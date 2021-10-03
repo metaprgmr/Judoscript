@@ -1,4 +1,8 @@
+.DS_Store
+build_result
+archives
 alfa*
 beta*
 gamma*
 delta*
+my*
