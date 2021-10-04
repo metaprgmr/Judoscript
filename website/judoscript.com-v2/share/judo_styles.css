@@ -1,0 +1,266 @@
+body {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+}
+body, table, td, th, li, h1, h2, h3, h4, h5 {
+	font-family: Verdana, Helvetica, Arial, Geneva, sans-serif;
+	color: #333366;
+	font-size: 12px;
+}
+code    {
+        font-family: courier new;
+}
+HR { color:#66CCFF }
+ol {
+	margin-left: 40px;
+        bullet-margin-left: 0px;
+}
+blockquote { margin-left:15px; }
+a:link {
+	color: #333333;
+	text-decoration: none;
+}
+a:visited {
+	color: #333333;
+	text-decoration: none;
+}
+a:hover {
+	color: #333333;
+	text-decoration: underline;
+}
+a:active {
+	color: #333333;
+	text-decoration: none;
+}
+H1   { margin-top:10; font-size:20px }
+H2   { font-size:18px; margin-bottom:5px }
+H3   { font-size:14px; font-weight:bold; }
+UL   { margin-left:15px; margin-top:12px; margin-bottom:12px; list-style-type:square}
+OL   { margin-left:15px; margin-top:12px; margin-bottom:12px; }
+LI   { margin-left:20px }
+PRE  { font-family:courier new; font-size:14px }
+CODE { font-family:courier new; font-size:14px }
+TH   { font-family:arial; font-size:14px; font-weight:bold; }
+
+.h1Text {
+	font-size:28px;
+	line-height:30px;
+        letter-spacing: 4px;
+	color: #AAAAAA;
+}
+.h1ID {
+	font-size:32px;
+	font-weight:bold;
+}
+.h2Text {
+	font-size:18px;
+	color: #AAAAAA;
+}
+.h2ID {
+	font-size:22px;
+	font-weight:bold;
+}
+.h3Text {
+	font-size:15px;
+	color: #AAAAAA;
+	font-weight:bold;
+}
+.h3ID {
+	color:#AAAAAA;
+}
+.h4Text {
+	font-size:15px;
+	color: #AAAAAA;
+	font-weight:bold;
+	text-decoration:italic
+}
+.h5Text {
+	color: #AAAAAA;
+	text-decoration:underline
+}
+.resourcePaneText {
+        font-size: 12px;
+	color: #333333;
+        letter-spacing: 3px;
+}
+.menuText1 {
+        font-size: 20px;
+        line-height: 36px;
+	color: #FF0000;
+}
+.menuText {
+	font-family: Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        letter-spacing: 0px;
+        line-height: 20px;
+	color: #3399DD;
+}
+.menuText a:link {
+	color: #3399DD;
+	text-decoration: none;
+}
+.menuText a:visited {
+	color: #3399DD;
+	text-decoration: none;
+}
+.menuText a:hover {
+	color: #99EEFF;
+	text-decoration: underline;
+}
+.menuText a:active {
+	color: #3399DD;
+	text-decoration: none;
+}
+.bodyText {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #333333;
+}
+.bodyText a:link {
+	color: #009900;
+	text-decoration: none;
+}
+.bodyText a:visited {
+	color: #009900;
+	text-decoration: none;
+}
+.bodyText a:hover {
+	color: #009900;
+	text-decoration: underline;
+}
+.bodyText a:active {
+	color: #009900;
+	text-decoration: none;
+}
+.resourceText {
+	color: #FFFFFF;
+}
+.resourceText a:link {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.resourceText a:visited {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.resourceText a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+.resourceText a:active {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.exampleText {
+	font-family: Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        letter-spacing: 2px;
+        line-height: 25px;
+	color: #333333;
+}
+.copyrightText {
+	font-family: Helvetica, Arial, sans-serif;
+        font-size: 10px;
+        letter-spacing: 0px;
+	color: #333333;
+}
+.sectionText {
+	font-family: Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        letter-spacing: 2px;
+        line-height: 16px;
+	color: #333333;
+}
+.titleBar {
+	color: #FFFFFF;
+	font-size: 12px;
+	letter-spacing: 4px;
+}
+.titleSection {
+	font-size: 28px;
+	font-weight: bold;
+	letter-spacing: 0px;
+}
+.titleRightCorner {
+	font-size: 12px;
+	letter-spacing: 0px;
+	font-weight: bold;
+}
+.titleExample {
+	position: absolute;
+	left: 205;
+	top: 48;
+	height: 56;
+	vertical-align: bottom;
+	font-size: 56px;
+	font-weight: bold;
+	color: #DDDDDD
+}
+.imgRight {
+	horizontal-align:right;
+	margin-left:10px;
+	margin-right:10px;
+}
+.imgLeft {
+	horizontal-align:left;
+	margin-left:-40px;
+	margin-right:30px;
+}
+.imgLeftInList {
+	horizontal-align:left;
+	margin-left:0px;
+	margin-right:15px;
+}
+
+.code    { background-color: #dddddd }
+.concept { font-family:arial; font-size:14px; font-weight:bold; color:red }
+.caption { font-family:arial; font-size:14px; font-weight:bold; font-variant:small-caps }
+.console { background-color: #eeeeee }
+.title   { background-color: #d6e7ff; font-family:arial; font-size:24px; font-widht:bold }
+.text    { font-family:arial; font-size:14px; vertical-align:top }
+.text10  { font-family:arial; font-size:10px; vertical-align:top; }
+.text12  { font-family:arial; font-size:12px; vertical-align:top; }
+.text12b { font-family:arial; font-size:12px; vertical-align:top; font-weight:bold }
+.text14  { font-family:arial; font-size:14px; vertical-align:top; }
+.text14b { font-family:arial; font-size:14px; vertical-align:top; font-weight:bold }
+.text16  { font-family:arial; font-size:16px; vertical-align:top; color:#555555; font-weight:bold }
+.text16b { font-family:arial; font-size:16px; vertical-align:top; color:#555555; font-weight:bold; }
+.text18  { font-family:arial; font-size:18px; vertical-align:top }
+.text18b { font-family:arial; font-size:18px; vertical-align:top; font-weight:bold; color:red }
+
+.t    { font-family:courier new; color:#990000; }
+.t  a:link      { color:#009900; text-decoration:none; vertical-align:top}
+.t  a:visited   { color:#009900; text-decoration:none; }
+.t  a:hover     { color:#333333; text-decoration:none; }
+.t  a:active    { color:#009900; text-decoration:none; }
+.op   { font-family:arial;       color:#0000FF; }
+.kw   { font-family:courier new; font-weight:bold; color:#990000; }
+.obj  { font-family:arial; color:#990000; }
+.obj a:link    { font-family:arial; color:#990000; }
+.obj a:visited { font-family:arial; color:#990000; }
+.obj a:hover   { font-family:arial; color:#990000; text-decoration:underline; }
+.obj a:active  { font-family:arial; color:#990000; }
+.nt   { font-family:arial; color:#888888; }
+.nt a:link      { color:#009900; text-decoration:none; vertical-align:top}
+.nt a:visited   { color:#009900; text-decoration:none; }
+.nt a:hover     { color:#333333; text-decoration:none; text-decoration:underline; }
+.nt a:active    { color:#009900; text-decoration:none; }
+.bnf  { font-family:arial; color:#0000ff; font-weight:bold; }
+.sfn  { font-family:courier new; color:#333333; }
+.sfn a:link      { color:#009900; text-decoration:none; vertical-align:top}
+.sfn a:visited   { color:#009900; text-decoration:none; }
+.sfn a:hover     { color:#333333; text-decoration:none; text-decoration:underline; }
+.sfn a:active    { color:#009900; text-decoration:none; }
+.anno { font-family:arial;       color:#AAAAAA; }
+.anno a:link    { color:#AAAAAA; text-decoration:none; }
+.anno a:visited { color:#AAAAAA; text-decoration:none; }
+.anno a:hover   { color:#6666FF; text-decoration:underline; }
+.anno a:active  { color:#AAAAAA; text-decoration:none; }
+.used { font-family:arial;       color:#6666FF; }
+.used a:link    { color:#6666FF; text-decoration:none; }
+.used a:visited { color:#6666FF; text-decoration:none; }
+.used a:hover   { color:#0000FF; text-decoration:underline; }
+.used a:active  { color:#6666FF; text-decoration:none; }
+.param { color:#990000; text-decoration:italic; }

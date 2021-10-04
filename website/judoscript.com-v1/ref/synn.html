@@ -1,0 +1,1158 @@
+<html><head><title>JudoScript v0.7</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+<script language=JavaScript><!--
+function switchDisplay(id) {
+var e = document.getElementById(id);
+if (e.innerHTML == '') { e.innerHTML = listUsedBy(id); }
+e.style.display = (e.style.display=='') ? 'none' : '';
+}
+//--></script>
+</head><body><a name=syntax></a>
+<h3>JudoScript v0.7 Grammar</h3>
+<p>For legends, see <a href="javascript:showSyn('')"><b>Syntax and Semantics</b></a>.</p>
+<table border=1><tr><td>
+<table bgcolor=#EEEEEE cellpadding=0 cellspacing=0 border=0 width=98% class=op>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Script>Script</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Script')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Script')">semantics</a>&nbsp;<br>
+<div id=_Script style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=nt><a href="javascript:showSynNT('UsageDeclaration')">UsageDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ImportStatement')">ImportStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('Directives')">Directives</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ConstantDefinition')">ConstantDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ClassDefinition')">ClassDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FunctionDeclaration')">FunctionDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ThreadDeclaration')">ThreadDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('SgmlHandlerDeclaration')">SgmlHandlerDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font> <br>  |  <font class=kw>catch</font>  <font class=kw>:</font>  <br>  |  <font class=kw>finally</font>  <font class=kw>:</font>  <br>  )*  <br>  (  <font class=kw>EndScript</font>  <font class=t>LOCALDATA</font>   )?                   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=UsageDeclaration>UsageDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_UsageDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('UsageDeclaration')">semantics</a>&nbsp;<br>
+<div id=_UsageDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>usage</font>  <font class=kw>{</font>  <font class=t>IDENTIFIER</font>  <font class=kw>=</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>;</font>   )+  <font class=kw>}</font>                                                                                                      <font class=obj><a href="javascript:showObj('obtainUsage')">obtainUsage</a></font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ImportStatement>ImportStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ImportStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ImportStatement')">semantics</a>&nbsp;<br>
+<div id=_ImportStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>import</font>  <font class=t>JAVA_CLASS_NAME_COLLECTION</font>  <font class=kw>;</font>        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Directives>Directives</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Directives')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Directives')">semantics</a>&nbsp;<br>
+<div id=_Directives style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('IncludeDirective')">IncludeDirective</a></font>  |  <font class=nt><a href="javascript:showSynNT('Pragma')">Pragma</a></font>  |  <font class=nt><a href="javascript:showSynNT('JavaClassShortcuts')">JavaClassShortcuts</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=IncludeDirective>IncludeDirective</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_IncludeDirective')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('IncludeDirective')">semantics</a>&nbsp;<br>
+<div id=_IncludeDirective style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>!include</font>   (  <font class=kw>if</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>ifexists</font>   |   (  <font class=kw>ifdef</font>   |  <font class=kw>ifndef</font>   )  <font class=t>CONST_NAME</font>   )?  <font class=t>STRING_LIT</font>           </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Pragma>Pragma</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Pragma')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Pragma')">semantics</a>&nbsp;<br>
+<div id=_Pragma style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>!pragma</font>  <font class=nt><a href="javascript:showSynNT('PragmaType')">PragmaType</a></font> <font class=nt><a href="javascript:showSynNT('Literal')">Literal</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaClassShortcuts>JavaClassShortcuts</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaClassShortcuts')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaClassShortcuts')">semantics</a>&nbsp;<br>
+<div id=_JavaClassShortcuts style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>!JavaPackages</font>  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw>!DefineJavaPackages</font>   (  <font class=kw>&lt;</font>   )?  <font class=t>IDENTIFIER</font>   (  <font class=kw>&gt;</font>   )?  <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  ),+  <font class=kw>}</font>  <br>  |  <font class=kw>!JavaBaseClass</font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw>!JavaGuiClass</font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw>!JavaEnterpriseClass</font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw>!JavaCorbaClass</font>   (  <font class=t>CONST_NAME</font>   ),+                            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConstantDefinition>ConstantDefinition</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConstantDefinition')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConstantDefinition')">semantics</a>&nbsp;<br>
+<div id=_ConstantDefinition style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>const</font>   )?  <font class=t>CONST_NAME</font>  <font class=kw>=</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('SetAllocator')">SetAllocator</a></font>  )   (  <font class=kw>ifndef</font>   |  <font class=kw>if</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=kw>;</font>         </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ClassDefinition>ClassDefinition</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ClassDefinition')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ClassDefinition')">semantics</a>&nbsp;<br>
+<div id=_ClassDefinition style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>class</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>extends</font>   (  <font class=t>IDENTIFIER</font>   |  <font class=kw>OrderedMap</font>   |  <font class=kw>SortedMap</font>  <font class=nt><a href="javascript:showSynNT('ComparatorDecl')">ComparatorDecl</a></font>  |  <font class=kw>TreeNode</font>   )   )?  <br> <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('ConstructorDeclaration')">ConstructorDeclaration</a></font>  )?   (  <font class=nt><a href="javascript:showSynNT('FunctionDeclaration')">FunctionDeclaration</a></font>  )*  <font class=kw>}</font>                 </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaExtensionDefinition>JavaExtensionDefinition</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaExtensionDefinition')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaExtensionDefinition')">semantics</a>&nbsp;<br>
+<div id=_JavaExtensionDefinition style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>class</font>  <font class=t>IDENTIFIER</font>  <font class=kw>extends</font>  <font class=kw>java</font>  <font class=kw>::</font>   (  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   ),+  <br> <font class=kw>{</font>  <br>  (  <font class=nt><a href="javascript:showSynNT('ConstructorDeclaration')">ConstructorDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('JavaType')">JavaType</a></font>  (  <font class=t>IDENTIFIER</font>   ),+  <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('JavaType')">JavaType</a></font> <font class=t>IDENTIFIER</font>  <font class=kw>(</font>   (  <font class=nt><a href="javascript:showSynNT('JavaType')">JavaType</a></font> <font class=t>IDENTIFIER</font>   ),+  <font class=kw>)</font>  <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font> <br>  )*  <br> <font class=kw>}</font>                              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaType>JavaType</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaType')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaType')">semantics</a>&nbsp;<br>
+<div id=_JavaType style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=kw>CONST_NAME</font>   |  <font class=nt><a href="javascript:showSynNT('JavaPrimitiveTypes')">JavaPrimitiveTypes</a></font>  )   (  <font class=kw>[> <!]</font>   )*  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConstructorDeclaration>ConstructorDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConstructorDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConstructorDeclaration')">semantics</a>&nbsp;<br>
+<div id=_ConstructorDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>constructor</font>   |  <font class=kw>ctor</font>   )   (  <font class=nt><a href="javascript:showSynNT('FormalParameters')">FormalParameters</a></font>  )?  <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>         </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FunctionDeclaration>FunctionDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FunctionDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FunctionDeclaration')">semantics</a>&nbsp;<br>
+<div id=_FunctionDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>function</font>  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showSynNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FormalParameters>FormalParameters</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FormalParameters')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FormalParameters')">semantics</a>&nbsp;<br>
+<div id=_FormalParameters style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>(</font>   )?   (  <font class=kw>..</font>   |   (  <font class=t>IDENTIFIER</font>   (  <font class=kw>=</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   ),+   (  <font class=kw>,</font>  <font class=kw>..</font>   )?   )?   (  <font class=kw>)</font>   )?               </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=LambdaDeclaration>LambdaDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_LambdaDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('LambdaDeclaration')">semantics</a>&nbsp;<br>
+<div id=_LambdaDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>function</font>  <font class=nt><a href="javascript:showSynNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ThreadDeclaration>ThreadDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ThreadDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ThreadDeclaration')">semantics</a>&nbsp;<br>
+<div id=_ThreadDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>thread</font>  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showSynNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>          </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=StaticJavaFunctionDeclaration>StaticJavaFunctionDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_StaticJavaFunctionDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('StaticJavaFunctionDeclaration')">semantics</a>&nbsp;<br>
+<div id=_StaticJavaFunctionDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>function</font>  <font class=t>FUNCTION_NAME</font>  <br> <font class=kw>for</font>   (  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   )  <font class=kw>::</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>(</font>  <font class=kw>)</font>   )?  <font class=kw>;</font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaClassName>JavaClassName</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaClassName')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaClassName')">semantics</a>&nbsp;<br>
+<div id=_JavaClassName style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=t>IDENTIFIER</font>   (  <font class=kw>.</font>  <font class=t>IDENTIFIER</font>   )*   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Literal>Literal</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Literal')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Literal')">semantics</a>&nbsp;<br>
+<div id=_Literal style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=t>INT_LIT</font>   |  <font class=t>FLOAT_LIT</font>   |  <font class=t>STRING_LIT</font>   |  <font class=kw>true</font>   |  <font class=kw>false</font>   |  <font class=kw>null</font>   |  <font class=kw>nl</font>   |  <font class=kw>eof</font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Expr>Expr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Expr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Expr')">semantics</a>&nbsp;<br>
+<div id=_Expr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>defined</font>  <font class=t>CONST_NAME</font>   |  <font class=nt><a href="javascript:showSynNT('Assignment')">Assignment</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ConditionalExpr')">ConditionalExpr</a></font>  (  <font class=kw>@</font>  <font class=nt><a href="javascript:showSynNT('ConditionalExpr')">ConditionalExpr</a></font>  )*          </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConditionalExpr>ConditionalExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConditionalExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConditionalExpr')">semantics</a>&nbsp;<br>
+<div id=_ConditionalExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ConditionalOrExpr')">ConditionalOrExpr</a></font>  (  <font class=kw>?</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('ConditionalExpr')">ConditionalExpr</a></font>  )?              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConditionalOrExpr>ConditionalOrExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConditionalOrExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConditionalOrExpr')">semantics</a>&nbsp;<br>
+<div id=_ConditionalOrExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ConditionalAndExpr')">ConditionalAndExpr</a></font>  (  <font class=kw>||</font>  <font class=nt><a href="javascript:showSynNT('ConditionalAndExpr')">ConditionalAndExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConditionalAndExpr>ConditionalAndExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConditionalAndExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConditionalAndExpr')">semantics</a>&nbsp;<br>
+<div id=_ConditionalAndExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('InclusiveOrExpr')">InclusiveOrExpr</a></font>  (  <font class=kw>&&</font>  <font class=nt><a href="javascript:showSynNT('InclusiveOrExpr')">InclusiveOrExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=InclusiveOrExpr>InclusiveOrExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_InclusiveOrExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('InclusiveOrExpr')">semantics</a>&nbsp;<br>
+<div id=_InclusiveOrExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ExclusiveOrExpr')">ExclusiveOrExpr</a></font>  (  <font class=kw>|</font>  <font class=nt><a href="javascript:showSynNT('ExclusiveOrExpr')">ExclusiveOrExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExclusiveOrExpr>ExclusiveOrExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExclusiveOrExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExclusiveOrExpr')">semantics</a>&nbsp;<br>
+<div id=_ExclusiveOrExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('AndExpr')">AndExpr</a></font>  (  <font class=kw>^</font>  <font class=nt><a href="javascript:showSynNT('AndExpr')">AndExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=AndExpr>AndExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_AndExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('AndExpr')">semantics</a>&nbsp;<br>
+<div id=_AndExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('EqualityExpr')">EqualityExpr</a></font>  (  <font class=kw>&</font>  <font class=nt><a href="javascript:showSynNT('EqualityExpr')">EqualityExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=EqualityExpr>EqualityExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_EqualityExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('EqualityExpr')">semantics</a>&nbsp;<br>
+<div id=_EqualityExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('RelationalExpr')">RelationalExpr</a></font>  (   (  <font class=kw>==</font>   |  <font class=kw>!=</font>   )  <font class=nt><a href="javascript:showSynNT('RelationalExpr')">RelationalExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=RelationalExpr>RelationalExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_RelationalExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('RelationalExpr')">semantics</a>&nbsp;<br>
+<div id=_RelationalExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ShiftExpr')">ShiftExpr</a></font>  (   (    |  <font class=kw>&gt;</font>   |  <font class=kw>&lt;=</font>   |  <font class=kw>&gt;=</font>   )  <font class=nt><a href="javascript:showSynNT('ShiftExpr')">ShiftExpr</a></font>  )?      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ShiftExpr>ShiftExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ShiftExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ShiftExpr')">semantics</a>&nbsp;<br>
+<div id=_ShiftExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('AdditiveExpr')">AdditiveExpr</a></font>  (   (  <font class=kw>&lt;&lt;</font>   |  <font class=kw>&gt;&gt;</font>   |  <font class=kw>&gt;&gt;&gt;</font>   )  <font class=nt><a href="javascript:showSynNT('AdditiveExpr')">AdditiveExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=AdditiveExpr>AdditiveExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_AdditiveExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('AdditiveExpr')">semantics</a>&nbsp;<br>
+<div id=_AdditiveExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('MultiplicativeExpr')">MultiplicativeExpr</a></font>  (   (  <font class=kw>+</font>   |  <font class=kw>-</font>   )  <font class=nt><a href="javascript:showSynNT('MultiplicativeExpr')">MultiplicativeExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=MultiplicativeExpr>MultiplicativeExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_MultiplicativeExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('MultiplicativeExpr')">semantics</a>&nbsp;<br>
+<div id=_MultiplicativeExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('UnaryExpr')">UnaryExpr</a></font>  (   (  <font class=kw>*</font>   |  <font class=kw>/</font>   |  <font class=kw>%</font>   )  <font class=nt><a href="javascript:showSynNT('UnaryExpr')">UnaryExpr</a></font>  )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=UnaryExpr>UnaryExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_UnaryExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('UnaryExpr')">semantics</a>&nbsp;<br>
+<div id=_UnaryExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>+</font>   |  <font class=kw>-</font>   )  <font class=nt><a href="javascript:showSynNT('UnaryExpr')">UnaryExpr</a></font>  |  <font class=nt><a href="javascript:showSynNT('PrefixExpr')">PrefixExpr</a></font>  |  <font class=nt><a href="javascript:showSynNT('UnaryExprNotPlusMinus')">UnaryExprNotPlusMinus</a></font>  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrefixExpr>PrefixExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrefixExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrefixExpr')">semantics</a>&nbsp;<br>
+<div id=_PrefixExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>++</font>   |  <font class=kw>-&#45;</font>   )  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=UnaryExprNotPlusMinus>UnaryExprNotPlusMinus</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_UnaryExprNotPlusMinus')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('UnaryExprNotPlusMinus')">semantics</a>&nbsp;<br>
+<div id=_UnaryExprNotPlusMinus style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>~</font>   |  <font class=kw>!</font>   )  <font class=nt><a href="javascript:showSynNT('UnaryExpr')">UnaryExpr</a></font>  |  <font class=nt><a href="javascript:showSynNT('PostfixExpr')">PostfixExpr</a></font>  |  <font class=nt><a href="javascript:showSynNT('Literal')">Literal</a></font>  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PostfixExpr>PostfixExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PostfixExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PostfixExpr')">semantics</a>&nbsp;<br>
+<div id=_PostfixExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  (  <font class=kw>++</font>   |  <font class=kw>-&#45;</font>   )?      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrimaryExpr>PrimaryExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrimaryExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrimaryExpr')">semantics</a>&nbsp;<br>
+<div id=_PrimaryExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ObjectAllocator')">ObjectAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('JavaAllocator')">JavaAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('JavaClassAllocator')">JavaClassAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('LambdaDeclaration')">LambdaDeclaration</a></font>  |  <font class=kw>${</font>  <font class=t>IDENTIFIER</font>  <font class=kw>}</font>   |  <font class=kw>&</font>  <font class=t>IDENTIFIER</font>   |  <font class=nt><a href="javascript:showSynNT('AtomicExpr')">AtomicExpr</a></font>             <font class=obj><a href="javascript:showObj('getEnvVar')">getEnvVar</a></font>         </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ObjectAllocator>ObjectAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ObjectAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ObjectAllocator')">semantics</a>&nbsp;<br>
+<div id=_ObjectAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>new</font>   (  <font class=t>IDENTIFIER</font>   |  <font class=kw>SortedMap</font>  <font class=nt><a href="javascript:showSynNT('ComparatorDecl')">ComparatorDecl</a></font>  )   (  <font class=nt><a href="javascript:showSynNT('MemberInitList')">MemberInitList</a></font>  |  <font class=nt><a href="javascript:showSynNT('AnonMemberInitList')">AnonMemberInitList</a></font>  )?                  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=MemberInitList>MemberInitList</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_MemberInitList')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('MemberInitList')">semantics</a>&nbsp;<br>
+<div id=_MemberInitList style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>(</font>   (   (  <font class=t>IDENTIFIER</font>   |  <font class=t>STRING_LIT</font>   )  <font class=kw>=</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),+  <font class=kw>)</font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=AnonMemberInitList>AnonMemberInitList</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_AnonMemberInitList')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('AnonMemberInitList')">semantics</a>&nbsp;<br>
+<div id=_AnonMemberInitList style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>(</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),+  <font class=kw>)</font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ArrayAllocator>ArrayAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ArrayAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ArrayAllocator')">semantics</a>&nbsp;<br>
+<div id=_ArrayAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>LinkedList</font>   )?  <font class=kw>[> <Expr</font>  <font class=kw>..</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |   (  <font class=nt><a href="javascript:showSynNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  ),*   (  <font class=kw>,</font>   )?  <font class=kw>]</font>             </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=StructAllocator>StructAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_StructAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('StructAllocator')">semantics</a>&nbsp;<br>
+<div id=_StructAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>{</font>   (  <font class=t>IDENTIFIER</font>   (  <font class=kw>:</font>   |  <font class=kw>=</font>   )   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  )   ),*   (  <font class=kw>,</font>   )?  <font class=kw>}</font>       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SetAllocator>SetAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SetAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SetAllocator')">semantics</a>&nbsp;<br>
+<div id=_SetAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>Set</font>  <font class=nt><a href="javascript:showSynNT('ComparatorDecl')">ComparatorDecl</a></font>  (  <font class=kw>[> <lq</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),*  <font class=kw>]</font>   )?              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ComparatorDecl>ComparatorDecl</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ComparatorDecl')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ComparatorDecl')">semantics</a>&nbsp;<br>
+<div id=_ComparatorDecl style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>&lt;</font>   (   (  <font class=kw>Number</font>   |  <font class=kw>String</font>   |  <font class=kw>Date</font>   )   (  <font class=kw>-</font>   |  <font class=kw>+</font>   )?   |  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=kw>&gt;</font>   )?       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaAllocator>JavaAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaAllocator')">semantics</a>&nbsp;<br>
+<div id=_JavaAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>new</font>  <font class=kw>java</font>  <font class=kw>::</font>  <br>  (  <font class=nt><a href="javascript:showSynNT('JavaPrimitiveTypes')">JavaPrimitiveTypes</a></font>  |  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   |  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )  <br>   (  <font class=nt><a href="javascript:showSynNT('Arguments')">Arguments</a></font>  )?   |   (  <font class=kw>[> <!]</font>   )+  <font class=nt><a href="javascript:showSynNT('JavaArrayAllocator')">JavaArrayAllocator</a></font>  |   (  <font class=kw>[> <Expr</font>  <font class=kw>]</font>   )+   )            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaArrayAllocator>JavaArrayAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaArrayAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaArrayAllocator')">semantics</a>&nbsp;<br>
+<div id=_JavaArrayAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('JavaArrayAllocator')">JavaArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  ),*   (  <font class=kw>,</font>   )?  <font class=kw>}</font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaPrimitiveTypes>JavaPrimitiveTypes</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaPrimitiveTypes')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaPrimitiveTypes')">semantics</a>&nbsp;<br>
+<div id=_JavaPrimitiveTypes style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>boolean</font>   |  <font class=kw>byte</font>   |  <font class=kw>char</font>   |  <font class=kw>short</font>   |  <font class=kw>int</font>   |  <font class=kw>long</font>   |  <font class=kw>float</font>   |  <font class=kw>double</font>   |  <font class=kw>String</font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JavaClassAllocator>JavaClassAllocator</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JavaClassAllocator')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JavaClassAllocator')">semantics</a>&nbsp;<br>
+<div id=_JavaClassAllocator style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>java</font>  <font class=kw>::</font>   (  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   )      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=AtomicExpr>AtomicExpr</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_AtomicExpr')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('AtomicExpr')">semantics</a>&nbsp;<br>
+<div id=_AtomicExpr style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <br>  (  <font class=kw>::</font>   )?  <font class=t>IDENTIFIER</font>   |  <font class=t>CONST_NAME</font>   |  <font class=t>FUNCTION_NAME</font>   |  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font> <font class=kw>::</font>  <font class=t>IDENTIFIER</font>  <br>  |  <font class=kw>super</font>  <font class=kw>.</font>  <font class=t>IDENTIFIER</font>   |  <font class=kw>this</font>  <br>  |  <font class=kw>(</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>)</font>  <br>  |  <font class=kw>#args</font>   |  <font class=kw>#options</font>   |  <font class=kw>#cmd_args</font>   |  <font class=kw>#prog</font>  <br>  |  <font class=kw>$_</font>   |  <font class=kw>$__</font>   |  <font class=kw>$$</font>   |  <font class=kw>$$con</font>   |  <font class=kw>$$timer</font>   |  <font class=kw>$$args</font>   |  <font class=kw>$$fs_result</font>   |  <font class=kw>$$local</font>   |  <font class=kw>$$bsf</font>  <br>  |  <font class=kw>column</font>   (  <font class=kw>(</font>  <font class=t>STRING_LIT</font>   |  <font class=t>INT_LIT</font>  <font class=kw>)</font>   )  <br>  )  <br>  (  <br> <font class=kw>[> <Expr</font>   (  <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )*  <font class=kw>]</font>  <br>  |  <font class=kw>.</font>   (  <font class=t>IDENTIFIER</font>   |  <font class=t>STRING_LIT</font>   |  <font class=kw>(</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>)</font>   )  <br>  |  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>&gt;</font>  <br>  |   (  <font class=kw>-&gt;</font>   )?  <font class=nt><a href="javascript:showSynNT('Arguments')">Arguments</a></font>  )  <br>  )*                                                                                   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Arguments>Arguments</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Arguments')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Arguments')">semantics</a>&nbsp;<br>
+<div id=_Arguments style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>(</font>   (  <font class=kw>{{</font>   )?   (   (  <font class=nt><a href="javascript:showSynNT('JavaPrimitiveTypes')">JavaPrimitiveTypes</a></font>  )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),*   (  <font class=kw>}}</font>   )?  <font class=kw>)</font>                </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=HereDoc>HereDoc</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_HereDoc')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('HereDoc')">semantics</a>&nbsp;<br>
+<div id=_HereDoc style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>[[*</font>   |  <font class=kw>[[[*</font>   )  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>*]]</font>              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Mixture>Mixture</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Mixture')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Mixture')">semantics</a>&nbsp;<br>
+<div id=_Mixture style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>PLAIN_TEXT</font>   |  <font class=kw>(*</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>*)</font>   )*              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Assignment>Assignment</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Assignment')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Assignment')">semantics</a>&nbsp;<br>
+<div id=_Assignment style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font> <br>  (  <font class=kw>=</font>   |  <font class=kw>@=</font>   |  <font class=kw>*=</font>   |  <font class=kw>/=</font>   |  <font class=kw>%=</font>   |  <font class=kw>+=</font>   |  <font class=kw>-=</font>   |  <font class=kw>&lt;&lt;=</font>   |  <font class=kw>&gt;&gt;=</font>   |  <font class=kw>&gt;&gt;&gt;=</font>   |  <font class=kw>&=</font>   |  <font class=kw>^=</font>   |  <font class=kw>|=</font>   )  <br>  (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('SetAllocator')">SetAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  )        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=LocalVariableDeclaration>LocalVariableDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_LocalVariableDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('LocalVariableDeclaration')">semantics</a>&nbsp;<br>
+<div id=_LocalVariableDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>local</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>=</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('SetAllocator')">SetAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  )   )?      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Statement>Statement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Statement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Statement')">semantics</a>&nbsp;<br>
+<div id=_Statement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('LocalVariableDeclaration')">LocalVariableDeclaration</a></font> <br>  |  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showSynNT('ArgumentList')">ArgumentList</a></font> <font class=kw>;</font>  <br>  |   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('IfStatement')">IfStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('SwitchStatement')">SwitchStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('WhileStatement')">WhileStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('DoWHileStatement')">DoWHileStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ForStatements')">ForStatements</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('LinesStatement')">LinesStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('BreakStatement')">BreakStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('ContinueStatement')">ContinueStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('ResumeStatement')">ResumeStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('ReturnStatement')">ReturnStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('ThrowStatement')">ThrowStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('StartThreadStatement')">StartThreadStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('DynamicStatements')">DynamicStatements</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('PrintStatement')">PrintStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('PrintTableDataStatement')">PrintTableDataStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('EchoStatement')">EchoStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('DeleteStatement')">DeleteStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('JdbcStatements')">JdbcStatements</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FileSystemStatements')">FileSystemStatements</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('XmlStatement')">XmlStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('XsltStatement')">XsltStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('SgmlStatement')">SgmlStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ScheduleStatement')">ScheduleStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecStatement')">ExecStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('SCPStatement')">SCPStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('MailStatement')">MailStatement</a></font> <font class=kw>;</font>  <br>  |  <font class=nt><a href="javascript:showSynNT('GuiEventsStatement')">GuiEventsStatement</a></font>                            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Block>Block</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Block')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Block')">semantics</a>&nbsp;<br>
+<div id=_Block style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )*   (  <font class=kw>catch</font>  <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+   )?   (  <font class=kw>finally</font>  <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+   )?  <font class=kw>}</font>              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SimpleBlock>SimpleBlock</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SimpleBlock')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SimpleBlock')">semantics</a>&nbsp;<br>
+<div id=_SimpleBlock style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )*  <font class=kw>}</font>           </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=IfStatement>IfStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_IfStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('IfStatement')">semantics</a>&nbsp;<br>
+<div id=_IfStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>if</font>   (  <font class=kw>(</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>)</font>   )?  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font> <br>  (   (  <font class=kw>elif</font>   |  <font class=kw>else</font>  <font class=kw>if</font>   )   (  <font class=kw>(</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>)</font>   )?  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )*  <br>  (  <font class=kw>else</font>  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )?         </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SwitchStatement>SwitchStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SwitchStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SwitchStatement')">semantics</a>&nbsp;<br>
+<div id=_SwitchStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>switch</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>{</font>   (   (  <font class=kw>case</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>default</font>   )  <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )*   )*  <font class=kw>}</font>             </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=WhileStatement>WhileStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_WhileStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('WhileStatement')">semantics</a>&nbsp;<br>
+<div id=_WhileStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>while</font>   (  <font class=kw>(</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>)</font>   )?  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>          </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=DoWhileStatement>DoWhileStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_DoWhileStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('DoWhileStatement')">semantics</a>&nbsp;<br>
+<div id=_DoWhileStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>do</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font> <font class=kw>while</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>;</font>            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ForStatements>ForStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ForStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ForStatements')">semantics</a>&nbsp;<br>
+<div id=_ForStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=nt><a href="javascript:showSynNT('ForStatement')">ForStatement</a></font>  |  <font class=nt><a href="javascript:showSynNT('ForInStatement')">ForInStatement</a></font>  |  <font class=nt><a href="javascript:showSynNT('ForFromToStatement')">ForFromToStatement</a></font>  |  <font class=nt><a href="javascript:showSynNT('RepeatStatement')">RepeatStatement</a></font>  )            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ForStatement>ForStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ForStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ForStatement')">semantics</a>&nbsp;<br>
+<div id=_ForStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>for</font>   (  <font class=kw>(</font>   )?   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),*  <font class=kw>;</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>;</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),*   (  <font class=kw>)</font>   )?  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ForInStatement>ForInStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ForInStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ForInStatement')">semantics</a>&nbsp;<br>
+<div id=_ForInStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>for</font>   (  <font class=kw>(</font>   )?  <font class=t>IDENTIFIER</font>  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <br>  (  <font class=kw>backward</font>   |   (  <font class=kw>from</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (   (  <font class=kw>to</font>   |  <font class=kw>downto</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )   (  <font class=kw>step</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   )?   (  <font class=kw>)</font>   )?  <br> <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ForFromToStatement>ForFromToStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ForFromToStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ForFromToStatement')">semantics</a>&nbsp;<br>
+<div id=_ForFromToStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>for</font>   (  <font class=kw>(</font>   )?  <font class=t>IDENTIFIER</font>   (  <font class=kw>from</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>to</font>   |  <font class=kw>downto</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>step</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>)</font>   )?  <br> <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>           </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=RepeatStatement>RepeatStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_RepeatStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('RepeatStatement')">semantics</a>&nbsp;<br>
+<div id=_RepeatStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>repeat</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>times</font>   )?  <br> <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=LinesStatement>LinesStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_LinesStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('LinesStatement')">semantics</a>&nbsp;<br>
+<div id=_LinesStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=t>LABEL_NAME</font>  <font class=kw>:</font>   )?  <font class=kw>do</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   )?  <font class=kw>as</font>  <font class=kw>lines</font>   (  <font class=kw>for</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=BreakStatement>BreakStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_BreakStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('BreakStatement')">semantics</a>&nbsp;<br>
+<div id=_BreakStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>break</font>   (  <font class=t>LABEL_NAME</font>   |  <font class=kw>schedule</font>   )              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ContinueStatement>ContinueStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ContinueStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ContinueStatement')">semantics</a>&nbsp;<br>
+<div id=_ContinueStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>continue</font>   (  <font class=t>LABEL_NAME</font>   |  <font class=kw>schedule</font>   )            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ResumeStatement>ResumeStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ResumeStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ResumeStatement')">semantics</a>&nbsp;<br>
+<div id=_ResumeStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>resume</font>                 </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ReturnStatement>ReturnStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ReturnStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ReturnStatement')">semantics</a>&nbsp;<br>
+<div id=_ReturnStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>return</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('SetAllocator')">SetAllocator</a></font>  |  <font class=nt><a href="javascript:showSynNT('Dom')">Dom</a></font>  )?       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ThrowStatement>ThrowStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ThrowStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ThrowStatement')">semantics</a>&nbsp;<br>
+<div id=_ThrowStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>throw</font>  <br>  (  <font class=kw>new</font>   (  <font class=kw>java</font>  <font class=kw>::</font>  <font class=nt><a href="javascript:showSynNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   |  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )   (  <font class=nt><a href="javascript:showSynNT('Arguments')">Arguments</a></font>  )?  <br>  |  <font class=t>IDENTIFIER</font>   (  <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  )?            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=StartThreadStatement>StartThreadStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_StartThreadStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('StartThreadStatement')">semantics</a>&nbsp;<br>
+<div id=_StartThreadStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>start</font>   (  <font class=kw>daemon</font>   )?  <font class=kw>thread</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=t>FUNCTION_NAME</font>   (  <font class=nt><a href="javascript:showSynNT('Arguments')">Arguments</a></font>  )?  <font class=kw>;</font>   )   |  <font class=nt><a href="javascript:showSynNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>  )                  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=DynamicStatements>DynamicStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_DynamicStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('DynamicStatements')">semantics</a>&nbsp;<br>
+<div id=_DynamicStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>eval</font>   |  <font class=kw>evalExternal</font>   |  <font class=kw>evalFile</font>   )   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  )  <br>  (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('ArgumentList')">ArgumentList</a></font>  )?  <font class=kw>;</font>                </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrintStatement>PrintStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrintStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrintStatement')">semantics</a>&nbsp;<br>
+<div id=_PrintStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>print</font>   |  <font class=kw>println</font>   |  <font class=kw>flush</font>   |  <font class=kw>.</font>   )   (  <font class=kw>{</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>}</font>   )?  <br>  (  <font class=kw>&lt;</font>   (  <font class=kw>out</font>   |  <font class=kw>err</font>   |  <font class=kw>log</font>   |  <font class=kw>pipe</font>   |  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  )  <font class=kw>&gt;</font>   )?  <br>  (  <font class=nt><a href="javascript:showSynNT('PrintArgument')">PrintArgument</a></font>  ),*                          </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrintArgument>PrintArgument</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrintArgument')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrintArgument')">semantics</a>&nbsp;<br>
+<div id=_PrintArgument style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )   (  <font class=kw>:</font>   (  <font class=kw>&lt;</font>   |  <font class=kw>&gt;</font>   |  <font class=kw>*</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>!</font>   )?   )?   (  <font class=kw>{</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>}</font>   |  <font class=kw>repeat</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?               </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrintTableDataStatement>PrintTableDataStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrintTableDataStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrintTableDataStatement')">semantics</a>&nbsp;<br>
+<div id=_PrintTableDataStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>printTable</font>   (  <font class=kw>&lt;</font>   (  <font class=kw>out</font>   |  <font class=kw>err</font>   |  <font class=kw>log</font>   |  <font class=kw>pipe</font>   |  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  )  <font class=kw>&gt;</font>   )?  <br> <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>skip</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>limit</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br> <font class=kw>for</font>   (  <font class=nt><a href="javascript:showSynNT('PrintArgument')">PrintArgument</a></font>  ),*               </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=EchoStatement>EchoStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_EchoStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('EchoStatement')">semantics</a>&nbsp;<br>
+<div id=_EchoStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>echo</font>   (  <font class=kw>on</font>   |  <font class=kw>off</font>   |  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=DeleteStatement>DeleteStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_DeleteStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('DeleteStatement')">semantics</a>&nbsp;<br>
+<div id=_DeleteStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>delete</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=VoidStatement>VoidStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_VoidStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('VoidStatement')">semantics</a>&nbsp;<br>
+<div id=_VoidStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>void</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SgmlStatement>SgmlStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SgmlStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SgmlStatement')">semantics</a>&nbsp;<br>
+<div id=_SgmlStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>do</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   )?  <font class=kw>as</font>   (  <font class=kw>sgml</font>   (  <font class=kw>case</font>   )?   |  <font class=kw>html</font>   )  <br>  (  <font class=kw>with</font>  <font class=t>IDENTIFIER</font>  <font class=kw>;</font>  <br>  |   (  <font class=kw>extends</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('SgmlEvent')">SgmlEvent</a></font> <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+   )+  <font class=kw>}</font>  <br>  )                 <font class=obj><a href="javascript:showObj('')"></a></font> <font class=obj><a href="javascript:showObj('')"></a></font> <font class=obj><a href="javascript:showObj('')"></a></font>                  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SgmlHandlerDeclaration>SgmlHandlerDeclaration</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SgmlHandlerDeclaration')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SgmlHandlerDeclaration')">semantics</a>&nbsp;<br>
+<div id=_SgmlHandlerDeclaration style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>sgml</font>   (  <font class=kw>case</font>   )?   |  <font class=kw>html</font>   )  <font class=t>IDENTIFIER</font>   (  <font class=kw>extends</font>  <font class=t>IDENTIFIER</font>   )?  <br> <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('SgmlEvent')">SgmlEvent</a></font> <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+   )+  <font class=kw>}</font>        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SgmlEvent>SgmlEvent</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SgmlEvent')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SgmlEvent')">semantics</a>&nbsp;<br>
+<div id=_SgmlEvent style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>BEFORE</font>   |  <font class=kw>AFTER</font>   |  <font class=kw>&lt;</font>  <font class=kw>&gt;</font>   |   (  <font class=kw>&lt;</font>   |  <font class=kw>&lt;/</font>   )  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   |  <font class=kw>TEXT</font>   |  <font class=kw>&lt;!--> <!&gt;>
+  <or> <!&lt;!> <!&gt;>
+  <or> <!&lt;?> <!&gt;>
+
+<semantics>
+  <p>These are the SGML events that can be generated by a SGML parser. All events except for
+  <!BEFORE> and <!AFTER> are for tags. A regular tag is <!&lt;><em>name</em><!&gt;> or
+  <!&lt;/><em>name</em><!&gt;>. <!TEXT> is for a piece of text between two tags. Any unhandled
+  tags are represented by <!&lt;> <!&gt;>; this do not include special tags, which start with
+  <!&lt;?>, <!&lt;!> and <!&lt;!--</font>  <font class=obj><a href="javascript:showObj('')"></a></font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ScheduleStatement>ScheduleStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ScheduleStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ScheduleStatement')">semantics</a>&nbsp;<br>
+<div id=_ScheduleStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>schedule</font>   (  <font class=kw>absolute</font>   )?   (   (  <font class=kw>starting</font>   |  <font class=kw>after</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>repeat</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br> <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font> <br>  (  <font class=kw>listen</font>  <font class=kw>on</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>title</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  )?                 <font class=obj><a href="javascript:showObj('')"></a></font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecStatement>ExecStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>exec</font>   (  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>from</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>with</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |   (  <font class=t>IDENTIFIER</font>  <font class=kw>=</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  ),+   )  <br>  (   (  <font class=kw>needSystemIn</font>   )?   (  <font class=kw>;</font>   |  <font class=kw>output</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  )  <br>  |  <font class=kw>input</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  (  <font class=kw>output</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  )?  <br>  )                 <font class=obj><a href="javascript:showObj('readPipe')">readPipe</a></font>       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=SCPStatement>SCPStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_SCPStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('SCPStatement')">semantics</a>&nbsp;<br>
+<div id=_SCPStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>scp</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br> <font class=kw>from</font>   (  <font class=kw>remote</font>   |  <font class=kw>local</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>to</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>recursive</font>   |  <font class=kw>echo</font>   )*             </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=MailStatement>MailStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_MailStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('MailStatement')">semantics</a>&nbsp;<br>
+<div id=_MailStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>sendMail</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>from</font>   |  <font class=kw>to</font>   |  <font class=kw>cc</font>   |  <font class=kw>bcc</font>   |  <font class=kw>subject</font>   |  <font class=kw>attach</font>   |  <font class=kw>body</font>   |  <font class=kw>htmlBody</font>   )   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br> <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>  )   )+  <font class=kw>;</font>    <font class=obj><a href="javascript:showObj('connectMailServer')">connectMailServer</a></font> <font class=obj><a href="javascript:showObj('disconnectMailServer')">disconnectMailServer</a></font>                  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=GuiEventsStatement>GuiEventsStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_GuiEventsStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('GuiEventsStatement')">semantics</a>&nbsp;<br>
+<div id=_GuiEventsStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>guiEvents</font>  <font class=kw>{</font>  <br>  (  <font class=kw>&lt;</font>   (  <br>  (  <font class=kw>?</font>  <font class=t>IDENTIFIER</font>   |   (  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  ),+   )  <br> <font class=kw>:</font>  <font class=t>IDENTIFIER</font>  <br> <font class=kw>:</font>   (  <font class=t>IDENTIFIER</font>   ),+  <br>  ),+  <font class=kw>&gt;</font>  <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+  <br>  )*  <br> <font class=kw>}</font>               <font class=obj><a href="javascript:showObj('getGuiHandler')">getGuiHandler</a></font>            </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FileSystemStatements>FileSystemStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FileSystemStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FileSystemStatements')">semantics</a>&nbsp;<br>
+<div id=_FileSystemStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('FSListStatement')">FSListStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FSFileModStatements')">FSFileModStatements</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FSMakeRemoveDirStatements')">FSMakeRemoveDirStatements</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FSCopyStatement')">FSCopyStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('FSMoveStatement')">FSMoveStatement</a></font> <br>  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FSListStatement>FSListStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FSListStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FSListStatement')">semantics</a>&nbsp;<br>
+<div id=_FSListStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>listFiles</font>   (  <font class=kw>{</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <font class=kw>}</font>   )?   |  <font class=kw>listPrintFiles</font>   |  <font class=kw>ls</font>   )   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>except</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>recursive</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>fileOnly</font>   |  <font class=kw>dirOnly</font>   |  <font class=kw>perFile</font>   |  <font class=kw>perDir</font>  <br>  |  <font class=kw>count</font>   |  <font class=kw>countLines</font>   |  <font class=kw>size</font>   |  <font class=kw>compressedSize</font>   |  <font class=kw>as</font>  <font class=kw>tree</font>   |  <font class=kw>ordered</font>   (  <font class=kw>by</font>   (  <font class=kw>Date</font>   |  <font class=kw>size</font>   |  <font class=kw>extension</font>   )   )  <br>  )*                                      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FSFileModStatements>FSFileModStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FSFileModStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FSFileModStatements')">semantics</a>&nbsp;<br>
+<div id=_FSFileModStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>remove</font>   |  <font class=kw>setFileTime</font>   |  <font class=kw>setReadOnly</font>   |  <font class=kw>chgrp</font>   |  <font class=kw>chmod</font>   |  <font class=kw>chown</font>   )   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>except</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>to</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>recursive</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>fileOnly</font>   |  <font class=kw>dirOnly</font>   )*           </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FSMakeRemoveDirStatements>FSMakeRemoveDirStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FSMakeRemoveDirStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FSMakeRemoveDirStatements')">semantics</a>&nbsp;<br>
+<div id=_FSMakeRemoveDirStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>removeDir</font>   |  <font class=kw>rmdir</font>   |  <font class=kw>makeDir</font>   |  <font class=kw>mkdir</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>force</font>   )?       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FSCopyStatement>FSCopyStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FSCopyStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FSCopyStatement')">semantics</a>&nbsp;<br>
+<div id=_FSCopyStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>copy</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <br>  (  <font class=kw>except</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>strip</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>under</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |   (  <font class=kw>to</font>   |  <font class=kw>into</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <br>  |  <font class=kw>recursive</font>   |  <font class=kw>echo</font>   |  <font class=kw>Echo</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>keepDirs</font>   |  <font class=kw>compress</font>   |  <font class=kw>store</font>  <br>  |  <font class=kw>transform</font>   (  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=t>IDENTIFIER</font>  <font class=kw>,</font>  <font class=t>IDENTIFIER</font>  <font class=nt><a href="javascript:showSynNT('Block')">Block</a></font>  )  <br>  )*           <font class=obj><a href="javascript:showObj('')"></a></font> <font class=obj><a href="javascript:showObj('')"></a></font>                                                           <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=FSMoveStatement>FSMoveStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_FSMoveStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('FSMoveStatement')">semantics</a>&nbsp;<br>
+<div id=_FSMoveStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>rename</font>   |  <font class=kw>move</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>except</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>to</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>echo</font>   )*      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=JdbcStatements>JdbcStatements</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_JdbcStatements')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('JdbcStatements')">semantics</a>&nbsp;<br>
+<div id=_JdbcStatements style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=nt><a href="javascript:showSynNT('ConnectStatement')">ConnectStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('PrepareStatement')">PrepareStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('PreparedExecuteStatement')">PreparedExecuteStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('PreparedExecuteQueryStatement')">PreparedExecuteQueryStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('PreapredExecuteUpdateStatement')">PreapredExecuteUpdateStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecuteQueryStatement')">ExecuteQueryStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecuteUpdateStatement')">ExecuteUpdateStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecuteSqlStatement')">ExecuteSqlStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecuteBatchStatement')">ExecuteBatchStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('ExecuteAnyStatement')">ExecuteAnyStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('CreateBatchStatement')">CreateBatchStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('AddBatchStatement')">AddBatchStatement</a></font> <br>  |  <font class=nt><a href="javascript:showSynNT('DumpTableStatement')">DumpTableStatement</a></font>  </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ConnectStatement>ConnectStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ConnectStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ConnectStatement')">semantics</a>&nbsp;<br>
+<div id=_ConnectStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>connect</font>   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=nt><a href="javascript:showSynNT('MemberInitList')">MemberInitList</a></font>  )?  <font class=kw>to</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>,</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   )?  <font class=kw>;</font>                                                                                              </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PrepareStatement>PrepareStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PrepareStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PrepareStatement')">semantics</a>&nbsp;<br>
+<div id=_PrepareStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>prepare</font>   |  <font class=kw>prepareCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>             </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PreparedExecuteStatement>PreparedExecuteStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PreparedExecuteStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PreparedExecuteStatement')">semantics</a>&nbsp;<br>
+<div id=_PreparedExecuteStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>preparedExecute</font>   |  <font class=kw>preparedExecuteCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?  <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PreparedExecuteQueryStatement>PreparedExecuteQueryStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PreparedExecuteQueryStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PreparedExecuteQueryStatement')">semantics</a>&nbsp;<br>
+<div id=_PreparedExecuteQueryStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>preparedExecuteQuery</font>   |  <font class=kw>preparedExecuteQueryCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?  <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>  <br>  (  <font class=kw>;</font>   |  <font class=kw>onSuccess</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  (  <font class=kw>else</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  )?   )        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=PreparedExecuteUpdateStatement>PreparedExecuteUpdateStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_PreparedExecuteUpdateStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('PreparedExecuteUpdateStatement')">semantics</a>&nbsp;<br>
+<div id=_PreparedExecuteUpdateStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>preparedExecuteUpdate</font>   |  <font class=kw>preparedExecuteUpdateCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?  <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecuteQueryStatement>ExecuteQueryStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecuteQueryStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecuteQueryStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecuteQueryStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>executeQuery</font>  <br>  (   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>  <br>  |   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>  <br>  )   (  <font class=kw>;</font>   |  <font class=kw>onSuccess</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  (  <font class=kw>else</font>  <font class=nt><a href="javascript:showSynNT('SimpleBlock')">SimpleBlock</a></font>  )?   )     <font class=obj><a href="javascript:showObj('')"></a></font>      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecuteUpdateStatement>ExecuteUpdateStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecuteUpdateStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecuteUpdateStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecuteUpdateStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>executeUpdate</font>   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>     <font class=obj><a href="javascript:showObj('')"></a></font>     </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecuteSqlStatement>ExecuteSqlStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecuteSqlStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecuteSqlStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecuteSqlStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>executeSQL</font>   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <br>  (  <font class=nt><a href="javascript:showSynNT('RawSqlList')">RawSqlList</a></font>  |  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>   |   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showSynNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw>;</font>   )       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecuteAnyStatement>ExecuteAnyStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecuteAnyStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecuteAnyStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecuteAnyStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>executeAny</font>   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=nt><a href="javascript:showSynNT('HereDoc')">HereDoc</a></font>       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=ExecuteBatchStatement>ExecuteBatchStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_ExecuteBatchStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('ExecuteBatchStatement')">semantics</a>&nbsp;<br>
+<div id=_ExecuteBatchStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>executeBatch</font>   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?   (  <font class=nt><a href="javascript:showSynNT('RawSqlList')">RawSqlList</a></font>  |  <font class=kw>;</font>   )      </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=RawSqlList>RawSqlList</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_RawSqlList')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('RawSqlList')">semantics</a>&nbsp;<br>
+<div id=_RawSqlList style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>{</font>   (  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>   )+  <font class=kw>}</font>         </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=BindVariableList>BindVariableList</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_BindVariableList')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('BindVariableList')">semantics</a>&nbsp;<br>
+<div id=_BindVariableList style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+  (  <font class=kw>@</font>  <font class=t>INT_LIT</font>  <br>  (  <font class=kw>::</font>  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showSynNT('Arguments')">Arguments</a></font> <br>  |   (  <font class=kw>:</font>  <font class=kw>array</font>   |  <font class=kw>bigDecimal</font>   |  <font class=kw>blob</font>   |  <font class=kw>boolean</font>   |  <font class=kw>byte</font>   |  <font class=kw>bytes</font>   |  <font class=kw>clob</font>   |  <font class=kw>Date</font>   |  <font class=kw>double</font>  <br>  |  <font class=kw>float</font>   |  <font class=kw>int</font>   |  <font class=kw>long</font>   |  <font class=kw>Numeric</font>   |  <font class=kw>ref</font>   |  <font class=kw>short</font>   |  <font class=kw>String</font>   |  <font class=kw>Struct</font>   |  <font class=kw>time</font>  <br>  |  <font class=kw>timestamp</font>   |  <font class=kw>varchar</font>   |  <font class=kw>other</font>   |  <font class=kw>oracle_rowid</font>   |  <font class=kw>oracle_cursor</font>   |  <font class=kw>oracle_bfile</font>  <br>  )?   (  <font class=kw>=</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>=&gt;</font>  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  |  <font class=kw>&lt;=&gt;</font>  <font class=nt><a href="javascript:showSynNT('PrimaryExpr')">PrimaryExpr</a></font>  )?  <br>  )   ),+               </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=CreateBatchStatement>CreateBatchStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_CreateBatchStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('CreateBatchStatement')">semantics</a>&nbsp;<br>
+<div id=_CreateBatchStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>createBatch</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>;</font>       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=AddBatchStatement>AddBatchStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_AddBatchStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('AddBatchStatement')">semantics</a>&nbsp;<br>
+<div id=_AddBatchStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>addBatch</font>   (  <font class=kw>to</font>   )?  <font class=t>IDENTIFIER</font>  <font class=kw>:</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font> <font class=kw>;</font>       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=DumpTableStatement>DumpTableStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_DumpTableStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('DumpTableStatement')">semantics</a>&nbsp;<br>
+<div id=_DumpTableStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>dumpTable</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font> <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   |  <font class=kw>into</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>limit</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  |  <font class=kw>prompt</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )*  <br>  (  <font class=kw>where</font>  <font class=nt><a href="javascript:showSynNT('Mixture')">Mixture</a></font>  )?  <font class=kw>;</font>            <font class=obj><a href="javascript:showObj('')"></a></font> <font class=obj><a href="javascript:showObj('openTableDump')">openTableDump</a></font>   </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=Dom>Dom</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_Dom')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('Dom')">semantics</a>&nbsp;<br>
+<div id=_Dom style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>do</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=kw>as</font>  <font class=kw>dom</font>   (  <font class=nt><a href="javascript:showSynNT('XmlInitList')">XmlInitList</a></font>  )?        </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=XmlInitList>XmlInitList</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_XmlInitList')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('XmlInitList')">semantics</a>&nbsp;<br>
+<div id=_XmlInitList style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>with</font>   (  <font class=t>IDENTIFIER</font>   (  <font class=kw>=</font>  <font class=kw>true</font>   |  <font class=kw>false</font>   )?   |  <font class=kw>xmlns</font>   (  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw>=</font>  <font class=t>STRING_LIT</font>   ),+       </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=XmlStatement>XmlStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_XmlStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('XmlStatement')">semantics</a>&nbsp;<br>
+<div id=_XmlStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>do</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>  <font class=kw>&gt;</font>   )?   (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <font class=kw>as</font>  <font class=kw>xml</font>   (  <font class=nt><a href="javascript:showSynNT('XmlInitList')">XmlInitList</a></font>  )?  <font class=kw>{</font>  <br>  (  <font class=kw>BEFORE</font>   |  <font class=kw>AFTER</font>   |  <font class=kw>&lt;</font>  <font class=kw>&gt;</font>   |   (  <font class=kw>&lt;</font>   |  <font class=kw>&lt;/</font>   )+  <font class=t>IDENTIFIER</font>   (  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )+  <font class=kw>&gt;</font>  <br>  |  <font class=kw>TEXT</font>   (  <font class=kw>&lt;</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>:</font>  <font class=t>IDENTIFIER</font>   )+  <font class=kw>&gt;</font>   (  <font class=kw>+</font>   |  <font class=kw>-</font>   )?   )?  <br>  |  <font class=kw>WARNING</font>   |  <font class=kw>ERROR</font>   |  <font class=kw>START_DOC</font>   |  <font class=kw>END_DOC</font>   |  <font class=kw>START_NS_MAP</font>   |  <font class=kw>END_NS_MAP</font>  <br>  |  <font class=kw>PI</font>   |  <font class=kw>WHITESPACE</font>   |  <font class=kw>COMMENT</font>   |  <font class=kw>START_CDATA</font>   |  <font class=kw>END_CDATA</font>  <br>  |  <font class=kw>START_DTD</font>   |  <font class=kw>END_DTD</font>   |  <font class=kw>START_ENTITY</font>   |  <font class=kw>END_ENTITY</font>   |  <font class=kw>ELEMENT_DECL</font>  <br>  |  <font class=kw>ATTR_DECL</font>   |  <font class=kw>ENTITY_DECL</font>   |  <font class=kw>EXT_ENTITY_DECL</font>   |  <font class=kw>SKIPPED_ENTITY</font>  <br>  )  <font class=kw>:</font>   (  <font class=nt><a href="javascript:showSynNT('Statement')">Statement</a></font>  )+  <br>  )+  <font class=kw>}</font>        <font class=obj><a href="javascript:showObj('')"></a></font>      <font class=obj><a href="javascript:showObj('')"></a></font>           </blockquote></td></tr>
+
+ <tr><td width=200 valign=top nowrap>
+<b>&nbsp; <font class=nt><a name=XsltStatement>XsltStatement</a></font> &nbsp;::=</b></td>
+<td class=anno>
+<a href="JavaScript:;" onmouseup="switchDisplay('_XsltStatement')">used by</a> &nbsp; &nbsp;
+&nbsp; <a href="JavaScript:showNT('XsltStatement')">semantics</a>&nbsp;<br>
+<div id=_XsltStatement style="display=none;width:200;" class=used></div>
+</td></tr>
+<tr><td nowrap colspan=2><blockquote>
+ <font class=kw>xslt</font>  <br>  (  <font class=kw>copy</font>  <br>  |   (  <font class=kw>xpath</font>  <font class=kw>(</font>   )?  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?   (  <font class=kw>)</font>   )?  <font class=kw>on</font>  <br>  )  <br> <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>as</font>  <font class=kw>dom</font>  <br>  |   (  <font class=kw>into</font>   |  <font class=kw>to</font>   )  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showSynNT('Expr')">Expr</a></font>  )?  <br>  )  <br>  (  <font class=kw>outputProperties</font>  <font class=nt><a href="javascript:showSynNT('MemberInitList')">MemberInitList</a></font>  |  <font class=kw>parameters</font>  <font class=nt><a href="javascript:showSynNT('MemberInitList')">MemberInitList</a></font>  )*              </blockquote></td></tr>
+
+ </td></tr></table></table>
+ </body></html>

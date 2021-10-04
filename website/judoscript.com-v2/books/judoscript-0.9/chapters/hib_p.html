@@ -1,0 +1,669 @@
+<html><head><title>Chapter 24. Hibernate ORM and HQL Scripting</title>
+      <link href="../../../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro">Introduction to Hibernate and HQL</a></li><br>&#187;&nbsp;<a href="#hib_ex">A Simple Example of Object Mapping</a><br>&#187;&nbsp;<a href="#hib_apis">Key Hibernate API Classes and Interfaces</a><br>&#187;&nbsp;<a href="#intro_setup">Set-Up and Initialization of Hibernate</a><li><a href="#hib_scripting">Hibernate Scripting</a></li><br>&#187;&nbsp;<a href="#setup">Set-Up and Initialization of Hibernate</a><br>&#187;&nbsp;<a href="#tx">Support for Object Persistence and Transactions</a><br>&#187;&nbsp;<a href="#hql">Support for HQL and Multiple Object Deletion</a><li><a href="#hom">Working with Hibernate Object Models</a></li><br>&#187;&nbsp;<a href="#types">Mapping Types</a><br>&#187;&nbsp;<a href="#entity_value">Mapping Entity and Value Types</a><br>&#187;&nbsp;<a href="#inheritance">Mapping Class Inheritance</a><br>&#187;&nbsp;<a href="#assoc">Mapping Associations</a><li><a href="#summary">Summary</a></li>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+<p class=tiny>Book: <a href="../toc_details.html">The Judo Language 0.9</a></p>
+ <h1>Chapter 24. Hibernate ORM and HQL Scripting</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<br><a href="hib.html">non-printer version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+Hibernate is proven to be one of the best Object-Relational Mapping (ORM) frameworks for Java. Judo chooses to natively support Hibernate because object models written with Hibernate can be used in regular Java (and Judo), so that you can write Judo programs to use the same business logic as on the server to manipulate persistent data. Judo's native support for Hibernate include transactional features and query support with <i>Hibernate Query Language</i> (HQL) much the same way as Judo's JDBC scripting. Judo seamlessly supports scripting for both Hibernate versions 2 and 3, meaning that a same Judo program can be run with both Hibernate versions.
+</td></tr></table></td></tr></table>
+
+<p>Enterprise applications typically persist data in relational databases. In object-oriented systems such as those written in Java, saving data equates to persist object states into SQL databases. One advantage of OOP is encapsulation, and hiding the database operations from the application code is only natural in an OO environment. ORM (Object-Relational Mapping) frameworks are designed to make this as easy, seamless and painless as possible. Mordern ORM frameworks, such as Hibernate, are very close to this ideal.</p>
+
+<p>Hibernate has emerged to be one of the best ORM frameworks for Java. In Hibernate, you write an object models with totally normal Java objects with accompanying meta data in XML format, and the framework takes care of creating SQLs for persisting object state into the database. Hibernate also defines a query language, the <i>Hibernate Query Language</i> (HQL), for retrieving objects from database according to specific query conditions. Another important feature is, object models in Hibernate can be used both in containers and in plain Java software.</p>
+
+<p>Judo chooses to natively support Hibernate, because Hibernate is clearly <i>an ORM done right</i>. Judo's Hibernate scripting support allows programmers to query the object model easily just like Judo's JDBC scripting (chapter <i><a href="jdbc.html">22. JDBC (SQL) Scripting</a></i>). Also provided is a set of abstract commands for manipulating Hibernate persistent objects. This Hibernate scripting support is significant for systems implemented with Hibernate as its persistence layer: you can use Judo to manipulate data through the same object model that the system uses, so the data integrity and business rules are best maintained.</p>
+
+
+
+<h2>&nbsp;<br><a name=intro> Introduction to Hibernate and HQL</a></h2>
+
+<p>Object-oriented systems, such as those written in Java, comprise of graphes of objects. Some objects will disappear some time prior to the demise of the running JVM; others will be persisted and can be reinstated later on. By far, the most popular persistence stores for object data are relational databases, because of the simplicity, well-established SQL support and the plethora of reporting and data mining tools avaiable. However, relational models and object models are distinctly different; mapping objects states to and from relational databases takes a lot of work, which typically means writing a lot of SQL code and JDBC calls. Numerous efforts have been made to automate this object-relational mapping, yielding a special breed of infrastructural softwared called <i>object-relational mapping (ORM) framework</i>. ORM frameworks reduce or even eliminate the need of any hand-written SQL statements, and also offer many options for better system design and performance.</p>
+
+<p>Hibernate is one of the ORM frameworks. It is one of the least intrusive object mapping mechanism and does automatic dirty check. The Hibernate framework and the code using it can be run in both managed containers and unmanaged environment. It provides enough facilities to address the complicated problem of ORM, yet are mostly intuitive enough for the causes. It has a versatile query language, the <i>Hibernate Query Language</i> or HQL for short. Hibernate is undoubtedly one of the best Java ORM solutions, and Judo chooses to support it natively, so that users can easily script an object model written in Hibernate to perform tasks consistent with systems that are built on top of the same object model.</p>
+
+
+<a name=hib_ex><h3> A Simple Example of Object Mapping</h3></a>
+
+<p>Hibernate, being an ORM framework, deals with three parties: Java classes, relational database schema and the mapping between the two defined by Hibernate. For each Java classs, a descriptor is required for each Java class. This descriptor can be a separate XML document (typically with the extension of <code>.hbm.xml</code>), or as annotational tags within the Java source file. Hibernate provides tools to generate one party from the other; for instance, from a mapping descriptor file, you can generate the corresponding Java source file and database schema, or generate the descriptor file from a Java class source file.</p>
+
+<p>Let's take a look at a simplest object model, that is, one that just contains a single class called <code>TestSimpleTypes</code>. The mapping descriptor file is:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="TestSimpleTypes.hbm.xml">Listing 24.1</a> TestSimpleTypes.hbm.xml</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd"&gt;
+
+&lt;hibernate-mapping&gt;
+  &lt;class name="TestSimpleTypes" discriminator-value="N"&gt;
+    &lt;id name="id" type="long"&gt; &lt;generator class="native"/&gt; &lt;/id&gt;
+    &lt;property name="theFloat"   type="float"/&gt;
+    &lt;property name="theString"  type="java.lang.String"/&gt;
+    &lt;property name="theDate"    type="java.util.Date"/&gt;
+  &lt;/class&gt;
+&lt;/hibernate-mapping&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Run the <code>hbm2java</code> tool, and the Java source file is generated:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="TestSimpleTypes.java">Listing 24.2</a> TestSimpleTypes.java</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+import java.util.Date;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+/** @author Hibernate CodeGenerator */
+public class TestSimpleTypes implements java.io.Serializable
+{
+    private Long id;
+    private Float theFloat;
+    private String theString;
+    private Date theDate;
+
+    public TestSimpleTypes(Float theFloat, String theString, Date theDate) {
+        this.theFloat = theFloat;
+        this.theString = theString;
+        this.theDate = theDate;
+    }
+
+    public TestSimpleTypes() {}
+
+    public Long getId() { return this.id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Float getTheFloat() { return this.theFloat; }
+    public void setTheFloat(Float theFloat) { this.theFloat = theFloat; }
+
+    public String getTheString() { return this.theString; }
+    public void setTheString(String theString) { this.theString = theString; }
+
+    public Date getTheDate() { return this.theDate; }
+    public void setTheDate(Date theDate) { this.theDate = theDate; }
+
+    public String toString() {
+        return new ToStringBuilder(this).append("id", getId()).toString();
+    }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Note that the Java class doesn't have to implement any Hibernate-specific interfaces! Because of this, Hibernate is deemed one of the least intrusive ORM framework. This generated code simply contains property getters and setters. You can add business logic methods and other convenience methods, and there are ways to define composite or calculated properties; this falls in the realm of Hibernate ORM practices and is out of the scope of this chapter.</p>
+
+<p>Compile the Java source file and bundle the descirptor <code>hbm.xml</code> file in the same classpath, there you have a working Hibernate object model.</p>
+
+<br>
+
+
+<a name=hib_apis><h3> Key Hibernate API Classes and Interfaces</h3></a>
+
+<p>Once you have the object model ready, you can use Hibernate to retrieve persistent objects from database and write the object state back to database via calls to Hibernate APIs.</p>
+
+<p>The reason Judo provides native support for any <i>domain</i> is to hide the details of the domain APIs. While this holds true with Hibernate scripting as well, it is a little different. Because Hibernate object models are predominantly used in Java systems, understanding the API itself is a necessity to anyone who uses Hibernate. Here we summarize the most important Hibernate API classes and interfaces for using Hibernate object models. In the rest of this chapter, we will refer to these classes and interfaces when discussing Judo's Hibernate scripting support.</p>
+
+<p><b>Hibernate versions and API names</b><br>Hibernate version 2 API used prefix of <code>net.sf.hibernate</code>; later versions use the prefix of <code>org.hibernate</code>. Judo can script both and you are not exposed with this issue. In this documentation, however, we have to occasionally refer to the Hibernate API classes and interfaces. For the convenience of this discussion, we simply use the prefix of <code>org.hibernate</code>, but keep in mind that if you are working with Hibernate version 2, the prefix should be <code>net.sf.hibernate</code>.</p>
+
+<p>In Java Hibernate programs, these are the most basic classes and interfaces:
+<ul>
+<li><code>org.hibernate.cfg.Configuration</code></li>
+<li><code>org.hibernate.SessionFactory</code></li>
+<li><code>org.hibernate.Session</code></li>
+<li><code>org.hibernate.Transaction</code></li>
+</ul>
+</p>
+
+<p>For Hibernate transactions, these classes and interfaces are critical:
+<ul>
+<li><code>org.hibernate.Query</code></li>
+<li><code>org.hibernate.Criteria</code></li>
+<li><code>org.hibernate.Lock</code></li>
+</ul>
+</p>
+
+<p>In Hibernate object models, you may very likely encounter user-defined types, which are implementations of one of these interfaces:
+<ul>
+<li><code>org.hibernate.UserType</code></li>
+<li><code>org.hibernate.CompositeUserType</code></li>
+</ul>
+</p>
+
+<p>There are other classes and interfaces in Hibernate API that allow various kinds of extensions to the framework, which are not that important to our purpose of scripting Hibernate object models.</p>
+
+<br>
+
+
+<a name=intro_setup><h3> Set-Up and Initialization of Hibernate</h3></a>
+
+<p>For any applications using Hibernate, the Hibernate environment must be initialized once. This means to initialize an instance of the <code>Configuration</code>, from which to derive a singleton instance of <code>SessionFactory</code>. Hibernate object persistence is done in units of work called <i>sessions</i>, represented by the <code>Session</code> interface. Each session is created by the session factory.</p>
+
+<p>The Hibernate configuration is extremely important; it contains information about the whole ORM environment as well as the object model itself. There are two ways to configure Hibernate. The first way is to use initialization properties, which can be either from <code>System.getProperties()</code> or stored in a <code>hibernate.properties</code> file in the classpath. The second way is the more versatile configraution XML document, <code>hibernate.cfg.xml</code>, also in the classpath. Using <code>hibernate.cfg.xml</code>, you can contain object model as well; if you use properties, you would have to programmatically add each class in the object model via <code>Configuration.addResource()</code> or <code>Configuration.addClass()</code> calls.</p>
+
+<p><b>Commonly-used Hibernate configuration attributes</b><br>The most important information to configure is the database connection. In standalone applications, you probably need these attributes:
+<ul>
+<li><code>hibernate.connection.driver_class</code></li>
+<li><code>hibernate.connection.url</code></li>
+<li><code>hibernate.connection.username</code></li>
+<li><code>hibernate.connection.password</code></li>
+<li><code>hibernate.connection.pool_size</code></li>
+<li><code>hibernate.dialect</code></li>
+</ul>
+
+If the application runs inside an application server, you may want to obtain a data source for database connection:
+<ul>
+<li><code>hibernate.connection.datasource</code></li>
+<li><code>hibernate.jndi.url</code></li>
+<li><code>hibernate.jndi.class</code></li>
+</ul>
+
+There are many options for database connections, caching and others. Some of the interesting attributes are:
+<ul>
+<li><code>hibernate.show_sql</code></li>
+<li><code>hibernate.hbm2dll.auto</code></li>
+</ul>
+
+Hibernate provides good documentation, and it would be beneficial to browse all the attributes at least once.</p>
+
+<p><b>Steps of using Hibernate in Java</b><br>To use Hibernate in a Java applications, including Judo programs, these are the steps:
+<ol>
+<li>Define the object model by creating Java class source files and their accompanying <code>hbm.xml</code> files.</li>
+<li>Decide on the parameters for the Hibernate environment and create configuration files.</li>
+<li>At runtime, initialize the <code>Configuration</code> instance with the configuration information and register the object model classes.</li>
+<li>Derive a <code>SessionFactory</code> singleton.</li>
+<li>Obtain a <code>Session</code> to carry out a unit of work of CRUD persistent objects, in one or more transactions.</li>
+</ol>
+</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=hib_scripting> Hibernate Scripting</a></h2>
+
+<p>Judo provides a number of abstract constructs to make it very easy to script objects in Hibernate object models. These are mechanisms for initializing and accessing Hibernate environment:
+<ul>
+<li>The <b><code>hib::setup</code></b> statement:<br>for configuring Hibernate.</li>
+<li>The <b><code>hib::addClass</code></b> and <b><code>hib::addResource</code></b> statements:<br>for programmatically adding object model classes.</li>
+<li>The <b><code>hib::get</code></b> function:<br>for returning Hibernate system objects such as configuration, session factory and the current session object, in case Java-style API manipulations are intended.</code>
+</ul>
+</p>
+
+<p>Judo provides these mechanisms for persisting objects:
+<ul>
+<li>The <b><code>hib::get</code></b><b><code>(</code></b> <i>JavaClass</i><b><code>,</code></b> <i>ObjectID</i> [ <b><code>,</code></b> <i>lock</i> ] <b><code>)</code></b> function:<br>to get a persistent object from the database.</li>
+<li>The <b><code>hib::save</code></b>, <b><code>hib::update</code></b>, <b><code>hib::saveOrUpdateCopy</code></b>, <b><code>hib::delete</code></b> and <b><code>hib::lock</code></b> and <b><code>hib::unlock</code></b> functions:<br>for persist object states to the database.</li>
+<li>The <b><code>hib::txBegin</code></b>, <b><code>hib::txEnd</code></b> and <b><code>hib::txAbort</code></b> statements:<br>for transactions that may involve multiple steps of object manipulations.</li>
+</ul>
+
+<p>Judo provides these mechanisms for HQL querying and deleting multiple objects:
+<ul>
+<li>The <b><code>hib::query</code></b>, <b><code>hib::iterate</code></b> and <b><code>hib::delete</code></b> statements:<br>for HQL scripting. They are syntactically similar to the JDBC scripting <b><code>db::query</code></b> statement.</li>
+</ul>
+</p>
+
+
+<a name=setup><h3> Set-Up and Initialization of Hibernate</h3></a>
+
+<p>The <b><code>hib::setup</code></b> statement abstracts the Hibernate configuration. You can specify everything in this single statement. Its syntax is:</p>
+
+<a name="g_hib_setup"><table border=0 class=secondary3>
+<tr><td valign=top><i>Hibernate_Setup</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>hib::setup</code></b> [ <i>attributes</i> ] [ ( <i>JavaClassName</i> | <i>STRING_LITERAL</i> ),* ] <b><code>;</code></b></td></tr>
+<tr><td valign=top><i>attributes</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>(</code></b> ( <i>PROPERTY_NAME</i> <b><code>=</code></b> <i>Expr</i> ),* <b><code>)</code></b></td></tr>
+</table></a>
+</p>
+
+<p>Let's look at an example.</p>
+
+<font  color=black><pre>
+import com.foo.bar.Auction.*;
+
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update',
+    hibernate.show_sql            = true,
+    judoscript.echo               = true  // echo the eventual config values
+  )
+
+  'com/foo/bar/Auction/Item',   // add a resource
+  com.foo.bar.Auction.Category, // add a class with qualified class name
+  Bid                           // add a class qualified via the import.
+;
+</pre></font>
+
+<p>The attributes in the parentheses are the same as those in the <code>hibernate.proeprties</code> file; the Java class names and/or mapping <code>hbm.xml</code> files are listed at the end. Look closely at the database connection attributes, and you may find that there are some important attributes missing, such as <code>hibernate.connection.driver_class</code> and <code>hibernate.dialect</code>. This is because Judo <i>knows</i> many relational databases; based on the JDBC URL , Judo can figure out the driver class (see <i><a href="jdbc.html#con_1">JDBC Drivers</a></i>) and Hibernate dialects. The ultimate properties used by Hibernate may have more attributes than what are specified in the <b><code>hib::setup</code></b> statement. Judo provides an extra boolean attribute, <code>judoscript.echo</code>; when it is , Judo will print out all the attributes before Hibernate is actually initialized. So when you run it, you may first see something like this:</p>
+
+<font  color=black><pre>
+[hib::setup] hibernate.connection.username = james
+[hib::setup] judoscript.echo = true
+[hib::setup] hibernate.connection.password = james
+[hib::setup] hibernate.dialect = net.sf.hibernate.dialect.MySQLDialect
+[hib::setup] hibernate.connection.url = jdbc:mysql://localhost/test
+[hib::setup] hibernate.connection.driver_class = com.mysql.jdbc.Driver
+[hib::setup] hibernate.hbm2ddl.auto = update
+[hib::setup] judoscript.hibernate.version = 2
+</pre></font>
+
+<p>The last property, <code>judoscript.hibernate.version</code>, is a Judo internal indicator. In the above output, it is "2" because we ran with Hibernate version 2. Judo figures out the Hibernate version based on the classes it founds; if Hibernate version 3 classes are in the classpath instead, it would yield the following result:</p>
+
+<font  color=black><pre>
+[hib::setup] hibernate.connection.username = james
+[hib::setup] judoscript.echo = true
+[hib::setup] hibernate.connection.password = james
+[hib::setup] hibernate.dialect = org.hibernate.dialect.MySQLDialect
+[hib::setup] hibernate.connection.url = jdbc:mysql://localhost/test
+[hib::setup] hibernate.connection.driver_class = com.mysql.jdbc.Driver
+[hib::setup] hibernate.hbm2ddl.auto = update
+[hib::setup] judoscript.hibernate.version = 3
+</pre></font>
+
+<p>You can choose to store configuration information in the configuration file instead. For example, the following statement initializes Hibernate:</p>
+
+<font  color=black><pre>
+hib::setup;
+</pre></font>
+
+<p>In this case, you need to specified everything in a <code>hibernate.cfg.xml</code> document that can be found in the classpath, which contains something like this:</p>
+
+<font  color=black><pre>
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 2.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd"&gt;
+&lt;hibernate-configuration&gt;
+  &lt;session-factory name="java:/hibernate/HibernateFactory"&gt;
+    &lt;property name="show_sql"&gt;true&lt;/property&gt;
+    &lt;property name="connection.datasource"&gt;java:/comp/env/jdbc/AuctionDB&lt;/property&gt;
+    &lt;property name="dialect"&gt;org.hibernate.dialect.MySQLDialect"&lt;/property&gt;
+
+    &lt;mapping resource="auction/Item.hbm.xml"/&gt;
+    &lt;mapping resource="auction/Category.hbm.xml"/&gt;
+    &lt;mapping resource="auction/Bid.hbm.xml"/&gt;
+  &lt;/session-factory&gt;
+&lt;/hibernate-configuration&gt;
+</pre></font>
+</p>
+
+<p>You can also put configuration attributes in the <code>hibernate.properties</code> file, in which case all the classes in the object model must be specified explicitly in <b><code>hib::setup</code></b>. All attributes must be specified, such as <code>hibernate.connection.driver_class</code> and <code>hibernate.dialect</code>.</p>
+
+
+<p><b>Programmatically add classes and/or resources</b><br>There may be situations where you prefer to programmatically add classes of the object model to the Hibernate environment instead of declaring them in <b><code>hib::setup</code></b> statement. Judo provides two functions for this purpose: <b><code>hib::addClass()</code></b> and <b><code>hib::addResource()</code></b>. For instance, perhaps you want to add all the <code>hbm.xml</code> mapping files in a folder within a jar file:
+
+<font  color=black><pre>
+hib::setup;
+
+listFiles '*.hbm.xml' in 'myobjmdl.jar' recursive
+{
+  hib::addResource $_; // $_ holds the current file path
+}
+</pre></font>
+</p>
+
+<p><b>Hibernate system objects</b><br>After initialization, Judo maintains a singleton of <code>Configuration</code> and a <code>SessionFactory</code> instances. When any of the persisting operations (discussed later) are invoked, a new session is created (if it doesn't already exist); this session will be there until <b><code>hib::close</code></b> is called.</p>
+
+<p>The <b><code>hib::get()</code></b> function can take an argument of <code>"config"</code>, <code>"factory</code> or <code>"session"</code> and return one of these Hibernate system objects. For example, you may want to get the session object and invoke its criteria API to perform a <i>query-by-example</i> (QBE) operation:
+
+<font  color=black><pre>
+import org.hibernate.expression.Example;
+
+hib::setup;
+
+exampleUser = new java::User;
+exampleUser.firstName = 'Max';
+
+sess = hib::get('session');
+crit = sess.createCriteria(java::User);
+crit.add( Example::create(exampleUser) );
+result = crit.list(); // result is a List.
+
+for x in result {
+  println x.firstName, ' ', x.lastName;
+}
+</pre></font>
+
+This example is almost purely Java scripting except it gets the session object via <b><code>hib::get()</code></b>.</p>
+
+<p>Note that <b><code>hib::get()</code></b> function is dual-purpose: it can also be used to retrieve individual persistent objects from database, as you will see in the next section.</p>
+
+<br>
+
+
+
+<a name=tx><h3> Support for Object Persistence and Transactions</h3></a>
+
+<p>Once Hibernate is initialized properly, you can create and manipulate instances in the object model using the Hibernate functions and operators.</p>
+
+<p><b>Hibernate sessions and transactions</b><br>As we know, all the object persistence operations in Hibernate occur within a session. In Judo, a session is started automatically whenever any persisting operation starts, <i>per each thread</i>. The session is open until <b><code>hib::close</code></b> is called.</p>
+
+<p>More accurately, Hibernate object persisting operations happen in transactions, and multiple transactions can happen in a session. In Judo, you can start a transaction via a <b><code>hib::txBegin</code></b> call, and commit and finish it via a <b><code>hib::txEnd</code></b> call, or roll back the changes by a <b><code>hib::txAbort</code></b> call. If a transaction is not started for a session, operations are in the <i>auto-commit</i> mode, where each operation starts its own transaction, commits it once done. Because the session instance is per-thread, there can be only one transaction per session at any moment.</p>
+
+<p><b>Persistent object life-cycles and manipulation</b><br>In Hibernate, persistent objects can be in one of the following states: <i>transient</i>, <i>persistent</i> and <i>detached</i>. An object is in the <i>transient</i> state when it is either newly created, or deleted. An object with a valid database identifier is said to be <i>persistent</i>. Persistent objects are associated with a <code>Session</code> instnace; some API calls can disassociate persistent instances from the <code>Session</code>, and such instances are said to be in the <i>detached</i> state. Detached instances' changes will not be automatically picked up unless they are explicitly updated by a <code>Session</code>.</p>
+
+<p>In Judo, Hibernate persistent objects' life-cycles are managed with these built-in functions and operators:</p>
+<ul>
+<li><b><code>hib::get(</code></b> <i>InstanceClass</i> <b><code>,</code></b> <i>Identifier</i> [ <b><code>,</code></b> <i>LockMode</i> ] <b><code>)</code></b>:<br>to get a persistent instance from the database, and optionally lock the instance.</li>
+<li><b><code>hib::save</code></b> <i>Instance</i>:<br>to save a newly created instance. If the current thread is in a transaction, the change is not committed until the transaction commits; otherwise, this call auto-commits.</li>
+<li><b><code>hib::update</code></b> <i>Instance</i>:<br>to update a <i>persistent</i> instance. If the current thread is in a transaction, the change is not committed until the transaction commits; otherwise, this call auto-commits.</li>
+<li><b><code>hib::saveOrUpdateCopy</code></b> <i>Instance</i>:<br>to update a <i>persistent</i> instance or insert a <i>detached</i> instance. If the current thread is in a transaction, the change is not committed until the transaction commits; otherwise, this call auto-commits.</li>
+<li><b><code>hib::delete</code></b> <i>Instance</i>:<br>to delete a <i>persistent</i> instance. If the current thread is in a transaction, the change is not committed until the transaction commits; otherwise, this call auto-commits.</li>
+<li><b><code>hib::lock</code></b> <i>Instance</i> <b><code>,</code></b> <i>LockMode</i>:<br>to lock a <i>persistent</i> instance.</li>
+<li><b><code>hib::unlock</code></b> <i>Instance</i>:<br>to unlock a locked instance. This is equivalent to calling <code>hib::lock(instance, "none")</code> or <code>hib::lock(instance, null)</code>.</li>
+</ul>
+
+<p>If you have worked with the Hibernate API, you probably recognize that most of them are methods of the <code>Session</code> interface. This is indeed true, as these functions and operators are delegates to the methods of the underlying per-thread <code>Session</code> instance. All parameters are natural to the API, except for the <i>LockMode</i> used in <b><code>hib::get()</code></b> and <b><code>hib::lock()</code></b>, which is normally a case-insensititive name of "none", "read", "upgrade", "upgrade_nowait" and "write", or an instance of <code>org.hibernate.LockMode</code> (such as one of its static final instances like <code>NONE</code>, <code>READ</code>, <code>UPGRADE</code>, <code>UPGRADE_NOWAIT</code> and <code>WRITE</code>).</p>
+
+<p>Let's take a look at an example. The following script uses the simple object model we saw earlier, which comprises of a single class, <code>TestSimpleTypes</code>.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="SimplestORM.judo">Listing 24.3</a> SimplestORM.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+//
+// 1. First of all, initialize the Hibernate environment using MySQL.
+//
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update',
+    judoscript.echo               = true
+  )
+
+  TestSimpleTypes
+;
+
+//
+// 2. Create a new object, and save it.
+//
+x = new java::TestSimpleTypes(10.5, 'abcdefg', Date());
+println 'Before save: x.id = ', x.id;
+hib::save(x);
+println 'After save: x.id = ', x.id;
+
+//
+// 3. Modify the object and update it.
+//
+x.theFloat = 100.8;
+hib::update(x);
+println 'Updated x.';
+
+//
+// 4. Find that object.
+//
+y = hib::get(java::TestSimpleTypes, x.id);
+println 'Found: y.id = ', y.id, '  y.theFloat = ', y.theFloat;
+
+//
+// 5. Delete the object.
+//
+hib::delete y;
+z = hib::get(java::TestSimpleTypes, y.id);
+if (z != null)
+  println 'Found: z.id = ', z.id;
+else
+  println 'Object[id=', y.id, '] has been deleted.';
+
+//
+// 6. Reinstate the object (obtains a different ID).
+//
+println 'Re-save y... currently, y.id = ', y.id;
+hib::saveOrUpdateCopy y; // put it back in.
+println 'Now, y.id = ', y.id;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In this script, we conduct six experiments. The <u>first experiment</u> is for <code>hib::setup</code>, where we simply specify a MySQL database connection, and turn on the <code>judoscript.echo</code> option to see the "real" properties at runtime. The output for this part is:</p>
+
+<font  color=black><pre>
+[hib::setup] hibernate.connection.username = james
+[hib::setup] judoscript.echo = true
+[hib::setup] hibernate.connection.password = james
+[hib::setup] hibernate.dialect = org.hibernate.dialect.MySQLDialect
+[hib::setup] hibernate.connection.url = jdbc:mysql://localhost/test
+[hib::setup] hibernate.connection.driver_class = com.mysql.jdbc.Driver
+[hib::setup] hibernate.hbm2ddl.auto = update
+</pre></font>
+
+<p>The <u>second experiment</u> creates a new instance and saves it to the database. We simply print out the instance's identifier before and after the save, and you can see the identifier is filled in during the persisting process:</p>
+
+<font  color=black><pre>
+Before save: x.id =
+After save:  x.id = 1
+</pre></font>
+
+<p>The <u>third experiment</u> then changes one of its property and updates it in the database. Then, the <u>forth experiment</u> gets that instance from the database and verifies that the changed property is indeed as expected:</p>
+
+<font  color=black><pre>
+Updated x.
+Found: y.id = 1  y.theFloat = 100.80000305175781
+</pre></font>
+
+<p>The <u>fifth experiment</u> deletes that instance (note this is auto-committed), and then tries to get it from the database, which should return <code>null</code>:</p>
+
+<font  color=black><pre>
+Object[id=1] has been deleted.
+</pre></font>
+
+<p>By now, the instance referenced by <code>y</code> is in <i>transient</i> state, that is, it does not exist in the database, and its identifier, though not null, is bogus. Finally, the <u>sixth experiment</u> calls <code>hib::saveOrUpdateCopy</code> to save it again into the database. We print out its identifier for proof:</p>
+
+<font  color=black><pre>
+Re-save y... currently, y.id = 1
+Now, y.id = 2
+</pre></font>
+
+<p><b>Summary</b><br>To summarize, Judo provides the aforementioned statements, functions and operators to hide the details of manipulating Hibernate persistent objects. These operations are terse, intuitive and convenient, and the resultant code is much less noisy than the Java counterpart.</p>
+
+<p>Many of the object life-cycle management functions and operations are delegates to the <code>org.hibernate.Session</code> methods. But the <code>org.hibernate.Session</code> has more methods that you may want to call, and you may even need to call methods of the <code>org.hibernate.SessionFactory</code> and <code>org.hibernate.cfg.Configuration</code> instances. Judo doesn't stop you from doing this: you can get these objects via a call to <code>hib::get('session')</code>, <code>hib::get('factory')</code> or <code>hib::get('config')</code>. Such API calls are considered far less likely to happen as compared to the <code>hib::</code> operations. Citing the 80-20 rule, Judo's Hibernate scripting makes it easy for the &gt;80% chance of sripting Hibernate while leaving it possible for the &lt;20% chance of Hibernate API calls.</p>
+
+<br>
+
+
+<a name=hql><h3> Support for HQL and Multiple Object Deletion</h3></a>
+
+<p>Hibernate defines a SQL-like object query language, <i>Hibernate Query Language</i> (<i>HQL</i> for short), to find a collection of objects from the database or from a collection of objects. The found objects can be returned or deleted.  HQL can also return a collection of values rather than objects; this is sometimes called <i>report queries</i>. Like, JDBC, the Hibernate HQL API allows users to dynamically bind parameters to a query.</p>
+
+<p>Judo supports HQL scripting in a way similar to chapter <i><a href="jdbc.html">22. JDBC (SQL) Scripting</a></i>. Judo provides a unified syntax for querying and deleting objects using HQL:</p>
+
+<a name="hib_qry_del"><table border=0 class=secondary3>
+<tr><td valign=top><i>HQL</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>hib::query</code></b> | <b><code>hib::iterate</code></b> | <b><code>hib::delete</code></b> ) [ <i>IDENTIFIER</i> ] [ <i>options</i> ] <b><code>:</code></b> <i>HQL</i> <b><code>;</code></b> [ <b><code>with</code></b> <i>BindVariableList</i> <b><code>;</code></b> ]</td></tr>
+<tr><td valign=top><i>options</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( ( <b><code>from</code></b> | <b><code>limit</code></b> | <b><code>in</code></b> ) <i>Expr</i> )*</td></tr>
+<tr><td valign=top><i>BindVariableList</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <i>IDENTIFIER</i> [ <b><code>:</code></b> <i>HibernateType</i> ] <b><code>=</code></b> <i>Expr</i> ),*</td></tr>
+</table></a>
+
+<p>In this unitified syntax, the <i>options</i> are for pagination and query in a collection; they obviously don't apply to <b><code>hib::delete</code></b>. The <b><code>hib::iterate</code></b> is functionally the same as <b><code>hib::query</code></b>, but Hibernate does the query in two steps: for non-report queries, it first finds the identifiers of entities and then fetches the entities on demand; this is primarily to allow applications to take advantage of the second-level cache. Let's see an example of query.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="Queries.judo">Listing 24.4</a> Queries.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  TestSimpleTypes
+;
+
+//
+// Query for objects:
+//
+hib::query qry:  // or hib::iterate.
+  from TestSimpleTypes o where o.id &gt; 9 and o.id &lt; 15
+;
+// now, qry is a List of TestSimpleTypes's --
+for o in qry {
+  println o;
+}
+
+//
+// Report query:
+//
+hib::query qry:
+  select o.id, o.theFloat, o.theString from TestSimpleTypes o
+  where o.id &gt; :startIdx and o.id &lt; :endIdx
+; with startIdx:Long = 9, endIdx:Long = 15;
+
+// now, qry is a List of Object[] --
+for o in qry {
+  println o;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The first query returns a collection of <code>TestSimpleTypes</code> instances. It is the same as:</p>
+
+<font  color=black><pre>
+hib::query qry:  // or hib::iterate.
+  select o from TestSimpleTypes o where o.id &gt; 9 and o.id &lt; 15
+;
+</pre></font>
+
+<p>The second query is the so-called <i>report query</i> that returns a collection of <code>Object[]</code> arrays. This one actually uses bind variables, <code>startIdx</code> and <code>endIdx</code>; we will discuss bind variables later. The running result is:</p>
+
+<font  color=black><pre>
+TestSimpleTypes@ff94b1[id=10]
+TestSimpleTypes@7c3885[id=12]
+TestSimpleTypes@162e295[id=14]
+[10,100.8,abcdefg]
+[12,100.8,abcdefg]
+[14,100.8,abcdefg]
+</pre></font>
+
+<p>The reason that the <i>id</i>s are all even numbers is because the operations done in code listing <i><a href="hib.html#SimplestORM.judo">24.3</a></i>.</p>
+
+<p><b>Delete objects via HQL</b><br>You can delete objects with the same HQL syntax:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="DeleteObjects.judo">Listing 24.5</a> DeleteObjects.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  TestSimpleTypes
+;
+
+//
+// Delete objects:
+//
+hib::delete:
+  from TestSimpleTypes o where o.id &gt; :startIdx and o.id &lt; :endIdx
+; with startIdx:Long = 11, endIdx:Long = 13;
+
+//
+// Verify:
+//
+hib::query qry:
+  select o.id, o.theFloat, o.theString from TestSimpleTypes o
+  where o.id &gt; :startIdx and o.id &lt; :endIdx
+; with startIdx:Long = 9, endIdx:Long = 15;
+
+for o in qry {
+  println o;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>And the result is:</p>
+
+<font  color=black><pre>
+[10,100.8,abcdefg]
+[14,100.8,abcdefg]
+</pre></font>
+
+
+<p><b>Bind variables</b><br>If you have worked with JDBC scripting (chapter <i><a href="jdbc.html">22. JDBC (SQL) Scripting</a></i>), then bind variable is not a stranger. In Judo JDBC scripting, you can embed use question marks or names prefixed with colons <code>:</code> to represent bind variables with SQL statements. When the SQLs are run, you can bind variables to them with index numbers (starting at 1) or by name. The SQL binding variables can be assigned with a type; if no type specified, by default it is <code>VARCHAR</code>.</p>
+
+<p>For HQL statements, it is slightly different. First of all, only named bind variables are supported in HQL statements. Secondly, the bind variable type must always be specified. The types are those defined by Hibernate, which include built-in types that are mostly Java and JDBC types, or custom types. Keep in mind that, with Judo's Java scripting support (chapter <i><a href="java.html">11. Java Scripting</a></i>), you can use <b><code>import</code></b> just like in Java, and also, <code>java.lang.*</code>, <code>java.util.*</code> and <code>java.io.*</code> are imported automatically. For instance, in code listing <i><a href="hib.html#Queries.judo">24.4</a></i>, the second query bound values to <code>startIdx</code> and <code>endIdx</code> with type <code>Long</code>, which is really <code>java.lang.Long</code>.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=hom> Working with Hibernate Object Models</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<p>In this section, we are going to explore some of the common situations in using Hibernate. <font color=gray>TODO: <i>to be done.</i></font> </p>
+
+
+<a name=types><h3> Mapping Types</h3></a>
+
+<br>
+
+
+<a name=entity_value><h3> Mapping Entity and Value Types</h3></a>
+
+<br>
+
+
+<a name=inheritance><h3> Mapping Class Inheritance</h3></a>
+
+<p><b>Table per concrete class</b><br>.</p>
+
+<p><b>Table per class hierarchy</b><br>.</p>
+
+<p><b>Table per subclass</b><br>.</p>
+
+<br>
+
+
+<a name=assoc><h3> Mapping Associations</h3></a>
+
+<p><b>One-to-one relationship</b><br>.</p>
+
+<p><b>Many-to-one unidirectional relationship</b><br>.</p>
+
+<p><b>Many-to-one bidirectional relationship</b><br>.</p>
+
+<p><b>Many-to-many relationship</b><br>.</p>
+
+<p><b>Polymorphic associations</b><br>.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=summary> Summary</a></h2>
+
+<p>Why Judo support a proprietary API to such an extent for Hibernate? We believe that Hibernate is one of the best solutions in the problem domain of ORM, and it has a promising future. Hibernate may be somehow absorbed into some standards, at which time Judo will evolve accordingly to support that standard. For now, natively support Hibernate seems good enough.</p>
+
+<p>Judo's native Hibernate support makes much sense. One of the biggest selling points of Hibernate is that object models written in Hibernate can be used in <i>and</i> out of containers; the same object model can be used in a web application and by a command-line tool, say. Judo is designed to be a powerful data manipulation tool; by using Hibernate object models (rather than, say, using raw SQL) in Judo programs, business rules and data integrity will be easily maintained throughout the system. Conversely, during system design phase, Judo is an ideal tool for prototyping and testing the object model, which may ultimately lead to automated testing package for the object model, probably as a part of the overall system test suite.</p>
+
+<br>
+
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>

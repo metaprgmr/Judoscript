@@ -1,0 +1,8 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/get_tree_tar.judo:</b></td></tr><tr><td><pre>
+listFiles '*' in 'testdata/awebapp.tar.gz' recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}
+</pre></td></tr></table></body></html>

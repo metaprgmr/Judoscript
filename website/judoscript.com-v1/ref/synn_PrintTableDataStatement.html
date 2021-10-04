@@ -1,0 +1,26 @@
+<html><head><title>JudoScript Semantics - PrintTableDataStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PrintTableDataStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PrintTableDataStatement>PrintTableDataStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>printTable</font>   (  <font class=kw><nobr>&lt;</nobr></font>   (  <font class=kw>out</font>   |  <font class=kw>err</font>   |  <font class=kw>log</font>   |  <font class=kw>pipe</font>   |  <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font>  )  <font class=kw><nobr>&gt;</nobr></font>   )?  <br> <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>skip</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>limit</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br> <font class=kw>for</font>   (  <font class=nt><a href="javascript:showNT('PrintArgument')">PrintArgument</a></font>  ),*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PrintTableDataStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement prints a <font class=kw>TableData</font> . <font class=kw>TableData</font> 's column titles are not printed.
+  In the <font class=nt><a href="javascript:showNT('PrintArgument')">PrintArgument</a></font>s, the special <font class=kw>column</font>  expression is used to select
+  columns in the table data for printing. The values can have the same formating as in
+  <font class=nt><a href="javascript:showNT('PrintStatement')">PrintStatement</a></font>.</p>
+
+  <p>By default it prints all rows. This can be changed by <font class=kw>skip</font>  so many rows,
+  and/or <font class=kw>limit</font>  the number of rows to print.</p>
+ </body></html>

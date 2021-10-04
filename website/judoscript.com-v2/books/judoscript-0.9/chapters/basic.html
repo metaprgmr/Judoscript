@@ -1,0 +1,400 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Chapter 3. Basic Program Structure</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="" name=keywords>
+<LINK href="../../../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../../../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../../../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../../../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../../../home.html')"><IMG alt="Home" hspace=0 src="../../../share/home_gray.gif" border=0></A><A href="javascript:go_to('../../../judo.html')"><IMG alt="Judo Language" hspace=0 src="../../../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../../../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../../../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../../../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../../../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Book: <a href="../toc_details.html" class=tinywhite>The Judo Language 0.9</a></b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../../../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../../../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../../../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../../../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../../../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../../../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../../../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../../../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../../../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../../../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../../../share/spacer.gif" height=7 width=1 border=0>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#lex">Lexical Structure</a></li><br>&#187;&nbsp;<a href="#iden">Identifiers, Variable and Constants</a><br>&#187;&nbsp;<a href="#keywords">Reserved Words</a><br>&#187;&nbsp;<a href="#comment">Comments</a><li><a href="#var">Variables and Scopes</a></li><li><a href="#const">Constants</a></li><br>&#187;&nbsp;<a href="#preconst">Predefined Constants</a>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+
+ <h1>Chapter 3. Basic Program Structure</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<img src="../../../share/printer.gif"> <a href="basic_p.html">printer-friendly version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+This chapter introduces the most elementary parts of Judo as a general-purpose programming language, including its lexical structure, variables and constants, start-up environment and environment interfaction, including sub-scripts, etc.
+</td></tr></table></td></tr></table>
+
+<p>Judo is a free-form, case-sensitive, block-structured language. Whitespaces and line breaks are ignored except for within string literals. Statements are ended by semicolons (<code>;</code>). Multiple statements and any language constructs can be on the same line, although style-wise this may not be desirable most of the time.</p>
+
+<p>Most language entities are case-sensitive. There are a few situations where names can be case-insensitive; one example is SQL statements and types, as SQL is a case-insensitive language and is only natural to ignore the case.</p>
+
+<p>The basic structure of Judo language is block-based, just like Java, C or C++. A pair of curly braces (<code>{ }</code>) delimits a block; each block defines a scope. A block can exist by its own, or it can be an integral part of a statement (such as <code>if</code>, <code>while</code>, etc.) or a construct (such as a class body). Blocks, like statements, can be enclosed in other blocks. Blocks may be of different semantic meanings, depending on their usages. For instance, a class body means quite differently to a function body or a SGML statement block, even though syntactically they are all blocks.</p>
+
+
+<h2>&nbsp;<br><a name=lex> Lexical Structure</a></h2>
+
+
+<a name=iden><h3> Identifiers, Variable and Constants</h3></a>
+
+<p>Judo identifiers are used for many purposes, including names for variables, functions, threads, user-defined classes, and labels. Letters, digits, underscore (<code>_</code>) and dollar sign (<code>$</code>) are legitimate constituents of Judo identifiers; identifiers can start with letters, dollar signs, underscores but not digits. Identifiers starting with <code>$$</code> are reserved for Judo internal variables, which can be accessed but can not be assigned. The following are examples of legitimate identifiers:</p>
+
+<font  color=black><pre>
+Hello
+$likeperl
+basic$1$2$3
+_priv
+_1
+</pre></font>
+
+<p>The following are examples illegal attempts for identifiers:</p>
+
+<font  color=black><pre>
+1st
+reg-expr
+.bashrc
+</pre></font>
+
+<p>Constant names starts with a pound sign (<code>#</code>); the rest is the same as variable names. For using constants, see <i><a href="basic.html#const">3.1</a></i>.</p>
+
+<br>
+
+
+<a name=keywords><h3> Reserved Words</h3></a>
+
+<font color=gray>TODO: <i>list all reserved words</i></font>
+
+<br>
+
+
+<a name=comment><h3> Comments</h3></a>
+
+<p>Judo supports as many as five formats of comments. Four of them are general comment, and one is only valid in SQL statements.</p>
+
+<p><b>Java-like comments</b><br>The two most commonly used comments are the same as those of Java or C++, i.e., multi-line comment are enclosed between <code>/* */</code>, and anything following <code>//</code> up to the end of line is comment. Here is some examples.</p>
+
+<font  color=black><pre>
+/*
+   This is a multi-line comment.
+   This is a multi-line comment.
+   This is a multi-line comment.
+*/
+
+// this is a single line comment.
+</pre></font>
+
+<p><b>Comment for disabling code</b><br>The third form of comment in Judo is <code>/? ?/</code>. This is similar to <code>/* */</code>; the reason for this format is to disable a large chunk of code. For instance,</p>
+
+<font  color=black><pre>
+/? --- DISABLE THIS CHUNK OF THE CODE FOR NOW.
+  if a != 'init' { // for this condition
+    /*
+     * Some code comment
+     */
+    do_something(a);
+  }
+--- ?/
+</pre></font>
+
+<p>The outer comment block <code>/? ?/</code> "hides" everything within, including other comments such as <code>/* */</code>. In fact, an outer block of <code>/* */</code> can also hide <code>/? ?/</code>; by convention, <code>/* */</code> is more for regular comments, and <code>/? ?/</code> is for disabling code.</p>
+
+<p><b>Unix auto-run comment</b><br>In most Unix shells, files that start with <code>#!</code> can be run automatically by the program specified on that line (and, of course, the file mode must be set to executable.) Judo supports the same mechanism with the special single-line comment, <code>#!</code>:</p>
+
+<font  color=black><pre>
+#! /usr/bin/env judo
+</pre></font>
+
+<p>We will discusss this topic specifically in section <i><a href="running.html#unix">Make Scripts Executable on Unix</a></i>.</p>
+
+<p><b>SQL comment</b><br>Scripts of many RDBMSs support single-line comment that starts with <code>--</code>. In Judo, within SQL statements, this format of comment is also supported. This makes SQL statements in Judo appear even closer to the native SQL scripts, and is also important to run native SQL scripts verbatim (in many situations.) The following is a couple of examples:</p>
+
+<font  color=black><pre>
+executeSQL: // individual SQL
+  UPDATE emp SET first_name='James'
+  WHERE emp_no=100         -- Employee #100.
+;
+
+executeSQL { // group SQLs
+  /*
+   * All other types of comments are also valid.
+   */
+
+  UPDATE emp SET first_name='James'
+  WHERE emp_no=100;        -- Employee #100.
+
+  UPDATE emp SET first_name='Jim'
+  WHERE emp_no=101;        -- Employee #101.
+}
+</pre></font>
+
+<p>Note that, for individual SQL statements, the <code>--</code> comment must appear before the ending semicolon (<code>;</code>); for group SQL statements, comments can appear anywhere within <code>{ }</code>. Within SQL statements, other forms of comments are also legitimate.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=var> Variables and Scopes</a></h2>
+
+<p>Judo variables are not typed; the values held in Judo variables, though, are typed. This is called <i>dynamic typing</i>. Anywhere in the program, the value of a variable is assumed known, so that corresponding attributes (properties and methods) can be accessed. This is the nature of most scripting languages. The benefit is simple and easy to use, the cost is uncertainty. Parameters in functions and methods are also variables. <font color=brown><i>In the forth-coming JudoScript version 1.0, variable static typing will be added; dynamic typing will still stay.</i></font></p>
+
+<p>Variable names can be any legitimate identifiers. Variable names can start with a dollar sign (<code>$</code>). Names starting with a double dollar sign (<code>$$</code>) are reserved for Judo internal variables, as discussed below.</p>
+
+<p><b>Variable scopes</b><br>Variables have scopes, which is roughly equivalent to certain blocks delimited by <code>{</code> and <code>}</code>. One scope may enclose other scopes, where the outer ones are the parents of the enclosed scopes. A variable resides in one scope, and can be accessed by the enclosed scopes. If a same-name variable exists in the enclosed scope, the one in the parent scope is shield and not accessible.</p>
+
+<p>Compound statements such as <code>for</code> and <code>while</code> loops have a mandatory body and hence create new scopes. These are discussed in more details later.</p>
+
+<p>Two <i>big exceptions</i> are the <code>if/elif/else</code> and <code>switch/case/default</code> statements! These two statements have blocks but do not create new scopes. This is because they are simple branching statements.</p>
+
+<p>When a variable is assigned a value, Judo tries to locate the variable starting from the current scope; if not found, it looks in the parent scope and so on, until either it is either found or a <i>terminal</i> scope is reached, discussed blow. If that variable is not located, a local variable with that name will be created in the current scope. To explicitly create a local variable, so declare a variable with <code>var</code>, as demonstrated with this example:</p>
+
+<font  color=black><pre>
+{
+  a = 9;  // a variable here.
+  {
+    println a; // result: 9
+
+    var a = 5;
+
+    println a; // result: 5
+  }
+}
+</pre></font>
+
+<p><b>Terminal scopes</b><br>A terminal scope is one of the following: the <i>global scope</i>, a <i>function or thread scope</i>, and a <i>user-defined class scope</i>.</p>
+
+<p>When a program starts, it is in its global scope. A global scope is a terminal scope. Variables in the global scope can be accessed explicitly via the <code>::</code> decorator for the variable name, demonstrated below:</p>
+
+<font  color=black><pre>
+a = 9; // a global variable
+{
+  println a; // result: 9
+
+  var a = 5;
+  println a; // result: 5
+
+  println ::a; // result: 9
+}
+</pre></font>
+
+<p>This <code>::</code> global variable access decorator can be used anywhere, including within function, method and thread bodies.</p>
+
+<p>Functions and threads in Judo are defined very similarly, although their usages are totally different. A function or thread scope is a terminal scope. This will be discussed in detail in <i><a href="flow.html#fxn">Functions and Function Variables</a></i> and chapter <i><a href="thread.html">8. Threads and Dynamic Evaluation</a></i>.</p>
+
+<p>User-defined classes can have methods, which are functions attached to an object of that class. Method scopes, unlike non-method functions, are not terminal scope; they have a parent scope, the class scope, which is a terminal. This will be discussed more in chapter <i><a href="oop.html">10. Object-Oriented Programming</a></i>.</p>
+
+<p><b>The special variable <code>$_</code></b><br>This is a variable that is used in many situations by Judo, when a result is expected but no explicit variable reference is given. Such <code>$_</code> variables are always in the local scope (variable scope is discussed later). For instance, in JDBC scripting, <code>executeQuery</code>, <code>executeUpdate</code> and <code>executeSQL</code> can optionally take a variable name; if no variable name is supplied, <code>$_</code> will be used. To be safe, you should try to specify a variable explicitly rather than use <code>$_</code>. In other cases, such as the file system list command, where you don't have a chance to specify a different variable name, try to assign <code>$_</code> to a variable before going too far.</p>
+
+<p><b>Other special variables</b><br>Judo has defined a few special variables, like the global variable <code>$$con</code> that holds the default database connection and <code>$$args</code> in a function that is an array that holds all the passed-in parameters. These variables are generally read-only by the application code.</p>
+
+<p><b>Dynamic variables</b><br>In Judo, variables can be created programmatically through two system functions, <code>setVariable()</code> and <code>convertToVariables()</code>. The <code>setVariable()</code> function takes a name and a value, and optionally can take a boolean flag indicating whether the variable should be created locally; if not specified or is <code>false</code>, the variable is set or created according to the usual rule for variable assignment. The <code>convertToVariables()</code> function convers values stored in an <code>Object</code> into variables, using the same rules for <code>setVariable()</code>. Note that the names must be legitimate variable names; otherwise they are simply ignored. The following example shows how this can be done:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="dyn_vars.judo">Listing 3.1</a> dyn_vars.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+// Dynamically set one variable
+setVariable('xyz', 5);
+
+// Dynamically set a number of variables
+a = { x = 'x as set in Object',
+      y = 9,
+      '09898aa' = "this won't be a variable."
+    };
+convertToVariables(a);
+
+println 'xyz = ', xyz; // result: 5
+println 'x = ', x;     // result: x as set in Object
+println 'y = ', y;     // result: 9
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<br>
+
+<p>The <code>{ }</code> declares a literal value for a new <code>Object</code>. In that object, <code>a</code>, there are three keys; the last one is not a valid variable name and hence not accessible in the program once the keys and values are converted to be variables.</p>
+
+
+<h2>&nbsp;<br><a name=const> Constants</a></h2>
+
+<p>Constants are defined with the <code>const</code> decorator, and once a constant is defined, it can not be reassigned. Constants always have global scoping.</p>
+
+<font  color=black><pre>
+const #PI = 3.1415926536;
+</pre></font>
+
+<p>Constant declaration is a compile-time activity. Similar compile-time activities include function and thread declaration and user-defined class declaration. These declarations are collected at compile time, and are instantiated prior to the sciprt is executed. Therefore, these declarations can appear anywhere in a script and are still applicable to the whole script. For instance,</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="const.judo">Listing 3.2</a> const.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+println '    #PI = ', #PI : 2.7;
+println '5 * #PI = ', 5 * #PI : 2.7;
+
+const #PI = 3.1415926536;
+println '    #PI = ', #PI : 2.7;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+    #PI =  3.1415927
+5 * #PI = 15.7079633
+    #PI =  3.1415927
+</pre></font>
+
+<p>Constants can be defined with any values and any constant expressions. For example,</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="apple_pi.judo">Listing 3.3</a> apple_pi.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+const #PI = 3.1415926536;
+const #apple_PI = 'Apple ' + #PI;
+
+println #apple_PI;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>yields:</p>
+
+<font  color=black><pre>
+Apple 3.1415926536
+</pre></font>
+
+<p><b>Detect the existence of constants</b><br>The <code>defined</code> expression can be used to detect whether a constant has been defined or not. Alternatively, you can compare a constnat against the <code>undefined</code> value for the same purpose.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="defined.judo">Listing 3.4</a> defined.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+const #ccc = 1;
+
+if defined #ccc {
+  println '#ccc is defined.';
+}
+
+if #ccc != undefined {
+  println '#ccc is defined.';
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p><b>Conditional constant declaration</b><br>The complete constant declaration syntax is:</p>
+
+<a name="const"><table border=0 class=secondary3>
+<tr><td valign=top><i>Constant</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>const</code></b> <i>CONST_NAME</i> <b><code>=</code></b> <i>Expr</i> [ <b><code>ifndef</code></b> | <b><code>if</code></b> <i>Expr</i> ] <i>;</i>
+</table></a>
+
+<p>Constants can be conditionally defined. This is useful when another file is included in the current script and you want to make sure a constant is defined. The first form with <code>ifndef</code> is equivalent to do a <code>defined</code> check on the current constant being defined. The second form is obvious. A usage would be like this:</p>
+
+<font  color=black><pre>
+!include 'common.judi'
+
+const #tmp = '~/tmp/' ifndef;
+
+mkdir #tmp;
+</pre></font>
+
+<p>File inclusion is discussed in <i><a href="running.html#include">Include Other Scripts</a></i>.
+
+
+<a name=preconst><h3> Predefined Constants</h3></a>
+
+<p>Judo has a number of predefined constants, listed below.</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 3.1 Predefined Constants</b></caption>
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td valign=top><code>#versionInfo</code></td><td valign=top>the version information of the current Judo runtime, such as "JudoScript Language v0.9 2004-6-26 (JDK1.3+)".</td></tr>
+<tr><td valign=top><code>#versionID</code></td><td valign=top>the version ID of the current Judo runtime, such as "v0.9".</td></tr>
+<tr><td valign=top><code>#user</code></td><td valign=top>the current user name running the script.</td></tr>
+<tr><td valign=top><code>#year</code></td><td valign=top>the current year of running.</td></tr>
+<tr><td valign=top><code>#script</code></td><td valign=top>the script file path. Subsequently, you can get the script file name with <code>#script.getFileName()</code> and the directory where the script resides with <code>#script.getFilePath()</code>.</td></tr>
+<tr><td valign=top><code>#prog</code></td><td valign=top>the script name. For regular script files, this is the same as <code>#script.getFileName()</code>; in special situations, <code>#prog</code> may be set where <code>#script</code> is not valid.</td></tr>
+<tr><td valign=top><code>#cmd_args</code></td><td valign=top>an array that contains all the command line arguments.</td></tr>
+<tr><td valign=top><code>#args</code></td><td valign=top>an array that contains the command line arguments except for options; see <i><a href="running.html#startup">Start-Up Environment</a></i> for details.</td></tr>
+<tr><td valign=top><code>#options</code></td><td valign=top>an object that contains the command line options; see <i><a href="running.html#startup">Start-Up Environment</a></i> for details.</td></tr>
+<tr><td valign=top><code>#sysprops</code></td><td valign=top>the system properties of the currenv JVM. See <i><a href="running.html#sysprop_envvars">System Properties and Environment Variables</a></i> for details.</td></tr>
+<tr><td valign=top><code>#classpath</code></td><td valign=top>the classpath object. See <i><a href="running.html#classpath">Classpath</a></i> for details.</td></tr>
+<tr><td valign=top><code>#usage</code></td><td valign=top>an object that documents this script; see <i><a href="running.html#usage">Program Documentation</a></i> for details.</td></tr>
+</table>
+
+<p>There are a few constant values in Judo that are represented in other formats, such as:</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 3.2 Predefined Constants In Other Forms</b></caption>
+<tr><td valign=top><code>${:}</code></td><td valign=top>the platform-dependent path separator. On Unix it is <code>:</code>; on Windows it is <code>;</code>. This character is frequently used in constructing classpaths.</td></tr>
+<tr><td valign=top><code>${/}</code></td><td valign=top>the platform-dependent file name separator, that is, the character that separates the file name and directory names in a path. On Unix it is <code>/</code>; on Windows it is <code>\</code>.</td></tr>
+<tr><td valign=top><code>${~}</code></td><td valign=top>the home directory of the user running the script.</td></tr>
+<tr><td valign=top><code>${.}</code></td><td valign=top>the current directory. This can be changed by the <code>cd</code> command, so it is not strictly a constant value; it starts with the current directory when the script is being run.</td></tr>
+</table>
+
+<p>These notations can be, like any <code>${<i>xyz</i>}</code>, embedded in string literals, as discussed in <i><a href="datatypes.html#string">String and Character</a></i>.</p>
+
+<br>
+
+<br>
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+
+
+<BR><IMG src="../../../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../../../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

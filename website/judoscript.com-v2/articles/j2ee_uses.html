@@ -1,0 +1,588 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Use JudoScript for J2EE Development</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="JudoScript, Scripting Java, Java scripting language, scripting language for Java, j2ee, ejb, jsp, jdbc" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Use JudoScript for J2EE Development</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Use JudoScript for J2EE Development" author="James Jianbo Huang" created="May 2003" keywords="JudoScript, Scripting Java, Java scripting language, scripting language for Java, j2ee, ejb, jsp, jdbc">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#jdbc">Use JDBC in Your Work</a>
+ <br>&#187;  <a href="#fake">Set Up Schema and Generate Fake Test Data</a>
+ <br>&#187;  <a href="#spsrc">Get Oracle Stored Procedure Source Code</a>
+<li> <a href="#ejb">Use JudoScript for EJBs</a>
+ <br>&#187;  <a href="#ejbclnt">A Session Bean Client</a>
+ <br>&#187;  <a href="#makejar">Create an EJB Jar File</a>
+<li> <a href="#jms">Use JudoScript for JMS</a>
+ <br>&#187;  <a href="#qsend">Send a JMS Message</a>
+ <br>&#187;  <a href="#qget">Get a JMS Message</a>
+ <br>&#187;  <a href="#jmssub">Create a JMS Subscriber</a>
+<li> <a href="#ssdev">Server-Side Development with JudoScript</a>
+ <br>&#187;  <a href="#webqsend">A Web JMS Message Sender with JUSP</a>
+<li> <a href="#mail">Send Mail</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Use JudoScript for J2EE Development</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;May 2003 &nbsp; &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="j2ee_uses_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+<em>JudoScript</em> is a powerful tool for J2EE developers, thanks to its superb Java scripting capability,
+enterprise computing and general features. This article demonstrates some of them with a
+list of <em>JudoScript</em>'s J2EE use cases, which you can adapt to use in your cases.
+It may grow to include more cases over time.
+<hr>
+
+<p>&nbsp;</p>
+
+
+<p><em>JudoScript</em> code is supposed to be obvious to Java programmers.
+In the example source code, we put a special comment that starts with
+<code>//{{NOTE}}</code> to indicate it is a <em>JudoScript</em> usage note.
+Otherwise, it is a valid comment for the program itself.
+
+
+<h2><a name=jdbc>1. Use JDBC in Your Work</a></h2><p>
+
+<p><em>JudoScript</em> is the first JDBC scripting language. You can easily execute SQL statements in various modes,
+such as directly, preparedly or in batches. It is simply easier to write the SQL and bind parameters.
+We give two practical examples that are easy for you to adapt and use in your work.
+</p>
+
+<h3><a name=fake>Set Up Schema and Generate Fake Test Data</a></h3><p>
+
+<p>The following example creates an "employee" table and generates a number of fake records.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="FakeData">Listing 1</a>. CreateTestData.judo</th>
+          </thead><tr><td class=code><pre>
+firstNames = [ 'James', 'Jim', 'Jimmy' ];
+lastNames  = [ 'Huang', 'Hwang', 'Wang', 'Wong' ];
+
+connect to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+           'dbuser', 'dbpass';
+
+executeSQL {
+  create table emp (id         integer,
+                    first_name varchar(20),
+                    last_name  varchar(20),
+                    salary     integer
+                   );
+  alter table emp add primary key(id);
+  create sequence emp_id starting with 100;
+}
+
+prepare upd:
+  insert into emp (id, first_name, last_name, salary)
+  values (emp_id.nextval, ?, ?, ?)
+;
+
+repeat 8 times {
+  executeUpdate upd with
+    @1 = firstName[ random(0,firstName.length) ],
+    @2 = lastName[ random(0,lastName.length) ],
+    @3:int = random(25000,150000);
+}
+//{{NOTE}} bind parameters are by default string,
+//{{NOTE}} unless specified explicitly like the last one.
+
+disconnect();
+</pre></td></tr></table></p><p>
+
+</section>
+
+
+<h3><a name=spsrc>Get Oracle Stored Procedure Source Code</a></h3><p>
+
+<p>In Oracle, stored procedure source code is stored in a table.
+For user procedures, they can be obtained through view <code>user_source</code>.
+Each line of source code is stored as a row, each row contains the procedure name, type, line number and code itself.
+</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="SPSource">Listing 2</a>. SPSource.judo</th>
+          </thead><tr><td class=code><pre>
+connect oraCon to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+                  'dbuser', 'dbpass';
+
+executeQuery qry using oraCon:
+   select distinct type, name, line, text
+     from user_source
+     order by name, type, line
+;
+
+name = null;
+while qry.next() {
+  if name != qry.name { // beginning of a new procedure
+    if name != null {   // last procedure ..
+      prinltn nl;       // print a new line
+    }
+    name = qry.name;
+    prinltn name, ':';
+  }
+  flush '  ', qry.text; // print the code --
+  //{{NOTE}} Oracle keeps a new-line at the end of text.
+  //{{NOTE}} So use flush instead of println.
+}
+
+oraCon.disconnect();
+</pre></td></tr></table></p><p>
+
+<p>One thing worth noting: the connection is named with <code>oraCon</code>, and
+the <code>executeQuery</code> statement has a <code>using oraCon</code> clause.
+Named connections allow multiple connections to different (kinds of) databases simultaneously.</p>
+
+<p>Let us enhance the script so it can print out source for specific procedures specified on the command-line.
+In <em>JudoScript</em>, command-line parameters are stored in a pre-defined constant array, <code>#args</code>.
+More over, we want to save individual procedures into their own <code>.proc</code> files.
+</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="SPSource1">Listing 3</a>. SPSource1.judo</th>
+          </thead><tr><td class=code><pre>
+// construct a where clause
+whereClause = '';
+if #args.length > 0 {
+  whereClause = 'where name in (';
+  for i=0; i<#args.length; ++i {
+    if i>0 { whereClause @= ', '; } //{{NOTE}} @ is string concat op.
+    whereClause @= "'" @ #args[i].toUpper() @ "'";
+  }
+  whereClause @= ')';
+}
+
+connect oraCon to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+                  'dbuser', 'dbpass';
+
+executeQuery qry using oraCon:
+   select distinct type, name, line, text
+     from user_source
+     order by name, type, line
+     (* whereClause *)
+;
+//{{NOTE}} can contain dynamic text for the SQL statement.
+
+name = null;
+file = null;
+while qry.next() {
+  if name != qry.name { // beginning of a new procedure
+    name = qry.name;
+    if file != null {
+      flush <file>;
+      file.close();     // close the previous file
+    }
+    // open a new file for the object
+    file = openTextFile(name @ '.' @ qry.type, 'w');
+  }
+  print <file> qry.text; //{{NOTE}} write the code into the file
+}
+if file != null { // for the last file.
+  flush <file>;
+  file.close();
+}
+
+oraCon.disconnect();
+</pre></td></tr></table></p><p>
+
+</section>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=ejb>2. Use JudoScript for EJBs</a></h2><p>
+</section>
+
+
+<h3><a name=ejbclnt>A Session Bean Client</a></h3><p>
+
+<p>The following program is an EJB client that retrieves a session bean
+and invoke a method on it:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="EJBClient">Listing 4</a>. EJBClient.judo</th>
+          </thead><tr><td class=code><pre>
+const #custName = 'com.example.ejb.customer.CustomerManagerHome';
+
+ctx = weblogicContext('t3://jhuang:7301','weblogic','system32');
+custMgr = ctx.lookup(#custName)
+             .cast(#custName)    //{{NOTE}} Why must cast? See below.
+             .create();
+custs = custMgr.findCustomersByFirstName('James'); // returns java.util.List
+//{{NOTE}} Java collection data structures can be iterated
+//{{NOTE}} the same way as <em>JudoScript</em> arrays, like so:
+for x in custs {
+  println x.getFirstName(), ' ', x.getLastName();
+}
+</pre></td></tr></table></p><p>
+
+The <code>.cast()</code> in most cases are required and should be interesting to Java programmers.
+The reason is a limitation (actually, a feature) in Java reflection API.
+As we know, when using RMI and EJB, you define (remote) interfaces, and rmic or ejbc will generate
+stubs and skeletons, which are normally not public but do implement those interfaces.
+<em>JudoScript</em> uses Java reflection to find all the classes extended and interfaces implemented by the stub class;
+in this case, it will only fail because the stub is not public.
+Thus, you have to explicitly call the <code>.cast(className)</code> which is a <em>JudoScript</em>-built-in method for
+Java objects (the other <em>JudoScript</em>-built-in mehtod for Java objects is <code>.instanceof(className)</code>).
+</p>
+
+</section>
+
+
+<h3><a name=makejar>Create an EJB Jar File</a></h3><p>
+
+<p><em>JudoScript</em> has rich support for O.S. and file system operations.
+We can use them to compile Java and package jar files for EJBs.
+This step-by-step process is easy and straightforward.</p>
+
+<p>Suppose we have such a directory structure for the source code:
+
+<blockquote><font class=secondary3><pre>
+~/dev/src/com/example/ECommerce.java
+~/dev/src/com/example/util/EComUtil.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManager.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManagerBean.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManagerHome.java
+~/dev/ejb/META-INF/ejb-jar.xml
+~/dev/ejb/META-INF/weblogic-ejb-jar.xml
+</pre></font></blockquote>
+
+and we intend to make two jar files: <code>~/dist/ecom.jar</code> for non-EJB classes and
+<code>~/dist/ejbs.jar</code> for EJBs.
+In the process, we use <code>~/temp/classes/</code> to store compiled class files.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="BuildEJBs">Listing 5</a>. BuildEJBs.judo</th>
+          </thead><tr><td class=code><pre>
+src_dir  = '~/dev/';
+tmp_dir  = '~/temp/classes/';
+dist_dir = '~/dist/';
+
+rmdir tmp_dir force; // clear first
+mkdir tmp_dir;       // create the dir to store class files.
+
+// Step 1. Compile Java files
+
+// first, construct the Java source file list
+list '*' except '*/META-INF*' in src_dir dirOnly recursive;
+//{{NOTE}} list returns paths in $$fs_result (array).
+
+java_files = $$fs_result.toCsv(' ', lambda x { return x @ '/*.java'; });
+//{{NOTE}} lambda is an anonymous function.
+//{{NOTE}} <em>JudoScript</em> functions may take function references as parameters.
+//{{NOTE}} Classic example is a compartor function for array sorting.
+
+exec &lt;> [[*
+   javac -classpath ${CLASSPATH}${:}${MY_CP}
+         -d (* tmp_dir *)
+         (* java_files *)
+*]];
+//{{NOTE}} a) &lt;> forces this exec to be synchronous.
+//{{NOTE}}    &lt;x> returns the exit value in x; exec is synchronous.
+//{{NOTE}} b) a command-line can span many lines
+//{{NOTE}} c) ${} expands variable values or environment variables
+//{{NOTE}}    if name-sake variable does not exist.
+//{{NOTE}}    ${:} is for platform path separator,
+//{{NOTE}}    ${/} is for platform file name separator, and
+//{{NOTE}}    ${~} denotes the home directory.
+//{{NOTE}} d) (* *) encloses expressions.
+
+// Step 2. Create the jar files
+
+// create jar for non-EJB classes
+copy 'com/*.class' except '*/ejb/*' in tmp_dir recursive
+     into dist_dir @ 'ecom.jar';
+//{{NOTE}} 'into' puts into archives.
+//{{NOTE}} 'to' puts into a directory or a target file.
+
+// create jar for EJB classes:
+jar = createJar(dist_dir @ 'ejbs.jar');
+copy 'com/*/ejb/*.class' in tmp_dir recursive into jar;
+copy 'META-INF/*' in src_dir @ 'ejb' recursive into jar;
+jar.close();
+//{{NOTE}} Need to open a jar object to do multiple copies.
+</pre></td></tr></table></p><p>
+
+</p>
+
+
+</section>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=jms>3. Use JudoScript for JMS</a></h2><p>
+</section>
+
+
+<h3><a name=qsend>Send a JMS Message</a></h3><p>
+
+<p>The following script sends a text message to a JMS queue named
+"weblogic.examples.jms.exampleQueue" running on a Weblogic server:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="QueueSend">Listing 6</a>. QueueSend.judo</th>
+          </thead><tr><td class=code><pre>
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+      //{{NOTE}} There are other built-in context reteivers, e.g.,
+      //{{NOTE}} sunContext(), websphereContect(), jbossContext(), ...
+qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+qcon = qconFactory.createQueueConnection();
+qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+qsender = qsession.createSender(queue);
+msg = qsession.createTextMessage();
+qcon.start();
+msg.setText('Hello JMS Queue World!');
+qsender.send(msg);
+</pre></td></tr></table></p><p>
+
+The code is the same as its Java countpart, only a lot less typing.
+</p>
+
+</section>
+
+
+<h3><a name=qget>Get a JMS Message</a></h3><p>
+
+<p>The following script gets and prints out a text message from a JMS queue
+named "weblogic.examples.jms.exampleQueue" running on a Weblogic server:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="QueueGet">Listing 7</a>. QueueGet.judo</th>
+          </thead><tr><td class=code><pre>
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+qcon = qconFactory.createQueueConnection();
+qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+qreceiver = qsession.createReceiver(queue);
+qcon.start();
+msg = qreceiver.receive();
+println 'Received: ', msg.getText();
+</pre></td></tr></table></p><p>
+</p>
+
+</section>
+
+
+<h3><a name=jmssub>Create a JMS Subscriber</a></h3><p>
+
+<p>The following script subscribes to a JMS topic named
+"weblogic.examples.jms.exampleTopic" running on a Weblogic server and
+prints out text messages received until user types a line of "q" on the keyboard:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="TopicSub">Listing 8</a>. TopicSub.judo</th>
+          </thead><tr><td class=code><pre>
+//{{NOTE}} <em>JudoScript</em> can extend Java classes/interfaces with "Java extension class".
+//{{NOTE}} (<em>JudoScript</em> also has its own support of classes.)
+//{{NOTE}} Note the Java method signatures are always public,
+//{{NOTE}} but the method body is <em>JudoScript</em> code!
+class TextListener extendsjava javax.jms.MessageListener
+{
+  void onMessage(javax.jms.Message msg) {
+    if msg.instanceof('javax.jms.TextMessage') {
+      println 'Got message: ', msg.cast('javax.jms.TextMessage').getText();
+    } else {
+      println 'Got wrong type message: ', msg.getClass().getName();
+    }
+  }
+}
+
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+tconFactory = ctx.lookup('javax.jms.TopicConnectionFactory');
+tcon = tconFactory.createTopicConnection();
+tsession = tcon.createTopicSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+topic = ctx.lookup('weblogic.examples.jms.exampleTopic');
+tsubscriber = tsession.createSubscriber(topic);
+tlistener = new TextListener;
+tsubscriber.setMessageListener(tlistener);
+tcon.start();
+while {
+  line = readLine();
+  if line == 'q' { break; }
+}
+</pre></td></tr></table></p><p>
+</p>
+
+</section>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=ssdev>4. Server-Side Development with JudoScript</a></h2><p>
+
+<p><em>JudoScript</em> is easy to integrate with Java software. It has an easy-to-use engine API,
+and also supports Bean Scripting Framework (BSF).
+In theory, it can be used in JSPs by setting language to "judoscript", and can easily be extended for
+JSP Expression Language (EL). This may be done in the near future.</p>
+
+<p><em>JudoScript</em> does have a server-side scripting feature now, called <em>JudoScript</em> Server Page (JUSP).
+It works almost the same way as JSPs, using special tags like &lt;%> and &lt;%=> to quote scriptlets.
+In the JUSP pages, you can do anything that <em>JudoScript</em> can do as long as security allows.
+Each page has a number of predefined objects such as <code>request</code>, <code>response</code>,
+<code>session</code>, etc. You must install its servlet, <code>com.judoscript.jusp.JuspServlet</code>,
+in order to use this feature. (This may likely be deprecated in favor of using <em>JudoScript</em> within standard JSP.)
+</p>
+
+</section>
+
+
+<h3><a name=webqsend>A Web JMS Message Sender with JUSP</a></h3><p>
+
+<p>This example is a simple JUSP page that allows users to type in a message and send to a JMS queue.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="WebQueueSend">Listing 9</a>. webqueuesend.jusp</th>
+          </thead><tr><td class=code><pre>
+&lt;html>
+&lt;head>&lt;title>Message Sender&lt;/title>&lt;/head>
+&lt;body>
+&lt;%
+  txt = request.getParameter('msg');
+  if txt.isNotEmpty() {
+    // send the message to the queue
+    ctx = com.example.util.Util::getInitialContext();
+          //{{NOTE}} Call a static helper method to get the context.
+    qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+    qcon = qconFactory.createQueueConnection();
+    qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+    queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+    qsender = qsession.createSender(queue);
+    msg = qsession.createTextMessage();
+    qcon.start();
+    msg.setText(txt);
+    qsender.send(msg);
+  }
+%>
+
+&lt;form method=POST>
+&lt;textarea name=msg rows=5 cols=40>&lt;/textarea>&lt;br>
+&lt;input type=submit value="Send">
+&lt;/form>
+&lt;/body>&lt;html>
+</pre></td></tr></table></p><p>
+</p>
+
+</section>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=mail>5. Send Mail</a></h2><p>
+
+<p>Strictly speaking, spamming is not a feature of J2EE. Just kidding. But it is easy to spam
+with <code>javax.mail</code>, and with <em>JudoScript</em>, boy, it is almost tempting!
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="SendMail">Listing 10</a>. SendMail.judo</th>
+          </thead><tr><td class=code><pre>
+connectMailServer 'mail_server', 'mail_login', 'mail_password';
+
+sendMail
+    from: 'info@judoscript.com'
+      to: 'slee@example.com'
+ subject: 'The software. Thank you!'
+  attach: 'readme.txt, software.zip'
+    body: [[*
+          Dear Mr. Lee,
+
+          Thank you very much for your interest in this software.
+          Attached is a zip file for the software and a readme
+          text file. Follow the instructions therein for
+          installation and using. Enjoy!
+
+          Please visit www.judoscript.com for the latest news
+          and information. Thank you!
+
+          Sincerely,
+          JudoScript
+          *]]
+htmlBody: [[*
+          &lt;html&gt;&lt;body&gt;
+          &lt;p&gt;Dear Mr. &lt;b>Lee&lt;/b>,
+
+          &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+          Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+          text&lt;/u&gt; file. Follow the instructions therein for installation
+          and using. Enjoy!
+
+          &lt;p&gt;Please visit &lt;a href=http://www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+          for the latest news and information. Thank you!
+
+          &lt;p&gt;Sincerely,
+          &lt;p&gt;JudoScript
+          &lt;/body&gt;&lt;/html&gt;
+          *]]
+;
+
+disconnectMailServer();
+</pre></td></tr></table></p><p>
+
+All clauses in this <code>sendMail</code> command can take expressions, so
+you can hook up with database, Excel spreadsheet (via ActiveX scripting), XML, ...
+what have you, and do a lot of damage to the network bandwidth.
+(Disclaimer: <em>JudoScript</em> is not responsible for any spams if it is used for spamming;
+it is the killer that kills, not the gun.)
+</p>
+
+</section>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>6. Code Listings</a></h2><p>
+<ol><li> <a href=#FakeData>CreateTestData.judo</a><li> <a href=#SPSource>SPSource.judo</a><li> <a href=#SPSource1>SPSource1.judo</a><li> <a href=#EJBClient>EJBClient.judo</a><li> <a href=#BuildEJBs>BuildEJBs.judo</a><li> <a href=#QueueSend>QueueSend.judo</a><li> <a href=#QueueGet>QueueGet.judo</a><li> <a href=#TopicSub>TopicSub.judo</a><li> <a href=#WebQueueSend>webqueuesend.jusp</a><li> <a href=#SendMail>SendMail.judo</a></ol>
+</section>
+
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

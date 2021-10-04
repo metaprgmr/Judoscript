@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - ThrowStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ThrowStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ThrowStatement>ThrowStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>throw</font>  <br>  (  <font class=kw>new</font>   (  <font class=kw>java</font>  <font class=kw><nobr>::</nobr></font>  <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   |  <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>   )   (  <font class=nt><a href="javascript:showNT('Arguments')">Arguments</a></font>  )?  <br>  |  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ThrowStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The <font class=kw>throw</font>  statement can throw a Java exception or a JudoScript runtime error object.
+  When throwing a runtime error, it takes an runtime name and optionally with a message.
+  The runtime errors that can be thrown are <code>ASSERTION_FAILURE</code> and
+  <code>USER_EXCEPTION</code>.</p>
+ </body></html>

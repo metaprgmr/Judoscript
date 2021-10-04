@@ -1,0 +1,28 @@
+<html><head><title>JudoScript Semantics - ResumeStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ResumeStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ResumeStatement>ResumeStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>resume</font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ResumeStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This <font class=kw>resume</font>  statement has no Java counterpart. It is only used in exception handling
+  and extended SGML processing.</p>
+
+  <p>In exception handling, that is, the statements following a <font class=kw>catch</font>  <font class=kw><nobr>:</nobr></font>  (see <font class=nt><a href="javascript:showNT('Block')">Block</a></font>),
+  <font class=kw>resume</font>  will send the control back to where the exception is thrown.</p>
+
+  <p>In an extended SGML handler (see <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font>), that is, a SGML statement
+  extending another, this <font class=kw>resume</font>  statement can appear at the end of a handler to invoke
+  the parent statement's handler.</p>
+ </body></html>

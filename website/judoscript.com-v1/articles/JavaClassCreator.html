@@ -1,0 +1,678 @@
+<html><head>
+<title>Dynamically Create Java Classes With JavaClassCreator</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>Dynamically Create Java Classes With JavaClassCreator</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#intro">JavaClassCreator and Jamaica</a>
+<li> <a href="#flow">Create a Class or Interface</a>
+<br>&#187;  <a href="#mthdlst">API Method Partial Listing</a>
+<li> <a href="#instset">Bytecode Instructions and Macros</a>
+<br>&#187;  <a href="#bytecode">Bytecode Instructions</a>
+<br>&#187;  <a href="#macro">Macros</a>
+<br>&#187;  <a href="#indir">Indirect Instructions</a>
+<br>&#187;  <a href="#helper">Helper Methods</a>
+<li> <a href="#spi">Service Provider Methods</a>
+<br>&#187;  <a href="#opcode">Opcode Constants</a>
+<li> <a href="#examples">Examples</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+March 2004 &nbsp;
+
+<p><b>Abstract</b> &nbsp;
+
+
+<hr>
+
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+<h2><a name=intro>1. JavaClassCreator and Jamaica</a></h2><p>
+
+<p>
+The <code>JavaClassCreator</code> API is used by the <a href="jamaica.html">Jamaica</a>
+language to create JVM classes and interfaces. Jamaica is a JVM Macro Assembler language,
+which uses Java syntax to define a JVM class structure and symbolic names for bytecode
+instructions. This API is modeled after the Jamaica language, making it very easy to
+dynamically create Java classes. It supports the Jamaica-style symbolic assembling, and
+supports all the bytecode instructions and Jamaica macros, along with declarative class
+construction. It is an abstract class that delegates a handful of methods to its
+implementation while implementing the rest such as macros, etc. One difference between
+this API and Jamaica is that the API does not support <code>package</code> and
+<code>import</code>, so all class names must be complete with their package prefixes.
+
+<p>
+The class name for the API is <code>com.judoscript.jamaica.JavaClassCreator</code>.
+Currently two implementations are provided: class
+<code>com.judoscript.jamaica.ASMJavaClassCreartor</code> that utilizes the ASM package,
+and class <code>com.judoscript.jamaica.BCELJavaClassCreator</code> that utilizes the
+Jakarter-BCEL package.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=flow>2. Create a Class or Interface</a></h2><p>
+
+<p>
+Class <code>JavaClassCreator</code> has methods that starts a class or interface, creates
+data fields, constants and methods, and finishes the declaration. Therefore, many methods
+are context sensitive, i.e., they can only be called before or after certain events have
+happened. For instance, all the bytecode instruction and macro creation methods can only
+be called after a method is started and before that method is closed. During the process,
+all type names are Java names, e.g., "int" for primitive integer, "java.lang.String" for
+class names and "double[][]" for array types.
+
+<p>
+The following is the flow to create a JVM class using <code>JavaClassCreator</code>'s
+key methods:
+
+<ol>
+<li> Call <code>startClass()</code> or <code>startInterface()</code> to start.
+     After this, the following methods are allowed:
+     <code>setSourceFileName()</code>, <code>getSourceFileName()</code>,
+     <code>getClassName()</code>, <code>getRootClassName()</code>,
+     <code>getSuperclassName()</code> and <code>getInterfaceNames()</code>.
+<li> Create data fields and/or constants via calls to <code>addField()</code> and
+     <code>addConstant()</code>. For the defined variables, can call
+     <code>getFieldType()</code> and <code>isStaticField()</code>.
+<li> If a default constructor with no extra logic is intended, call
+     <code>addDefaultConstructor()</code>.
+<li> For abstract methods, call <code>addAbstractMethod()</code>.
+<li> If there are static fields to initialize, create a static method named "&lt;clinit>"
+     that takes no parameters and returns <code>void</code> to initialize them.
+<li> Create concrete methods. See below.
+<li> Call <code>endClass()</code> or <code>endClassToFile()</code> to finish.
+<li> To create more classes and/or interfaces, go to 1.
+</ol>
+
+This is the flow to create a concrete method:
+
+<ol>
+<li> Call <code>startMethod()</code> to start. After this, can call
+     <code>getMethodAccessFlags()</code> and <code>getMethodName()</code> on the defined
+     methods.
+<li> Call <code>addLocalVariable()</code> to add local variables. This can be mixed with other
+     code, but variables must be created before can be used by the instructions or macros.
+     Note that method parameters are also variables so avoid name clashes. For non-static
+     methods, the JVM specification mandates the <b><code>this</code></b> instance is the first on the
+     operand stack. You can access it via <code>this</code> as well. Once defined, can call
+     <code>getLocalVariableIndex()</code> and <code>getVariableType()</code> on the defined
+     variables in this method.
+<li> Add instructions and/or macros. They are presented in a
+     <a href="#instset">dedicated section</a>. Instructions can be preceeded by labels
+     created by calls to <code>setLabel()</code>.
+<li> All methods must create a return instruction at the end, including those with a
+     <code>void</code> return type.
+<li> Before finishing the method, zero or more catch clauses can be created via the call to
+     <code>addCatchClause()</code>. All the labels must be valid within this method. There is
+     no explicit "finally clause" in JVM; you can use jump instructions to emulate a Java
+     finally clause.
+<li> Call <code>endMethod()</code> to finish.
+</ol>
+
+
+
+<h3><a name=mthdlst>API Method Partial Listing</a></h3><p>
+
+<p>
+Here is a list of the methods mentioned so far. Most of them are merely listed along with
+their parameter names; some are briefly annotated with Java comments.
+
+<blockquote><font><pre>
+void startClass(int accessFlags, String className, String superName, String[] implementList);
+void startInterface(String itfName, String[] extendList);
+void setSourceFileName(String fileName);
+String getSourceFileName();
+String getClassName();
+String getClassRootName();
+String getSuperclassName();
+String[] getInterfaceNames();
+void addField(int accessFlags, String name, String type);
+void addConstant(int accessFlags, String fieldName, String type, Object value);
+String getFieldType(String fieldName);
+boolean isStaticField(String fieldName);
+void addDefaultConstructor(int accessFlags);
+void addAbstractMethod(int accessFlags, String name, String[] paramTypes, String[] paramNames,
+       String returnType, String[] exceptions);
+void startMethod(int accessFlags, String name, String[] paramTypes, String[] paramNames,
+       String returnType, String[] exceptions);
+int getMethodAccessFlags();
+String getMethodName();
+void addLocalVariable(String name, String type);
+int getLocalVariableIndex(String varName);
+String getVariableType(String varName);
+void setLabel(String label);
+void addCatchClause(String exceptionType, String startLabel, String endLabel, String actionLabel);
+void endMethod();
+byte[] endClass();
+void endClassToFile(String fileName);
+</pre></font></blockquote>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=instset>3. Bytecode Instructions and Macros</a></h2><p>
+
+
+<h3><a name=bytecode>Bytecode Instructions</a></h3><p>
+
+<p>
+<code>JavaClassCreator</code> has methods to create each and every JVM bytecode instruction
+directly. The naming convention for these methods are <code>inst_<em>xxxx</em>()</code>,
+where <em>xxxx</em> is the mnemonic. Based on their parameters, they are grouped as below.
+For a functional grouping, refer to the <a href="jamaica.html#instr">Jamaica language</a>
+and/or other sources.
+
+<p>Group 1 includes simple instructions with no parameters:
+
+<blockquote><font><pre>
+aconst_null iconst_m1 iconst_0 iconst_1 iconst_2 iconst_3 iconst_4 iconst_5
+lconst_0 lconst_1 fconst_0 fconst_1 fconst_2 dconst_0 dconst_1
+iload_0 iload_1 iload_2 iload_3 lload_0 lload_1 lload_2 lload_3
+fload_0 fload_1 fload_2 fload_3 dload_0 dload_1 dload_2 dload_3
+aload_0 aload_1 aload_2 aload_3
+iaload laload faload daload aaload baload caload saload
+istore_0 istore_1 istore_2 istore_3 lstore_0 lstore_1 lstore_2 lstore_3
+fstore_0 fstore_1 fstore_2 fstore_3 dstore_0 dstore_1 dstore_2 dstore_3
+astore_0 astore_1 astore_2 astore_3
+iastore lastore fastore dastore aastore bastore castore sastore
+pop pop2 dup dup_x1 dup_x2 dup2 dup2_x1 dup2_x2 swap
+iadd ladd fadd dadd isub lsub fsub dsub
+imul lmul fmul dmul idiv ldiv fdiv ddiv irem lrem frem drem
+ineg lneg fneg dneg ishl lshl ishr lshr iushr lushr iand land ior lor ixor lxor
+i2l i2f i2d l2i l2f l2d f2i f2l f2d d2i d2l d2f i2b i2c i2s
+lcmp fcmpl fcmpg dcmpl dcmpg ireturn lreturn freturn dreturn areturn return
+nop arraylength athrow monitorenter monitorexit
+</pre></font></blockquote>
+
+<p>Group 2 includes load, store and ret instructions:
+
+<blockquote><font><pre>
+iload lload fload dload aload
+istore lstore fstore dstore astore
+ret
+</pre></font></blockquote>
+
+These instructions all take a variable name as parameter, e.g.,
+
+<blockquote><font><pre>
+void inst_iload(String varName);
+</pre></font></blockquote>
+
+<p>Group 3 are instructions dealing with object types; they all take a type name as parameter:
+
+<blockquote><font><pre>
+new newarray anewarray checkcast instanceof
+</pre></font></blockquote>
+
+<p>Group 4 are instructions to get and put data fields:
+
+<blockquote><font><pre>
+getstatic putstatic getfield putfield
+</pre></font></blockquote>
+
+The method signature is like:
+
+<blockquote><font><pre>
+void inst_getstatic(String className, String fieldName, String fieldType);
+</pre></font></blockquote>
+
+<p>Group 5 is <code>ldc</code> and its variants:
+
+<blockquote><font><pre>
+ldc ldc_w ldc2_w
+</pre></font></blockquote>
+
+Each of them has two overloaded methods:
+
+<blockquote><font><pre>
+void inst_ldc(Object value);
+void inst_ldc(Object value, String type);
+</pre></font></blockquote>
+
+where <code>value</code> is a Java primitive type wrapper or a String, and
+<code>type</code> is the intended type. The constant will be added to the constant
+pool. For certain values, implementation may optimize to such as <code>bipush</code>
+or <code>iconst_0</code>, etc.
+
+<p>Group 6 are for jump instructions; they all take a target label as parameter:
+
+<blockquote><font><pre>
+ifeq ifne iflt ifge ifgt ifle
+if_icmpeq if_icmpne if_icmplt if_icmpge if_icmpgt if_icmple if_acmpeq if_acmpne
+goto jsr ifnull ifnonnull goto_w jsr_w
+</pre></font></blockquote>
+
+<p>Group 7 is invocation methods:
+
+<blockquote><font><pre>
+invokevirtual invokespecial invokestatic invokeinterface
+</pre></font></blockquote>
+
+Their signature is:
+
+<blockquote><font><pre>
+void invokevirtual(String className, String methodName, String[] paramTypes, String returnType);
+</pre></font></blockquote>
+
+<p>Group 8 is for instructions otherwise not grouped. Their signatures are listed below:
+
+<blockquote><font><pre>
+void inst_bipush(byte value);
+void inst_sipush(short value);
+void inst_iinc(String varName, int increment);
+void inst_multianewarray(String type, short dim);
+void inst_tableswitch(int[] consts, String[] labels, String defaultLabel);
+void inst_lookupswitch(int startConst, String[] labels, String defaultLabel);
+</pre></font></blockquote>
+
+
+
+<h3><a name=macro>Macros</a></h3><p>
+
+<p>
+Beyond individual instructions, <code>JavaClassCreator</code> has defined a number of macros
+for commonly used patterns. They can interpret a name to be a variable or field based on the
+context, and use the strong-type system to figure out what to do. They take an array element
+syntax, so array access is much simpler. In general, these macros will greatly shorten your
+programs and make them more readable. It is not uncommon that a method is implemented
+completely by variables and macros.
+
+<p>
+Access to variables, fields and arrays is represented in <code>JavaClassCreator</code> by
+one of its inner class, <code>VarAccess</code>.
+
+<blockquote><font><pre>
+public class JavaClassCreator {
+  public static class VarAccess {
+    public VarAccess(String name, int lineNum);
+    public VarAccess(String name);
+    public boolean isArray();
+    public void setIndex(Object index);
+    public String toString();
+  }
+}
+</pre></font></blockquote>
+
+If it is a single name, the API will try to find a variable in the current method or a field
+in the class. When its index is set, this is an array element accessing operation. The index
+can be a number or a <code>VarAccess</code>, or can be an array of those as a
+multi-dimensional array access.
+
+<p>
+Macros can be classified into two categories: Jamaica Macros and non-Jamaica ones. Jamaica
+macros are direct counterparts of those defined in the Jamaica language. They are all quite
+sophisticated. Other macros are simpler, usually are expanded into just one instruction,
+which is almost always context-sensitive. Most of them are used to implement Jamaica macros.
+
+<blockquote><font><pre>
+void macroSet(Object dest, Object value);
+     // dest can be a String, a VarAccess or null;
+     // if null, the value is left on the stack;
+     // otherwise, the value is set to the dest.
+void macroPrint(String cmd, String target, Object[] params);
+     // Prints to java.lang.System.out or err.
+     // cmd is "print", "println" or "flush".
+     // target is null, "out" or "err".
+     // params can be values or VarAccess's.
+void macroObject(String type, String[] paramTypes, Object[] paramValues);
+     // creates an object on the stack.
+void macroArray(String type, int dims, Object[] sizes);
+     // creates an array on the stack.
+void macroStringConcat(Object[] vals);
+     // vals can be values or VarAccess's. The concatenated string is left on stack.
+void macroIterate(VarAccess coll, String var, String id);
+     // coll must reference either a java.util.Iterator or Enumeration.
+     // var must reference an Object, holding the object during each iteration.
+     // var can be null, where the object is left on the stack.
+     // This macro must be ended by a call to macroEndIterator() with a matchin id.
+void macroEndIterate(String id);
+void macroArrayIterate(VarAccess array, String var, String id);
+     // array must reference an array.
+     // var must reference an int to serve as the index used by the iteration.
+     // The stack is not used.
+     // This macro must be ended by a call to macroEndArrayIterator() with a matching id.
+void macroEndArrayIterate(String, String id);
+void macroIf(String op, Object left, Object right, String id, boolean hasElse);
+     // op is one of these: &lt;, &lt;=, >, >=, == or !=.
+     // left and right can be constants or references.
+     // This macro must be ended by a macroElse() or macroEndIf() with a matching id.
+void macroElse(String id);
+     // This macro must be proceded by a macroIf() and
+     // ended by a macroEndIf() with a matching id.
+void macroEndIf(String id);
+     // This macro must be proceeded by a macroIf() or macroElse() and
+     // ended by a macroEndIf() with a matching id.
+</pre></font></blockquote>
+
+<p>
+Non-Jamaica Macros are simple ones that do "intelligent" instruction generation.
+
+<blockquote><font><pre>
+void macroTypeCast(String fromType, String toType);
+String macroGetField(String name);
+     // Returns the type of the value loaded on the stack.
+String macroLoadConstantOrVarOrField(Object value, String intendedType);
+     // value can be a constant (including String) or a VarAccess.
+     // Returns the type of the value loaded on the stack.
+String macroLoadVarOrField(String name, String intendedType);
+     // Returns the type of the value loaded on the stack.
+String macroLoadVarOrField(VarAccess var, String intendedType);
+     // Returns the type of the value loaded on the stack.
+</pre></font></blockquote>
+
+
+
+<h3><a name=indir>Indirect Instructions</a></h3><p>
+
+<p>
+In addition to the direct bytecode instructions and powerful macros,
+<code>JavaClassCreator</code> provides a number of flexible methods to create bytecode
+instructions. In fact, most direct instructions are delegated to these, as noted below:
+
+<blockquote><font><pre>
+void inst(int opcode);
+     // For all group 1 instructions.
+void instLoadStoreRet(int opcode, String varName);
+     // For all group 2 instructions.
+void instType(int opcode, String type);
+     // For all group 3 instructions.
+void instGetPut(int opcode, String className, String fieldName, String type);
+     // For all group 4 instructions.
+void instLdc(int opcode, Object value, String type);
+     // For all group 5 instructions.
+void instJump(int opcode, String label);
+     // For all group 6 instructions.
+void instInvoke(int opcode, String className, String methodName,
+       String[] paramTypes, String returnType);
+     // For all group 7 instructions.
+</pre></font></blockquote>
+
+
+
+<h3><a name=helper>Helper Methods</a></h3><p>
+
+<p>
+These are helper methods that can be handy at times.
+
+<blockquote><font><pre>
+String getMnemonic(int opcode);
+String getType(Object value);
+static String getConstTypeName(Object value);
+static boolean isPrimitiveType(String type);
+static boolean isInt(String type);
+static int getLoadInstruction(String type);
+static int getStoreInstruction(String type);
+static int getArrayLoadStoreInstruction(String type, boolean isStore);
+static VarAccess createVarAccess(String name);
+static VarAccess createArrayAccess(String name, Object index);
+static VarAccess createArrayAccess(String name, Object index1, Object index2);
+</pre></font></blockquote>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=spi>4. Service Provider Methods</a></h2><p>
+
+<p>
+Implementation classes of <code>JavaClassCreator</code> are obliged to implement these
+abstract methods:
+
+<blockquote><font><pre>
+void setSourceFileName(String fileName);
+String getSourceFileName();
+String getClassName();
+String getSuperclassName();
+String[] getInterfaceNames();
+String getClassRootName();
+void startClass(int accessFlags, String className, String superName, String[] implementList);
+void startInterface(String itfName, String[] extendList);
+byte[] endClass();
+void endClassToFile(String fileName);
+void addField(int accessFlags, String name, String type);
+void addConstant(int accessFlags, String fieldName, String type, Object value);
+String getFieldType(String fieldName);
+boolean isStaticField(String fieldName);
+void addDefaultConstructor(int accessFlags);
+void addAbstractMethod(int accessFlags, String name, String[] paramTypes, String[] paramNames,
+       String returnType, String[] exceptions);
+void startMethod(int accessFlags, String name, String[] paramTypes, String[] paramNames,
+       String returnType, String[] exceptions);
+void endMethod();
+int getMethodAccessFlags();
+String getMethodName();
+void addLocalVariable(String name, String type);
+int getLocalVariableIndex(String varName);
+String getVariableType(String varName);
+void addCatchClause(String exceptionType, String startLabel, String endLabel, String actionLabel);
+void setLabel(String label);
+void inst(int opcode);
+void instLoadStoreRet(int opcode, String varName);
+void instType(int opcode, String typeName);
+void instGetPut(int opcode, String className, String fieldName, String type);
+void instLdc(int opcode, Object value, String type);
+void instJump(int opcode, String label);
+void instInvoke(int opcode, String className, String methodName,
+       String[] paramTypes, String returnType);
+void inst_tableswitch(int[] consts, String[] labels, String defaultLabel);
+void inst_lookupswitch(int startConst, String[] labels, String defaultLabel);
+void inst_bipush(byte value);
+void inst_sipush(short value);
+void inst_iinc(String varName, int increment);
+void inst_multianewarray(String arrayType, short dims);
+String getMnemonic(int opcode);
+</pre></font></blockquote>
+
+
+
+<h3><a name=opcode>Opcode Constants</a></h3><p>
+
+<p>
+<code>JavaClassCreator</code> does not define constants for the JVM bytecode opcodes,
+because all implementation packages have a collection of those. For instance, in the
+Jakarta-BCEL package, interface <code>org.apache.bcel.Constants</code> defines constants
+for all the bytecode opcodes.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=examples>5. Examples</a></h2><p>
+
+<p>
+Let's write some Java code to generate a Java class and use it instantly. The generated
+class will be like the following class written in Jamaica:
+
+<p align=center><table width=640><thead>
+<th><a name="DynaHandler">Listing 1</a>. DynaHandler Genereated Within JCCTest.java</th>
+</thead><tr><td class=code><pre>
+ 
+// We will write a Java class called JCCTest to generate this one.
+// JCCTest has an inner interface, EventHandler, that is implemented here.
+public class DynaHandler implements JCCTest$EventHandler
+{
+  .default_constructor <public>
+
+  public void event(String e) { 
+    %println "String event: ", e
+  }
+
+  public void event(int e) {
+    %println "int event: ", e
+  }
+
+  public void event(int[] e) {
+    int i;
+    %set i = 0
+
+    %if e != null
+      aload e
+      arraylength
+      istore i
+    %end_if
+
+    %println "Array event: length=", i
+
+    %if i > 0
+      %array_iterate e i
+        %println "  e[", i, "]=", e[i]
+      %end_array_iterate
+    %end_if
+  }
+}
+</pre></td></tr></table></p><p>
+
+
+This is the Java code that generates and uses a created class:
+
+<p align=center><table width=640><thead>
+<th><a name="JCCTest">Listing 2</a>. JCCTest.java</th>
+</thead><tr><td class=code><pre>
+ 
+import java.lang.reflect.Modifier;
+import com.judoscript.jamaica.*;
+
+public class JCCTest extends ClassLoader
+{
+  public static final JCCTest classLoader = new JCCTest();
+
+  private JCCTest() {}
+
+  /**
+   * This is the interface that any dynamica class will implement.
+   */
+  public static interface EventHandler {
+    public void event(String e);
+    public void event(int    e);
+    public void event(int[]  e);
+  }
+
+  public static void main(String[] args) {
+    try {
+      // Create the dyncamic class
+      Class cls = generateHandlerClass();
+
+      // Create an instance of the dyncamic class and use it.
+      EventHandler eh = (EventHandler)cls.newInstance();
+      eh.event("Cool!");
+      eh.event(5);
+      eh.event(new int[] { 3, 6, 9 });
+      eh.event((int[])null);
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  static Class generateHandlerClass() throws JavaClassCreatorException {
+    String[] paramNames = new String[] { "e" }; // because they are all the same.
+
+    JavaClassCreator jcc = new BCELJavaClassCreator();
+    jcc.startClass(Modifier.PUBLIC, "DynaHandler", null, new String[]{ "JCCTest$EventHandler" });
+
+    jcc.addDefaultConstructor(Modifier.PUBLIC);
+
+    jcc.startMethod(Modifier.PUBLIC, "event", new String[]{ "java.lang.String" },
+                    paramNames, "void", null);
+    jcc. macroPrint("println", null, new Object[]{ "String event: ", jcc.createVarAccess("e") });
+    jcc. inst_return();
+    jcc.endMethod();
+
+    jcc.startMethod(Modifier.PUBLIC, "event", new String[]{ "int" }, paramNames, "void", null);
+    jcc. macroPrint("println", null, new Object[]{ "int event: ", jcc.createVarAccess("e") });
+    jcc. inst_return();
+    jcc.endMethod();
+
+    jcc.startMethod(Modifier.PUBLIC, "event", new String[]{ "int[]" }, paramNames, "void", null);
+    jcc. addLocalVariable("i", "int", new Integer(0));
+    jcc. macroIf("!=", jcc.createVarAccess("e"), null, "?if_1", false);
+    jcc.   inst_aload("e");
+    jcc.   inst_arraylength();
+    jcc.   inst_istore("i");
+    jcc. macroEndIf("?if_1");
+    jcc. macroPrint("println", null, new Object[]{
+           "Array event: length=", jcc.createVarAccess("i")
+         });
+    jcc. macroIf(">", new JavaClassCreator.VarAccess("i"), new Integer(0), "?if_2", false);
+    jcc.  macroArrayIterate(jcc.createVarAccess("e"), "i", "?iter_1");
+    jcc.   macroPrint("println", null, new Object[]{
+             " e[", jcc.createVarAccess("i"), "]=",
+             jcc.createArrayAccess("e", jcc.createVarAccess("i"))
+           });
+    jcc.  macroEndArrayIterate("i", "?iter_1");
+    jcc. macroEndIf("?if_2");
+    jcc. inst_return();
+    jcc.endMethod();
+
+    byte[] bytes = jcc.endClass(); 
+
+    return classLoader.defineClass("DynaHandler", bytes, 0, bytes.length);
+  }
+}
+</pre></td></tr></table></p><p>
+
+
+The output is:
+
+<blockquote><font><pre>
+% javac JCCTest.java
+% Java JCCTest
+String event: Cool!
+int event: 5
+Array event: length=3
+ e[0]=3
+ e[1]=6
+ e[2]=9
+Array event: length=0
+</pre></font></blockquote>
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>6. Code Listings</a></h2><p>
+<ol><li> <a href=#DynaHandler>DynaHandler Genereated Within JCCTest.java</a><li> <a href=#JCCTest>JCCTest.java</a></ol>
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

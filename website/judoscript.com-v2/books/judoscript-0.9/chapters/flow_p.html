@@ -1,0 +1,927 @@
+<html><head><title>Chapter 6. Flow Control</title>
+      <link href="../../../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#flowctrl">Basic Flow Control Statements</a></li><br>&#187;&nbsp;<a href="#block">Types of Judo Statements</a><br>&#187;&nbsp;<a href="#stmt_if">If-Else Statement</a><br>&#187;&nbsp;<a href="#stmt_switch">Switch Statement</a><br>&#187;&nbsp;<a href="#stmt_while">While and Do-While Loops</a><br>&#187;&nbsp;<a href="#stmt_for">For and Repeat Loops</a><br>&#187;&nbsp;<a href="#breakcont">Break, Continue and Loop Index</a><li><a href="#fxn">Functions and Function Variables</a></li><br>&#187;&nbsp;<a href="#params">Function Parameters</a><br>&#187;&nbsp;<a href="#dynparams">Dynamic Function Parameters</a><br>&#187;&nbsp;<a href="#fxnvar">Function Variables</a><br>&#187;&nbsp;<a href="#anonfxn">Anonymous Functions</a><br>&#187;&nbsp;<a href="#javafxn">Function Alias for Java Static Methods</a><br>&#187;&nbsp;<a href="#sysfxn">System Functions</a><li><a href="#excpt">Exception Handling</a></li><br>&#187;&nbsp;<a href="#exobj">The Exception Object</a><br>&#187;&nbsp;<a href="#throw_resume">The Throw and Resume Statements</a>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+<p class=tiny>Book: <a href="../toc_details.html">The Judo Language 0.9</a></p>
+ <h1>Chapter 6. Flow Control</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<br><a href="flow.html">non-printer version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+This chapter introduces all the flow control mechanisms of general programming. In addition to the flow control statements such as <b><code>if</code></b>-<b><code>else</code></b>, <b><code>switch</code></b>-<b><code>case</code></b>-<b><code>default</code></b>, <b><code>while</code></b> and <b><code>for</code></b> loops, function and exception handling are also covered.
+</td></tr></table></td></tr></table>
+
+
+<h2>&nbsp;<br><a name=flowctrl> Basic Flow Control Statements</a></h2>
+
+
+<a name=block><h3> Types of Judo Statements</h3></a>
+
+<p>In Judo, statements include simple statements, block statement, compound statements and event-driven statements.</p>
+
+<p><b>Simple statements</b><br>Simple statements perform specific tasks. For example, the assignment statement assigns a value to a variable or field; a <code>return</code> statement returns from a function or method. Simple statements in Judo can actually be quite complicated, such as the JDBC statements:</p>
+
+<font  color=black><pre>
+executeQuery qry:
+  SELECT * FROM emp WHERE first_name = ?
+; with @1 = 'James';
+</pre></font>
+
+<p><b>Block statement</b><br>A number of statements can be grouped and surrounded by <b><code>{</code></b> and <b><code>}</code></b> and form a block. Blocks have their own variable scope.</p>
+
+<a name="stmt_block"><table border=0 class=secondary3>
+<tr><td valign=top><i>Block</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>{</code></b> ( <i>Statement</i> )* <b><code>}</code></b></td></tr>
+</table></a>
+
+<p>Blocks can also be a part of other compound statements that are discussed in this chapter. Blocks can also have <code>catch</code> and <code>finally</code> clauses, discussed in <i><a href="flow.html#excpt">Exception Handling</a></i>.</p>
+
+<p><b>Compound statements</b><br>Compound statements are those that may contain or require other statements for processing based on different conditions and/or in different situations. The enclosed statements are usually organized in block statements. In the general programming area, the flow control statements (such as <i>if-else</i> and loops) are all compound statements. Many functional statements are also compound statements.</p>
+
+<p><b>Event-driven statements</b><br>Some of Judo's functional statements use an event-driven programming model; those statements are event-driven statements. For instance, the <code>guiEvent</code> statement, the SGML and XML statements. The following is an example of SGML statement:</p>
+
+<font  color=black><pre>
+do 'http://www.yahoo.com' as sgml {
+&lt;a>:   if $_.href != null { println $_.href; }
+&lt;img>: println $_.src;
+}
+</pre></font>
+
+<p>In this SGML statement, each SGML tag encountered is treated as an "event"; you as a programmer provides an event "handler", which is a series of statements, for each "event".</p>
+
+<br>
+
+
+<a name=stmt_if><h3> If-Else Statement</h3></a>
+
+<p>The <i>if-else</i> statement has this syntax:</p>
+
+<a name="stmt_if"><table border=0 class=secondary3>
+<tr><td valign=top><i>IfElse</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>if</code></b> <i>Expr</i> <i>Block</i> ( ( <b><code>else</code></b> <b><code>if</code></b> | <b><code>elif</code></b> ) <i>Expr</i> <i>Block</i> )* [ <b><code>else</code></b> <i>Block</i> ]</td></tr>
+</table></a>
+
+<p>The <i>Expr</i>'s are evaluated to boolean values; if <code>true</code>, the chunk of code that follows will be executed. If-else statement is straightforward and is one of the most frequently used statement. There is only one catch: the blocks following <code>if</code>, <code>elif</code> and <code>else</code> expressions do not define new scopes. If you declare local variables in these blocks, the scope for these variable is actually the scope that contains the if-statement. To avoid confusion, do not declare local variables in any of these blocks. For instance,</p>
+
+<font  color=black><pre>
+if foo() {
+  var tmp = 5;
+  println 'foo() returns true.';
+} else {
+  println 'foo() returns false.';
+}
+println tmp;
+</pre></font>
+
+<p>In the last line, <code>tmp</code> may or may not be defined, depending on the boolean result of the <code>foo()</code> call. A better way is to move the <code>var tmp</code> declaration out.</p>
+
+<br>
+
+
+<a name=stmt_switch><h3> Switch Statement</h3></a>
+
+<p>The syntax for the switch statement is:</p>
+
+<a name="stmt_switch"><table border=0 class=secondary3>
+<tr><td valign=top><i>Switch</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>switch</code></b> <i>Expr</i> <b><code>{</code></b> ( <i>CaseClaus</i> )* <b><code>}</code></b></td></tr>
+<tr><td valign=top><i>CaseClause</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>case</code></b> <i>Expr</i> | <b><code>default</code></b> ) <b><code>:</code></b> ( <i>Statement</i> )*</td></tr>
+</table></a>
+
+<p>No more than one <code>default</code> clause is allowed. The <i>Expr</i> following <b><code>switch</code></b> is evaluated and checked against values specified in each <code>case</code> clause; if a match is found, the chunk of code is executed; if no match is found and the <code>default</code> clause is present, execute the chunk of code for <code>default</code>; otherwise, simply finish the statement.</p>
+
+<p>The values in the <code>case</code> clauses are usually constant values but actually can be any expressions; the value types can be anything, such as primitive types like integer, number, string, date/time, and Java objects. The match between the <code>switch</code> value and <code>case</code> values tries the comparisons with different types and is carried out in this order: Java object, number and date/time, and string. The following example demonstrates this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="stmt_switch.judo">Listing 6.1</a> stmt_switch.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+values = [ 9,
+           Date(2001,11,20),
+           new java::HashMap,
+           'uvw',
+           'XYZ',
+           '{}'
+         ];
+
+for a in values {
+  switch a {
+  case 9:                 println 'CASE OF number: ', a; break;
+  case 'uvw':             println 'CASE OF string: ', a; break;
+  case Date(2001,11,20):  println 'CASE OF Date:   ', a; break;
+  case new java::HashMap: println 'CASE OF Java:   ', a; break;
+  default:                println 'DEFAULT:        ', a; break;
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The <code>values</code> is an array of values of different types; each value is run against the switch statement. The result is:</p>
+
+<font  color=black><pre>
+CASE OF number: 9
+CASE OF Date:   11/20/01 12:00 AM
+CASE OF Java:   {}
+CASE OF string: uvw
+DEFAULT:        XYZ
+CASE OF Java:   {}
+</pre></font>
+
+<p>What happened to the value of <code>'{}'</code>? It is a string and happens to match <code>new java::HashMap</code> because they both share the same stringn representation, <code>{}</code>. In most situations, the <code>case</code> values are numbers or strings.</p>
+
+<p>Statements for each <code>case</code> and <code>default</code> normally ends with a <code>break</code> statement. If no <code>break</code> statement is present at the end, the program continues on to the statements in the next <code>case</code> or <code>default</code>; you can have no statements for certain <code>case</code> and/or <code>default</code> clauses to share a same chunk of code. For instance,</p>
+
+<font  color=black><pre>
+switch x {
+case 1:
+case 2:
+case 3:  println 'In [1,3]';          break;
+case 4:
+case 5:
+case 6:  println 'In [4,6]';          break;
+default: println 'Outside of [1,6];'; break;
+}
+</pre></font>
+
+<p>Note that the <code>case</code> values do not have to be constants; they can be any expression. This may be used for dynamic matching. The following example uses the <i>switch</i> statement in a function (which will be discussed shortly in this chapter); it is not a practical function for the purpose of its name.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="stmt_switch2.judo">Listing 6.2</a> stmt_switch2.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+for i from 0 to 100 {
+  isPowerOf i, 3;
+}
+
+function isPowerOf x, base {
+  base2 = base  * base;
+  base3 = base2 * base;
+  base4 = base3 * base;
+  base5 = base4 * base;
+  base6 = base5 * base;
+
+  switch x {
+  case 0:
+  case base:
+  case base2:
+  case base3:
+  case base4:
+  case base5:
+  case base6: println x, ' is a power of ', base; break;
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+0 is a power of 3
+3 is a power of 3
+9 is a power of 3
+27 is a power of 3
+81 is a power of 3
+</pre></font>
+
+<br>
+
+
+<a name=stmt_while><h3> While and Do-While Loops</h3></a>
+
+<p>The <i>while</i> and <i>do-while</i> statements have the following syntax:</p>
+
+<a name="While_Do"><table border=0 class=secondary3>
+<tr><td valign=top><i>While</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>while</code></b> <i>Expr</i> <i>Block</i></td></tr>
+<tr><td valign=top><i>DoWhile</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>do</code></b> <i>Block</i> <b><code>while</code></b> <i>Expr</i> <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The meaning of these two statements are self-evident. The following example tests both:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="stmt_while.judo">Listing 6.3</a> stmt_while.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+println 'while() {}';
+a = 3;
+while a >= 0 {
+  println a;
+  --a;
+}
+
+println;
+println 'do {} while.';
+do {
+  println a;
+  a++;
+} while a < 2;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+while() {}
+3
+2
+1
+0
+
+do {} while.
+-1
+0
+1
+</pre></font>
+
+<br>
+
+
+<a name=stmt_for><h3> For and Repeat Loops</h3></a>
+
+<p>Judo has three <i>for</i> loop statements.</p>
+
+<p><b>The generic <i>for</i> loop</b><br></p>
+
+<p>The syntax for the generic <i>for</i> loop is:</p>
+
+<a name="ForLoop"><table border=0 class=secondary3>
+<tr><td valign=top><i>ForLoop</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>for</code></b> [ <b><code>(</code></b> ] [ <i>ExprList</i> ] <b><code>;</code></b> [ <i>Expr</i> ] <b><code>;</code></b> [ <i>ExprList</i> ] [ <b><code>)</code></b> ] <i>Block</i></td></tr>
+<tr><td valign=top><i>ExprList</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i> ( <b><code>,</code></b> <i>Expr</i> )*
+</table></a>
+
+<p>This form of <i>for</i> loop is the same as the <i>for</i> statement in Java or C/C++. It runs the first list of expressions sort of like initialization, then check on the boolean expression in the second place; if <code>true</code>, the block is executed, and at the end the expression list in the third place is executed. So, for the following pseudocode:</p>
+
+<font  color=black><pre>
+for init(); cond(); postproc() {
+  do_work();
+}
+</pre></font>
+
+<p>it is equivalent to:</p>
+
+<font  color=black><pre>
+init();
+while cond() {
+  do_work();
+  postproc();
+}
+</pre></font>
+
+<p>This is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="forloop.judo">Listing 6.4</a> forloop.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+for a=0; a<3; ++a {
+  println a;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p><b>The <i>for-from-to</i> loop</b><br></p>
+
+<p>This statement is to loop through a series of numbers as specified. The syntax is:</p>
+
+<a name="ForFromTo"><table border=0 class=secondary3>
+<tr><td valign=top><i>ForFromTo</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>for</code></b> [ <b><code>(</code></b> ] <i>INDENTIFIER</i> [ <b><code>from</code></b> <i>Expr</i> ] ( <b><code>do</code></b> | <b><code>downto</code></b> ) <i>Expr</i> [ <b><code>step</code></b> <i>Expr</i> ] [ <b><code>)</code></b> ] <i>Block</i></td></tr>
+</table></a>
+
+<p>The loop number can be ascending (with the <code>to</code> clause) or down (with the <code>downto</code> clause). If the <code>from</code> clause is missing, by default it starts with <code>0</code>. If the <code>step</code> is not specified, the step is defaulted to <code>1</code>. Step can never be negative; if negative value is specified, its absolute value is used instead. The following program demonstrates varios usages:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="for_fromto.judo">Listing 6.5</a> for_fromto.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+print 'for [from 0] to 3:           ';
+for a to 3 { print a, ' '; }
+println;
+
+print 'for from 3 to 5:             ';
+for a from 3 to 5 { print a, ' '; }
+println;
+
+print 'for from 3 to 10 step 2:     ';
+for a from 3 to 10 step 2 { print a, ' '; }
+println;
+
+print 'for from 10 downto 5 step 2: ';
+for a from 10 downto 5 step 2 { print a, ' '; }
+println;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+for [from 0] to 3:           0 1 2 3
+for from 3 to 5:             3 4 5
+for from 3 to 10 step 2:     3 5 7 9
+for from 10 downto 5 step 2: 10 8 6
+</pre></font>
+
+<p><b>The <i>for-in</i> loop</b><br></p>
+
+<p>The <i>for-in</i> statement is to iterate through collection data structures. Collections include built-in data structures such as <code>Array</code>, <code>LinkedList</code>, <code>Set</code> and <code>Object</code>. Java arrays and instances of <code>java.util.Iterator</code>, <code>java.util.Enumeration</code>, <code>java.util.Collection</code>, <code>java.util.List</code> and <code>java.util.Map</code> can also be iterated with <i>for-in</i> statement. In the case of Judo <code>Object</code> and Java <code>java.util.Map</code> subjects, their keys are iterated. The syntax of <i>for-in</i> statement is:</p>
+
+<a name="ForIn"><table border=0 class=secondary3>
+<tr><td valign=top><i>ForIn</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>for</code></b> [ <b><code>(</code></b> ] <i>INDENTIFIER</i> <b><code>in</code></b> <i>Expr</i> [ <b><code>backward</code></b> ] [ <b><code>from</code></b> <i>Expr</i> ] ( <b><code>do</code></b> | <b><code>downto</code></b> ) <i>ExprList</i> [ <b><code>step</code></b> <i>Expr</i> ] [ <b><code>)</code></b> ] <i>Block</i></td></tr>
+</table></a>
+
+<p>The <code>backward</code> and <code>from</code>/<code>to</code> apply only to fixed-length collections such as <code>Array</code>, Java arrays and <code>java.util.List</code> instances. The following example shows some of the usages:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="for_in.judo">Listing 6.6</a> </th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+println 'Iterating Array:';
+a = [ 1, 2, 3 ];
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating Java array:';
+a = new java::int[]{ 10, 20, 30 };
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating java.util.ArrayList:';
+a = new java::ArrayList;
+a.add(100);
+a.add(200);
+a.add(300);
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating with range:';
+a = [ 1, 2, 3, 4 ];
+
+print "--- for in                 ";
+for e in a { print e, ' '; }
+
+print nl, "--- for in backward        ";
+for e in a backward { print e, ' '; }
+
+print nl, "--- for in from 1          ";
+for e in a from 1 { print e, ' '; }
+
+print nl, "--- for in to 1            ";
+for e in a to 1 { print e, ' '; }
+
+print nl, "--- for in from 1 to 2     ";
+for e in a from 1 to 2 { print e, ' '; }
+
+print nl, "--- for in from 2 downto 1 ";
+for e in a from 2 downto 1 { print e, ' '; }
+
+print nl, "--- for in downto 1        ";
+for e in a downto 1        { print e, ' '; }
+println;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+Iterating Array:
+0: 1
+1: 2
+2: 3
+
+Iterating Java array:
+0: 10
+1: 20
+2: 30
+
+Iterating java.util.ArrayList:
+0: 100
+1: 200
+2: 300
+
+Iterating with range:
+--- for in                 1 2 3 4
+--- for in backward        4 3 2 1
+--- for in from 1          2 3 4
+--- for in to 1            1 2
+--- for in from 1 to 2     2 3
+--- for in from 2 downto 1 3 2
+--- for in downto 1        4 3 2
+</pre></font>
+
+<p><b>The <i>repeat</i> statement</b><br>If you simply want to repeat certain operations for a number times, the <i>repeat</i> statement is an easy one.</p>
+
+<a name="Repeat"><table border=0 class=secondary3>
+<tr><td valign=top><i>Repeat</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>repeat</code></b> <i>Expr</i> [ <b><code>times</code></b> ] <i>Block</i></td></tr>
+</table></a>
+
+<br>
+
+<br>
+
+
+<a name=breakcont><h3> Break, Continue and Loop Index</h3></a>
+
+<p><b>The <i>break</i> and <i>continue</i> statements</b><br>In loops, you can use the <i>break</i> statement to break the loop, or <i>continue</i> statement to skip the rest of the statement in the current iteration and go to the start of next iteration. The syntax for these statements is:</p>
+
+<a name="BreakContinue"><table border=0 class=secondary3>
+<tr><td valign=top><i>BreakContinue</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>break</code></b> | <b><code>continue</code></b> ) [ <i>IDENTIFIER</i> ] <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The optional <i>IDENTIFIER</i> is a label name for a loop to break or continue from within a nested loop. The following is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="breakcont.judo">Listing 6.7</a> breakcont.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+aloop:
+  for i from 0 to 5 {
+    for j from 1 to 5 {
+      if i+j &lt; 5 {
+        continue aloop;
+      } else if i+j >= 10 {
+        break aloop;
+      }
+      println i, '-', j;
+    }
+  }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+4-1
+4-2
+4-3
+4-4
+4-5
+5-1
+5-2
+5-3
+5-4
+</pre></font>
+
+<p><b>Loop index</b><br>All loop statements, including the general programming flow control and special-purpose statements to be discussed later in the book, have a <i>loop index</i>. The loop index starts at <code>0</code> for the first iteration and increments thereafter. This loop index is accessible via the system function, <code>loopIndex()</code>. It can take a negative integer number to return the loop index of the enclosing loop statement in case of nested loops.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="loopidx.judo">Listing 6.8</a> loopidx.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+for i from 1 to 3 {
+  for j from 2 to 5 {
+    println ' outer loop: ', loopIndex(-1),
+            ' inner loop: ', loopIndex();
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+  outer loop: 0  inner loop: 0
+  outer loop: 0  inner loop: 1
+  outer loop: 0  inner loop: 2
+  outer loop: 0  inner loop: 3
+  outer loop: 1  inner loop: 0
+  outer loop: 1  inner loop: 1
+  outer loop: 1  inner loop: 2
+  outer loop: 1  inner loop: 3
+  outer loop: 2  inner loop: 0
+  outer loop: 2  inner loop: 1
+  outer loop: 2  inner loop: 2
+  outer loop: 2  inner loop: 3
+</pre></font>
+
+<p>This <code>loopIndex()</code> function can be quite useful in loops that do not have an explicit loop indicator; without it, sometimes you would need to use an explicit counter variable. For instance, the following program prints out lines starting at line number 5 in a file:</p>
+
+<font  color=black><pre>
+do file_name as lines {
+  if loopIndex() < 5 { continue; }
+  println $_;
+}
+</pre></font>
+
+<p>The <i>do .. as lines</i> statement is covered later.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=fxn> Functions and Function Variables</a></h2>
+
+<p>Judo functions organize code into reusable units. A function can take 0 or more parameters, and return a value. They can be built-in system functions or user-defined functions. The syntax for user-defined function declaration is:</p>
+
+<a name=""><table border=0 class=secondary3>
+<tr><td valign=top><i>Function</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>function</code></b> <i>IDENTIFIER</i> [ <b><code>(</code></b> ] <i>params</i> [ <b><code>)</code></b> ]  <b><code>{</code></b> ( <i>Statement</i> )* <b><code>}</code></b></td></tr>
+<tr><td valign=top><i>params</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>param</i> ( <b><code>,</code></b> <i>param</i> )* [ <b><code>,</code></b> <b><code>..</code></b> ] | <b><code>..</code></b> | <b><code>&lt;</code></b> <i>Expr</i> <b><code>&gt;</code></b></td></tr>
+<tr><td valign=top><i>param</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>IDENTIFIER</i> [ <b><code>=</code></b> <i>Expr</i> ]</td></tr>
+</table></a>
+
+<p>The same syntax is used for methods within user-defined classes; there are some fundamental differences between functions and class methods, which will be discussed in chapter <i><a href="oop.html">10. Object-Oriented Programming</a></i>.</p>
+
+<p>The parentheses around parameters are not required; if parentheses are used, the right parenthesis must match the left one. Functions always return a value; the <code>return</code> statement can return a value and exit the function. If no <code>return</code> statements are called, the function code will fall out of scope and exit, returning <code>undefined</code>. Functions, like any declarations in Judo, can appear anywhere, that is, you can call a function before it is declared. The following is the famous Hanoi Tower problem followed by the result of a test run.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="hanoi.judo">Listing 6.9</a> hanoi.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+cnt = 0;
+hanoiTower(4, 'A', 'B', 'C');
+
+function hanoiTower N, src, aux, dst {
+  if N == 0 { return; }
+  hanoiTower(N-1, src, dst, aux);
+  println 'step ', ++cnt :&gt;2, ':  ', src, ' =&gt; ', dst;
+  hanoiTower(N-1, aux, src, dst);
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The Tower of Hanoi puzzle was invented by the French mathematician Edouard Lucas in 1883. There are three pegs; initially a number of disks of different sizes are stacked on one peg; the objective is to transfer the entire tower to another peg, moving only one disk at a time and never a larger one on top of a smaller. This is a well-known recursive algorithm. In <code>hanoi.judo</code>, we used a global variable, <code>cnt</code>, to track the history of the transfers. The following is the result of moving an initial tower of 4 disks.</p>
+
+<font  color=black><pre>
+step  1:  A =&gt; B
+step  2:  A =&gt; C
+step  3:  B =&gt; C
+step  4:  A =&gt; B
+step  5:  C =&gt; A
+step  6:  C =&gt; B
+step  7:  A =&gt; B
+step  8:  A =&gt; C
+step  9:  B =&gt; C
+step 10:  B =&gt; A
+step 11:  C =&gt; A
+step 12:  B =&gt; C
+step 13:  A =&gt; B
+step 14:  A =&gt; C
+step 15:  B =&gt; C
+</pre></font>
+
+
+<a name=params><h3> Function Parameters</h3></a>
+
+<p>Function parameter names are the same as variable names. Parameters may have default values. Function calls can take any number of parameter values. If the number of passed values is less than the number of declared parameters, the missing parameters take the default values in the function declaration; if no default values specified, <code>null</code> is used. If the number of passed values is more than the number of declared parameters, the extra parameters are stored in an array in the predefined local variable, <code>$$args</code>.</p>
+
+<p>To explicitly declare that a function takes variable number of parameters, you may end the parameter list with two dots (<code>..</code>); this has no further meaning.</p>
+
+<p>During function calls, parameters are pass-by-value for primitive Judo data types (including integer, number, date and time and string), and pass-by-reference for other object types.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="var_params.judo">Listing 6.10</a> var_params.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+function inc x, delta=1, .. {
+  ret = x + delta;
+  if $$args != null {
+    for x in $$args { ret += x; }
+  }
+  return ret;
+}
+println inc(2);
+println inc(2,2);
+println inc(2,2,2);
+
+function sum .. {
+  ret = 0;
+  for x in $$args { ret += x; }
+  return ret;
+}
+println sum(1,2,3,4,5,6,7,8,9);
+
+function oneparam a {
+  println '---', nl, 'The parameter: ', a;
+  if $$args != null {
+    println unit($$args.length, 'useless parameter');
+  }
+}
+oneparam('abc');
+oneparam('abc', x, y, z);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+3
+4
+6
+45
+----
+The parameter: abc
+----
+The parameter: abc
+3 useless parameters
+</pre></font>
+
+<br>
+
+
+<a name=dynparams><h3> Dynamic Function Parameters</h3></a>
+
+<p>Judo allows you to dynamically create a parameter list in an array, and use that array as function call parameters through the <code>{{ }}</code> syntax.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="dyn_params.judo">Listing 6.11</a> dyn_params.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+function sentence subj, verb, obj, .. {
+  print subj, ' ', verb, ' ', obj;
+  for x in $$args { print ' ', x; }
+  println '.';
+}
+
+params = [ 'James', 'wrote', 'Judo' ];
+sentence( {{params}} );
+
+params = [ 'He', 'uses', 'Judo', 'day-in', 'and', 'day-out' ];
+sentence( {{params}} );
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In the example, the function<code>sentence()</code> prints out all its parameters separated by spaces. The first three parameters are named, and it handles variable number of parameters. When called with dynamic parameters in an array, the elements of array are taken as individual parameters and the result of execution is:</p>
+
+<font  color=black><pre>
+James wrote Judo.
+He uses Judo day-in and day-out.
+</pre></font>
+
+<br>
+
+
+<a name=fxnvar><h3> Function Variables</h3></a>
+
+<p>A function variable is a variable that references a function. A function reference is obtained by the <code>&amp;</code> operator. They can be assigned to variables or passed as paramter values to other functions.</p>
+
+<p>To call a function reference stored in a variable, you can simply invoke the function with the variable name. If the function reference is stored in an array element, use that array element. If the function reference is stored as a value for a key in an <code>Object</code>, use the key name to invoke the function. The following example demonstrates all these situations.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="">Listing 6.15</a> fxn_var.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+function foo1 a, b { return a + b; }
+function foo2 a, b { return a * b; }
+function whichFoo f, a, b { return f(a,b); }
+
+println 'whichFoo(&foo1, 2, 3) = ', whichFoo(&foo1, 2, 3);
+println 'whichFoo(&foo2, 2, 3) = ', whichFoo(&foo2, 2, 3);
+
+x = [ &foo1, &foo2 ];
+println 'x = ', x;
+println 'x[0](2, 3) = ', x[0](2, 3);
+println 'x[1](2, 3) = ', x[1](2, 3);
+
+y = { fxn1 = &foo1, fxn2 = &foo2 };
+println 'y = ', y;
+println 'y.fxn1(4, 6) = ', y.fxn1(4, 6);
+println 'y.fxn2(4, 6) = ', y.fxn2(4, 6);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The only ambiguous situation is that, if there is a function defined with the same name as a variable that holds a function reference, the defined function will be accessed. To remedy this situation, Judo uses the <code>-&gt;</code> operator to explicitly invoke a function referenced in a variable as follows:</p>
+
+<font  color=black><pre>
+function foo1 a, b { return a + b; }
+function foo2 a, b { return a * b; }
+function whichFoo f, a, b { return f(a,b); }
+
+println 'whichFoo-&gt;(&foo1, 2, 3) = ', whichFoo-&gt;(&foo1, 2, 3);
+println 'whichFoo-&gt;(&foo2, 2, 3) = ', whichFoo-&gt;(&foo2, 2, 3);
+</pre></font>
+
+<p>Function variables are important in Judo. Many data structures have methods that take particular function variables to do tasks such as sorting, filtering and transformation. For instance, <code>Array</code>'s <code>sort()</code> method can take a function reference which takes two parameters and return <code>1</code>, <code>0</code> or <code>-1</code> as the result of comparison; its <code>filter()</code> method can take a function reference which takes one parameter and returns <code>true</code> or <code>false</code>. The following example shows how to do a custom sorting on array elements.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="custom_sort.judo">Listing 6.13</a> custom_sort</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+a.sort( &amp;my_comparator );
+for x in al { println x; }
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  for i from 0 to la.size() {
+    if la[i].int() &lt; ra[i].int() { return -1; }
+    if la[i].int() &gt; ra[i].int() { return 1; }
+  }
+  if la.size() == ra.size() { return 0; }
+  return la.size() &gt; ra.size();
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>This program prints the array list as book section numbers. The result is:</p>
+
+<font  color=black><pre>
+1.2
+1.2.1
+1.10
+2.3
+3
+3
+3.9
+</pre></font>
+
+<p>Another good example is the <code>toCsv()</code> of the <code>Array</code> object. The following code converts an array of values into comma-separated, quoted strings, which can be used in SQL's <i>where</i> clause as the values for the <i>in</i> expression:</p>
+
+<font  color=black><pre>
+last_names = [ 'Olajuwon', 'Yao' ];
+in_expr = last_names.toCsv(',', function(x){ return "'"+x+"'"; });
+exeucteQuery qry:
+  SELECT * FROM emp WHERE last_name IN ( (* in_expr *) )
+;
+</pre></font>
+
+<p>The resultant SQL statement is:</p>
+
+<font  color=black><pre>
+SELECT * FROM emp WHERE last_name IN ( 'Olajuwon', 'Yao' )
+</pre></font>
+
+<p>The SQL scripting is introduced in chapter <i><a href="jdbc.html">22. JDBC (SQL) Scripting</a></i>.</p>
+
+<br>
+
+
+<a name=anonfxn><h3> Anonymous Functions</h3></a>
+
+<p>With function variables, functions do not always need names. Anonymous functions can be declared without names; in this case, parentheses around parameters are required, and it must be assigned to a location.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="filter.judo">Listing 6.14</a> filter.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+f = function(elem){ return elem.length() &gt;= 5; };
+a.filter(f,true);
+println a;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In the <code>filter()</code> call, the first parameter is a filter function. The second parameter of <code>true</code> indicates the filtering is done locally; if <code>false</code>, a new array is returned with the filtered elements. The filtering is for strings over 5-character long. The result is:</p>
+
+<font  color=black><pre>
+[abcde,abcdef,abcdefg]
+</pre></font>
+
+<br>
+
+
+<a name=javafxn><h3> Function Alias for Java Static Methods</h3></a>
+
+<p>Another way to make new functions is to alias Java class static methods. Aliasing Java static methods is also discussed in <i><a href="java.html#alias">Alias Java Static Methods as Functions</a></i>. The syntax is:</p>
+
+<a name="_FunctionAlias"><table border=0 class=secondary3>
+<i>FunctionAlias</i> ::= <b><code>function</code></b> <i>IDENTIFIER</i> <b><code>for</code></b> <b><code>java::</code></b><i>JavaClassName</i> [ <b><code>(</code></b><b><code>)</code></b> ] <b><code>;</code></b>
+</table></a>
+
+<p>Once a Java static method is aliased to be a function, that function can be used almost like a native Judo function:</p>
+
+<font  color=black><pre>
+function now for java::System.currentTimeMillis();
+function loadLibrary for java::System.loadLibrary();
+
+millis = now();
+loadLibrary("native.dll");
+</pre></font>
+
+<p>Because the function aliases are indeed Java methods, the method parameters are fixed and strongly typed. You have to pass exactly the same number of parameters, and the parameter values should be compatible with the declared parameter types, and sometimes explicit casting may be needed. See <i><a href="java.html#alias">Alias Java Static Methods as Functions</a></i> for more details.</p>
+
+<br>
+
+
+<a name=sysfxn><h3> System Functions</h3></a>
+
+<p>Judo has a number of system functions for various purposes. They are actually the methods of an internal <code>$$sys</code> object but <code>$$sys</code> is not required to use them. This is called method shortcut. In addition to <code>$$sys</code>, shortcut methods also exists for internal object <code>$$con</code> (the default database connection). In Judo, values and objects all have methods. The mathematical functions, for instance, are methods of numeric values. System functions are those that do not belong to any objects but useful system-wide.</p>
+
+<p>The system functions fall into the following categories: values and numbers, system properties and related, system controls, system standard input-output, file input-output and generic. Refer to appendix <i><a href="a_sf.html">3. Built-In System Functions</a></i> for a complete listing.</p>
+
+
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=excpt> Exception Handling</a></h2>
+
+<p>Judo can catch runtime exceptions, either from the language engine or from Java. The try-catch-finally syntax has two equivalent forms:</p>
+
+<a name="block_catchfinally"><table border=0 class=secondary3>
+<tr><td valign=top><i>BlockCatchFinally</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>{</code></b> ( <i>Statement</i> )+ [ <b><code>catch</code></b> [ <i>IDENTIFIER</i> ] <b><code>:</code></b> ( <i>Statement</i> )+ ] [ <b><code>finally</code></b> <b><code>:</code></b> ( <i>Statement</i> )+ ] <b><code>}</code></b></td></tr>
+</table></a>
+
+<a name="try_catchfinally"><table border=0 class=secondary3>
+<tr><td valign=top><i>TryCatchFinally</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>try</code></b> <i>Block</i> [ <b><code>catch</code></b> [ <i>IDENTIFIER</i> ] <i>Block</i> ] [ <b><code>finally</code></b> <i>Block</i> ]</td></tr>
+</table></a>
+
+<p>In the second form, at least one of <code>catch</code> and <code>finally</code> clauses must appear. The following is an example:</p>
+
+<font  color=black><pre>
+try {
+  xxxxx(); // doesn't exist and will fail.
+} catch ex {
+  println 'Catch: ', ex;
+} finally {
+  println 'Finally.';
+}
+</pre></font>
+
+<p>The first form is compact and easy; the second form is more Java-like and elegant but verbose. The choice is totally up to your style. The block form can also be applied to bodies of functions and compound statements. Note that <i>if-else</i> and <i>switch</i> statements' blocks can not have <code>catch</code> and <code>finally</code> clauses, as these blocks are just syntactic blocks and not block statements.</p>
+
+<p>The <code>catch</code> clause can take a variable name to hold the exception object; if not specified, <code>$_</code> is used, as is the case in the following example:</p>
+
+<font  color=black><pre>
+{
+  xxxxx(); // doesn't exist and will fail.
+catch:
+  println 'Catch: ', $_;
+finally:
+  println 'Finally.';
+}
+</pre></font>
+
+<p>In the global scope, you can have one <code>catch</code> and one <code>finally</code> clauses:</p>
+
+<font  color=black><pre>
+xxxxx(); // doesn't exist and will fail.
+
+catch:   println 'Catch: ', $_;
+finally: cleanup();
+</pre></font>
+
+
+<a name=exobj><h3> The Exception Object</h3></a>
+
+<p>The exception object in the <code>catch</code> clause is a built-in object. For Java exceptions, the exception object wraps the Java exception, and all the Java exception methods can be accessed. The Judo exception object has these properties:</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 6.1 Exception Object Property</b></caption>
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td valign=top><code>line</code></td><td valign=top>the line number in the script where the exception happened.</td></tr>
+<tr><td valign=top><code>file</code></td><td valign=top>the file name of the script in which the exception happened.</td></tr>
+<tr><td valign=top><code>message</code></td><td valign=top>the message for the exception.</td></tr>
+<tr><td valign=top><code>name</code></td><td valign=top>the internal name of the exception.</td></tr>
+<tr><td valign=top><code>type</code></td><td valign=top>the internal type of the exception.</td></tr>
+</table>
+
+<p>The most frequently used properties are <code>line</code> and <code>message</code>.
+
+<br>
+
+
+<a name=throw_resume><h3> The Throw and Resume Statements</h3></a>
+
+<p>The <i>throw</i> and <i>resume</i> statements are two exception-related statements in Judo. The <i>throw</i> statement throws an exception that transfers the control to the immediate <i>catch</i> clause, or it aborts the program. Its syntax is:</p>
+
+<a name="Throw"><table border=0 class=secondary3>
+<tr><td valign=top><i>Throw</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>throw</code></b> [ <i>Expr</i> ] <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The <i>Expr</i> should be evaluated to be either an exception object (including Java exception object) or a string. If a string or no value is specified, a <code>USER_EXCEPTION</code> is thrown.</p>
+
+<p>The <code>resume</code> statement is used only during handling exception in the <code>catch</code> clause. It resumes the execution after where the exception has happened. If it has no effect if it appears in non-<code>catch</code> code. It takes no parameters:</p>
+
+<a name="Resume"><table border=0 class=secondary3>
+<tr><td valign=top><i>Resume</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>resume</code></b> <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The following test demonstrates most of the exeption handling topics, including the exception object properties, <i>throw</i> and <i>resume</i> statements, and <code>catch</code> and <code>finally</code> in local and global scopes.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="">Listing 6.15</a> excpt_test.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+{
+  xxxxx();  // method does not exist
+  println 'Not reached.';
+catch:
+  println '[Line ', $_.line, '] INSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  throw $_;
+finally:
+  println 'INSIDE FINALLY.';
+}
+
+throw;
+throw new java::Exception("This exception is pure Java.");
+throw "ABCDE";
+
+catch:
+  println '[Line ', $_.line, '] OUTSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  resume;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The output is:</p>
+
+<font  color=black><pre>
+[Line 2] INSIDE CATCH: &lt;METHOD_NOT_FOUND> Function xxxxx() not found.
+INSIDE FINALLY.
+[Line 2] OUTSIDE CATCH: &lt;METHOD_NOT_FOUND> Function xxxxx() not found.
+[Line 12] OUTSIDE CATCH: &lt;USER_EXCEPTION>
+[Line 13] OUTSIDE CATCH: &lt;JAVA_EXCEPTION> This exception is pure Java.
+[Line 14] OUTSIDE CATCH: &lt;USER_EXCEPTION> ABCDE
+</pre></font>
+
+<p>The <code>catch</code> and <code>finally</code> clauses do not create new scopes; that is, they are all in the same scope as the whole block. In the format of <code>try { .. } catch { .. } finally { .. }</code>, this may not be obvious.</p>
+
+<br>
+
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>

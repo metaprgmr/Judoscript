@@ -1,0 +1,21 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/str_replace.judo:</b></td></tr><tr><td><pre>
+println str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('defABC','-+-+-+'), " -- replacedIgnoreCase('defABC','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('defABC','-+-+-+'), " -- replace('defABC','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('defabc','-+-+-+'), " -- replacedIgnoreCase('defabc','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('defabc','-+-+-+'), " -- replace('defabc','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('abc','-+-'), " -- replace('abc','-+-')";
+
+        str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('aBc','-+-'), " -- replaceIgnoreCase('aBc','-+-')";
+
+</pre></td></tr></table></body></html>

@@ -1,0 +1,11 @@
+$cnt = 0;
+. '   ', ' 0' @ ($cnt++).fmtHex() {16};
+. '   ', ' --' repeat 16;
+for $x from 2 to 15 {
+  local $base = $x << 4;
+  print $x.fmtHex(), '0:';
+  for $y from 0 to 0x0f {
+    print '  ', ($base | $y).chr();
+  }
+  .;
+}

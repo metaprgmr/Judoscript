@@ -1,0 +1,18 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Printing, I/O and File Operations</u></h3>
+  <p>The <font class=nt><a href="javascript:showNT('PrintStatement')">PrintStatement</a></font> writes string content to text output files or standard
+  output streams, which include <font class=kw>out</font> , <font class=kw>err</font>  and <font class=kw>log</font> .</p>
+
+  <p>Files can be opened in binary mode by system function <font class=sfn><a href="javascript:showSF('openFile')">openFile()</a></font>,
+  <font class=sfn><a href="javascript:showSF('openGZippedFile')">openGZippedFile()</a></font> and <font class=obj><a href="javascript:showObj('ZipArchive')">ZipArchive</a></font>'s <code>openFile()</code> method; or
+  they can be opened in text mode by system functions <font class=sfn><a href="javascript:showSF('openTextFile')">openTextFile()</a></font>,
+  <font class=sfn><a href="javascript:showSF('openGZippedTextFile')">openGZippedTextFile()</a></font> and <font class=obj><a href="javascript:showObj('ZipArchive')">ZipArchive</a></font>'s <code>openTextFile()</code>
+  method. The system functions take a second parameter which can be <code>'r'</code>
+  (default) for reading, <code>'w'</code> for writing and <code>'a'</code> for appending.
+  Each open file is an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font> object. For text input files, use its
+  <code>readLine()</code>, or simply use the <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> to read line by
+  line.</p>
+<h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('PrintStatement')">PrintStatement</a></font><li><font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font></ul><h4>Related System Functions</h4><ul><li><font class=sfn><a href="javascript:showSF('openFile')">openFile()</a></font><li><font class=sfn><a href="javascript:showSF('openTextFile')">openTextFile()</a></font><li><font class=sfn><a href="javascript:showSF('openGZippedFile')">openGZippedFile()</a></font><li><font class=sfn><a href="javascript:showSF('openGZippedTextFile')">openGZippedTextFile()</a></font><li><font class=sfn><a href="javascript:showSF('getFileAsString')">getFileAsString()</a></font><li><font class=sfn><a href="javascript:showSF('getGZippedFileAsString')">getGZippedFileAsString()</a></font><li><font class=sfn><a href="javascript:showSF('openRandomAccessFile')">openRandomAccessFile()</a></font></ul><h4>Related Object Types</h4><ul><li><font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font><li><font class=obj><a href="javascript:showObj('ZipArchive')">ZipArchive</a></font></ul></body></html>

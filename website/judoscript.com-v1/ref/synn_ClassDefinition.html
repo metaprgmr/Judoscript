@@ -1,0 +1,25 @@
+<html><head><title>JudoScript Semantics - ClassDefinition</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ClassDefinition</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ClassDefinition>ClassDefinition</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>class</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw>extends</font>   (  <font class=t>IDENTIFIER</font>   |  <font class=kw>OrderedMap</font>   |  <font class=kw>SortedMap</font>  <font class=nt><a href="javascript:showNT('ComparatorDecl')">ComparatorDecl</a></font>  |  <font class=kw>TreeNode</font>   )   )?  <br> <font class=kw><nobr>{</nobr></font>   (  <font class=nt><a href="javascript:showNT('ConstructorDeclaration')">ConstructorDeclaration</a></font>  )?   (  <font class=nt><a href="javascript:showNT('FunctionDeclaration')">FunctionDeclaration</a></font>  )*  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ClassDefinition'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>User defined classes may have methods, or member functions, and a constructor.
+  A class by default extends <font class=kw>Struct</font> , or otherwise extends <font class=kw>OrderedMap</font> ,
+  <font class=kw>treeNode</font>  or other user-defined classes. Java classes can <em>not</em> be extended.</p>
+
+  <p>Data members are just regular <font class=kw>Struct</font>  data members. To enforce the existence of
+  certain data members during creation, can use <font class=kw>Struct</font> 's <code>assertHas()</code> method.</p>
+ </body></html>

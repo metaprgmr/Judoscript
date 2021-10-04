@@ -1,0 +1,147 @@
+<html><head><title>Chapter 18. Scheduled Jobs</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 18. Scheduled Jobs</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#">Different Modes of Scheduling</a></li><li><a href="#">HTTP Console Interface for Schedules</a></li></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+</table>
+<h2>&nbsp;<br><a name=> Different Modes of Scheduling</a></h2>
+
+<p>The <b><code>schedule</code></b> statement schedules jobs to run in the future. Any actions can be specified, such as database operations, run Java or native executables, sending e-mails, etc. It has a number of modes: one-time or repetitive, absolute or non-absolute, and starting at a specific time or after a delay. A HTTP interface is integrated and started when a port number is provided, so that the job can be monitored or controlled via a browser or any HTTP client program.</p>
+
+<a name="Schedule"><table border=0>
+<b><code>schedule</code></b> [ <b><code>absolute</code></b> ]
+[ ( <b><code>starting</code></b> | <b><code>after</code></b> ) <i>time_or_delay</i>
+[ <b><code>repeating</code></b> <i>period</i> ] <i>block</i> <br>
+[ <b><code>listen on</code></b> [ <b><code>title</code></b> <i>html_title</i> ] <i>control_block</i> ]
+</table></a>
+
+<p>Schedules can not be embedded. A program can have one schedule running at a time. Each schedule is run by a timer called <b><code>$$timer</code></b>. It can be accessed in the scheduler code, which has these members: <b><code>time</code></b> for the current event being handled, <b><code>period</code></b> for the current period, <b><code>htmlOut</code></b> is the HTML output stream and <b><code>cmd</code></b> is the command sent by the control panel client (most likely a brower) -- the last two are valid only in the control block.</p>
+
+<p>To abort a schedule job, run <b><code>break schedule;</code></b>.</p>
+
+<p>The following program emulates a count-down process, where 4 one-time events are run one second apart.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="">Listing 18.4</a> countdown.judo -- <em>one-time event</em></th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+1: time = date(2001,10,12,19,4,57);
+2: schedule starting time { println $$timer.time, ": Three!"; }
+3: ++time.second;
+4: schedule starting time { println $$timer.time, ": Two!"; }
+5: ++time.second;
+6: schedule starting time { println $$timer.time, ": One!"; }
+7: ++time.second;
+8: schedule starting time { println $$timer.time, ": LAUNCH!"; }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>This is a simple repetitive motion:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="">Listing 18.4</a> heart_beat.judo -- <em>not-so-accurate repetitive events</em></th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+1: beats_per_minute = 80;
+2:
+3: schedule repeat 60000 / beats_per_minute
+4: {
+5:   println 'puh ... at ', $$timer.time;
+6: }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Next, we emulate a coocoo clock that every hour it plays so many "Cukoo" sound. Lines 1 through 4 gets the time for the next hour. Line 7 gets the time for this event, and its hour attribute is used for the number of "Cucoo" sound.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="">Listing 18.4</a> coocoo_clock.judo -- <em>accurate repetitive events</em></th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+ 1: $start = date();
+ 2: ++$start.hour;
+ 3: $start.minute = 0;
+ 4: $start.second = 0;
+ 5: schedule absolute starting $start repeat 3600000
+ 6: {
+ 7:   local time = $$timer.time;
+ 8:   for $i from 1 to time.hour { print 'Cukoo...'; }
+ 9:   println;
+10: }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Scheduled jobs should run quickly, that is, they should not run longer than the scheduled periods. If they do sometimes and mess up the operation, practical synchronization mechanism should be put in place. For instance, suppose every 5 minutes the job checks the database for unprocessed order data. If it founds some, process them. Sometimes e-commerce site may take so many orders in a short period of time, that within that 5-minute period they can not be all processed. What you can do is, for instance, use a temporary database table; when start processing, set a flag there, and reset it when done; if this flag is set, other jobs will simply bypass. The crux of this solution is, use an operation that is always short than the period to enforce the synchronization.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=> HTTP Console Interface for Schedules</a></h2>
+
+<p>By issuing a <b><code>listen on</code></b> clause with a port number, you have the scheduled job start a single-thread HTTP server. A title can be specified for the HTML output. If not, the default title is "Judo Scheduler Control Panel".</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="">Listing 18.4</a> changing_time.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+ 1: history = linkedList{};
+ 2:
+ 3: schedule repeat 2000
+ 4: {
+ 5:   history.add($$timer.time);
+ 6:   if $history.length() &gt; 10 { history.remove(0); }
+ 7: }
+ 8: listen on 3333 title '&lt;h1&gt;Changing Time&lt;/h1&gt;'
+ 9: {
+10:   println &lt;$$timer.htmlOut&gt; '&lt;h3&gt;Latest Events&lt;/h3&gt;';
+11:   for x in history backward { println &lt;$$timer.htmlOut&gt; x, '&lt;br&gt;'; }
+12: }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<img src="changing_time.gif" align="right">
+
+<p>The job itself does nothing but keeping the execution time in a list for the last 10 events (line 6). Its control panel server listens on port 3333. The control panel is typically run from a browser. The title, "Changing Time", is issued on line 8. The screen is standard above the horizontal line. If and only if both boxes are checked will the job be stopped and closed. Anything user type in to the edit box is sent to the server and becomes the content of <b><code>$$timer.cmd</code></b>. What it means is totally up to your interpretation, such as a mini command system. In the control panel code, we used <b><code>$$timer.htmlOut</code></b> to write out custom content that shows below the horizontal line (lines 10 and 11).</p>
+
+<br>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

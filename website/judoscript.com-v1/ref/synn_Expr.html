@@ -1,0 +1,21 @@
+<html><head><title>JudoScript Semantics - Expr</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Expr</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Expr>Expr</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>defined</font>  <font class=t>CONST_NAME</font>   |  <font class=nt><a href="javascript:showNT('Assignment')">Assignment</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ConditionalExpr')">ConditionalExpr</a></font>  (  <font class=kw><nobr>@</nobr></font>  <font class=nt><a href="javascript:showNT('ConditionalExpr')">ConditionalExpr</a></font>  )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Expr'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The <font class=kw>defined</font>  expression tells if a constant is defined.</p>
+  <p>The <font class=kw><nobr>@</nobr></font>  is the operator for string concatenation.</p>
+ </body></html>

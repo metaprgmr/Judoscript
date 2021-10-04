@@ -1,0 +1,158 @@
+<html><head>
+<title>Load Testing with JudoScript</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>Load Testing with JudoScript</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#listings">Code Listings</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+March 2002 &nbsp;
+
+<p><b>Abstract</b> &nbsp;
+
+Load testing is to collect performance data of a web service under
+stress situations. It is carried out by issuing a large number of
+requests in a short period of time against the target web site, and
+collect statistics such as site response time. <em>JudoScript</em> supports versatile
+HTTP client and server programming as well as HTML scraping and
+XML scripting. It can be used to launch effective load tests, check
+the server responses and record useful data.
+<hr>
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+<p>
+<img src="../share/oe_L.gif" align=left valign=top border=0 alt="L">oad testing reveals site performance under heavy traffic by issuing
+a large number of requests in a short period of time and collecting
+reultant statistics. These data are important for many purposes, such
+as sizing the service base, verifying and fine-tuning architectures,
+and hosting contract fulfilment.
+
+<p>
+Load tests start with a design. The test designer analyzes the site,
+anticipates common usage patterns and their probabilities, and creates
+a user model, that is, a "virtual user" that emulates a person's actions.
+The rest is to launch certain number of virtual users against the site
+and collect data. Take <a href="http://www.amazon.com">amazon.com</a> as
+an example. People do these on the site:
+
+<ul>
+<li> Browse various HTML pages
+<li> Search and view different results
+<li> Put an item into a shopping cart
+<li> Check out the items; may go back shopping afterwards
+<li> Login
+<li> Register
+<li> Write book reviews and feedbacks
+</ul>
+
+Each type of actions has a certain probability of happening. Site
+like <i>amazon.com</i> is operational so you can get percentages from
+the web log. To test a new web site yet to be launched, you will have
+to make some educated guess and assign a probability to each task.
+
+<p>
+Some actions require a user session. For instance, check out requires
+the user be logged in first. To emulate such a use case, it is better
+record a real-person usage and then parametize the involved requests.
+This is one of the major features of any load testing tools.
+
+<p>
+Once the "virtual user" is ready, the question is how to effectively
+launch tens of thousands of them simultaneously against the server.
+Launching all the test requires from a single machine is probably
+unrealistic and inaccurate due to hardware and network limitations.
+Therefore, it is a common practice to enlist a number of machines,
+install agents on them, then have them fire test requests at a
+synchronizing command. This is the second major features of load
+testing tools.
+
+<p>
+Once the tests are done running, the collected data need be
+consolidated from various test stations, and generate reasonable
+reports. This completes a load testing run.
+
+<p>
+It is clear that a load test is none other than executing scripts.
+Test scripts have to be designed and created. Those scripts are
+typically written in proprietary languages, so knowledge about them
+is useless outside the testing environment.
+
+<p>
+<em>JudoScript</em> has all the facilities to do effective web load testing, and
+this is the topic of this article. We will see how to record
+actions between web browsers and servers (including cookies); how
+to use <em>JudoScript</em> threads to launch simultaneous requests to servers;
+how to create test agents that run on various test stations to
+synchronously fire test requests, and finally how to collect data
+back to the master station for reporting. The end result is a
+working skeleton that you can customize for your load testing needs.
+
+
+
+<h2>TO BE FINISHED</h2>
+
+
+
+<h2><a name=listings>1. Code Listings</a></h2><p>
+<ol></ol>
+
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

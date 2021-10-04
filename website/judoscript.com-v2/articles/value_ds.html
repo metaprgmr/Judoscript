@@ -1,0 +1,1187 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Values, Variables and Data Strcutures</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="Java scripting language, JudoScript, scripting language for Java, variable, constant, number, integer, floating-point, float, string, here-doc, date, time, math, array, linked list, stack, queue, map, ordered map, table data, sorting, filter, convert, array sorting, array filter, array convert, chr, ascii, unicode, ceil, floor, round, groupNumber, fractionDigits, toBoolean, toByte, toCharacter, toShort, toInteger, toLong, toFloat, toDouble, parseUrl, fileExists, isDir, isFile, fileTime, fileSize, sin, cos, sin_d, cos_d, log, log2, bfs, dfs" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Values, Variables and Data Strcutures</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Values, Variables and Data Strcutures" author="James Jianbo Huang" created="October 2001" last="July 2003" keywords="Java scripting language, JudoScript, scripting language for Java, variable, constant, number, integer, floating-point, float, string, here-doc, date, time, math, array, linked list, stack, queue, map, ordered map, table data, sorting, filter, convert, array sorting, array filter, array convert, chr, ascii, unicode, ceil, floor, round, groupNumber, fractionDigits, toBoolean, toByte, toCharacter, toShort, toInteger, toLong, toFloat, toDouble, parseUrl, fileExists, isDir, isFile, fileTime, fileSize, sin, cos, sin_d, cos_d, log, log2, bfs, dfs" widetoc="true">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#var_const">Variables and Constants</a>
+<li> <a href="#primitive">Primitive Data Types</a>
+<br>&#187;  <a href="#convert">Conversions and Formatting</a>
+<br>&#187;  <a href="#string">String Processing</a>
+<br>&#187;  <a href="#heredoc">Enhanced Here-Doc</a>
+<br>&#187;  <a href="#datetime">Date and Time</a>
+<br>&#187;  <a href="#secret">Secret Value</a>
+<li> <a href="#string_spec">Special-Purpose String Methods</a>
+<li> <a href="#math">Maths</a>
+<li> <a href="#array">Array and Linked List</a>
+<br>&#187;  <a href="#stats">Statistics</a>
+<br>&#187;  <a href="#sort">Sort, Filter and Convert</a>
+<li> <a href="#struct">Object and Ordered Map</a>
+<li> <a href="#adv">Advanced Data Structures</a>
+<br>&#187;  <a href="#stack">Stack and Queue</a>
+<br>&#187;  <a href="#set">Set</a>
+<br>&#187;  <a href="#true">Tree</a>
+<br>&#187;  <a href="#table">Tabular Data</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Values, Variables and Data Strcutures</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;October 2001 &nbsp;<font face="Arial" style="font-size:9px">UPDATED:</font> July 2003 &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="value_ds_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+<em>JudoScript</em> has primitive data types and data structures including arrays, linked
+lists, structs, ordered maps, stacks and queues, and table data. Primitive
+data types include number, string and date/time and secret. String can also
+represent URL and file. Arrays can be sorted and filtered with custom
+comparator and filter functions. The Objects' keys can be obtained in
+array, either in undetermined order, or sorted and/or filtered by keys or
+by the values. Comparator and filter functions are frequently defined as
+lambda functions.
+<hr>
+
+<p>&nbsp;</p>
+
+
+<h2><a name=var_const>1. Variables and Constants</a></h2><p>
+
+<p>
+<em>JudoScript</em> is a dynamically typed language, meaning that its variables and constants
+are not typed, but their values, however, belong to one of these supported
+types: number, string, date and time, secret, compound data types (data
+structures), Java objects and arrays, and built-in object types. Variables
+are not required to be declared first. Value types are interpreted in the
+program based on the context at runtime. For instance, a boolean expression
+will interpret the values as integers. This articles discusses the primitive
+types and data structures.
+
+<p>
+Variable names start with a letter, underscore or dollar sign (<b><code>$</code></b>);
+and the following can include any of these as well as digits. They are
+defined by being assigned a value:
+
+<blockquote><font class=secondary3><pre>
+a = 1;
+</pre></font></blockquote>
+
+Constant names start with a pound sign (<b><code>#</code></b>). They are defined like this:
+
+<blockquote><font class=secondary3><pre>
+const #PI = 3.1415927;
+</pre></font></blockquote>
+
+To check whether a constant has been defined or not, use the <b><code>defined</code></b>
+operator:
+
+<blockquote><font class=secondary3><pre>
+if defined #PI { println #PI; }
+</pre></font></blockquote>
+
+The <b><code>println</code></b> command can be abbreviated as a dot (.).
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=primitive>2. Primitive Data Types</a></h2><p>
+
+<p>
+<em>JudoScript</em> supports these primitive data types: integer, floating-point number,
+string and date/time. Boolean values are just numbers: 0 stands for false,
+non-zero for true. They can be assigned a <b><code>true</code></b> or <b><code>false</code></b>,
+which are just 1 and 0. A character is a length-1 string. The <b><code>null</code></b>
+value is numerically equivalent to 0 and textually empty. Numbers and
+strings are called simple values; they have a set of common methods.
+
+<p>
+The following program demonstrates how values are used:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="simple_vars">Listing 1</a>. simple_vars.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: println 'A) a = 1: ':&lt;18,       a = 1;
+ 2: println 'B) a = 1.00: ':&lt;18,    a = 1.00;
+ 3: println "C) a = '1.00': ":&lt;18,  a = '1.00';
+ 4: println 'D) a = 1.5e5: ':&lt;18,   a = 1.5e5;
+ 5: println 'E) a = null: ':&lt;18,    a = null;
+ 6: println '   a = 1.0:':&lt;18,      a = 1.0;
+ 7: println 'F) a += 2: ':&lt;18,      a += 2;
+ 8: println '   a = 1.1':&lt;18,       a = '1.1';
+ 9: println 'G) a *= 4: ':&lt;18,      a *= 4;
+10: println '   a = 10:':&lt;18,       a = 10;
+11: println 'H) b = a / 2.5: ':&lt;18, b = a / 2.5;
+12: println '   a = 3.5:':&lt;18,      a = 3.5;
+13: println '   b = 2.5:':&lt;18,      b = 2.5;
+14: println 'I) a % b = ':&lt;18,      a % b;
+15: println '   a = 5.0:':&lt;18,      a = 5.0;
+16: println 'J) a - c = ':&lt;18,      a - c; // c is not defined.
+17: println 'K) a + "abc" = ':&lt;18,  a + "abc";
+18: println 'L) "abc" + a = ':&lt;18,  "abc" + a;
+19: println 'M) "abc" @ a = ':&lt;18,  "abc" @ a; // concatenation
+20: println '   a @= "xyz": ':&lt;18,  a @= "xyz"; // self concatenation
+21: println 'N) a + "0x0a" = ':&lt;18, a + "0x0a";
+22: println 'O) a + "0x0m" = ':&lt;18, a + "0x0m";
+23: println 'P) a + "007" = ':&lt;18,  a + "008";
+24: println 'Q) a + "008" = ':&lt;18,  a + "008";
+25: println '   a = 5:':&lt;18,        a = 5;
+26: println 'R) a + "0x0a" = ':&lt;18, a + "0x0a";
+27: println 'S) a + "0x0m" = ':&lt;18, a + "0x0m";
+28: println 'T) a + "007" = ':&lt;18,  a + "007";
+29: println 'U) a + "008" = ':&lt;18,  a + "008";
+30:
+31: catch:
+32:   println 'EXCEPTION: ', $_.message;
+33:   resume;
+</pre></td></tr></table></p><p>
+
+If this is your first glance of any <em>JudoScript</em> code, it may look too much. But if
+you look closely, it is really very natural. The start of script and lines 31 and 34 form a
+try-catch block; when an exception happens, its message is printed and the
+execution is resumed (line 33). I wish Java had <b><code>resume</code></b> statement,
+too; you never know, someday it might. The major mechanism used in this
+program is <b><code>println</code></b>, or a dot. It takes any number of parameters
+and prints them one by one to the system standard output. The <b><code>&lt;18</code></b>
+notion is for formatting: it means "left-aligned with a width of 18". For
+right- and center-alignment, it is <b><code>&gt;18</code></b> and <b><code>*18</code></b>. An
+assignment expression returns the value itself.
+
+<p>
+Let us see the result of the run and dive into the gory details of
+numbers, strings and expressions:
+
+<blockquote><font class=secondary3><pre>
+% java judo simple_vars.judo
+A) a = 1:        1
+B) a = 1.00:     1.0
+C) a = '1.00':   1.00
+D) a = 1.5e5:    150000.0
+E) a = null:
+   a = 1.0:      1.0
+F) a += 2:       3.0
+   a = 1.1       1.1
+G) a *= 4:       4.4
+   a = 10:       10
+H) b = a / 2.5:  4.0
+   a = 3.5:      3.5
+   b = 2.5:      2.5
+I) a % b =       1
+   a = 5.0:      5.0
+J) a - c =       5.0
+K) a + "abc" =   EXCEPTION: Invalid floating-point value
+L) "abc" + a =   EXCEPTION: Invalid floating-point value
+M) "abc" @ a =   abc5.0
+   a @= "xyz":   5.0xyz
+N) a + "0x0a" =  EXCEPTION: Invalid integer value
+O) a + "0x0m" =  EXCEPTION: Invalid integer value
+P) a + "007" =   EXCEPTION: Invalid integer value
+Q) a + "008" =   EXCEPTION: Invalid integer value
+   a = 5:        5
+R) a + "0x0a" =  15
+S) a + "0x0m" =  EXCEPTION: Invalid integer value
+T) a + "007" =   12
+U) a + "008" =   EXCEPTION: Invalid integer value
+</pre></font></blockquote>
+
+First of all, strings can be quoted either by single quotes or double
+quotes (line 4). When single quotes are used, double quote characters
+can appear as normal text and vice versa. Its concatenation operator
+is <b><code>@</code></b> (line 20). Integers can be expressed as decimal (line 3),
+octal (starts with 0 but not "0x"; line 29) or hexadecimal (starts with
+"0x" or "0X"; line 27). Floating-point numbers can be decimal and
+fraction digits (line 7) or in scientific notion (line 5).
+
+<p>
+Lines 7 through 17 demonstrates the auto-detection of number types:
+<em>JudoScript</em> always tries to use a higher-precision type, that is, floating
+points over integers. Based on context, a string is evaluated to a
+number by its "face value" (lines 22, 27 and 29); if the string is
+not in a valid number format, an exception is thrown (lines 18, 19,
+22 through 25, 28 and 30).
+
+
+<h3><a name=convert>Conversions and Formatting</a></h3><p>
+
+<p>
+There are times where a specific data type or value range is intended.
+The simple values have methods for such controls.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="conversions">Listing 2</a>. conversions.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: println 'i1 = 62:       ', i1 = 62;
+ 2: println 'i2 = 12345678: ', i2 = 12345678;
+ 3: println 'f1 = 54.12345: ', f1 = 54.12345;
+ 4: println 'f2 = 54.56789: ', f2 = 54.56789;
+ 5: println 'f3 = 54.56123: ', f3 = 54.56123;
+ 6: println 'c = "A":       ', c = "A";
+ 7: println 's = "abcdefg": ', s = "abcdefg";
+ 8:
+ 9: println nl, '=== integer &lt;=&gt; float ===';
+10: println 'i1.float() = ', i1.float();
+11: println 'f1.int() =   ', f1.int();
+12:
+13: println nl, '=== character &lt;=&gt; number ===';
+14: println 'i1.chr() =    ', i1.chr();
+15: println 'i2.chr() =    ', i2.chr();
+16: println 'f1.chr() =    ', f1.chr();
+17: println 'c.ascii() =   ', c.ascii();
+18: println 's.ascii() =   ', s.ascii();
+19: println 'c.unicode() = ', c.unicode();
+20: println 's.unicode() = ', s.unicode();
+21:
+22: println nl, '=== float and integer precision control and formatting ===';
+23: println 'f1.ceil(), f1.floor(), f1.round() =  ',
+24:         f1.ceil(), '  ', f1.floor(), '  ', f1.round();
+25: println 'f2.ceil(), f2.floor(), f2.round() =  ',
+26:         f2.ceil(), '  ', f2.floor(), '  ', f2.round();
+27: println 'i2.groupNumber()      = ', i2.groupNumber();
+28: println 'i2.groupNumber(4)     = ', i2.groupNumber(4);
+29: println "i2.groupNumber(4,'.') = ", i2.groupNumber(4,'.');
+30: println 'f2.fractionDigits()   = ', f2.fractionDigits();
+31: println 'f2.fractionDigits(2)  = ', f2.fractionDigits(2);
+32: println 'f3.fractionDigits(2)  = ', f3.fractionDigits(2);
+33:
+34: println nl, '=== numbers =&gt; Java objects ===';
+35: println 'i1.toBoolean() =   ', i1.toBoolean().getClass().getName();
+36: println 'i1.toByte() =      ', i1.toByte().getClass().getName();
+37: println 'i1.toCharacter() = ', i1.toCharacter().getClass().getName();
+38: println 'i1.toShort() =     ', i1.toShort().getClass().getName();
+39: println 'i1.toInteger() =   ', i1.toInteger().getClass().getName();
+40: println 'i1.toLong() =      ', i1.toLong().getClass().getName();
+41: println 'i1.toFloat() =     ', i1.toFloat().getClass().getName();
+42: println 'i1.toDouble() =    ', i1.toDouble().getClass().getName();
+</pre></td></tr></table></p><p>
+
+On line 9, etc., <b><code>nl</code></b> inside <b><code>println</code></b> stands for newline.
+Lines 10 and 11 converts the numbers explicitly to float or integer. In
+lines 14 through 20, method <b><code>chr()</code></b> (or <b><code>char()</code></b>) treats
+a numeric value as a character value, where <b><code>ascii()</code></b> and
+<b><code>unicode()</code></b> returns a character's numeric value. A character in
+<em>JudoScript</em> is a length-1 string, so the character value of "abcdefg" is the
+same as that of "a". Lines 23 through 26 demonstrate how to round up
+floating point values to integers, and lines 27 through 32 for
+formatting numbers. Lines 35 through 42 show the methods that convert a
+number to a Java object; this is useful when calling a Java method that
+requires precise data types among overloaded methods.
+
+<p>
+These methods are specifically for formatting numbers:
+<ul>
+<li> <b><code>formatBool()</code></b> or <b><code>fmtBool()</code></b>: returns "true" or
+     "false" if the value is interpreted as boolean true or false.
+<li> <b><code>formatHex()</code></b> or <b><code>fmtHex()</code></b>: returns the hexadecimal
+     representation of the integer number.
+<li> <b><code>formatOctal()</code></b> or <b><code>fmtOctal()</code></b>: returns the octal
+     representation of the integer number.
+<li> <b><code>formatCurrency()</code></b> or <b><code>fmtCurrency()</code></b>: returns the
+     currency representation for this value, using the JVM's default locale.
+<li> <b><code>formatDuration()</code></b> or <b><code>fmtDuration()</code></b>: returns the
+     English representation of the millisecond value in days, hours,
+     minutes and seconds.
+</ul>
+
+The follow examples show some uses:
+<blockquote><font class=secondary3><pre>
+println '1 > 2 is ', (1 > 2).fmtBool();
+println (231).fmtHex();
+dur = ( (2 * 24 + 3) * 3600 + 35 * 60 + 9 ) * 1000;
+println dur.fmtDuration(); // => 2 days 3:35:09
+</pre></font></blockquote>
+ 
+Using <em>JudoScript</em> command-line program execution feature, you have a calculator:
+
+<blockquote><font class=secondary3><pre>
+%java judo -x println (231).fmtHex()
+E7
+%java judo -x println 0xE7
+231
+</pre></font></blockquote>
+
+The last ';' can be omitted. I create an alias "jx" for "java judo -x",
+so the above lines become really compact.
+
+
+<h3><a name=string>String Processing</a></h3><p>
+
+<p>
+A <em>JudoScript</em> string supports most Java's <b><code>java.lang.String</code></b> methods. In
+addition, it has a number of its own convenience and special purpose
+methods, because in <em>JudoScript</em> strings also represent many other things. We
+discuss string processing methods first.
+
+<p>
+The <b><code>csv()</code></b> method turns a character-separated value into an array.
+It takes a string as its parameter, all characters are separators; if
+missing, uses comma. This method returns null for two consecutive
+separators; this is different than <b><code>java.util.StringTokenizer</code></b>
+which discards such values.
+
+<blockquote><font class=secondary3><pre>
+s = '2001/10/01||XYZ|12.00|10000';
+a = s.csv('|');
+println 'Date:   ', a[0];
+println 'Name:   ', a[1]; // => null
+println 'Symbol: ', a[2];
+println 'Quote:  ', a[3];
+println 'Volume: ', a[k];
+</pre></font></blockquote>
+
+The <b><code>isEmpty()</code></b> and <b><code>isNotEmpty()</code></b> checks if a string is empty
+or not. A string is considered empty if it is null or only contains whitespace
+characters. Method <b><code>neverEmpty()</code></b> takes a default string parameter; if
+the current string value is empty, that parameter is returned. If no parameters
+specified, when empty it returns a space (which is "empty" itself but what
+else?) The <b><code>replace()</code></b> and <b><code>replaceIgnoreCase()</code></b> methods replace
+substrings with new ones, which is more powerful than Java counterpart
+(<b><code>replace(char,char)</code></b>) that only replaces characters. The following is
+an application dealing with HTML content:
+
+<blockquote><font class=secondary3><pre>
+expr = " &lt;add_expr&gt; ::= &lt;expr&gt; '+' &lt;expr&gt; ";
+exprHtml = expr.replace('&lt;', '&amp;lt;')
+               .replace('&gt;', '&amp;gt;')
+               .replace('&amp;', '&amp;amp;')
+               .replace("'", '&amp;quot;');
+println &lt;htmlFile&gt; exprHtml;
+println &lt;htmlFile&gt; '&lt;td&gt;', x.neverEmpty('&amp;nbsp;'), '&lt;/td&gt;';
+</pre></font></blockquote>
+
+The following example shows how to use file system commands to rename all
+files with extension of ".htm" or ".HTM" to ".html".
+
+<blockquote><font class=secondary3><pre>
+list '*.htm, *.HTM'; // result is an array stored in $$fs_result
+for x in $$fs_result {
+  if x.toLower().endsWith('.htm') {
+    rename x to x.replaceIgnoreCase('.htm', '.html');
+  }
+}
+</pre></font></blockquote>
+
+This program prints out an ASCII table for 32 to 255:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="ascii">Listing 3</a>. ascii.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: cnt = 0;
+ 2: println '   ', ' 0' @ (cnt++).fmtHex() repeat 16;
+ 3: println '   ', ' --' {16};
+ 4: for x from 2 to 15 {
+ 5:   local base = x &lt;&lt; 4;
+ 6:   print x.fmtHex(), '0:';
+ 7:   for y from 0 to 0x0f {
+ 8:     local ch = base | y;
+ 9:     print '  ', ch.chr();
+10:   }
+11:   println;
+12: }
+</pre></td></tr></table></p><p>
+
+Lines 2 and 3 print out the header. On line 2, the <b><code>repeat</code></b> clause
+make that expression evaluated 16 times; on line 3, the shortcut form
+<b><code>{16}</code></b> is used. The result for values less than 127 is listed below.
+
+<blockquote><font class=secondary3><pre>
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20:     !  "  #  $  %  &  '  (  )  *  +  ,  -  .  /
+30:  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?
+40:  @  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O
+50:  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _
+60:  `  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o
+70:  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~ 
+</pre></font></blockquote>
+
+<p>
+String has other methods. <b><code>count()</code></b> counts the occurrances of a
+character within the string. <b><code>regionMatches()</code></b> and
+<b><code>regionmatchesIgnoreCase()</code></b> does the same as <b><code>java.lang.String</code></b>.
+<b><code>getReader()</code></b> returns a reader that uses the string as its input.
+Programs can, for instance, read lines from a string.
+
+
+
+<h3><a name=heredoc>Enhanced Here-Doc</a></h3><p>
+
+<p>
+In the make utility, feature here-doc is used to specify a chunk of text
+to be enclosed in two user-defined markers and used verbatim by the script.
+<em>JudoScript</em> supports the same feature with the extension that expressions can be
+embedded.
+
+<blockquote><font class=secondary3><pre>
+lastname = "Robinson";
+prodname = "Dry Cleaner";
+representative = "Cleo Rubinstein";
+letter = [[*
+  Dear Mr. (* lastname *),
+
+  Thank you very much for your interest in our product, (* prodname *).
+  For more information, please visit our web site at (* url *).
+
+  Sincerely,
+
+  (* representative *)
+*]];
+flush letter;
+</pre></font></blockquote>
+
+The markers are <b><code>[[*</code></b> and <b><code>*]]</code></b>. Embedded expressions are
+enclosed in between <b><code>(*</code></b> and <b><code>*)</code></b>. The lines' indentations
+are removed, so is the first empty new line following the <b><code>[[*</code></b>
+marker, so the code can appear nice and neat. Use <b><code>[[[*</code></b> instead
+of <b><code>[[*</code></b> to turn off automatic indentation stripping. 
+
+
+
+<h3><a name=datetime>Date and Time</a></h3><p>
+
+<p>
+Three system functions create dates and times: <b><code>date()</code></b>, <b><code>time()</code></b>
+and <b><code>timeToday()</code></b>.
+
+<blockquote><font class=secondary3><pre>
+Oct1_2001 = date(2001,10,1);
+timestamp = date(2001,10,1,15,30,0);
+noon = time(12);
+tonight6_30pm = timeToday(18,30);
+</pre></font></blockquote>
+
+<b><code>date()</code></b> takes parameters of year, month, day, hour, minute and second.
+<b><code>time()</code></b> creates a date object with year, month and day fields all
+initialized to 0. <b><code>timeToday()</code></b> is a convenience method that creates a
+time in today.
+
+<p>
+Date values (objects) have a list of attributes, some are settable and others
+read-only. See <a href="../langspec/spec3.html#date">language specification</a>
+for a complete listing. It also have a method, <b><code>formatDate()</code></b> or
+<b><code>fmtDate()</code></b>, which takes a <b><code>java.text.SimpleDateFormat</code></b> format
+string and optionally a time zone ID, one of those returned by
+<b><code>java.util.TimeZone.getAvailableIDs()</code></b>. If the format string is
+<b><code>null</code></b>, use the default date/time format. The default date/time format
+can be obtained or set by <b><code>getDefaultDateFormat()</code></b> and
+<b><code>setDefaultDateFormat()</code></b> functions.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="date_attr">Listing 4</a>. date_attr.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: println 'd = ', d = date();
+ 2:
+ 3: // get
+ 4: println 'd.epoch            = ', d.epoch;
+ 5: println 'd.year             = ', d.year;
+ 6: println 'd.month            = ', d.month;
+ 7: println 'd.date             = ', d.date;
+ 8: println 'd.hour             = ', d.hour;
+ 9: println 'd.minute           = ', d.minute;
+10: println 'd.second           = ', d.second;
+11: println 'd.milliSecond      = ', d.milliSecond;
+12: println 'd.zoneOffset       = ', d.zoneOffset;
+13: println 'd.dstOffset        = ', d.dstOffset;
+14: println 'd.weekOfYear       = ', d.weekOfYear;
+15: println 'd.weekOfMonth      = ', d.weekOfMonth;
+16: println 'd.dayOfMonth       = ', d.dayOfMonth;
+17: println 'd.dayOfYear        = ', d.dayOfYear;
+18: println 'd.dayOfWeek        = ', d.dayOfWeek;
+19: println 'd.dayOfWeekInMonth = ', d.dayOfWeekInMonth;
+20: println 'd.isAM             = ', d.isAM.fmtBool();
+21: println 'd.isPM             = ', d.isPM.fmtBool();
+22: println 'd.monthName        = ', d.monthName;
+23: println 'd.monthShortName   = ', d.monthShortName;
+24: println 'd.weekDayName      = ', d.weekDayName;
+25: println 'd.weekDayShortName = ', d.weekDayShortName;
+26:
+27: // set
+28: println 'd.epoch       = ', d.epoch = 1000,       '  =&gt; ', d;
+29: println 'd.year        = ', d.year = 1996,        '  =&gt; ', d;
+30: println 'd.month       = ', d.month = 5,       '     =&gt; ', d;
+31: println 'd.date        = ', d.date = 25,        '    =&gt; ', d;
+32: println 'd.hour        = ', d.hour = 8,        '     =&gt; ', d;
+33: println 'd.minute      = ', d.minute = 15,      '    =&gt; ', d;
+34: println 'd.second      = ', d.second = 56,      '    =&gt; ', d;
+35: println 'd.milliSecond = ', d.milliSecond = 430, '   =&gt; ', d;
+36: println 'd.zoneOffset  = ', d.zoneOffset = 360000, ' =&gt; ', d;
+37: println 'd.dstOffset   = ', d.dstOffset = 360000,  ' =&gt; ', d;
+</pre></td></tr></table></p><p>
+
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Are variables typed? Do they have to be declared?
+<li> How to define a constant?
+<li> What are the primitive value types of <em>JudoScript</em>?
+<li> What is the result type of <b><code>date(1999,12,1) + 5.35 * 4 - '0x0FE'</code></b>?
+           What happens to this expression: <b><code>12 + 'who'</code></b>?
+<li> How to catch exceptions? What does <b><code>resume</code></b> do?
+<li> Given a number such as 64, how to get a character of its value?
+           How to get a charater's numeric value?
+<li> What is the difference between a string and a character?
+<li> Values have methods, too. Can their methods be invoked
+           directly like <b><code>231.fmtHex()</code></b>? If not, how?
+<li> How to limit the number of fraction digits to 3 for a
+           floating-point number?
+<li> Are boolean values a unique type in <em>JudoScript</em>?
+           How to assign a boolean value? How to print it?
+<li> Use <em>JudoScript</em> as a calculator, quickly convert between
+           decimal 2345678 and hex 23CACE.
+<li> The expression <b><code>a = ( 'a,b,,,e' ).csv();</code></b> returns an
+           array of how many elements? Their values?
+<li> Do the string methods <b><code>replace()</code></b> and
+           <b><code>replaceIgnoreCase()</code></b> only replace individual characters?
+<li> How to assign a block of text to a string variable? Can you align
+           the text with the code nice and neat?
+<li> How to create a date value for 9:12 AM today? How to create a
+           date value for 2:15 PM tomorrow?
+<li> How to change a time to the next hour?
+<li> How to print a time in the GMT time zone with default format?
+</ul>
+
+
+<h3><a name=secret>Secret Value</a></h3><p>
+
+<p>
+Secret values appear to be regular values but are used only by known parties,
+such as statements that take passwords. If it is attempted to be printed, it
+will throw illegal-access exception. To obtain one, use the system function
+<b><code>secret()</code></b>:
+
+<blockquote>
+<b><code>secret(</code></b> <em>encrypted_text</em> [ <b><code>,</code></b> <em>decryptor</em> ] <b><code>)</code></b>
+</blockquote>
+
+The <em>decryptor</em> is an object that implements the method <b><code>decrypt()</code></b>,
+which takes a string and returns another. It does not matter whether it is
+implemented in <em>JudoScript</em> or Java, though most likely it is in Java. The encrypted
+value must be a text string. How to obtain it is up to your crypto package
+that your decryptor is part of. If no decryptor is specified, by default the
+value is returned as-is for now. However, this behavior may change, that is,
+a default decryptor may be used, which is specified in the runtime
+environment. Let us see an example. Suppose you have run some utility and
+encrypted your password to "XI,8aM4/", and the decryptor is a Java class.
+
+<blockquote><font class=secondary3><pre>
+const #dbPass = secret('XI,8aM4/', javanew com.xxx.util.MyCrypto);
+</pre></font></blockquote>
+
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=string_spec>3. Special-Purpose String Methods</a></h2><p>
+
+<p>
+Strings also represents URLs and file names. String has <b><code>urlEncode()</code></b>
+(<b><code>encodeUrl()</code></b>), <b><code>urlDecode()</code></b> (<b><code>decodeUrl()</code></b>) methods.
+It also has a <b><code>parseUrl()</code></b> method that parses a string into a number
+of URL parts, returned in a struct. This program also demonstrates a feature
+called <em>class transposition</em>, on line 23. Class instances can be
+transposed into objects of another class, normally with more or new methods
+than the current one.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="parse_url">Listing 5</a>. parse_url.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: a = [ 'http://localhost:8080/articles/developer.html#top',
+ 2:       'http://localhost/cgi-bin/check.pl?id=1234&amp;sess=abc',
+ 3:       '/index.html',
+ 4:       'index.html',
+ 5:       '',
+ 6:       '/',
+ 7:       'http://www.judoscript.com',
+ 8:       'images/bg.gif'
+ 9:     ];
+10: for url in a {
+11:   b = url.parseUrl();
+12:   println '-----------------------------------------------';
+13:   println '            URL: ', url;
+14:   println '           root: ', b.root;
+15:   println '       protocol: ', b.protocol;
+16:   println '         domain: ', b.domain;
+17:   println '           host: ', b.host;
+18:   println '           port: ', b.port;
+19:   println '           path: ', b.path;
+20:   println '      file_name: ', b.file_name;
+21:   println '   query_string: ', b.query_string;
+22:   println '            ref: ', b.ref;
+23:   println 'constructed URL: ', b.transpose('UrlInfo');
+24: }
+25:
+26: class UrlInfo
+27: {
+28:   function toString() {
+29:     ret = root @ path;
+30:     if query_string != null { ret @= '?' @ query_string; }
+31:     if ref != null { ret @= '#' @ ref; }
+32:     return ret;
+33:   }
+34: }
+</pre></td></tr></table></p><p>
+
+You can treat a string as a file path and get various parts:
+
+<blockquote><font class=secondary3><pre>
+  a = [ '/usr/bin/java', 'c:/temp/Test.java', '~/alfa', 'judo.jar' ];
+  for x in a {
+    println x.getFilePath(), ' : ', x.getFileName(), ' : ', x.getFileExt();
+  }
+</pre></font></blockquote>
+
+The following example shows string's file methods:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="file_status">Listing 6</a>. file_status.judo</th>
+          </thead><tr><td class=code><pre>
+1: f = #args[0];
+2:
+3: println 'file name: ':<13,    f;
+4: println 'file exists: ':<13,  f.fileExists().fmtBool();
+5: println 'file is dir: ':<13,  f.isDir().fmtBool();
+6: println 'file is file: ':<13, f.isFile().fmtBool();
+7: println 'file time: ':<13,    f.fileTime();
+8: println 'file size: ':<13,    f.fileSize();
+</pre></td></tr></table></p><p>
+
+
+<h3><em>Review Questions</em></h3><ul>
+<li> How to get the host and path part of a URL?
+<li> How to get file extension of a file name?
+<li> How to check if a file exists? Whether it is a file or directory?
+           Its size?
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=math>4. Maths</a></h2><p>
+
+<p>
+Numeric values have a list of mathematic methods. See
+<a href="../langspec/spec3.html#value">language specification</a> for a complete
+listing. The following is some trigonometric examples:
+
+<blockquote><font class=secondary3><pre>
+println '------ trigonometry ------';
+const #PI = 3.1415927;
+println "60' in radian: angle = ", angle = #PI / 3;
+println 'angle.degree() = ', angle.degree().fractionDigits(3);
+println 'angle.sin() = ', angle.sin().fractionDigits(3);
+println 'angle.cos() = ', angle.cos().fractionDigits(3);
+println 'angle.tan() = ', angle.tan().fractionDigits(3);
+println 'f = ', f = 1.0;
+println 'f.asin() = ', f.asin().fractionDigits(3);
+println 'f.acos() = ', f.acos().fractionDigits(3);
+println 'f.atan() = ', f.atan().fractionDigits(3);
+println "60' in degrees: angle = ", angle = 60;
+println 'angle.radian() = ', angle.radian().fractionDigits(3);
+println 'angle.sin_d() = ', angle.sin_d().fractionDigits(3);
+println 'angle.cos_d() = ', angle.cos_d().fractionDigits(3);
+println 'angle.tan_d() = ', angle.tan_d().fractionDigits(3);
+println 'f.asin_d() = ', f.asin_d().fractionDigits(3);
+println 'f.acos_d() = ', f.acos_d().fractionDigits(3);
+println 'f.atan_d() = ', f.atan_d().fractionDigits(3);
+</pre></font></blockquote>
+
+<h3><em>Review Questions</em></h3><ul>
+<li> List all the mathematical methods for numeric values.
+</ul>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=array>5. Array and Linked List</a></h2><p>
+
+<p>
+Array is one of the most important data structures. A <em>JudoScript</em> can contain any
+variables, including numbers, strings, Java objects and other data structures
+including arrays. To define or initialize an array:
+
+<blockquote><font class=secondary3><pre>
+arr = []; // empty array
+arr = [ 1, 'abc', date(2001,10,1), javanew java.util.Hashtable() ];
+arr = [ [ 1, 2 ], [ 3, 4 ] ]; // multi-dimension
+arr = new Array; // another way to create.
+arr = new Array( 1, 'abc', date(2001,10,1) );
+</pre></font></blockquote>
+
+<p>
+Linked lists are desirable over arrays in certain algorithms for performance
+reasons. In <em>JuduScript</em> both share a common interface; the only
+difference is its declaration:
+
+<blockquote><font class=secondary3><pre>
+lst = linkedList[]; // empty list
+lst = linkedList[ 1, 'abc', date(2001,10,1), javanew java.util.Hashtable() ];
+lst = [ linkedList[ 1, 2 ], linkedList[ 3, 4 ] ];
+</pre></font></blockquote>
+
+The <b><code>length</code></b> or <b><code>size</code></b> attribute is the number of elements.
+To add elements, call its <b><code>add()</code></b> or <b><code>append()</code></b> with one or
+more values; use <b><code>prepend()</code></b> to insert elements to the front; or use
+<b><code>insert()</code></b> to insert at a particular position. Array index is 0-based.
+You can merge all the elements from another array by <b><code>appendArray()</code></b>
+or <b><code>prependArray()</code></b>. Obtain a portion of an array via <b><code>subarray()</code></b>.
+Method <b><code>clear()</code></b> removes all the elements, where <b><code>remove()</code></b>
+removes an element at a specific location. To find the index of an element,
+use <b><code>indexOf()</code></b>. <b><code>reverse()</code></b> is a convenience method that
+reverses all the elements.
+
+<p>
+To enumerate all the elements in an array, do one of these:
+
+<blockquote><font class=secondary3><pre>
+for idx=0; idx < arr.length; ++idx {
+  local x = arr[idx];
+  println idx, '  ', x;
+}
+for idx from 0 to arr.lastIndex() {
+  local x = arr[idx];
+  println idx, '  ', x;
+}
+for x in arr {
+  println x;
+}
+</pre></font></blockquote>
+
+If the index is not used, the last form is the easiest. If the index is
+used, the second form is more concise.
+
+<p>
+Arrays can also be created via <b><code>new</code></b> operator. This may be useful
+where <code>{}</code> is syntactically not allowed.
+
+
+
+<h3><a name=stats>Statistics</a></h3><p>
+
+<p>
+These methods collect some basic statistics about all the numeric elements
+in the array: <b><code>sum()</code></b>, <b><code>max()</code></b>, <b><code>min()</code></b>, <b><code>average()</code></b>
+or <b><code>avg()</code></b> and <b><code>range()</code></b> (the difference between the smallest
+and largest values). If elements are all integers, the result is integer,
+otherwise it is float.
+
+
+<h3><a name=sort>Sort, Filter and Convert</a></h3><p>
+
+<p>
+<em>JudoScript</em> has some powerful sorting capabilities for arrays and linked lists via
+the <b><code>sort()</code></b>. This method can take a user-defined comparator function
+to control the ordering. By default it sorts according to the string
+representation of the elements. Sorting is done locally, and the array itself
+is returned.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="custom_sort">Listing 7</a>. custom_sort.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+ 2: a.sort( &amp;my_comparator );
+ 3: for i from 0 to a.lastIndex() { println i, '  ', a[i]; }
+ 4:
+ 5: function my_comparator(lhs, rhs) {
+ 6:   la = lhs.csv('.');
+ 7:   ra = rhs.csv('.');
+ 8:   for i from 0 to la.size() {
+ 9:     if la[i].int() &lt; ra[i].int() { return -1; }
+10:     if la[i].int() &gt; ra[i].int() { return 1; }
+11:   }
+12:   if la.size() == ra.size() { return 0; }
+13:   return la.size() &gt; ra.size();
+14: }
+</pre></td></tr></table></p><p>
+
+Lines 5 through 14 defines a custom comparator. Comparator functions must
+take two parameters, and return -1, 0 or 1. On line 1, we have an array
+of things that look like book sections. Normal string comparison fails to
+yield correct order. Our comparator takes apart the section number to an
+array (lines 6 and 7), and compares each parts. Line 2 shows how to pass
+a function to a method: the ampersand notion. The result is:
+
+<blockquote><font class=secondary3><pre>
+0  1.2
+1  1.2.1
+2  1.10
+3  2.3
+4  3
+5  3
+6  3.9
+</pre></font></blockquote>
+
+As a convenience, <em>JudoScript</em> has <b><code>sortAsNumber()</code></b>, <b><code>sortAtDate()</code></b>
+and <b><code>sortAsString()</code></b> methods. The last one is not really necessary,
+just for the sake of naming consistency.
+
+<p>
+Sometimes you need to pick "qualified" elements in an array. <em>JudoScript</em>'s array
+filtering feature makes this easy. Array have a <b><code>filter()</code></b> that
+takes a user-defined filter function. It can return a new array for the
+qualified elements, or change the array locally.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="filter">Listing 8</a>. filter.judo</th>
+          </thead><tr><td class=code><pre>
+1: a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+2: println a.filter(&amp;size_filter);
+3:
+4: function size_filter elem { return elem.length() &lt; 5; }
+5:
+6: a.filter( lambda elem { return elem.length() &gt;= 5; }, true );
+7: println a;
+</pre></td></tr></table></p><p>
+
+Lines 1 through 4 shows how a filter function, which takes a parameter
+and returns a boolean, is used by the <b><code>filter()</code></b> method. Line 2
+prints a string representation of the array.
+
+<p>
+On line 6, the second parameter is <b><code>true</code></b>, so filtering is done
+locally. The first parameter is an anonymous function mechanism, called
+"lambda" function. Functions can be assigned to a variable, for instance,
+
+<blockquote><font class=secondary3><pre>
+f1 = &amp;size_filter;
+f2 = lambda elem { return elem.length() >= 5; };
+println a.filter(f1);
+println a.filter(f2);
+</pre></font></blockquote>
+
+Our last topic of this seciton is converting elements in arrays. This
+is done by the method <b><code>convert()</code></b>, which, not surprisingly,
+takes a conversion function that must accept one parameter and return
+a value.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="array_convert">Listing 9</a>. array_convert.judo</th>
+          </thead><tr><td class=code><pre>
+1: a = [ 'abc', 'Abc', 'ABc', 'ABC' ];
+2: println a.convert( lambda elem { return elem.toUpper(); } );
+</pre></td></tr></table></p><p>
+
+<h3><em>Review Questions</em></h3><ul>
+<li> How to create an array and linked list? How to initialize them?
+<li> How many ways to add elements to an array and linked list?
+<li> What is the easiest way to enumerate an array either forward
+           or backward?
+<li> What kinds of statistics can you get directly from arrays?
+<li> What is a comparator function? How can they be used in array sorting?
+<li> Given an array of integers, how to use filter to obtain all
+           even numbers?
+<li> What is a lambda function? Can functions be assigned to variables
+           or passed as parameters?
+<li> How to initialize a multi-dimensional array? How to access its
+           elements?
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=struct>6. Object and Ordered Map</a></h2><p>
+
+<p>
+A struct and an ordered map are virtually the same compound data structures
+that holds variable number of named attributes. In <em>JudoScript</em> there is no need to
+define a struct; simply assign values to an attribute name. Therefore, "map"
+may be a more appropriate name for struct. Objects and ordered maps are
+created by the <b><code>new</code></b> operator, and may take 0 or more named
+initializers. Attribute names do not have to be quoted unless they have
+non-identifier characters. Ordered maps maintains the order of attributes
+added when you retrieve them; structs do not. This is the only difference
+between the two. Ordered map also has an <b><code>indexOf()</code></b> method that
+works the same way as for arrays. An ordered map essentially serves the use
+of an array (for the names) along with a name-value mapping, which can be
+very handy in some situations.
+
+<blockquote><font class=secondary3><pre>
+a = new Object;
+a = new OrderedMap;
+a = new Object( name = 'Sanjay Deepak',
+                title = 'Software Engineer',
+                sex = 'm',
+                age = 34
+              );
+a = new Object( 'last name' = 'Deepak',
+                'first name' = 'Sanjay',
+                title = 'Software Engineer'
+              );
+</pre></font></blockquote>
+
+To access an attribute, use the dot operator; if the attribute name has
+non-identifier characters, have it quoted. If an attribute is not defined,
+a <b><code>null</code></b> is returned.
+
+<blockquote><font class=secondary3><pre>
+println a.'first name';      // access by name
+field = 'first name';  // access by expression
+println a.(field);
+</pre></font></blockquote>
+
+To remove an attribute, use <b><code>remove()</code></b> or <b><code>delete()</code></b>.
+Method <b><code>size()</code></b> returns the number of attributes, and
+<b><code>clear()</code></b> removes them all.
+
+<p>
+Method <b><code>keys()</code></b> returns all the keys in an array. It is used to
+enumerate all attributes. Method <b><code>values()</code></b> returns an array of
+all values.
+
+<blockquote><font class=secondary3><pre>
+a = new Object( alfa = 'A', beta = 'B', gamma = 'C', delta = 'D' );
+for x in a.keys() {
+  println x, ' => ', a.(x);
+}
+</pre></font></blockquote>
+
+Keys (attributes) or their values can be sorted or filtered. This is
+a powerful feature that makes in-memory data processing extremely easy.
+The methods are <b><code>keysSorted()</code></b>, <b><code>keysFiltered()</code></b>,
+<b><code>keysSortedByValue()</code></b>, <b><code>keysFilteredByValue()</code></b> and
+<b><code>keysSortedAndFilteredByValue()</code></b>. All of them may take a
+comparator function and/or filter function. The following example shows
+how to use the latter three to achieve some kind of in-memory queries.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="in_memory_query">Listing 10</a>. in_memory_query.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: empl = new Object;
+ 2: empl.'0001' = new Object( name = 'Tony Nugyen',  age = 33 );
+ 3: empl.'0002' = new Object( name = 'Kathy Murphy', age = 42 );
+ 4: empl.'0003' = new Object( name = 'Michael Chu',  age = 29 );
+ 5: empl.'0004' = new Object( name = 'Rick Policsi', age = 30 );
+ 6: empl.'0005' = new Object( name = 'Sanjay Buch',  age = 23 );
+ 7:
+ 8: age_comp = lambda lhs, rhs { return compare(lhs.age, rhs.age); };
+ 9: age_flt  = lambda elem { return (elem.age &gt;= 30); };
+10:
+11: println 'List employees by age in descending order:';
+12: listThem( empl.keysSortedByValue(age_comp) );
+13:
+14: println 'List employees older than 30 years old:';
+15: listThem( empl.keysFilteredByValue(age_flt) );
+16:
+17: println 'List employees older than 30 years old in descending order:';
+18: listThem( empl.keysFilteredAndSortedByValue(age_flt,age_comp) );
+19:
+20: function listThem keys {
+21:   for x in keys {
+22:     local emp = empl.(x);
+23:     println emp.age, ' ', emp.name;
+24:   }
+25: }
+</pre></td></tr></table></p><p>
+
+Lines 1 through 6 create an Object whose attributes are keys and values
+are a struct containing various pieces of information. Line 8 defines a
+comparator function that compares values with the system function
+<b><code>compare()</code></b>; line 9 defines a filter function that filters the
+values also. These two are used in lines 12, 15 and 18 for various sorting
+and filtering combinations. As you see, tabular data in memory can be
+filtered and sorted based on any "column" or "columns" -- it is all in
+the comparator and filter function you implement.
+
+<h3><em>Review Questions</em></h3><ul>
+<li> What is the difference between a struct and an ordered map?
+<li> If an attribute name starts with a digit, how this attribute
+           can be initialized when creating a struct?
+<li> What is the syntax to access an attribute given a variable
+           for its name?
+<li> Are attribute names limited to strings? What about their values?
+<li> How to enumerate through all the attributes in a struct or
+           an ordered map.
+<li> For a struct, how do you get all keys in a specific order?
+<li> How to get an array of keys in the order based on its values
+           and/or qualified based on certain criterion?
+</ul>
+
+
+
+<h3><a name=stack>Stack and Queue</a></h3><p>
+
+<p>
+Stacks ane queues are essential to deal with recursive data structures
+(such as trees and graphs) and algorithms. To create a stack or queue,
+use the <b><code>new</code></b> operator.
+
+<p>
+Stacks have these methods: <b><code>size()</code></b>, <b><code>clear()</code></b>, <b><code>push()</code></b>,
+<b><code>pop()</code></b>, <b><code>peek()</code></b>, <b><code>peekAt()</code></b> and <b><code>isEmpty()</code></b>.
+Queues have these methods: <b><code>enque()</code></b> or <b><code>eng()</code></b>, <b><code>deque()</code></b>
+or <b><code>deq()</code></b>, <b><code>head()</code></b>, <b><code>tail()</code></b> and <b><code>isEmpty()</code></b>.
+The next program traverses a tree in two ways.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="dfs_bfs">Listing 11</a>. dfs_bfs.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: class Node
+ 2: {
+ 3:   constructor {
+ 4:     assert(name != null); // should be in the initializer
+ 5:     children = [];
+ 6:   }
+ 7:   function toString { return name; }
+ 8:   function addChild child { children.add(child); }
+ 9: }
+10:
+11: // constuct a tree
+12: root = new Node(name='ROOT');
+13: a = new Node( name='A' );
+14: a.addChild(new Node(name='A1'));
+15: a.addChild(new Node(name='A2'));
+16: root.addChild(a);               // left subtree
+17: a = new Node( name='B');
+18: a.addChild(new Node(name='B1'));
+19: a.addChild(new Node(name='B2'));
+20: a.addChild(new Node(name='B3'));
+21: root.addChild(a);               // right subtree
+22:
+23: dfs(root);
+24: bfs(root);
+25:
+26: function dfs root {
+27:   print 'Depth-first traverse: ';
+28:   stk = new stack;
+29:   stk.push(root);
+30:   while !stk.isEmpty() {
+31:     node = stk.pop();
+32:     print node, ' ';
+33:     for x in node.children backward { stk.push(x); }
+34:   }
+35:   println;
+36: }
+37:
+38: function bfs root {
+39:   print 'Breadth-first traverse: ';
+40:   que = new queue;
+41:   que.enq(root);
+42:   while !que.isEmpty() {
+43:     node = que.deq();
+44:     print node, ' ';
+45:     for x in node.children { que.enq(x); }
+46:   }
+47:   println;
+48: }
+</pre></td></tr></table></p><p>
+
+Lines 1 through 9 defines a class. In the constructor, lines 4 mandates
+that an attributed called "name" must be initialized, and line 5 creates
+an array attribute "children". A stack is used for depth-first traversal,
+and a queue for bread-first. On line 33 the for loop runs in backward
+order so the "left" child is processed first. The tree and the result of
+run is shown below:
+
+<blockquote><font class=secondary3><pre>
+      ROOT
+     /    \
+    A      B
+   /|    / | \
+ A1 A2  B1 B2 B3
+
+Depth-first traverse: ROOT A A1 A2 B B1 B2 B3
+Breadth-first traverse: ROOT A B A1 A2 B1 B2 B3
+</pre></font></blockquote>
+
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Use a stack to reverse an array (without resorting to array's
+           <b><code>reverse()</code></b> method).
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>7. Summary</a></h2><p>
+
+<p>
+<em>JudoScript</em> variables and constants are weakly typed. The primitive types include
+integer, floating point number, string and date/time and secret. Data
+structures include struct, ordered map, array, linked list, stack and
+queue. Other variables include Java objects (and arrays) and built-in
+objects. Numbers and strings can be used interchangeably in expressions.
+They can be explicitly converted to intended types. Numbers and strings
+have a set of methods that covers conversion, formatting, mathematical,
+and string processing. Strings also represent URLs and file, they have
+methods like <b><code>parseUrl()</code></b>, <b><code>fileExists()</code></b>, etc.
+
+<p>
+A chunk of text can be used via the enhanced here-doc mechanism. Text can
+be aligned and the indentation is stripped. Expressions can be embedded.
+
+<p>
+Date and time values can be created in various ways. They have a number of
+attributes, some are writable.
+
+<p>
+Arrays and linked lists share the same interface. The only difference is
+their creation. They can be initialized; elements can be added to the end
+or front. Other arrays/lists can be merged in. The best way to enumerate
+an array is the <b><code>for..in</code></b> statement. A number of basic statistics
+method helps the numeric processing. They can be sorted or filtered with
+user-defined comparator or filter function. Such functions are often
+declared as lambda functions.
+
+<p>
+Objects and ordered maps stores a number of name-value mapping. Ordered
+maps maintain the order of the keys that were added to it, where structs
+don't. The keys can be returned as an array, which is the way to
+enumerate sturcts; they may be returned sorted or filtered (by user-defined
+functions); they can even be sorted and/or filtered based on the values. 
+ 
+<p>
+Stacks and queues are also supported.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>8. Code Listings</a></h2><p>
+
+<ol><li> <a href=#simple_vars>simple_vars.judo</a><li> <a href=#conversions>conversions.judo</a><li> <a href=#ascii>ascii.judo</a><li> <a href=#date_attr>date_attr.judo</a><li> <a href=#parse_url>parse_url.judo</a><li> <a href=#file_status>file_status.judo</a><li> <a href=#custom_sort>custom_sort.judo</a><li> <a href=#filter>filter.judo</a><li> <a href=#array_convert>array_convert.judo</a><li> <a href=#in_memory_query>in_memory_query.judo</a><li> <a href=#dfs_bfs>dfs_bfs.judo</a></ol>
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

@@ -1,0 +1,98 @@
+<html><head><title>JudoScript Object - DBConnection</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>DBConnection</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font>: <code>java.sql.Connection</code></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Members:</h5>
+<table border=1>
+<tr><th>Name</th><th>Writable</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=DBConnection_driver>driver
+</a></font></td><td align=center>no</td><td>The JDBC driver Java class name for this connection.</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_autoCommit>autoCommit
+</a></font></td><td align=center>yes</td><td>The boolean auto-commit flag.</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_readOnly>readOnly
+</a></font></td><td align=center>yes</td><td>The boolean read-only flag.</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_catalog>catalog
+</a></font></td><td align=center>yes</td><td>The catalog.</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_typeMap>typeMap
+</a></font></td><td align=center>yes</td><td>The type map.</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_transactionIsolation>transactionIsolation
+</a></font></td><td align=center>yes</td><td>The transaction isolation level. Valid values are 'transaction_non', 'transaction_read_uncommitted', 'transaction_read_committed' and 'transaction_serializable'.</td></tr>
+</table>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=DBConnection_addTypeMap></a>addTypeMap<br></font></td><td valign=top><font class=param>name</font><br><font class=param> typeClass</font><br></td><td valign=top>
+  Adds the type Java class <font class=param>typeClass</font> for type <font class=param>name</font>
+  for this connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_clearWarning></a>clearWarning<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Clears the warning.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_commit></a>commit<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Commits the last transaction.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_countRows></a>countRows<br></font></td><td valign=top><font class=param>tableName</font><br></td><td valign=top>
+  Returns the number of rows for table <font class=param>tableName</font> in this database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_databaseObjectExists></a><a name=DBConnection_existsDatabaseobject></a>databaseObjectExists<br>existsDatabaseobject<br></font></td><td valign=top><font class=param>objName</font><br></td><td valign=top>
+  This is Oracle specific. Returns <font class=kw>true</font>  if the object <font class=param>objName</font>
+  exists in the schema. (It queries table <code>user_objects</code>.)
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_describe></a><a name=DBConnection_desc></a>describe<br>desc<br></font></td><td valign=top><font class=param>tableName</font><br></td><td valign=top>
+  Returns the table information for <font class=param>tableName</font> in a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> object.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_disconnect></a><a name=DBConnection_close></a>disconnect<br>close<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Disconnects the connection to the database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_executeBatch></a>executeBatch<br></font></td><td valign=top><font class=param>sqls</font><br></td><td valign=top>
+  The parameter <font class=param>sqls</font> is an array of SQL statements. Executes them
+  in a batch and returns the total result count.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_executeQuery></a>executeQuery<br></font></td><td valign=top><font class=param>sql</font><br></td><td valign=top>
+  Executes the query <font class=param>sql</font> and returns the result set.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_executeSQL></a>executeSQL<br></font></td><td valign=top><font class=param>sql</font><br></td><td valign=top>
+  Executes the SQL <font class=param>sql</font> and returns the result count.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_executeSQLFile></a>executeSQLFile<br></font></td><td valign=top><font class=param>sqlFile</font><br><font class=param> ...</font><br></td><td valign=top>
+  Executes the SQL statements in files represented by <font class=param>sqlFile</font>'s and
+  returns the result count. The SQL statements in the file must be separated by <font class=kw><nobr>;</nobr></font>  and
+  is runnable by the JDBC driver. Lines starting with <font class=kw><nobr>#</nobr></font>  are comments and are ignored.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_getDatabaseObjectType></a>getDatabaseObjectType<br></font></td><td valign=top><font class=param>objName</font><br></td><td valign=top>
+  This is Oracle specific. Returns the type of the object <font class=param>objName</font>
+  if it exists in the schema. (It queries table <code>user_objects</code>.)
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_getMetaData></a>getMetaData<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the database meta data (<font class=obj><a href="javascript:showObj('DBMetaData')">DBMetaData</a></font>) for this connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_nativeSQL></a>nativeSQL<br></font></td><td valign=top><font class=param>sql</font><br></td><td valign=top>
+  Returns the RDBMS's native SQL for <font class=param>sql</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_procedureExists></a><a name=DBConnection_procExists></a>procedureExists<br>procExists<br></font></td><td valign=top><font class=param>procPattern</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if procedure <font class=param>procPattern</font> exists.
+  The <font class=param>procPattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_reportWarnings></a>reportWarnings<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the boolean value indicating whether warnings are shown.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_rollback></a>rollback<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Rolls back the last transaction.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_tableExists></a>tableExists<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if table <font class=param>tablePattern</font> exists.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBConnection_userTypeExists></a><a name=DBConnection_userDefinedTypeExists></a>userTypeExists<br>userDefinedTypeExists<br></font></td><td valign=top><font class=param>typePattern</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if user-defined type <font class=param>typePattern</font> exists.
+  The <font class=param>typePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,112 @@
+<html><head><title>JudoScript Object - TableData</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>TableData</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font>: <code>com.judoscript.util.TableData</code></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=TableData_addRow></a><a name=TableData_add></a>addRow<br>add<br></font></td><td valign=top><font class=param>anArray</font><br></td><td valign=top>
+  Adds elements in <font class=param>anArray</font> as a row. The <font class=param>anArray</font>
+  can also be a Java array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_clear></a>clear<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Clears all the data in this table-data.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filter></a>filter<br></font></td><td valign=top><font class=param>filterFunction</font><br></td><td valign=top>
+  Returns a new table data with certain rows filtered out by the required
+  <font class=param>filterFunction</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filterByColumn></a>filterByColumn<br></font></td><td valign=top><font class=param>column</font><br><font class=param> filterFunction</font><br></td><td valign=top>
+  Returns a new table data with certain rows filtered out on column <font class=param>column</font>
+  by the required <font class=param>filterFunction</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filterByColumnNotNull></a>filterByColumnNotNull<br></font></td><td valign=top><font class=param>column</font><br></td><td valign=top>
+  Returns a new table data with certain rows filtered out on null columns.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filterByColumnNotNull></a>filterByColumnNotNull<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns a new table-data that have rows with null column at <font class=param>index</font> removed.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filterNotNull></a>filterNotNull<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a new table data with null rows filtered out.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_filterNotNullRows></a>filterNotNullRows<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a new table-data that have null rows removed.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getAt></a>getAt<br></font></td><td valign=top><font class=param>row</font><br><font class=param> column</font><br></td><td valign=top>
+  Returns the value at (<font class=param>row</font>, <font class=param>column</font>), or <font class=kw>null</font>  if
+  it is out of range.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getColumn></a>getColumn<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns a Java array <code>java.lang.Object[]</code> for column <font class=param>index</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getColumnCount></a>getColumnCount<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of columns.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getColumnIndex></a>getColumnIndex<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns the index for the column <font class=param>name</font>, or -1 if not found.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getColumnMaxWidths()></a>getColumnMaxWidths()<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of each column's maximum string length.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getData></a>getData<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the table data in a 2-dimensional array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getRow></a>getRow<br></font></td><td valign=top><font class=param>row</font><br></td><td valign=top>
+  Returns a row data at <font class=param>row</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getTitle></a>getTitle<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns the title of column <font class=param>index</font>, which is 0-based.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_getTitles></a>getTitles<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string array of the column titles.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_lastIndex></a>lastIndex<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the index of the last row, which is size - 1.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_setAt></a>setAt<br></font></td><td valign=top><font class=param>row</font><br><font class=param> column</font><br><font class=param> value</font><br></td><td valign=top>
+  Sets the value to (<font class=param>row</font>, <font class=param>column</font>), where <font class=param>column</font>
+  can be an index or a column name.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_setRow></a>setRow<br></font></td><td valign=top><font class=param>row</font><br><font class=param> rowData</font><br></td><td valign=top>
+  Sets the array <font class=param>rowData</font> at <font class=param>row</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_setTitleAt></a>setTitleAt<br></font></td><td valign=top><font class=param>index</font><br><font class=param> name</font><br></td><td valign=top>
+  Sets the title for column <font class=param>index</font>, which is 0-based.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_setTitleCaseSensitive></a>setTitleCaseSensitive<br></font></td><td valign=top><font class=param>set</font><br></td><td valign=top>
+  Sets the flag indicating the title is case-sensitive or not.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_setTitles></a>setTitles<br></font></td><td valign=top><font class=param>titles</font><br></td><td valign=top>
+  Sets the titles for the columns.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_size></a>size<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the size (number of rows) of this table-data.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_sort></a>sort<br></font></td><td valign=top><font class=param>comparatorFunction</font><br></td><td valign=top>
+  Sort the rows with the required <font class=param>comparatorFunction</font>.
+  Returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_sortByColumn></a>sortByColumn<br></font></td><td valign=top><font class=param>column</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Sort by <font class=param>column</font>. If no <font class=param>column</font> specified, default
+  to 0. The <font class=param>comparatorFunction</font> is optional.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_sortByColumnAsDate></a>sortByColumnAsDate<br></font></td><td valign=top><font class=param>ascending</font><br></td><td valign=top>
+  Sort by <font class=param>column</font> as dates. If no <font class=param>column</font> specified,
+  default to 0. If <font class=param>asending</font> is not specified, by default it is ascending.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_sortByColumnAsNumber></a>sortByColumnAsNumber<br></font></td><td valign=top><font class=param>ascending</font><br></td><td valign=top>
+  Sort by <font class=param>column</font> as numbers. If no <font class=param>column</font> specified,
+  default to 0. If <font class=param>asending</font> is not specified, by default it is ascending.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TableData_sortByColumnAsString></a>sortByColumnAsString<br></font></td><td valign=top><font class=param>column</font><br><font class=param> ascending</font><br></td><td valign=top>
+  Sort by <font class=param>column</font> as strings. If no <font class=param>column</font> specified,
+  default to 0. If <font class=param>asending</font> is not specified, by default it is ascending.
+</td></tr>
+</table>
+</body></html>

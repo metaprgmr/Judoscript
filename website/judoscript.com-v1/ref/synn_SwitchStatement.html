@@ -1,0 +1,26 @@
+<html><head><title>JudoScript Semantics - SwitchStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>SwitchStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=SwitchStatement>SwitchStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>switch</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>{</nobr></font>   (   (  <font class=kw>case</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>default</font>   )  <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )*   )*  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('SwitchStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This <font class=kw>switch</font> -<font class=kw>case</font> -<font class=kw>default</font>  statement is a basic flow-control statement that
+  should be familiar to any programmers. For <font class=kw>case</font>  clauses, the value label can be
+  any constants, such as strings.</p>
+
+  <p>The <font class=kw>break</font>  statement can be used to jump out of a case; otherwise, control
+  continues on the next statement in another case. The parentheses for the value
+  expression are optional.</p>
+ </body></html>

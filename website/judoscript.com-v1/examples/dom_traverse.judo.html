@@ -1,0 +1,87 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_dom/dom_traverse.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Reads in XML data at the end of this script to build a DOM, and
+    uses node iterator to enumerate and tree walker to navigate.
+  *]];
+}
+
+!JavaBaseClass #NodeFilter
+
+doc = do $$local as dom;
+
+if ! doc.isSupported("Traversal","2.0") {
+  println &lt;err> 'Traversal is not implemented by this XML parser.';
+  exit 0;
+}
+
+/*
+ * Use NodeIterator.
+ */
+println 'Members of the royal family with children...', nl;
+filter = lambda n {
+            return n.hasChildNodes() &amp;&amp; n.getNodeName()=="Person"
+                   ? #NodeFilter.FILTER_ACCEPT : #NodeFilter.FILTER_SKIP;
+          };
+iter = doc.createNodeIterator( doc, #NodeFilter.SHOW_ALL, filter, true );
+while (n=iter.nextNode()) != null {
+  println n.getAttribute("name"), " (", n.getAttribute("born"), ")";
+}
+
+/*
+ * Use TreeWalker
+ */
+println nl, 'Looking for Princess Anne...';
+filter = lambda n {
+            return n.getNodeName()=="Person"
+                   ? #NodeFilter.FILTER_ACCEPT : #NodeFilter.FILTER_SKIP;
+          };
+walker = doc.createTreeWalker( doc,#NodeFilter.SHOW_ALL,filter,true );
+while (n=walker.nextNode()) != null {
+  name = n.getAttribute("name");
+  if name.indexOf("Anne") >= 0 { break; }
+  println 'Skipping ', name;
+}
+
+// Store the Node so we can come back
+anne = walker.getCurrentNode();
+println 'Found "', anne.getAttribute("name"), '".', nl;
+
+walker.setCurrentNode(anne);
+println 'PreviousSibling = "', walker.previousSibling().getAttribute('name'), '"';
+walker.setCurrentNode(anne);
+println '    NextSibling = "', walker.nextSibling().getAttribute('name'), '"';
+walker.setCurrentNode(anne);
+println '     firstChild = "', walker.firstChild().getAttribute('name'), '"';
+walker.setCurrentNode(anne);
+println '      LastChild = "', walker.lastChild().getAttribute('name'), '"';
+walker.setCurrentNode(anne);
+println '   PreviousNode = "', walker.previousNode().getAttribute('name'), '"';
+walker.setCurrentNode(anne);
+println '       NextNode = "', walker.nextNode().getAttribute('name'), '"';
+
+EndScript ----------------------------------------------------------
+&lt;FamilyTree name="The Royal Family">
+   &lt;Person born="1926" name="Queen Elizabeth II" spouse="Phillip">
+      &lt;Person born="1948" name="Charles, Prince of Wales" spouse="Diana">
+         &lt;Person born="1982" name="Prince William"/>
+         &lt;Person born="1984" name="Prince Henry of Wales"/>
+      &lt;/Person>
+      &lt;Person born="1950" name="Anne, Princess Royal"
+              spouse="Mark" spouse2="Tim">
+         &lt;Person born="1977" name="Peter Phillips"/>
+         &lt;Person born="1981" name="Zara Phillips"/>
+      &lt;/Person>
+      &lt;Person born="1960" name="Andrew, Duke of York" spouse="Sarah">
+         &lt;Person born="1988" name="Princess Beatrice of York"/>
+         &lt;Person born="1990" name="Princess Eugenie or York"/>
+      &lt;/Person>
+      &lt;Person born="1964" name="Edward, Earl of Wessex"
+              spouse="Sophie"/>
+   &lt;/Person>
+&lt;/FamilyTree>
+</pre></td></tr></table></body></html>

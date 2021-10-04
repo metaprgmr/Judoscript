@@ -1,0 +1,494 @@
+<html><head><title>JudoScript Object - simple</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>simple</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=simple_abs></a>abs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the absolute value of the current float or integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_acos></a>acos<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc cosine of the current float value in radians, in the range of 0 through pi.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_acos_d></a>acos_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc cosine of the current float value in degrees, in the range of 0 through 180.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_ascii></a>ascii<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the ASCII value (8-bit) for the <em>first character</em>, or 0 if the string is empty.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_asin></a>asin<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc sine of the current float value in radians, in the range of -pi/2 through pi/2.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_asin_d></a>asin_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc sine of the current float value in degrees, in the range of -90 through 90.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_atan></a>atan<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc tagent of the current float value in radians, in the range of -pi/2 through pi/2.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_atan_d></a>atan_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the arc tangent of the current float value in degrees, in the range of -90 through 90.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_base64Decode></a>base64Decode<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a base-64 decoded byte array of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_capitalizeAllFirstLetters></a><a name=simple_capAllFirst></a>capitalizeAllFirstLetters<br>capAllFirst<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string that has the all first letter capitalized.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_capitalizeFirstLetter></a><a name=simple_capFirst></a>capitalizeFirstLetter<br>capFirst<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string that has the first letter capitalized.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_ceil></a>ceil<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the smallest (closest to negative infinity) double value that is not
+  less than the current float value and is equal to a mathematical integer.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_char></a><a name=simple_chr></a>char<br>chr<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a character for the current integer value as its Unicode.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_contains></a>contains<br></font></td><td valign=top><font class=param>pattern</font><br><font class=param> ...</font><br></td><td valign=top>
+  If any <font class=param>pattern</font> is found in the current string value, it returns <font class=kw>true</font> .
+  The <font class=param>pattern</font> can be a string or a <font class=obj><a href="javascript:showObj('RegExp')">RegExp</a></font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_cos></a>cos<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric cosine of the current float value in radians.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_cos_d></a>cos_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric cosine of the current float value in degrees.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_count></a>count<br></font></td><td valign=top><font class=param>pattern</font><br></td><td valign=top>
+  Returns the number of occurrances of the <font class=param>pattern</font> in the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_csv></a>csv<br></font></td><td valign=top><font class=param>separator</font><br><font class=param> trim</font><br><font class=param> minLen</font><br><font class=param> defaultString</font><br></td><td valign=top>
+  Returns an array of sub-strings, separated by <font class=param>separator</font>, of the current string.
+  If no parameter specified, the separator is defaulted to be comma ",". Parameter <font class=param>minLen</font>,
+  if specified, dictates the minimum length of the returned array. If the string does not
+  contain enough elements, <font class=param>defaultString</font> or <font class=kw>null</font>  is used to fill in.
+  If <font class=param>trim</font>, each substring's whitespaces are trimed; by default, <font class=param>trim</font>
+  is <font class=kw>false</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_date></a>date<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the date/time value; if this is a date object, returns that; otherwise,
+  the integer value is used to create a date. See <code>parseDate()</code> for parsing
+  the string value to a date object.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_decodeUrl></a>decodeUrl<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string that is URL-decoded of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_degree></a>degree<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the degrees of the current radian value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_encodeUrl></a>encodeUrl<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string that is URL-encoded of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_endsWith></a>endsWith<br></font></td><td valign=top><font class=param>str</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string ends with any one of the parameters.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_equalsIgnoreCase></a>equalsIgnoreCase<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string is case-insenstively the same as the parameter.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_escapeHtml></a>escapeHtml<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Escapes this string value for HTML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_escapeJava></a>escapeJava<br></font></td><td valign=top><font class=param>onlyNonASCII</font><br></td><td valign=top>
+  Escapes this string value for Java source code; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+  If <font class=param>onlyNonASCII</font> is <font class=kw>true</font> , only non-ASCII characters
+  are escaped; all the whitespace characters are preserved. By default
+  this flag is <font class=kw>false</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_escapeJavaScript></a>escapeJavaScript<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Escapes this string value for JavaScript; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_escapeSql></a>escapeSql<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Escapes this string value for SQL; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_escapeXml></a>escapeXml<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Escapes this string value for XML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_exp></a>exp<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the exponential number e (i.e., 2.718...) raised to the power of the
+  current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_fileExists></a><a name=simple_existsFile></a>fileExists<br>existsFile<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the file represented by the current string value exists in
+  the file system.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_fileSize></a><a name=simple_fileLength></a>fileSize<br>fileLength<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the size for the file represented by the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_fileTime></a>fileTime<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the last modified time for the file represented by the current string
+  value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_fileWritable></a><a name=simple_fileCanWrite></a>fileWritable<br>fileCanWrite<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the file represented by the current string value is writable.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_float></a><a name=simple_double></a>float<br>double<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the floating-point number value for this object. It may throw exception if no integer
+  value is available, such as a string with invalid integer format.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_floor></a>floor<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the largest (closest to positive infinity) double value that is not
+  greater than the current float value and is equal to a mathematical integer.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatBool></a><a name=simple_fmtBool></a>formatBool<br>fmtBool<br></font></td><td valign=top><font class=param>falseName</font><br><font class=param> trueName</font><br></td><td valign=top>
+  Returns the string representation of the current boolean number, which is
+  an integer that 0 means <font class=kw>false</font>  and non-0 <font class=kw>true</font> . If both parameters are
+  specified, use them. Otherwise, it is "false" or "true".
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatCurrency></a><a name=simple_fmtCurrency></a>formatCurrency<br>fmtCurrency<br></font></td><td valign=top><font class=param>language</font><br><font class=param> country</font><br></td><td valign=top>
+  Returns the string representation of currency the currentn integer number. 
+  If <font class=param>language</font> and/or <font class=param>country</font> are provided, it uses
+  that locale; otherwise, use the default locale.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatDuration></a><a name=simple_fmtDuration></a>formatDuration<br>fmtDuration<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an English phrase for the currentn integer number as duration in seconds.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatHex></a><a name=simple_fmtHex></a>formatHex<br>fmtHex<br></font></td><td valign=top><font class=param>format</font><br></td><td valign=top>
+  Returns the hexadecimal representation of the current integer number.
+  The <font class=param>format</font> is a number followed by 'A' or 'a', where
+  number is the width (0 left-packed), and 'A' or 'a' indicate the case for
+  A through F.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatOctal></a><a name=simple_fmtOctal></a>formatOctal<br>fmtOctal<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the octal representation of the current integer number.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_formatRoman></a><a name=simple_fmtRoman></a>formatRoman<br>fmtRoman<br></font></td><td valign=top><font class=param>upperCase</font><br></td><td valign=top>
+  Returns the Roman representation of the current integer number, in upper case if
+  <font class=param>upperCase</font> is <font class=kw>true</font>  or lower case otherwise. Default is lower case.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_fractionDigits></a>fractionDigits<br></font></td><td valign=top><font class=param>digits</font><br></td><td valign=top>
+  Returns a double number that rounds to so many <font class=param>digits</font> after decimal point.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getAt></a>getAt<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns the character (length-1 string) at <font class=param>index</font> of the current string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getBytes></a>getBytes<br></font></td><td valign=top><font class=param>encoding</font><br></td><td valign=top>
+  Returns a byte array of the current string value for the <font class=param>encoding</font>.
+  If no parameters specified, use the JVM's default character encoding.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getChars></a>getChars<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the character array of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getFileExt></a><a name=simple_getFileExtension></a>getFileExt<br>getFileExtension<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the file extension of the path as represented by the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getFileName></a>getFileName<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the file name in the path as represented by the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getFilePath></a>getFilePath<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the path (excluding the file name) as represented by the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_getReader></a>getReader<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  For the current string, returns a reader object to read the content of the string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_groupNumber></a>groupNumber<br></font></td><td valign=top><font class=param>distance</font><br><font class=param> divider</font><br></td><td valign=top>
+  Returns a string representation for the current integer value that divides
+  <font class=param>distance</font> consecutive characters with <font class=param>divider</font> if
+  specified (default is ',').
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_indexOf></a>indexOf<br></font></td><td valign=top><font class=param>str</font><br><font class=param> startIndex</font><br></td><td valign=top>
+  Returns the index of the <font class=param>str</font> in the current string value. The search starts
+  from <font class=param>startIndex</font>, if specified. If the substring is not found, returns -1.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_int></a>int<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the integer value for this object. It may throw exception if no integer
+  value is available, such as a string with invalid integer format.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isAlnum></a>isAlnum<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a letter or a digit.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isAlpha></a>isAlpha<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a letter.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isAsciiOnly></a>isAsciiOnly<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnes <font class=kw>true</font>  if all the characters in this string are ASCII.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isDigit></a>isDigit<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a digit.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isDir></a><a name=simple_isDirectory></a>isDir<br>isDirectory<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string value represents a valid directory in the
+  file system.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isEmpty></a>isEmpty<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this is <font class=kw>null</font>  or this object is a string with only whitespaces.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isEven></a>isEven<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the current integer value is even.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isFile></a>isFile<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string value represents a valid file in the
+  file system.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isFileHidden></a>isFileHidden<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string value represents a valid hidden file in
+  the file system.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isLower></a>isLower<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a lower-case character.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isNotEmpty></a>isNotEmpty<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this is not <font class=kw>null</font>  and <code>trim()</code> returns non-0.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isOdd></a>isOdd<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the current integer value is odd.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isUpper></a>isUpper<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a upper-case character.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_isWhitespace></a><a name=simple_isWhite></a>isWhitespace<br>isWhite<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Checks the first character and returns <font class=kw>true</font>  if it is a white-space character.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_lastIndexOf></a>lastIndexOf<br></font></td><td valign=top><font class=param>str</font><br><font class=param> startIndex</font><br></td><td valign=top>
+  Returns the index of the <font class=param>str</font> in the current string value, starting from the
+  back. The search starts from <font class=param>startIndex</font>, if specified. If the substring is
+  not found, returns -1.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_left></a>left<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns the sub-string starting from 0 up to <font class=param>index</font> exclusive.
+  If <font class=param>index</font> <= 0, returns the original string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_leftOf></a>leftOf<br></font></td><td valign=top><font class=param>subString</font><br></td><td valign=top>
+  Returns the sub-string starting from 0 up to <font class=param>subString</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_length></a><a name=simple_size></a>length<br>size<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the length of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_log></a>log<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the natural logorithm (base <i>e</i>) of the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_log10></a>log10<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the base 10 logorithm of the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_log2></a>log2<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the base 2 logorithm of the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_matches></a>matches<br></font></td><td valign=top><font class=param>regex</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if the <font class=param>regex</font> regular expression matches this string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_neverEmpty></a>neverEmpty<br></font></td><td valign=top><font class=param>defaultValue</font><br></td><td valign=top>
+  If the current string value is not empty, returns itself. Otherwise, returns the
+  <font class=param>defaultValue</font> if specified, or a space otherwise.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_numOfDigits></a>numOfDigits<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of digits for the decimal format of this integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_numOfHexDigits></a>numOfHexDigits<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of digits for the hexadecimal format of this integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_numOfOctalDigits></a>numOfOctalDigits<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of digits for the octal format of this integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_parseDate></a>parseDate<br></font></td><td valign=top><font class=param>format</font><br></td><td valign=top>
+  Returns a date value of the current string value based on <font class=param>format</font>.
+  If no parameters specified, use the default date format at the time.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_parseFixedPosition></a>parseFixedPosition<br></font></td><td valign=top><font class=param>len</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns a string array of substring with the specified lengths, that is, each substring
+  is at the fixed position in this variable as a string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_parseInt></a>parseInt<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an integer of the current string value either in the decimal, octal or hexadecimal format.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_parseIntRoman></a>parseIntRoman<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an integer of the current string value as Roman format.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_parseUrl></a>parseUrl<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Parses the current string value as a URL and returns a <font class=obj><a href="javascript:showObj('struct')">struct</a></font> that
+  possibly holds these values:
+  <table border="1">
+  <tr><th>Field</th><th>Meaning</th></tr>
+  <tr><td>url</td><td>the original value.</td></tr>
+  <tr><td>protocol</td><td>the protocol (before "://")</td></tr>
+  <tr><td>domain</td><td>the domain of this URL.</td></tr>
+  <tr><td>host</td><td>the host part of the domain.</td></tr>
+  <tr><td>port</td><td>the port part of the domain.</td></tr>
+  <tr><td>root</td><td>from the beginning up to the host part of the URL.</td></tr>
+  <tr><td>path</td><td>the virtual path part of the URL.</td></tr>
+  <tr><td>file_name</td><td>the file name of the URL.</td></tr>
+  <tr><td>query_string</td><td>the query string of the URL following "?" before "#".</td></tr>
+  <tr><td>ref</td><td>the reference part of the URL following "#".</td></tr>
+  </table>
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_pow></a>pow<br></font></td><td valign=top><font class=param>power</font><br></td><td valign=top>
+  Returns of value of the current float value raised to the <font class=param>power</font>.
+  If no parameters specified, returns 1.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_radian></a>radian<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the radians of the current degree value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_regionMatches></a>regionMatches<br></font></td><td valign=top><font class=param>offset</font><br><font class=param> other</font><br><font class=param> other_offset</font><br><font class=param> length</font><br></td><td valign=top>
+  Returns true if a regional match is found for <font class=param>other</font> in the current string.
+  The search starts at <font class=param>offset</font> in the current string and <font class=param>other_offset</font>
+  in <font class=param>other</font> for the specified <font class=param>length</font>. If <font class=param>length</font> is
+  not specified, it is the length for the <font class=param>other</font> minus <font class=param>other_offset</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_regionMatchesIgnoreCase></a>regionMatchesIgnoreCase<br></font></td><td valign=top><font class=param>offset</font><br><font class=param> other</font><br><font class=param> other_offset</font><br><font class=param> length</font><br></td><td valign=top>
+  Returns true if a case-insensitive regional match is found for <font class=param>other</font> in the
+  current string. The search starts at <font class=param>offset</font> in the current string and
+  <font class=param>other_offset</font> in <font class=param>other> for the specified <font class=param>length</font>.
+  If <font class=param>length</font> is not specified, it is the length for the <font class=param>other</font>
+  minus <font class=param>other_offset</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_replace></a>replace<br></font></td><td valign=top><font class=param>old</font><br><font class=param> new</font><br></td><td valign=top>
+  Does a non-regular-expression replacing of all the <font class=param>old</font> sub-string to
+  <font class=param>new</font> for the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_replaceAll></a>replaceAll<br></font></td><td valign=top><font class=param>regex</font><br><font class=param> newValue</font><br></td><td valign=top>
+  Returns a new string with all the <font class=param>regex</font> regular expression matches
+  replaced by <font class=param>regex</font>. <font class=param>newValue</font> can be <font class=kw>null</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_replaceFirst></a>replaceFirst<br></font></td><td valign=top><font class=param>regex</font><br><font class=param> newValue</font><br></td><td valign=top>
+  Returns a new string with the first <font class=param>regex</font> regular expression matches
+  replaced by <font class=param>regex</font>. <font class=param>newValue</font> can be <font class=kw>null</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_replaceIgnoreCase></a>replaceIgnoreCase<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Case-insensitively replaces the <font class=param>old</font> sub-string to <font class=param>new</font> for
+  the current string value,
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_right></a>right<br></font></td><td valign=top><font class=param>count</font><br></td><td valign=top>
+  Returns the sub-string starting from <font class=param>count</font> characters from the end.
+  If <font class=param>count</font> <= 0, returns the original string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_rightOf></a>rightOf<br></font></td><td valign=top><font class=param>subString</font><br></td><td valign=top>
+  Returns the sub-string starting from <font class=param>subString</font> to the end.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_round></a>round<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the closest long to the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_sin></a>sin<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric sine of the current float value in radiant.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_sin_d></a>sin_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric sine of the current float value in degrees.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_split></a>split<br></font></td><td valign=top><font class=param>regex</font><br><font class=param> limit</font><br></td><td valign=top>
+  Returns an array of sub-strings of the current string value splitted by the
+  <font class=param>regex</font> regular expression. The array is no longer than <font class=param>limit</font>
+  if it is specified.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_splitWithMatches></a>splitWithMatches<br></font></td><td valign=top><font class=param>regex</font><br></td><td valign=top>
+  Returns an array of sub-strings of the current string value splitted by the
+  <font class=param>regex</font> regular expression, including the matched patterns.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_splitWithMatchesOnly></a>splitWithMatchesOnly<br></font></td><td valign=top><font class=param>regex</font><br></td><td valign=top>
+  Returns an array of matched patterns of the current string value matched by
+  the <font class=param>regex</font> regular expression.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_sqrt></a>sqrt<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the square-root of the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_startsWith></a>startsWith<br></font></td><td valign=top><font class=param>str</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if the current string starts with any one of the parameters.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_stringCompare></a>stringCompare<br></font></td><td valign=top><font class=param>other</font><br></td><td valign=top>
+  Compares this string value to <font class=param>other</font>, and returns 1 if this one is "greater",
+  -1 if <font class=param>other</font> is greater, or 0 if they are the same.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_substr></a><a name=simple_substring></a>substr<br>substring<br></font></td><td valign=top><font class=param>start</font><br><font class=param> end</font><br></td><td valign=top>
+  Returns the sub-string starting at <font class=param>start</font> inclusive to <font class=param>end</font> exclusive.
+  If <font class=param>end</font> is not specified, it is up to the end of the current string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_tan></a>tan<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric tagent of the current float value in radiant.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_tan_d></a>tan_d<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the trigonometric tagent of the current float value in degrees.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toAbsolutePath></a>toAbsolutePath<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the absolute path for a file represented by this string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toBoolean></a>toBoolean<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Boolean</code> object for the current boolean value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toByte></a>toByte<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Byte</code> object for the current integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toCharacter></a>toCharacter<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Character</code> object for the first character of
+  the current string value. If it is empty, a space is returned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toDouble></a>toDouble<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Double</code> object for the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toFloat></a>toFloat<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Float</code> object for the current float value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toInteger></a>toInteger<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Integer</code> object for the current integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toLong></a>toLong<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Long</code> object for the current integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toLower></a><a name=simple_toLowerCase></a>toLower<br>toLowerCase<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the lower case of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toOSPath></a>toOSPath<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  If this is Windows, replace '/' with '\'. Otherwise, return self.
+  This can be useful in <font class=kw>exec</font>  commands and other Windows-specific usages.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toShort></a>toShort<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.lang.Short</code> object for the current integer value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toString></a>toString<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string object for this value. If this is string, the self is returned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_toUpper></a><a name=simple_toUpperCase></a>toUpper<br>toUpperCase<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the upper case of the current string value.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_trim></a>trim<br></font></td><td valign=top><font class=param>pattern</font><br></td><td valign=top>
+  If <font class=param>pattern</font> is missing, returns a string value that is the current
+  string value with whitespace characters trimmed from both ends. If <font class=param>pattern</font>
+  is specified, trims all its occurrances at the head and tail.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_truncate></a><a name=simple_trunc></a>truncate<br>trunc<br></font></td><td valign=top><font class=param>numChars</font><br></td><td valign=top>
+  Returns the sub-string that is <font class=param>numChars</font> shorter.
+  If parameter is invalid, returns the original string.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unescapeHtml></a>unescapeHtml<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Unescapes this string value for HTML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unescapeJava></a>unescapeJava<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Unescapes this string value for Java source code; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unescapeJavaScript></a>unescapeJavaScript<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Unescapes this string value for JavaScript; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unescapeXml></a>unescapeXml<br></font></td><td valign=top>&nbsp;</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unicode></a>unicode<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the Unicode value for the <em>first character</em>, or 0 if the string is empty.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unit></a>unit<br></font></td><td valign=top><font class=param>singularName</font><br><font class=param> pluralName</font><br></td><td valign=top>
+  Returns an English representation for the number of the entities. If the
+  current value is one, returns "1 " and the <font class=param>singularName</font>;
+  otherwise, returns the number and the plural name, which is <font class=param>pluralName</font>
+  if it is specified, or <font class=param>singularName</font> ended with 's'.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_unquote></a>unquote<br></font></td><td valign=top><font class=param>leftQuote</font><br><font class=param> rightQuote</font><br></td><td valign=top>
+  Returns a substring of the current string value with quotes trimmed off.
+  If no <font class=param>leftQuote</font> and <font class=param>rightQuote</font> specified, the single-quote
+  or double-quote character is assumed. If only <font class=param>leftQuote</font> is specified, and
+  the <font class=param>leftQuote</font> is a single character, then for '(', '<', '{' and '[', the
+  right quote is ')', '>', '}' and ']', respectively; otherwiser, the right quote is the
+  same as <font class=param>leftQuote</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=simple_writeToFile></a>writeToFile<br></font></td><td valign=top><font class=param>filename</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Writes this value (as string) into the file denoted by <font class=param>filename</font>. If
+  <font class=param>encoding</font> is specified, use it; otherwise, use the JVM's default encoding.
+</td></tr>
+</table>
+</body></html>

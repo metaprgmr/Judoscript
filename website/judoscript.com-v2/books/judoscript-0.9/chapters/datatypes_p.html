@@ -1,0 +1,437 @@
+<html><head><title>Chapter 5. Basic Data Types and Expressions</title>
+      <link href="../../../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#null">Null and Undefined</a></li><li><a href="#boolnum">Boolean and Numbers</a></li><li><a href="#string">String and Character</a></li><li><a href="#fileurl">File Names and URLs</a></li><li><a href="#regex">Regular Expression</a></li><br>&#187;&nbsp;<a href="#regexsyn">The Java/Judo Regular Expressions</a><br>&#187;&nbsp;<a href="#useregex">Use Regular Expressions in Judo</a><li><a href="#datetime">Date and Time</a></li><li><a href="#secret">Secret</a></li>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+<p class=tiny>Book: <a href="../toc_details.html">The Judo Language 0.9</a></p>
+ <h1>Chapter 5. Basic Data Types and Expressions</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<br><a href="datatypes.html">non-printer version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr></table><p>In Judo, all values are objects. Every object has a type, which equates to a set of properties and methods.</p>
+
+<p>For convenience, Judo data types are categorized into primitive and non-primitive types. Primitive types are traditionally simple values; in Judo, primitive types include boolean, numbers, string, date, time and a special type, <code>Secret</code>. Other than these, all types are non-primtive, which includes Judo built-in data structures and objects, Java objects and anything that are mapped into Java objects, such as XML DOM objects and Windows ActiveX controls. In this section, we discuss primitive types and their usages.</p>
+
+
+<h2>&nbsp;<br><a name=null> Null and Undefined</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<p><code>null</code></p>
+
+<p><code>undefined</code></p>
+
+<p><code>eof</code></p>
+
+<p><code>nl</code></p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=boolnum> Boolean and Numbers</a><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub></h2>
+
+<p>Boolean type has only two values, the literals <code>true</code> and <code>false</code>. Numerically, <code>true</code> is <code>1</code> and <code>false</code> is <code>0</code>.</p>
+
+<p>Numbers can be integers or floating point numbers. Judo supports all the integer and floating point number formats that Java supports.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=string> String and Character</a><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub></h2>
+
+<p>Judo strings are sequences of unicode characters. There is no specific <i>character</i> type in Judo; characters are simply strings containing one character.</p>
+
+<p>Judo strings are very rich in functionality. Strings are also used to represent file and directory names and URLs.</p>
+
+<p>The simplest form of string literals is a piece of text quoted by either double quotes or single quotes; if double quotes are used, single quotes are legitimate characters, and vice versa. If both double quotes and single quotes appear in the text, one of them has to be escaped. The escape sequences are the same as in Java. Judo supports unicode escape sequence as well. The following are some examples.</p>
+
+<font  color=black><pre>
+x = 'Hello, World!';
+x = "It's so nice.";
+x = '"Fine," he said.';
+x = '"Yes," he said, "it\'s good!"';
+x = '\u65E5\u672C\u8A9E';
+x = 'a\tb\tc';
+</pre></font>
+
+<p><b>Multi-line text literals</b><br>Judo supports two forms of multi-line text literals, <code>[[* *]]</code> and <code>[[[* *]]</code>. Both formats quote a chunk of text, which may include new-lines. The <code>[[* *]]</code> is used more often; it allows the chunk of text to be indented, resulting in code that is nicely aligned. In other words, the leading number of whitespace characters at the beginning of each line are stripped. For this reason, it is better not to use tabs to avoid potential confusions. The <code>[[* *]]</code> also trims the leading and trailing whitespace characters. The <code>[[[* *]]</code> format simply quotes the chunk of text as-is. Let's see an example and explain.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="multiline.judo">Listing 5.1</a> multiline.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+a = [[*
+   aaaaaaaaaaaaaaa
+   aaaaaaaaaaaaaaa
+   aaaaaaaaaaaaaaa
+*]];
+println '----', a, '----';
+
+b = [[[*
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+*]];
+println '====', b, '====';
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The <code>println</code> command prints out all the textual values plus a newline. The result for this program is:</p>
+
+<font  color=black><pre>
+----aaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaa----
+====
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+====
+</pre></font>
+
+<p><b>Embedded expressions</b><br>In mutli-line text literals, expressions can be embedded with the <code>(* *)</code> syntax. The embedded expressions will be evaluated to string values and concatenated to the rest of the text. Strictly speaking, the text is not a literal any more, but rather, a template. The following is an example that sends out emails to a mailing list which is stored in a database table (we will explain the usages later in this book; for now, just focus on how the text template is used; auxiliary parts such as connecting and disconnecting from servers are also omitted.)</p>
+
+<font  color=black><pre>
+executeQury qry:
+  SELECT last_name, salute, email FROM customers
+;
+while qry.next() {
+  sendMail
+     from: 'support@judoscript.com'
+       to: qry.email
+  subject: 'Daily digest for ' + Date().fmtDate('yyyy-MM-dd')
+     body: [[*
+               Dear (* qry.salute *) (* qry.last_name *),
+
+               This is today's daily digest.
+               Please don't reply to this mail.
+
+               Thanks,
+               -Judo support
+           *]]
+  ;
+}
+</pre></font>
+
+<p>In the <code>body</code> clause of the <code>sendMail</code> statement, we used a text template and generated the message body for each customer, where the values are from the database query object.</p>
+
+<p><b>Embedded variables and environment variables</b><br>The syntax for embedded expressions, <code>(* *)</code>, applies only to the multi-line text literals. However, variables, including environment variables, can be embedded all forms of string literals via the <code>${}</code> syntax, which is familiar to Unix shell programmers. The rule is that, if the named variale exists within the current Judo program, its value is used; otherwise, the name-sake environment variable is retrieved and used. What's more, <code>${}</code> can be used independently, which is a shortcut for the system function, <code>getenv()</code>, that explicitly accesses environment variables. As usual, let's see an example.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="envvar.judo">Listing 5.2</a> envvar.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+println 'Case I.   \${CLASSPATH}        --&gt; ', ${CLASSPATH};
+println "Case Ia.  '\${CLASSPATH}'      --&gt; ${CLASSPATH}";
+println "Case Ib.  CLASSPATH           --&gt;", CLASSPATH;
+
+// set it and see that it is:
+println '... Set in-program variable CLASSPATH to ', CLASSPATH = 'hahaha';
+
+println 'Case II.  \${CLASSPATH}        --&gt; ', ${CLASSPATH};
+println "Case IIa. getenv('CLASSPATH') --&gt; ", getenv('CLASSPATH');
+println "Case IIb. '\${CLASSPATH}'      --&gt; ${CLASSPATH}";
+println 'Case III. CLASSPATH           --&gt; ', CLASSPATH;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>This program essentially consists of five test cases. <i>Case I</i> explicitly accesses the environment variable <code>CLASSPATH</code>. <i>Case Ia</i> yields the same result, only because there is no name-sake variable. Prior to <i>Case II</i>, we set a in-program variable with the same name, <code>CLASSPATH</code>; <i>Case II</i> proves that the <code>${CLASSPATH}</code> ignores the in-program variable and still returns the environment variable. <i>Case IIa</i> shows how to use <code>getenv('CLASSPATH')</code> to accomplish the same. <i>Case IIb</i> is in contrast to <i>Case Ia</i>; this time, the varaible <code>CLASSPATH</code> has been defined, and the in-program variable value is displayed. Lastly, the reference to <code>CLASSPATH</code> is always referencing the in-program variable. The following is the result:</p>
+
+<font  color=black><pre>
+Case I.   ${CLASSPATH}        --&gt; c:\jlib\judo.jar;c:\jlib\classes12.zip
+Case Ia.  '${CLASSPATH}'      --&gt; c:\jlib\judo.jar;c:\jlib\classes12.zip
+Case Ib.  CLASSPATH           --&gt;
+... Set in-program variable CLASSPATH to hahaha
+Case II.  ${CLASSPATH}        --&gt; c:\jlib\judo.jar;c:\jlib\classes12.zip
+Case IIa. getenv('CLASSPATH') --&gt; c:\jlib\judo.jar;c:\jlib\classes12.zip
+Case IIb. '${CLASSPATH}'      --&gt; hahaha
+Case III. CLASSPATH           --&gt; hahaha
+</pre></font>
+
+<p>This environment variable access operator is familiar to Unix shell programmers, and will be discussed further in chapter <i><a href=".html">. </a></i>.</p>
+
+<p>Within a string, both <code>${}</code> and <code>(* *)</code> syntax can embed references to variables; <code>(* *)</code> can enclose any expressions; <code>${}</code> potentially reference environment variables if the name-sake variable does not exist. To access global variables, you can do like this: <code>${::xyz}</code>. If the global variable does not exist, Judo still tries to find the name-sake environment variable.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=fileurl> File Names and URLs</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=regex> Regular Expression</a></h2>
+
+<p>Regular expression (short as <i>regex</i>) is a familiar topic to many scripting language programmers. As a mini language describing various text patterns, regex renders tremendous power to text processing. People have been making great efforts to provide this power to Java, and finally, JDK1.4 embraced it as a part of Java standard edition. Judo regex support is based on that of Java. Since this is available only in JDK1.4 and later, any regex uses with JDK1.3 will cause runtime errors.</p>
+
+<p>If you are a Java programmer, you are probably aware of the JDK1.4 regex API. If you are not a Java programmer, you don't have to be concerned with that API; all you have to know is the regex constructs. Judo does not reinvent the regex construts but simply uses Java's, so it is good to know how Java does it and what Java supports.</p>
+
+<p>The <code>java.util.regex</code> package in JDK1.4 onwards supports Java regex. The key in this API is class <code>Pattern</code>. A regex must be "compiled" into a <code>Pattern</code> instance, and then used to deal with string instances. What you can apply a compiled regex pattern to strings to do these:</p>
+
+<ol>
+<li>Check if the regex pattern matches the whole or the leading part of the string.</li>
+<li>Replace the first or all the occurrances of the regex matches.</li>
+<li>Split the string into an array of strings separated by the regex pattern.</li>
+<li>Match the regex pattern against a string and return a detailed information regarding the matched segments in the string.</li>
+</ol>
+
+<p>The match operation, in Java, returns a <code>Matcher</code> object, which has facilities (methods) to go through various pieces of the matches. Each matched piece is called a <i>group</i>, which has a <i>start</i> and an <i>end</i> indices in the original string. You can reset and match again. This object is treated as an intrinsic object in Judo and will be discussed in detail later.</p>
+
+
+<a name=regexsyn><h3> The Java/Judo Regular Expressions</h3></a>
+
+<p>Regular expressions in Judo are the same as in Java; from this point on, we will just call them regular expressions, or simply regex's. In this section, we will introduce the details of the regex's, which is, indeed, the specification defined by the <code>java.util.regex.Pattern</code> class in JDK1.4. For general knowledge about regex, please refer to relevant literatures such as any Perl books. Here, we assume that you are assumed to be familiar with some forms of regex's and just discuss the details of regex syntax.</p>
+
+<p>The following table shows the regex constructs:</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 5.1 Regex Constructs</b></caption>
+<tr><th>Construct</th><th>Matches</th></tr>
+<tr><td colspan="2"><b>Characters</b></td>
+<tr><td valign=top><code><i>x</i></code></td><td valign=top>The character <code><i>x</i></code></td></tr>
+<tr><td valign=top><code>\\</code></td><td valign=top>The backslash character</td></tr>
+<tr><td valign=top><code>\0<i>n</i></code></td><td valign=top>The character with octal value <code>0<i>n</i></code> (0 <= n <= 7)</td></tr>
+<tr><td valign=top><code>\0<i>nn</i></code></td><td valign=top>The character with octal value <code>0<i>nn</i></code> (0 <= n <= 7)</td></tr>
+<tr><td valign=top><code>\0<i>mnn</i></code></td><td valign=top>The character with octal value <code>0m<i>nn</i></code> (0 <= m <= 3, 0 <= n <= 7)</td></tr>
+<tr><td valign=top><code>\x<i>hh</i></code></td><td valign=top>The character with hexadecimal value <code>0x<i>hh</i></code></td></tr>
+<tr><td valign=top><code>\u<i>hhhh</i></code></td><td valign=top>The character with hexadecimal value <code>0x<i>hhhh</i></code></td></tr>
+<tr><td valign=top><code>\t</code></td><td valign=top>The tab character (<code>'\u0009'</code>)</td></tr>
+<tr><td valign=top><code>\n</code></td><td valign=top>The newline (line feed) character (<code>'\u000A'</code>)</td></tr>
+<tr><td valign=top><code>\r</code></td><td valign=top>The carriage-return character (<code>'\u000D'</code>)</td></tr>
+<tr><td valign=top><code>\f</code></td><td valign=top>The form-feed character (<code>'\u000C'</code>)</td></tr>
+<tr><td valign=top><code>\a</code></td><td valign=top>The alert (bell) character (<code>'\u0007'</code>)</td></tr>
+<tr><td valign=top><code>\e</code></td><td valign=top>The escape character (<code>'\u001B'</code>)</td></tr>
+<tr><td valign=top><code>\c<i>x</i></code></td><td valign=top>The control character corresponding to <code><i>x</i></code></td></tr>
+<tr><td colspan="2"><b>Character classes</b></td>
+<tr><td valign=top><code>[abc]</code></td><td valign=top><code>a</code>, <code>b</code>, or <code>c</code> (simple class)</td></tr>
+<tr><td valign=top><code>[^abc]</code></td><td valign=top>Any character except <code>a</code>, <code>b</code>, or <code>c</code> (negation)</td></tr>
+<tr><td valign=top><code>[a-zA-Z]</code></td><td valign=top><code>a</code> through <code>z</code> or <code>A</code> through <code>Z</code>, inclusive (range)</td></tr>
+<tr><td valign=top><code>[a-d[m-p]]</code></td><td valign=top><code>a</code> through <code>d</code>, or <code>m</code> through <code>p</code>: <code>[a-dm-p]</code> (union)</td></tr>
+<tr><td valign=top><code>[a-z&&[def]]</code></td><td valign=top><code>d</code>, <code>e</code>, or <code>f</code> (intersection)</td></tr>
+<tr><td valign=top><code>[a-z&&[^bc]]</code></td><td valign=top><code>a</code> through <code>z</code>, except for <code>b</code> and <code>c</code>: <code>[ad-z]</code> (subtraction)</td></tr>
+<tr><td valign=top><code>[a-z&&[^m-p]]</code></td><td valign=top><code>a</code> through <code>z</code>, and not <code>m</code> through <code>p</code>: <code>[a-lq-z]</code> (subtraction)</td></tr>
+<tr><td colspan="2"><b>Predefined character classes</b></td>
+<tr><td valign=top><code>.</code></td><td valign=top>Any character (may or may not match line terminators) 
+<tr><td valign=top><code>\d</code></td><td valign=top>A digit: <code>[0-9]</code></td></tr>
+<tr><td valign=top><code>\D</code></td><td valign=top>A non-digit: <code>[^0-9]</code></td></tr>
+<tr><td valign=top><code>\s</code></td><td valign=top>A whitespace character: <code>[ \t\n\x0B\f\r]</code></td></tr>
+<tr><td valign=top><code>\S</code></td><td valign=top>A non-whitespace character: <code>[^\s]</code></td></tr>
+<tr><td valign=top><code>\w</code></td><td valign=top>A word character: <code>[a-zA-Z_0-9]</code></td></tr>
+<tr><td valign=top><code>\W</code></td><td valign=top>A non-word character: <code>[^\w]</code></td></tr>
+<tr><td colspan="2"><b>POSIX character classes (US-ASCII only)</b></td>
+<tr><td valign=top><code>\p{Lower}</code></td><td valign=top>A lower-case alphabetic character: <code>[a-z]</code></td></tr>
+<tr><td valign=top><code>\p{Upper}</code></td><td valign=top>An upper-case alphabetic character: <code>[A-Z]</code></td></tr>
+<tr><td valign=top><code>\p{ASCII}</code></td><td valign=top>All ASCII: <code>[\x00-\x7F]</code></td></tr>
+<tr><td valign=top><code>\p{Alpha}</code></td><td valign=top>An alphabetic character: <code>[\p{Lower}\p{Upper}]</code></td></tr>
+<tr><td valign=top><code>\p{Digit}</code></td><td valign=top>A decimal digit: <code>[0-9]</code></td></tr>
+<tr><td valign=top><code>\p{Alnum}</code></td><td valign=top>An alphanumeric character: <code>[\p{Alpha}\p{Digit}]</code></td></tr>
+<tr><td valign=top><code>\p{Punct}</code></td><td valign=top>Punctuation: One of <code>!"#$%&'()*,-./:;<=>?@[\]^_`{|}~</code></td></tr>
+<tr><td valign=top><code>\p{Graph}</code></td><td valign=top>A visible character: <code>[\p{Alnum}\p{Punct}]</code></td></tr>
+<tr><td valign=top><code>\p{Print}</code></td><td valign=top>A printable character: <code>[\p{Graph}]</code></td></tr>
+<tr><td valign=top><code>\p{Blank}</code></td><td valign=top>A space or a tab: <code>[ \t]</code></td></tr>
+<tr><td valign=top><code>\p{Cntrl}</code></td><td valign=top>A control character: <code>[\x00-\x1F\x7F]</code></td></tr>
+<tr><td valign=top><code>\p{XDigit}</code></td><td valign=top>A hexadecimal digit: <code>[0-9a-fA-F]</code></td></tr>
+<tr><td valign=top><code>\p{Space}</code></td><td valign=top>A whitespace character: <code>[ \t\n\x0B\f\r]</code></td></tr>
+<tr><td colspan="2"><b>Classes for Unicode blocks and categories</b></td>
+<tr><td valign=top><code>\p{InGreek}</code></td><td valign=top>A character in the Greek block (simple block)</td></tr>
+<tr><td valign=top><code>\p{Lu}</code></td><td valign=top>An uppercase letter (simple category)</td></tr>
+<tr><td valign=top><code>\p{Sc}</code></td><td valign=top>A currency symbol</td></tr>
+<tr><td valign=top><code>\P{InGreek}</code></td><td valign=top>Any character except one in the Greek block (negation)</td></tr>
+<tr><td valign=top><code>[\p{L}-[\p{Lu}]]</code></td><td valign=top>Any letter except an uppercase letter (subtraction)</td></tr>
+<tr><td colspan="2"><b>Boundary matchers</b></td>
+<tr><td valign=top><code>^</code></td><td valign=top>The beginning of a line</td></tr>
+<tr><td valign=top><code>$</code></td><td valign=top>The end of a line</td></tr>
+<tr><td valign=top><code>\b</code></td><td valign=top>A word boundary</td></tr>
+<tr><td valign=top><code>\B</code></td><td valign=top>A non-word boundary</td></tr>
+<tr><td valign=top><code>\A</code></td><td valign=top>The beginning of the input</td></tr>
+<tr><td valign=top><code>\G</code></td><td valign=top>The end of the previous match</td></tr>
+<tr><td valign=top><code>\Z</code></td><td valign=top>The end of the input but for the final terminator, if any</td></tr>
+<tr><td valign=top><code>\z</code></td><td valign=top>The end of the input</td></tr>
+<tr><td colspan="2"><b>Greedy quantifiers</b></td>
+<tr><td valign=top><code><i>X</i>?</code></td><td valign=top><code><i>X</i></code>, once or not at all</td></tr>
+<tr><td valign=top><code><i>X</i>*</code></td><td valign=top><code><i>X</i></code>, zero or more times</td></tr>
+<tr><td valign=top><code><i>X</i>+</code></td><td valign=top><code><i>X</i></code>, one or more times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>}</code></td><td valign=top><code><i>X</i></code>, exactly <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>(<i>n</i>,}</code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>,<i>m</i>}</code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> but not more than <i>m</i> times</td></tr>
+<tr><td colspan="2"><b>Reluctant quantifiers</b></td>
+<tr><td valign=top><code><i>X</i>??</code></td><td valign=top><code><i>X</i></code>, once or not at all</td></tr>
+<tr><td valign=top><code><i>X</i>*?</code></td><td valign=top><code><i>X</i></code>, zero or more times</td></tr>
+<tr><td valign=top><code><i>X</i>?</code></td><td valign=top><code><i>X</i></code>, one or more times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>}?</code></td><td valign=top><code><i>X</i></code>, exactly <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>(<i>n</i>,}?</code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>,<i>m</i>}?</code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> but not more than <i>m</i> times</td></tr>
+<tr><td colspan="2"><b>Possessive quantifiers</b></td>
+<tr><td valign=top><code><i>X</i>?</code></td><td valign=top><code><i>X</i></code>, once or not at all</td></tr>
+<tr><td valign=top><code><i>X</i>*</i></code></td><td valign=top><code><i>X</i></code>, zero or more times</td></tr>
+<tr><td valign=top><code><i>X</i></code></td><td valign=top><code><i>X</i></code>, one or more times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>}</i></code></td><td valign=top><code><i>X</i></code>, exactly <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>(<i>n</i>,}</i></code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> times</td></tr>
+<tr><td valign=top><code><i>X</i>{<i>n</i>,<i>m</i>}</i></code></td><td valign=top><code><i>X</i></code>, at least <code><i>n</i></code> but not more than <i>m</i> times</td></tr>
+<tr><td colspan="2"><b>Logical operators</b></td>
+<tr><td valign=top><code><i>XY</i></td><td valign=top><code><i>X</i></code> followed by <code><i>Y</i></code></td></tr>
+<tr><td valign=top><code><i>X</i>|<i>Y</i></code></td><td valign=top>Either <code><i>X</i></code> or <code><i>Y</i></code></td></tr>
+<tr><td valign=top><code>(<code><i>X</i>)</code></td><td valign=top><code><i>X</i></code>, as a capturing group</td></tr>
+<tr><td colspan="2"><b>Back references</b></td>
+<tr><td valign=top><code>\<i>n</i></code></td><td valign=top>Whatever the <code><i>n</i></code><sup>th</sup> capturing group matched</td></tr>
+<tr><td colspan="2"><b>Quotation</b></td>
+<tr><td valign=top><code>\</code></td><td valign=top>Nothing, but quotes the following character</td></tr>
+<tr><td valign=top><code>\Q</code></td><td valign=top>Nothing, but quotes all characters until <code>\E</code></td></tr>
+<tr><td valign=top><code>\E</code></td><td valign=top>Nothing, but ends quoting started by <code>\Q</code></td></tr>
+<tr><td colspan="2"><b>Special constructs (non-capturing)</b></td>
+<tr><td valign=top><code>(?:<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, as a non-capturing group</td></tr>
+<tr><td valign=top><code>(?idmsux-idmsux)</code></td><td valign=top>Nothing, but turns match flags on - off</td></tr>
+<tr><td valign=top><code>(?idmsux-idmsux:<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, as a capturing group with the given flags on - off</td></tr>
+<tr><td valign=top><code>(?=<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, via zero-width positive lookahead</td></tr>
+<tr><td valign=top><code>(?!<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, via zero-width negative lookahead</td></tr>
+<tr><td valign=top><code>(?&lt;=<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, via zero-width positive lookbehind</td></tr>
+<tr><td valign=top><code>(?&lt;!<i>X</i>)</code></td><td valign=top><code><i>X</i></code>, via zero-width negative lookbehind</td></tr>
+<tr><td valign=top><code>(?><i>X</i>)</code></td><td valign=top><code><i>X</i></code>, as an independent, non-capturing group</td></tr>
+</table>
+
+<p><b>Backslashes, escapes, and quoting</b><br>The backslash character (<code>\</code>) serves to introduce escaped constructs, as defined in the table above, as well as to quote characters that otherwise would be interpreted as unescaped constructs. Thus the expression <code>\\</code> matches a single backslash and <code>\{</code> matches a left brace.</p>
+
+<p>It is an error to use a backslash prior to any alphabetic character that does not denote an escaped construct; these are reserved for future extensions to the regular expression language. A backslash may be used prior to a non-alphabetic character regardless of whether that character is part of an unescaped construct.</p>
+
+<p><b>Line terminators</b><br>A line terminator is a one- or two-character sequence that marks the end of a line of the input character sequence. The following are recognized as line terminators:</p>
+<ul>
+<li>A newline (line feed) character (<code>\n</code>),</li>
+<li>A carriage-return character followed immediately by a newline character (<code>\r\n</code>),</li>
+<li>A standalone carriage-return character (<code>\r</code>),</li>
+<li>A next-line character (<code>\u0085</code>),</li>
+<li>A line-separator character (<code>\u2028</code>), or</li>
+<li>A paragraph-separator character (<code>\u2029</code>).</li>
+</ul>
+
+<p>If UNIX_LINES mode is activated, then the only line terminators recognized are newline characters.</p>
+
+<p>The regular expression <code>.</code> matches any character except a line terminator unless the DOTALL flag is specified.</p>
+
+<p><b>Groups and capturing</b><br>Capturing groups are numbered by counting their opening parentheses from left to right. In the expression <code>((A)(B(C)))</code>, for example, there are four such groups:</p>
+<ol>
+<li><code>((A)(B(C)))</code></li>
+<li><code>(A)</code></li>
+<li><code>(B(C))</code></li>
+<li><code>(C)</code></li>
+</ol>
+
+<p>Group zero always stands for the entire expression.</p>
+
+<p>Capturing groups are so named because, during a match, each subsequence of the input sequence that matches such a group is saved. The captured subsequence may be used later in the expression, via a back reference, and may also be retrieved from the matcher once the match operation is complete.</p>
+
+<p>The captured input associated with a group is always the subsequence that the group most recently matched. If a group is evaluated a second time because of quantification then its previously-captured value, if any, will be retained if the second evaluation fails. Matching the string <code>aba</code> against the expression <code>(a(b)?)</code>, for example, leaves group two set to <code>b</code>. All captured input is discarded at the beginning of each match.</p>
+
+<p>Groups beginning with (<code>?</code> are pure groups that do not capture text and do not count towards the group total.</p>
+
+<p><b>Regex modes</b><br>Regex patterns can be run in different modes. The following table lists all the modes, along with the mode symbols used in Judo regex.</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 5.2 Regex Modes</b></caption>
+<tr><th>Mode</th><th>Symbol</th><th>Meaning</th></tr>
+<tr><td valign=top>CANON_EQ</td><td valign=top>c</td><td valign=top>Enable canonical equivalence, so that two characters will be considered to match if, and only if, their full canonical decompositions match. The expression <code>a\u030A</code>, for example, will match the string <code>&#229;</code> when this flag is specified. By default, matching does not take canonical equivalence into account.</td></tr>
+<tr><td valign=top>CASE_INSENTITIVE</td><td valign=top>i</td><td valign=top>Enables case-insensitive matching. By default, case-insensitive matching assumes that only characters in the US-ASCII charset are being matched. Unicode-aware case-insensitive matching can be enabled by specifying the UNICODE_CASE flag in conjunction with this flag. Case-insensitive matching can also be enabled via the embedded flag expression <code>(?i)</code>.</td></tr>
+<tr><td valign=top>COMMENTS</td><td valign=top>x</td><td valign=top>Permits whitespace and comments in pattern, that whitespace is ignored, and embedded comments starting with <code>#</code> are ignored until the end of a line. Unix lines mode can also be enabled via the embedded flag expression <code>(?x)</code>. </td></tr>
+<tr><td valign=top>DOTALL</td><td valign=top>s</td><td valign=top>Enables dotall mode, where the expression <code>.</code> matches any character, including a line terminator. By default this expression does not match line terminators. Dotall mode can also be enabled via the embedded flag expression <code>(?s)</code>.</td></tr>
+<tr><td valign=top>MULTILINE</td><td valign=top>m</td><td valign=top>Enables multiline mode, where the expressions <code>^</code> and <code>$</code> match just after or just before, respectively, a line terminator or the end of the input sequence. By default these expressions only match at the beginning and the end of the entire input sequence. Multiline mode can also be enabled via the embedded flag expression <code>(?m)</code>.</td></tr>
+<tr><td valign=top>UNICODE_CASE</td><td valign=top>u</td><td valign=top>Enables Unicode-aware case folding. When this flag is specified then case-insensitive matching, when enabled by the CASE_INSENSITIVE flag, is done in a manner consistent with the Unicode Standard. By default, case-insensitive matching assumes that only characters in the US-ASCII charset are being matched. Unicode-aware case folding can also be enabled via the embedded flag expression <code>(?u)</code>.</td></tr>
+<tr><td valign=top>UNIX_LINES</td><td valign=top>l</td><td valign=top>Enables Unix lines mode, that only the '\n' line terminator is recognized in the behavior of <code>.</code>, <code>^</code>, and <code>$</code>. Unix lines mode can also be enabled via the embedded flag expression <code>(?d)</code>. </td></tr>
+</table>
+
+<br>
+
+
+<a name=useregex><h3> Use Regular Expressions in Judo</h3></a>
+
+<p>Regex support in Judo is very simple; there is no extra operators or special syntax. The string data type has these regex methods: <code>matches()</code>, <code>matchesStart()</code>, <code>replaceAll()</code>, <code>replaceFirst()</code>, <code>split()</code> and <code>match()</code>. All these methods take a pattern as their first parameter. The pattern can be a single string, or an array of two strings: the first one is the pattern and the second is the modes.</p>
+
+<p>Regex's are compiled by its engine before they can be used. This process can be expensive if repeated many times, so Judo caches all the compiled ones. Regex's in different modes are different ones and are cached separately. Let us see some examples.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="regex1.judo">Listing 5.3</a> regex1.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+input = 'aAabFOOAABFooABfOOb';
+println input.replaceAll(['a*b','i'], '-'); // result: -FOO-Foo-fOO-
+
+input = 'zzdogzzdigzz';
+println input.replaceFirst('d.g','cat');    // result: zzcatzzdigzz
+
+input = 'boo:and:foo';
+println input.split(':',2);  // result: [boo,and:foo]
+println input.split(':',5);  // result: [boo,and,foo]
+println input.split(':',-1); // result: [boo,and,foo]
+println input.split('o',5);  // result: [b,,:and:f,,]
+println input.split('o',-1); // result: [b,,:and:f,,]
+println input.split('o',0);  // result: [b,,:and:f]
+println input.split('o');    // result: [b,,:and:f]
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<font color=gray>TODO: <i>To be expanded with more examples, including various modes and case studies such as log analyzers and such.</i></font>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=datetime> Date and Time</a><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub></h2>
+
+<p>Both date and time literals are specified by the same <code>Date</code> keyword. All parts of date/time can be specified in this sequence:</p>
+
+<font  color=black><pre>
+Date(year, month, day, hour, minute, second, milli-second)
+</pre></font>
+
+<p>where <i>month</i> is 1 through 12, <i>day</i> is the day of the month. The rest are obvious. The time components, e.g., <i>hour</i>, <i>minute</i>, etc., can be omitted; the missing components are 0's. If no parameters are supplied, <code>Date()</code> itself represents the current time.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=secret> Secret</a></h2>
+
+<p>Judo is a great tool to create network client programs. Security is one of the major concerns in any distributed environment. Password is the most commonly used mechanism, but leaving plain text passwords in scripts or configuration files is always a huge hole in security. Judo address this issue by introducing a special data type, <code>Secret</code>. <code>Secret</code> values are created with this constructor:</p>
+
+<font  color=black><pre>
+Secret( encrypted_password [ , decryptor ] ) 
+</pre></font>
+
+<p>The <code><i>decryptor</i></code> is any object that implements the method <code>decrypt()</code>, which takes a string and returns another. It does not matter whether it is implemented in Judo or Java, though most likely it is in Java. The encrypted value must be a text string. How to obtain it is up to your crypto package that your decryptor is part of. If no decryptor is specified, or the decryptor is not found (i.e., evaluated to be <code>null</code>,) by default the password is returned as-is. But would this <code>Secret</code> value really protect the password? Judo is open source; what if some attacker plant a sniffer in the code that gets the returned password from the decryptor?</p>
+
+<p>The idea for this <code>Secret</code> mechanism is to use different decryptor objects in different environments. Take a look at this example:</p>
+ Suppose you have run some utility and encrypted your password to "XI,8aM4/", and the decryptor is a Java class.</p>
+
+<font  color=black><pre>
+decryptor = null;
+{
+  decryptor = new java::com.xxx.util.MyCrypto;
+catch: ; // ignore any exceptions.
+}
+
+// Use a Secret value as password to connect to a database:
+connect to dbUrl, 'dbuser', Secret('abcdef', decryptor);
+
+......
+</pre></font>
+
+<p>This script is run in a test environment and in the production environment. Both environments have their own database schemas, user names and passwords. On the test environment, we do not have the Java class <code>com.xxx.util.MyCrypto</code> in the classpath, so the <code>decryptor</code> ends up being <code>null</code>, which is passed to the <code>Secret</code> constructor; therefore, in the test environment, the password for the <code>connect</code> command is actually <code>abcdef</code>, which is ok. In the production, the Java class <code>com.xxx.util.MyCrypto</code> is deployed in the classpath (that runs Judo), so <code>decryptor</code> will hold an instance of that Java class; the class's <code>decrypt()</code> method will be called and turn <code>abcdef</code> into <code>THIS IS SOMETHING YOU'D NEVER EVER HAVE GUESSED</code>, which is the password for the production database. Because of the only the production deployer has the decryptor Java class, the security is not compromized in the script, which is checked in to the Configuration Management system that every developer has access to. The same script can be easily run as-is in various environments, including production.</p>
+
+<br>
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>

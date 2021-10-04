@@ -1,0 +1,87 @@
+<html><head><title>JudoScript Object - TreeNode</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>TreeNode</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('Object')">Object</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=TreeNode_addChild></a>addChild<br></font></td><td valign=top><font class=param>node</font><br><font class=param> ...</font><br></td><td valign=top>
+  Adds <font class=param>node</font>'s to the end of the child list.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_bfsAllNodes></a>bfsAllNodes<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the nodes in the (sub)tree starting from this node
+  in a breadth-first search.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_dfsAllNodes></a>dfsAllNodes<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the nodes in the (sub)tree starting from this node
+  in a depth-first search.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_find></a>find<br></font></td><td valign=top><font class=param>filterFunction</font><br></td><td valign=top>
+  Returns an array of nodes that are qualified by <font class=param>filterFunction</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_findByKey></a>findByKey<br></font></td><td valign=top><font class=param>key</font><br></td><td valign=top>
+  The <font class=param>key</font> is a text name. Uses the <code>getKey()</code> to find
+  a match and returns the mached node, or <font class=kw>null</font>  if no match is found.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getCascade></a>getCascade<br></font></td><td valign=top><font class=param>attrName</font><br></td><td valign=top>
+  Returns the value for the key named <font class=param>attrName</font>; if such a key does
+  not exist in the current node, it traces all the way to the root until either a
+  value is found or root is reached.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getChildren></a>getChildren<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the immediate children nodes.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getKey></a>getKey<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a "key" for this node, which typically should be unique among all the
+  nodes in the tree. This is used by the <code>findByKey()</code> method.
+  By default, it returns what <code>toString()</code> returns. This method is
+  likely overridden in the derived class.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getLevel></a>getLevel<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the depth of this node in the tree. The level of the root of a tree is 0.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getParent></a>getParent<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the parant node, or <font class=kw>null</font>  if this is the root of the tree.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getPath></a>getPath<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of nodes that is the path from the root of the tree up to
+  this node (self is not included).
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_getTop></a>getTop<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the root of the tree that this node resides in. It can be self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_hasInPath></a>hasInPath<br></font></td><td valign=top><font class=param>node</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if <font class=param>node</font> is in the path from the root of the tree
+  to this node.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_isLeaf></a>isLeaf<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this node has no children.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_isTop></a>isTop<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this is the root of the tree (without a parent).
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_sortChildren></a>sortChildren<br></font></td><td valign=top><font class=param>comparator</font><br></td><td valign=top>
+  Sorts the children, either with the supplied <font class=param>comparator</font> if
+  present or with the default comparator.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_sortChildrenWholeTree></a>sortChildrenWholeTree<br></font></td><td valign=top><font class=param>comparator</font><br></td><td valign=top>
+  Sorts the children for all the nodes in the subtree rooted at this node,
+  either with the supplied <font class=param>comparator</font> if present or with the
+  default comparator.
+</td></tr>
+<tr><td valign=top><font class=sfn></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sets <font class=param>node</font> to be the parent.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=TreeNode_transposeTree></a>transposeTree<br></font></td><td valign=top><font class=param>type</font><br></td><td valign=top>
+  Transposes all the nodes in the subtree rooted at this node into the new
+  <font class=param>type</font>. The <font class=param>type</font> must represent a user-defined
+  class that extends <font class=kw>treeNode</font> .
+</td></tr>
+</table>
+</body></html>

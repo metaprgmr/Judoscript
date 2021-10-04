@@ -1,0 +1,172 @@
+<html><head><title>Chapter 8. Threads and Dynamic Evaluation</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 8. Threads and Dynamic Evaluation</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#rtc">Runtime Context</a></li><li><a href="#thread">Thread Programming</a></li><li><a href="#eval">Execute Dynamic and External Scripts</a></li></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+</table><p class="font-size:16px">Not done yet. For now, please read <a href="../../../articles/fxn_cls_etc.html#thrd">this article</a>.</p>
+
+
+
+<h2>&nbsp;<br><a name=rtc> Runtime Context</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+<p>a</p>
+<p>b</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=thread> Thread Programming</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=eval> Execute Dynamic and External Scripts</a><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub></h2>
+
+<p>You can dynamically create Judo code and run. There are a couple of    either in the current runtime context with <b><code>eval</code></b> command or in a separate context with <b><code>evalExternal</code></b> and <b><code>evalFile</code></b>. <b><code>evalFile</code></b> takes a file name instead of code.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="eval.judo">Listing 8.1</a> eval.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+x = 'aliens';
+eval [[*
+  println 'Hello, you ', x, '!';
+  y = 9;
+*]];
+println 'y was set within eval; now, y = ', y, nl;
+
+evalExternal "println 'Hello, you ', x, '!'; ";
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<font color=black><pre>
+eval 'println "ABCDEFG"';
+</pre></font>
+
+<p>When the dynamic code is evaluated with <b><code>eval</code></b>, the declarations such as functions, classes and constants are taken into the current runtime context. <b><code>evalExternal</code></b> and <b><code>evalFile</code></b> do not.</p>
+
+<font color=black><pre>
+eval [[*
+  const #acon = 'a';
+  function foo() { println 'From foo()'; }
+  class BarCls { constructor { println 'BarCls.ctor()'; } }
+*]];
+
+println '#acon = ', #acon;
+foo();
+new BarCls;
+</pre></font>
+
+<p>
+<b><code>evalExternal</code></b> and <b><code>evalFile</code></b> can take parameters using the
+<b><code>with</code></b> clause:
+
+<font color=black><pre>
+code = [[*
+  if #args.length < 0 {
+    println &lt;err&gt; 'Usage: java judo ', #prog, ' x';
+    exit 0;
+  }
+
+  println 'The argument is: ', #args[0];
+*]];
+evalExternal code;
+evalExternal code with 'abcd';
+</pre></font>
+
+<p>The result is:</p>
+
+<font color=black><pre>
+Usage: java judo &lt;string&gt; x
+The argument is: abcd
+</pre></font>
+
+<p>The following is an example. Last July, Rainbow Inc., a retail company, ramped up its e-commerce presence. This July, Mr. Smart is hired to head the marketing department. He devised a sophisticated pricing scheme to promote certain products. Fortunately, the consultants who designed the system used Judo's dynamic evaluation feature, so Mr. Smart's unforeseeable request is entered into the system without any code rewrite.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="new_princing.judo">Listing 8.2</a> new_pricing.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+ 1: // pre-Mr.Smart pricing -- flat
+ 2: pricing = lambda prod, quantity {
+ 3:              switch prod {
+ 4:              case 'candy': return 1.49 * quantity;
+ 5:              case 'chips': return 2.49 * quantity;
+ 6:              case 'beer':  return 2.99 * quantity;
+ 7:              default:      return 0.99 * quantity;
+ 8:              }
+ 9:            };
+10:
+11: println '10 candies: ', pricing('candy', 10);
+12:
+13: // post-Mr.Smart pricing -- quantity discount
+14: eval [[[*
+15:   pricing = lambda prod, quantity {
+16:                switch prod {
+17:                case 'candy': unitprice = 1.49; break;
+18:                case 'chips': unitprice = 2.49; break;
+19:                case 'beer':  unitprice = 2.99; break;
+20:                default:      unitprice = 0.99; break;
+21:                }
+22:                if quantity &lt;= 5 {
+23:                  return unitprice * quantity;
+24:                } elif quantity &lt;= 10 {
+25:                  return (unitprice * 0.95 * quantity).fractionDigits(2);
+26:                } else {
+27:                  return (unitprice * 0.90 * quantity).fractionDigits(2);
+28:                }
+29:              };
+30: *]];
+31:
+32: println ' 5 candies: ', pricing('candy', 5);
+33: println '10 candies: ', pricing('candy', 10);
+34: println '15 candies: ', pricing('candy', 15);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>What happens is, the software has a admin-tool that allows a human operator to type in the new pricing scheme (lines 15 through 29) and submit to the system, test out and commit the changes.</p>
+
+<br>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

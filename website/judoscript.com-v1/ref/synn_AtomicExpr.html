@@ -1,0 +1,81 @@
+<html><head><title>JudoScript Semantics - AtomicExpr</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>AtomicExpr</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=AtomicExpr>AtomicExpr</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <br>  (  <font class=kw><nobr>::</nobr></font>   )?  <font class=t>IDENTIFIER</font>   |  <font class=t>CONST_NAME</font>   |  <font class=t>FUNCTION_NAME</font>   |  <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font> <font class=kw><nobr>::</nobr></font>  <font class=t>IDENTIFIER</font>  <br>  |  <font class=kw>super</font>  <font class=kw><nobr>.</nobr></font>  <font class=t>IDENTIFIER</font>   |  <font class=kw>this</font>  <br>  |  <font class=kw><nobr>(</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>)</nobr></font>  <br>  |  <font class=kw><nobr>#args</nobr></font>   |  <font class=kw><nobr>#options</nobr></font>   |  <font class=kw><nobr>#cmd_args</nobr></font>   |  <font class=kw><nobr>#prog</nobr></font>  <br>  |  <font class=kw><nobr>$_</nobr></font>   |  <font class=kw><nobr>$__</nobr></font>   |  <font class=kw><nobr>$$</nobr></font>   |  <font class=kw><nobr>$$con</nobr></font>   |  <font class=kw><nobr>$$timer</nobr></font>   |  <font class=kw><nobr>$$args</nobr></font>   |  <font class=kw><nobr>$$fs_result</nobr></font>   |  <font class=kw><nobr>$$local</nobr></font>   |  <font class=kw><nobr>$$bsf</nobr></font>  <br>  |  <font class=kw>column</font>   (  <font class=kw><nobr>(</nobr></font>  <font class=t>STRING_LIT</font>   |  <font class=t>INT_LIT</font>  <font class=kw><nobr>)</nobr></font>   )  <br>  )  <br>  (  <br> <font class=kw><nobr>[> <Expr</nobr></font>   (  <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )*  <font class=kw><nobr>]</nobr></font>  <br>  |  <font class=kw><nobr>.</nobr></font>   (  <font class=t>IDENTIFIER</font>   |  <font class=t>STRING_LIT</font>   |  <font class=kw><nobr>(</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>)</nobr></font>   )  <br>  |  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw><nobr>&gt;</nobr></font>  <br>  |   (  <font class=kw><nobr>-&gt;</nobr></font>   )?  <font class=nt><a href="javascript:showNT('Arguments')">Arguments</a></font>  )  <br>  )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('AtomicExpr'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This represents individual variables, object member access, array access,
+  function calls and combinations of all these.</p>
+
+  <p>The leading <font class=kw><nobr>::</nobr></font>  decorator is to access global scope variables and/or functions.
+  If <font class=kw><nobr>::</nobr></font>  appears in between two names, the name(s) on the left is a Java class name
+  and the one on the right is a static member or method.</p>
+
+  <p>A name followed by <font class=kw><nobr>(</nobr></font>  ... <font class=kw><nobr>)</nobr></font>  is a function/method call. A name followed by
+  <font class=kw><nobr>-&gt;</nobr></font>  <font class=kw><nobr>(</nobr></font>  ... <font class=kw><nobr>)</nobr></font>  is an indirect function/method call, meaning calling the
+  function reference that is held in that entity. If <font class=kw><nobr>(</nobr></font>  <font class=kw><nobr>)</nobr></font>  follows other
+  parentheses or brackets, it is automatically a function reference call.</p>
+
+  <p>An expression enclosed in parentheses <font class=kw><nobr>(</nobr></font>  and <font class=kw><nobr>)</nobr></font>  is an atomic expression. This
+  is the way to invoke methods on literals such as a number or a string. Since the
+  expression can be evaluated into anything, including a function reference, an array
+  or a Java object, function call operators and array access operators can follow.</p>
+
+  <p>The <font class=kw>this</font>  variable is used to reference the current object. It is valid only
+  within class methods.</p>
+
+  <p>The <font class=kw>super</font>  decorator is used only to invoke methods in the parent class. It is
+  valid only within class methods.</p>
+
+  <p>The <font class=kw><nobr>#args</nobr></font> , <font class=kw><nobr>#options</nobr></font> , <font class=kw><nobr>#cmd_args</nobr></font>  and <font class=kw><nobr>#prog</nobr></font>  built-in constants are for
+  command-line options. <font class=kw><nobr>#prog</nobr></font>  holds the program's name, the path name for the script.
+  JudoScript supports command-line parameters, that any parameter starting with '-' or
+  '/' is deemed as an option; it can be a name-value pair, or simply a name whose value
+  is defaulted to <font class=kw>true</font> . These options, if present, are parsed and stored in <font class=kw><nobr>#options</nobr></font> 
+  which is a <font class=kw>Struct</font> . All other parameters are collected into the array <font class=kw><nobr>#args</nobr></font> .
+  The row command-line elements are saved in <font class=kw><nobr>#cmd_args</nobr></font> , so that custom command-line
+  formats can be implemented.</p>
+
+  <p>The <font class=kw><nobr>$_</nobr></font>  built-in variable is used in many occations to represent the "current"
+  state. These include in <font class=kw>catch</font>  clause for the exception object (see <font class=nt><a href="javascript:showNT('Block')">Block</a></font>),
+  in SGML/HTML (see <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font>) and XML (see <font class=nt><a href="javascript:showNT('XmlStatement')">XmlStatement</a></font>)
+  statements for the current tag, in GUI event handlers (see <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font>)
+  for the event object, and in the lines statement (see <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font>) for
+  the current line.</p>
+
+  <p>The <font class=kw><nobr>$__</nobr></font>  built-in variable is used in the XML handler for embedded text tags. It
+  references the parent (enclosing) tag of the current text tag.</p>
+
+  <p>The <font class=kw><nobr>$$</nobr></font>  built-in variable is for the default database handle (see
+  <font class=nt><a href="javascript:showNT('JdbcStatements')">JdbcStatements</a></font>). The <font class=kw><nobr>$$con</nobr></font>  built-in variable is for the default database
+  connection (see <nt=connectstatement>).</p>
+
+  <p>The <font class=kw><nobr>$$timer</nobr></font>  built-in variable is the timer object in the schedule statement (see
+  <font class=nt><a href="javascript:showNT('ScheduleStatement')">ScheduleStatement</a></font>).</p>
+
+  <p>The <font class=kw><nobr>$$args</nobr></font>  array represents the function call parameters that follow the named
+  formal parameters in function calls and thread startups. See <font class=nt><a href="javascript:showNT('FormalParameters')">FormalParameters</a></font>.</p>
+
+  <p>The <font class=kw><nobr>$$fs_result</nobr></font>  built-in variable holds the result for file-system listing commands.
+  </p>
+
+  <p>The <font class=kw><nobr>$$local</nobr></font>  built-in variable is an input text reader for the in-script data that
+  follows the line of <font class=kw>EndScript</font> . See <font class=nt><a href="javascript:showNT('Script')">Script</a></font>.
+
+  <p>The <font class=kw><nobr>$$bsf</nobr></font>  built-in variable is the one and only BSF object, for embedding JudoScript
+  in other Java software via BSF.</p>
+
+  <p>The <font class=kw>column</font>  expression is used only in <font class=nt><a href="javascript:showNT('PrintTableDataStatement')">PrintTableDataStatement</a></font>.</p>
+ </body></html>

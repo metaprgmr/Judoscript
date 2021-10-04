@@ -1,0 +1,73 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_wsdl/builtin_types.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This test program runs against the Apache Axis sample web service,
+    "echo", which has the following operations:
+
+      * echoString              -- here
+      * echoNormalizedString    -- here
+      * echoToken               -- here
+      * echoInteger             -- here
+      * echoFloat               -- here
+      * echoUnsignedLong        -- here
+      * echoUnsignedInt         -- here
+      * echoUnsignedShort       -- here
+      * echoUnsignedByte        -- here
+      * echoNonNegativeInteger  -- here
+      * echoPositiveInteger     -- here
+      * echoNonPositiveInteger  -- here
+      * echoNegativeInteger     -- here
+      * echoBase64              -- here
+      * echoHexBinary           -- here
+      * echoDecimal             -- here
+      * echoBoolean             -- here
+      * echoDate                -- here
+      * echoMap                 -- here
+      * echoVoid                -- here
+
+      * echoStringArray 
+      * echoIntegerArray 
+      * echoFloatArray 
+      * echoStruct
+      * echoStructArray 
+      * echoStructAsSimpleTypes 
+      * echoSimpleTypesAsStruct 
+      * echo2DStringArray 
+      * echoNestedStruct 
+      * echoNestedArray 
+      * echoMapArray 
+  *]];
+  author = 'James Huang';
+  created = '2004-11-20';
+}
+
+//
+// The WSDL:
+//
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+byteArray = new byte[]{ 1, 2, 3 };
+map       = { a=1, b=2, c=3 };
+
+println 'echoString:             ', wsdl.echoString( 'string' );
+println 'echoNormalizedString:   ', wsdl.echoNormalizedString( 'normalized string' );
+println 'echoToken:              ', wsdl.echoToken( 'token a' );
+println 'echoInteger:            ', wsdl.echoInteger( 9 );
+println 'echoFloat:              ', wsdl.echoFloat( 9 );
+println 'echoUnsignedLong:       ', wsdl.echoUnsignedLong( 2 );
+println 'echoUnsignedInt:        ', wsdl.echoUnsignedInt( 2 );
+println 'echoUnsignedShort:      ', wsdl.echoUnsignedShort( 2 );
+println 'echoUnsignedByte:       ', wsdl.echoUnsignedByte( 2 );
+println 'echoNonNegativeInteger: ', wsdl.echoNonNegativeInteger( 2 );
+println 'echoPositiveInteger:    ', wsdl.echoPositiveInteger( 2 );
+println 'echoNonPositiveInteger: ', wsdl.echoNonPositiveInteger( -2 );
+println 'echoNegativeInteger:    ', wsdl.echoNegativeInteger( -2 );
+println 'echoDecimal:            ', wsdl.echoDecimal( 123 );
+println 'echoBoolean:            ', wsdl.echoBoolean( true );
+println 'echoDate:               ', wsdl.echoDate( Date(2004,11,19) ).getTime();
+println 'echoBase64:             ', wsdl.echoBase64( byteArray );
+println 'echoHexBinary:          ', wsdl.echoHexBinary( byteArray );
+println 'echoMap:                ', wsdl.echoMap( map );
+println 'echoVoid().',              wsdl.echoVoid();
+</pre></td></tr></table></body></html>

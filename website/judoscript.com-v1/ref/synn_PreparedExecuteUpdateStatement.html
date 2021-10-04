@@ -1,0 +1,21 @@
+<html><head><title>JudoScript Semantics - PreparedExecuteUpdateStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PreparedExecuteUpdateStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PreparedExecuteUpdateStatement>PreparedExecuteUpdateStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>preparedExecuteUpdate</font>   |  <font class=kw>preparedExecuteUpdateCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?  <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw><nobr>:</nobr></font>  <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> <font class=kw><nobr>;</nobr></font>   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PreparedExecuteUpdateStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This is a convenience statement that combines <font class=nt><a href="javascript:showNT('PrepareStatement')">PrepareStatement</a></font>
+  and <font class=nt><a href="javascript:showNT('ExecuteUpdateStatement')">ExecuteUpdateStatement</a></font>.</p>
+ </body></html>

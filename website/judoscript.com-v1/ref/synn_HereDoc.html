@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - HereDoc</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>HereDoc</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=HereDoc>HereDoc</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw><nobr>[[*</nobr></font>   |  <font class=kw><nobr>[[[*</nobr></font>   )  <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> <font class=kw><nobr>*]]</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('HereDoc'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This is a convenience mechanism for specifying a chunk of text. Expressions can be enclosed
+  in <font class=kw><nobr>(*</nobr></font>  and <font class=kw><nobr>*)</nobr></font> . Any characters can be enclosed except for these rarely-appearing patterns:
+  <font class=kw><nobr>*]]</nobr></font> , <font class=kw><nobr>(*</nobr></font>  and <font class=kw><nobr>*)</nobr></font> , which are used by this here-doc itself.</p>
+
+  <p>See <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font>.</p>
+ </body></html>

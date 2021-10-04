@@ -1,0 +1,100 @@
+<html><head><title>JudoScript Object - DBMetaData</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>DBMetaData</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font>: <code>java.sql.DatabaseMetaData</code></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getBestRowIdentifier></a>getBestRowIdentifier<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> scope</font><br><font class=param> nullable</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the row identifiers matching <font class=param>tablePattern</font>,
+  <font class=param>scope</font> and <font class=param>nullable</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+  The <font class=param>scope</font> can be one of these: "bestRowNotPseudo" (default), "bestRowPseudo",
+  "bestRowSession", "bestRowTemporary" and "bestRowTransaction"; <font class=param>nullable</font> is a
+  boolean, default is <font class=kw>true</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getCatalogs></a>getCatalogs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the catalogs in the database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getColumnPrivileges></a>getColumnPrivileges<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> type</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the column privileges matching <font class=param>tablePattern</font>
+  and <font class=param>type</font>(s).
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getColumns></a>getColumns<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> type</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the columns matching <font class=param>tablePattern</font>
+  and <font class=param>type</font>(s).
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getCrossReference></a>getCrossReference<br></font></td><td valign=top><font class=param>primaryTablePattern</font><br><font class=param> foreignTablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the cross reference for <font class=param>primaryTablePattern</font>
+  and <font class=param>foreignTablePattern</font>.
+  Both are patterns in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getExportddKeys></a>getExportddKeys<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the exported keys matching <font class=param>tablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getImportddKeys></a>getImportddKeys<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the imported keys matching <font class=param>tablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getIndexInfo></a>getIndexInfo<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> unique</font><br><font class=param> approximate</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the index information for <font class=param>tablePattern</font>,
+  <font class=param>unique</font> and <font class=param>foreignTablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+  The <font class=param>unique</font> is boolean, default <font class=kw>false</font> .
+  The <font class=param>approximate</font> is boolean, default <font class=kw>false</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getPrimaryKeys></a>getPrimaryKeys<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the primary keys matching <font class=param>tablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getProcedureColumns></a>getProcedureColumns<br></font></td><td valign=top><font class=param>procPattern</font><br><font class=param> columnPattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the procedure columns matching <font class=param>procPattern</font>
+  and <font class=param>columnPattern</font>.
+  The <font class=param>procPattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getProcedures></a>getProcedures<br></font></td><td valign=top><font class=param>procPattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the procedures matching <font class=param>procPattern</font>.
+  The <font class=param>procPattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getSchemas></a>getSchemas<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the schemas in the database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getTablePrivileges></a>getTablePrivileges<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the table privileges matching <font class=param>tablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getTableTypes></a>getTableTypes<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the table types in the database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getTables></a>getTables<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> columnPattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the tables matching <font class=param>tablePattern</font>
+  and <font class=param>columnPattern</font>(s).
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getTypeInfo></a>getTypeInfo<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the type information in the database.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getUDTs></a>getUDTs<br></font></td><td valign=top><font class=param>tablePattern</font><br><font class=param> type</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the user-defined types matching <font class=param>tablePattern</font>
+  and <font class=param>type</font>(s). The <font class=param>type</font>(s) can be "java_object", "struct" or "distinct".
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_getVersionColumns></a>getVersionColumns<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns a <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> for the version columns matching <font class=param>tablePattern</font>.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBMetaData_tableExists></a>tableExists<br></font></td><td valign=top><font class=param>tablePattern</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if table <font class=param>tablePattern</font> exists.
+  The <font class=param>tablePattern</font> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</td></tr>
+</table>
+</body></html>

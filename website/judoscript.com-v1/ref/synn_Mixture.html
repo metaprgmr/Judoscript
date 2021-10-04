@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - Mixture</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Mixture</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Mixture>Mixture</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=t>PLAIN_TEXT</font>   |  <font class=kw><nobr>(*</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>*)</nobr></font>   )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Mixture'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This is a chunk of text that may include newlines and virtually anything except for <font class=kw><nobr>*]]</nobr></font> ,
+  <font class=kw><nobr>(*</nobr></font>  and <font class=kw><nobr>*)</nobr></font> , which are used in here-doc. In addition to here-docs, this is also used by
+  SQL statements in JDBC scripting and send-mail statement.</p>
+
+  <p>See <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>, <font class=nt><a href="javascript:showNT('JdbcStatements')">JdbcStatements</a></font> and <font class=nt><a href="javascript:showNT('MailStatement')">MailStatement</a></font>).</p>
+ </body></html>

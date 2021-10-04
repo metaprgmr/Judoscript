@@ -1,0 +1,36 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_sgml/body.htmx:</b></td></tr><tr><td><pre>
+do $$local as html
+{
+&lt;doc>:  print [[*
+          &lt;html>&lt;head>&lt;title>(* $_.title *)&lt;/title>&lt;/html>&lt;body>
+          &lt;center>&lt;table width=650>&lt;tr>&lt;td> &lt;h1>(* $_.title *)&lt;/h1>
+        *]];
+&lt;/doc>: println '&lt;hr>&lt;/td>&lt;/tr>&lt;/table> &lt;/center>&lt;/body>&lt;/html>';
+&lt;quote>:  print '&lt;blockquote>&lt;font size=-1>';
+&lt;/quote>: print '&lt;/font>&lt;/blockquote>';
+
+:TEXT,&lt;>,&lt;?>,&lt;!>: print $_;
+}
+
+EndScript ------------------------------------------------
+
+&lt;doc title="Body Systems">
+&lt;p>
+The body can be thought of as a number of systems:
+&lt;ul>
+&lt;li> skeleon
+&lt;li> musculature
+&lt;li> cardiovascular system
+&lt;li> digestive system
+&lt;li> excretory system
+&lt;li> immune system
+&lt;li> respiratory system
+&lt;li> reproductive system
+&lt;/ul>
+&lt;quote>
+"The digestive system breaks down food and turns
+it into the right chemicals for the body to use."
+&lt;/quote>
+&lt;/doc>
+</pre></td></tr></table></body></html>

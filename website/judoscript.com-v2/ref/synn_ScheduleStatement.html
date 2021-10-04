@@ -1,0 +1,29 @@
+<html><head><title>JudoScript Semantics - ScheduleStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ScheduleStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ScheduleStatement>ScheduleStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>schedule</font>   (  <font class=kw>absolute</font>   )?   (   (  <font class=kw>starting</font>   |  <font class=kw>after</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>repeat</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br> <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font> <br>  (  <font class=kw>listen</font>  <font class=kw>on</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>title</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ScheduleStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement schedules one-time or repetitive (with the <font class=kw>repeat</font>  keyword) actions;
+  the actions can be anything. The action can be scheduled to start at a specific moment via
+  the <font class=kw>starting</font>  clause, or wait for a period by the <font class=kw>after</font>  clause. The <font class=kw>absolute</font> 
+  decorater signifies that the time need be absolute or not; see javadoc for the
+  <code>java.util.Timer</code> class.</p>
+
+  <p>For repetitive scheduled actions, this statement supports a built-in HTTP interface
+  to interact with the job if the whole <font class=kw>listen</font>  <font class=kw>on</font>  <em>port</em> section is present.
+  The scheduled job, including user input via the browser, is represented by the built-in
+  singleton variable <font class=kw><nobr>$$timer</nobr></font> . See <font class=obj><a href="javascript:showObj('SchedulerTimer')">SchedulerTimer</a></font> for details on how to program.</p>
+ </body></html>

@@ -1,0 +1,1219 @@
+<html><head><title>Chapter 15. File System and Archives</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 15. File System and Archives</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#fs">Working in the File System</a></li><br>&#187;&nbsp;<a href="#cd">The Current Directory and Change Directory</a><br>&#187;&nbsp;<a href="#mkrmdir">Make and Remove Directory</a><br>&#187;&nbsp;<a href="#mv">Rename and Move Files</a><li><a href="#listFiles">List and Process Files</a></li><br>&#187;&nbsp;<a href="#selection">File Selection</a><br>&#187;&nbsp;<a href="#list">Obtain Selected Files in a List or a Tree</a><br>&#187;&nbsp;<a href="#count">Count Files and Directories</a><br>&#187;&nbsp;<a href="#stats">Get Statistics about Files</a><br>&#187;&nbsp;<a href="#retvals">Summary of listFiles Return Values</a><br>&#187;&nbsp;<a href="#rm_time_ro">Remove and Set Attributes on Selected Files</a><br>&#187;&nbsp;<a href="#exec">Run Shell Commands on Selected Files</a><br>&#187;&nbsp;<a href="#do">Arbitrarily Process Selected Files</a><br>&#187;&nbsp;<a href="#listarch">List Files and Get Information in Archives</a><br>&#187;&nbsp;<a href="#listzip">Process Files in Zip Archives</a><li><a href="#copy">Copy and Archive Files</a></li><br>&#187;&nbsp;<a href="#copysingle">Copy a Single File to a Different Name</a><br>&#187;&nbsp;<a href="#copylocal">Copy Files to a Different Location</a><br>&#187;&nbsp;<a href="#copyarch">Copy Files into Archives</a><br>&#187;&nbsp;<a href="#multiarch">Save Multiple File Sets into a Single Archive</a><br>&#187;&nbsp;<a href="#copyurl">Copy Public Internet Resources</a><li><a href="#fileutil">Other File Utilities</a></li><br>&#187;&nbsp;<a href="#encrypt">Encrypting and Decrypting Files and Data</a><br>&#187;&nbsp;<a href="#chopfile">Chopping and Assembling Files</a></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+<!-- SYNOPSIS PART --><tr><td valign=top>
+ <table border=0 cellpadding=5><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+
+Judo has powerful commands to process files and archives. You can change the current working directory anywhere in the file system, make or remove directories, and move or rename files and directories. The <b><code>listFiles</code></b> command can selectively list files in a directory or an archive file. For the selected files, it can return them in an array or a tree, or find their statistics such as <b><code>count</code></b>, <b><code>size</code></b>, <b><code>compressedSize</code></b>, <b><code>lines</code></b> and <b><code>words</code></b>. Or, actions can be performed upon each file selected, including <b><code>remove</code></b>, <b><code>setReadOnly</code></b>, <b><code>setFileTime</code></b>, any OS shell commands via the <b><code>exec</code></b> clause or custom code. Another powerful command is <b><code>copy</code></b>, which uses the same file selection options as in <b><code>listFiles</code></b> and copy files to another file system location or zip, jar and tar archives. It has intimate support for zip and jar file creation, including <b><code>compress</code></b> or <b><code>store</code></b> and the <b><code>manifest</code></b> text. Beyond these file system and archive operations, Judo also provides some useful file utilities such as file encrypting and decrypting, and chopping and re-assembling.
+ </td></tr></table>
+</td></tr><!-- SYNOPSIS PART -->
+</table>
+
+
+
+<h2>&nbsp;<br><a name=fs> Working in the File System</a></h2>
+
+
+<a name=cd><h3> The Current Directory and Change Directory</h3></a>
+
+<p>Judo maintains its own current directory in the local file system. This currenct directory is used as the default location for the subsequent file operations as well as the <b><code>exec</code></b> command (see <i><a href="exec.html">16. Run Executables</a></i>) that runs native executables. It starts with the directory of the JVM process, and can be changed via the <b><code>cd</code></b> command:</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>ChangeDirectory</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>cd</code></b> [ <i>Expr</i> ( <b><code>,</code></b> <i>Expr</i> )* ]</td></tr>
+</table></a>
+
+<p>If no parameters are specified, the <b><code>cd</code></b> command changes to the home directory of the user. In the path expression, it can start with <code>~</code> to represent the home directory. The path can be absolute or relative to the current directory in Judo. The file separator can use slashes always, although on Windows you can use back slashes. By the way, the current directory within Judo can be obtained with the system function <code>curDir()</code>.</p>
+
+<font color=black><pre>
+C:\>type pwd.judo
+cd;          println curDir();
+cd '~/..';   println curDir();
+cd 'jhuang'; println curDir();
+
+C:\>java judo -q pwd.judo
+C:/Documents and Settings/jhuang
+C:/Documents and Settings
+C:/Documents and Settings/jhuang
+</pre></font>
+
+<p>The <b><code>cd</code></b> command can take multiple paths; the end result is the last path. This can be useful to dynamically move to a specific directory depending on different situations.</p>
+
+<br>
+
+
+<a name=mkrmdir><h3> Make and Remove Directory</h3></a>
+
+<p>In Judo, you make a new directory with the <b><code>mkdir</code></b> command and remove one with the <b><code>rmdir</code></b> command:</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>MakeDirectory</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>mkdir</code></b> <i>Expr</i></td></tr>
+</table></a>
+
+<p>If you are making a directory like <code>'x/y/z/'</code> and directory <code>'x'</code> does not exist, Judo creates the intermediate directories. If the target directory already exists, <b><code>mkdir</code></b> silently quits.</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>RemoveDirectory</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>rmdir</code></b> <i>Expr</i> [ <b><code>force</code></b> ]</td></tr>
+</table></a>
+
+<p>When removing a directory, normally the directory must be empty. To force a removal of a directory, use the <b><code>force</code></b> option.</p>
+
+<br>
+
+
+<a name=mv><h3> Rename and Move Files</h3></a>
+
+<p>Renaming and moving files are both achieved by the <b><code>move</code></b> command. Its syntax is:</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>MoveCommand</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>move</code></b> <i>Expr</i> <b><code>,</code></b> <i>Expr</i></td></tr>
+</table></a>
+
+<p>The first parameter is the source file or directory, the second is the target, which can be either a non-existing path name or an existing directory. If the target is a directory, the source file or directory is moved into that directory. If the target exists and is not a directory, an error occurs. Again, let's experiment on the command line:</p>
+
+<font color=black><pre>
+C:\z>dir
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\z
+
+09/04/2004  07:05a      &lt;DIR>          .
+09/04/2004  07:05a      &lt;DIR>          ..
+09/04/2004  07:04a                   5 alfa
+09/04/2004  07:05a      &lt;DIR>          ddd
+               1 File(s)              5 bytes
+               3 Dir(s)  38,403,932,160 bytes free
+
+C:\z>java judo -x "move 'alfa', 'beta'"
+
+C:\z>java judo -x "move 'beta', 'ddd'"
+
+C:\z>java judo -x "move 'ddd/beta', 'gamma'"
+
+C:\z>dir
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\z
+
+09/04/2004  07:06a      &lt;DIR>          .
+09/04/2004  07:06a      &lt;DIR>          ..
+09/04/2004  07:04a                   5 gamma
+09/04/2004  07:05a      &lt;DIR>          ddd
+               1 File(s)              5 bytes
+               3 Dir(s)  38,403,796,992 bytes free
+</pre></font>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=listFiles> List and Process Files</a></h2>
+
+<p>The <b><code>listFiles</code></b> command is used to find and process files or directories. Its syntax is:</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>ListCommand</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>listFiles</code></b> [ <b><code>&lt;</code></b> <i>Expr</i> <b><code>&gt;</code></b> ] | <b><code>ls</code></b> ) [ <i>FileSelection</i> ] ( <i>ListOption</i> )* [ <i>StatsOption</i> | <i>Action</i> ]</td></tr>
+<tr><td valign=top><i>FileSelection</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i> ( <b><code>except</code></b> <i>Expr</i> | <b><code>in</code></b> <i>Expr</i> )*</td></tr>
+<tr><td valign=top><i>ListOption</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>ordered</code></b> [ <b><code>by</code></b> ( <b><code>date</code></b> | <b><code>size</code></b> | <b><code>extension</code></b> ) ] | <b><code>limit</code></b> <i>Expr</i> | <b><code>as</code></b> <b><code>tree</code></b> | <b><code>recursive</code></b> | <b><code>noHidden</code></b> | <b><code>fileOnly</code></b> | <b><code>showDir</code></b> | <b><code>dirOnly</code></b></td></tr>
+<tr><td valign=top><i>StatsOption</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>count</code></b> | ( <b><code>size</code></b> | <b><code>compressedSize</code></b> | <b><code>lines</code></b> | <b><code>words</code></b> | <b><code>perFile</code></b> )+</td></tr>
+<tr><td valign=top><i>Action</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>remove</code></b> | <b><code>setFileTime</code></b> [ <i>Expr</i> ] | <b><code>setReadOnly</code></b> | <b><code>addToClasspath</code></b> | <b><code>exec</code></b> <i>Expr</i> | <i>Block</i></td></tr>
+</table></a>
+
+<p>In plain English, <b><code>listFiles</code></b> uses a <i>FileSelection</i> along with zero or more list options to find the files and directories (or folders) in a file system directory or from an archive file, and can do the following three things:</p>
+
+<ul>
+<li>return the found files in an array or a tree,</li>
+<li>return some statistics, such as <b><code>count</code></b>, <b><code>size</code></b>, <b><code>lines</code></b> or <b><code>words</code></b>; or</li>
+<li>perform a number of operations on the found files or directories including:
+<ol>
+<li>predefined operations such as <b><code>remove</code></b>, <b><code>setFileTime</code></b> and <b><code>setReadOnly</code></b>,</li>
+<li>execute shell command with the <b><code>exec</code></b> clause, or
+<li>run custom processing in a <i>Block</i> of code.</li>
+</ol>
+</ul>
+
+<p>The <b><code>ls</code></b> command works like <b><code>listFiles</code></b> but just prints out the files and returns nothing. It emulates the Unix shell command <code>ls</code> or Windows <code>dir</code> command. For <b><code>ls</code></b>, no actions are allowed.</p>
+
+<p>This command is rich and have many options. Some options and/or actions are valid and compatible with each other. The Judo parser enforces these rules and will issue error messages if incompatible options are specified. Let's see how this command can be used to achieve various purposes on files, starting with the <i>FileSelection</i>.</p>
+
+<p>By default, <b><code>fileOnly</code></b> is on, meaning that only file names are returned or displayed. To show directory names along with file names, use the <b><code>showDir</code></b> option. To see directory names only, use <b><code>dirOnly</code></b>.</p>
+
+
+<a name=selection><h3> File Selection</h3></a>
+
+<p>The <i>FileSelection</i> includes an <i>inclusive</i> list, an <i>exclusive</i> list and a <i>base</i>, all of which are optional. The following is a couple of examples:</p>
+
+<font color=black><pre>
+C:\>type ls.judo
+ls '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp';
+
+C:\>java judo -q ls.judo
+C:/temp/mytest.judo
+C:/temp/Test.java
+</pre></font>
+
+<p>The <b><code>ls</code></b> command here lists and prints the files in a file system direcotry. The following example lists and prints files in a jar archive:</p>
+
+<font color=black><pre>
+C:\devenv\envroot\projects\judoscript-0.9\testcases\2.ess_fs_archive>type ls_jar.judo
+ls 'src/*.java' except '*/save/*, */alfa*' in 'c:/src.jar';
+
+C:\>java judo -q ls_jar.judo
+src/judo.java
+src/juspProc.java
+src/rjudo.java
+src/rjudo_server.java
+src/vjudo.java
+</pre></font>
+
+<p>The inclusive and exclusive (<b><code>except</code></b>) lists are expressions evaluated as strings, and the string value is a comma-separated list of path name patterns that may contain wildcard characters like <code>*</code> (for 0 or more characters) and <code>?</code> (for a single character). Because the path names are all absolute during list operation, it is wise to use <code>*</code> as prefix to path patterns. If the inclusive list is not present, it is assumed <code>'*'</code> except for the <b><code>remove</code></b> operation. If the base directory or archive file is not specified, the list operation starts at the current directory.</p>
+
+<p>There is one tricky situation with the inclusive list. Since the inclusive list can be any expression, it can also be a variable name. If a variable name happens to be a <b><code>listFiles</code></b> option name, confusion arises:</p>
+
+<font color=black><pre>
+fileOnly = '*.java, *.judo';
+listFiles fileOnly; // !#@~*$
+</pre></font>
+
+<p>The rule is, <b><code>listFiles</code></b> option names take precedence over variable names. So variable <code>fileOnly</code> can never be used <b><code>listFiles</code></b> and <b><code>ls</code></b> commands; you have to use a different variable name.</p>
+
+<p>The <b><code>listFiles</code></b> and <b><code>ls</code></b> commands can also take options like <b><code>recursive</code></b>, <b><code>noHidden</code></b>, <b><code>fileOnly</code></b> and <b><code>dirOnly</code></b>; they direct the command and affects the file selection in a different way. Their meanings should be self-evident.</p>
+
+<p>So far we have seen the simple way of listing files, that is, print out via the <b><code>ls</code></b> command. In contrast, <b><code>listFiles</code></b> either returns the result to the script for programmatic processing or it does in-line processing with the specified actions. We will cover all the usages in the following sections.</p>
+
+<br>
+
+
+<a name=list><h3> Obtain Selected Files in a List or a Tree</h3></a>
+
+<p>In the simplest case, <b><code>listFiles</code></b> returns the found file path names in an <code><i>Array</i></code> and store it in the predefined local variable <code>$_</code>. The following example use <b><code>listFiles</code></b> to get a list of file names and then print them out, behaving just like <b><code>ls</code></b>:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ls_clone.judo">Listing 15.1</a> ls_clone.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp';
+
+for x in $_ {
+  println x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Again, be careful with <code>$_</code> since a number of statements in Judo uses it and can be overwritten without notice. It is safer to assign it to a dedicated variable immediately following the <b><code>listFiles</code></b> command.</p>
+
+<p>When <b><code>recursive</code></b> option is specified, <b><code>listFiles</code></b> and <b><code>ls</code></b> commands recurse into sub-directories for all files and/or directories that match the file selection criteria. The returned files can be sorted by path name, file time or size via the <b><code>ordered by</code></b> clause.</p>
+
+<p>Sometimes, you just need to find a few files. In this case, specify the <b><code>limit</code></b> clause to improve performance. The following code snippet assumes a <code>junit.jar</code> lies somewhere in the vicinity of the script, finds it and adds it to the classpath:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="prepare_unittest.judo">Listing 15.2</a> prepare_unittest.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+cd #script.getFilePath(), '..'; // move up one directory
+listFiles '*/junit.jar' recursive limit 1;
+if $_.length &lt;= 0 {
+  println &lt;err> "junit.jar is not found. Can't proceed with testing.";
+  return;
+}
+
+#classpath.add( $_[0] );
+
+// now, do some unit testing
+// ....
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Speaking of classpath, <b><code>listFiles</code></b> provides another action, <b><code>addToClasspath</code></b>, that makes this even easier:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="addtoclasspath.judo">Listing 15.3</a> addtoclasspath.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+cd #script.getFilePath(), '../lib/'; // move to the lib/ directory
+listFiles '*.jar, *.zip' addToClasspath;
+
+println #classpath; // verify
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Most of the time, <b><code>listFiles</code></b> return path names as an <code><i>Array</i></code> in the <code>$_</code> local variable. You can also merge the result into an existing array like this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="add_libjars_2cp.judo">Listing 15.4</a> add_libjars_2cp.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+/*
+ * To add all the jar/zip files in ${deploy}/lib and ${thirdparty}/lib
+ * into the (user) classpath.
+ */
+arr = [];
+listFiles &lt;arr> '*.jar, *.zip' in '${deploy}/lib';
+listFiles &lt;arr> '*.jar, *.zip' in '${thirdparty}/lib';
+
+#classpath.add(arr);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>By the way, you can do <b><code>addToClasspath</code></b> on the second <b><code>listFiles</code></b> command to add all the found files to the classpath.</p>
+
+<p>Sometimes it is convenient to process the content of a directory as a tree rather than a list (or array). This can be easily done with the <b><code>as tree</code></b> option:</p>
+
+<font color=black><pre>
+C:\>type get_tree.judo
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp'
+  recursive as tree;
+
+println $_;
+
+for x in $_.getChildren() {
+  println x;
+}
+
+C:\>java judo -q get_tree.judo
+{isDir=true,path=C:/temp}
+{isDir=true,path=C:/temp/Adobe}
+{isDir=true,path=C:/temp/Cookies}
+{isDir=true,path=C:/temp/History}
+{isDir=true,path=C:/temp/Temporary Internet Files}
+{isDir=true,path=C:/temp/VBE}
+{path=C:/temp/Test.java}
+{path=C:/temp/mytest.judo}
+</pre></font>
+
+<p>The returned value is a <code><i>TreeNode</i></code> object for the root directory, which may have one or more children nodes holding information about the files and directories. Each node has a <code>path</code> attribute and an <code>isDir</code> boolean attribute. Needless to say, only directory nodes have children nodes. Refer to <i><a href="datastr.html#tree">Tree Node</a></i> for how to work with trees. For instance, you can use <code><i>TreeNode</i></code>'s traversal methods like <code>bfsAllNodes()</code> or <code>dfsAllNodes()</code> to display all the nodes:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="get_dir_tree.judo">Listing 15.5</a> get_dir_tree.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp'
+  dirOnly recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The <b><code>listFiles</code></b> command can not only find files but also calculate some statistics about the files, that is, <b><code>size</code></b>, <b><code>lines</code></b>, <b><code>words</code></b> and <b><code>count</code></b>; for files within archives, you can get <b><code>compressedSize</code></b>, too. The return value for these commends are all different based on the options. The <b><code>count</code></b> is an individual option, where <b><code>size</code></b>, <b><code>compressedSize</code></b>, <b><code>lines</code></b> and <b><code>words</code></b> can be used together.</p>
+
+<br>
+
+
+<a name=count><h3> Count Files and Directories</h3></a>
+
+<p>The <b><code>count</code></b> option returns counts of the selected files and directories. It returns an array of three elements: count of files, count of directories or folders, and the total count. The last element is redundant: it is always the sum of the other two. The following example demonstrates its use by directly running some code on command-line:</p>
+
+<font color=black><pre>
+C:\src>java judo -x "listFiles '*.java' count; println $_"
+[5,0,5]
+
+C:\src>java judo -x "listFiles '*.java' recursive count; println $_"
+[289,29,318]
+
+C:\src>java judo -x "listFiles '*.java' recursive fileOnly count; println $_"
+[289,0,289]
+</pre></font>
+
+<br>
+
+
+<a name=stats><h3> Get Statistics about Files</h3></a>
+
+<p>You can get file statistics with the <b><code>size</code></b>, <b><code>compressedSize</code></b>, <b><code>lines</code></b> and <b><code>words</code></b> options. These options can be used together as well. When used individually, the return value is a number; if multiple options are used together, an array of numbers are returned.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="dirstats.judo">Listing 15.6</a> dirstats.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*' in 'C:/src/com/judoscript' dirOnly;
+for x in $_ {
+  // get status for each directory
+  listFiles '*.java, *.jj' in x recursive size lines words;
+  println $_[0]:>8, '  ', $_[1]:>6, '  ', $_[2]:>6, '  ', x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The result is something like this:</p>
+
+<font color=black><pre>
+   35889     993    4286  C:/src/com/judoscript/xml
+  524476   15003   63402  C:/src/com/judoscript/util
+   20219     455    2321  C:/src/com/judoscript/user
+   40954    1273    4451  C:/src/com/judoscript/studio
+  215570    6361   20776  C:/src/com/judoscript/parser
+   12537     391    1398  C:/src/com/judoscript/jusp
+    7181     195     883  C:/src/com/judoscript/jdk14
+   29410     654    2911  C:/src/com/judoscript/gui
+   32918     877    3775  C:/src/com/judoscript/ext
+   70331    1886    7652  C:/src/com/judoscript/db
+  297949    8179   33558  C:/src/com/judoscript/bio
+       0       0       0  C:/src/com/judoscript/ant
+</pre></font>
+
+<p>And we just found an empty directory that can be removed.</p>
+
+<p>You can also get the statistics per file. The return value is a <code><i>SortedMap</i></code> which are path names mapped a number or an array of numbers, depending on how many options are specified. The following example shows both cases:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="filestats.judo">Listing 15.7</a> filestats.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*.java' fileOnly lines perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats:>8, '  ', f;
+}
+
+listFiles '*.java' fileOnly size lines words perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats[0]:>8, '  ', stats[1]:>6, '  ', stats[2]:>6, '  ', f;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<font color=black><pre>
+    ....  .......
+      35  C:\src\com\judoscript\ValueBase.java
+     369  C:\src\com\judoscript\ValueSpecial.java
+      45  C:\src\com\judoscript\Variable.java
+    1460  C:\src\com\judoscript\VariableAdapter.java
+     273  C:\src\com\judoscript\VersionInfo.java
+      83  C:\src\com\judoscript\_Thread.java
+   16991  TOTAL
+   .....    ....    ....  .......
+    1409      35     190  C:\src\com\judoscript\ValueBase.java
+   15734     369    1860  C:\src\com\judoscript\ValueSpecial.java
+    1759      45     226  C:\src\com\judoscript\Variable.java
+   63038    1460    6331  C:\src\com\judoscript\VariableAdapter.java
+   14173     273    1762  C:\src\com\judoscript\VersionInfo.java
+    2665      83     317  C:\src\com\judoscript\_Thread.java
+  628614   16991   73332  TOTAL
+</pre></font>
+
+<p>For Unix users, features likes <b><code>size</code></b>, <b><code>lines</code></b> and <b><code>words</code></b> may remind you of the <code>wc</code> utility.</p>
+
+<br>
+
+
+<a name=retvals><h3> Summary of listFiles Return Values</h3></a>
+
+<p>Since <b><code>listFiles</code></b> command can be used for so many purposes, let us summarize its return values.</p>
+
+<table border=1><caption align=left><b>Table 15.1 Return Values for listFiles</b></caption>
+<tr><th>Sample Command</th><th>Return Value</th></tr>
+<tr><td valign=top><code>listFiles</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of paths.</td></tr>
+<tr><td valign=top><code>listFiles as tree</code></td><td valign=top><code>$_</code> is a <code><i>TreeNode</i></code> with these attributes: <code>path</code> and <code>isDir</code>.</td></tr>
+<tr><td valign=top><code>listFiles count</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of three elements: <code>$_[0]</code> is the count of files, <code>$_[1]</code> is the count of directories or folders, and <code>$_[2]</code> is the sum of the other two.</td></tr>
+<tr><td valign=top><code>listFiles size</code></td><td valign=top><code>$_</code> is a number as the cumulative size of all files. The option can also be <b><code>compressedSize</code></b>, <b><code>lines</code></b> or <b><code>words</code></b>.</td></tr>
+<tr><td valign=top><code>listFiles size perFile</code></td><td valign=top><code>$_</code> is a <code><i>SortedMap</i></code>, where each path is mapped to a number as the size of that file.</td></tr>
+<tr><td valign=top><code>listFiles size lines words</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of three numbers for the size, number of lines and number of words.</td></tr>
+<tr><td valign=top><code>listFiles lines size</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of three numbers for the number of lines and size.</td></tr>
+<tr><td valign=top><code>listFiles lines size perFile</code></td><td valign=top><code>$_</code> is a <code><i>SortedMap</i></code>, where each path is mapped to an <code><i>Array</i></code> of three numbers for the number of lines and size.</td></tr>
+<tr><td valign=top><code>listFiles exec '..'</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of all the path names processed. See <i><a href="fs.html#exec">Run Shell Commands on Selected Files</a></i>.</td></tr>
+<tr><td valign=top><code>listFiles { ... }</code></td><td valign=top><code>$_</code> is an <code><i>Array</i></code> of all the path names processed. See <i><a href="fs.html#do">Arbitrarily Process Selected Files</a></i>.</td></tr>
+</table>
+
+<br>
+
+
+<a name=rm_time_ro><h3> Remove and Set Attributes on Selected Files</h3></a>
+
+<p>The <b><code>listFiles</code></b> command natively supports three operations on selected files via the keywords <b><code>remove</code></b>, <b><code>setFileTime</code></b> and <b><code>setReadOnly</code></b>. The command returns the path names of all the files and directories affected.</p>
+
+<p>The <b><code>remove</code></b> command can remove files and empty directories in the file system. The following example removes all the files left over by the <code>vi</code> editor:</p>
+
+<font color=black><pre>
+C:\src>java judo -x "listFiles '*~' recursive remove; println $_"
+</pre></font>
+
+<p>To remove a directory that is not empty, you would have to use the <b><code>rmdir</code></b> mentioned below.</p>
+
+<p>The <b><code>setFileTime</code></b> command can optionally take a <code><i>Date</i></code> value. If the time value is not specified, the current time is used, and this command becomes much like the Unix <code>touch</code> utility.</p>
+
+<p>The <b><code>setReadOnly</code></b> command is used to set the read-only flag on a file or directory in the file system. The Java platform does not support setting files to be read-write, so this <b><code>setReadOnly</code></b> command does not have a counterpart to set files and directories to be read-write.</p>
+
+<p>Of course, you can use the operationg system's commands or utilities to do these operations via the <b><code>exec</code></b> command explained next.</p>
+
+<br>
+
+
+<a name=exec><h3> Run Shell Commands on Selected Files</h3></a>
+
+<p>For the selected files in the <b><code>listFiles</code></b> command, you can apply any operating system shell commands or utilities on them via the <b><code>exec</code></b> clause. The following is an example that does the same as <b><code>setReadOnly</code></b>:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="list_exec.judo">Listing 15.8</a> list_exec.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles exec isWindows() ? 'attrib +r $_' : 'chmod 666 $_';
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The <b><code>exec</code></b> clause takes an operating system command-line, which uses <code>$_</code> to represent the current file being processed. In this example, we use the <code>attrib</code> utility on the Windows platform or the <code>chmod</code> command on Unix to set the read-only attribute for files and directories. You can easily modify this to make files writable as well.</p>
+
+<p>Sometimes it is more efficient to run native executables directly if possible. This is because the <b><code>listFiles</code></b> command runs the command line for a single file or path, where the native executable can take wildcard characters in the parameter to handle a set of files, for instance:</p>
+
+<font color=black><pre>
+% chmod 666 *.java
+</pre></font>
+
+<p>The processed file names are also returned in an array as <code>$_</code>.</p>
+
+<p>The <code>exec</code> command is really a shortcut. For example, <code>listFile exec 'chmod 666 $_';</code> is a shortcut for:</p>
+
+<font color=black><pre>
+listFile;
+for x in $_ { exec 'chmod 666 ${x}'; }
+</pre></font>
+
+<p>This is also true for arbitrary file processing that is discussed next.</p>
+
+<br>
+
+
+<a name=do><h3> Arbitrarily Process Selected Files</h3></a>
+
+<p>In addition to the <b><code>exec</code></b> clause to run operating system commands on the selected files, you can specify a block of code to process the selected file. Again, the file name being processed in stored in <code>$_</code>. The following example counts the total blank and non-blank lines in all the files:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="count_blank.judo">Listing 15.9</a> count_blank.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+cnt1 = 0;
+cnt2 = 0;
+
+listFiles '*.java, *.jj' in 'c:/src' recursive
+{
+  do $_ as lines {
+    // now, $_ has become the line just read!
+    if ($_.isEmpty())
+      ++cnt1;
+    else
+      ++cnt2;
+  }
+}
+
+println '    Blank lines: ', cnt1:>7;
+println 'Non-Blank lines: ', cnt2:>7;
+println '    Total Files: ', $_.length:>7;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The result is:</p>
+
+<font color=black><pre>
+    Blank lines:    5983
+Non-Blank lines:   47562
+    Total Files:     282
+</pre></font>
+
+<p>This command also returns all the path names in an array. So in this example, the meaning of all three occurrances of <code>$_</code> are all different. The first <code>$_</code> within <code>do $_ as lines</code> is a string representing the path name being processed; the second <code>$_</code> in <code>if ($_.isEmpty())</code> is the line just read from the file; and the last <code>$_</code> in <code>println '    Total Files: ', $_.length:>7</code> is an array of all the path names just processed.</p>
+
+<p>Next is a more elaborate example. We will go through the source code tree and update the copyright note for all the source files owned by the project. The modified source files will be generated in another directory and left there.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="upd_copyright.judo">Listing 15.10</a> upd_copyright.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+src = 'C:/src/';
+src_len = src.length();
+target = 'C:/temp/new_src/';
+mkdir target;
+
+listFiles '*.java, *.jj' in src fileOnly recursive
+{
+  // Construct the path for the new file:
+  var path = $_.getFilePath();
+  var file = $_.getFileName();
+  var newPath = target + path.substring(src_len);
+  mkdir newPath; // make sure the dir is there; ok if exists.
+
+  var newfile = openTextFile(newPath + file, 'w');
+
+  // Process the lines in the source file:
+  var updated = false;
+  do $_ as lines {
+    // now, $_ holds the line just read.
+    if !updated && $_.startsWith(' * Copyright (C) 2001-') {
+      println &lt;newfile> ' * Copyright (C) 2001-', #year,
+                        ' James Huang http://www.judoscript.com';
+      updated = true;
+    } else {
+      println &lt;newfile> $_;
+    }
+  }
+  // Done.
+  newfile.close();
+  println 'Updated ', path.substring(src_len), file;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>This concludes our discussion of the <b><code>listFiles</code></b> command. The <b><code>listFiles</code></b> command does much more than what the name suggests. It is indeed a file processor, allowing you to obtain a set of files and directories, and process them individually (via the <b><code>exec</code></b> and a code block) or collective (such as getting the result in a tree via the <b><code>as</code></b> <b><code>tree</code></b> option). It can also return a number of statistics. This single command includes functionalities of a number of popular shell utilities, such as <code>ls</code>, <code>wc</code> and <code>touch</code> on Unix.</p>
+
+<p>Beyond individual file processing, Judo has some other commands to do copying and moving. These are covered in the rest of this chapter.</p>
+
+<br>
+
+
+<a name=listarch><h3> List Files and Get Information in Archives</h3></a>
+
+<p>As we have mentioned eariler, the <b><code>listFiles</code></b> and <b><code>ls</code></b> commands can be applied to contents within zip, jar and tar (gzipped or not) archives. Obviously files and folders contained in archives are all read-only, so commands like <b><code>remove</code></b>, <b><code>setFileTime</code></b> and <b><code>setReadOnly</code></b> don't apply, and shell command with <b><code>exec</code></b> generally doesn't make sense. Information gathering is valid, and you can do read-only processing on files in zip or jar achives. You can't do anything in a tar archive due to its sequential nature.</p>
+
+<p>Let's take a look at some examples involving zip and tar archives, starting with a zip archive like this:</p>
+
+<font color=black><pre>
+C:\>jar tvf awebapp.zip
+   276 Tue Jun 15 13:33:32 PDT 2004 index.jsp
+   347 Mon Aug 30 13:32:30 PDT 2004 login.jsp
+     0 Mon Aug 30 13:28:26 PDT 2004 META-INF/
+    55 Tue Jun 15 13:33:32 PDT 2004 META-INF/MANIFEST.MF
+     0 Mon Aug 30 13:34:16 PDT 2004 WEB-INF/
+     0 Mon Aug 30 13:41:06 PDT 2004 WEB-INF/classes/
+     0 Mon Aug 30 13:38:44 PDT 2004 WEB-INF/classes/foo/
+     0 Mon Aug 30 13:39:06 PDT 2004 WEB-INF/classes/foo/bar/
+  1604 Mon Aug 30 13:39:06 PDT 2004 WEB-INF/classes/foo/bar/LoginDAO.class
+     0 Mon Aug 30 13:36:22 PDT 2004 WEB-INF/lib/
+118726 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/lib/commons-beanutils.jar
+ 31605 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/lib/commons-logging.jar
+498051 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/lib/struts.jar
+     0 Mon Aug 30 13:28:24 PDT 2004 WEB-INF/src/
+  3672 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/src/build.xml
+     0 Mon Aug 30 13:40:54 PDT 2004 WEB-INF/src/java/
+     0 Mon Aug 30 13:37:46 PDT 2004 WEB-INF/src/java/foo/
+     0 Mon Aug 30 13:38:28 PDT 2004 WEB-INF/src/java/foo/bar/
+  1026 Mon Aug 30 13:38:28 PDT 2004 WEB-INF/src/java/foo/bar/LoginDAO.java
+  1923 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/src/README.txt
+  8868 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/struts-bean.tld
+ 66192 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/struts-html.tld
+ 14511 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/struts-logic.tld
+  1942 Tue Jun 15 13:33:32 PDT 2004 WEB-INF/web.xml
+
+C:\>java judo -q "ls '*' in 'awebapp.zip' recursive"
+WEB-INF/
+WEB-INF/web.xml
+WEB-INF/struts-logic.tld
+WEB-INF/struts-html.tld
+WEB-INF/struts-bean.tld
+WEB-INF/src/
+WEB-INF/src/README.txt
+WEB-INF/src/java/
+WEB-INF/src/java/foo/
+WEB-INF/src/java/foo/bar/
+WEB-INF/src/java/foo/bar/LoginDAO.java
+WEB-INF/src/build.xml
+WEB-INF/lib/
+WEB-INF/lib/struts.jar
+WEB-INF/lib/commons-logging.jar
+WEB-INF/lib/commons-beanutils.jar
+WEB-INF/classes/
+WEB-INF/classes/foo/
+WEB-INF/classes/foo/bar/
+WEB-INF/classes/foo/bar/LoginDAO.class
+META-INF/
+META-INF/MANIFEST.MF
+login.jsp
+index.jsp
+
+C:\>java judo -q "ls '*' in 'awebapp.zip' fileOnly recursive"
+WEB-INF/web.xml
+WEB-INF/struts-logic.tld
+WEB-INF/struts-html.tld
+WEB-INF/struts-bean.tld
+WEB-INF/src/README.txt
+WEB-INF/src/java/foo/bar/LoginDAO.java
+WEB-INF/src/build.xml
+WEB-INF/lib/struts.jar
+WEB-INF/lib/commons-logging.jar
+WEB-INF/lib/commons-beanutils.jar
+WEB-INF/classes/foo/bar/LoginDAO.class
+META-INF/MANIFEST.MF
+login.jsp
+index.jsp
+</pre></font>
+
+<p>The following program gets the overall sizes of the top level folders:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="dirstats_zip.judo">Listing 15.11</a> dirstats_zip.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*' in 'awebapp.zip' dirOnly;
+for x in $_ {
+  // get status for each directory
+  listFiles '*.java, *.jj' in x recursive size compressedSize;
+  println $_[0]:>8, '  ', $_[1]:>8, '  ', x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<font color=black><pre>
+C:\>java judo -q dirstats_zip.judo
+  748120    590201  WEB-INF/
+      55        56  META-INF/
+</pre></font>
+
+<p>The same operations can be done on tar archives:</p>
+
+<font color=black><pre>
+C:\>tar tvfz awebapp.tar.gz
+drwxr-xr-x jhuang/None       0 2004-08-30 13:28:26 META-INF/
+-rw-r--r-- jhuang/None      55 2004-06-15 13:33:33 META-INF/MANIFEST.MF
+drwxr-xr-x jhuang/None       0 2004-08-30 13:34:17 WEB-INF/
+drwxr-xr-x jhuang/None       0 2004-08-30 13:41:08 WEB-INF/classes/
+drwxr-xr-x jhuang/None       0 2004-08-30 13:38:46 WEB-INF/classes/foo/
+drwxr-xr-x jhuang/None       0 2004-08-30 13:39:08 WEB-INF/classes/foo/bar/
+-rw-r--r-- jhuang/None    1604 2004-08-30 13:39:08 WEB-INF/classes/foo/bar/LoginDAO.class
+drwxr-xr-x jhuang/None       0 2004-08-30 13:36:23 WEB-INF/lib/
+-rw-r--r-- jhuang/None  118726 2004-06-15 13:33:33 WEB-INF/lib/commons-beanutils.jar
+-rw-r--r-- jhuang/None   31605 2004-06-15 13:33:33 WEB-INF/lib/commons-logging.jar
+-rw-r--r-- jhuang/None  498051 2004-06-15 13:33:33 WEB-INF/lib/struts.jar
+drwxr-xr-x jhuang/None       0 2004-08-30 13:28:26 WEB-INF/src/
+-rw-r--r-- jhuang/None    3672 2004-06-15 13:33:33 WEB-INF/src/build.xml
+drwxr-xr-x jhuang/None       0 2004-08-30 13:40:54 WEB-INF/src/java/
+drwxr-xr-x jhuang/None       0 2004-08-30 13:37:48 WEB-INF/src/java/foo/
+drwxr-xr-x jhuang/None       0 2004-08-30 13:38:28 WEB-INF/src/java/foo/bar/
+-rw-r--r-- jhuang/None    1026 2004-08-30 13:38:28 WEB-INF/src/java/foo/bar/LoginDAO.java
+-rw-r--r-- jhuang/None    1923 2004-06-15 13:33:33 WEB-INF/src/README.txt
+-rw-r--r-- jhuang/None    8868 2004-06-15 13:33:33 WEB-INF/struts-bean.tld
+-rw-r--r-- jhuang/None   66192 2004-06-15 13:33:33 WEB-INF/struts-html.tld
+-rw-r--r-- jhuang/None   14511 2004-06-15 13:33:33 WEB-INF/struts-logic.tld
+-rw-r--r-- jhuang/None    1942 2004-06-15 13:33:33 WEB-INF/web.xml
+-rw-r--r-- jhuang/None     276 2004-06-15 13:33:33 index.jsp
+-rw-r--r-- jhuang/None     347 2004-08-30 13:32:31 login.jsp
+
+C:\>java judo -q "ls '*' in 'awebapp.tar.gz' recursive"
+login.jsp
+index.jsp
+WEB-INF/
+WEB-INF/web.xml
+WEB-INF/struts-logic.tld
+WEB-INF/struts-html.tld
+WEB-INF/struts-bean.tld
+WEB-INF/src/
+WEB-INF/src/README.txt
+WEB-INF/src/java/
+WEB-INF/src/java/foo/
+WEB-INF/src/java/foo/bar/
+WEB-INF/src/java/foo/bar/LoginDAO.java
+WEB-INF/src/build.xml
+WEB-INF/lib/
+WEB-INF/lib/struts.jar
+WEB-INF/lib/commons-logging.jar
+WEB-INF/lib/commons-beanutils.jar
+WEB-INF/classes/
+WEB-INF/classes/foo/
+WEB-INF/classes/foo/bar/
+WEB-INF/classes/foo/bar/LoginDAO.class
+META-INF/
+META-INF/MANIFEST.MF
+
+C:\>java judo -q "ls '*' in 'awebapp.tar.gz' fileOnly recursive"
+login.jsp
+index.jsp
+WEB-INF/web.xml
+WEB-INF/struts-logic.tld
+WEB-INF/struts-html.tld
+WEB-INF/struts-bean.tld
+WEB-INF/src/README.txt
+WEB-INF/src/java/foo/bar/LoginDAO.java
+WEB-INF/src/build.xml
+WEB-INF/lib/struts.jar
+WEB-INF/lib/commons-logging.jar
+WEB-INF/lib/commons-beanutils.jar
+WEB-INF/classes/foo/bar/LoginDAO.class
+META-INF/MANIFEST.MF
+</pre></font>
+
+<p>Files and folders within zip and tar archives all start at the root with no name. This fact becomes obvious when you get the file names in a tree:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="get_tree_zip.judo">Listing 15.12</a> get_tree_zip.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+listFiles '*' in 'awebapp.zip' fileOnly recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<font color=black><pre>
+C:\>java judo -q get_tree_zip.judo
+{isDir=true,path=}
+{path=login.jsp}
+{path=index.jsp}
+{path=WEB-INF/web.xml}
+{path=WEB-INF/struts-logic.tld}
+{path=WEB-INF/struts-html.tld}
+{path=WEB-INF/struts-bean.tld}
+{path=WEB-INF/src/java/foo/bar/LoginDAO.java}
+{path=WEB-INF/src/build.xml}
+{path=WEB-INF/src/README.txt}
+{path=WEB-INF/lib/struts.jar}
+{path=WEB-INF/lib/commons-logging.jar}
+{path=WEB-INF/lib/commons-beanutils.jar}
+{path=WEB-INF/classes/foo/bar/LoginDAO.class}
+{path=META-INF/MANIFEST.MF}
+</pre></font>
+
+<p>The first node, which is the root, has an empty path name.</p>
+
+<br>
+
+
+<a name=listzip><h3> Process Files in Zip Archives</h3></a>
+
+<p>Let's port the <code>count_blank.judo</code> program to make it work with files residing in a zip archive.</p>
+
+<font color=black><pre>
+listFiles '*.java, *.jj' in 'C:/src.jar' recursive
+{
+  do $_ in 'C:/src.jar' as lines {
+    ......
+  }
+}
+</pre></font>
+
+<p>For brevity we omitted unchanged parts. There are two significant changes: one is in <code>listFiles ... in 'C:/src.jar'</code>, and the second is in <code>do $_ in 'C:/src.jar' as lines</code>. This should work and give the right result.</p>
+
+<p>But there is one performance concern. The <code>do $_ in 'C:/src.jar' as lines</code> will open and close the zip archive for every single source file contained in the zip archive. Since the zip archive is already opened by the <b><code>listFiles</code></b> command itself, why not use that open zip archive for this purpose? The remedy is, Judo has provided a built-in parameter, <code>$$archive</code>, that holds the open zip archive and is available only in the processing block. Hence the revised version:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="count_blank_zip.judo">Listing 15.13</a> count_blank_zip.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+cnt1 = 0;
+cnt2 = 0;
+
+listFiles 'src/com/judoscript/*.java, src/com/judoscript/*.jj'
+          in 'C:/src.jar' recursive
+{
+  do $_ in $$archive as lines {
+    // now, $_ has become the line just read!
+    if ($_.isEmpty())
+      ++cnt1;
+    else
+      ++cnt2;
+  }
+}
+
+println '    Blank lines: ', cnt1:>7;
+println 'Non-Blank lines: ', cnt2:>7;
+println '    Total Files: ', $_.length:>7;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>As discussed in <i><a href="io.html">14. Print, File I/O and In-Script Data</a></i>, you can open the files within a zip archive such as <code>$$archive.openTextFile($_)</code> to do more sophisticated read-only operations.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=copy> Copy and Archive Files</a></h2>
+
+
+<p>The Judo <b><code>copy</code></b> command operates between directories and archives such as zip, jar, tar and gzipped tar files. It has good support for jar files including jar file manifest. The command's synta is:</p>
+
+<a name=""><table border=0>
+<tr><td valign=top><i>CopyCommand</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>copy</code></b> ( <i>FileSelection</i> | <i>URL</i> ) ( <b><code>to</code></b> | <b><code>into</code></b> ) <i>Expr</i> ( <i>CopyOption</i> | <i>ArchiveOption</code></b> )+</td></tr>
+<tr><td valign=top><i>CopyOption</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>force</code></b> | <b><code>echo</code></b> | <b><code>Echo</code></b> | <b><code>keepDirs</code></b> | <b><code>dupOk</code></b></td></tr>
+<tr><td valign=top><i>ArchiveOption</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>compress</code></b> | <b><code>store</code></b> | ( <b><code>under</code></b> | <b><code>strip</code></b> | <b><code>manifest</code></b> ) <i>Expr</i></td></tr>
+<tr><td valign=top><i>URL</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+</table></a>
+
+<p>The file selection is exactly the same as that of the <b><code>listFiles</code></b> command, that is, files can be selected from a directory or an archive. The <b><code>to</code></b> and <b><code>into</code></b> clause specifies the target; the <b><code>to</code></b> clause is for a destination directory or a file (where the source must be a single file); the <b><code>into</code></b> clause specifies a new archive, whose type is determined by the file extension such as <code>.zip</code>, <code>.jar</code>, <code>.war</code>, <code>.tar</code> and <code>.tar.gz</code>. Next, let's see copying files in the local file system first.</p>
+
+
+<a name=copysingle><h3> Copy a Single File to a Different Name</h3></a>
+
+<p>In a <b><code>copy</code></b> command, when</p>
+<ol>
+<li>the target in the <b><code>to</code></b> clause does not exist, or</li>
+<li>the target exists and is not a directory,</li>
+</ol>
+
+<p>then it is assumed that a single source file will be copied to this name. If the target path name is not absolute, it is relative to the current directory. If there are more than one source file or the source is a directory, an exception is raised. Let's again run some Judo code from the command line and see what happens:</p>
+
+<font color=black><pre>
+C:\x>java judo -x "copy 'alfa' to 'beta'"
+
+C:\x>md y
+
+C:\x>java judo -x "copy 'alfa' to 'y'"
+
+C:\x>java judo -x "copy 'alfa' to 'y/gamma'"
+
+C:\x>dir
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\x
+
+09/02/2004  01:46p      &lt;DIR>          .
+09/02/2004  01:46p      &lt;DIR>          ..
+08/30/2004  06:15a                   5 alfa
+08/30/2004  06:15a                   5 beta
+               2 File(s)             10 bytes
+               2 Dir(s)  38,433,390,592 bytes free
+
+C:\x>dir y
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\x\y
+
+09/02/2004  01:49p      &lt;DIR>          .
+09/02/2004  01:49p      &lt;DIR>          ..
+08/30/2004  06:15a                   5 alfa
+08/30/2004  06:15a                   5 gamma
+               2 File(s)             10 bytes
+               2 Dir(s)  38,433,390,592 bytes free
+
+</pre></font>
+
+<p>When copying files from a base, the relative paths can be retained via the <b><code>keepDirs</code></b> option.</p>
+
+<font color=black><pre>
+C:\>md z
+
+C:\>java judo -x "copy 'y/gamma' to 'z'"
+
+C:\x>dir z
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\x\z
+
+09/02/2004  01:58p      &lt;DIR>          .
+09/02/2004  01:58p      &lt;DIR>          ..
+08/30/2004  06:15a                  5 gamma
+09/02/2004  01:57p      &lt;DIR>          y
+               1 File(s)              5 bytes
+               3 Dir(s)  38,432,976,896 bytes free
+
+C:\>java judo -x "copy 'y/gamma' to 'z' keepDirs"
+
+C:\x>dir z\y
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\x\z\y
+
+09/02/2004  01:57p      &lt;DIR>          .
+09/02/2004  01:57p      &lt;DIR>          ..
+08/30/2004  06:15a                   5 gamma
+               1 File(s)              5 bytes
+               2 Dir(s)  38,432,976,896 bytes free
+</pre></font>
+
+<p>Copying a single file is simple, but the power of <b><code>copy</code></b> command is to deal with a set of files.</p>
+
+<br>
+
+
+<a name=copylocal><h3> Copy Files to a Different Location</h3></a>
+
+<p>Suppose you want to copy a tree of files and directories to a different directory, use the <b><code>recursive</code></b> option; the <b><code>keepDirs</code></b> option is implicitly turned on:</p>
+
+<font color=black><pre>
+C:\>md y
+
+C:\>java judo -x "copy '*' in 'C:/x' to 'C:/y' recursive"
+</pre></font>
+
+<p>When copying file(s) from one location to another in the file system, by default the <b><code>copy</code></b> command compares the file's time and size; if both time and size are the same between the source and target file, it <i>passes</i> the file without physically copying it. The <b><code>force</code></b> option disables this optimization. The <b><code>echo</code></b> option displays the source files being actually copied, and the <b><code>Echo</code></b> option displayes both copied and passed files.</p>
+
+
+<a name=copyarch><h3> Copy Files into Archives</h3></a>
+
+<p>The same <b><code>copy</code></b> is also a versatile archiving command. In the simplest form, it is almost identical to copying files in the file systems except for using <b><code>into</code></b> clause rather than <b><code>to</code></b>.</p>
+
+<font color=black><pre>
+copy '*' in 'C:/x' into 'C:/test.zip' recursive;
+</pre></font>
+
+<p>The archive can be a zip, jar, tar or gzipped tar file, whose type is determined by the archive file extension. These extension are recognized: <code>zip</code>, <code>jar</code>, <code>war</code>, <code>ear</code>, <code>rar</code>, <code>tar</code>, <code>taz</code> and <code>tar.gz</code>; these extensions can be in mixed case as well. What if a file with an unknown extension is intended to be used as a, say, tar file? You can create the archive file via the <code>createZip()</code>, <code>createJar()</code> and <code>createTar()</code> system functions, and use that open archive object as the destiny:</p>
+
+<font color=black><pre>
+zip = createZip('iamdoc.doc');
+copy '*' recursive into zip;
+zip.close();
+
+tar = createTar('ship.tarball');
+copy '*' recursive into tar;
+tar.close();
+</pre></font>
+
+<p>The open archive object is important for archiving multiple sources, as discussed in <i><a href="fs.html#multiarch">Save Multiple File Sets into a Single Archive</a></i>.</p>
+
+<p>The <b><code>copy</code></b> command has these archiving options: <b><code>compress</code></b>, <b><code>store</code></b>, <b><code>manifest</code></b>, <b><code>under</code></b> and <b><code>strip</code></b>. The first three options are zip-/jar-specific.</p>
+
+<p>The <b><code>under</code></b> option allows you to copy a tree of files under a specific prefix within the archive. Conversely, when copying files out of an archive, you can use <b><code>strip</code></b> to strip that prefix. Suppose we have a directory like this:</p>
+
+<font color=black><pre>
+C:\src\com\judoscript\
+C:\src\com\judoscript\util\
+C:\src\com\judoscript\parser\
+C:\src_native\
+</pre></font>
+
+<p>and we want to archive files in <code>C:\src\</code> into a zip (or tar) file under <code>src/</code> like this:</p>
+
+<font color=black><pre>
+src_java/com/judoscript
+src_java/com/judoscript/util/
+src_java/com/judoscript/parser/
+</pre></font>
+
+<p>This is the way to do this:</p>
+
+<font color=black><pre>
+copy '*' in 'C:/src/' recursive into 'src.zip' under 'src_java';
+</pre></font>
+
+<p>Later, when copying them out of <code>src.zip</code>, we use this:</p>
+
+<font color=black><pre>
+copy '*' in 'src.zip' recursive to 'C:/x' strip 'src_java/';
+</pre></font>
+
+<p>For zip or jar files, by default files are compressed. If you want to just store the files without compiling, such as creating Java executable jar files, use the <b><code>store</code></b> option. The <b><code>compress</code></b> option is also available but is almost always redundant. For jar files, you can also specify a manifest text along the way. The following is an example to create a Java executable jar:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="make_xjar.judo">Listing 15.14</a> make_xjar.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+copy '*.java, *.properties' in 'C:/temp/classes/' recursive
+     into 'judo.jar' store manifest
+[[*
+  Manifest-Version: 1.0
+  Main-Class: judo
+  Created-By: James Jianbo Huang (c) 2001-(* #year *)
+*]]
+;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<br>
+
+
+<a name=multiarch><h3> Save Multiple File Sets into a Single Archive</h3></a>
+
+<p>The <b><code>copy</code></b> target in the <b><code>into</code></b> clause can be an open archive object, returned by the <code>createZip()</code>, <code>createZip()</code> and <code>createTar()</code> system functions. Hence, you can easily copy multiple sets of files into a single archive. The <b><code>under</code></b> clause is also handy for organizing files stored within the archives. For instance, I have a source file directory, a documentation directory and an example directory. Everyday I make a backup file with this structure:</p>
+
+<font color=black><pre>
+src/
+docs/
+examples/
+</pre></font>
+
+<p>This is easily done with Judo:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="backup.judo">Listing 15.15</a> backup.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+zf = createZip('~/archives/work-'+Date().fmtDate('yyyyMMdd')+'.zip');
+
+copy '*' in 'c:/src/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'src/';
+
+copy '*' in 'c:/docs/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'docs/';
+
+copy '*' in 'c:/examples/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'examples/';
+
+zf.close();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In the first line, a new zip file is created based on the date. Then, three sets of files are copied under different folder names before finally the zip archive is closed (and saved). Don't forget to close it!</p>
+
+<p>When copying multiple sets of files into a single archive, it is possible to have duplicate files. If this is allowed, specify the <b><code>dupOk</code></b> option; otherwise it will fail.</p>
+
+<br>
+
+
+<a name=copyurl><h3> Copy Public Internet Resources</h3></a>
+
+<p>So far, we have seen how the <b><code>copy</code></b> command can copy files between file systems and archives. In fact, it can copy public internet resources as well. All you have to do is to specify a URL as the source, mostly likely a HTTP or FTP URL. The source is never more than one. You can still save it to a location in the file system or into an archive.</p>
+
+<p>To copy the resource to a file, like copying a single file from the file system, you can specify a directory or a file path name:</p>
+
+<font color=black><pre>
+C:\>cd z
+
+C:\z>java judo -x "copy 'http://www.yahoo.com/index.html'"
+
+C:\z>java judo -x "copy 'http://www.yahoo.com/index.html' to 'i.html';
+
+C:\z>java judo -x "copy 'http://www.yahoo.com'";
+
+C:\z>java judo -x "copy 'http://www.yahoo.com/'";
+
+C:\z>dir
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\z
+
+09/03/2004  10:22p      &lt;DIR>          .
+09/03/2004  10:22p      &lt;DIR>          ..
+09/03/2004  10:21p              36,682 default.htm
+09/03/2004  10:22p              36,676 i.html
+09/03/2004  10:22p              36,676 index.html
+               3 File(s)        110,034 bytes
+</pre></font>
+
+<p>If file name is not specified in the URL, Judo provides a default file name, <code>"default.htm"</code>. If the file name exists, such as <code>index.html</code> in the example, then it is used. Sometimes, the file name part of the URL is not really a file name, for instance, <code>http://finance.yahoo.com/q/cq?s=%5edji+%5eixic+beas+goog</code>, but Judo will simply use <code>cq</code> as the target file name. Therefore, if you are copying a resource with a dynamic URL in nature, it's better to provide a target file name.</p>
+
+<p>For static internet resources, you can retain the path of the remote resource in the local file system or archives via the <code>keepDirs</code> option:</p>
+
+<font color=black><pre>
+C:\z>java judo -x "copy 'http://dir.yahoo.com/Computers_and_Internet/index.html' keepDirs"
+
+C:\z>dir Computers_and_internet
+ Volume in drive C is Local Disk
+ Volume Serial Number is 8097-678E
+
+ Directory of C:\z\Computers_and_internet
+
+09/03/2004  10:30p      &lt;DIR>          .
+09/03/2004  10:30p      &lt;DIR>          ..
+09/03/2004  10:30p              22,589 index.html
+               1 File(s)         22,589 bytes
+</pre></font>
+
+<p>This feature, coupled with <i><a href="sgml.html">25. SGML and JSP Scraping</a></i>, can be used to efficiently construct a web crawler.</p>
+
+<p>Network resources can also be copied into archives. The following example emulating copying the Yahoo! directory of <i>Computers and Internet</i> into a zip and a tar files.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="download_yahoo_dir.judo">Listing 15.16</a> download_yahoo_dir.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+tar = createTar('yahoo_comp.tar.gz');
+zip = createZip('yahoo_comp.zip');
+
+urls = [
+  'http://dir.yahoo.com/Computers_and_Internet/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Software/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Macintosh/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Internet/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Internet/WAIS/index.html'
+];
+
+for u in urls {
+  copy u into tar keepDirs;
+  copy u into zip keepDirs;
+}
+
+tar.close();
+zip.close();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>After execution, the zip archive has these files:</p>
+
+<font color=black><pre>
+     0 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/
+ 22721 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/index.html
+     0 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Software/
+ 23306 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Software/index.html
+     0 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Macintosh/
+ 25034 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Macintosh/index.html
+     0 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Internet/
+ 20739 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Internet/index.html
+     0 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Internet/WAIS/
+  8981 Fri Sep 03 22:35:06 PDT 2004 Computers_and_Internet/Internet/WAIS/index.html
+</pre></font>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=fileutil> Other File Utilities</a></h2>
+
+
+<a name=encrypt><h3> Encrypting and Decrypting Files and Data</h3></a>
+
+<p>Judo provides built-in encryption for files and data, based on the <code>javax.crypto</code> package included in JDK1.4 and up. In Judo, encryption and decryption are password-based; they are provided via these system functions:</p>
+
+<pre>function <b>encryptFile</b></pre>
+<pre>function <b>decryptFile</b></pre>
+<pre>function <b>encrypt</b></pre>
+<pre>function <b>decrypt</b></pre>
+<pre>function <b>setCryptoClassName</b></pre>
+
+<p>The encrypt and decrypt functions can take byte arrays, strings or <code>java.io.InputStream</code> as input, and produced the encrypted or decrypted result in a byte array.</p>
+
+<p>The default implementation uses MD5 and DES encryption implemented in class <code>com.judoscript.util.PBEWithMD5AndDES</code>. If you have highly confidential information to safeguard, you can provide your own crypto class via the system function <code>setCryptoClassName()</code>; the crypto class must extend <code>com.judoscript.util.PBEBase</code> and implement its <code>encrypt()</code> and <code>decrypt()</code> methods.</p>
+
+<br>
+
+
+<a name=chopfile><h3> Chopping and Assembling Files</h3></a>
+
+<p>For big files are hard to transfer or save on different media. Downloading a 550MB file, for instance, may pose great problems for less-than-fast connections. Sometimes you may want to back up a 1GB file onto a 650MB CD-ROM. Judo provides a file chopping and assembling utility just for this purpose.</p>
+
+<p></p>
+
+<br>
+
+<br>
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

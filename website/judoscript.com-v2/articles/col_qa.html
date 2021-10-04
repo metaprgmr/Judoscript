@@ -1,0 +1,654 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Java Software Unit Testing</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="junit, jtest, jcover, java test, java testing, unit test, unit testing, scripting language, JudoScript" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Java Software Unit Testing</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Java Software Unit Testing" author="James Jianbo Huang" created="February 2002" keywords="junit, jtest, jcover, java test, java testing, unit test, unit testing, scripting language, JudoScript" widetoc="true">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#junit">Java Unit Testing with JUnit</a>
+<li> <a href="#problems">Problems with Writing Test Cases in Java</a>
+<li> <a href="#judo">Java Unit Testing with JudoScript</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Java Software Unit Testing</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;February 2002 &nbsp; &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="col_qa_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+Unit testing is critical to the quality of object-oriented software,
+because it solidifies the foundation -- the objects. This article
+explains the uses of a unit testing package for Java called
+<em>JUnit</em>, discusses the pros and cons of packages like such, and
+introduces how to do unit testing with <em>JudoScript</em> and explain why it is the
+way to go.
+<hr>
+<p>&nbsp;</p>
+
+
+<p><oeu>nit testing ensures the quality of independent logical units of the
+software. In the case of Java, such logical units are classes and
+sometimes the collaboration of a number of classes. Automated unit
+testing is essential to regression tests. </p>
+
+<p>In this article, I will explain a Java unit testing package called
+<em>JUnit</em>, what it is and what it does. I will discuss issues
+regarding its approach, draw some clear-cut conclusions, and present
+unit testing in <em>JudoScript</em> to show that this is the way to go. </p>
+
+
+
+<h2><a name=junit>1. Java Unit Testing with JUnit</a></h2><p>
+
+<p>JUnit is a Java development package for writing Java code to test
+other Java software. In essence, it formalizes test cases and test
+suites in the form of Java classes, and provides a few assertion and
+reporting facilities, so that Java classes for test cases are developed
+consistently.</p>
+
+<p>Since it is a testing tool, it can potentially be used by three
+types of engineers:</p>
+
+<ol>
+<li> Experienced Java developers
+<li> Java-savvy QA engineers
+<li> QA engineers with no Java programming experience
+</ol>
+
+<p>For experienced Java programmers, it probably takes less than an
+hour to start writing useful testing code with JUnit, because JUnit is
+just another Java package, and programmers use various Java packages
+day-in-day-out. If you do JUnit programming already, simply skip to
+the next section.</p>
+
+<p>If you never program in Java, you are not up to using JUnit. Period.
+You can go to section 3 to learn how to use <em>JudoScript</em> for unit testing;
+otherwise, you will have to learn Java first.</p>
+
+<p>This section is for Java-savvy QA engineers. First off, it is a good
+idea to print out the following image, the class diagram of JUnit's key
+package, <code>junit.framework</code>.</p>
+
+<a href="junit_framework.gif"><img src="junit_framework.gif" border="0" width="560" height="362"></a>
+
+<p>A class diagram depicts the relationships among classes. For instance,
+in the middle of this diagram lies the most important classes,
+<code>junit.framework.TestCase</code> and <code>junit.framework.TestSuite</code>
+and interface <code>junit.framework.Test</code>; both these classes
+<em>implements</em> interface <code>Test</code>; <code>TestCase</code>
+also <em>extends</em> class <code>Assert</code> (so that it can directly
+use all the methods in <code>Assert</code>). Since <code>TestSuite</code>
+only cares about <code>Test</code> instances, you can include other test
+suites in a (main) test suite.</p>
+
+<p>To write a test case, you write a Java class that extends <code>TestCase</code>,
+in a couple of ways. Let me use a real test case to demonstrate. I need
+to test the following class, which contains a static method that runs a
+secure copy command to tranfer files between local and a remote machine
+running the SSH server:</p>
+
+<blockquote><font class=secondary3><pre>
+public class SSHFactory
+{
+  public static void scp(String host,
+                         String user,
+                         String password,
+                         String ciper,
+                         String[] src,
+                         String dest,
+                         boolean recursive,
+                         boolean toremote) throws Exception
+  {
+    ... ... ...
+  }
+}
+</pre></font></blockquote>
+
+<p>The following is a run of a test case:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="scp_test1">Listing 1</a>. SCP Test Case 1</th>
+          </thead><tr><td class=code><pre>
+import junit.framework.*;
+import com.judoscript.ext.SSHFactory;
+
+public class MyTestCase1 extends TestCase
+{
+  protected void runTest() {
+    try {
+      SSHFactory.scp("ssh.judoscript.com", // host
+                     "myuser",             // user name
+                     "itspassword",        // password
+                     null,
+                     new String[]{ "temp/file1.txt", "temp/file2.bin" },
+                     "temp/", // destination on the remote machine
+                     false,   // not recursive
+                     true);   // to remote machine
+    } catch(Exception e) {
+      fail(e.getMessage());
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      MyTestCase1 tcase = new MyTestCase1();
+      TestResult tres = tcase.run();
+      System.out.println("# of failures: " + tres.failureCount());
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+} // end of class MyTestCase1.
+
+</pre></td></tr></table></p><p>
+
+<p>For the test case, all you have to do is override the <code>runTest()</code>
+method for your testing code. Method <code>runTest()</code> is invoked by the
+JUnit framework to conduct the testing. This test copies two files under "temp/"
+in the current directory to the remote server. If it does not throw exceptions,
+it is considered successful. This criterion is rather loose, because even if
+it did not throw exception, we still don't know whether the files are copied
+correctly or not. One way to remedy this is to issue another <code>scp()</code>
+that copies these files back from the remote machine; if the identical files
+are retrieved, then we are confident that the file copies were indeed good.
+As I mentioned earlier, there are two ways to write test cases, so let us use
+the second approach.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="scp_test2">Listing 2</a>. SCP Test Case 2</th>
+          </thead><tr><td class=code><pre>
+import junit.framework.*;
+import com.judoscript.ext.SSHFactory;
+import java.io.*;
+
+public class MyTestCase2 extends TestCase
+{
+  public MyTestCase2(String method) { super(method); }
+
+  public void testSCP_NonRecursive() {
+    try {
+      // copy to remote machine
+      SSHFactory.scp("ssh.judoscript.com", // host
+                     "myuser",             // user name
+                     "itspassword",        // password
+                     null,
+                     new String[]{ "temp/file1.txt", "temp/file2.bin" },
+                     "temp/", // dest on the remote machine
+                     false,   // not recursive
+                     true);   // to remote machine
+
+      // copy from remote machine
+      SSHFactory.scp("ssh.judoscript.com", // host
+                     "myuser",             // user name
+                     "itspassword",        // password
+                     null,
+                     new String[] { "temp/back/" }, // local dest
+                     "temp/file1.txt", // source on the remote machine
+                     false,   // not recursive
+                     false);  // from remote machine
+      SSHFactory.scp("ssh.judoscript.com", // host
+                     "myuser",             // user name
+                     "itspassword",        // password
+                     null,
+                     new String[] { "temp/back/" }, // local dest
+                     "temp/file2.bin", // source on the remote machine
+                     false,   // not recursive
+                     false);  // from remote machine
+
+      // compare the files -- just compare their sizes
+      long f1_len  = new File("temp/file1.txt").length();
+      long f1b_len = new File("temp/back/file1.txt").length();
+      long f2_len  = new File("temp/file2.bin").length();
+      long f2b_len = new File("temp/back/file2.bin").length();
+      if ((f1_len != f1b_len) || (f2_len != f2b_len))
+        fail("SCP file copy failed.");
+
+    } catch(Exception e) {
+      fail(e.getMessage());
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      MyTestCase2 tcase = new MyTestCase2("testSCP_NonRecursive");
+      TestResult tres = tcase.run();
+      System.out.println("# of failures: " + tres.failureCount());
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+} // end of class MyTestCase2.
+</pre></td></tr></table></p><p>
+
+<p>In this case, we implemented a method called "testSCP_NonRecursive";
+then, in <code>main()</code>, we passed this name to the constructor when
+creating a test case object <code>tcase</code>. This method has to be public.
+Why we need this approach?</p>
+
+<p>In real world testing, many test cases require certain settings. For
+instance, if the remote host is not running SSH when we run the test case,
+it will fail but that is not a bug; it is a user error. Or the test is run
+on a different PC that does not contain "temp/file1.txt" -- another user
+error. In JUnit, you can set up and clean up these "test fixture" by
+overriding methods <code>setUp()</code> and <code>tearDown()</code>, which
+are called before and after the test by JUnit framework. Many times, these
+two methods actually take a lot more code than the test cases themselves.
+For example, in order to make the test case self-contained, we should prepare
+the files to be copied in <code>setUp()</code>, and remove them in
+<code>tearDown()</code>. In order to reuse setUp() and tearDown(), JUnit
+adopts the name-based test case methods as we saw in the second exmaple.
+This way, we can implement another test case called "testSCP_Recursive" in
+the same class to use the same set-up/tear-down methods.</p>
+
+<p>To automate testing, JUnit provides class <code>TestSuite</code>. You
+can add multiple test cases and even other test suites into a test suite,
+and then run them altogether.</p>
+
+<blockquote><font class=secondary3><pre>
+import junit.framework.*;
+import com.judoscript.ext.SSHFactory;
+import java.io.*;
+
+public class MyTestCase3 extends TestCase
+{
+  public MyTestCase3(String method) { super(method); }
+
+  public void testSCP_NonRecursive() {
+    ... ... ...
+  }
+
+  public void testSCP_Recursive() {
+    ... ... ...
+  }
+
+  protected void setUp() {
+    // set up the test directories and files on the local machine
+    ... ... ...
+  }
+
+  protected void tearDown() {
+    // remove the test directories and files on the local machine
+    ... ... ...
+  }
+
+  public static void main(String[] args) {
+    try {
+      TestSuite suite = new TestSuite();
+      suite.addText(new MyTestCase3("testSCP_NonRecursive"));
+      suite.addText(new MyTestCase3("testSCP_Recursive"));
+      TestResult tres = suite.run();
+      System.out.println("# of failures: " + tres.failureCount());
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+} // end of class MyTestCase3.
+</pre></font></blockquote>
+
+<p>This code is straightforward. The class itself implements two test
+cases. In <code>main()</code>, we created a test suite object and two
+test case objects, and added both to the suite. A single run of the
+suite does the job.</p>
+
+<p>JUnit is a simple idea and simple framework. It tries to standardize
+the way people write test cases and suites for Java, in Java. In fact,
+in the article JUnit A Cook's Tour, it is clearly stated,</p>
+
+<blockquote>
+"the number one goal is to write a framework within which we have
+some glimmer of hope that developers will actually write tests."
+</blockquote>
+
+<p>Assuming developers are only
+willing to write Java code, JUnit cuts their excuses not writing any
+tests. The question is, is this a blessing for the QA team?</p>
+
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=problems>2. Problems with Writing Test Cases in Java</a></h2><p>
+
+<p>In a team environment, tests are run and maintained by QA engineers,
+not developers. Writing tests in Java has at least the following three
+problems. The root of the problems is, <u>Java is a system language,
+designed for building robust software, <em>not for doing things
+directly and quickly</em></u>. </p>
+
+<ol>
+<li> Test cases in Java will take a lot of coding. Java has these
+     characteristics:
+     <ol>
+     <li> It requires a lot of house-keeping code -- code for class
+          definition, method definition, exception handling ... that is not
+          directly useful for the tasks at hand.
+     <li> Java APIs are detailed and low level, providing maximum flexibility.
+          To do anything useful, however, you need many lines of code. Think
+          of the SCP test case above, and try to create a directory tree with
+          a few files in it for the recursive copy test.
+     </ol>
+     The consequences are:
+     <ul>
+     <li> Setting up necessary test environment may take a lot of coding and
+          dependencies.
+     <li> The more code, the more bugs. When the size of test case code
+          approaches or even surpasses that of the testees, the test cases
+          need be tested first before running them.
+     <li> Developers will write a lot of code that will not be used by any
+          customers. How many developers will whole-heartedly take this job?
+          You can expect a lot more Q&D (quick-and-dirty) code than in
+          production software.
+     <li> QA engineers are probably not up to the task of writing or even
+          maintaining test cases. Even if they are capable, they will not be
+          able to modify the test cases as fast, wasting precious testing time.
+     </ul>
+
+<li> Java code must be compiled into class files before run. For a production
+     software or application, this is ok because the class files will be
+     packaged and deployed. In case of testing, the test environment may
+     change all the time (due to limited test machines and other resources),
+     modification to parameters is commonplace, the compilation adds an
+     unnecessary step and hurts productivity.
+
+<li> Java software are built with classes, interfaces and inheritance;
+     for a well designed software, it can have elegant architecture. But
+     for busy QA personel, how many people really have the time and
+     capacity to handle the complexity? Who maintain the test case code?
+</ol>
+
+<p>Therefore, Java is a wrong language for general testing; designing
+a formal framework does not help. It will
+<ol>
+<li> cost developers' time,
+<li> add complexity to test case maintenance,
+<li> slow down parameter modifications, and
+<li> add more time to analyze failed test cases.
+</ol>
+</p>
+
+<p>If some developer decides to use JUnit for his/her own testing, it is
+perfectly fine. For a team with developers and QA testers, even if all the
+QA testers are fully Java potent, this approach still slows down the pace
+and productivity and should never be adopted.</p>
+
+<p>What is the solution then? <b>Scripting!</b> Scripting languages are
+designed to do many things easily, quickly and effectively; they are
+perfect for testing. Since they are also general-purpose programming
+langauges, they are up to almost anything. In fact, conceptualizing
+tests as just test cases and test suites may not be enough, because
+it limits the ways test cases be organized. For instance, I may want
+to connect to a test database, create a few test tables with data,
+then test a series of test cases before I drop all the test tables
+and disconnect from the database server. Such tasks are better left
+to the QA testers who do the testing. </p>
+
+<p>Testing is a step-by-step process of execution and analysis. There
+is no shortcut, complicated architectures bring in little value.
+Powerful scripting languages are <em>the</em> tool for testing.</p>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=judo>3. Java Unit Testing with JudoScript</a></h2><p>
+
+<p>For Java software testing, <em>JudoScript</em> is a perfect match for these reasons:</p>
+
+<ol>
+<li> <em>JudoScript</em> is a complete, general-purpose scripting language. It
+     emphazises on doing things quickly and intuitively. At the same
+     time, it is capable of anything that Java is capable of.
+<li> <em>JudoScript</em> is designed ground-up for Java platforms. You can use any Java
+     objects seamlessly in the scripts. For this reason, you can extend
+     <em>JudoScript</em> by simply creating regular Java classes.
+<li> <em>JudoScript</em> programs are run without compiling, they are easy to modify
+     and maintain.
+<li> <em>JudoScript</em>'s rich, ready-to-use features can be used for testing itself,
+     and are invaluable for test environment setting up and cleaning up. 
+<li> <em>JudoScript</em>'s feature list is virtually unlimited because it can use any
+     Java software packages. You can use free Java software such as
+     jCVS, java DNS, ... or commercial Java software, or Java software
+     developed in house.
+<li> <em>JudoScript</em> is great not only for automated unit testing, but also for
+     functional testing, web load testing, database application testing,
+     XML document verification, and more.
+<li> <em>JudoScript</em> can be used in integrated build environment such as
+     <a href="http://jakarta.apache.org/ant">Ant</a>, because it supports
+     BSF (Bean-Scripting-Framework), a standard interface for Java
+     software to interact with scripting langauges.
+<li> <em>JudoScript</em> has complete documentation, sample code and topical articles,
+     on-line or hard copy. Documentation is such an important part
+     of this language, more and more information is coming.
+<li> Because <em>JudoScript</em> is a general-purpose programming language, it can
+     be used beyond testing, so knowledge about <em>JudoScript</em> is reusable in
+     other situations. Many propriatary testing languages only work in
+     their own test environment. <em>JudoScript</em> is also an easier way to learn
+     Java, thanks to its smooth interaction between the two.
+<li> Last but not least, <em>JudoScript</em> is totally free. How much are you paying now?
+</ol>
+
+<p>As we mentioned earilier, there are many different set-ups for testing.
+The following following scheme have multiple test cases share a same pair
+of set-up/clean-up routines:</p>
+
+<blockquote><font class=secondary3><pre>
+test environment verify and setup; // make sure the test database server
+                                   // is live and make a connection.
+run test case 1;
+run test case 2;
+run test case 3;
+test environment cleanup;          // disconnect from the database
+</pre></font></blockquote>
+
+This is best modeled in <em>JudoScript</em> using functions:
+
+<blockquote><font class=secondary3><pre>
+function test_Foo_setup() {
+  connect 'jdbc:oracle:thin@localhost:1521:mydb', 'orauser', 'orapass';
+}
+function test_Foo_cleanup() {
+  disconnect();
+}
+function test_Foo_1() { ... }
+function test_Foo_2() { ... }
+function test_Foo_3() { ... }
+
+// run the test:
+test_Foo_setup();
+test_Foo_1();
+test_Foo_2();
+test_Foo_3();
+test_Foo_cleanup();
+</pre></font></blockquote>
+
+<p>This is another scenario:</p>
+
+<blockquote><font class=secondary3><pre>
+test environment verify and setup;
+
+test set up A;
+  run test case 1;
+test clean up A;
+
+test set up A;
+  run test case 2;
+test clean up A;
+
+test set up B;
+  run test case 3;
+test clean up A;
+
+run test case 4;
+
+test environment cleanup;
+</pre></font></blockquote>
+
+<p>In addition to the global setup/cleanup, many test cases have their own
+environment; some of the test cases share a same pair of setup/cleanup
+routines. In this case, the inheritance feature of object-oriented 
+programming helps to orginize code nice and clean:</p>
+
+<blockquote><font class=secondary3><pre>
+function test_Foo_setup() { ... }
+function test_Foo_cleanup() { ... }
+
+class Test_Base
+{
+  function setup()   {} // empty
+  function cleanup() {} // empty
+  function doTest()  {} // empty -- should be overridden
+
+  function runTest() {
+    setup();
+    doTest();
+    cleanup();
+  }
+}
+
+class Test_Foo_Group_A extends Test_Base
+{
+  function setup()   { /* group A setup */ }
+  function cleanup() { /* group A cleanup */ }
+  function doTest()  {} // empty -- should be overridden
+}
+
+class Test_Foo_Group_B extends Test_Base
+{
+  function setup()   { /* group B setup */ }
+  function cleanup() { /* group B cleanup */ }
+  function doTest()  {} // empty -- should be overridden
+
+class Test_Foo_1 extends Test_Foo_Group_A
+{
+  construtor { desc = "Project Foo's test case 1."; }
+  function doTest { /* test case 1 code */ }
+}
+
+class Test_Foo_2 extends Test_Foo_Group_A
+{
+  construtor { desc = "Project Foo's test case 2."; }
+  function doTest { /* test case 2 code */ }
+}
+
+class Test_Foo_3 extends Test_Foo_Group_B
+{
+  construtor { desc = "Project Foo's test case 3."; }
+  function doTest { /* test case 3 code */ }
+}
+
+class Test_Foo_4 extends Test_Base
+{
+  construtor { desc = "Project Foo's test case 4."; }
+  function doTest { /* test case 4 code */ }
+}
+
+// Run the tests
+test_Foo_setup();
+(new Test_Foo_1).runTest();
+(new Test_Foo_2).runTest();
+(new Test_Foo_3).runTest();
+(new Test_Foo_4).runTest();
+test_Foo_cleanup();
+</pre></font></blockquote>
+
+<p>The class hierarchy is like this:</p>
+
+<blockquote><font class=secondary3><pre>
+Test_Base
+    Test_Foo_Group_A
+        Test_Foo_1
+        Test_Foo_2
+    Test_Foo_Group_B
+        Test_Foo_3
+    Test_Foo_4
+</pre></font></blockquote>
+
+<p>In effect, the test cases are grouped; each group shares a pair of
+<code>setup()</code> and <code>cleanup()</code> methods. You get a
+nicely laid out paradigm. The cost is house-keeping code and complexity.
+A by-product is, you can bundle more information (such as descriptions)
+with the test cases. </p>
+
+<p>The second scenario can be implement with functions as well. The
+point is, <em>JudoScript</em> is flexible enough for you to lay out tests in the most
+appropriate way for the situation. <em>JudoScript</em> language has built-in assertion
+and exception handling facility. It also has standard, error and log
+output streams. If you have some special reporting needs, you can
+easily write your own report functions, perhaps using the the flexible
+<code>print</code> and <code>println</code> statements in <em>JudoScript</em>. <em>JudoScript</em>
+scripts can include other scripts; and external programs can be run
+from another script. There are many ways you can organize your test
+suites. </p>
+
+<p>To truly understand <em>JudoScript</em> language and feel its power, there is no other
+way than reading featured articles such as <a href="intro.html">Introduction
+to JudoScript</a>, and try it out by yourself. <em>JudoScript</em> is an easy-to-use and
+easy-to-learn language; even if you have never programmed in Java, you
+won't have any problem start writing useful <em>JudoScript</em> code. </p>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>4. Code Listings</a></h2><p>
+
+<ol><li> <a href=#scp_test1>SCP Test Case 1</a><li> <a href=#scp_test2>SCP Test Case 2</a></ol>
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

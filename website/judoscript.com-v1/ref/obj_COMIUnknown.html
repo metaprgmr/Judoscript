@@ -1,0 +1,32 @@
+<html><head><title>JudoScript Object - COMIUnknown</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>COMIUnknown</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=COMIUnknown_addRef></a>addRef<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Increments the reference count of the COM object.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=COMIUnknown_getIDispatch></a>getIDispatch<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a COMIDispatch for this COM interface.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=COMIUnknown_getIEnumVARIANT></a>getIEnumVARIANT<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of elements represented by the IEnumVARIANT interface for this
+  COM interface.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=COMIUnknown_queryInterface></a>queryInterface<br></font></td><td valign=top><font class=param>className guid</font><br></td><td valign=top>
+  Returns a COMIUnknown for the <font class=param>guid</font>. The <font class=param>className</font> must
+  be a Java class that extends the class <code>jp.ne.so_net.ga2.no_ji.jcom.IUnknown</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=COMIUnknown_release></a>release<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Decrements the reference count of the COM object.
+</td></tr>
+</table>
+</body></html>

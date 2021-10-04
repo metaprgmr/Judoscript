@@ -1,0 +1,472 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Schedule, Execute, E-Mail, SSH, SCP</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="Java scripting language, JudoScript, scripting language for Java, schedule, absolute, after, starting, repeat, control panel, htmlOut, $$timer, run executable, execute, mail, e-mail, ssh, scp" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Schedule, Execute, E-Mail, SSH, SCP</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Schedule, Execute, E-Mail, SSH, SCP" author="James Jianbo Huang" created="October 2001" last="Jan 2003" keywords="Java scripting language, JudoScript, scripting language for Java, schedule, absolute, after, starting, repeat, control panel, htmlOut, $$timer, run executable, execute, mail, e-mail, ssh, scp">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#sched">Scheduled Activities</a>
+<br>&#187;  <a href="#control">Monitor and Control</a>
+<li> <a href="../books/judoscript-0.9/chapters/exec.html">Run Native Executables</a>
+<li> <a href="#email">Sending E-Mails</a>
+<li> <a href="#sshscp">SSH and SCP</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Schedule, Execute, E-Mail, SSH, SCP</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;October 2001 &nbsp;<font face="Arial" style="font-size:9px">UPDATED:</font> Jan 2003 &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="sched_exec_mail_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+The <b><code>schedule</code></b> statement schedules one-time or repetitive jobs to run
+at intervals or at specific moments for any kind of actions. The job also has
+a built-in HTTP server as a HTML-based control panel, activated when a port
+number is specified. The code in the job can take and interpret commands from
+the control panel and/or generate custom information for display. Executables
+are run with the <b><code>exec</code></b> command with all kinds of input/output and
+piping options, including taking input from the script itself or sending
+output back to the script for processing; working directory and environment
+variables can be set. The <b><code>mail::send</code></b> statement sends messages in text,
+HTML or both with or without attachment to multiple "to", "cc" and "bcc"
+recipients. The texts can be in different character sets. SCP and SSH are
+used to securely transfer files between remote hosts as well as issue commands
+on the remote machines. All these applications can be highly useful for
+scheduled jobs to automate tasks.
+<hr>
+<p>&nbsp;</p>
+
+
+<h2><a name=sched>1. Scheduled Activities</a></h2><p>
+
+<p>
+The <b><code>schedule</code></b> statement schedules jobs to run in the future.
+Any actions can be specified, such as database operations, run Java or
+native executables, sending e-mails, etc. It has a number of modes:
+one-time or repetitive, absolute or non-absolute, and starting at a
+specific time or after a delay. A HTTP interface is integrated and
+started when a port number is provided, so that the job can be
+monitored or controlled via a browser or any HTTP client program.
+
+<blockquote>
+<b><code>schedule</code></b> [ <b><code>absolute</code></b> ]
+[ ( <b><code>starting</code></b> | <b><code>after</code></b> ) <em>time_or_delay</em>
+[ <b><code>repeating</code></b> <em>period</em> ] <em>block</em> <br>
+[ <b><code>listen on</code></b> [ <b><code>title</code></b> <em>html_title</em> ] <em>control_block</em> ]
+</blockquote>
+
+<p>
+Schedules can not be embedded. A program can have one schedule running at
+a time. Each schedule is run by a timer called <b><code>$$timer</code></b>. It can be
+accessed in the scheduler code, which has these members: <b><code>time</code></b> for
+the current event being handled, <b><code>period</code></b> for the current period,
+<b><code>htmlOut</code></b> is the HTML output stream and <b><code>cmd</code></b> is the command
+sent by the control panel client (most likely a brower) -- the last two are
+valid only in the control block.
+
+<p>
+To abort a schedule job, run <b><code>break schedule;</code></b>.
+
+<p>
+The following program emulates a count-down process, where 4 one-time events
+are run one second apart.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="countdown">Listing 1</a>. countdown.judo -- <em>one-time event</em></th>
+          </thead><tr><td class=code><pre>
+1: time = date(2001,10,12,19,4,57);
+2: schedule starting time { println $$timer.time, ": Three!"; }
+3: ++time.second;
+4: schedule starting time { println $$timer.time, ": Two!"; }
+5: ++time.second;
+6: schedule starting time { println $$timer.time, ": One!"; }
+7: ++time.second;
+8: schedule starting time { println $$timer.time, ": LAUNCH!"; }
+</pre></td></tr></table></p><p>
+
+This is a simple repetitive motion:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="heart_beat">Listing 2</a>. heart_beat.judo -- <em>not-so-accurate repetitive events</em></th>
+          </thead><tr><td class=code><pre>
+1: beats_per_minute = 80;
+2:
+3: schedule repeat 60000 / beats_per_minute
+4: {
+5:   println 'puh ... at ', $$timer.time;
+6: }
+</pre></td></tr></table></p><p>
+
+Next, we emulate a coocoo clock that every hour it plays so many "Cukoo"
+sound. Lines 1 through 4 gets the time for the next hour. Line 7 gets
+the time for this event, and its hour attribute is used for the number
+of "Cucoo" sound.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="coocoo_clock">Listing 3</a>. coocoo_clock.judo -- <em>accurate repetitive events</em></th>
+          </thead><tr><td class=code><pre>
+ 1: $start = date();
+ 2: ++$start.hour;
+ 3: $start.minute = 0;
+ 4: $start.second = 0;
+ 5: schedule absolute starting $start repeat 3600000
+ 6: {
+ 7:   local time = $$timer.time;
+ 8:   for $i from 1 to time.hour { print 'Cukoo...'; }
+ 9:   println;
+10: }
+</pre></td></tr></table></p><p>
+
+Scheduled jobs should run quickly, that is, they should not run longer
+than the scheduled periods. If they do sometimes and mess up the
+operation, practical synchronization mechanism should be put in place.
+For instance, suppose every 5 minutes the job checks the database for
+unprocessed order data. If it founds some, process them. Sometimes
+e-commerce site may take so many orders in a short period of time,
+that within that 5-minute period they can not be all processed. What
+you can do is, for instance, use a temporary database table; when
+start processing, set a flag there, and reset it when done; if this
+flag is set, other jobs will simply bypass. The crux of this solution
+is, use an operation that is always short than the period to enforce
+the synchronization.
+
+
+
+<h3><a name=control>Monitor and Control</a></h3><p>
+
+<p>
+By issuing a <b><code>listen on</code></b> clause with a port number, you have the
+scheduled job start a single-thread HTTP server. A title can be specified
+for the HTML output. If not, the default title is "JudoScript Scheduler
+Control Panel".
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="changing_time">Listing 4</a>. changing_time.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: history = linkedList{};
+ 2:
+ 3: schedule repeat 2000
+ 4: {
+ 5:   history.add($$timer.time);
+ 6:   if $history.length() &gt; 10 { history.remove(0); }
+ 7: }
+ 8: listen on 3333 title '&lt;h1&gt;Changing Time&lt;/h1&gt;'
+ 9: {
+10:   println &lt;$$timer.htmlOut&gt; '&lt;h3&gt;Latest Events&lt;/h3&gt;';
+11:   for x in history backward { println &lt;$$timer.htmlOut&gt; x, '&lt;br&gt;'; }
+12: }
+</pre></td></tr></table></p><p>
+
+<p>
+<img src="changing_time.gif" align="right">
+
+The job itself does nothing but keeping the execution time in a list for the
+last 10 events (line 6). Its control panel server listens on port 3333. The
+control panel is typically run from a browser. The title, "Changing Time", is
+issued on line 8. The screen is standard above the horizontal line. If and
+only if both boxes are checked will the job be stopped and closed. Anything
+user type in to the edit box is sent to the server and becomes the content of
+<b><code>$$timer.cmd</code></b>. What it means is totally up to your interpretation, such
+as a mini command system. In the control panel code, we used <b><code>$$timer.htmlOut</code></b>
+to write out custom content that shows below the horizontal line (lines 10 and 11).
+
+<h3><em>Review Questions</em></h3><ul>
+<li> How to schedule a one-time event? How about repetitive events?
+<li> How to schedule events that happen precisely (up to JVM precision)
+           every 5 minutes?
+<li> How to obtain the time for the current event and the period
+           for this job?
+<li> Specified a <b><code>listen on 4444</code></b> for a scheduled job with an
+           empty control block. When connected to it via a browser, what
+           will you see?
+<li> Think of a scheduled job with the control panel, and devise an
+           interactive mechanism that takes the command from the control
+           panel in the brower and acts upon it.
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#Jan 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=email>2. Sending E-Mails</a></h2><p>
+
+<p>
+You can send e-mails directly from <em>JudoScript</em>. To use the e-mail feature, you
+need to have the <b><code>javax.mail</code></b> packages in the class path. It can
+be obtained from various places, such as the "j2ee.jar" file in the J2EE
+installation. Before sending any messages, you must first connect to a
+mail server by calling the system function:
+
+<blockquote><font class=secondary3><pre>
+mail::connect( server [ , username [ , password ] ] );
+mail::disconnect();
+</pre></font></blockquote>
+
+The server may include a port number, separated by a colon. Once
+connected, you can easily send one, two, fitfy or a million e-mails from
+a simple <em>JudoScript</em> script; spamming is never easier. Well, if one does want to
+spam, there are zillions of ways anyway.
+
+<p>
+The syntax for sending mail is:
+
+<blockquote>
+<b><code>mail::send</code></b> [ <em>charset</em> ] <br>
+( ( <b><code>from</code></b> | <b><code>to</code></b> | <b><code>cc</code></b> | <b><code>bcc</code></b>
+    | <b><code>attach</code></b> | <b><code>subject</code></b> | <b><code>body</code></b> | <b><code>htmlBody</code></b> ) <b><code>:</code></b>
+  <em>content</em>
+)+ 
+</blockquote>
+
+As you see, text and/or HTML messages can be sent at the same time.
+You can specify character sets for addresses, subject and bodies.
+If <em>charset</em> is set to <b><code>mail::send</code></b>, both the text and HTML bodies will use it.
+A <em>charset</em> can have "charest=". The following two examples are equivalent:
+
+<blockquote><font class=secondary3><pre>
+  mail::send 'iso-2022-jp' ...
+  mail::send 'charset=iso-2022-jp' ...
+</pre></font></blockquote>
+
+Alternatively, you can call the system function <b><code>setCharset()</code></b> to set
+the language character set for the whole language environment. The
+<b><code>mail::send</code></b> command uses that if no <em>charset</em> is explicitly
+specified in itself. This global character set may affect text encoding used
+in other places.
+
+<p>
+Files can be attached; messages can be sent to a list of "to", "cc" and/or
+"bcc" recipients; within each list, recipients are separated by commas. Each
+clause can appear at most once. For the message bodies, the here-doc is a big
+convenience. Here is an example:
+
+<blockquote><font class=secondary3><pre>
+mail::send
+   from: 'syang@exotic.nat'
+     to: 'foodback@judoscript.com, syang56@yahoo.cum'
+subject: 'bug report'
+   body: [[*
+         Hi there,
+
+         JudoScript is cool. I'm doing a lot and will do a lot more
+         with it.
+
+         I think I've found a bug. I have a program, 'tvcontrol.judo';
+         there is a function like this:
+
+           function switchTV $on {
+             if $on { turnOnTV(); } else { turnOffTV(); }
+           }
+
+         however, when it is called with $on=3, it turns off my VCR!
+         I believe this is a bug in JudoScript that, when the value
+         is not 0 or 1, it emits erroneous radio shock waves that
+         affect other appliances than the intended one. Please take
+         a look. Thank you!
+
+         Best regards,
+         -- Steve Young
+         *]];
+</pre></font></blockquote>
+
+The following example sends out trial software to newly registered users,
+whose information is stored in a database. For each user with status
+"NEW", a zip file and a "readme.txt" file are sent, and his/her status
+is changed to "TRIAL VERSION" in the database. This program is likely
+executed by a scheduled job that runs at midnight or later.
+
+<blockquote><font class=secondary3><pre>
+db::connect 'jdbc:oracle:thin:@localhost:1521:userdb', 'onlyme', 'uggess';
+
+db::query u:
+  select email, lastname, solute from usertbl where status='NEW';
+
+db::prepare: update userdb set status='TRIAL VERSION' where email=?;
+while u.next() {
+  sendSoftware(u.email, u.lastname, u.solute);
+  executeUpdate with @1 = u.email;
+}
+
+db::disconnect;
+
+function sendSoftware email, lname, solute
+{
+  mail::send
+     from: 'info@judoscript.com'
+       to: email
+  subject: 'The software. Thank you!'
+   attach: 'readme.txt, software.zip'
+     body: [[*
+           Dear (* solute *) (* lname *),
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           &lt;html&gt;&lt;body&gt;
+           &lt;p&gt;Dear (* solute *) (* lname *),
+
+           &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+           Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+           text&lt;/u&gt; file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p&gt;Please visit &lt;a href=www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+           for the latest news and information. Thank you!
+
+           &lt;p&gt;Sincerely,
+           &lt;p&gt;JudoScript
+           &lt;/body&gt;&lt;/html&gt;
+           *]]
+  ;
+}
+</pre></font></blockquote>
+
+
+<h3><em>Review Questions</em></h3><ul>
+<li> How to connect to a mail server?
+<li> Can you send an e-mail message in both text and HTML?
+<li> Can you have multiple "to" clauses? How to specify multiple recipients?
+<li> How to attach 3 files to a message?
+</ul>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#Jan 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=sshscp>3. SSH and SCP</a></h2><p>
+
+<p>
+The SSH and SCP features uses ISNetworks' distribution of MindTerm package,
+a GPL'ed open-source pure Java SSH/SCP bundle. It is a GUI program that
+you can use daily; its SCP screen looks like a FTP GUI client. Very handy!
+Download it from <a href="http://www.isnetworks.com/ssh">ISNetworks</a>.
+Make sure the version is "version 1.2.1 SCP release 3" or up. Unpack and put
+the class jar file into your classpath, and run
+
+<blockquote><font class=secondary3><pre>
+%java mindbright.application.MindTerm
+</pre></font></blockquote>
+
+If it is the first time use, it prompts you for host, user and password,
+and generates necessary keys automatically. You should run it to establish
+such environment before using <em>JudoScript</em>'s SSH/SCP features. By the way, the nice
+SCP screen is available on its "File" menu, not so obvious to the first-time
+users.
+
+<p>
+Once the jar file is in the classpath and you have set up the environment,
+please refer to the <a href="../langspec/spec7.html">language spec</a> for
+how to use. It is rather straightforward.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#Jan 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>4. Summary</a></h2><p>
+
+<p>
+Running scheduled jobs is an important application of scripting languages.
+The <b><code>schedule</code></b> command allows to schedule one-time jobs or repetitive
+ones, running at intervals or at specific moments. The actions for the job
+can be any valid <em>JudoScript</em> statements and commands except for another schedule,
+that is, no embedded schedules. The internal variable, <b><code>$$timer</code></b>, has
+members like <b><code>time</code></b> and <b><code>period</code></b> for code to access. A <em>JudoScript</em>
+scheduled job has a built-in HTTP server for control panel. All you have to
+do is specify the <b><code>listen on</code></b> with a port number, and use a browser
+to see the current status. The control panel allows administrators to stop
+the job, or send a command string to it, which becomes <b><code>$$timer.cmd</code></b>
+in the script that you can respond to. With <b><code>$$timer.htmlOut</code></b>, you
+can generate more information to the control panel.
+
+<p>
+Scheduled jobs typically check database or some files for changes and
+respond by processing the data, running other applications, handling files
+and archives and sending results either via remote calls to systems or
+e-mails to humans. <em>JudoScript</em> has flexible JDBC scripting, running executables,
+invoking Java programs and sending e-mails. So practically you rarelly
+have to leave <em>JudoScript</em>.
+
+<p>
+The <b><code>exec</code></b> command can run executables as flexible as any shells or
+Windows consoles with input/output redirections, merging program output
+and error, and piping output to other executables; what is more, the
+command line can even take input from the script, or pipe the output back
+to the script for processing. A command line can be indicated to take from
+the system input; if it is not indicated and the program reads system input,
+an EOF is sent immediately so it does not hang the script.
+
+<p>
+E-mails can be sent directly via the <b><code>mail::send</code></b> command; the message
+can be in text, HTML or both. File attachment is supported, so are multiple
+recipients for "to", "cc" and "bcc". Prior to sending e-mails, a mail
+server must be connected via <b><code>mail::connect()</code></b> system call. The
+Java extension packages of <b><code>javax.mail</code></b> must be present.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#Jan 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>5. Code Listings</a></h2><p>
+
+<ol><li> <a href=#countdown>countdown.judo -- <em>one-time event</em></a><li> <a href=#heart_beat>heart_beat.judo -- <em>not-so-accurate repetitive events</em></a><li> <a href=#coocoo_clock>coocoo_clock.judo -- <em>accurate repetitive events</em></a><li> <a href=#changing_time>changing_time.judo</a></ol>
+
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

@@ -1,0 +1,13 @@
+<%@page isIncludeOnly="true" %>
+
+<BR><%!spacer 452, 1 %></TD>
+<TD width=10><%--  space between content and right edge --%><%!spacer 10, 1 %></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><%!spacer 1, 1 %></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

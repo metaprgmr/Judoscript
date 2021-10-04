@@ -1,0 +1,12 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_COM/xmldoc.judo:</b></td></tr><tr><td><pre>
+xmldoc = new com::Microsoft.XMLDOM;
+xmldoc.async = false;
+xmldoc.load('test.xml');
+
+children = xmldoc.documentElement.childNodes;
+for i from 0 to children.length-1 {
+  c = children['item',i];
+  println c, '  ', c.text;
+}
+</pre></td></tr></table></body></html>

@@ -1,0 +1,374 @@
+<html><head>
+<title>COM Scripting with JudoScript</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>COM Scripting with JudoScript</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#intro2ax">Introduction to COM and ActiveX</a>
+<li> <a href="#judoax">ActiveX Scripting with JudoScript</a>
+<br>&#187;  <a href="#paramget">Parameterized Property Getting</a>
+<br>&#187;  <a href="#enumvar">IEnumVARIANT Interface</a>
+<li> <a href="#env_api">Setting Up and Java-COM-Bridge APIs</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+December 2002 &nbsp;
+
+<p><b>Abstract</b> &nbsp;
+
+<p>Microsoft's COM and Java are the two most popular object models. <em>JudoScript</em> has native
+support for both. In <em>JudoScript</em>, ActiveX controls are obtained via the operator
+<code>new com::</code>. Once obtained, the object's methods can be called and
+properties accessed just like any other kinds of objects. One of the main reasons for
+ActiveX scripting is to use Microsoft Office products such as Word and Excel; sample
+code is presented to demonstrate their uses.</p>
+<p>Currently ActiveX event handling is not supported due to the limitation of the
+underlying JCom package, and out-bound parameters are not supported in a more meaningful
+way. These situations may improve in the later versions.</p>
+<hr>
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+<h2><a name=intro2ax>1. Introduction to COM and ActiveX</a></h2><p>
+
+<p>Microsoft's Component Object Model (COM) and Java's object model are the two most
+important object models to date. <em>JudoScript</em>, as a language designed for Java scripting, has
+also native support for COM/ActiveX scripting. JudoScript seamlessly bridges these two
+powerful object models (without the Microsoft JVM).</p>
+
+<p>In the early days of Windows, most programs are monolithic executables. DLLs provide
+limited flexibility and reusability. It was the "crazy" idea of embedding spreadsheets
+in word documents and vice versa that prompted the concept of OLE, which eventually led
+to the ubiquitous COM on Windows platforms. Today, most of the major Windows software
+are presented in the form of ActiveX (what a funky name!), making them readily
+scriptable with capable scripting languages like Visual Basic and JudoScript.</p>
+
+<p>All COM objects are registered in the Windows registry when the software is
+installed. Windows have APIs to obtain such objects via GUIDs (Globally Unique
+IDentifiers).  COM objects implements various interfaces; each interface is identified
+by a GUID and is also registered on the system. Every single COM object implements an
+interface called IUnknown, which is not useful in itself but allows clients to obtain
+other interfaces that it implements. Hence, in order to use a COM object, you will
+need to know its GUID and its interfaces. There are ways to describe and inspect those
+interfaces offline, but this is not generally available at runtime and type matching
+is challenging if possible at all. What this means is, general COM objects are not as
+easily scriptable with scripting languages.</p>
+
+<p>In order to make COM objects scriptable, Microsoft has defined a special interface called
+<code>IDispatch</code>, which has such an <code>invoke()</code> method for any clients to
+call named methods supported by the object. In particular, there are two pre-defined method
+names, "GET" and "PUT", to access "properties" of the objects.
+Therefore, ActiveX objects are scriptable COM objects that implement <code>IDispatch</code>.
+How do you know what methods to call using the <code>invoke()</code> method? You as a
+programmer need to consult the manual for that particular object. (You may ask, why bother
+to have IDispatch interface anyhow, if you still need to know what the object supports?
+Keep in mind that IDispatch permits tools like Visual Basic and JudoScript to pass on your
+intention to call which method and get/set which property; without IDispatch, you may have
+to write C/C++ code to access these objects, albeit it is possible.)</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=judoax>2. ActiveX Scripting with JudoScript</a></h2><p>
+
+<p>To get hold of an ActiveX control in <em>JudoScript</em>, use the <code>new</code> with the
+<code>com::</code> namespace; once obtained, call its methods and access its
+properties like any other types of objects in <em>JudoScript</em>.
+
+<p align=center><table width=640><thead>
+<th><a name="vbscript">Listing 1</a>. vbscript.judo</th>
+</thead><tr><td class=code><pre>
+
+1: sc = new com::ScriptControl;
+2: sc.Language = 'VBScript';
+3:
+4: for i=0; i<10; ++i {
+5:   println sc.Eval(i @ '+1001');
+6: }
+</pre></td></tr></table></p><p>
+
+
+Microsoft Windows has aliases for ActiveX identifiers. In the above example, we
+instantiates a "ScriptControl", set its <code>Language</code> property to "VBScript",
+and (on line 5) invokes its <code>Eval()</code> method. To use GUID to find the
+object, you must use the format in the following example:
+
+<p align=center><table width=640><thead>
+<th><a name="ietest">Listing 2</a>. ietest.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: ie = new com::'{0002DF01-0000-0000-C000-000000000046}';
+ 2: //ie = new com::InternetExplorer.Application;
+ 3: ie.Visible = true;
+ 4: ie.AddressBar = true;
+ 5: ie.StatusText = 'My Status Text';
+ 6: println '----- Path: ', ie.Path;
+ 7:
+ 8: url = 'http://www.yahoo.com';
+ 9: println '----- Visiting ', url;
+10: ie.Navigate(url);
+11: sleep(5000);
+12:
+13: url = 'http://www.google.com';
+14: println '----- Visiting ', url;
+15: ie.Navigate(url);
+16: sleep(5000);
+17:
+18: println '----- close the browser.';
+19: ie.Quit();
+</pre></td></tr></table></p><p>
+
+
+This program brings up the Internet Explorer, prints out the path for the executable
+(line 6), visits Yahoo! and Google respectively for 5 seconds, then closes the
+brower.</p>
+
+<p>Like calling methods in Java, you can cast values to Java primitive types. For
+ActiveX invocation, there is one more type, <code>currency</code>.</p>
+
+
+<h3><a name=paramget>Parameterized Property Getting</a></h3><p>
+
+<p>One of the main reasons to script ActiveX controls is to script Microsoft Office
+products such as Word and Excel. The following is an example that uses Excel.
+
+<p align=center><table width=640><thead>
+<th><a name="exceltest">Listing 3</a>. exceltest.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: xl = new com::Excel.Application;
+ 2: println 'Version: ', xl.Version;
+ 3: xl.Visible = true;
+ 4:
+ 5: workbooks = xl.Workbooks;
+ 6: workbook  = workbooks.Add;
+ 7: sheet = workbook.ActiveSheet;
+ 8: a1 = sheet['Range', 'A1'];
+ 9: a2 = sheet['Range', 'A2'];
+10: a1.Value   = 123.456;
+11: a2.Formula = '=A1*2';
+12: println 'a1 from excel: ', a1.Value;
+13: println 'a2 from excel: ', a2.Value;
+14:
+15: workbook.Close();
+16: xl.Quit();
+</pre></td></tr></table></p><p>
+
+
+It launches Excel, creates a new workbook, sets a value at cell "A1" and sets a
+formula at cell "A2", then prints out the values at "A1" and "A2". On lines 8 and
+9, it uses <em>parameterized property get</em>; its syntax is the same as the
+multi-dimensional array access operator. Similarly, a simple property access for
+ActiveX controls can be conceived as a single-dimensional array access. (It would
+be preferrable to use a syntax like <code>sheet.Range['A1']</code>; unfortunately
+<em>JudoScript</em> would be confused by this, since the dot operator and [] operator in this
+expression are two separate operations, whereas in this case it is really a single
+operation.) The following is another example for Excel; it lists all the files in
+the current directory and displays their attributes in Excel. It calculates the
+sum of file sizes.</p>
+
+<p align=center><table width=640><thead>
+<th><a name="testexcel">Listing 4</a>. testexcel.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: excel = new com::Excel.Application;
+ 2: excel.Visible = true;
+ 3: println "Version:  ", excel.Version;
+ 4: println "UserName: ", excel.UserName;
+ 5: println "Caption:  ", excel.Caption;
+ 6: println "Value:    ", excel.Value;
+ 7:
+ 8: xlBooks  = excel.Workbooks;
+ 9: xlBook   = xlBooks.Add;
+10: xlSheets = xlBook.Worksheets;
+11: xlSheet  = xlSheets['Item', 1];
+12: xlRange  = xlSheet.Cells;
+13:
+14: xlRange['Item',1,1].Value = "Name";
+15: xlRange['Item',1,2].Value = "Length";
+16: xlRange['Item',1,3].Value = "Time";
+17: xlRange['Item',1,4].Value = "Is-Dir";
+18: xlRange['Item',1,5].Value = "Is-File";
+19: xlRange['Item',1,6].Value = "Exists";
+20: xlRange['Item',1,7].Value = "Writable";
+21: xlRange['Item',1,8].Value = "Hidden";
+22:
+23: list './';
+24: filenames = $$fs_result;
+25: i = 2;
+26: for file in filenames {
+27:   xlRange['Item',i,1].Value = file;
+28:   xlRange['Item',i,2].Value = file.fileLength();
+29:   xlRange['Item',i,3].Value = file.fileTime();
+30:   xlRange['Item',i,4].Value = file.isDirectory();
+31:   xlRange['Item',i,5].Value = file.isFile();
+32:   xlRange['Item',i,6].Value = file.fileExists();
+33:   xlRange['Item',i,7].Value = file.fileWritable();
+34:   xlRange['Item',i,8].Value = file.isFileHidden();
+35:   ++i;
+36: }
+37: ++i;
+38: xlRange['Item',i,1].Value = "Total Size:";
+39: xlRange['Item',i,2].Formula = '=Sum(B2:B' @ (filenames.length+1) @ ')';
+40: xlRange.Columns.AutoFit();
+41:
+42: sleep(10000);
+43: xlBook.Close(false,null,false);
+44: excel.Quit();
+</pre></td></tr></table></p><p>
+
+
+The following is an example that uses Microsoft Word. It opens a Word document
+and prints out its words and tables. Using this program as a template, you can
+do a lot more with Word; you will need to know the Word's DOM, which is not the
+topic of this article; this information is available in the help files of the
+Word product, or any books about VBA for Word.
+
+<p align=center><table width=640><thead>
+<th><a name="testword">Listing 5</a>. testword.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: wdApp = new com::Word.Application;
+ 2: wdApp.Visible = true;
+ 3: 
+ 4: wdDocuments = wdApp.Documents;
+ 5: wdDocument  = wdDocuments.Open(#args[0].toAbsolutePath());
+ 6: println 'fullname=', wdDocument.FullName;
+ 7: 
+ 8: wdWords = wdDocument.Words;
+ 9: word_count = wdWords.Count;
+10: for i from 1 to word_count {
+11:   println wdWords.Item(i).Text;
+12: }
+13: 
+14: wdTables = wdDocument.Tables;
+15: println wdTables;
+16: table_count = wdTables.Count;
+17: println 'table count=', table_count;
+18: for i from 0 to table_count-1 {
+19:   println 'tables[', i, "]=", wdTables.Item(i+1);
+20: }
+21: 
+22: sleep(3000);
+23: wdApp.Quit();
+</pre></td></tr></table></p><p>
+
+
+
+<h3><a name=enumvar>IEnumVARIANT Interface</a></h3><p>
+
+<p>One of the COM interface, IEnumVARIANT, represents a collection of values. It can
+be returned by method calls. <em>JudoScript</em> directly converts an IEnumVARIANT into an array.
+
+<p align=center><table width=640><thead>
+<th><a name="enumtest">Listing 6</a>. enumtest.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: excel = new com::Excel.Application;
+ 2: excel.Visible = true;
+ 3: 
+ 4: xlBooks = excel.Workbooks;
+ 5: xlBook = xlBooks.Add;
+ 6: xlSheets = xlBook.Worksheets;
+ 7: 
+ 8: ary = xlSheets._NewEnum.getIEnumVARIANT();
+ 9: for xlSheet in ary { println xlSheet.Name; }
+10: 
+11: sleep(5000);
+12: xlBook.Close(false,null,false);
+13: excel.Quit();
+</pre></td></tr></table></p><p>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=env_api>3. Setting Up and Java-COM-Bridge APIs</a></h2><p>
+
+<p>At this writing, <em>JudoScript</em> uses the <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom/">JCom</a>
+package for its ActiveX support. Java classes of JCom are already included in the
+<em>JudoScript</em>. JCom's JNI DLL, jcom.dll, must be put in the <code>PATH</code> environment
+variable.</p>
+
+<p>JCom package is a straightforward Java-COM bridge. Its API is concise and elegant,
+and maps Java and COM data types well. However, <em>JudoScript</em> has a wish-list from a Java-COM
+bridge provider that would support by-reference parameters and event handling. So <em>JudoScript</em>
+has not ruled out the possibility of creating its own Java-COM implementation. For now,
+if scripting Microsoft Word and Excel is functioning well, it is deemed good enough,
+unless users strongly request the aforementioned features.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>4. Summary</a></h2><p>
+
+<p><em>JudoScript</em> bridges the two most powerful object models -- COM/ActiveX and Java. In <em>JudoScript</em>,
+scripting ActiveX controls is no different than scripting any other objects, including
+Java objects; the only difference is the way to obtain an object: ActiveX controls are
+obtained via the <code>new com::</code> operator; once obtained, its methods can be
+invoked, and properties can be got and set. Parameterized property get is achieved with
+the syntax of multi-dimensional array access. A predefined COM interface, IEnumVARIANT,
+is interpreted by <em>JudoScript</em> as an array.</p>
+
+<p>Currently, <em>JudoScript</em> does not handle ActiveX event handling, and by-reference parameters
+are not explicitly supported, that is, the out-bound parameters are not supported.
+This, however, may change in the future releases.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>5. Code Listings</a></h2><p>
+
+<ol><li> <a href=#vbscript>vbscript.judo</a><li> <a href=#ietest>ietest.judo</a><li> <a href=#exceltest>exceltest.judo</a><li> <a href=#testexcel>testexcel.judo</a><li> <a href=#testword>testword.judo</a><li> <a href=#enumtest>enumtest.judo</a></ol>
+
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

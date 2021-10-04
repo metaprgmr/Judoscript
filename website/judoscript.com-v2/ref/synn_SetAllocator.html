@@ -1,0 +1,27 @@
+<html><head><title>JudoScript Semantics - SetAllocator</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>SetAllocator</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=SetAllocator>SetAllocator</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>Set</font>  <font class=nt><a href="javascript:showNT('ComparatorDecl')">ComparatorDecl</a></font>  (  <font class=kw><nobr>[> <lq</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  ),*  <font class=kw><nobr>]</nobr></font>   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('SetAllocator'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>In addition to the "formal" set creation by <font class=kw>new</font>  operator, this is the way
+  to create a set with initial elements. This is also the only way to created a
+  sorted set by specifying a comparator, if <font class=nt><a href="javascript:showNT('CompartorDecl')">CompartorDecl</a></font> clause is
+  present, whether it is predefined or user-defined.</p>
+
+  <p>If no <font class=kw><nobr>&lt;</nobr></font>  <font class=kw><nobr>&gt;</nobr></font>  clause is specified, an unordered set is created, which
+  is initialized with 0 or more elements in <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font> .</p>
+
+ </body></html>

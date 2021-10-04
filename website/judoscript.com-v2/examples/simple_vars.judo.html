@@ -1,0 +1,37 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/simple_vars.judo:</b></td></tr><tr><td><pre>
+println 'A) a = 1: '       :&lt;18, a = 1;
+println 'B) a = 1.00: '    :&lt;18, a = 1.00;
+println "C) a = '1.00': "  :&lt;18, a = '1.00';
+println 'D) a = 1.5e5: '   :&lt;18, a = 1.5e5;
+println "   a = '1.5e5': " :&lt;18, a = '1.5e5';
+println 'E) a = null: '    :&lt;18, a = null;
+println '   a = 1.0:'      :&lt;18, a = 1.0;
+println 'F) a += 2: '      :&lt;18, a += 2;
+println "   a = '1.1'"     :&lt;18, a = '1.1';
+println 'G) a *= 4: '      :&lt;18, a *= 4;
+println '   a = 10:'       :&lt;18, a = 10;
+println 'H) b = a / 2.5: ' :&lt;18, b = a / 2.5;
+println '   a = 3.5:'      :&lt;18, a = 3.5;
+println '   b = 2.5:'      :&lt;18, b = 2.5;
+println 'I) a % b = '      :&lt;18, a % b;
+println '   a = 5.0:'      :&lt;18, a = 5.0;
+println 'J) a - c = '      :&lt;18, a - c; // c is not defined.
+println 'K) a + "abc" = '  :&lt;18, a + "abc" ;
+println 'L) "abc" + a = '  :&lt;18, "abc" + a;
+println 'M) "abc" @ a = '  :&lt;18, "abc" @ a; // concatenation
+println '   a @= "xyz": '  :&lt;18, a @= "xyz"; // self concatenation
+println 'N) a + "0x0a" = ' :&lt;18, a + "0x0a" ;
+println 'O) a + "0x0m" = ' :&lt;18, a + "0x0m" ;
+println 'P) a + "007" = '  :&lt;18, a + "008" ;
+println 'Q) a + "008" = '  :&lt;18, a + "008" ;
+println '   a = 5:'        :&lt;18, a = 5;
+println 'R) a + "0x0a" = ' :&lt;18, a + "0x0a" ;
+println 'S) a + "0x0m" = ' :&lt;18, a + "0x0m" ;
+println 'T) a + "007" = '  :&lt;18, a + "007" ;
+println 'U) a + "008" = '  :&lt;18, a + "008" ;
+
+catch:
+  println 'EXCEPTION: ', $_.message;
+  resume;
+</pre></td></tr></table></body></html>

@@ -1,0 +1,20 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_java/for_in_iter.judo:</b></td></tr><tr><td><pre>
+o = new java::IterationDemo;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneIterator;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneEnumeration;
+for x in o { println x; }
+println;
+
+o = new java::Hashtable;
+o.aa = 1;
+o.bb = 2;
+o.cc = 3;
+for x in o { println x, ' => ', o.(x); }
+</pre></td></tr></table></body></html>

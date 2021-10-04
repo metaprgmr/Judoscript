@@ -1,0 +1,1534 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Jamaica: The Java Virtual Machine (JVM) Macro Assembler</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="jamaica, Java Assember, JVM Macro Assembler, JVM Assembler, JVM bytecode, bytecode, JVM instruction set, Java class file, dynamic java class, create java class, dynamically create java class, JavaClassCreator, ASM, BCEL, ASMJavaClassCreator, BCELJavaClassCreator" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_gray.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_black.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Jamaica: The Java Virtual Machine (JVM) Macro Assembler</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Jamaica: The Java Virtual Machine (JVM) Macro Assembler" author="James Jianbo Huang" created="March 2004" keywords="jamaica, Java Assember, JVM Macro Assembler, JVM Assembler, JVM bytecode, bytecode, JVM instruction set, Java class file, dynamic java class, create java class, dynamically create java class, JavaClassCreator, ASM, BCEL, ASMJavaClassCreator, BCELJavaClassCreator" widetoc="true" class="jamaica">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#intro">Introduction</a>
+<br>&#187;  <a href="#jvm">JVM, Bytecode Assembly Programming</a>
+<br>&#187;  <a href="#jamaica">Introduction to Jamaica</a>
+<br>&#187;  <a href="#why">Use of Jamaica</a>
+<br>&#187;  <a href="#conform">JVM Specification Conformance</a>
+<br>&#187;  <a href="#tools">Jamaica Assembler and Tools</a>
+<br>&#187;  <a href="#dl"><a href=/download.html>Download</a></a>
+<li> <a href="#lex">Lexical Rules of a Jamaica Source File</a>
+<li> <a href="#clsdef">Defining Classes or Interfaces</a>
+<br>&#187;  <a href="#clsmacros">Class-Level Macros</a>
+<li> <a href="#method">Method Body</a>
+<br>&#187;  <a href="#catch">Exception and Finally Handlers</a>
+<br>&#187;  <a href="#prgm">Bytecode Programming</a>
+<li> <a href="#instr">Introduction to Instructions</a>
+<br>&#187;  <a href="#rt">Introduction to the JVM Runtime</a>
+<br>&#187;  <a href="#instconst">Constant Loading Instructions</a>
+<br>&#187;  <a href="#symconst">Using Symbolic Constants</a>
+<br>&#187;  <a href="#instvar">Variable Access Instructions</a>
+<br>&#187;  <a href="#instarray">Array Operation Instructions</a>
+<br>&#187;  <a href="#instgetput">Data Member Access Instructions</a>
+<br>&#187;  <a href="#insttype">Data Type Instructions</a>
+<br>&#187;  <a href="#instnew">Object Creation Instructions</a>
+<br>&#187;  <a href="#instarith">Arithmetic and Logical Instructions</a>
+<br>&#187;  <a href="#inststack">Stack Manipulation Instructions</a>
+<br>&#187;  <a href="#instinvoke">Method Invocation Instructions</a>
+<br>&#187;  <a href="#instuncondjmp">Uncontidional Jump Instructions</a>
+<br>&#187;  <a href="#instcondjmp">Contidional Jump Instructions</a>
+<br>&#187;  <a href="#instother">Other Instructions</a>
+<li> <a href="#macro">Introduction to Executable Macros</a>
+<br>&#187;  <a href="#macroparam">Executable Macro Parameters</a>
+<br>&#187;  <a href="#macroprint">%print, %println and %flush</a>
+<br>&#187;  <a href="#macroload">%load</a>
+<br>&#187;  <a href="#macroset">%set</a>
+<br>&#187;  <a href="#macroobj">%object</a>
+<br>&#187;  <a href="#macroarr">%array</a>
+<br>&#187;  <a href="#macroconcat">%concat</a>
+<br>&#187;  <a href="#macroif">%if, %else and %end_if</a>
+<br>&#187;  <a href="#macroiter">%iterate and %end_iterate</a>
+<br>&#187;  <a href="#macroaiter">%array_iterate and %end_iterate</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Jamaica: The Java Virtual Machine (JVM) Macro Assembler</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;March 2004 &nbsp; &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="jamaica_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+<em>Jamaica</em>, the <em>JVM Macro Assembler</em>, is an easy-to-learn and easy-to-use
+assembly language for JVM bytecode programming. It uses Java syntax to define a JVM class
+except for the method body that takes bytecode instructions, including Jamaica's built-in
+macros. In Jamaica, bytecode instructions use mnemonics and symbolic names for all variables,
+parameters, data fields, constants and labels. Jamaica is a simplified JVM assembly language.
+It does not support inner classes. Variables are all method-wide and are strongly-typed.
+
+<p>Jamaica is a language facade for a Java class creation API, <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a>. This API closely mimics
+the Jamaica language, allows users to define a Java class with the same flow, and supports
+all the Jamaica instruction set and macros.
+
+<p>Why Jamaica? Even with the rigid JVM architecture and verification, creating JVM classes
+at bytecode level is still highly risky and error-prone. With Jamaica, you can quickly
+experiment dynamically creating classes; once done, mechanically convert the Jamaica source
+code into <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a> API calls. Jamaica is currently the only macro assembler for JVM, and serves
+this purpose very well. This is Jamaica's users' manual, including syntax for all JVM
+bytecode instructions and Jamaica macros. This is not meant to be a reference for the JVM,
+Java class files, JVM architecture and JVM runtime environment; they are introduced where
+necessary only to serve as the background for bytecode programming.
+<hr>
+
+<p>&nbsp;</p>
+
+
+<h2><a name=intro>1. Introduction</a></h2><p>
+
+<p>
+<em>Jamaica</em>, or <em>JVM Macro Assembler</em>, is an assembly language for JVM bytecode
+programming. It uses syntax that is almost identical to Java language except for the method
+body, where the program is written in bytecode instructions. Class fields, methods and local
+variables are all declared with Java syntax. Symbolic labels are used instead of absolute
+addresses, and variable and field names are used in the instructions rather than their
+indices. This makes it very easy to do JVM assembly programming.
+
+
+
+<h3><a name=jvm>JVM, Bytecode Assembly Programming</a></h3><p>
+
+<p>
+The Java Virtual Machine (JVM for short) is a specification defined by Sun Microsystems.
+It is by no means a simple reflection of the Java programming language. It only understands
+a particular binary format, the class file format, which contains a symbol table (constant
+pool), data fields, methods with JVM instructions (so-called bytecodes), and other
+ancillary information. The Java virtual machine imposes strong format and structural
+constraints of a class file for the sake of security.
+
+<p>
+Even though JVM is totally separate from the Java language, it is certainly designed with
+Java in mind. It has facilities to support all Java features such as various kinds of
+classes (including interface), synchronization instructions and Java data type support.
+Since class is the center of JVM, and the class structure is so well defined and closely
+reflects the needs of the Java programming language, this "CPU" is quite different from
+traditional ones. Even for JVM assembler programmers, there is not much one can do to
+control the structure, hence understanding the class file format doesn't really help much.
+It is quite easy to hide the complexity of enforcing the structural constraints through
+Java-like syntax and let the assembler to do the dirty work. The JVM Bytecode instructions
+ubiquitously use indices to reference fields, variables and constant pool entries. Jamaica
+exclusively uses symbolic names for all instructions. Therefore, programmers can focus on
+programming with JVM instructions, fields and variables. This is the design goal of Jamaica.
+
+
+
+<h3><a name=jamaica>Introduction to Jamaica</a></h3><p>
+
+<p>
+The Jamaica language is a language to specify JVM bytecode instructions in a Java-like class
+structure that will be compiled into a JVM class. Its syntax is mostly the same as the Java
+programming language, that is, the class, initialization, member declarations and variable
+declarations are all the same as in Java. The <code>package</code> and <code>import</code>
+are also supported. The executable code is written in JVM bytecode instructions; the format
+of instructions uses mnemonics and symbolic names for labels, fields and variables. No
+indices are used and allowed. Jamaica is a strongly typed language (stronger than JVM,
+because in JVM variables are just slots and type is less strongly enforced.) 
+
+<p>
+Assembly language programs typically have a lot of patterns that are used repeatedly. Jamaica
+has defined a number of useful macros; hence "macro" in its name. Because it is strongly typed,
+uses of those macros greatly simplifies programmers' lives because many JVM instructions
+actually force to specify the type of its operands. The current version is a little shy of
+being a true "macro assembly language" as it does not support user-defined macros.
+
+<p>
+Let's take a look at an example.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="CFirstCls1">Listing 1</a>. CFirstCls1.ja</th>
+          </thead><tr><td class=code><pre>
+public class CFirstCls
+{
+  int count;
+
+  public CFirstCls() {
+    iconst_0
+    putfield count int
+    return
+  }
+
+  public void inc(int amount) {
+    getfield count int
+    iload amount
+    iadd
+    putfield count int
+    return
+  }
+
+  public void printSelf() throws IOException {
+    getstatic System.out PrintStream
+    aload this    // same as aload_0
+    invokevirtual PrintStream.println(Object)void
+    return
+  }
+
+  public String toString() {
+    ldc "It's only me!"
+    areturn
+  }
+}
+</pre></td></tr></table></p><p>
+
+The code is self-explanatory, assuming you are somewhat familiar with the JVM bytecode
+instructions as well as Java class format in general. Outside of Java methods, it is just in
+Java syntax.  Note that Java class names and types are used like in Java. Java built-in
+classes in packages <code>java.lang.</code>, <code>java.io.</code> and <code>java.util.</code>
+can be used without package prefix or explicit <code>import</code> declarations. Next is a
+version for the same class but uses macros.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="CFirstCls2">Listing 2</a>. CFirstCls2.ja</th>
+          </thead><tr><td class=code><pre>
+public class CFirstCls
+{
+  int count;
+
+  public CFirstCls() {
+    %set count = 0
+  }
+
+  public void inc(int amount) {
+    %load count
+    %load amount
+    iadd
+    putfield count int
+  }
+
+  public void printSelf() throws IOException {
+    %println this
+  }
+
+  public String toString() {
+    %concat "CFirstCls<", count, '>'
+    areturn
+  }
+}
+</pre></td></tr></table></p><p>
+
+<p>
+Macros are cool. Look at <code>toString()</code>, where the concatenated string is put on top
+of the stack for consumption. With bytecode instructions, this program will be much longer.
+Besides the uses of macros, you may have noticed one thing: the <code>return</code> statements
+are missing for methods of <code>void</code> return type. Jamaica inserts one automatically if
+it does not see one.
+
+
+
+<h3><a name=why>Use of Jamaica</a></h3><p>
+
+<p>
+What's the use of Jamaica? One of the main purposes is to study the JVM in order to create
+Java classes on the fly without compilation. As you will discover (if you haven't done that
+yet), creating Java classes directly with bytecode instructions is very error-prone and
+takes a lot of effort. Jamaica is a relatively high-level language for this purpose and lets
+you focus on the class you want to create rather than the nitty-gritty details of class file
+structure, so you can quickly experiment with your class creation. Jamaica is a language
+facade for a Java class creation API, <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a>. This class is modeled after Jamaica; it uses
+symbolic labels and field/variable names, supports all Jamaica macros, and the flow of
+creating a class is identical to specifying a class in Jamaica. Currently there are a couple
+of implementations that use the <a href="http://asm.objectweb.org/">ASM package</a> and the
+<a href="http://jakarta.apache.org/bcel/">Jakarta-Apache BCEL package</a>.
+Click on the link to read more about using this class.
+
+
+
+<h3><a name=conform>JVM Specification Conformance</a></h3><p>
+
+<p>
+Jamaica is not related to Java nor is obliged to support all the features of the JVM
+specification. It does not support inner classes. It does not allow reuse of variables with
+different types nor ranges. This means all variable slots are strongly typed, something that
+is not rigidly enforced by the JVM. All these are quite minor, and frankly, it is probably
+better off without those features after all. (But, opinions differ.)
+
+<p>
+JVM bytecode instructions use index numbers such as constant pool entry numbers, field numbers
+and local operand stack slot numbers. Because Jamaica is a symbolic assembler, you can't
+specify instructions in their "raw" format, nor can you manipulate the constant pool entries. 
+This is exactly the reason for this symbolic assembler.
+
+
+
+<h3><a name=tools>Jamaica Assembler and Tools</a></h3><p>
+
+<p>
+The Jamaica assembler is the java class <code>com.judoscript.jamaica.Main</code>. It takes a
+Jamaica source file (by convention with extension ".ja") and generates a class file. The
+class name is specified in the source and may be different from the file name, although it is
+highly recommended to keep them the same.
+
+<p>
+The most popular and convenient tool to inspect the generated class file is <code>javap</code>
+that comes with JDK installation. Make sure the generated class is in the classpath, then run
+<code>javap</code> with the -c option to show bytecode. It display the bytecode in its own
+format that is different from Jamaica's, but it is visually similar.
+
+<p>
+Jamaica, being an assembler, does little code verification and optimization, because it uses
+textual information for class creation as much as possible to avoid dependency of other Java
+classes. Therefore, you <em>can</em> generate invalid code! You should always test it, one
+way is to run the generated class even if it does not contain the start-up method
+<code>main()</code>.
+
+<p>
+There are other tools for verifying and inspecting Java classes, such as utilities included
+in the Jakarta-BCEL package.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=lex>2. Lexical Rules of a Jamaica Source File</a></h2><p>
+
+<p>
+To avoid confusion, from this point on, we use "Java" for the Java programming language.
+The following are the lexical rules for Jamaica.
+
+<ol>
+<li> Comment is the same as Java single-line and multi-line comment.
+<li> Jamaica identifiers are Java identifiers. All Java reserved words are Jamaica reserved
+     words; Jamaica has no extra reserved words at the level of class/interface declaration.
+<li> Within method bodies and class static initization blocks, bytecode instruction
+     mnemonics are considered reserved words, and should not be used as names for variables,
+     parameters and labels. Refer to the instruction sets for all the mnemonics.
+<li> All data type names, including Java primitive types, class and interface names and array
+     names, are the same as Java data type names. No JVM style data type names are used.
+<li> All macro names start with <b><code>%</code></b>.
+<li> Bytecode instructions and macros are <em>not</em> terminated by any terminator character.
+     They are <em>not</em> required to be on a single line, although this is highly
+     recommended for readability.
+</ol>
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=clsdef>3. Defining Classes or Interfaces</a></h2><p>
+
+<p>
+These are the syntactic and semantic rules for defining a JVM class or interface.
+
+<ol>
+<li> The class or interface name is a simple name without package prefix.
+<li> The package prefix, if present, must be specified at first with the same Java syntax.
+<li> Following the optional package prefix declaration and before the class or interface
+     declaration, there may be zero or more import declarations with the same Java syntax.
+<li> Where a class name is expected, the class name is resolved via the following pseudo code:
+<blockquote><font class=secondary3><pre>
+  if the class name has a package prefix, i.e., contains dots, then
+    use it as-is;
+  otherwise, i.e., it is a simple one without package prefix, then
+    if there is an exact match in the import list (see below) then
+      use the first (or only) match
+    else
+      if there is a match in the import list (see below) then
+        use the first (or only) match
+      else
+        use the simply class name as-is
+      end if
+    end if
+  end if
+</pre></font></blockquote>
+     Notice that the resolved class name may or may not represent a valid Java class at
+     compile time. The rules for matching a name against an import list are:
+     <ol>
+     <li> An exact match is found when a complete class name is specified in the import
+          (e.g. <code>java.sql.Date</code>), and the class name is same as the name after
+          the last dot.
+     <li> A non-exact match is found when an import declaration ends with an asterisk and the
+          class name <em>can be resolved into a class in that package at compile-time</em>.
+     <li> These packages are auto-imported: <b><code>java.lang.*</code></b>, <b><code>java.io.*</code></b>, and
+          <b><code>java.util.*</code></b>. Therefore, classes and interfaces in these packages can be
+          used directly without package prefixes.
+     </ol>
+     Inner class names use dollar sings (<code>$</code>) to separate the inner-outer class
+     names.
+
+<li> Class data members are defined with Java syntax, but they can <em>not</em> be assigned
+     initial values. Initial values for local members are assigned in constructor(s), and
+     static members in the class initialization block(s).
+<li> The only exception to the above rule is for static final data members of primitive
+     types, whose values <em>must</em> be assigned, with the same Java syntax. (Static final
+     non-primitive-type members are still assigned in the initialization block(s).)
+<li> Methods are declared with the same Java syntax except for the content of the method
+     bodies. If a method delcaration ends with a <b><code>;</code></b>, it is assumed abstract and the
+     <b><code>abstract</code></b> attribute is optional. This is true for both interface and class
+     methods.
+<li> There can be zero or more class initialization blocks with the same Java syntax.
+<li> The contents of method bodies and initialization blocks can contain variable
+     declarations, bytecode instructions, labels and exception tables. This is described in
+     greater detail below.
+<li> There can be class-level macros to simplify your life when appropriated. See the next
+     section.
+<li> For constant values, there are special uses that are described in detail below.
+</ol>
+
+<p>
+It looks like lot of rules, but they are all intuitive if you know Java (who doesn't?)
+The following is an example.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="CSecondCls">Listing 3</a>. CSecondCls.ja</th>
+          </thead><tr><td class=code><pre>
+package xyz;
+
+public class CSecondCls implements Serializable
+{
+  public static final int MAX = 5;  // static/final/primitive: must initialize.
+  public static final HashMap symbols;
+
+  static  long      lSFld;
+  static  ArrayList oSFld;
+
+  private int       iFld;
+  private String[]  saFld;
+
+  static {
+    %set symbols = %object HashMap // static final
+    %set lSFld = 0
+    %set oSFld = null
+  }
+
+  %default_constructor &lt;public>
+
+  public static long getLong()       { getstatic lSFld long  lreturn }
+  public static void setLong(long v) { lload v  putstatic lSFld long }
+
+  public static List getList()            { getstatic oSFld ArrayList  areturn }
+  public static void setList(ArrayList v) { aload v  putstatic oSFld ArrayList }
+
+  public int  getInt()      { aload_0  getfield iFld int  ireturn }
+  public void setInt(int v) { aload_0  iload v  putfield iFld int }
+
+  public String[] getSA()       { aload_0  getfield saFld String[]  areturn }
+  public void setSA(String[] v) { aload_0  aload v  putfield saFld String[] }
+
+  public String toString() {
+    String parentString;
+    long lV;
+    List listV;
+    int  iV;
+    String[] saV;
+
+    aload this
+    invokespecial Object.toString()String
+    astore parentString
+
+    invokestatic getLong()long
+    lstore lV
+
+    invokestatic getList()List
+    astore listV
+
+    aload_0     // load this object
+    invokevirtual getInt()int
+    istore iV
+
+    aload this  // same as aload_0
+    invokevirtual getSA()String[]
+    astore saV
+
+    // now, format the string
+    %concat parentString, "\ngetLong() = ", lV, "\ngetList() = ", listV,
+            "\ngetInt()  = ", iV, "\ngetSA()   = ", saV, "\n---------------"
+    areturn     // the string is on the stack top
+  }
+
+  // Test it out.
+  public static void main(String[] args) {
+    CSecondCls obj;
+    %set obj = %object CSecondCls
+
+    %println obj
+
+    // Call their methods and print again.
+
+    %load obj
+    ldc 4
+    invokevirtual setInt(int)void
+
+    %load obj
+    %array String[] { "ABCD", "EFG", "HIJK" }
+    invokevirtual setSA(String[])void
+
+    ldc (long)100
+    invokestatic setLong(long)void
+
+    %object ArrayList
+    invokestatic setList(ArrayList)void
+
+    %println obj
+  }
+}
+</pre></td></tr></table></p><p>
+
+<p>
+Run it with the following command line, it generates file CSecondCls.class; move it to the
+right place in the classpath, and run it with the following result:
+
+<blockquote><font class=secondary3><pre>
+% java com.judoscript.jamaica.Main CSecondCls.ja
+% mv CSecondCls.class xyz/
+% java xyz.CSecondCls
+CSecondCls@3f5d07
+getLong() = 0
+getList() = null
+getInt()  = 0
+getSA()   = null
+---------------
+CSecondCls@3f5d07
+getLong() = 100
+getList() = []
+getInt()  = 4
+getSA()   = [Ljava.lang.String;@cac268
+---------------
+</pre></font></blockquote>
+
+
+
+
+<h3><a name=clsmacros>Class-Level Macros</a></h3><p>
+
+<p>
+Jamaica supports these class-level macros:
+
+<ul>
+<li> If the parent class has a default constructor, and there is no specific object
+     initialization, then this macro can be used to define a default constructor:
+<blockquote>
+<b><code>%default_constructor</code></b> [ <b><code>&lt;</code></b> ( <b><code>public</code></b> | <b><code>protected</code></b> | <b><code>private</code></b> ) <b><code>></code></b> ]
+</blockquote>
+
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=method>4. Method Body</a></h2><p>
+
+<p>
+In essence, Jamaica the language is almost identical to Java except for the content of the
+class method body. In Jamaica, bytecode instructions (and macros, which are collections of
+instructions) are specified for program logic instead of Java statements and expressions.
+Jamaica completely uses symbolic names for variables and labels, and Java data type syntax,
+so the code is still familiar. The following is the syntax for a method body, which also
+include class initialization blocks:
+
+<blockquote>
+<em>MethodBody</em> ::=
+<b><code>{</code></b>
+  ( <em>VariableDecl</em> | [ <em>Label></em> <b><code>:</code></b> ] <em>Instruction</em> )*
+  ( <em>CatchClause</em> )*
+<b><code>}</code></b>
+</blockquote>
+
+Where <em>VariableDecl</em> is the same Java syntax for declaring local variables, and
+primitive type values can be initialized.
+
+<p>
+Variables must be declared before can be used. Although they can be declared anywhere in the
+code, they are all of method-wide access. This is different from Java and the JVM
+specification. There are no sub-scopes within a method body. Variables are also strongly
+typed, and this type information is used by many macros.
+
+<p>
+In JVM, method parameters are actually local variables, therefore they are accessed exactly
+like variables. Don't declare variables with the same name as any of the parameters.
+
+
+<h3><a name=catch>Exception and Finally Handlers</a></h3><p>
+
+<p>
+Before the end of method body, catch clauses can be specified to handle exceptions.
+
+<blockquote>
+<em>CatchClause</em> ::=<br>
+<b><code>catch</code></b> [ <em>ClassName</em> ]
+<b><code>(</code></b> <em>Label</em> <b><code>,</code></b> <em>Label</em> <b><code>)</code></b> <em>Label</em>
+</blockquote>
+
+<p>
+The first label (inclusive) and second label (exclusive) designate the catch block, i.e., the
+specified exception happening in this range of code will be caught and control is transferred
+to the third label. If the exception class name is not specified, this clause catches any
+kind of <code>java.lang.Throwable</code>s.
+
+<p>
+JVM has no explicit support for Java's <b><code>finally</code></b> clause. When a finally clause is
+specified for a block, the Java compiler make sure all branches invoke that handler before
+exiting the method. That is, finally clause is a Java construct, not JVM's. In Jamaica, this
+becomes a style issue and you can choose to do anything.
+
+
+
+<h3><a name=prgm>Bytecode Programming</a></h3><p>
+
+<p>
+As demonstrated in the examples earlier, bytecode instructions use mnemonics, symbolic name
+and Java style data types. The macros also take advantage of the strong typing of variables
+and data members, thus making them easier to use than instructions which usually require
+data types.
+
+<p>
+For non-static methods, keyword <b><code>this</code></b> is used to denote the current object. In JVM
+method calls, <b><code>this</code></b> is always the first parameter (index 0), so these two statements
+are equivalent:
+
+<blockquote><font class=secondary3><pre>
+  aload this
+  aload_0
+</pre></font></blockquote>
+
+<p>
+The easy way of programming in Jamaica is to cheat. Suppose you want to implement something
+like this Java method:
+
+<blockquote><font class=secondary3><pre>
+  public int max(int[] vals) {
+    try {
+      int max = vals[0];
+      for (int i=1; i<vals.length; ++i)
+        if (vals[i]> max)
+          max = vals[i];
+      return max;
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
+</pre></font></blockquote>
+
+Compile the Java class first, then use <code>javap -c</code> tool to deassemble the code and
+get this:
+
+<blockquote><font class=secondary3><pre>
+Method int max(int[])
+   0 aload_1
+   1 iconst_0
+   2 iaload
+   3 istore_2
+   4 iconst_1
+   5 istore_3
+   6 goto 23
+   9 aload_1
+  10 iload_3
+  11 iaload
+  12 iload_2
+  13 if_icmple 20
+  16 aload_1
+  17 iload_3
+  18 iaload
+  19 istore_2
+  20 iinc 3 1
+  23 iload_3
+  24 aload_1
+  25 arraylength
+  26 if_icmplt 9
+  29 iload_2
+  30 ireturn
+  31 astore_2
+  32 aload_2
+  33 invokevirtual #3 <method null>
+  36 goto 39
+  39 iconst_0
+  40 ireturn
+Exception table:
+   from   to  target type
+     0    30    31   <class java.lang.exception>
+</pre></font></blockquote>
+
+You can mechanically convert this into Jamaica. In this program, variable #0 is <b><code>this</code></b>,
+#1 is <code>vals</code> the parameter, #2 is a local variable <code>max</code>, and #3 is
+another local variable <code>i</code>. We keep the line numbers for reference.
+
+<blockquote><font class=secondary3><pre>
+  public int max(int[] vals) {
+            int max, i;
+
+ 0   begin: aload vals
+ 1          iconst_0
+ 2          iaload
+ 3          istore    max
+ 4          iconst_1
+ 5          istore    i
+ 6          goto      check
+ 9    loop: aload     vals
+10          iload     i
+11          iaload
+12          iload     max
+13          if_icmple cont
+16          aload     vals
+17          iload     i
+18          iaload
+19          istore    max
+20    cont: iinc      i 1
+23   check: iload     i
+24          aload     vals
+25          arraylength
+26          if_icmplt loop
+29          iload     max
+30          ireturn
+31          //astore_2  // javac re-uses slot #2 for the Exception object
+32          //aload_2   // we simply call its method so no need for such
+33  action: invokevirtual Exception.printStackTrace()void
+36          //goto 39   // obviously redundant
+39          iconst_0
+40          ireturn
+
+    catch (begin, action) action
+  }
+</pre></font></blockquote>
+
+When you become better at Jamaica, especially its handy macros, JVM assembly programming can
+be a lot easier and fun as well.
+
+<blockquote><font class=secondary3><pre>
+  public int max(int[] vals) {
+    int max, i;
+begin:
+    %set max = vals[0]
+    %array_iterate vals i
+      %if vals[i] > max
+        %set max = vals[i]
+      %end_if
+    %end_iterate
+    %load max
+    ireturn
+action:
+    invokevirtual Exception.printStackTrace()void
+    iconst_0
+    ireturn
+
+    catch (begin, action) action
+  }
+</pre></font></blockquote>
+
+This is actually very close to Java code. You may feel this is going away from the low-level
+bytecode programming. Well, you can always choose to use bytecode instructions directly.
+Problem with that is, many commonly used patterns are repeated again and again, each taking
+many instructions and readabilty becomes really poor. What is nice about Jamaica macros is,
+the underlying Java class creator, <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a>, supports all these macros, so this code can be
+faithfully converted to <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a> calls.
+
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=instr>5. Introduction to Instructions</a></h2><p>
+
+
+<h3><a name=rt>Introduction to the JVM Runtime</a></h3><p>
+
+<p>
+When a method is called, a new frame is allocate to store state information during the
+method execution; it is discarded when the method returns. Frames are maintained on a stack
+of the current thread. Each thread has its own stack. Within the frame, there are numerous
+pieces of information, such as local variables and the operand stack. JVM is a stack-based
+machine; instructions receive values and return results on the operand stack, as well as
+passing parameters to method calls. The local variables in a frame include the current
+object reference <b><code>this</code></b> as its first one (for non-static methods), followed by
+invocation parameters and the method local variables.
+
+<p>
+Both operand stack and local variables are one word (32-bits) wide. Most values are one
+word, except for long and double values which are two words (64-bits).
+
+
+
+
+<h3><a name=instconst>Constant Loading Instructions</a></h3><p>
+
+<p>
+JVM has instructions to load constants onto the top of the stack. Constants can be of type
+integer, long, float, long, string and <b><code>null</code></b>.
+
+<p>
+Instruction <b><code>aconst_null</code></b> loads <b><code>null</code></b>.
+
+<p>
+Instructions <b><code>bipush</code></b> and <b><code>sipush</code></b> push small integers values; <b><code>bipush</code></b>
+takes a byte parameter, and <b><code>sipush</code></b> takes a short (double-byte) parameter.
+
+<p>
+JVM also has single-byte instructions for commonly-used constant values. For integer, they
+are: <b><code>iconst_m1</code></b> (for minus-1) and <b><code>iconst_0</code></b> through <b><code>iconst_5</code></b>; for
+long, <b><code>lconst_0</code></b> and <b><code>lconst_1</code></b>; for float, <b><code>fconst_0</code></b> through
+<b><code>fconst_2</code></b>; and for double, <b><code>dconst_0</code></b> and <b><code>dconst_1</code></b>.
+
+<p>
+For other values and strings, <b><code>ldc</code></b> and its variants, <b><code>ldc_w</code></b> and
+<b><code>ldc2_w</code></b>, load constants from the class's constant pool. In JVM, these instructions
+take as a parameter an index number that points to a constant pool entry: <b><code>ldc</code></b> takes
+a byte index, while the "wide" versions take a double-type index. <b><code>ldc2_w</code></b> is for
+loading long and double constants. In Jamaica, no index numbers are used. These instructions
+just take a constant literal as its parameter. Jamaica also handles the wideness and value
+size with the <b><code>ldc</code></b>, that is, you can always specify <b><code>ldc</code></b> regardless of the
+size of the index number or the size of value. Here are a few examples:
+
+<blockquote><font class=secondary3><pre>
+ldc 129832      // integer
+ldc (long)232   // long and becomes ldc2_w
+ldc 5.5         // double and becomes ldc2_w
+ldc (float)5.5  // float
+ldc "ABCD"
+ldc "ABCD"      // only one entry for "ABCD" in the constant pool
+ldc 1234        // Jamaica optimizes this to "sipush 1234"
+ldc 234         // Jamaica optimizes this to "bipush 234"
+ldc 2           // Jamaica optimizes this to "iconst_2"
+</pre></font></blockquote>
+
+<p>
+There is no boolean type in JVM. Use 1 for <b><code>true</code></b> and 0 for <b><code>false</code></b>.
+
+
+
+<h3><a name=symconst>Using Symbolic Constants</a></h3><p>
+
+<p>
+Jamaica supports symbolic constants. Anywhere a constant value is expected, a constant name
+or a class's static-final data member can be used with this syntax:
+
+<blockquote>
+<b><code>{</code></b> [ <em>ClassName</em> <b><code>.</code></b> ] <em>name</em><b><code>}</code></b>
+</blockquote>
+
+<p>
+All programming macros take constants, so do these instructions: <b><code>iinc</code></b>, <b><code>ldc</code></b>
+(and <b><code>ldc_w</code></b> and <b><code>ldc2_w</code></b>), <b><code>bipush</code></b>, <b><code>sipush</code></b>, <b><code>switch</code></b>
+(including <b><code>tableswitch</code></b> and <b><code>lookupswitch</code></b>).
+
+<p>
+The constant is a simple name, it is one of these: a static-final primitive type data member
+already defined in the current class or its parent class and/or implemented interfaces, or a
+constant name explicitly defined via the <b><code>%const</code></b> macro prior to the class/interface
+declaration. The constant value is obtained at compile time. Here is an example:
+
+<blockquote><font class=secondary3><pre>
+%const clob = java.sql.Types.CLOB
+
+public class CTest
+{
+  public static void main(String[] args) {
+    %ldc {clob}                // becomes  sipush 2005
+    %ldc {java.sql.Types.CLOB} // becomes  sipush 2005
+    pop
+    pop
+  }
+}
+</pre></font></blockquote>
+
+
+
+
+<h3><a name=instvar>Variable Access Instructions</a></h3><p>
+
+<p>
+Variables in a JVM method are allocated slots in the runtime frame. Most slots take two
+bytes except for long and double values, which take four bytes. In JVM, few instructions
+deal with variables directly (the only exception is <b><code>iinc</code></b>); values of variables
+need be load onto or store from the top of the stack, via JVM's load and store instructions.
+In Jamaica, variables, including method parameters, are represented by symbolic names;
+nevertheless, within JVM, they are represented by slot numbers. Their syntax is:
+
+<blockquote>
+( &lt;type><b><code>load</code></b> | &lt;type><b><code>store</code></b> ) <em>variable</em>
+</blockquote>
+
+where <code>&lt;type></code> is one of the following: <b><code>i</code></b>, <b><code>l</code></b>, <b><code>f</code></b>,
+<b><code>d</code></b> and <b><code>a</code></b>, for integer, long, float, double and <em>any</em>, respectively.
+So to copy a long value stored in variable <em>foo</em> into <em>bar</em>, you do this:
+
+<blockquote><font class=secondary3><pre>
+lload  foo
+lstore bar
+</pre></font></blockquote>
+
+<p>
+JVM has single-byte shorthand instructions to access the first 4 variables; they are:
+
+<blockquote>
+&lt;type><b><code>load_</code></b>&lt;0-3> | &lt;type><b><code>store_</code></b>&lt;0-3>
+</blockquote>
+
+These instructions are supported by Jamaica; however, they demand extra caution. Let's
+take a look at an example:
+
+<blockquote><font class=secondary3><pre>
+1  public void amethod(String msg) {
+2    long lvar;
+3    int  ivar;
+4    iload_3
+5    i2l
+6    lstore_2
+7  }
+</pre></font></blockquote>
+
+At first glance, this code looks innocent. But line 4 is wrong, because the second
+variable, <code>lvar</code>, is a long and takes two slots, so the slot number for
+<code>ivar</code>, is 4.
+
+<p>
+One instruction is frequently used: <b><code>aload_0</code></b>. In a non-static method, the
+object instance for this method is pushed as the first variable and always occupies
+slot #0. In Jamaica, keyword <b><code>this</code></b> is used for the same purpose. Hence,
+
+<blockquote><font class=secondary3><pre>
+aload_0
+aload this
+</pre></font></blockquote>
+
+are exactly the same.
+
+
+
+<h3><a name=instarray>Array Operation Instructions</a></h3><p>
+
+<p>
+Arrays In JVM are treated like objects. Array elements can have all Java types. In addition
+to the simple type counterpart, array elements can also be boolean, byte, char and short.
+
+<p>
+To access their attributes and data elemenets, JVM has dedicated instructions. All these
+instructions need to have the array instance itself loaded on top of the stack. Instruction
+<b><code>arraylength</code></b> returns the length of the array on the stack top. The syntax for array
+element access methods is:
+
+<blockquote>
+&lt;type><b><code>aload</code></b> | &lt;type><b><code>astore</code></b>
+</blockquote>
+
+where <em>&lt;type></em> is one of the following: <b><code>i</code></b>, <b><code>l</code></b>, <b><code>f</code></b>,
+<b><code>d</code></b>, <b><code>a</code></b>, <b><code>b</code></b>, <b><code>c</code></b> and <b><code>s</code></b> for integer, long, float,
+double, <em>any</em>, boolean/byte, char and short, respectively. So for a double array
+<code>darr</code>, to copy element at 0 to 4, do this:
+
+<blockquote><font class=secondary3><pre>
+  aload    darr // load the array instance
+  dup           // it will be used twice here
+  iconst_0      // array index 0
+  daload        // load the double value on the stack
+  dstore   tmp  // save it
+  bipush   4    // array index 4
+  dload    tmp  // get the other value
+  dastore       // put the value into the array (at 4)
+</pre></font></blockquote>
+
+
+
+<h3><a name=instgetput>Data Member Access Instructions</a></h3><p>
+
+<p>
+A JVM class can have class-wide (static) and instance-wide (non-static) data members. The
+following instructions are used to access data members:
+
+<blockquote>
+( <b><code>getfield</code></b> | <b><code>getstatic</code></b> | <b><code>putfield</code></b>  | <b><code>putstatic</code></b> )
+[ <em>ClassName</em> <b><code>.</code></b> ] <em>FieldName</em> <em>type</em>
+</blockquote>
+
+In Jamaica, if the class name for the field is missing, it is assumed the field is in the
+current class. The class name and type seem redundant but that is one way JVM enforces data
+security. For non-static data members, the object that owns the field is loaded on the stack
+first. Here is an example:
+
+<blockquote><font class=secondary3><pre>
+class MyClass
+{
+  PrintStream out;
+
+  MyClass() {
+    getstatic System.out PrintStream
+    putfield  out        PrintStream
+  }
+}
+</pre></font></blockquote>
+
+
+
+<h3><a name=insttype>Data Type Instructions</a></h3><p>
+
+<p>
+These instructions converts the value on the stack top to a different numeric type:
+
+<blockquote>
+<b><code>i2l</code></b> | <b><code>i2f</code></b> | <b><code>i2d</code></b> | <b><code>i2b</code></b> | <b><code>i2c</code></b> | <b><code>i2s</code></b> |<br>
+<b><code>l2i</code></b> | <b><code>l2f</code></b> | <b><code>l2d</code></b> | <b><code>f2i</code></b> | <b><code>f2l</code></b> | <b><code>f2d</code></b> |
+<b><code>d2i</code></b> | <b><code>d2l</code></b> | <b><code>d2f</code></b>
+</blockquote>
+
+<p>
+Instruction <b><code>checkcast</code></b> checks the object on the stack top for a particular class and
+throws an exception if the object is not compatible with the class. Instruction
+<b><code>instanceof</code></b> checks the object against a particular class and returns a boolean value
+(0 or 1) on the stack. Their syntax is:
+
+<blockquote>
+( <b><code>checkcast</code></b> | <b><code>instanceof</code></b> ) <em>ClassName</em>
+</blockquote>
+
+
+
+
+<h3><a name=instnew>Object Creation Instructions</a></h3><p>
+
+<p>
+The instruction <b><code>new</code></b> <em>ClassName</em> creates an instance of that class on the
+stack. It must be initialized by an explicit call to one of its constructors. The following
+is an example:
+
+<blockquote><font class=secondary3><pre>
+new StringBuffer
+dup
+bipush 100
+invokespecial StringBuffer<init>(int)void
+// now the StringBuffer object on the stack is ready
+</pre></font></blockquote>
+
+<p>
+To create a single dimensional array, use one of these instructions:
+
+<blockquote>
+<b><code>newarray</code></b> <em>PrimitiveType</em> | <b><code>anewarray</code></b> <em>ClassName</em>
+</blockquote>
+
+They both takes the array dimension from the stack top. Here is an example:
+
+<blockquote><font class=secondary3><pre>
+// to create int[9]
+bipush 9
+newarray int
+// to create String[10]
+bipush 10
+anewarray String
+</pre></font></blockquote>
+
+<p>
+Multi-dimensional arrays are created with this instruction:
+
+<blockquote>
+<b><code>multianewarray</code></b> <em>DataType</em> ( <b><code>[]</code></b> )* <em>dimensions</em>
+</blockquote>
+
+where <em>dimensions</em> is the dimension of the sub-array to be created. The sizes of
+each dimension must be placed on the stack first. Here is an example:
+
+<blockquote><font class=secondary3><pre>
+// to do:
+//   byte[][][] a = new byte[19][19][];
+//   a[1][2] = new byte[3];
+bipush 19
+bipush 19
+multianewarray byte[][][] 2
+dup
+astore a
+iconst_1
+aaload
+iconst_2
+iconst_3
+newarray byte
+aastore
+</pre></font></blockquote>
+
+
+
+<h3><a name=instarith>Arithmetic and Logical Instructions</a></h3><p>
+
+<p>
+These instructions do arithmethic calculations on the parameters from the stack and store
+the result on the stack:
+
+<blockquote>
+&lt;type><b><code>add</code></b> | &lt;type><b><code>sub</code></b> | &lt;type><b><code>mul</code></b> |
+&lt;type><b><code>div</code></b> | &lt;type><b><code>rem</code></b> | &lt;type><b><code>neg</code></b>
+</blockquote>
+
+where <em>&lt;type></em> is one of the following: <b><code>i</code></b>, <b><code>l</code></b>, <b><code>f</code></b> and
+<b><code>d</code></b> for integer, long, float and double.
+
+<p>
+These instructions do logical and shifting operations on the parameters from the stack and
+store the resutl on the stack:
+
+<blockquote>
+&lt;type><b><code>shl</code></b> |
+&lt;type><b><code>shr</code></b> |
+&lt;type><b><code>ushr</code></b> |
+&lt;type><b><code>and</code></b> |
+&lt;type><b><code>or</code></b> |
+&lt;type><b><code>xor</code></b>
+</blockquote>
+
+where <em>&lt;type></em> is one of the following: <b><code>i</code></b> and <b><code>l</code></b> for integer
+and long.
+
+<p>
+Instruction <b><code>iinc</code></b> is the only one that operates on a variable slot, not stack.
+Its syntax is:
+
+<blockquote>
+<b><code>iinc</code></b> <em>variable</em> <em>increment</em>
+</blockquote>
+
+where <em>increment</em> is an integer constant.
+
+
+
+<h3><a name=inststack>Stack Manipulation Instructions</a></h3><p>
+
+<p>
+JVM has a number of instructions to manipulate the stack top. The reason may be that JVM
+has no registers whatsoever, and these instructions may help speed up certain operations.
+Whatever the reason, here they are: <b><code>pop</code></b>, <b><code>pop2</code></b>, <b><code>dup</code></b>,
+<b><code>dup_x1</code></b>, <b><code>dup_x2</code></b>, <b><code>dup2</code></b>, <b><code>dup2_x1</code></b>, <b><code>dup2_x2</code></b> and
+<b><code>swap</code></b>. They are all supported in Jamaica.
+
+
+<h3><a name=instinvoke>Method Invocation Instructions</a></h3><p>
+
+<p>
+JVM has four method invocation methods: <b><code>invokevirtual</code></b> is used to call methods of
+object instances; <b><code>invokestatic</code></b> is to call static methods; <b><code>invokeinterface</code></b>
+is to call interface methods, and <b><code>invokespecial</code></b> is to call special methods such as
+constructors or methods of the super classes. They all share the same syntax in Jamaica:
+
+<blockquote>
+( <b><code>invokevirtual</code></b> | <b><code>invokestatic</code></b> | <b><code>invokeinterface</code></b> | <b><code>invokespecial</code></b> )<br>
+[ <em>ClassName</em> <b><code>.</code></b> ] <em>name</em> <em>MethodSignature</em><br>
+<em>MethodSignature</em> ::=
+<b><code>(</code></b> [ <em>DataType</em> ( <b><code>,</code></b> <em>DataType</em> )* ] <b><code>)</code></b> <em>DataType</em>
+</blockquote>
+
+
+
+<h3><a name=instuncondjmp>Uncontidional Jump Instructions</a></h3><p>
+
+<p>
+The program execution can be unconditionally changed to a location that may not be the next
+instruction in the flow by an absolute <b><code>goto</code></b> (and <b><code>goto_w</code></b>) instruction, a
+return instruction in a method, or by an exception explicitly thrown via the <b><code>athrow</code></b>
+instruction. The syntax for these instructions are:
+
+<blockquote>
+<em>UncondidionalJump</em> ::=<br>
+( <b><code>goto</code></b> | <b><code>goto_w</code></b> ) <em>label</em> |<br>
+( <b><code>jsr</code></b> | <b><code>jsr_w</code></b> ) <em>label</em> | <b><code>ret</code></b> |<br>
+<b><code>return</code></b> | &lt;type><b><code>return</code></b> |<br>
+<b><code>athrow</code></b>
+</blockquote>
+
+where <code>&lt;type></code> is one of the following: <b><code>i</code></b>, <b><code>l</code></b>, <b><code>f</code></b>,
+<b><code>d</code></b> and <b><code>a</code></b> for integer, long, float, double and <em>any</em>.
+
+<p>
+The <b><code>jsr</code></b> (and <b><code>jsr_w</code></b>) and the companion <b><code>ret</code></b> make it possible to
+implement subroutines within methods. The <em>label</em> must point to an address within the
+method that calls <b><code>jsr</code></b>, and at the end of the subroutine there must be a
+<b><code>ret</code></b>. Java language does not explicitly use this JVM feature, although javac commonly
+use this to implement finally clause if there are multiple exit routes.
+
+<p>
+As usual, the wide version of those instructions are optional; their "narrow" counterparts
+can be used in place of them and will be converted to wide if necessary.
+
+<p>
+The <b><code>return</code></b> is not necessary at the end of a method with a <b><code>void</code></b> return type.
+Jamaica inserts one if it is needed.
+
+
+
+
+<h3><a name=instcondjmp>Contidional Jump Instructions</a></h3><p>
+
+<p>
+The following instructions compare two integers and jump accordingly: 
+
+<blockquote>
+<b><code>if_icmp</code></b>&lt;op> <em>label</em>
+</blockquote>
+
+where <em>&lt;op></em> is one of the following: <b><code>eq</code></b> for equal, <b><code>ne</code></b> for
+not-equal, <b><code>lt</code></b> for less-than, <b><code>le</code></b> for less-or-equal, <b><code>gt</code></b> for
+greater-than and <b><code>ge</code></b> for greater-or-equal.
+
+<p>
+For two objects, their equality or non-equality can be compared with these instructions:
+
+<blockquote>
+( <b><code>if_acmpeq</code></b> | <b><code>if_acmpne</code></b> ) <em>label</em>
+</blockquote>
+
+<p>
+To compare two long, float or double values, you need to first invoke one of these
+instructions: <b><code>lcmp</code></b>, <b><code>fcmpl</code></b>, <b><code>fcmpg</code></b>, <b><code>dcmpl</code></b> and <b><code>dcmpg</code></b>,
+which compares the two values on the stack and leave an integer result on the stack top. Then,
+use one of the following to branch:
+
+<blockquote>
+<b><code>if</code></b>&lt;op> <em>label</em>
+</blockquote>
+
+where <em>&lt;op></em> is one of the following: <b><code>eq</code></b>, <b><code>ne</code></b>, <b><code>lt</code></b>,
+<b><code>le</code></b>, <b><code>gt</code></b> and <b><code>ge</code></b>.
+
+<p>
+To test whether an object reference is null or not, use these instructions:
+
+<blockquote>
+( <b><code>ifnull</code></b> | <b><code>ifnonnull</code></b> ) <em>label</em>
+</blockquote>
+
+<p>
+JVM also defines two switch instructions that do multi-way branching.
+
+<blockquote>
+( ( <b><code>tableswitch</code></b> | <b><code>switch</code></b> )
+  ( <em>int_constant</em> <b><code>:</code></b> <em>label</em> )*
+  <b><code>default</code></b> <b><code>:</code></b> <em>label</em><br>
+| <b><code>lookupswitch</code></b> <em>int_constant</em> ( <em>label</em> )*
+  <b><code>default</code></b> <b><code>:</code></b> <em>label</em>
+)
+</blockquote>
+
+<b><code>lookupswitch</code></b> is a high-performance switch statement: the multiple choices must be
+consecutive numbers, so it just needs a first value and a number of labels.
+<b><code>tableswitch</code></b> (and its Jamaica synonyn, <b><code>switch</code></b>) takes a number of integer
+constants and their associated labels.  Jamaica optimizes this if the constant values happen
+to be consecutive.
+
+
+
+<h3><a name=instother>Other Instructions</a></h3><p>
+
+<p>
+The <b><code>nop</code></b> instruction does nothing. It can be used as a placeholder for testing
+purposes.
+
+<p>
+There are two synchronization instructions, <b><code>monitorenter</code></b> and <b><code>monitorexit</code></b>,
+to implement object-based synchronization. They both takes an object on the stack as their
+parameter. Method synchronization is denoted by the <b><code>synchronized</code></b> attribute, not
+through these instructions.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=macro>6. Introduction to Executable Macros</a></h2><p>
+
+<p>
+Jamaica executable macros (or simply, macros) greatly simplifies JVM bytecode assembly
+programming. They cover these areas:
+
+<ol>
+<li> print
+<li> get and set values from/to constants, variables and data fields
+<li> object and array creation
+<li> string concatenation
+<li> conditional branching for comparisons
+<li> iteration of iterators and enumerations
+</ol>
+
+Jamaica macros take advantage of the strongly-typedness of variables. They treat individual
+variables, data fields, array elements and constants consistently. The object and array
+creation macros are assignable macros, meaning they can be used as the righthand side values
+for the <b><code>%set</code></b> macro.
+
+
+<h3><a name=macroparam>Executable Macro Parameters</a></h3><p>
+
+<p>
+Macro parameters can be a constant, a simple name or an array element expression. No other
+expressions are available (for now). Syntactically,
+
+<blockquote>
+<em>Param</em> ::=
+<em>Constant</em> | <em>name</em> ( <b><code>[</code></b> <em>Param</em> <b><code>]</code></b> )*
+</blockquote>
+
+The names in the parameters are resolved in this order: if variable is found with that name,
+use that variable; otherwise, if a data member (static or otherwise), use that field. This
+is an example:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="MacroTest">Listing 4</a>. MacroTest.ja</th>
+          </thead><tr><td class=code><pre>
+public class MacroTest
+{
+  static int iSFld[];
+  int idx;
+
+  static {
+    %set iSFld = %array int[]{ 2, 3, 4 }
+  }
+
+  void foo() {
+    %set idx = 0
+    %println "iSFld[iSFld[idx=", idx, "]] = ", iSFld[iSFld[idx]]
+  }
+
+  public static void main(String[] args) {
+    %object MacroTest
+    invokevirtual foo()void
+  }
+}
+</pre></td></tr></table></p><p>
+
+
+
+<h3><a name=macroprint>%print, %println and %flush</a></h3><p>
+
+<p>
+The syntax for the print macro is:
+
+<blockquote>
+( <b><code>%println</code></b> | <b><code>%print</code></b> | <b><code>%flush</code></b> )
+[ <b><code>&lt;</code></b> <em>TargetName</em> <b><code>></code></b> ]
+[ <em>Param</em> ( <b><code>,</code></b> <em>Param</em> )* ]
+</blockquote>
+
+The <em>TargetName</em> is either <b><code>out</code></b> (for <code>System.out</code>) or <b><code>err</code></b>
+(for <code>System.err</code>.) By default, it is <b><code>out</code></b>. These macros can take a
+variable number of parameters. For <b><code>println</code></b>, the whole list is printed without line
+breaks except for the end. For <b><code>flush</code></b>, the whole list is printed like with
+<b><code>print</code></b>, followed by a call to the <code>flush()</code> method.
+
+
+
+<h3><a name=macroload>%load</a></h3><p>
+
+<p>
+The syntax for the load macro is:
+
+<blockquote>
+<b><code>%load</code></b> <em>Param</em>
+</blockquote>
+
+The value, whether a constant, a variable, a field or an array element, is loaded onto the
+top of the stack.
+
+
+<h3><a name=macroset>%set</a></h3><p>
+
+<p>
+The syntax for the set macro is:
+
+<blockquote>
+<b><code>%set</code></b> <em>Param</em> <b><code>=</code></b> <em>Param</em>
+</blockquote>
+
+The righthand-side value, whether a constant, a variable, a field or an array element, is
+assigned to the variable, field or an array element of the lefthand-side.
+
+
+
+<h3><a name=macroobj>%object</a></h3><p>
+
+<p>
+The syntax for the object creation macro is:
+
+<blockquote>
+<b><code>%object</code></b> <em>ClassName</em>
+[ <b><code>(</code></b> <em>DataType</em> ( <b><code>,</code></b> <em>DataType</em> )* <b><code>)</code></b>
+  <b><code>(</code></b> <em>Param</em> ( <b><code>,</code></b> <em>Param</em> )* <b><code>)</code></b> ]
+</blockquote>
+
+This creates an object of that class on the stack top and invokes its constructor.
+
+
+<h3><a name=macroarr>%array</a></h3><p>
+
+<p>
+There are two ways to create an array and put onto the stack, one by specifying the
+dimensions, the other by initialization values for single-dimensional arrays.
+
+<blockquote>
+<b><code>%array</code></b> <em>ClassName</em>
+( <b><code>[</code></b> <em>Param</em> <b><code>]</code></b> )+ ( <b><code>[</code></b> <b><code>]</code></b> )*
+| <b><code>[</code></b> <b><code>]</code></b> <b><code>{</code></b> <em>Param</em> ( <b><code>,</code></b> <em>Param</em> )* <b><code>}</code></b>
+)
+</blockquote>
+
+
+<h3><a name=macroconcat>%concat</a></h3><p>
+
+<p>
+This macro concatenates all the parameters into a single string and put onto the stack:
+
+<blockquote>
+<b><code>%concat</code></b> <em>Param</em> ( <b><code>,</code></b> <em>Param</em> )*
+</blockquote>
+
+
+<h3><a name=macroif>%if, %else and %end_if</a></h3><p>
+
+<p>
+The if-else structure is familiar to any programmers. Jamaica supports all the comparision
+operations and handles types automatically. The syntax for the if-else macro is:
+
+<blockquote>
+<b><code>%if</code></b> <em>Param</em> [ <em>CompareOp</em> <em>Param</em> ] <em>CodeList</em>
+[ <b><code>%else</code></b> <em>CodeList</em> ]
+<b><code>%end_if</code></b><br>
+<em>CompareOp</em> ::= <b><code>==</code></b> | <b><code>!=</code></b> |
+<b><code>&lt;</code></b> | <b><code>&lt;=</code></b> | <b><code>></code></b> | <b><code>>=</code></b>
+</blockquote>
+
+If the comparison expression is a single parameter, it is treated as a boolean and is
+compared to > 0.
+
+
+<h3><a name=macroiter>%iterate and %end_iterate</a></h3><p>
+
+<p>
+The syntax of the iterate macro is:
+
+<blockquote>
+<b><code>%iterate</code></b> <em>Param</em> [ <em>IterateVarName</em> ]
+<em>CodeList</em>
+<b><code>%end_iterate</code></b>
+</blockquote>
+
+where <em>Param</em> must be evaluated to either a <code>java.util.Iterator</code> or a
+<code>java.util.Enumeration</code>. During each iteration, if the iterate variable is
+specified, that element is stored there; otherwise, it is put on the top of the stack.
+The types of the elements and the iterate variable must be compatible. E.g.,
+
+<blockquote><font class=secondary3><pre>
+public String toCSV(List list) {
+  Iterator iter;
+  %load list
+  invokevirtual List.iterator()Iterator
+  astore iter
+
+  StringBuffer sb;
+  %object StringBuffer
+  dup
+  astore sb
+  dup
+  boolean first;
+  %set first = true
+  %iterate iter
+    %if first
+      %set first = false
+    %else
+      %load sb
+      ldc ','
+      invokevirtual StringBuffer.append(char)void
+    %end_if
+    // stack top are: sb and element
+    invokevirtual StringBuffer.append(Object)void
+    dup  // sb
+  %end_iterate 
+  pop
+  invokevirtual StringBuffer.toString()String
+  areturn
+}
+</pre></font></blockquote>
+
+
+
+<h3><a name=macroaiter>%array_iterate and %end_iterate</a></h3><p>
+
+<p>
+The syntax of the array iterate macro is:
+
+<blockquote>
+<b><code>%array_iterate</code></b> <em>Param</em> <em>IterateIndexVarName</em>
+<em>CodeList</em>
+<b><code>%end_iterate</code></b>
+</blockquote>
+
+where <em>Param</em> must be evaluated to an array, and the index variable must be an
+<code>int</code>. In the iterations, the index variable is incremented from 0 to the array
+length minus one. E.g.,
+
+<blockquote><font class=secondary3><pre>
+int[] arr;
+%set arr = %array int[]{ 9, 8, 7 }
+int idx;
+%array_iterate arr idx
+  %println "arr[", idx, "]=", arr[idx]
+%end_iterate
+</pre></font></blockquote>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>7. Summary</a></h2><p>
+
+<p>
+Jamaica is a macro assembly language for the Java VM. It uses the Java syntax for the
+class or interface definition except for the method bodies, where JVM bytecode
+instructions are used.  Within the method body, variables can be defined and exception
+handlers can be specified.  The instructions all use symbolic names for variables, fields
+and labels and never use indices that the JVM instruction set has defined. The details of
+a class file such as constant pools are totally hidden. This is because JVM specification
+has defined such a rigid JVM structure that programmers have no liberty nor interest to
+handle these by themselves. In addition, Jamaica supports a number of macros for common
+patterns that are intelligently expanded into sets of instructions, hence the name Jamaica
+for the JVM Macro Assembler. This is possible because Jamaica is a strongly-typed language,
+e.g., each named variable is specified with a type. Jamaica does not support creating inner
+classes or interfaces, but it can use inner classes or interfaces.
+
+<p>
+Dynamically creating Java classes at bytecode level is extremely tedious and error-prone.
+Jamaica removes most of the chores of managing class files details and greatly simplifies
+this task. It is implemented by a Java API, <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a>, which is modeled after the Jamaica
+language itself, including macros. Therefore, you have the tool, Jamaica, to quickly
+ specify and verify the process to dynamically create Java classes, and once done, you can
+easily, mechanically convert the Jamaica source code into a series of <a href="JavaClassCreator.html"><code>JavaClassCreator</code></a> method calls
+to use in your Java software that dynamically creates Java classes.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>8. Code Listings</a></h2><p>
+<ol><li> <a href=#CFirstCls1>CFirstCls1.ja</a><li> <a href=#CFirstCls2>CFirstCls2.ja</a><li> <a href=#CSecondCls>CSecondCls.ja</a><li> <a href=#MacroTest>MacroTest.ja</a></ol>
+
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

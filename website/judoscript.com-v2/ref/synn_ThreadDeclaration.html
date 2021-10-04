@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - ThreadDeclaration</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ThreadDeclaration</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ThreadDeclaration>ThreadDeclaration</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>thread</font>  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showNT('Block')">Block</a></font> </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ThreadDeclaration'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>A thread is defined much the same way as a <font class=nt><a href="javascript:showNT('function')">function</a></font> and started via
+  the <font class=kw>start</font>  keyword. Threads run in a different "context" and only global
+  varibles and constants are shared across threads.</p>
+
+  <p>See <font class=nt><a href="javascript:showNT('StartThreadStatement')">StartThreadStatement</a></font>.</p>
+ </body></html>

@@ -1,0 +1,122 @@
+<%
+  if (!::tabID) ::tabID = 'home';
+  if (!::subTitle) ::subTitle = '&nbsp;';
+
+  function jusp$spacer ctxt, width, height {
+    print<ctxt.writer> '<IMG src="', ::base, 'share/spacer.gif" height=${height} width=${width} border=0>';
+  }
+
+  // Uses ::tabID to compare to myID, which is: 'home', 'judo', 'jusp', or 'jamaica'.
+  function jusp$topTab ctxt, uri, name, imgName, myID {
+    imgName += (::tabID == myID) ? '_black' : '_gray';
+    print<ctxt.writer> '<A href="javascript:go_to(\'${::base}${uri}\')"><IMG alt="${name}" hspace=0 src="',
+                       '${::base}share/${imgName}.gif" border=0></A>';
+  }
+
+  function jusp$menuTab ctxt, uri, name {
+    print<ctxt.writer> '<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap>',
+                       '<A class=nolinewhite href="javascript:go_to(\'${uri}\')">${name}</A></TD>';
+  }
+
+  function jusp$leftbarCategory ctxt, name {
+    print<ctxt.writer> '<P class=navheader style="MARGIN: 0px">${name}</P>';
+  }
+
+  function jusp$leftbarItem ctxt, name, uri, title {
+    print<ctxt.writer> '<P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px">',
+                       '<A class=nav3 title="${title}" href="javascript:go_to(\'${uri}\')">${name}</A></P>';
+  }
+
+  function jusp$new ctxt, uri, title {
+    print<ctxt.writer> '<a href="${uri}"><img src="share/new.gif" alt="${title}" border=0></a>';
+  }
+
+  function jusp$leftPane ctxt {
+    print<ctxt.writer> '<table width=100% border=0><tr><td class=secondary3 valign=top width="50%">';
+  }
+
+  function jusp$rightPane ctxt {
+    var width = 25;
+    print<ctxt.writer> '</td><td width=${width}>';
+    jusp$spacer ctxt, width, 1;
+    print<ctxt.writer> '</td><td class=secondary3 valign=top width="50%">';
+  }
+
+  function jusp$endPanes ctxt {
+    print<ctxt.writer> '</td></tr></table>';
+  }
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE><%= ::title %></TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="<%= ::keywords %>" name=keywords>
+<LINK href="<%= ::base %>share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="<%= ::base %>share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="<%= ::base %>share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="<%= ::base %>share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><%!topTab
+      'home.html', 'Home', 'home', 'home' %><%!topTab
+      'judo.html', 'Judo Language', 'judo_lang', 'judo' %><%!topTab
+      'jusp.html', 'JuSP Platform', 'jusp_plaf', 'jusp' %><%!topTab
+      'jamaica.html', 'Jamaica Language', 'jamaica_lang', 'jamaica' %></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2><%--  horizontal nav (generic)  --%>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<%!menuTab ::base + 'ref/index.html', 'Judo Reference' %>
+<%!menuTab ::base + 'jusp.html', 'JuSP Reference' %>
+<%!menuTab ::base + 'wiki_weblog.html', 'Wiki/Weblog' %>
+<%!menuTab ::base + 'tut_pres.html', 'Tutorials/Presentations' %>
+<%!menuTab ::base + 'download.html', 'Downloads' %>
+<%!menuTab ::base + 'goodies/index.html', 'Goodies' %>
+<%!menuTab 'http://www.judoscript.com/feedback.jusp', 'Feedback' %>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b><%= ::subTitle %></b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+<%
+  if !::noLeftNavBar {
+%>
+<%--  begin left navbar  --%>
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><%!spacer 160, 1 %></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<%!leftbarCategory 'Judo Language' %>
+<%!leftbarItem 'Whitepaper', '${::base}articles/whitepaper.html', 'Judo language whitepaper' %>
+<%!leftbarItem 'Reference', '${::base}ref/index.html', 'Judo language reference' %>
+<%!leftbarItem 'Articles', '${::base}articles/index.html', 'Judo language articles' %>
+<%!leftbarItem 'Examples', '${::base}examples/index.html', 'Judo language example library' %>
+<%!leftbarItem 'FAQs', '${::base}faq.html', 'Judo language frequently asked questions' %>
+<%!leftbarItem 'Release Note', '${::base}relnote.html', 'Judo release note' %>
+<%!leftbarItem 'License (LGPL)', '${::base}license.html', 'Judo language license' %>
+<BR><BR>
+<%!leftbarCategory 'JuSP Platform' %>
+<%!leftbarItem 'Tutorial', '${::base}jusptut/index.jusp', 'JuSP Comprehensive Tutorial' %>
+<%!leftbarItem 'Documentation', '${::base}jusp.html', 'JuSP documentation' %>
+<BR><BR>
+<%!leftbarCategory 'JuSPT CM Kit' %>
+<%!leftbarItem 'Documentation', '${::base}jusp.html', 'JuSPT documentation' %>
+<BR><BR>
+<%!leftbarCategory 'Jamaica Language' %>
+<%!leftbarItem 'Documentation', '${::base}articles/jamaica.html', 'Jamaica documentation' %>
+<%!leftbarItem 'License (LGPL)', '${::base}license.html', 'Jamaica language license' %>
+<BR><BR>
+</NOINDEX><NOINDEX><%!spacer 10, 5 %><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><%--  space between left nav and tiles/lede area  --%><%!spacer 10, 1 %></TD>
+<%
+  } // if !noLeftNavBar.
+%>
+<TD vAlign=top width="100%" class=secondary3><%!spacer 1, 7 %>

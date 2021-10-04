@@ -1,0 +1,33 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_java/extend_class.judo:</b></td></tr><tr><td><pre>
+class MyHashtable extends java::Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in this { arr.add(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    for x in values() { arr.add(x); }
+    return arr.toObjectArray();
+  }
+}
+
+mht = new MyHashtable;
+mht.put('adate', Date(2004, 6, 6));
+mht.put('anumber', 2);
+mht.put('astring', 'string');
+
+println '    keys: ', mht.getKeys();
+println '  values: ', mht.getValues();
+println 'hashCode: ', mht.hashCode();
+
+catch: $_.pist();
+</pre></td></tr></table></body></html>

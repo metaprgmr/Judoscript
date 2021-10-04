@@ -1,0 +1,19 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_thread/locks.judo:</b></td></tr><tr><td><pre>
+const #fmt = 'mm:ss.SSS';
+
+thread t name, dur=2000 {
+  while true {
+    sleep(dur);
+    lock 'house';
+    println name, ' have it!  ', Date().fmtDate(#fmt);
+    sleep(dur);
+    println name, ' give up.  ', Date().fmtDate(#fmt);
+    unlock 'house';
+  }
+}
+
+start thread t('Kitty', 1000);
+sleep(1300);
+start thread t('Doggy');
+</pre></td></tr></table></body></html>

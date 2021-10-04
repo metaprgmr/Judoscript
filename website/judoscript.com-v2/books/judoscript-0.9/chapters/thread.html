@@ -1,0 +1,215 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Chapter 8. Threads and Dynamic Evaluation</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="" name=keywords>
+<LINK href="../../../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../../../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../../../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../../../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../../../home.html')"><IMG alt="Home" hspace=0 src="../../../share/home_gray.gif" border=0></A><A href="javascript:go_to('../../../judo.html')"><IMG alt="Judo Language" hspace=0 src="../../../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../../../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../../../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../../../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../../../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Book: <a href="../toc_details.html" class=tinywhite>The Judo Language 0.9</a></b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../../../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../../../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../../../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../../../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../../../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../../../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../../../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../../../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../../../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../../../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../../../share/spacer.gif" height=7 width=1 border=0>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#rtc">Runtime Context</a></li><li><a href="#thread">Thread Programming</a></li><li><a href="#eval">Execute Dynamic and External Scripts</a></li>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+
+ <h1>Chapter 8. Threads and Dynamic Evaluation</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<img src="../../../share/printer.gif"> <a href="thread_p.html">printer-friendly version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr></table><p class="font-size:16px">Not done yet. For now, please read <a href="../../../articles/fxn_cls_etc.html#thrd">this article</a>.</p>
+
+
+
+<h2>&nbsp;<br><a name=rtc> Runtime Context</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+<p>a</p>
+<p>b</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=thread> Thread Programming</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=eval> Execute Dynamic and External Scripts</a><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub></h2>
+
+<p>You can dynamically create Judo code and run. There are a couple of    either in the current runtime context with <b><code>eval</code></b> command or in a separate context with <b><code>evalExternal</code></b> and <b><code>evalFile</code></b>. <b><code>evalFile</code></b> takes a file name instead of code.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="eval.judo">Listing 8.1</a> eval.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+x = 'aliens';
+eval [[*
+  println 'Hello, you ', x, '!';
+  y = 9;
+*]];
+println 'y was set within eval; now, y = ', y, nl;
+
+evalExternal "println 'Hello, you ', x, '!'; ";
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<font  color=black><pre>
+eval 'println "ABCDEFG"';
+</pre></font>
+
+<p>When the dynamic code is evaluated with <b><code>eval</code></b>, the declarations such as functions, classes and constants are taken into the current runtime context. <b><code>evalExternal</code></b> and <b><code>evalFile</code></b> do not.</p>
+
+<font  color=black><pre>
+eval [[*
+  const #acon = 'a';
+  function foo() { println 'From foo()'; }
+  class BarCls { constructor { println 'BarCls.ctor()'; } }
+*]];
+
+println '#acon = ', #acon;
+foo();
+new BarCls;
+</pre></font>
+
+<p>
+<b><code>evalExternal</code></b> and <b><code>evalFile</code></b> can take parameters using the
+<b><code>with</code></b> clause:
+
+<font  color=black><pre>
+code = [[*
+  if #args.length < 0 {
+    println &lt;err&gt; 'Usage: java judo ', #prog, ' x';
+    exit 0;
+  }
+
+  println 'The argument is: ', #args[0];
+*]];
+evalExternal code;
+evalExternal code with 'abcd';
+</pre></font>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+Usage: java judo &lt;string&gt; x
+The argument is: abcd
+</pre></font>
+
+<p>The following is an example. Last July, Rainbow Inc., a retail company, ramped up its e-commerce presence. This July, Mr. Smart is hired to head the marketing department. He devised a sophisticated pricing scheme to promote certain products. Fortunately, the consultants who designed the system used Judo's dynamic evaluation feature, so Mr. Smart's unforeseeable request is entered into the system without any code rewrite.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="new_princing.judo">Listing 8.2</a> new_pricing.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+ 1: // pre-Mr.Smart pricing -- flat
+ 2: pricing = lambda prod, quantity {
+ 3:              switch prod {
+ 4:              case 'candy': return 1.49 * quantity;
+ 5:              case 'chips': return 2.49 * quantity;
+ 6:              case 'beer':  return 2.99 * quantity;
+ 7:              default:      return 0.99 * quantity;
+ 8:              }
+ 9:            };
+10:
+11: println '10 candies: ', pricing('candy', 10);
+12:
+13: // post-Mr.Smart pricing -- quantity discount
+14: eval [[[*
+15:   pricing = lambda prod, quantity {
+16:                switch prod {
+17:                case 'candy': unitprice = 1.49; break;
+18:                case 'chips': unitprice = 2.49; break;
+19:                case 'beer':  unitprice = 2.99; break;
+20:                default:      unitprice = 0.99; break;
+21:                }
+22:                if quantity &lt;= 5 {
+23:                  return unitprice * quantity;
+24:                } elif quantity &lt;= 10 {
+25:                  return (unitprice * 0.95 * quantity).fractionDigits(2);
+26:                } else {
+27:                  return (unitprice * 0.90 * quantity).fractionDigits(2);
+28:                }
+29:              };
+30: *]];
+31:
+32: println ' 5 candies: ', pricing('candy', 5);
+33: println '10 candies: ', pricing('candy', 10);
+34: println '15 candies: ', pricing('candy', 15);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>What happens is, the software has a admin-tool that allows a human operator to type in the new pricing scheme (lines 15 through 29) and submit to the system, test out and commit the changes.</p>
+
+<br>
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+
+
+<BR><IMG src="../../../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../../../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

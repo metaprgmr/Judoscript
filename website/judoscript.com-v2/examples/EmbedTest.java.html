@@ -1,0 +1,32 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/4.adv_embedinjava/EmbedTest.java:</b></td></tr><tr><td><pre>
+import java.awt.Frame;
+import com.judoscript.JudoEngine;
+
+public class EmbedTest
+{
+  public static void main (String[] args) throws Exception
+  {
+    // 1. Create a JudoScript engine
+    JudoEngine je = new JudoEngine();
+
+    try {
+
+      // 2. Create an object to pass on to the script
+      Frame frame = new Frame();
+      je.putBean("frame", frame);
+
+      // 3. Invoke judoscript
+      je.runScript("randgen.judo");
+
+      // 4. Get back an object from judoscript
+      String title = (String)je.getBean("title");
+
+      // 5. Show the frame
+      frame.setTitle(title);
+      frame.show();
+
+    } catch(Exception e) { e.printStackTrace(); }
+  }
+}
+</pre></td></tr></table></body></html>

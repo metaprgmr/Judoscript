@@ -1,0 +1,58 @@
+<html><head><title>JudoScript Semantics - ConnectStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ConnectStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ConnectStatement>ConnectStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>connect</font>   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font>  )?  <font class=kw>to</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ConnectStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement connect to a database. The connection is saved in a variable,
+  whose name is the first parameter, which is optional. If no name given, it is saved
+  in the default connection, <font class=kw><nobr>$$con</nobr></font> . The JDBC URL and database user name and password
+  are specified following the <font class=kw>to</font>  keyword.</p>
+  <p>JDBC driver class names usually do not be loaded explicitly like in Java programs,
+  because JudoScript has knowledge about the following drivers and pick one from the
+  JDBC URL (and the list will grow to cover new ones that come to attention):</p>
+  <table border="1"><tr><th>JDBC DB ID</th><th>JDBC Driver Class</th></tr>
+  <tr><td>cloudscape</td><td>COM.cloudscape.core.JDBCDriver</td></tr>
+  <tr><td>db2</td><td>COM.ibm.db2.jdbc.net.DB2Driver</td></tr>
+  <tr><td>hsqldb</td><td>org.hsqldb.jdbcDriver</td></tr>
+  <tr><td>idb</td><td>org.enhydra.instantdb.jdbc.idbDriver</td></tr>
+  <tr><td>informix-sqli</td><td>com.informix.jdbc.IfxDriver</td></tr>
+  <tr><td>jtds</td><td>org.sourceforge.jtds.jdbc.Driver</td></tr>
+  <tr><td>microsoft</td><td>com.microsoft.jdbc.sqlserver.SQLServerDriver</td></tr>
+  <tr><td>msql</td><td>com.imaginary.sql.msql.MsqlDriver</td></tr>
+  <tr><td>mysql</td><td>com.mysql.jdbc.Driver, org.gjt.mm.mysql.Driver</td></tr>
+  <tr><td>odbc</td><td>sun.jdbc.odbc.JdbcOdbcDriver</td></tr>
+  <tr><td>oracle</td><td>oracle.jdbc.driver.OracleDriver</td></tr>
+  <tr><td>pointbase</td><td>com.pointbase.jdbc.jdbcUniversalDriver</td></tr>
+  <tr><td>postgres95</td><td>postgres95.PGDriver</td></tr>
+  <tr><td>postgresql</td><td>org.postgresql.Driver, postgresql.Driver</td></tr>
+  <tr><td>sapdb</td><td>com.sap.dbtech.jdbc.DriverSapDB</td></tr>
+  <tr><td>solid</td><td>solid.jdbc.SolidDriver</td></tr>
+  <tr><td>sqlbase</td><td>centura.java.sqlbase.SqlbaseDriver</td></tr>
+  <tr><td>sybase</td><td>com.sybase.jdbc2.jdbc.SybDriver</td></tr>
+  </table> 
+  <p>JDBC connections can take a set of options, which can be specified as the
+  <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font>. The valid options are:</p>
+  <table border="1"><tr><th>Option Name</th><th>Value Type</th></tr>
+  <tr><td>driver</td><td>string of JDBC driver Java class name</td></tr>
+  <tr><td>autoCommit</td><td>boolean</td></tr>
+  <tr><td>readOnly</td><td>boolean</td></tr>
+  <tr><td>catalog</td><td>string</td></tr>
+  <tr><td>typeMap</td><td><code>java.util.Map</code></td></tr>
+  <tr><td>transactionIsolation</td><td>'transaction_none',
+    'transaction_read_committed', 'transaction_read_uncommitted',
+    'transaction_serializable'</td></tr>
+  </table> 
+ </body></html>

@@ -1,0 +1,804 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Building GUI Applications</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="Java scripting language, JudoScript, scripting language for Java, GUI, Swing, gui::events, named event handler, timer, timer event, JavaGuiClass, JavaBaseClass, adapter, embedded java, embedded java class" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: Building GUI Applications</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Building GUI Applications" author="James Jianbo Huang" created="October 2001" keywords="Java scripting language, JudoScript, scripting language for Java, GUI, Swing, gui::events, named event handler, timer, timer event, JavaGuiClass, JavaBaseClass, adapter, embedded java, embedded java class">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#gui">Building Java AWT/Swing GUI</a>
+<li> <a href="#guicls">Using Java GUI Classes</a>
+<li> <a href="#hndlr">Event Handlers</a>
+<br>&#187;  <a href="#named_hndlr">Named Event Handlers</a>
+<br>&#187;  <a href="#timer">Handling Timer Events</a>
+<li> <a href="#java">Using Java to Extend Components</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Building GUI Applications</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;October 2001 &nbsp; &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="gui_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+Building GUI applications in <em>JudoScript</em> is achieved by its superb capability
+of using Java classes and the event handler statement, <b><code>gui::events</code></b>.
+GUI components are created and glued together in <em>JudoScript</em>. Embedded Java
+class and adapter are important mechanisms to create new components.
+If they are to be re-used, they can reside in their own source file.
+<hr>
+<p>&nbsp;</p>
+
+
+<h2><a name=gui>1. Building Java AWT/Swing GUI</a></h2><p>
+
+<p>
+Modern GUI systems are the best examples of object-based systems, where
+GUI components are encapsulated in reusable classes and used in a cohesive
+event-driven framework. GUI programs become assemblies of components.
+There is no significant differences whether those components are glued by
+Java or other languages like <em>JudoScript</em>.
+
+<p>
+The following is the simplest Java Swing GUI writtin in <em>JudoScript</em>.
+It demonstrates two key elements in <em>JudoScript</em> GUI programming: a) invoking
+Java classes to assemble the GUI, and b) GUI event handling.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="SimplestGUI">Listing 1</a>. SimplestGUI.judo</th>
+          </thead><tr><td class=code><pre>
+1: const #JFrame = javaclass javax.swing.JFrame;
+2:
+3: frame = javanew #JFrame("Simplest GUI");
+4: frame.setVisible(true);
+5:
+6: gui::events {
+7:   &lt;frame : Window : windowClosing&gt; :  exit(0);
+8: }
+</pre></td></tr></table></p><p>
+
+Line 2 establishes a <code>javax.swing.JFrame</code> frame and make it
+visible on line 3. Lines 6 through 8 is a event handler. Line 7 basically
+reads: component <code>frame</code> listens for <code>Window</code>
+events and handles the <code>windowClosing</code> message. As you see,
+<em>JudoScript</em> provides a new way of specifying your GUI application but does not
+introduce any new GUI concepts; all it does is supporting the underlying
+Java GUI packages. Therefore, you should be well familiar with Java GUI
+programming in order to do GUI programming in <em>JudoScript</em>, and Java AWT/Swing
+programming is not covered here; you can find many literatures on these.
+So why <em>JudoScript</em> GUI? Two possiblities. The first possibility is you just want
+to. <em>JudoScript</em> programs are more direct, intuitive, and there are so many
+applications features ready for use. <em>JudoScript</em> supports threads, embedded Java
+classes and Java interface adapters, there is no limitation to building
+GUI applications. The other possibility is to have a GUI for tools
+implementing in <em>JudoScript</em>. The following is another example.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="ButtonDemo">Listing 2</a>. ButtonDemo.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: !JavaGuiClass #JFrame, #JPanel, #JLabel, #JButton
+ 2: !JavaGuiClass #ImageIcon, #AbstractButton, #KeyEvent, #BorderLayout
+ 3:
+ 4: leftButtonIcon   = javanew #ImageIcon("images/right.gif");
+ 5: middleButtonIcon = javanew #ImageIcon("images/middle.gif");
+ 6: rightButtonIcon  = javanew #ImageIcon("images/left.gif");
+ 7:
+ 8: b1 = javanew #JButton("Disable middle button", leftButtonIcon);
+ 9: b1.setVerticalTextPosition(#AbstractButton.CENTER);
+10: b1.setHorizontalTextPosition(#AbstractButton.LEFT);
+11: b1.setMnemonic(#KeyEvent.VK_D);
+12: b1.setActionCommand("disable");
+13:
+14: b2 = javanew #JButton("Middle button", middleButtonIcon);
+15: b2.setVerticalTextPosition(#AbstractButton.BOTTOM);
+16: b2.setHorizontalTextPosition(#AbstractButton.CENTER);
+17: b2.setMnemonic(#KeyEvent.VK_M);
+18:
+19: b3 = javanew #JButton("Enable middle button", rightButtonIcon);
+20: b3.setMnemonic(#KeyEvent.VK_E);
+21: b3.setActionCommand("enable");
+22: b3.setEnabled(false);
+23:
+24: b1.setToolTipText("Click this button to disable the middle button.");
+25: b2.setToolTipText("This middle button does nothing when you click it.");
+26: b3.setToolTipText("Click this button to enable the middle button.");
+27:
+28: demo = javanew #JPanel;
+29: demo.add(b1);
+30: demo.add(b2);
+31: demo.add(b3);
+32:
+33: frame = javanew #JFrame("ButtonDemo");
+34: frame.getContentPane().add(demo, #BorderLayout.CENTER);
+35:
+36: gui::events {
+37:   <b1,b3: action : actionperformed> :
+38:     local isDisable = ($_.getActionCommand() == 'disable');
+39:     b1.setEnabled(!isDisable);
+40:     b2.setEnabled(!isDisable);
+41:     b3.setEnabled( isDisable);
+42:
+43:   <frame : window : windowclosing> : exit(0);
+44: }
+45:
+46: frame.pack();
+47: frame.setVisible(true);
+</pre></td></tr></table></p><p>
+
+<p>
+<img src="ButtonDemo.gif" align="right">
+
+This program sets up three buttons; when the left one is clicked, it
+disables the middle one (which has a image), and the right button does
+the opposite. The middle button does nothing. In lines 37 through 41,
+both left and right buttons <b><code>b1</code></b> and <b><code>b3</code></b> share a same
+event handler. GUI programs tend to have many lines but most of them
+are rather simple statements. The crux is event handling.
+
+<h3><em>Review Questions</em></h3><ul>
+<li> How are GUI applications constructed in <em>JudoScript</em>?
+<li> Do you need to learn a new paradigm for building GUI
+           applications in <em>JudoScript</em>? What you must know?
+</ul>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=guicls>2. Using Java GUI Classes</a></h2><p>
+
+<p>
+GUI programs typically involve large number of Java classes. Declaring
+them one by one is tedious, because they spread across many different
+packages. <em>JudoScript</em> provides a mechanism called standard Java class declaration
+shortcut, which are three directives used to easily declare a large
+number of standard J2SE and J2EE classes:
+
+<blockquote><font class=secondary3><pre>
+!JavaBaseClass       #System, #Hashtable, #Dimension
+!JavaGuiClass        #JFrame, #JPanel, #Color, #ActionListener
+!JavaEnterpriseClass #HttpServletRequest, #EJBObject, #EJBContext
+</pre></font></blockquote>
+
+See the other <a href="java_excpt.html#clsdecl">article</a> for more information.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=hndlr>3. Event Handlers</a></h2><p>
+
+<p>
+<b><code>gui::events</code></b> is an event-driven statement for specifying event
+handlers. It may appear multiple times in a program. Each handler has a
+label and a series of statements associated. The <b><code>gui::events</code></b>
+statements for specified components must follow the code that the
+components are created. The label has three parts (line 37 in
+<a href=#ButtonDemo>listing 0</a>): the first part is one or more origins of
+the event; the second is the event type; the last is one or more messages
+of that type of event. The event type corresponds to a Java listener
+interface (such as <code>java.awt.event.ActionListener</code>), and the
+messages are its methods. All the GUI event messages have one parameter,
+an instance that extends <code>java.util.EventObject</code>, which is
+stored in the internal variable <b><code>$_</code></b> (line 38).
+
+<p>
+When multiple components share a same handler, use <b><code>$_.getSource()</code></b>
+or other more specific methods to find out where the current event is
+from. Multiple messages can share a same handler, too, for instance,
+a common handler may be specified for <b><code>mouseEntered()</code></b> and
+<b><code>mouseExited()</code></b>. Use <b><code>$_.getID()</code></b> or other more specific
+methods to find out the type of message for the current event.
+
+
+<h3><a name=named_hndlr>Named Event Handlers</a></h3><p>
+
+<p>
+Sometimes event handlers are applied to variable components such as menu
+items, so the first part of the message label (components) do not make
+any sense. In this case, use a name followed by <b><code>?</code></b> in place of
+the components to define a named event handler, then use the
+<b><code>setGuiListner()</code></b> system function to associate a handler with a
+component, as shown in the following program. If a <b><code>gui::events</code></b>
+only has named handoers, it can appear anywhere in the code.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="MenuDemo">Listing 3</a>. MenuDemo.judo</th>
+          </thead><tr><td class=code><pre>
+  1: !JavaGuiClass #JCheckBoxMenuItem, #JFrame, #JMenu, #JMenuBar
+  2: !JavaGuiClass #JRadioButtonMenuItem, #JScrollPane, #JTextArea
+  3: !JavaGuiClass #ActionEvent, #BorderLayout, #ButtonGroup, #ImageIcon
+  4: !JavaGuiClass #ItemEvent, #KeyEvent, #KeyStroke, #JMenuItem
+  5: 
+  6: demoFrame = javanew #JFrame('MenuDemo');
+  7: gui::events { &lt;demoFrame : Window : windowClosing&gt; : exit(0); }
+  8: 
+  9: //Add regular components to the window, using the default BorderLayout.
+ 10: contentPane = demoFrame.getContentPane();
+ 11: $output = javanew #JTextArea(5, 30);
+ 12: $output.setEditable(false);
+ 13: scrollPane = javanew #JScrollPane($output);
+ 14: contentPane.add(scrollPane, #BorderLayout.CENTER);
+ 15: 
+ 16: //Create the menu bar.
+ 17: menuBar = javanew #JMenuBar;
+ 18: demoFrame.setJMenuBar(menuBar);
+ 19: 
+ 20: //Build the first menu.
+ 21: menu = javanew #JMenu("A Menu");
+ 22: menu.setMnemonic(#KeyEvent.VK_A);
+ 23: menu.getAccessibleContext().setAccessibleDescription(
+ 24:                    "The only menu in this program that has menu items");
+ 25: menuBar.add(menu);
+ 26: 
+ 27: //a group of JMenuItems
+ 28: menuItem = javanew #JMenuItem("A text-only menu item", #KeyEvent.VK_T);
+ 29: menuItem.setAccelerator(
+ 30:   #KeyStroke.getKeyStroke(#KeyEvent.VK_1, #ActionEvent.ALT_MASK));
+ 31: menuItem.getAccessibleContext().setAccessibleDescription(
+ 32:                                      "This doesn't really do anything");
+ 33: setGuiListener(menuItem, 'ACTION');
+ 34: menu.add(menuItem);
+ 35: 
+ 36: menuItem = javanew #JMenuItem("Both text and icon",
+ 37:                                javanew #ImageIcon("images/middle.gif"));
+ 38: menuItem.setMnemonic(#KeyEvent.VK_B);
+ 39: setGuiListener(menuItem, 'ACTION');
+ 40: menu.add(menuItem);
+ 41: 
+ 42: gui::events {
+ 43:   &lt; ?ACTION : Action : actionPerformed&gt; :
+ 44:     local source = $_.getSource();
+ 45:     local s = [[*
+ 46:       Action event detected.
+ 47:           Event source: (* source.getText() *)
+ 48:           (an instance of (* getClassName(source) *))
+ 49:     *]];
+ 50:     $output.append(s);
+ 51: 
+ 52:   &lt; ?ITEM : Item : itemStateChanged&gt; :
+ 53:     local source = $_.getSource();
+ 54:     local s = [[*
+ 55:       Item event detected.
+ 56:           Event source: (* source.getText() *)
+ 57:           (an instance of (* getClassName(source) *))
+ 58:           New state: (* (($_.getStateChange()==#ItemEvent.SELECTED)
+ 59:                         ? "selected" : "unselected")
+ 60:                      *)
+ 61:     *]];
+ 62:     $output.append(s);
+ 63: }
+ 64: 
+ 65: menuItem = javanew #JMenuItem(javanew #ImageIcon("images/middle.gif"));
+ 66: menuItem.setMnemonic(#KeyEvent.VK_D);
+ 67: setGuiListener(menuItem, 'ACTION');
+ 68: menu.add(menuItem);
+ 69: 
+ 70: //a group of radio button menu items
+ 71: menu.addSeparator();
+ 72: 
+ 73: $group = javanew #ButtonGroup;
+ 74: $rbMenuItem = javanew #JRadioButtonMenuItem("A radio button menu item");
+ 75: $rbMenuItem.setSelected(true);
+ 76: $rbMenuItem.setMnemonic(#KeyEvent.VK_R);
+ 77: $group.add($rbMenuItem);
+ 78: setGuiListener($rbMenuItem, 'ACTION');
+ 79: menu.add($rbMenuItem);
+ 80: 
+ 81: $rbMenuItem = javanew #JRadioButtonMenuItem("Another one");
+ 82: $rbMenuItem.setMnemonic(#KeyEvent.VK_O);
+ 83: $group.add($rbMenuItem);
+ 84: setGuiListener($rbMenuItem, 'ACTION');
+ 85: menu.add($rbMenuItem);
+ 86: 
+ 87: //a group of check box menu items
+ 88: menu.addSeparator();
+ 89: 
+ 90: $cbMenuItem = javanew #JCheckBoxMenuItem("A check box menu item");
+ 91: $cbMenuItem.setMnemonic(#KeyEvent.VK_C);
+ 92: setGuiListener($cbMenuItem, 'ITEM');
+ 93: menu.add($cbMenuItem);
+ 94: 
+ 95: $cbMenuItem = javanew #JCheckBoxMenuItem("Another one");
+ 96: $cbMenuItem.setMnemonic(#KeyEvent.VK_H);
+ 97: setGuiListener($cbMenuItem, 'ITEM');
+ 98: menu.add($cbMenuItem);
+ 99: 
+100: //a submenu
+101: menu.addSeparator();
+102: submenu = javanew #JMenu("A submenu");
+103: submenu.setMnemonic(#KeyEvent.VK_S);
+104: 
+105: menuItem = javanew #JMenuItem("An item in the submenu");
+106: menuItem.setAccelerator(
+107:   #KeyStroke.getKeyStroke(#KeyEvent.VK_2, #ActionEvent.ALT_MASK));
+108: setGuiListener(menuItem, 'ACTION');
+109: submenu.add(menuItem);
+110: 
+111: menuItem = javanew #JMenuItem("Another item");
+112: setGuiListener(menuItem, 'ACTION');
+113: submenu.add(menuItem);
+114: menu.add(submenu);
+115: 
+116: //Build second menu in the menu bar.
+117: menu = javanew #JMenu("Another Menu");
+118: menu.setMnemonic(#KeyEvent.VK_N);
+119: menu.getAccessibleContext().setAccessibleDescription(
+120:                                       "This menu does nothing");
+121: menuBar.add(menu);
+122: 
+123: // Returns just the class name -- no package info.
+124: function getClassName o {
+125:   classString = o.getClass().getName();
+126:   dotIndex = classString.lastIndexOf(".");
+127:   return classString.substring(dotIndex+1);
+128: }
+129: 
+130: demoFrame.setSize(450, 260);
+131: demoFrame.setVisible(true);
+</pre></td></tr></table></p><p>
+
+<img src="MenuDemo.gif" align="right">
+
+First of all, we see two <b><code>gui::events</code></b> statements on lines 7 and 39.
+Starting on lines 42 and 52, there are two named event handlers, "ACTION"
+and "ITEM". On lines 33, 39, 67, 78, 84, 97, 108 and 112, the
+<b><code>setGuiListener()</code></b> system function associates them to various
+menu items.
+
+<h3><a name=timer>Handling Timer Events</a></h3><p>
+
+<p>
+Java Swing set has a class, <code>javax.swing.Timer</code>, that causes
+action to occur at a predefined rate. It can take a number of
+<code>ActionListener</code>'s; in <em>JudoScript</em> terms, it can be associated with
+event handlers for event type <b><code>Action</code></b>. The following slider demo
+uses a timer. See line 42 and on for how it is used, and line 58 for how
+its events are handled.
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="SliderDemo">Listing 4</a>. SliderDemo.judo</th>
+          </thead><tr><td class=code><pre>
+ 1: !JavaGuiClass #JFrame, #JLabel, #JPanel, #JSlider
+ 2: !JavaGuiClass #Component, #ImageIcon, #BorderFactory, #BoxLayout, #Timer
+ 3: 
+ 4: FPS_INIT = 15;    //initial frames per second
+ 5: frameNumber = 0;
+ 6: frozen = false;
+ 7: delay = 1000 / FPS_INIT;
+ 8: 
+ 9: //Create the slider and its label
+10: sliderLabel = javanew #JLabel("Frames Per Second", #JLabel.CENTER);
+11: sliderLabel.setAlignmentX(#Component.CENTER_ALIGNMENT);
+12: 
+13: framesPerSecond = javanew #JSlider(#JSlider.HORIZONTAL, 0, 30, FPS_INIT);
+14: 
+15: //Turn on labels at major tick marks.
+16: framesPerSecond.setMajorTickSpacing(10);
+17: framesPerSecond.setMinorTickSpacing(1);
+18: framesPerSecond.setPaintTicks(true);
+19: framesPerSecond.setPaintLabels(true);
+20: framesPerSecond.setBorder(#BorderFactory.createEmptyBorder(0,0,10,0));
+21: 
+22: //Create the label for the animation.
+23: picture = javanew #JLabel(javanew #ImageIcon(
+24:     "images/doggy/T" @ frameNumber @ ".gif"), #JLabel.CENTER);
+25: picture.setAlignmentX(#Component.CENTER_ALIGNMENT);
+26: picture.setBorder(
+27:   #BorderFactory.createCompoundBorder(
+28:      #BorderFactory.createLoweredBevelBorder(),
+29:      #BorderFactory.createEmptyBorder(10,10,10,10)));
+30:
+31: contentPane = javanew #JPanel;
+32: contentPane.setLayout(javanew #BoxLayout(contentPane, #BoxLayout.Y_AXIS));
+33: contentPane.add(sliderLabel);
+34: contentPane.add(framesPerSecond);
+35: contentPane.add(picture);
+36: contentPane.setBorder(#BorderFactory.createEmptyBorder(10,10,10,10));
+37: 
+38: demoFrame = javanew #JFrame("SliderDemo");
+39: demoFrame.setContentPane(contentPane);
+40: 
+41: //Set up a timer that calls this object's action handler.
+42: timer = javanew #Timer(delay, timerHandler());
+43: timer.setInitialDelay(delay * 10); //pauses animation after frames
+44:                                      //0 and 6 by restarting the timer
+45: timer.setCoalesce(true);
+46: 
+47: function startAnimation {
+48:   timer.start();
+49:   frozen = false;
+50: }
+51: 
+52: function stopAnimation {
+53:   timer.stop();
+54:   frozen = true;
+55: }
+56: 
+57: gui::events {
+58:   &lt;timer : Action : actionPerformed&gt; :
+59:     local source = $_.getSource();
+60:     //Advance the animation frame.
+61:     if frameNumber==13 { frameNumber = 0; }
+62:     else { ++frameNumber; }
+63:     picture.setIcon(javanew #ImageIcon(
+64:                        "images/doggy/T" @ frameNumber @ ".gif"));
+65:     if (frameNumber==0) || (frameNumber==6) {
+66:       timer.restart();
+67:     }
+68: 
+69:   &lt;framesPerSecond : Change : stateChanged&gt; :
+70:     local source = $_.getSource();
+71:     if !source.getValueIsAdjusting() {
+72:       local fps = source.getValue();
+73:       if fps == 0 {
+74:         if !frozen { stopAnimation(); }
+75:       } else {
+76:         delay = 1000 / fps;
+77:         timer.setDelay(delay);
+78:         timer.setInitialDelay(delay * 10);
+79:         if frozen { startAnimation(); }
+80:       }
+81:     }    
+82: 
+83:   &lt;demoFrame : Window : windowIconified&gt; :   stopAnimation();
+84:   &lt;demoFrame : Window : windowDeiconified&gt; : startAnimation();
+85:   &lt;demoFrame : Window : windowClosing&gt; :     exit(0);
+86: }  
+87: 
+88: demoFrame.pack();
+89: demoFrame.setVisible(true);
+90: startAnimation();
+</pre></td></tr></table></p><p>
+
+<img src="SliderDemo.gif" align="right">
+
+The funny dog sways back and forth; shifting the nob of the slider control
+changes its speed. 
+
+<h3><em>Review Questions</em></h3><ul>
+<li> What is the variable for the parameter of an event message?
+<li> An event handler can be specified for multiple components and/or
+           multiple messages. How to find out which component has generated
+           which message?
+<li> Why named handlers are needed? How to apply them?
+<li> How to handle events generated by a timer object?
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=java>4. Using Java to Extend Components</a></h2><p>
+
+<p>
+Look at the screen of the next program. There are two rulers; a button in
+the upper-left corner toggles the rules between inches and cm's. The rulers
+are new components not found in the standard Swing packages, and the
+scrolling pane responds to them. Such custom components are create by
+extending base components. The only way to extend Java classes in <em>JudoScript</em> is
+through embedded Java. Embedded Java classes (lines 5, 13 and 121) are
+contained in the script, since at this moment nobody cares about them
+beyond the script itself. See the other <a href="java_excpt.html#embed">article</a>
+for more on embedded Java classes in <em>JudoScript</em>.
+
+<p><img src="ScrollDemo.jpg">
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="ScrollDemo">Listing 5</a>. ScrollDemo.judo</th>
+          </thead><tr><td class=code><pre>
+  1: !JavaGuiClass #JFrame, #JPanel, #JScrollPane, #JToggleButton
+  2: !JavaGuiClass #ImageIcon, #Font, #Insets, #Dimension, #BorderFactory
+  3: !JavaGuiClass #Color, #BoxLayout, #ItemEvent
+  4: 
+  5: !JavaClass
+  6:   public final class Corner extends javax.swing.JComponent {
+  7:     public void paintComponent(java.awt.Graphics g) {
+  8:       g.setColor(new java.awt.Color(230, 163, 4));
+  9:       g.fillRect(0, 0, getWidth(), getHeight());
+ 10:     }
+ 11:   }
+ 12: 
+ 13: !JavaClass
+ 14:   import java.awt.*;
+ 15:   import javax.swing.*;
+ 16: 
+ 17:   public final class Rule extends JComponent {
+ 18:     public static final int INCH =
+ 19:                Toolkit.getDefaultToolkit().getScreenResolution();
+ 20:     public static final int HORIZONTAL = 0;
+ 21:     public static final int VERTICAL = 1;
+ 22:     public static final int SIZE = 35;
+ 23: 
+ 24:     public int orientation;
+ 25:     public boolean isMetric;
+ 26:     private int increment;
+ 27:     private int units;
+ 28: 
+ 29:     public Rule(int o, boolean m) {
+ 30:       orientation = o;
+ 31:       isMetric = m;
+ 32:       setIncrementAndUnits();
+ 33:     }
+ 34: 
+ 35:     public void setIsMetric(boolean isMetric) {
+ 36:       this.isMetric = isMetric;
+ 37:       setIncrementAndUnits();
+ 38:       repaint();
+ 39:     }
+ 40: 
+ 41:     private void setIncrementAndUnits() {
+ 42:       if (isMetric) {
+ 43:         units = (int)((double)INCH / (double)2.54); // dots per CMs
+ 44:         increment = units;
+ 45:       } else {
+ 46:         units = INCH;
+ 47:         increment = units / 2;
+ 48:       }
+ 49:     }
+ 50: 
+ 51:     public boolean isMetric() { return this.isMetric; }
+ 52:     public int getIncrement() { return increment; }
+ 53:     public void setPreferredHeight(int ph) {
+ 54:       setPreferredSize(new Dimension(SIZE,ph));
+ 55:     }
+ 56:     public void setPreferredWidth(int pw)  {
+ 57:       setPreferredSize(new Dimension(pw,SIZE));
+ 58:     }
+ 59: 
+ 60:     public void paintComponent(Graphics g) {
+ 61:       Rectangle drawHere = g.getClipBounds();
+ 62: 
+ 63:       // Fill clipping area with dirty brown/orange.
+ 64:       g.setColor(new Color(230, 163, 4));
+ 65:       g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
+ 66: 
+ 67:       // Do the ruler labels in a small font that's black.
+ 68:       g.setFont(new Font("SansSerif", Font.PLAIN, 10)); 
+ 69:       g.setColor(Color.black);
+ 70: 
+ 71:       // Some vars we need.
+ 72:       int end = 0;
+ 73:       int start = 0;
+ 74:       int tickLength = 0;
+ 75:       String text = null;
+ 76:   
+ 77:       // Use clipping bounds to calculate first and last tick location
+ 78:       if (orientation == HORIZONTAL) {
+ 79:         start = (drawHere.x/increment)*increment;
+ 80:         end = (((drawHere.x+drawHere.width)/increment)+1)*increment;
+ 81:       } else {
+ 82:         start = (drawHere.y/increment) * increment;
+ 83:         end = (((drawHere.y+drawHere.height)/increment)+1)*increment;
+ 84:       }
+ 85: 
+ 86:       // Make a special case of 0 to display the number
+ 87:       // within the rule and draw a units label.
+ 88:       if (start == 0) {
+ 89:         text = Integer.toString(0) + (isMetric ? " cm" : " in");
+ 90:         tickLength = 10;
+ 91:         if (orientation == HORIZONTAL) {
+ 92:           g.drawLine(0, SIZE-1, 0, SIZE-tickLength-1);
+ 93:           g.drawString(text, 2, 21);
+ 94:         } else {
+ 95:           g.drawLine(SIZE-1, 0, SIZE-tickLength-1, 0);
+ 96:           g.drawString(text, 9, 10);
+ 97:         }
+ 98:         text = null;
+ 99:         start = increment;
+100:       }
+101: 
+102:       // ticks and labels
+103:       for (int i = start; i &lt; end; i += increment) {
+104:         if (i % units == 0)  {
+105:           tickLength = 10;
+106:           text = Integer.toString(i/units);
+107:         } else {
+108:           tickLength = 7;
+109:           text = null;
+110:         }
+111: 
+112:         if (tickLength != 0) { 
+113:           if (orientation == HORIZONTAL) {
+114:             g.drawLine(i, SIZE-1, i, SIZE-tickLength-1);
+115:             if (text != null) g.drawString(text, i-3, 21);
+116:           } else {
+117:             g.drawLine(SIZE-1, i, SIZE-tickLength-1, i);
+118:             if (text != null) g.drawString(text, 9, i+3);
+119:           }
+120:         }
+121:       }
+122:     }
+123: 
+124:   } // end of java class Rule.
+125: 
+126: !JavaClass
+127:   import java.awt.*;
+128:   import java.awt.event.*;
+129:   import javax.swing.*;
+130:   import javax.swing.border.*;
+131: 
+132:   public class ScrollablePicture extends JLabel implements Scrollable
+133:   {
+134:     private int maxUnitIncrement = 1;
+135: 
+136:     public ScrollablePicture(ImageIcon i, int m) {
+137:       super(i);
+138:       maxUnitIncrement = m;
+139:     }
+140: 
+141:     public Dimension getPreferredScrollableViewportSize() {
+142:       return getPreferredSize();
+143:     }
+144: 
+145:     public int getScrollableUnitIncrement(Rectangle visibleRect,
+146:                                           int orientation, int dir)
+147:     {
+148:       //Get the current position.
+149:       int curPos = (orientation==SwingConstants.HORIZONTAL)
+150:                    ? visibleRect.x : visibleRect.y;
+151: 
+152:       //Return the number of pixels between curPos
+153:       //and the nearest tick mark in the indicated direction.
+154:       if (dir &lt; 0) {
+155:         int newPosition = curPos-(curPos/maxUnitIncrement)*maxUnitIncrement;
+156:         return (newPosition == 0) ? maxUnitIncrement : newPosition;
+157:       } else {
+158:         return ((curPos/maxUnitIncrement)+1)*maxUnitIncrement-curPos;
+159:       }
+160:     }
+161: 
+162:     public int getScrollableBlockIncrement(Rectangle visibleRect,
+163:                                            int orientation, int dir)
+164:     {
+165:       return (orientation == SwingConstants.HORIZONTAL)
+166:              ? visibleRect.width - maxUnitIncrement
+167:              : visibleRect.height - maxUnitIncrement;
+168:     }
+169: 
+170:     public boolean getScrollableTracksViewportWidth() { return false; }
+171:     public boolean getScrollableTracksViewportHeight() { return false; }
+172:     public void setMaxUnitIncrement(int pixels) { maxUnitIncrement=pixels; }
+173: 
+174:   } // end of java class ScrollablePicture.
+175: 
+176: // Now let's have some judo! ;)
+177: 
+178: pic = javanew #ImageIcon("images/peter.jpg");
+179: 
+180: // Create the row and column headers.
+181: columnView = javanew #Rule(#Rule.HORIZONTAL, true);
+182: columnView.setPreferredWidth(pic.getIconWidth());
+183: rowView = javanew #Rule(#Rule.VERTICAL, true);
+184: rowView.setPreferredHeight(pic.getIconHeight());
+185: 
+186: // Create the corners.
+187: buttonCorner = javanew #JPanel;
+188: isMetric = javanew #JToggleButton("cm", true);
+189: isMetric.setFont(javanew #Font("SansSerif", #Font.PLAIN, 11));
+190: isMetric.setMargin(javanew #Insets(2,2,2,2));
+191: buttonCorner.add(isMetric); //Use the default FlowLayout
+192: 
+193: // Set up the scroll pane.
+194: picture = javanew #ScrollablePicture(pic, columnView.getIncrement());
+195: pictureScrollPane = javanew #JScrollPane(picture);
+196: pictureScrollPane.setPreferredSize(javanew #Dimension(300, 250));
+197: pictureScrollPane.setViewportBorder(
+198:                          #BorderFactory.createLineBorder(#Color.black));
+199: 
+200: pictureScrollPane.setColumnHeaderView(columnView);
+201: pictureScrollPane.setRowHeaderView(rowView);
+202: 
+203: pictureScrollPane.setCorner(#JScrollPane.UPPER_LEFT_CORNER,
+204:                              buttonCorner);
+205: pictureScrollPane.setCorner(#JScrollPane.LOWER_LEFT_CORNER,
+206:                              javanew #Corner);
+207: pictureScrollPane.setCorner(#JScrollPane.UPPER_RIGHT_CORNER,
+208:                              javanew #Corner);
+209: 
+210: // Put it in this panel.
+211: demo = javanew #JPanel;
+212: demo.setLayout(javanew #BoxLayout(demo, #BoxLayout.X_AXIS));
+213: demo.add(pictureScrollPane);
+214: demo.setBorder(#BorderFactory.createEmptyBorder(20,20,20,20));
+215: 
+216: demoFrame = javanew #JFrame("ScrollDemo");
+217: demoFrame.setContentPane(demo);
+218: 
+219: gui::events {
+220:   &lt;isMetric : Item : itemStateChanged&gt; :
+221:     local doMetric = ($_.getStateChange() == #ItemEvent.SELECTED);
+222:     rowView.setIsMetric(doMetric);
+223:     columnView.setIsMetric(doMetric);
+224:     picture.setMaxUnitIncrement(rowView.getIncrement());
+225: 
+226:   &lt;demoFrame : Window : windowClosing&gt; : exit(0);
+227: }
+228: 
+229: demoFrame.pack();
+230: demoFrame.setVisible(true);
+</pre></td></tr></table></p><p>
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Why is embedded Java in <em>JudoScript</em> important to GUI applications?
+           When should embed Java classes?
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>5. Summary</a></h2><p>
+
+<p>
+Modern GUI applications are object or component based. While GUI programming
+in Java is like creating new components, building GUI in <em>JudoScript</em> is a matter of
+gluing components together. Event handling is done by the <b><code>gui::events</code></b>
+statement, which can statically or dynamically attach event handlers to
+components, including timers. When new components are needed, they can be
+implemented as embedded Java within the script.
+
+<p>
+<em>JudoScript</em> does not introduce its own GUI paradigm. All it does is using Java AWT
+and/or Swing classes to construct GUI. Hence, to create GUI applications in
+<em>JudoScript</em>, you need to be familiar with Java GUI programming. This articles
+contains some pretty long source code listings. This is the characterisitcs
+of GUI programs: they are typically long but fairly simple in structure for
+the most part.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>6. Code Listings</a></h2><p>
+
+<ol><li> <a href=#SimplestGUI>SimplestGUI.judo</a><li> <a href=#ButtonDemo>ButtonDemo.judo</a><li> <a href=#MenuDemo>MenuDemo.judo</a><li> <a href=#SliderDemo>SliderDemo.judo</a><li> <a href=#ScrollDemo>ScrollDemo.judo</a></ol>
+
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

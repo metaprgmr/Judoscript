@@ -1,0 +1,30 @@
+<html><head><title>JudoScript Semantics - DynamicStatements</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>DynamicStatements</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=DynamicStatements>DynamicStatements</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>eval</font>   |  <font class=kw>evalExternal</font>   |  <font class=kw>evalFile</font>   )   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  )  <br>  (  <font class=kw>with</font>  <font class=nt><a href="javascript:showNT('ArgumentList')">ArgumentList</a></font>  )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('DynamicStatements'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>These statements evaluates text content as a subprogram.</p>
+
+  <p>The <font class=kw>eval</font>  statement evaluates the subprogram in the current content. This means
+  that any function, thread or class declarations are taken in the current content as
+  well.</p>
+
+  <p>The <font class=kw>evalExternal</font>  does in a separate context; declarations are thrown away once
+  evaluation is done. Command-line options can be specified via the <font class=kw>with</font>  clause.
+  They are always expanded, that is, arrays are expanded as individual parameters.</p>
+
+  <p>The <font class=kw>evalFile</font>  evaluates the content of a file as the subprogram externally.</p>
+ </body></html>

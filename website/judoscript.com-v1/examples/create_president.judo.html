@@ -1,0 +1,43 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_dom/create_president.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Uses &lt;code>createDom()&lt;/code> to create a document, appends a few
+    nodes, and prints it out using &lt;code>xslt copy&lt;/code> statement.
+  *]];
+}
+
+doc = createDom();
+
+// Start with a "&lt;Person>"
+person = doc.createElement("Person");
+
+// Create the "&lt;FirstName>" element
+firstName = doc.createElement("FirstName");
+
+// Create a Text node "Al" and add it to the "FirstName" tag
+firstName.appendChild( doc.createTextNode("Al") );
+
+// Add the "&lt;FirstName>" tag to "&lt;Person>"
+person.appendChild(firstName);
+
+// Same as above
+surname = doc.createElement("Surname");
+surname.appendChild( doc.createTextNode("Gore") );
+person.appendChild(surname);
+
+president = doc.createElement("President");
+
+// Set the "Country" attribute in "&lt;Presedent>"
+president.setAttribute("Country","Us");
+president.appendChild( person );
+
+// Add everything to the XmlDocument (doc)
+doc.appendChild( president );
+
+// Write the DOM to stdout.
+xslt copy doc to getOut();
+</pre></td></tr></table></body></html>

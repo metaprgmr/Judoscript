@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - ExecuteUpdateStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ExecuteUpdateStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ExecuteUpdateStatement>ExecuteUpdateStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>executeUpdate</font>   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ExecuteUpdateStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This executes a prepared SQL update statement. If the variable name for the
+  prepared statement is missing, by default it uses <font class=kw><nobr>$$</nobr></font> . The result, which is
+  the number of rows updates, can be obtained via <font class=obj><a href="javascript:showObj('DBHandle')">DBHandle</a></font>'s
+  <code>updateCount</code> member.</p>
+ </body></html>

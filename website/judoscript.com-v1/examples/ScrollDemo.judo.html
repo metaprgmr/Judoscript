@@ -1,0 +1,229 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/ScrollDemo.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-12-03';
+  desc    = [[*
+    Demonstrates custom components written in Java, using Java
+    extension classes that implements GUI components.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+
+class Corner extends java::JComponent
+{
+  void paintComponent(Graphics g) {
+    g.setColor(new java::Color(230, 163, 4));
+    g.fillRect(0, 0, getWidth(), getHeight());
+  }
+}
+
+
+const #INCH = (java::Toolkit).getDefaultToolkit().getScreenResolution();
+const #HORIZONTAL = 0;
+const #VERTICAL = 1;
+const #SIZE = 35;
+
+class Rule extends java::JComponent
+{
+  int     orientation;
+  boolean isMetric;
+  int     increment;
+  int     units;
+
+  constructor orient, metric {
+    super();
+    orientation = orient;
+    isMetric = metric;
+    setIncrementAndUnits();
+  }
+
+  boolean isMetric() { return isMetric; }
+  int getIncrement() { return increment; }
+  void setPreferredHeight(int ph) { setPreferredSize(new java::Dimension(#SIZE,ph)); }
+  void setPreferredWidth(int pw)  { setPreferredSize(new java::Dimension(pw,#SIZE)); }
+
+  void setIsMetric(boolean metric) {
+    isMetric = metric;
+    setIncrementAndUnits();
+    repaint();
+  }
+
+  void setIncrementAndUnits() {
+    if isMetric {
+      units = #INCH / 2.54; // dots per CMs
+      increment = units;
+    } else {
+      units = #INCH;
+      increment = units / 2;
+    }
+  }
+
+  void paintComponent(Graphics g)
+  {
+    end = 0;
+    start = 0;
+    tickLength = 0;
+    text = null;
+  
+    // Fill clipping area with dirty brown/orange.
+    g.setColor(new java::Color(230, 163, 4));
+    drawHere = g.getClipBounds();
+    g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
+
+    // Do the ruler labels in a small font that's black.
+    g.setFont(new java::Font('SansSerif', (java::Font).PLAIN, 10)); 
+    g.setColor((java::Color).black);
+
+    // Use clipping bounds to calculate first and last tick location
+    if orientation == #HORIZONTAL {
+      start = (drawHere.x/increment)*increment;
+      end = (((drawHere.x+drawHere.width)/increment)+1)*increment;
+    } else {
+      start = (drawHere.y/increment) * increment;
+      end = (((drawHere.y+drawHere.height)/increment)+1)*increment;
+    }
+
+    // Make a special case of 0 to display the number
+    // within the rule and draw a units label.
+    if start == 0 {
+      text = isMetric ? '0 cm' : '0 in';
+      tickLength = 10;
+      if (orientation == #HORIZONTAL) {
+        g.drawLine(0, #SIZE-1, 0, #SIZE-tickLength-1);
+        g.drawString(text, 2, 21);
+      } else {
+        g.drawLine(#SIZE-1, 0, #SIZE-tickLength-1, 0);
+        g.drawString(text, 9, 10);
+      }
+      text = null;
+      start = increment;
+    }
+
+    // ticks and labels
+    for i=start; i&lt;end; i+=increment {
+      if (i % units) == 0  {
+        tickLength = 10;
+        text = i/units;
+      } else {
+        tickLength = 7;
+        text = null;
+      }
+
+      if tickLength != 0 { 
+        if orientation == #HORIZONTAL {
+          g.drawLine(i, #SIZE-1, i, #SIZE-tickLength-1);
+          if text != null { g.drawString(text, i-3, 21); }
+        } else {
+          g.drawLine(#SIZE-1, i, #SIZE-tickLength-1, i);
+          if text != null { g.drawString(text, 9, i+3); }
+        }
+      }
+    }
+  }
+
+} // end of java class Rule.
+
+
+class ScrollablePicture extends java::JLabel, Scrollable
+{
+  int maxUnitIncrement;
+
+  constructor imageicon, max {
+    super(imageicon);
+    maxUnitIncrement = (max==null) ? 1 : max;
+  }
+
+  Dimension getPreferredScrollableViewportSize() {
+    return getPreferredSize();
+  }
+
+  int getScrollableUnitIncrement(Rectangle visibleRect, int orient, int dir)
+  {
+    //Get the current position.
+    curPos = (orient == (java::SwingConstants).HORIZONTAL)
+             ? visibleRect.x : visibleRect.y;
+
+    //Return the number of pixels between curPos
+    //and the nearest tick mark in the indicated direction.
+    if dir &lt; 0 {
+      newPosition = curPos-(curPos/maxUnitIncrement)*maxUnitIncrement;
+      return (newPosition == 0) ? maxUnitIncrement : newPosition;
+    } else {
+      return ((curPos/maxUnitIncrement)+1)*maxUnitIncrement-curPos;
+    }
+  }
+
+  int getScrollableBlockIncrement(Rectangle visibleRect, int orient, int dir)
+  {
+    return (orient == (java::SwingConstants).HORIZONTAL)
+           ? visibleRect.width - maxUnitIncrement
+           : visibleRect.height - maxUnitIncrement;
+  }
+
+  boolean getScrollableTracksViewportWidth() { return false; }
+  boolean getScrollableTracksViewportHeight() { return false; }
+  void setMaxUnitIncrement(int pixels) { maxUnitIncrement = pixels; }
+
+} // end of java class ScrollablePicture.
+
+
+// Now let's have some judo! ;)
+
+pic = new java::ImageIcon('images/peter.jpg');
+
+// Create the row and column headers.
+columnView = new Rule(#HORIZONTAL, true);
+columnView.setPreferredWidth(pic.getIconWidth());
+rowView = new Rule(#VERTICAL, true);
+rowView.setPreferredHeight(pic.getIconHeight());
+
+// Create the corners.
+buttonCorner = new java::JPanel;
+isMetric = new java::JToggleButton('cm', true);
+isMetric.setFont(new java::Font('SansSerif', (java::Font).PLAIN, 11));
+isMetric.setMargin(new java::Insets(2,2,2,2));
+buttonCorner.add(isMetric); //Use the default FlowLayout
+
+// Set up the scroll pane.
+picture = new ScrollablePicture(pic, columnView.getIncrement());
+pictureScrollPane = new java::JScrollPane(picture);
+pictureScrollPane.setPreferredSize(new java::Dimension(300, 250));
+pictureScrollPane.setViewportBorder(
+                         (java::BorderFactory).createLineBorder((java::Color).black));
+
+pictureScrollPane.setColumnHeaderView(columnView);
+pictureScrollPane.setRowHeaderView(rowView);
+
+pictureScrollPane.setCorner((java::JScrollPane).UPPER_LEFT_CORNER, buttonCorner);
+pictureScrollPane.setCorner((java::JScrollPane).LOWER_LEFT_CORNER, new Corner);
+pictureScrollPane.setCorner((java::JScrollPane).UPPER_RIGHT_CORNER, new Corner);
+
+// Put it in this panel.
+demo = new java::JPanel;
+demo.setLayout(new java::BoxLayout(demo, (java::BoxLayout).X_AXIS));
+demo.add(pictureScrollPane);
+demo.setBorder((java::BorderFactory).createEmptyBorder(20,20,20,20));
+
+demoFrame = new java::JFrame('ScrollDemo');
+demoFrame.setContentPane(demo);
+
+gui::events {
+  &lt;isMetric : Item : itemStateChanged> :
+    doMetric = ($_.getStateChange() == (java::ItemEvent).SELECTED);
+    rowView.setIsMetric(doMetric);
+    columnView.setIsMetric(doMetric);
+    picture.setMaxUnitIncrement(rowView.getIncrement());
+    isMetric.setText(doMetric ? 'cm' : 'inch');
+
+  &lt;demoFrame : Window : windowClosing> : exit(0);
+}
+
+demoFrame.pack();
+demoFrame.setVisible(true);
+</pre></td></tr></table></body></html>

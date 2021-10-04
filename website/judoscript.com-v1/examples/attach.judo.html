@@ -1,0 +1,54 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_mail/attach.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Sends a message with both text and HTML plus an attachment
+    (of this script) to fake addresses. Correct the from/to
+    address and the mail server parameters before run.
+  *]];
+}
+
+connectMailServer 'mail-server', 'user', 'password';
+
+sendMail
+     from: 'foodback@judoscript.com'
+       to: 'A@some-site.cum'
+       cc: 'A@other-site.cum'
+  subject: 'The software. Thank you!'
+   attach: #prog
+     body: [[*
+           Dear Mr. A,
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           &lt;html>&lt;body>
+           &lt;p>Dear Mr. A,
+
+           &lt;p>Thank you very much for your interest in &lt;i>this software&lt;/i>.
+           Attached is a &lt;u>zip file&lt;/u> for the software and a &lt;u>readme
+           text&lt;/u> file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p>Please visit &lt;a href=www.judoscript.com>www.judoscript.com&lt;/a>
+           for the latest news and information. Thank you!
+
+           &lt;p>Sincerely,
+           &lt;p>JudoScript
+           &lt;/body>&lt;/html>
+           *]]
+  ;
+
+disconnectMailServer;
+</pre></td></tr></table></body></html>

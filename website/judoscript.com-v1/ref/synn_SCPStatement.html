@@ -1,0 +1,27 @@
+<html><head><title>JudoScript Semantics - SCPStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>SCPStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=SCPStatement>SCPStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>scp</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw><nobr>,</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br> <font class=kw>from</font>   (  <font class=kw>remote</font>   |  <font class=kw>local</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>to</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>recursive</font>   |  <font class=kw>echo</font>   )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('SCPStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement uses ISNetworks' MindTerm package to perform secure copy
+  between the local machine and a remote machine. The first 3 parameters are the
+  remote machine's host, user name and password. The optional 4th parameter is
+  a cipher.</p>
+  <p>The direction of copying is specified by <font class=kw>from</font>  <font class=kw>remote</font>  or <font class=kw>from</font>  <font class=kw>local</font> .
+  If <font class=kw>recursive</font>  is specified, and the source is a directory, all the content
+  in the directory will be copied. The destination should be a directory.</p>
+  TODO -- verify!
+ </body></html>

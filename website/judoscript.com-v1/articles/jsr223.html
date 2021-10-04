@@ -1,0 +1,306 @@
+<html><head>
+<title>JSR 223 and Scripting Java</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>JSR 223 and Scripting Java</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#whatisit">What Is JSR 223?</a>
+<li> <a href="#why">How Is JSR 223 Good For Java And Computing In General?</a>
+<li> <a href="#issues">Issues of Using Scripting Languages On Java Platform</a>
+<li> <a href="#bsf">The Bean Scripting Framework (BSF)</a>
+<li> <a href="#final">Final Words</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+June 2003 &nbsp;
+
+<p><b>Abstract</b> &nbsp;
+
+This article tries to fathom what JSR 223 is and is about, discusses its potential benefits for
+developers working in Java-related fields, and introduces an existing, related technology
+called the Bean Scripting Framework (BSF).
+<hr>
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+
+<p>During JavaOne 2003, JSR 223 was filed and announced.
+It caught the attention of many people because it is the first official mentioning of the term "scripting language" in the Java community.
+This article intends to fathom what this JSR is about and how it can be good and important for the Java platform.
+It also introduces the basics of a very close technology, BSF, and tries to bring up the similarities and differences between these two.
+Since JSR 223 is just out and the original JSR document exclusively uses future tense, this article is by nature speculative to certain extent.
+</p>
+
+
+<h2><a name=whatisit>1. What Is JSR 223?</a></h2><p>
+
+<p>JSR 223 is all about interaction and inter-operability between Java and scripting languages.
+It is about using Java objects within scripting languages, and emphasizes on the situation of web applications.
+The original motivation looks like accepting pages written in other (scripting) languages,
+such as PHP, into the J2EE framework.
+The result is unequivocally a standard API as a bridge between Java and scripting languages, that is,
+to allow Java objects inter-operable within other scripting language engines.
+For a comforming scripting language engine, Java objects will be accessible as if from a different container.
+For web applications, it can be the Servlet container; for standalone applications, it can be an in-process JVM instance.
+Theoretically, it can also be an out-of-process JVM, where Java objects can be retrieved via naming services such as JNDI.
+For Java-based scripting languages, the Java objects may very well run in the same JVM as the language engine itself.
+</p>
+
+<p>The outcome of this JSR is expected to include the following:
+<ul>
+<li> A standard API between Java and conforming scripting languages,
+     regardless of whether the scripting language engines are Java-based or not.
+<li> A list of Servlet objects exposed to web pages written in non-Java languages.
+     This part of the API is likely related to <code>javax.servlet</code>.
+<li> A standard of packaging web pages in non-Java languages into a Java web application,
+     the security, resource and class loader context issues,
+     and possibly including the way to denote web pages written in non-Java languages
+     within a Servlet container, such as tags in <code>web.xml</code> to designate a servlet
+     for a certain kind of pages.
+<li> The reference implementation will be built on top of the Servlet and JSP technologies
+     for a number of scripting language bindings, where PHP is definitely included.
+</ul>
+
+</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=why>2. How Is JSR 223 Good For Java And Computing In General?</a></h2><p>
+
+<p>This JSR is good and important for both Java and general computing communities.
+It acknowledges the increasing awareness of the usefulness of scripting languages for the Java platform,
+and it will officially open the door of the Java world to other scripting languages.
+This specification will benefit these two groups of audience: Java programmers and application developers.
+More importantly, it will benefit Java technology to become a universal resource on all platforms.
+</p>
+
+<p>The Java platform is an incredibly rich cross-platform computing resource.
+Its strong object-orientation makes itself a dream platform for scripting,
+because one of the biggest advantages of object orientation is scriptability.
+Java is readily usable for practical purposes through Java-capable scripting languages and/or interactive shells.
+Many Java programmers are so happy coding in Java,
+they have overlooked Java's tremendous power as a cross-platform <em>platform</em> and treat it just like another programming language.
+With a standard API thanks to the effort of JSR 223,
+many scripting languages will support Java scripting and be brought to Java programmers' attention.
+This will extend Java beyond a mere system language for creating application software and become a readily useable platform,
+so Java programmers can manipulate file systems and text files, run commands, process and analyze data in various formats,
+prototype, develop, test, package and deploy Java software products, etc., all on top of Java.
+</p>
+
+<p>Application developers focus on rapid application development (RAD) to
+cope with tight development cycles in order to fulfill ever-progressing business needs.
+They tend to use "easier" languages such as scripting languages or even domain-specific declarative languages.
+Those languages all have gateways to the underlying operating system or platform, so their capabilities are not limited.
+For instance, Perl, Python and PHP all have large libraries available
+that deal with every aspect of general computing and various areas.
+In that sense, Java is the new kid on the block.
+The standard packages in J2SE and J2EE are covering a lot of ground already,
+and the explosion of Java open-source projects is providing more functional features to Java.
+Exposure of this resource to scripting languages will greatly expand their horizon.
+</p>
+
+<p>This is especially true for web application development, which is actually the focus of JSR 223.
+As we know, the J2EE platform has gained great momentum.
+J2EE has created the most powerful and versatile middleware for web applications,
+i.e., Java application servers such as Weblogic and WebSphere.
+Through JSR 223, application developers can take advantage of J2EE platforms' resourcefulness using their favorate scripting languages.
+</p>
+
+<p>Java is a much easier language than C or C++.
+While using the Java platform, application developers will be constantly exposed to Java, its environment, methodology and code,
+and will have a good chance to move on to develop in Java to create reusable Java classes.
+Compare this to the Windows platform, it would be much harder for Visual Basic developers to move on to creating COM objects in C++.
+</p>
+
+<p>On the other hand, more application developers developing on the Java platforms
+will open up more opportunities for Java in the IT industry, helping Java to fight other monolithic technologies.
+</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=issues>3. Issues of Using Scripting Languages On Java Platform</a></h2><p>
+
+<p>Application developers will have to make a choice when developing with Java.
+Suppose a PHP developer is writing pages that run on a Java Servlet container, and she needs to do URL encoding and decoding.
+Since PHP and J2EE both have APIs to do this, she needs to choose one and stick to that choice.
+It would make sense to use the Java version for considerations such as performance if it is running on a Java app server.
+However, if she feels there is a good chance to port the web application back to her home-grown Linux-Apache-PHP server,
+PHP version is perferrable.
+</p>
+
+<p>Certain language communities are very loyal, and they may fear that Java would take over. This fear is not unfounded.
+The truth is, Java is a superior technology, not just technically but also market-wise.
+One may argue that his language is better for this or that minor reasons;
+the fact is, Java is good enough in the very least, and is extremely popular.
+There are web sites that rank programming languages, and Java is consistently among the top.
+It is well worth joining the main stream of Java computing.
+I would not, for instance, make the same recommendation if the main-stream programming language is C++.
+</p>
+
+<p>If Java platform becomes the basis for all scripting language, it can avoid a lot of wasted efforts in the computing communities.
+For any particular features, open-source developers need just develop a Java version
+rather than dialects for Perl, Python, Ruby, PHP, Tcl, ... and port them onto different platforms if they are written in C/C++.
+JSR 223 is a big step towards this ideal.
+</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=bsf>4. The Bean Scripting Framework (BSF)</a></h2><p>
+
+<p>JSR 223's opening statement of "bridge the scripting and the Java community" immediately reminds knowledgeable people of
+<a href="http://jakarta.apache.org/bsf/index.html">BSF</a>.
+BSF is an API designed exactly for this purpose.
+BSF-enabled software, such as Ant, can use embedded scripts of any
+<a href="http://jakarta.apache.org/bsf/projects.html">BSF-supporting languages</a>.
+To have a scripting language embeddable in Java through BSF, it has to support this API.
+At runtime, BSF the framework will function as a factory and load your language of choice.
+The scripting language can be Java-based or not; if not Java-based, its BSF support will require native interface.
+BSF was originally developed in IBM and donated to Apache Jakarta project.</p>
+
+<p>What is even more interesting about BSF is, its JSP support is already there, in two ways! 
+The first way is to <a href="http://jakarta.apache.org/bsf/manual.html">to specify the
+scripting language for the whole page</a> by putting such a tag
+
+<pre>&lt;%page language="javascript" %></pre>
+
+at the beginning of the page, and scriptlets enclosed between <code>&lt;%= %></code> and
+<code>&lt;% %></code> are interpreted as JavaScript code, in this case. Of course, the
+web application container has to be BSF-enabled and the scripting language engine registered.</p>
+
+<p>The second way is to use the
+<a href="http://jakarta.apache.org/taglibs/doc/bsf-doc/index.html">BSF tags in the JSP
+Standard Tag Library (JSTL)</a>, also from the Apache Jakarta project, which consists of
+two tags:
+
+<pre>
+&lt;bsf:expression language="perlscript">
+  CreateBean("java.util.Date")
+&lt;/bsf:expression>
+
+&lt;bsf:scriptlet language="tcl">
+  $out println "Hello world"
+&lt;/bsf:scriptlet>
+</pre>
+</p>
+
+<p>The nice thing is, JSP tags will all work. A corollary is, the compiled page remains
+a Java servlet, and embedded scriptlets are passed to the language engine for evaluation.
+This may work well in most situations but may encounter trouble for the following:
+
+<pre>
+&lt;ul>
+&lt;%
+   for (i=0; i<10; ++i)
+   {
+     %>&lt;li> Item #&lt;%= i %>&lt;%
+   }
+%>
+&lt;/ul>
+</pre>
+
+This code snippet works for Java. For the JSTL-BSF tags, it would look like and
+possibly cause syntax errors in the language engine:
+
+<pre>
+&lt;ul>
+&lt;bsf:scriptlet language="...">
+   for (i=0; i<10; ++i)
+   {
+&lt;/bsf:scriptlet>
+&lt;li> Item #&lt;bsf:expression> i &lt;/bsf:expression>
+&lt;bsf:scriptlet language="...">
+   }
+&lt;/bsf:scriptlet>
+&lt;/ul>
+</pre>
+</p>
+
+<p>The BSF Tag Library predefines these page objects for the scripting languages
+to use:
+
+<pre>
+request
+response
+pageContext
+application
+out
+config
+page
+exception
+session
+</pre>
+</p>
+
+<p>As we see, JSR 223 and BSF (including the BSF Tag Library for JSP) have a lot in common.
+The difference seems to be that, BSF Tag Library is trying to enable scripting languages in JSP pages,
+where JSR 223 is trying to include other scripting pages into J2EE web applications.
+In other words, BSF Tag Library bridges scripting languages into JSPs;
+JSR 223 bridges web application Java objects out to scripting languages.
+The relationship between these two is interesting to watch.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=final>5. Final Words</a></h2><p>
+
+<p>With a standard API and specification resulting from JSR 223,
+Java and scripting language inter-operability will be standardized and popularized.
+Web applications can be developed in pages not only with Java code but also with many "easier" scripting languages.
+Non-Java application developers will have a chance to be exposed with Java technologies while developing in their favorate langauges,
+and possibly upgrade themselves to Java programming.
+Java programmers will be brought to the awareness of Java's resourcefulness, and think more about using Java beyond coding.
+JSR 223 is a very important move for Java.
+</p>
+
+<p>There are existing technologies to enable Java in scripting languages and vice versa, such as BSF.
+Many Java-based scripting languages provide <a href="embed.html">their own ways</a> as well.
+JSR 223, being a standard for Java, should provide whatever is out there now and set a higher standard,
+especially in the realm of J2EE.
+</p>
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

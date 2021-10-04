@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/breakcont.judo:</b></td></tr><tr><td><pre>
+aloop:
+  for i from 0 to 5 {
+    for j from 1 to 5 {
+      if i+j &lt; 5 {
+        continue aloop;
+      } else if i+j >= 10 {
+        break aloop;
+      }
+      println i, '-', j;
+    }
+  }
+</pre></td></tr></table></body></html>

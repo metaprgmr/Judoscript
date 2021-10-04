@@ -1,0 +1,11 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_sgml/get_scripts_in_html.judo:</b></td></tr><tr><td><pre>
+// Display all the JavaScript code in a HTML page.
+//
+
+do #args[0] as html {
+:BEFORE:    $$parser.rushToTag("script");
+&lt;script>:   println $_;
+&lt;/script>:  println $_; $$parser.rushToTag("script");
+}
+</pre></td></tr></table></body></html>

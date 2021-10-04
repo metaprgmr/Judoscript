@@ -1,0 +1,148 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>JUSP: Server-Side Scripting</u></h3>
+  <p>JudoScript can be used to produce dynamica web pages just like JSP or ASP; the mechanism is called
+  JUSP (pronounced /ju:sp/). A JUSP page is a HTML template with embedded JudoScript code; a block of
+  code is enclosed in <font class=kw><nobr>&lt;%</nobr></font>  and <font class=kw><nobr>%&gt;</nobr></font> ; an expression is enclosed in <font class=kw><nobr>&lt;%=</nobr></font>  and <font class=kw><nobr>%&gt;</nobr></font> ;
+  and <!&lt;%--> and <!&#45;-%&gt;> enclose comments that become JudoScript comments and not shown
+  in the generated HTML.</p>
+
+  <p>The JUSP engine is the servlet <code>com.judoscript.jusp.JuspServlet</code>. It must be
+  configured with an init-parameter <b>juspRoot</b> that points to the root of all JUSP
+  pages. Within a JUSP page, these variables are predefined:
+  <ul><li><code>servlet</code>  -- <code>javax.servlet.http.HttpServlet</code>
+      <li><code>request</code>  -- <code>javax.servlet.http.HttpServletRequest</code>
+      <li><code>response</code> -- <code>javax.servlet.http.HttpServletResponse</code>
+      <li><code>session</code>  -- <code>javax.servlet.http.HttpSession</code>
+      <li><code>params</code>   -- <code>java.util.Hashtable</code> for the query string or posted data.
+                                   The values can be a string or a string array.
+  </ul>
+  In addition, the following are predefined:
+<pre>
+const #Cookie = javaclass javax.servlet.http.Cookie;
+</pre>
+</p>
+
+  <p>JUSP pages can include other JUSP pages via the <!!@include> directive. The extra <!@> in the
+  otherwise ordinary <!include> directive tells <J> to preprocess the included file as JUSP.</p>
+</content>
+
+<content id=gui seeSyn=GuiEventsStatement seeSysFun="timerHandler,setGuiListener" seeFA="java,java_obj">
+  <p>Java GUI programs are essentially made of two parts: assembly of GUI components and event
+  handling. Using <J>'s Java scripting capability, assembling AWT and Swing components is easy.
+  <J> uses a special <nt name=GuiEventsStatement> to handle GUI events. This statement can
+  specify event handlers for individual components or a group of components. In the latter case,
+  a named handler is created, which is used by <sfn name=setGuiListener> to assign to
+  specific components. Different <nt name=GuiEventsStatement>'s can be used for different sets
+  of components.</p>
+
+  <p>For a <code>javax.swing.Timer</code> object, the event handler is specified the same was
+  as other GUI components. The <code>Timer</code> constructor takes a
+  <code>java.awt.event.ActionListener</code> instance; in <J> this is obtained by
+  <sfn name=timerHandler>. What really happens is, a <J> GUI program has just one 
+  <code>java.awt.event.ActionListener</code> object, and it routes all the GUI events to the
+  respective handler code written in <J>. <sfn name=timerHandler> returns just that
+  <code>ActionListener</code> object.</p>
+</content>
+
+<content id=mail useSyn=MailStatement/>
+
+<content id=exec useSyn=ExecStatement/>
+
+<content id=sched useSyn=ScheduleStatement/>
+
+<content id=ssh seeSyn=SCPStatement seeSysFun=ssh seeObj=SSHConnection/>
+
+<content id=embed_in_src>
+  <p>The <J> language engine takes source files of Java, C and C++, filters out <J>
+  code encoded in <!/*[judo]> and <![judo]*/> and runs it. This is useful for unit
+  testing of that source file, or other purposes.</p>
+</content>
+
+<content id=java_judo>
+  <p><J> language engine has an interface that allows itself to be embedded in other Java software;
+  its LGPL licencing helps, too;) Alternatively, Java software can use the Bean-Scripting Framework
+  (BSF), a standard API for scripting languages to interact with Java software. You can construct
+  <J> program text on-the-fly and execute it, and pass objects between <J> and Java back and forth.</p>
+</content>
+
+<content id=java_judo_eng external=1/>
+
+<content id=java_judo_bsf seeObj=BSF>
+  <p><J>'s <a href="http://www-124.ibm.com/developerworks/projects/bsf">Bean Scripting Framework</a>
+  (BSF) engine is implemented by class <a href=bsfengine.html>com.judoscript.BSFJudoEngine</a>.
+
+  <p>The following table summarises using BSF.</p>
+  <table border="1"><tbody class="text">
+  <tr><th>Category</th><th>Description</th></tr>
+  <tr><td>Language identifier</td><td>judoscript</td></tr>
+  <tr><td>File extension(s)</td><td>.judo, .jud</td></tr>
+  <tr><td>Look up a bean</td><td>$$bsf.lookupBean("name-of-bean")</td></tr>
+  <tr><td>Create a new bean</td><td>JudoScript's javanew operator</td></tr>
+  <tr><td>Register a bean</td><td>$$bsf.registerBean("name-of-bean",$bean)</td></tr>
+  <tr><td>Unregister a bean</td><td>$$bsf.unregisterBean("name-of-bean")</td></tr>
+  <tr><td>Bind a script to be executed upon event firing</td><td>JudoScript's guiEvent{} or adapter</td></tr>
+  <tr><td>Do all bean operations</td><td>JudoScript method call</td></tr>
+  <tr><td>Language home</td><td>http://www.judoscript.com</td></tr>
+  </table>
+</content>
+
+<content id=custom_judo>
+  <p>With the ability to <fa id=java_judo>, <J> can be used in your applications. Here are
+  a few hints for embedding <J>.</p>
+
+  <p>The recommended way to build library for <J> is actually to write Java, not only for
+  performance but also for reusability across Java and <J> code. This does not exclude
+  building <J> libraries of functions and classes; in fact, such libraries (<J> source
+  files) can be put anywhere in the CLASSPATH.</p>
+
+  <p><J> has a few mechanisms to make using your Java code even easier. One is the
+  <fa id=java_st> to make Java static methods look like regular functions, the other
+  is <syn id=JavaClassShorts> to make using your Java classes easier (without having to
+  worry about long Java class names.)</p>
+
+  <h4>myjsysfxns.properties and myjavapkgs.properties</h4>
+
+  <p>A large portion of <J> system functions are actually implemented by static Java
+  methods; they are listed in <code>com/judoscript/jsysfxns.properties</code>. You can
+  extend this system function list by creating a similar properties file and name it as
+  <code>com/judoscript/myjsysfxns.properties</code>. Since this properties file does not
+  exist in the standard <J> distribution, your changes will not be overwritten by <J>
+  version upgrades. Another properties file, <code>com/judoscript/javapkgs.properties</code>,
+  holds the predefined Java package shortcuts. You can create your predefined Java package
+  shortcuts in <code>com/judoscript/myjavapkgs.properties</code>.</p>
+</content>
+
+<content id=localdata>
+  <p>In the script, anything starting on the next line of <!EndScript> can be accessed via
+  a predefined <!$$local> input stream. Anything on the rest of the line containing of
+  <!EndScript> is discarded.
+</content>
+
+wt.event.ActionListener</code> object, and it routes all the GUI events to the
+  respective handler code written in <J>. <sfn name=timerHandler> returns just that
+  <code>ActionListener</code> object.</p>
+</content>
+
+<content id=mail useSyn=MailStatement/>
+
+<content id=exec useSyn=ExecStatement/>
+
+<content id=sched useSyn=ScheduleStatement/>
+
+<content id=ssh seeSyn=SCPStatement seeSysFun=ssh seeObj=SSHConnection/>
+
+<content id=embed_in_src>
+  <p>The <J> language engine takes source files of Java, C and C++, filters out <J>
+  code encoded in <!/*[judo]> and <![judo]*/> and runs it. This is useful for unit
+  testing of that source file, or other purposes.</p>
+</content>
+
+<content id=java_judo>
+  <p><J> language engine has an interface that allows itself to be embedded in other Java software;
+  its LGPL licencing helps, too;) Alternatively, Java software can use the Bean-Scripting Framework
+  (BSF), a standard API for scripting languages to interact with Java software. You can construct
+  <J> program text on-the-fly and execute it, and pass objects between <J> and Java back and forth.</p>
+</conten

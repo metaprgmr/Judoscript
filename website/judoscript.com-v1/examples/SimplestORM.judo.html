@@ -1,0 +1,90 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_hibernate/Simplest/SimplestORM.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2005-1-11';
+  desc    = [[*
+    Use an Object Model of just one class to try out object persisting
+    with JudoScript's Hibernate scripting.
+
+    The Object Model consists of one simple class, which just has a few
+    properties of simple types. The source files are:
+      [hbm]  TestSimpleTypes.hbm.xml
+      [java] TestSimpleTypes.java
+
+    The experiments conducted herein are:
+    1. Initialize the Hibernate environment using a MySQL database.
+       Note that the JDBC driver and Hibernate dialect are automatically
+       picked up, since MySQL is a "known" RDBMS by JudoScript.
+    2. Create a new object, and save it.
+    3. Modify the object and update it.
+    4. Find that object.
+    5. Delete the object.
+    6. Reinstate the object (obtains a different ID).
+  *]];
+}
+
+//
+// 1. First of all, initialize the Hibernate environment using MySQL.
+//
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update',
+    judoscript.echo               = true  // echo the eventual config values
+  )
+
+  // List Java class(es) in the Object Model:
+  TestSimpleTypes
+;
+//hib::addClass java::TestSimpleTypes;
+println nl, 'Hibernate initialized. Ready to go!', nl;
+
+//
+// 2. Create a new object, and save it.
+//
+x = new java::TestSimpleTypes(10.5,      // theFloat
+                              2,         // theByte
+                              'c',       // theChar
+                              4,         // theShort
+                              8,         // theInt
+                              16,        // theLong
+                              'abcdefg', // theString
+                              Date());   // theDate: the current date/time
+println 'Before save: x.id = ', x.id;
+hib::save(x);
+println 'After save:  x.id = ', x.id;
+
+//
+// 3. Modify the object and update it.
+//
+x.theFloat = 100.8;
+hib::update(x);
+println 'Updated x.';
+
+//
+// 4. Find that object.
+//
+y = hib::get(java::TestSimpleTypes, x.id);
+println 'Found: y.id = ', y.id, '  y.theFloat = ', y.theFloat;
+
+//
+// 5. Delete the object.
+//
+hib::delete y;
+z = hib::get(java::TestSimpleTypes, y.id);
+if (z != null)
+  println 'Found: z.id = ', z.id;
+else
+  println 'Object[id=', y.id, '] has been deleted.';
+
+//
+// 6. Reinstate the object (obtains a different ID).
+//
+println 'Re-save y... currently, y.id = ', y.id;
+hib::saveOrUpdateCopy y; // put it back in.
+println 'Now, y.id = ', y.id;
+
+hib::close;
+</pre></td></tr></table></body></html>

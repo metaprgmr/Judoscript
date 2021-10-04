@@ -1,0 +1,27 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_oracle/prepared_execute.judo:</b></td></tr><tr><td><pre>
+!include 'setup/connect.judi'
+
+db::sql: DELETE FROM emp WHERE emp_no IN (108, 109);
+
+rows = [
+  [ 'Richard', 'Brown', Date(1985,5,23), 60150.0 ],
+  [ 'Smith',   'Green', Date(1977,9,7),  45600.0 ],
+];
+id = 108; // start value.
+
+db::prepare ins:
+  INSERT INTO    emp ( emp_no, first_name, last_name, birth_date, salary )
+              VALUES ( :empNo, :firstName, :lastName, :birthDate, :salary )
+;
+
+for row in rows {
+  db::sql ins with @empNo    :Integer = id++,
+                   @firstName         = row[0],
+                   @lastName          = row[1],
+                   @birthDate:Date    = row[2],
+                   @salary   :Number  = row[3];
+}
+
+db::disconnect();
+</pre></td></tr></table></body></html>

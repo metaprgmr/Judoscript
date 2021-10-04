@@ -1,0 +1,34 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_sgml/get_table_content.judo:</b></td></tr><tr><td><pre>
+// Demonstrates $$parser.skipToTag()/rushToTag()
+// methods with multiple tags.
+//
+// It skips anything before the first &lt;table> tag,
+// and prints out the complete content of that tag.
+
+var sw = createStringWriter();
+var depths = 0; // a stack
+
+do $$local as html {
+:BEFORE:  $$parser.skipToTag("table", "/table");
+&lt;table>:  print&lt;sw> $_;
+          ++depth;
+          print&lt;sw> $$parser.rushToTag("table", "/table");
+&lt;/table>: print&lt;sw> $_;
+          if (--depth == 0) break;
+          print&lt;sw> $$parser.rushToTag("table", "/table");
+}
+
+println sw.toString();
+
+EndScript ==================================================
+&lt;html>
+&lt;body>
+aa
+&lt;table>
+&lt;tr>&lt;td> bb &lt;table>&lt;tr>&lt;td> cc &lt;/td>&lt;/tr>&lt;/table>
+&lt;/td>&lt;/tr>
+&lt;/table>
+dd
+&lt;/body>&lt;/html>
+</pre></td></tr></table></body></html>

@@ -1,0 +1,22 @@
+<html><head><title>JudoScript Semantics - FSFileModStatements</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>FSFileModStatements</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=FSFileModStatements>FSFileModStatements</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>remove</font>   |  <font class=kw>setFileTime</font>   |  <font class=kw>setReadOnly</font>   |  <font class=kw>chgrp</font>   |  <font class=kw>chmod</font>   |  <font class=kw>chown</font>   )   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>except</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>to</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>recursive</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>fileOnly</font>   |  <font class=kw>dirOnly</font>   )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('FSFileModStatements'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>For the selected files, perform these operations.</p>
+  <p>Note that <font class=kw>chgrp</font> , <font class=kw>chmod</font>  and <font class=kw>chown</font>  runs a operating system command to
+  achieve the tasks, so are only available on systems that supports them.</p>
+ </body></html>

@@ -1,0 +1,65 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_COM/testExcel.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This program lists files and directories in the current directory and
+    displays their attributes in an Excel spread sheet. It also calculates
+    the total size.
+
+    Adapted from &lt;a href="http://www.hcn.zaq.ne.jp/no-ji/jcom">JCom&lt;/a>
+    file 'demo/samples/testExcel.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+excel = new com::Excel.Application;
+excel.Visible = true;
+println "Version:  ", excel.Version;
+println "UserName: ", excel.UserName;
+println "Caption:  ", excel.Caption;
+println "Value:    ", excel.Value;
+
+xlBooks  = excel.Workbooks;
+xlBook   = xlBooks.Add;
+xlSheets = xlBook.Worksheets;
+xlSheet  = xlSheets['Item', 1];
+xlRange  = xlSheet.Cells;
+
+xlRange['Item',1,1].Value = "Name";
+xlRange['Item',1,2].Value = "Length";
+xlRange['Item',1,3].Value = "Time";
+xlRange['Item',1,4].Value = "Is-Dir";
+xlRange['Item',1,5].Value = "Is-File";
+xlRange['Item',1,6].Value = "Exists";
+xlRange['Item',1,7].Value = "Writable";
+xlRange['Item',1,8].Value = "Hidden";
+
+listFiles;
+filenames = $_;
+i = 2;
+for file in filenames {
+  println file;
+  xlRange['Item',i,1].Value = file;
+  xlRange['Item',i,2].Value = file.fileLength();
+  xlRange['Item',i,3].Value = file.fileTime();
+  xlRange['Item',i,4].Value = file.isDirectory();
+  xlRange['Item',i,5].Value = file.isFile();
+  xlRange['Item',i,6].Value = file.fileExists();
+  xlRange['Item',i,7].Value = file.fileWritable();
+  xlRange['Item',i,8].Value = file.isFileHidden();
+  ++i;
+}
+expression = '=Sum(B2:B' @ (filenames.length+1) @ ')';
+println 'Expression: ', expression;
+++i;
+xlRange['Item',i,1].Value = "Total Size:";
+xlRange['Item',i,2].Formula = expression;
+
+xlRange.Columns.AutoFit();
+
+sleep(8000);
+xlBook.Close(false,null,false);
+excel.Quit();
+</pre></td></tr></table></body></html>

@@ -1,0 +1,23 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/envvars.judo:</b></td></tr><tr><td><pre>
+cmdline = 'java judo -x "for x in getEnvVars() { println x; }"';
+
+println nl, '--- Run with inherited env variables from parent JVM process:';
+exec cmdline;
+
+println nl, '--- Run with no env variables except for PATH and CLASSPATH:';
+exec cmdline
+     with &lt;new>
+     PATH = ${PATH},
+     CLASSPATH = ${CLASSPATH}
+;
+
+println nl, '--- Run with a new env variable:';
+exec cmdline with CLASSPATH = 'c:/temp';
+
+println nl, '--- Run with a set of new env variables:';
+newEVs = { FOO = 'foo',
+           BAR = 'bar'
+         };
+exec cmdline with newEVs;
+</pre></td></tr></table></body></html>

@@ -1,0 +1,15 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/encrypt_file.judo:</b></td></tr><tr><td><pre>
+infile   = getScriptPath();
+tempfile = infile.getFilePath() + '/baseline/alfa.enc';
+outfile  = infile.getFilePath() + '/baseline/alfa.dec';
+
+encryptFile 'password', infile, tempfile;
+decryptFile 'password', tempfile, outfile;
+
+if infile.fileSize() == outfile.fileSize() {
+  println 'Encryptiong/decryption succeeded!';
+} else {
+  println 'Encryptiong/decryption failed!';
+}
+</pre></td></tr></table></body></html>

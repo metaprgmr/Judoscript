@@ -1,0 +1,16 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_regex/groups.judo:</b></td></tr><tr><td><pre>
+text = '&lt;head>&lt;title>Judo&lt;/title>&lt;/head>';
+
+m = text.matcher('(&lt;title>)(.*)(&lt;/title>)');
+
+if m.find() {
+  println m.groupCount();
+  println ' : ', m.group();
+  println '0: ', m.group(0);
+  println '1: ', m.group(1);
+  println '2: ', m.group(2);
+  println '3: ', m.group(3);
+}
+
+</pre></td></tr></table></body></html>

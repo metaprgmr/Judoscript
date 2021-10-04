@@ -1,0 +1,841 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Book: The Judo Language 0.9</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="" name=keywords>
+<LINK href="../../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../../home.html')"><IMG alt="Home" hspace=0 src="../../share/home_gray.gif" border=0></A><A href="javascript:go_to('../../judo.html')"><IMG alt="Judo Language" hspace=0 src="../../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>&nbsp;</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../../share/spacer.gif" height=7 width=1 border=0>
+<center><h1>The Judo Language 0.9</h1>
+<table border=0 width=98% class=bodyText><tr><td>
+By <i>James Jianbo Huang</i>&nbsp;&nbsp;&nbsp;Last update: 2021-10-03</p>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%" class=secondary3>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartI. Introduction</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#intro">1.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html"><b>Introduction to Judo</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#usecases">2.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html"><b>Major Use Cases Illustrated</b></a></td></tr>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartII. Core Language Programming</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#basic">3.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/basic.html"><b>Basic Program Structure</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#running">4.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html"><b>Running Judo and Logging</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#datatypes">5.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/datatypes.html"><b>Basic Data Types and Expressions</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#flow">6.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/flow.html"><b>Flow Control</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#datastr">7.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/datastr.html"><b>Built-In Data Structures</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#thread">8.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/thread.html"><b>Threads and Dynamic Evaluation</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#oop">10.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/oop.html"><b>Object-Oriented Programming</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#java">11.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html"><b>Java Scripting</b></a></td></tr>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartIII. Essential Services and Shell Scripting</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#io">14.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/io.html"><b>Print, File I/O and In-Script Data</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#fs">15.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html"><b>File System and Archives</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#exec">16.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html"><b>Run Executables</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#net">17.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/net.html"><b>Internet Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#schedule">18.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/schedule.html"><b>Scheduled Jobs</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#gui">19.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/gui.html"><b>Java GUI Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#ant">20.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/ant.html"><b>Ant Scripting and Scripting Ant</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#i18n">21.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html"><b>Internalization and Localization</b></a></td></tr>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartIV. Advanced Data Processing and Applications</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#jdbc">22.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html"><b>JDBC (SQL) Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#db">23.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html"><b>JDBC (SQL) Scripting - Work with RDBMSs</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#hib">24.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/hib.html"><b>Hibernate ORM and HQL Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#sgml">25.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/sgml.html"><b>SGML and JSP Scraping</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#xml">26.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/xml.html"><b>XML Scripting - SAX Style</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#e4x">27.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/e4x.html"><b>XML Scripting - DOM Style</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#wsdl">28.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/wsdl.html"><b>SOAP Web Service Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#win32">29.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/win32.html"><b>Scripting for Windows</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#activex">30.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_orange.gif">&nbsp;<a href="chapters/activex.html"><b>Microsoft ActiveX Scripting</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#msoffice">31.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html"><b>Use Microsoft Office Products</b></a></td></tr>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartV. Beyond Basics</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#jusp">32.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_green.gif">&nbsp;<a href="chapters/jusp.html"><b>JuSP: the Judo Server Page Technology</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#embedjava">33.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html"><b>Embed Judo in Java Software</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#extend">34.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/extend.html"><b>Extending Judo</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#tools">35.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/tools.html"><b>Judo Tools and Special Usages</b></a></td></tr>
+<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>PartVI. Judo Language Reference</b></td></tr><tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#a_fa">I.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_fa.html"><b>Functional Areas</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#a_g">II.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_g.html"><b>Grammar</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#a_sf">III.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_sf.html"><b>Built-In System Functions</b></a></td></tr>
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#a_ot">IV.</a></b>&nbsp;</td>
+<td nowrap=1 width="98%"><img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_ot.html"><b>Built-In Object Types</b></a></td></tr>
+
+</table>
+<blockquote>
+Click on the chapter/appendix number to go to the expanded Table of Content.<br>
+Click on the chapter/appendix title to go to the chapter itself.<br>
+<em>This book is work-in-process.
+The square icons next to the chapter numbers indicate the progress.</em>
+</blockquote>
+<hr><a name="toc"></a><table border=0 cellspacing=0 cellpadding=1 width=100% class=secondary3>
+<tr><td class=text14b nowrap valign=top><a name=preface>0</a>.&nbsp;<a href="chapters/preface.html">Preface</a></td></tr><tr><td bgcolor="#DDDDDD"><h2>Part I. Introduction</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=intro> 1</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html">Introduction to Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html#backgnd">Background</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#judo_fsl">Judo, a Functional Java Scripting Language</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#jplaf">The Java Platform and Scripting Languages</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#scriptlangs">Vive les Scripting Languages!</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#design">Programming Language Design</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#9_10_ecma">Judo 0.9, 1.0 and ECMAScript</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/intro.html#components">Components of Judo Language</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#core">Core Programming Language</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#javascript">Java Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#ds">Built-In Data Structures</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#sysfxns">System Functions</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#fntnl">Functional Support</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html#uses">Uses of Judo</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#entuses">Enterprise Uses</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#devuses">Software Development Uses</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#dailyuses">Daily Uses</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html#who">Who Can Use Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/intro.html#run">How to Run Java Software and Judo</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#runjava">Install Java and Run Java Software</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/intro.html#runjudo">Install and Run Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/intro.html#bookorg">How This Book is Organized</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/intro.html#convention">Conventions and Terminologies Used in This Book</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=usecases> 2</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html">Major Use Cases Illustrated</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#prgmg">General Programming Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/usecases.html#branching">Branching</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/usecases.html#for">For Loop</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/usecases.html#while">While Loop</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#javascripting">Java Scripting Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#eval">Dynamic Evaluation Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#os">OS and Shell Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#fsarch">File System and Archive Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#net">Internet Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#jdbc">JDBC Scripting Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#hib">Hibernate Scripting Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#sgml">SGML Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#xml">XML Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#win">Windows Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#sss">Server-Side Scripting Use Cases</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/usecases.html#embed">Embed-In-Java Use Cases</a></td></tr>
+<tr><td bgcolor="#DDDDDD"><h2>Part II. Core Language Programming</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=basic> 3</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/basic.html">Basic Program Structure</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/basic.html#lex">Lexical Structure</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/basic.html#iden">Identifiers, Variable and Constants</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/basic.html#keywords">Reserved Words</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/basic.html#comment">Comments</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/basic.html#var">Variables and Scopes</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/basic.html#const">Constants</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/basic.html#preconst">Predefined Constants</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=running> 4</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html">Running Judo and Logging</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#startup">Start-Up Environment</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#classpath">Classpath</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#jclsconst">Java Class Constants</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#sysprop_envvars">System Properties and Environment Variables</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#include">Include Other Scripts</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#pragma">Pragma</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#autorun">Make Scripts Executable</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#win">Make Scripts Executable on Windows</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#unix">Make Scripts Executable on Unix</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#logging">Logging</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#log_pragma">Judo Logging Sources and Logging Pragma</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#log_pragma2">Non-Judo Logging Sources</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/running.html#log4j_jdk14">Logging with Log4J and JDK 1.4 Logging API</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/running.html#usage">Program Documentation</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=datatypes> 5</a>.&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/datatypes.html">Basic Data Types and Expressions</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datatypes.html#null">Null and Undefined</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/datatypes.html#boolnum">Boolean and Numbers</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/datatypes.html#string">String and Character</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datatypes.html#fileurl">File Names and URLs</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/datatypes.html#regex">Regular Expression</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/datatypes.html#regexsyn">The Java/Judo Regular Expressions</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/datatypes.html#useregex">Use Regular Expressions in Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/datatypes.html#datetime">Date and Time</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/datatypes.html#secret">Secret</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=flow> 6</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/flow.html">Flow Control</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/flow.html#flowctrl">Basic Flow Control Statements</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#block">Types of Judo Statements</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#stmt_if">If-Else Statement</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#stmt_switch">Switch Statement</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#stmt_while">While and Do-While Loops</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#stmt_for">For and Repeat Loops</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#breakcont">Break, Continue and Loop Index</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/flow.html#fxn">Functions and Function Variables</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#params">Function Parameters</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#dynparams">Dynamic Function Parameters</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#fxnvar">Function Variables</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#anonfxn">Anonymous Functions</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#javafxn">Function Alias for Java Static Methods</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#sysfxn">System Functions</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/flow.html#excpt">Exception Handling</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#exobj">The Exception Object</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/flow.html#throw_resume">The Throw and Resume Statements</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=datastr> 7</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/datastr.html">Built-In Data Structures</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#list">Array and Linked List</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#map">Object and Ordered Map</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#tree">Tree Node</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#set">Set and Ordered Set</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#stk_que">Stack and Queue</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/datastr.html#tabledata">Table Data</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=thread> 8</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/thread.html">Threads and Dynamic Evaluation</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/thread.html#rtc">Runtime Context</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/thread.html#thread">Thread Programming</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/thread.html#eval">Execute Dynamic and External Scripts</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=oop> 10</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/oop.html">Object-Oriented Programming</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/oop.html#">Define A New Class</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/oop.html#">Constructor and Initialization</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/oop.html#">Derive A New Class From Others</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/oop.html#">Transpose Class Instances</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=java> 11</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html">Java Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#intro">Introduction to Java and Object Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#jobjcls">Use Java Objects and Classes</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#jobj">Create and Use Java Objects</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#clsnames">Resolving Java Class Names</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#jcallvals">Pass Judo Values To Java Methods</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#jcls">Use Java Classes and Class Static Members</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#alias">Alias Java Static Methods as Functions</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#jarr">Create and Use Java Arrays</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#jds">Native Judo Operations for Java Data Structures</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#map">Initialize and Access java.util.Map Values</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#iter">Iterate Java Data Structures and Objects</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#jlist">Access elements in java.util.List</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#xjava">Extend Java Classes and Implement Java Interfaces</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/java.html#adapter">Java Interface Adapters</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/java.html#rmiejb">Making Clients for JNDI, RMI and EJB</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#jndi">Obtain JNDI Initial Context</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/java.html#rmi">RMI</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/java.html#testing">Java Software Testing and JUnit</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/java.html#prototyping">Java Software Prototyping</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/java.html#threads">Thread and Other Considerations</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/java.html#summary">Summary</a></td></tr>
+<tr><td bgcolor="#DDDDDD"><h2>Part III. Essential Services and Shell Scripting</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=io> 14</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/io.html">Print, File I/O and In-Script Data</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/io.html#print_fmt">Print and Formatting</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/io.html#print">Printing</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/io.html#print2var">Print Into Variables</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/io.html#sysinout">Using System Input and Output Streams</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/io.html#file">Read and Write Binary Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/io.html#">Read and Write Binary Files Sequentially</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/io.html#">Random Access Files</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/io.html#fileinzip">Read and Write Files Within Zip Files</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/io.html#local">In-Script Data</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=fs> 15</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html">File System and Archives</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html#fs">Working in the File System</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#cd">The Current Directory and Change Directory</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#mkrmdir">Make and Remove Directory</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#mv">Rename and Move Files</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html#listFiles">List and Process Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#selection">File Selection</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#list">Obtain Selected Files in a List or a Tree</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#count">Count Files and Directories</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#stats">Get Statistics about Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#retvals">Summary of listFiles Return Values</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#rm_time_ro">Remove and Set Attributes on Selected Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#exec">Run Shell Commands on Selected Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#do">Arbitrarily Process Selected Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#listarch">List Files and Get Information in Archives</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#listzip">Process Files in Zip Archives</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html#copy">Copy and Archive Files</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#copysingle">Copy a Single File to a Different Name</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#copylocal">Copy Files to a Different Location</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#copyarch">Copy Files into Archives</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#multiarch">Save Multiple File Sets into a Single Archive</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#copyurl">Copy Public Internet Resources</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/fs.html#fileutil">Other File Utilities</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#encrypt">Encrypting and Decrypting Files and Data</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/fs.html#chopfile">Chopping and Assembling Files</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=exec> 16</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html">Run Executables</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html#intro">Introduction to Running Native Programs</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html#cmdline">The Command-Line Format</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html#options">Return Value, Running Modes and Options</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#retval">Return Value</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#sync">Synchronous and Asynchronous Runs</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#envvars">Environment Variables</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#startup">Start-Up Directory</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/exec.html#execio">Process Executable Input And/Or Output</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#userinput">User Input for the Executable</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#input">Provide User Input from the Script</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#output">Read Executable Output into the Script</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/exec.html#inout">Write to and Read from the Executable</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/exec.html#buidjudo">Case Study: Build and Test the Judo Software</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=net> 17</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/net.html">Internet Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">HTTP Client Features</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">HTTP Server Features</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">Create A HTTP Proxy Server</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">UDP and Broadcasting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_yellow.gif">&nbsp;<a href="chapters/net.html#mail">Send Mail</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">SSH and SCP</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/net.html#">FTP</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=schedule> 18</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/schedule.html">Scheduled Jobs</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/schedule.html#">Different Modes of Scheduling</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/schedule.html#">HTTP Console Interface for Schedules</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=gui> 19</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/gui.html">Java GUI Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/gui.html#">Create AWT and Swing GUIs</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/gui.html#">Handle GUI Events</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/gui.html#">Handle GUI Events for Multiple Controls</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=ant> 20</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/ant.html">Ant Scripting and Scripting Ant</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/ant.html#intro">Introduction to Ant</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#whatis">What is Ant?</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#antbuild">Ant Build Scripts</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#j_and_ant">Judo and Ant</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/ant.html#inant">Embed Judo in Ant Build Script</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#anttag">The Ant &lt;judoscript&gt; Task</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#passant">Passing Information between Ant and the &lt;judoscript&gt; Tag</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#antcall">Call Other Ant Targets and Access Other Resources</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/ant.html#anttask">Script Ant Tasks</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#passanttask">Passing Information between code and Ant tasks</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#antfail">Handle Ant task execution failures</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/ant.html#whenwhy">When and why to script Ant tasks in Judo</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=i18n> 21</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html">Internalization and Localization</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html#">Text Encoding in Judo and Java</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">Text Encoding</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">Read and Write Files in Native Languages</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html#">Handle Native Language Contents on the Internet</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html#">Native Language Text in Source Code</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">Turn Characters into Unicode Escape Sequences</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">Use Native Characters Directly in Source Code</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html#">View and Edit Native Language Content</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">A Poor Man's Native Language Viewer</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/i18n.html#">A Poor Man's Native Language Editor</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/i18n.html#">Use Locales</a></td></tr>
+<tr><td bgcolor="#DDDDDD"><h2>Part IV. Advanced Data Processing and Applications</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=jdbc> 22</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html">JDBC (SQL) Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/jdbc.html#intro">Introduction to JDBC Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#intro_1">Java, JDBC and RDBMS</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#intro_2">SQL, JDBC and JDK Versions</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#intro_3">JDBC SQL Data Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#intro_4">JDBC and ODBC</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#intro_5">SQL/JDBC Scripting in Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#con">Connections and Drivers</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#con_1">JDBC Drivers</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#con_2">Connection Attributes</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#runsql">Direct and Batch Execution of SQL</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#runsql_1">Run SQL Directly</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#runsql_2">Run Raw SQL and Database Language Scripts</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/jdbc.html#runsql_3">Run SQL in Batches</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/jdbc.html#sf">Run SQL Script Files</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#prep">Parameterized SQL</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#upd">Run SQL Update Statements</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#qr">Queries and Query Results</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#asis">Execute Database Scripts As-Is</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jdbc.html#call">Call Stored Procedures</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/jdbc.html#advtype">Use Advanced SQL Types</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/jdbc.html#dbmeta">Database Meta-Information and Utilities</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=db> 23</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html">JDBC (SQL) Scripting - Work with RDBMSs</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html#">Use HSQLDB</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html#">Use Oracle</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html#">Use IBM DB2</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html#">Use Microsoft SQL Server</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/db.html#">Use MySQL</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=hib> 24</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/hib.html">Hibernate ORM and HQL Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/hib.html#intro">Introduction to Hibernate and HQL</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#hib_ex">A Simple Example of Object Mapping</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#hib_apis">Key Hibernate API Classes and Interfaces</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#intro_setup">Set-Up and Initialization of Hibernate</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#hib_scripting">Hibernate Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#setup">Set-Up and Initialization of Hibernate</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#tx">Support for Object Persistence and Transactions</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#hql">Support for HQL and Multiple Object Deletion</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/hib.html#hom">Working with Hibernate Object Models</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#types">Mapping Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#entity_value">Mapping Entity and Value Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#inheritance">Mapping Class Inheritance</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/hib.html#assoc">Mapping Associations</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/hib.html#summary">Summary</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=sgml> 25</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/sgml.html">SGML and JSP Scraping</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/sgml.html#sgml">SGML/HTML Scraping Made Easy</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/sgml.html#">SGML Scripting Versus XML Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/sgml.html#jsp">JSP Scraping and Build Template Systems</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/sgml.html#">Develop Your Own Tag System for Information Organization</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/sgml.html#">Case Study: An SGML-Based Documentation System</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/sgml.html#">Planning for SGML-Based Documentation</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/sgml.html#">Develop An SGML-Based Documentation System</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=xml> 26</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/xml.html">XML Scripting - SAX Style</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/xml.html#">Introduction to XML Document Processing</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/xml.html#">SAX-Style XML scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/xml.html#">DOM Programming</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/xml.html#">XSLT Scripting</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=e4x> 27</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/e4x.html">XML Scripting - DOM Style</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/e4x.html#">Native XML Scripting</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=wsdl> 28</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/wsdl.html">SOAP Web Service Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/wsdl.html#intro2ws">Introduction to SOAP Web Services</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#soap">SOAP Web Services</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#wsdl">WSDL</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#datatypes">Data Types and Encoding</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#wsclients">Web Service Clients</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/wsdl.html#soapscripting">SOAP Web Service Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#soapscripting_1">Prerequisite</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#soapscripting_2">Start Scripting Web Services</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/wsdl.html#datatypes">Parameters and Return Values</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#datatypes_3">Set Up the Echo Sample Web Service</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#builtin_types">Built-In Data Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#custom_types">Custom Data Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#return_values">Input/Output Parameters and Return Values</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#diff_in_types">Different Input Types for Maps and Structs</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/wsdl.html#summary">Summary of SOAP Web Service Scripting</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=win32> 29</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/win32.html">Scripting for Windows</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=activex> 30</a>.&nbsp;
+<img src="../../share/status_orange.gif">&nbsp;<a href="chapters/activex.html">Microsoft ActiveX Scripting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/activex.html#activex">Microsoft ActiveX/COM Background</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_1">Introduction to COM and ActiveX</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_2">IDispatch</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_3">IEnumVARIANT</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_4">Type Library</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_5">Introduction to ActiveX Control</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_6">ActiveX Control Data Types</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_7">ActiveX Control Methods and Properites</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#activex_8">ActiveX Control Events</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/activex.html#jactivex">ActiveX and Java</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#jactivex_1">Scripting ActiveX Controls with Java</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#jactivex_2">Thoughts about COM/ActiveX, Java and Platforms</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/activex.html#judoax">Scripting ActiveX Controls with Judo</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#judoax_1">Obtain ActiveX Controls</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#judoax_2">Access ActiveX Control Properties</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#judoax_3">Invoke ActiveX Control Methods</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#judoax_4">Control the Reference Counts</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/activex.html#judoax_5">Use the IEnumVARIANT Interface</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/activex.html#ado">Use ADO to Access Databases</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=msoffice> 31</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html">Use Microsoft Office Products</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html#msexcel">Use Microsoft Excel</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html#msword">Use Microsoft Word</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html#msie">Use Microsoft Internet Explorer</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/msoffice.html#msoutlook">Use Microsoft Outlook</a></td></tr>
+<tr><td bgcolor="#DDDDDD"><h2>Part V. Beyond Basics</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=jusp> 32</a>.&nbsp;
+<img src="../../share/status_green.gif">&nbsp;<a href="chapters/jusp.html">JuSP: the Judo Server Page Technology</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/jusp.html#">The JuSP Platform</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=embedjava> 33</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html">Embed Judo in Java Software</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html#">The Easy Way to Embed Judo in Java Software</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/embedjava.html#">Default Function Name in the Embedded Script</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/embedjava.html#">Capture and Redirect Output</a></td></tr>
+<tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="chapters/embedjava.html#">Syntax and Runtime Error Reporting</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html#bsf">Introduction to Bean Scripting Framework (BSF)</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html#withbsf">BSF Support for Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/embedjava.html#">Use Judo Inside Ant Through BSF</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=extend> 34</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/extend.html">Extending Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/extend.html#">Establish Your Own System Functions</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/extend.html#">Build Libraries for Java and Judo</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/extend.html#">Introduction to Judo Internals</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/extend.html#">Judo Debug Interface (JUDI)</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/extend.html#">Judo Profile Interface (JUPI)</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=tools> 35</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/tools.html">Judo Tools and Special Usages</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/tools.html#">Judo Precompiler</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/tools.html#">Judo-Java Translator</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/tools.html#">JUSP Preprocessor</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/tools.html#">White-Box Java Unit Testing</a></td></tr>
+<tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+<a href="chapters/tools.html#">Protect Passwords In The Scripts</a></td></tr>
+<tr><td bgcolor="#DDDDDD"><h2>Part VI. Judo Language Reference</h2></td></tr><tr><td class=text14b nowrap valign=top><a name=a_fa> I</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_fa.html">Functional Areas</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=a_g> II</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_g.html">Grammar</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=a_sf> III</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_sf.html">Built-In System Functions</a></td></tr>
+<tr><td class=text14b nowrap valign=top><a name=a_ot> IV</a>.&nbsp;
+<img src="../../share/status_red.gif">&nbsp;<a href="chapters/a_ot.html">Built-In Object Types</a></td></tr>
+
+
+</table>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+
+
+
+<BR><IMG src="../../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

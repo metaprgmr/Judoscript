@@ -1,0 +1,13 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/adapter.judo:</b></td></tr><tr><td><pre>
+import java.awt.Frame;
+import java.awt.event.*;
+
+f = new java::Frame;
+f.addWindowListener(
+  new java::WindowListener {
+    void windowClosing(WindowEvent e) { exit 0; }
+  }
+);
+f.setVisible(true);
+</pre></td></tr></table></body></html>

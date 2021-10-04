@@ -1,0 +1,30 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_sax/text_tags.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    This program tests various options for mixed text tags
+    using the SAX-style processing.
+    It uses the data enclosed at the end of this script.
+  *]];
+}
+
+do $$local as xml
+{
+&lt;tag0>TEXT:   println '+++ default +++', nl, $_;
+&lt;tag1>TEXT+:  println '+++++++++++++++', nl, $_;
+&lt;tag2>TEXT-:  println '---------------', nl, $_;
+
+&lt;tag1>:       println '-> &lt;tag1>.';
+&lt;/tag2>:      println '-> &lt;/tag2>.';
+&lt;>:           println ">> TAG:  ", $_;
+}
+
+EndScript --------------------------------------------
+&lt;tests>
+ &lt;tag0> Begin &lt;HTML>&lt;h1>TEST&lt;/h1> test &lt;/HTML> End &lt;/tag0>
+ &lt;tag1> Begin &lt;HTML>&lt;h1>TEST&lt;/h1> test &lt;/HTML> End &lt;/tag1>
+ &lt;tag2> Begin &lt;HTML>&lt;h1>TEST&lt;/h1> test &lt;/HTML> End &lt;/tag2>
+&lt;/tests>
+</pre></td></tr></table></body></html>

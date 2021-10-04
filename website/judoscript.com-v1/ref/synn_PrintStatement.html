@@ -1,0 +1,37 @@
+<html><head><title>JudoScript Semantics - PrintStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PrintStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PrintStatement>PrintStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>print</font>   |  <font class=kw>println</font>   |  <font class=kw>flush</font>   |  <font class=kw><nobr>.</nobr></font>   )   (  <font class=kw><nobr>{</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>}</nobr></font>   )?  <br>  (  <font class=kw><nobr>&lt;</nobr></font>   (  <font class=kw>out</font>   |  <font class=kw>err</font>   |  <font class=kw>log</font>   |  <font class=kw>pipe</font>   |  <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font>  )  <font class=kw><nobr>&gt;</nobr></font>   )?  <br>  (  <font class=nt><a href="javascript:showNT('PrintArgument')">PrintArgument</a></font>  ),*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PrintStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement prints text content to output streams, files or pipes.
+  The <font class=kw>print</font>  statement does not automatically do flushing, whereas <font class=kw>println</font> 
+  does. <font class=kw>flush</font>  works the same as <font class=kw>print</font>  but flushes when printing is done.
+  The <font class=kw><nobr>.</nobr></font>  is a shortcut for <font class=kw>println</font> , since the latter is used frequently.</p>
+
+  <p>These print statements supports flexible formatting, as shown in
+  <font class=nt><a href="javascript:showNT('PrintArgument')">PrintArgument</a></font>.</p>
+
+  <p>The print target by default is <font class=kw>out</font> , which is the standard system output
+  stream. Other system output streams are <font class=kw>err</font>  (for error) and <font class=kw>log</font>  (for
+  logging).  Or it can be a file, opened by <code>openTextFile(file_name,'w')</code>
+  system function call, where 'w' means writing. A <font class=kw>pipe</font>  is the input stream
+  for a command-line; this allows programs to write input to any command-lines.
+  See <font class=nt><a href="javascript:showNT('ExecStatement')">ExecStatement</a></font> on this. The target can also be a simple variable,
+  in which case the statement will print into a string stored in that variable.</p>
+
+  <p>If the print target is not a text output stream, it prints into a new string
+  and assigns to the variable.</p>
+ </body></html>

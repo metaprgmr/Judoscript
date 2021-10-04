@@ -1,0 +1,27 @@
+<html><head><title>JudoScript Semantics - PrintArgument</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PrintArgument</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PrintArgument>PrintArgument</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )   (  <font class=kw><nobr>:</nobr></font>   (  <font class=kw><nobr>&lt;</nobr></font>   |  <font class=kw><nobr>&gt;</nobr></font>   |  <font class=kw><nobr>*</nobr></font>   )?  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw><nobr>!</nobr></font>   )?   )?   (  <font class=kw><nobr>{</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>}</nobr></font>   |  <font class=kw>repeat</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PrintArgument'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This is a value to be printed, optionally with text alignment formatting
+  and repeating. The repeating is specified by <font class=kw><nobr>{</nobr></font>  <font class=kw><nobr>}</nobr></font>  or <font class=kw>repeat</font>  clause,
+  which are the same.</p>
+  <p>The <font class=kw><nobr>:&lt;</nobr></font> , <font class=kw><nobr>:&gt;</nobr></font>  and <font class=kw><nobr>:*</nobr></font>  decorators are for left-, right- and
+  center-alignment, with the following value as the width. If the value is
+  followed by a <font class=kw><nobr>!</nobr></font> , the width is forced with possible truncations. If the
+  value of width has a decimal point, then the part on either side is the
+  width for the respective part of a floating-point number.</p>
+ </body></html>

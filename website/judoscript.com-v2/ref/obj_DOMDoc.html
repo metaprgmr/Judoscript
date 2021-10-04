@@ -1,0 +1,45 @@
+<html><head><title>JudoScript Object - DOMDoc</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>DOMDoc</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font>: <code>org.w3c.dom.Document</code></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=DOMDoc_createNodeIterator></a>createNodeIterator<br></font></td><td valign=top><font class=param>root</font><br><font class=param> whatToShow</font><br><font class=param> filter</font><br><font class=param> entityReferenceExpansion</font><br></td><td valign=top>
+  This method functions only if the current object implements interface
+  <code>org.w3c.dom.traversal.DocumentTraversal</code>. The parameters are all required:
+  <font class=param>root</font> is an <font class=param>org.w3c.dom.Node</font>; <font class=param>whatToShow</font> is a
+  short integer that is the combination of flags defined in
+  <code>org.w3c.dom.traversal.NodeFilter</code>; <font class=param>filter</font> can be an instance of
+  <code>org.w3c.dom.traversal.NodeFilter</code>, or a node-filter function that takes an
+  <code>org.w3c.dom.Node</code> and returns one of the following:
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_ACCEPT</code>,
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_REJECT</code> or
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_SKIP</code>;
+  and finally, <font class=param>entityReferenceExpansion</font> is a boolean.
+  It create a new NodeIterator over the subtree rooted at the specified node, as stated
+  in the javadoc for the name-sake method of <code>org.w3c.dom.traversal.DocumentTraversal</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DOMDoc_createTreeWalker></a>createTreeWalker<br></font></td><td valign=top><font class=param>root</font><br><font class=param> whatToShow</font><br><font class=param> filter</font><br><font class=param> entityReferenceExpansion</font><br></td><td valign=top>
+  This method functions only if the current object implements interface
+  <code>org.w3c.dom.traversal.DocumentTraversal</code>. The parameters are all required:
+  <font class=param>root</font> is an <font class=param>org.w3c.dom.Node</font>; <font class=param>whatToShow</font> is a
+  short integer that is the combination of flags defined in
+  <code>org.w3c.dom.traversal.NodeFilter</code>; <font class=param>filter</font> can be an instance of
+  <code>org.w3c.dom.traversal.NodeFilter</code>, or a node-filter function that takes an
+  <code>org.w3c.dom.Node</code> and returns one of the following:
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_ACCEPT</code>,
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_REJECT</code> or
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_SKIP</code>;
+  and finally, <font class=param>entityReferenceExpansion</font> is a boolean.
+  Create a new TreeWalker over the subtree rooted at the specified node, as stated 
+  in the javadoc for the name-sake method of <code>org.w3c.dom.traversal.DocumentTraversal</code>.
+</td></tr>
+</table>
+</body></html>

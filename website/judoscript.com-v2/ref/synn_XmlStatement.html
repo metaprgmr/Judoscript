@@ -1,0 +1,32 @@
+<html><head><title>JudoScript Semantics - XmlStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>XmlStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=XmlStatement>XmlStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>do</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>&gt;</nobr></font>   )?   (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=kw>as</font>  <font class=kw>xml</font>   (  <font class=nt><a href="javascript:showNT('XmlInitList')">XmlInitList</a></font>  )?  <font class=kw><nobr>{</nobr></font>  <br>  (  <font class=kw>BEFORE</font>   |  <font class=kw>AFTER</font>   |  <font class=kw><nobr>&lt;</nobr></font>  <font class=kw><nobr>&gt;</nobr></font>   |   (  <font class=kw><nobr>&lt;</nobr></font>   |  <font class=kw><nobr>&lt;/</nobr></font>   )+  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>   )+  <font class=kw><nobr>&gt;</nobr></font>  <br>  |  <font class=kw>TEXT</font>   (  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>   )+  <font class=kw><nobr>&gt;</nobr></font>   (  <font class=kw><nobr>+</nobr></font>   |  <font class=kw><nobr>-</nobr></font>   )?   )?  <br>  |  <font class=kw>WARNING</font>   |  <font class=kw>ERROR</font>   |  <font class=kw>START_DOC</font>   |  <font class=kw>END_DOC</font>   |  <font class=kw>START_NS_MAP</font>   |  <font class=kw>END_NS_MAP</font>  <br>  |  <font class=kw>PI</font>   |  <font class=kw>WHITESPACE</font>   |  <font class=kw>COMMENT</font>   |  <font class=kw>START_CDATA</font>   |  <font class=kw>END_CDATA</font>  <br>  |  <font class=kw>START_DTD</font>   |  <font class=kw>END_DTD</font>   |  <font class=kw>START_ENTITY</font>   |  <font class=kw>END_ENTITY</font>   |  <font class=kw>ELEMENT_DECL</font>  <br>  |  <font class=kw>ATTR_DECL</font>   |  <font class=kw>ENTITY_DECL</font>   |  <font class=kw>EXT_ENTITY_DECL</font>   |  <font class=kw>SKIPPED_ENTITY</font>  <br>  )  <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )+  <br>  )+  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('XmlStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement provides a straightforward way of SAX2-compatible XML programming. The XML SAX2 parser
+  issues an event for tags, text segments and a number of other SAX2 events; JudoScript has added two more events,
+  <font class=kw>BEFORE</font>  and <font class=kw>AFTER</font> . Each event becomes a label in this statement, which is followed by statements that
+  handle the event, with <font class=kw><nobr>$_</nobr></font>  being the event object; see <font class=obj><a href="javascript:showObj('XmlTag')">XmlTag</a></font>.</p>
+
+  <p>In addition, this statement also supports a text event that is enclosed between a pair of open and
+  close tags, with the <font class=kw>TEXT</font>  <font class=kw><nobr>&lt;</nobr></font>  ... <font class=kw><nobr>&gt;</nobr></font> ; see <font class=obj><a href="javascript:showObj('XmlTextTag')">XmlTextTag</a></font>. It is likely to have other
+  tags embedded in the text between a pair of open/close tags; you have to options to copy them into the
+  text or ignore these embedded tags by the <font class=kw><nobr>+</nobr></font>  or <font class=kw><nobr>-</nobr></font>  following the tag (before <font class=kw><nobr>:</nobr></font> ). By default it
+  copies embedded tags (that is, <font class=kw><nobr>+</nobr></font> ).</p>
+
+  <p>The source can be a file, a URL or a file within a zip archive. The text encoding can be
+  specified in <font class=kw>lt;</font>  and <font class=kw>gt;</font> . </p>
+ </body></html>

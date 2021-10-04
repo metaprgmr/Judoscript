@@ -1,0 +1,47 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_env_sys/sysprops.judo:</b></td></tr><tr><td><pre>
+// Print out system class path:
+cp = systemProperty('java.class.path').csv(${:});
+for x in cp { // print class path nicely.
+  if loopIndex() == 0 {
+    println 'Java class path: ', x;
+  } else {
+    println '                 ', x;
+  }
+}
+
+// Print out a few pieces of system information:
+println 'OS Name:    ', osName();
+println 'isMac:      ', isMac();
+println 'isWindows:  ', isWindows();
+println 'isHP:       ', isHP();
+println 'isLinux:    ', isLinux();
+println 'isSunOS:    ', isSunOS();
+println 'javaVendor: ', javaVendor();
+println;
+println 'fileSep:    ', ${/};
+println 'pathSep:    ', ${:};
+println 'homeDir:    ', ${~};
+println 'curDir:     ', ${.};
+println "cd '/'";
+cd '/';   // change curDir().
+println 'curDir:     ', ${.};
+println 'userName:   ', #user;
+
+// Print out all the system properties:
+println nl, '=======================',
+        nl, ' All system properties',
+        nl, '=======================';
+for k in #sysprops {
+  println k:>26, ' = ', #sysprops.(k);
+}
+
+// Print out all the environment variables of this JVM process:
+println nl, '==========================',
+        nl, ' All environment variables',
+        nl, '==========================';
+envvars = getEnvVars();
+for k in envvars {
+  println k:>26, ' = ', envvars.(k);
+}
+</pre></td></tr></table></body></html>

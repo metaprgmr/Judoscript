@@ -1,0 +1,35 @@
+<html><head><title>JudoScript Semantics - ExecStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ExecStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ExecStatement>ExecStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>exec</font>   (  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>&gt;</nobr></font>   )?  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>from</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>with</font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |   (  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>=</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  ),+   )  <br>  (   (  <font class=kw>needSystemIn</font>   )?   (  <font class=kw><nobr>;</nobr></font>   |  <font class=kw>output</font>  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  )  <br>  |  <font class=kw>input</font>  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  (  <font class=kw>output</font>  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  )?  <br>  )  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ExecStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement executes an external command-line, with many options.
+  The command-line may contain multiple programs with output of the previous
+  programs piped into the following ones. Each program can take one input and
+  may produce an output sream and an error stream.</p>
+  <p>You can specify the working directory this command-line is started with
+  by the <font class=kw>from</font>  clause, and/or the environment variables fot the new process
+  using the <font class=kw>with</font>  clause, which can be a series of name=value pairs, or an
+  expression that is a Properties or <font class=kw>Struct</font> .</p>
+  <p>The <font class=kw>input</font>  clause allows script code to write input to the command-line.
+  Or, if <font class=kw>needSystemIn</font>  is specified, the input stream of the command-line is
+  connected to the system input stream. Otherwise, unless there is an input
+  redirect or a <font class=kw>input</font>  clause, the command-line is assumed not taking input.</p>
+  <p>The script can also receive output of the command-line by the <font class=kw>output</font>  clause.
+  The output is read by system function <font class=sfn><a href="javascript:showSF('readPipe')">readPipe()</a></font>.</p>
+  <p>If both <font class=kw>input</font>  and <font class=kw>output</font>  clauses are present, the output clause is
+  executed in a second thread; the input block, however, stays in the main thread.</p>
+ </body></html>

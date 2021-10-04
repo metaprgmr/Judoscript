@@ -1,0 +1,52 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_sax/sax_events.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  lastMod = '2001-11-12';
+  desc    = [[*
+    Displays tags, text and other XML events for the data included
+    at the end of the source file, using SAX-style XML processing.
+  *]];
+}
+
+do $$local as xml with namespace, validate,
+                       xmlns:n="judoscript/xml/namespaces"
+{
+BEFORE:       println '        &lt;BEFORE>.';
+AFTER:        println '         &lt;AFTER>.';
+START_DOC:    println '     &lt;START_DOC>.';
+END_DOC:      println '       &lt;END_DOC>.';
+TEXT:         println '            TEXT: ', $_;
+&lt;>:           println '&lt;', $_.getRaw():>14, '>: name =', $_.getName();
+              println '                  uri  =', $_.getUri();
+              println '                  local=', $_.getLocal();
+              for $x from 0 to $_.countAttrs()-1 {
+                println '                  Attribute: ',
+                        $_.getAttrName($x), '=', $_.getAttrValue($x);
+              }
+WARNING:      println '       &lt;WARNING>: ', $_.getMessage();
+ERROR:        println '         &lt;ERROR>: ', $_.getMessage();
+START_NS_MAP: println '  &lt;START_NS_MAP>: ', $_.prefix, ' => ', $_.uri;
+END_NS_MAP:   println '    &lt;END_NS_MAP>: ', $_;
+PI:           println '            &lt;PI>: ', $_.instruction;
+              println '                  ', $_.data;
+}
+
+EndScript ------------------------------------------------------
+&lt;?xml version="1.0"?>
+&lt;!DOCTYPE news:article [
+ &lt;!ELEMENT news:article (news:headline, news:author, news:body)>
+ &lt;!ATTLIST news:article date CDATA #REQUIRED>
+ &lt;!ELEMENT news:headline (#PCDATA)>
+ &lt;!ELEMENT news:author (#PCDATA)>
+ &lt;!ELEMENT news:body (#PCDATA)>
+]>
+&lt;?article-processor destination="news"?>
+&lt;news:article xmlns:news="judoscript/xml/namespaces" date="02-Dec-2000">
+  &lt;news:headline>SAX 2.0 Released&lt;/news:headline>
+  &lt;news:author>F. Bar&lt;/news:author>
+  &lt;?author-processor destination="Someone"?>
+  &lt;news:body>SAX 2.0 has been released into the public domain&lt;/news:body>
+&lt;/news:article>
+
+</pre></td></tr></table></body></html>

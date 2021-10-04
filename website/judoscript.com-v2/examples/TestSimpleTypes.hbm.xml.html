@@ -1,0 +1,25 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_hibernate/Simplest/TestSimpleTypes.hbm.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+&lt;!DOCTYPE hibernate-mapping PUBLIC 
+  "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+&lt;hibernate-mapping>
+
+  &lt;class name="TestSimpleTypes" discriminator-value="N">
+    &lt;id name="id" type="long">
+      &lt;generator class="native"/>
+    &lt;/id>
+    &lt;property name="theFloat"   type="float"/>
+    &lt;property name="theByte"    type="byte"/>
+    &lt;property name="theChar"    type="char"/>
+    &lt;property name="theShort"   type="short"/>
+    &lt;property name="theInt"     type="int"/>
+    &lt;property name="theLong"    type="long"/>
+    &lt;property name="theString"  type="java.lang.String"/>
+    &lt;property name="theDate"    type="java.util.Date"/>
+  &lt;/class>
+
+&lt;/hibernate-mapping>
+</pre></td></tr></table></body></html>

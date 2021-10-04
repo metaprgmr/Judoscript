@@ -1,0 +1,27 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_COM/testJCom.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This program sets a text message to cell 'A1' in a Excel spreadsheet.
+
+    Adapted from &lt;a href="http://www.hcn.zaq.ne.jp/no-ji/jcom">JCom&lt;/a>
+    file 'demo/samples/testJCom.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+xlApp = com::Excel.Application;
+xlApp.Visible = true;
+xlBooks = xlApp.Workbooks;
+xlBook  = xlBooks.Add;
+xlSheet = xlApp.ActiveSheet;
+xlRange = xlSheet['Range','A1'];
+xlRange.Value = 'COM scripting made easy with JudoScript';
+
+sleep(2000);
+xlBook.Close(false,null,false);
+xlApp.Quit();
+
+</pre></td></tr></table></body></html>

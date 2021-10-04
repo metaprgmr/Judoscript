@@ -1,0 +1,20 @@
+<html><head><title>JudoScript Semantics - LocalVariableDeclaration</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>LocalVariableDeclaration</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=LocalVariableDeclaration>LocalVariableDeclaration</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>local</font>  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>=</nobr></font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('SetAllocator')">SetAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('Dom')">Dom</a></font>  )   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('LocalVariableDeclaration'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This creates a local variable whole life span is only in the inner-most block in the code.</p>
+ </body></html>

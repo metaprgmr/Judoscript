@@ -1,0 +1,30 @@
+<html><head><title>JudoScript Semantics - Arguments</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Arguments</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Arguments>Arguments</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw><nobr>(</nobr></font>   (  <font class=kw><nobr>{{</nobr></font>   )?   (   (  <font class=nt><a href="javascript:showNT('JavaPrimitiveTypes')">JavaPrimitiveTypes</a></font>  )?  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  ),*   (  <font class=kw><nobr>}}</nobr></font>   )?  <font class=kw><nobr>)</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Arguments'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Arguments are used in function calls or thread startups.</p>
+
+  <p>In Java method calls, you can optionally cast a value to a Java primitive type,
+  including String. For other objects, you can call the Java object's <code>cast()</code>
+  method, although most of the time this is not needed.</p>
+
+  <p>Since functions and threads can take any number of parameters, it is possible to
+  dynamically construct a paramter list in an arry. The <font class=kw><nobr>(</nobr></font>  <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font>  <font class=kw><nobr>)</nobr></font>  does
+  just that. Any arrays (including linked-lists) passed in are expanded so that each
+  element is a parameter; non-array parameters are taken as regular parameters; Java
+  arrays are not expanded. This method does not apply to Java method calls.</p>
+ </body></html>

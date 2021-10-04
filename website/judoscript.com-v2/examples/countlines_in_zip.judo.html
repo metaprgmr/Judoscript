@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/countlines_in_zip.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args = ' zipfile [ inclusion_list [ exclusion_list ] ]';
+  desc = [[*
+    This program use the 'list countLines' command
+    to count the lines in a zip file.
+  *]];
+}
+
+switch #args.length() {
+case 1:  list in #args[0] recursive countLines; break;
+case 2:  list #args[1] in #args[0] recursive countLines; break;
+default: list #args[1] in #args[0] except #args[2] recursive countLines;
+}
+
+println "Total:       ", $$fs_result[0];
+println "Total files: ", $$fs_result[1];
+println "Total lines: ", $$fs_result[2];
+
+</pre></td></tr></table></body></html>

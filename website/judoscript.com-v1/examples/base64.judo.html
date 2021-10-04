@@ -1,0 +1,18 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_misc/base64.judo:</b></td></tr><tr><td><pre>
+a = [[*
+       Please, take a good look around you. Look at the
+       classmate on your left. Look at the classmate on
+       your right. Now, consider this: five years from now,
+       10 years from now, even 30 years from now, odds are
+       the person on your left is going to be a loser. The
+       person on your right, meanwhile, will also be a
+       loser. And you, in the middle? What can you expect? 
+     *]];
+
+b = encode(a.getBytes(), 'base64');
+println b;
+println '--------------------';
+println encode(b.base64Decode());
+
+</pre></td></tr></table></body></html>

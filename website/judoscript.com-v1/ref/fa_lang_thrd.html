@@ -1,0 +1,15 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Thread Programming</u></h3>
+  <p>A thread is declared similar to function except for the keyword to be <font class=kw>thread</font> . A thread
+  can be anonyous which is started directly. To start a thread, use <font class=kw>start</font>  <font class=kw>thread</font> 
+  statement.  The parameters are passed and handled the same way as in functions.</p>
+
+  <p>Threads run in their own contexts. The global context and global variables are shared by
+  all threads. Accesses to global variables may cause problems without approppriate
+  synchronization. The <font class=sfn><a href="javascript:showSF('lock')">lock()</a></font> and <font class=sfn><a href="javascript:showSF('unlock')">unlock()</a></font> are designed to protected
+  shared variable accesses. Threads can synchronize with each other with <font class=sfn><a href="javascript:showSF('waitFor')">waitFor()</a></font>,
+  <font class=sfn><a href="javascript:showSF('notify')">notify()</a></font> and <font class=sfn><a href="javascript:showSF('notifyAll')">notifyAll()</a></font>.</p>
+<h4>Related Functional Areas</h4><ul><li><font class=fa><a href="javascript:showFA('gui')">Building Java GUIs</a></font></ul><h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('ThreadDeclaration')">ThreadDeclaration</a></font><li><font class=nt><a href="javascript:showNT('StartThreadStatement')">StartThreadStatement</a></font></ul><h4>Related System Functions</h4><ul><li><font class=sfn><a href="javascript:showSF('lock')">lock()</a></font><li><font class=sfn><a href="javascript:showSF('unlock')">unlock()</a></font><li><font class=sfn><a href="javascript:showSF('waitFor')">waitFor()</a></font><li><font class=sfn><a href="javascript:showSF('notify')">notify()</a></font><li><font class=sfn><a href="javascript:showSF('notifyAll')">notifyAll()</a></font></ul></body></html>

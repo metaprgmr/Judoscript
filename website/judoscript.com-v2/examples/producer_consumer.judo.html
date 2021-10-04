@@ -1,0 +1,39 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_thread/producer_consumer.judo:</b></td></tr><tr><td><pre>
+inventory = 0; // shared
+
+has_lock = 'has-goods';
+use_lock = 'use-goods';
+
+println 'Production rate: 1-20.';
+
+thread consumer
+{
+  while inventory &lt;= 0 {
+    waitFor has_lock;
+
+    lock use_lock;
+    print inventory:>3, ': ';
+    for x from 1 to inventory { print '* '; }
+    println;
+    inventory = 0;
+    unlock use_lock;
+  }
+}
+
+thread producer
+{
+  while true {
+    sleep 1000;
+    lock use_lock;
+    if inventory == 0 { inventory = random(1,20); }
+    unlock use_lock;
+
+    notifyAll has_lock;
+  }
+}
+
+
+start thread consumer;
+start thread producer;
+</pre></td></tr></table></body></html>

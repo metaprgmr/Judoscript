@@ -1,0 +1,97 @@
+<html><head><title>Java White-Box Testing with Embedded JudoScript</title><meta content="white-box test, java unit test, java white-box test, software test, unit test" name=keywords>
+      <link href="../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Java White-Box Testing with Embedded JudoScript" author="James Jianbo Huang" created="March 2002" keywords="white-box test, java unit test, java white-box test, software test, unit test" nolisting="true">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Java White-Box Testing with Embedded JudoScript</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;March 2002 &nbsp; &nbsp; &nbsp; <a href="javatest.html">non-printer version</a><p><b>Abstract</b> &nbsp;
+<em>JudoScript</em> allows seamless Java code invocation, hence is perfect for Java code white-box unit
+testing. The language engine explicitly supports this by allowing <em>JudoScript</em> code to be
+embedded in (the comments in) Java source files. Special tags enclose <em>JudoScript</em> code, and
+the engine extract and run them. <em>JudoScript</em> is also great for batch black-box and load testing.
+<hr>
+<p>&nbsp;</p>
+
+
+<p>
+<em>JudoScript</em> has two characteristics that make it an ideal testing language especially for
+Java software. They are a) seamlessly invoking Java code and b) rich application
+features. If you go through its readily available feature list, plus the potential to
+use <em>any</em> Java software as its extension libraries, you will find why <em>JudoScript</em> is a
+powerful batch black-box and load testing language.
+
+<p>
+This article focuses on <em>JudoScript</em>'s white-box testing capability for Java. It has a feature
+that is designed especifically for this purpose -- embedded <em>JudoScript</em> code. It is like
+<a href="http_html.html#jusp">JUSP</a>, except that this is not for generating web pages
+but rather embedding scripts in Java source files. It is very simple to use. In the
+Java source file, use a pair of special tags, <b><code>/*[judo]</code></b> and <b><code>[judo]*/</code></b>,
+to enclose any <em>JudoScript</em> code; you can have unlimited such <em>JudoScript</em> code segments. Then, simply
+"run" that Java source file with <em>JudoScript</em>:
+
+<blockquote><font class=secondary3><pre>
+java judo Foo.java
+</pre></font></blockquote>
+
+the language engine will extract all the <em>JudoScript</em> code and run. The following is the source code:
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="white-box testing">Listing 1</a>. Foo.java</th>
+          </thead><tr><td class=code><pre>
+public class Foo
+{ 
+   /*[judo] 
+     function ut_sum { 
+       println 'UnitTest: int sum(int[])'; 
+       x = javanew Foo; 
+       ia = javanew int[] { 1, 3, 5 }; 
+       println 'Is this 9? -- ', x.sum(ia); 
+       println 'For null -- ', x.sum(null); 
+     catch: 
+       $_.printStackTrace(); 
+     } 
+   [judo]*/ 
+   public int sum(int[] ia) { 
+     int sum=0; 
+     for (int i=0; i&lt;ia.length; i++) sum += ia[i]; 
+     return sum; 
+   } 
+} 
+/*[judo] 
+   println '[UnitTest: class Foo]'; 
+   ut_sum(); 
+   println '[/UnitTest]'; 
+[judo]*/ 
+</pre></td></tr></table></p><p>
+
+<p>This incredibaly simple scheme is incredibly effective and efficient.
+It is better than Java unit testing with Java code for these reasons:
+
+<ul>
+<li> <em>Simple, straightforward, concise</em>. No need to adopt frameworks to create
+     a multitude of test classes (in Java) for testing.  No house-keeping code.
+<li> <em>Easy to run and maintain</em>. No need to compile. Just modify and run.
+<li> <em>Easy to organize test cases</em>. With the help of <b><code>!include</code></b>,
+     you can use common testing libararies and/or testing-time parameters.
+<li> <em>JudoScript</em>'s rich application features help in white-box tests, too. Tests typically
+     need to set up environment; <em>JudoScript</em> is designed to manipulate computer resources
+     including data. Java is a system language, calling APIs to set up is not a
+     pleasant task for most programmers.
+</ul>
+
+<p>
+JudoScript source code itself uses embedded JudoScript code. In file <em>MethodOrdinals.java</em>,
+JudoScript code is used to detect ambiguous or replicated function ordinals. In file
+<em>VariableAdapter.java</em>, JudoScript code tests the basic methods used by all the value
+types.
+
+</td></tr></table>
+<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>

@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - PrepareStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PrepareStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PrepareStatement>PrepareStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>prepare</font>   |  <font class=kw>prepareCall</font>   )   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw><nobr>:</nobr></font>  <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PrepareStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This prepares a SQL statement, either for query/updates or stored procedure
+  call (<font class=kw>prepareCall</font> ). It can use the default connection <font class=kw><nobr>$$con</nobr></font>  or a named
+  connection with <font class=kw>using</font>  clause. The prepared statement can be stored in the
+  default database handle variable, <font class=kw><nobr>$$</nobr></font> , or in a named variable. The SQL
+  statement is a <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> between the <font class=kw><nobr>:</nobr></font>  and <font class=kw><nobr>;</nobr></font> .</p>
+ </body></html>

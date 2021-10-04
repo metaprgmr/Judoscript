@@ -1,0 +1,25 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/ascii.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Prints the ASCII characters for values between 32 and 255.
+    Print the title fields aligned and repeated.
+  *]];
+}
+
+cnt = 0;
+println '   ', ' 0' @ (cnt++).fmtHex() {16};
+println '   ', ' --' repeat 16;
+for x from 2 to 15 {
+  local base = x &lt;&lt; 4;
+  print x.fmtHex(), '0:';
+  for y from 0 to 0x0f {
+    local ch = base | y;
+    print '  ', ch.chr();
+  }
+  println;
+}
+</pre></td></tr></table></body></html>

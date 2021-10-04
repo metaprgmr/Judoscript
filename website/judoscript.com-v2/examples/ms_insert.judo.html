@@ -1,0 +1,21 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_odbc_mssql/ms_insert.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Does 2 simple inserts.';
+}
+
+!include 'mssql_connection.judi'
+
+db::sql {
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+  values ( 1, 'Judy Fox', 'Judy', null, 'F', current_timestamp );
+
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+  values ( 4, 'Sanjay Deepak', 'Sanjay', null, 'M', current_timestamp );
+}
+
+db::disconnect();
+</pre></td></tr></table></body></html>

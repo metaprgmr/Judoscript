@@ -1,0 +1,42 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_sax/books.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    A simple program that displays tag and text values of the XML data
+    included at the end of the source file, using SAX-style XML processing.
+  *]];
+}
+
+do $$local as xml
+{
+&lt;book>:        println ($_.hardcover=='true') ? "Hard-cover " : "Soft-cover ",
+                       'Book ------------';
+TEXT&lt;date> :   println '  Date: ', $_, ' (', $_.type, ')';
+TEXT&lt;title> :  println ' Title: ', $_;
+TEXT&lt;author> : println 'Author: ', $_;
+TEXT&lt;isbn> :   println '  ISBN: ', $_;
+}
+
+EndScript -------------------------------------------------------
+
+&lt;booklist>
+ &lt;book>
+  &lt;title> UNIX in a Nutshell &lt;/title>
+  &lt;author> Daniel Gilly &lt;/author>
+  &lt;publisher> O&amp;apos;Reilly &amp;amp; Associates, Inc. &lt;/publisher>
+  &lt;isbn> 1-56592-001-5 &lt;/isbn>
+  &lt;date type="first edition"> 1986-12 &lt;/date>
+  &lt;date type="second edition"> 1992-06 &lt;/date>
+ &lt;/book>
+ &lt;book hardcover="true">
+  &lt;title> Advanced Programming in the UNIX Environment &lt;/title>
+  &lt;author> Richard Stevens &lt;/author>
+  &lt;publisher> Addison-Wesley &lt;/publisher>
+  &lt;isbn> 0-201-56317-7 &lt;/isbn>
+  &lt;date type="copyright"> 1993 &lt;/date>
+  &lt;date type="twelfth printing"> 1996-12 &lt;/date>
+ &lt;/book>
+&lt;/booklist>
+</pre></td></tr></table></body></html>

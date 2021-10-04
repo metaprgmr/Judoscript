@@ -1,0 +1,28 @@
+<html><head><title>JudoScript Semantics - ObjectAllocator</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ObjectAllocator</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ObjectAllocator>ObjectAllocator</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>new</font>   (  <font class=t>IDENTIFIER</font>   |  <font class=kw>SortedMap</font>  <font class=nt><a href="javascript:showNT('ComparatorDecl')">ComparatorDecl</a></font>  )   (  <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font>  |  <font class=nt><a href="javascript:showNT('AnonMemberInitList')">AnonMemberInitList</a></font>  )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ObjectAllocator'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Creates a new object. An object can be built-in object types such as <font class=kw>Struct</font> ,
+  <font class=kw>OrderedMap</font> , <font class=kw>SortedMap</font> , <font class=kw>TreeNode</font> , <font class=kw>Array</font> , <font class=kw>LinkedList</font> , <font class=kw>TableData</font>  ... or
+  user defined classes, or even any types that can be preregistered with the system. The
+  initializers can be named (that is, a series of name-value pairs, in most cases) or
+  unnamed (a sequence of values, as in the case of arrays).</p>
+
+  <p>For sorted maps, a comparator can be specified.</p>
+
+  <p>For Java objects and arrays, see <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font>.</p>
+ </body></html>

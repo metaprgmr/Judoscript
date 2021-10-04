@@ -1,0 +1,44 @@
+<html><head><title>JudoScript Semantics - SgmlStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>SgmlStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=SgmlStatement>SgmlStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>do</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>&gt;</nobr></font>   )?  <font class=kw>as</font>   (  <font class=kw>sgml</font>   (  <font class=kw>case</font>   )?   |  <font class=kw>html</font>   )  <br>  (  <font class=kw>with</font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>;</nobr></font>  <br>  |   (  <font class=kw>extends</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw><nobr>{</nobr></font>   (  <font class=nt><a href="javascript:showNT('SgmlEvent')">SgmlEvent</a></font> <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )+   )+  <font class=kw><nobr>}</nobr></font>  <br>  )  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('SgmlStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement is for SGML/HTML scraping and processing, which takes a file name or URL as
+  the source, and allow handler code for each tag including text. The source can also be a file
+  within a zip archive. The text encoding can be specified in <font class=kw><nobr>&lt;</nobr></font>  and <font class=kw><nobr>&gt;</nobr></font> . The keywords
+  <font class=kw>sgml</font>  and <font class=kw>html</font>  here are synonyms.</p>
+
+  <p>Tags and text pieces in a SGML document are parsed and become "events", allowing code to
+  process. There are also special events such as <font class=kw>BEFORE</font>  and <font class=kw>AFTER</font> . See <font class=nt><a href="javascript:showNT('SgmlEvent')">SgmlEvent</a></font>.</p>
+
+  <p>In the tag handler code, <font class=kw><nobr>$_</nobr></font>  is the built-in variable for the current tag. If it is not
+  an end tag or text, the associated attributes are accessed as data members of <font class=kw><nobr>$_</nobr></font> .
+  See <font class=obj><a href="javascript:showObj('SgmlTag')">SgmlTag</a></font>, <font class=obj><a href="javascript:showObj('SgmlTextTag')">SgmlTextTag</a></font> or <font class=obj><a href="javascript:showObj('SgmlSpecialTag')">SgmlSpecialTag</a></font>  for its properties
+  and methods. Tag names and attribute names are case insenstitive for HTML and SGML by default;
+  for SGML, the <font class=kw>case</font>  decorator forces case sensitivity. Multiple tags can share a same handler.
+  Handler code ends before the next tag. The code runs in its own context (or scope) of the block.</p>
+
+  <p>SGML handler statement can also be declared first. See <font class=nt><a href="javascript:showNT('SgmlHandlerDeclaration')">SgmlHandlerDeclaration</a></font>.
+  A declared SGML handler can be invoked via the <font class=kw>with</font>  clause. It also allows other SGML
+  handler statement to inherit its handlers via the <font class=kw>extends</font>  clause.</p>
+
+  <p>Here are the rules for inherited SGML handler statements. The <font class=kw>BEFORE</font>  and <font class=kw>AFTER</font> 
+  handlers are never inherited. For a tag, if no specific handler is provided in the current
+  handler, the processing goes to the parent; if none of the processors have a specific handler
+  for it, it tries the <em>any</em> tag handler (<font class=kw><nobr>&lt;</nobr></font>  <font class=kw><nobr>&gt;</nobr></font> ) in the same way. In a handler,
+  the <font class=kw>resume</font>  statement can be used at the end to continue processing with the parent's
+  handler.</p>
+ </body></html>

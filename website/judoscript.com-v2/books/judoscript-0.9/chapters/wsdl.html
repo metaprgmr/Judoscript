@@ -1,0 +1,492 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Chapter 28. SOAP Web Service Scripting</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="" name=keywords>
+<LINK href="../../../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../../../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../../../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../../../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../../../home.html')"><IMG alt="Home" hspace=0 src="../../../share/home_gray.gif" border=0></A><A href="javascript:go_to('../../../judo.html')"><IMG alt="Judo Language" hspace=0 src="../../../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../../../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../../../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../../../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../../../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Book: <a href="../toc_details.html" class=tinywhite>The Judo Language 0.9</a></b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../../../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../../../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../../../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../../../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../../../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../../../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../../../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../../../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../../../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../../../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../../../share/spacer.gif" height=7 width=1 border=0>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro2ws">Introduction to SOAP Web Services</a></li><br>&#187;&nbsp;<a href="#soap">SOAP Web Services</a><br>&#187;&nbsp;<a href="#wsdl">WSDL</a><br>&#187;&nbsp;<a href="#datatypes">Data Types and Encoding</a><br>&#187;&nbsp;<a href="#wsclients">Web Service Clients</a><li><a href="#soapscripting">SOAP Web Service Scripting</a></li><br>&#187;&nbsp;<a href="#soapscripting_1">Prerequisite</a><br>&#187;&nbsp;<a href="#soapscripting_2">Start Scripting Web Services</a><li><a href="#datatypes">Parameters and Return Values</a></li><br>&#187;&nbsp;<a href="#datatypes_3">Set Up the Echo Sample Web Service</a><br>&#187;&nbsp;<a href="#builtin_types">Built-In Data Types</a><br>&#187;&nbsp;<a href="#custom_types">Custom Data Types</a><br>&#187;&nbsp;<a href="#return_values">Input/Output Parameters and Return Values</a><br>&#187;&nbsp;<a href="#diff_in_types">Different Input Types for Maps and Structs</a><br>&#187;&nbsp;<a href="#summary">Summary of SOAP Web Service Scripting</a>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+
+ <h1>Chapter 28. SOAP Web Service Scripting</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<img src="../../../share/printer.gif"> <a href="wsdl_p.html">printer-friendly version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+Judo supports SOAP web service scripting in a very easy way. Basically, you obtain a WSDL handle, and treat the WSDL handle as a regular object by invoking its operations like calling a method on an object. Various data types can be passed to the operations, and the output parameters are returned in a map if multiple output parameters are returned; if there is only one output parameter, its value is returned instead. This chapter introduces to the basics of SOAP web services, detailed on the issues regarding web service scripting in Judo, and finishes with a case study that presents a program that utilizes the Google search API.
+</td></tr></table></td></tr></table>
+
+
+<h2>&nbsp;<br><a name=intro2ws> Introduction to SOAP Web Services</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+
+<a name=soap><h3> SOAP Web Services</h3></a>
+
+<br>
+
+
+<a name=wsdl><h3> WSDL</h3></a>
+
+<br>
+
+
+<a name=datatypes><h3> Data Types and Encoding</h3></a>
+
+<br>
+
+
+<a name=wsclients><h3> Web Service Clients</h3></a>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=soapscripting> SOAP Web Service Scripting</a></h2>
+
+
+<a name=soapscripting_1><h3> Prerequisite</h3></a>
+
+<p>In order to script web services in Judo, you need to download the Apache Axis version 1.1 or up software and put all the Java executable library jar files in the classpath. As a convenience, here is <a href="http://www.judoscript.com/store/axis11all.jar.zip">a single jar file for all the necessary libraries</a> that you can download; it is an agglomeration of all the jar files in the Axis 1.1 distribution.</p>
+
+<br>
+
+
+<a name=soapscripting_2><h3> Start Scripting Web Services</h3></a>
+
+<p>In Judo, scripting SOAP web services starts with obtaining the WSDL handle via the <code>wsdl::</code> operator, and simply call the <i>operations</i> of the <i>service</i> in the WSDL file. Here is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="wsdltest.judo">Listing 28.1</a> wsdltest.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+svc = wsdl::'<a href="http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL">http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</a>';
+
+println '3 + 2 = ', svc.Add(3, 2);
+println '3 - 2 = ', svc.Subtract(3, 2);
+println '3 * 2 = ', svc.Multiply(3, 2);
+println '3 / 2 = ', svc.Divide(3, 2);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The WSDL file for this service has a <code>&lt;service&gt;</code> element like this:</p>
+
+<font  color=black><pre>
+&lt;definitions&gt;
+  ......
+  &lt;service name="MathService"&gt;
+    &lt;port name="MathServiceSoap" binding="s0:MathServiceSoap"&gt;
+      &lt;soap:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+    &lt;port name="MathServiceHttpGet" binding="s0:MathServiceHttpGet"&gt;
+      &lt;http:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+    &lt;port name="MathServiceHttpPost" binding="s0:MathServiceHttpPost"&gt;
+      &lt;http:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+  &lt;/service&gt;
+&lt;/definitions&gt;
+</pre></font>
+
+<p>Each <i>port</i> has a binding of the four arithmetic operations: <code>Add</code>, <code>Subtract</code>, <code>Multiply</code> and <code>Divide</code>. Each operation, in turn, is associated with their paremeters; in this case, they all take two float numbers as input and return a float as result.</p>
+
+<p>Notice that in the above example, we only obtained the WSDL document and then call the operations directly without references to the <i>service</i> name nor the <i>port</i> name. By default, Judo looks for the first <i>serrvice</i> element in the WSDL. You can explicitly specify the service name in the <b><code>wsdl::</code></b> operator; its complete syntax is:</p>
+
+<a name="WSDL"><table border=0 class=secondary3>
+<tr><td valign=top><i>WSDL</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>wsdl::</code></b> <i>WSDL_URL</i> [ <b><code>:</code></b> <i>ServiceName</i> ]</td></tr>
+<tr><td valign=top><i>WSDL_URL</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+<tr><td valign=top><i>ServiceName</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+</table></a>
+
+<p>where <i>ServiceName</i> is an expression that evaluates to a QName (qualified name), which can be a <code>javax.xml.naming.QName</code> instance, or a string of the form <code>{namespace}local_part</code>. The following program does exactly the same as the previous example:</p>
+
+<font  color=black><pre>
+wsdlURL = '<a href="http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL">http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</a>';
+svcName = '{http://tempuri.org/}MathService';
+svc = wsdl::wsdlURL : svcName;
+......
+</pre></font>
+
+<p>Also, within the <i>service</i> element in the WSDL, there are multiple <i>ports</i>. By default, Judo looks for the port with SOAP binding. If you wish to, you can explicitly specify the port names:</p>
+
+<font  color=black><pre>
+wsdlURL = '<a href="http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL">http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</a>';
+svcName = '{http://tempuri.org/}MathService';
+svc = wsdl::wsdlURL : svcName;
+
+println '3 + 2 = ', svc.MathServiceSoap.Add(3, 2);
+println '3 - 2 = ', svc.MathServiceSoap.Subtract(3, 2);
+println '3 * 2 = ', svc.MathServiceSoap.Multiply(3, 2);
+println '3 / 2 = ', svc.MathServiceSoap.Divide(3, 2);
+</pre></font>
+
+<p>To summarize, scripting SOAP web services in Judo is quite similar to scripting any value systems such as Java scripting and COM/ActiveX scripting. You obtain a handle to a WSDL document, then simply invoke its <i>operations</i> just like calling methods on an object. As we mentioned earlier, web services can take both input and output parameters, and return value and parameters are typed. In the next section, we will detail on parameters and data types.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=datatypes> Parameters and Return Values</a></h2>
+
+<p>Web services are meant for remote procedure calls accross heteorogeneous systems. We use an inter-operation sample web service, <i>echo</i>, from the Apache Axis software to demonstrate using various types of data for parameters and return values.</p>
+
+
+<a name=datatypes_3><h3> Set Up the Echo Sample Web Service</h3></a>
+
+<p>All the programs in this section invoke the <i>echo</i> web service, run on the local machine. To start this service, you need to deploy the Axis webapp to a servlet container (such as Tomcat), and register the <i>echo</i> web service with that Axis webapp. The follow are the exact steps to set it up:</p>
+
+<ol>
+<li>Start a Tomcat server, say, on port 8080.</li>
+<li>Download the Apache Axis version 1.1 or 1.2 software and unpack to a directory such as <code>C:\axis1.1\</code>.</li>
+<li>Deploy the Axis webapp by copying the <code>C:\axis1.1\webapps\axis\</code> directory to the Tomcat deployment directory, such as <code>C:\tomcat-4.1.31\webapps\</code>.</li>
+<li>Move to <code>C:\axis1.1\samples\echo\</code> directory, (assuming you have added all the jar files in <code>C:\axis1.1\lib\</code> to your classpath,) and run:
+<font  color=black><pre>
+java org.apache.axis.client.AdminClient deploy.wsdd
+</pre></font>
+<li>Open the web browser and enter this URL: <code>http://localhost:8080/axis/index.html</code>. Click on the link of "<u>View</u> the list of deployed Web services", and you should see an <i>echo</i> service, whose WSDL document is located at <code>http://localhost:8080/axis/services/echo?wsdl</code>. This is the WSDL we will use throughout this section.</li>
+</ol>
+
+<p>The <i>echo</i> service includes operations that take a parameter and returns it. Sometimes the values returned are of different types. Here is a listing of all its services, grouped in two categories: <i>built-in</i> types:</p>
+
+<ul>
+<li>echoString</li>
+<li>echoNormalizedString</li>
+<li>echoToken</li>
+<li>echoInteger</li>
+<li>echoFloat</li>
+<li>echoUnsignedLong</li>
+<li>echoUnsignedInt</li>
+<li>echoUnsignedShort</li>
+<li>echoUnsignedByte</li>
+<li>echoNonNegativeInteger</li>
+<li>echoPositiveInteger</li>
+<li>echoNonPositiveInteger</li>
+<li>echoNegativeInteger</li>
+<li>echoBase64</li>
+<li>echoHexBinary</li>
+<li>echoDecimal</li>
+<li>echoBoolean</li>
+<li>echoDate</li>
+<li>echoMap</li>
+<li>echoVoid</li>
+</ul>
+
+<p>and <i>custom</i> types:</p>
+
+<ul>
+<li>echoStringArray</li>
+<li>echoIntegerArray</li>
+<li>echoFloatArray</li>
+<li>echoStruct</li>
+<li>echoStructArray</li>
+<li>echoStructAsSimpleTypes</li>
+<li>echoSimpleTypesAsStruct</li>
+<li>echo2DStringArray</li>
+<li>echoNestedStruct</li>
+<li>echoNestedArray</li>
+<li>echoMapArray</li>
+</ul>
+
+<br>
+
+
+<a name=builtin_types><h3> Built-In Data Types</h3></a>
+
+<p>The built-in types in SOAP correspond to primitive Judo data types, byte arrays, date/time and <code>Object</code>.
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="builtin_types.judo">Listing 28.2</a> builtin_types.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+byteArray = new byte[]{ 1, 2, 3 };
+map       = { a=1, b=2, c=3 };
+
+println 'echoString:             ', wsdl.echoString( 'string' );
+println 'echoNormalizedString:   ', wsdl.echoNormalizedString( 'normalized string' );
+println 'echoToken:              ', wsdl.echoToken( 'token a' );
+println 'echoInteger:            ', wsdl.echoInteger( 9 );
+println 'echoFloat:              ', wsdl.echoFloat( 9 );
+println 'echoUnsignedLong:       ', wsdl.echoUnsignedLong( 2 );
+println 'echoUnsignedInt:        ', wsdl.echoUnsignedInt( 2 );
+println 'echoUnsignedShort:      ', wsdl.echoUnsignedShort( 2 );
+println 'echoUnsignedByte:       ', wsdl.echoUnsignedByte( 2 );
+println 'echoNonNegativeInteger: ', wsdl.echoNonNegativeInteger( 2 );
+println 'echoPositiveInteger:    ', wsdl.echoPositiveInteger( 2 );
+println 'echoNonPositiveInteger: ', wsdl.echoNonPositiveInteger( -2 );
+println 'echoNegativeInteger:    ', wsdl.echoNegativeInteger( -2 );
+println 'echoDecimal:            ', wsdl.echoDecimal( 123 );
+println 'echoBoolean:            ', wsdl.echoBoolean( true );
+println 'echoDate:               ', wsdl.echoDate( Date(2004,11,19) ).getTime();
+println 'echoBase64:             ', wsdl.echoBase64( byteArray );
+println 'echoHexBinary:          ', wsdl.echoHexBinary( byteArray );
+println 'echoMap:                ', wsdl.echoMap( map );
+println 'echoVoid().',              wsdl.echoVoid();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The result is:</p>
+
+<font  color=black><pre>
+echoString:             string
+echoNormalizedString:   normalized string
+echoToken:              token a
+echoInteger:            9
+echoFloat:              9.0
+echoUnsignedLong:       2
+echoUnsignedInt:        2
+echoUnsignedShort:      2
+echoUnsignedByte:       2
+echoNonNegativeInteger: 2
+echoPositiveInteger:    2
+echoNonPositiveInteger: -2
+echoNegativeInteger:    -2
+echoDecimal:            123
+echoBoolean:            true
+echoDate:               11/19/04 12:00 AM
+echoBase64:             [1,2,3]
+echoHexBinary:          [1,2,3]
+echoMap:                {a=1, c=3, b=2}
+echoVoid().
+</pre></font>
+
+<p>You should compare the results to the WSDL of <code>http://localhost:8080/axis/services/echo?wsdl</code>, examine each operation's request and response. For instance, the operation <i>echoBase64</i> has such definitions:</p>
+
+<font  color=black><pre>
+&lt;definition&gt;
+  ......
+  &lt;wsdl:message name="echoBase64Response"&gt;
+    &lt;wsdl:part name="return" type="xsd:base64Binary" /&gt; 
+  &lt;/wsdl:message&gt;
+  &lt;wsdl:message name="echoBase64Request"&gt;
+    &lt;wsdl:part name="inputBase64" type="xsd:base64Binary" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:operation name="echoBase64" parameterOrder="inputBase64"&gt;
+    &lt;wsdl:input message="impl:echoBase64Request" name="echoBase64Request" /&gt; 
+    &lt;wsdl:output message="impl:echoBase64Response" name="echoBase64Response" /&gt; 
+  &lt;/wsdl:operation&gt;
+  ......
+&lt;/definition&gt;
+</pre></font>
+
+<p>The return values are converted back to Judo data types; some of them are actually Java data types such as byte arrays and <code>java.util.Map</code> instances. The <i>echoDate</i> operation takes and returns a <code>xsd:datetime</code> value, which is converted to a <code>java.util.Calendar</code>.
+
+<br>
+
+
+<a name=custom_types><h3> Custom Data Types</h3></a>
+
+<p>Web services can define new data types by defining arrays and structs, whose elements themselves can be built-in types and other custom types. The following program tests a permutation of these cases:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="custom_types.judo">Listing 28.3</a> custom_types.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+string2d    = [ [ 'a', 'b' ], [ 'A', 'B' ] ];
+mapArray    = [ new Object( alfa=1 ), new Object( beta='xyz' ) ];
+soapStruct  = { varString='xyz', varInt=1, varFloat=1.01 };
+structArray = [ soapStruct, soapStruct ];
+soapStruct1 = { varString='xyz', varInt=1, varFloat=1.01, varStruct=soapStruct };
+soapStruct2 = { varString='xyz', varInt=1, varFloat=1.01, varArray=[ 'x', 'y' ]};
+
+println 'echoStringArray:         ', wsdl.echoStringArray( [ 'o', 'p', 'q' ] );
+println 'echoIntegerArray:        ', wsdl.echoIntegerArray( [ 10, 20, 30 ] );
+println 'echoFloatArray:          ', wsdl.echoFloatArray( [ 1.01, 2.02, 3.03 ] );
+println 'echo2DStringArray:       ', wsdl.echo2DStringArray( string2d );
+println 'echoMapArray:            ', wsdl.echoMapArray( mapArray );
+println 'echoStruct:              ', wsdl.echoStruct( soapStruct );
+println 'echoStructArray:         ', wsdl.echoStructArray( structArray );
+println 'echoNestedStruct:        ', wsdl.echoNestedStruct( soapStruct1 );
+println 'echoNestedArray:         ', wsdl.echoNestedArray( soapStruct2 );
+println 'echoSimpleTypesAsStruct: ', wsdl.echoSimpleTypesAsStruct( 'xyz', 1, 1.01 );
+println 'echoStructAsSimpleTypes: ', wsdl.echoStructAsSimpleTypes( soapStruct );
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Judo maps values of various data types to the parameters specified in the WSDL. The <code>soapStruct</code> is an <code>Object</code> of three fields: <code>varString</code>, <code>varInt</code> and <code>varFloat</code>. The <code>structArray</code> is an array of a few <code>soapStruct</code> instances. The <code>soapStruct1</code> has one more field, <code>varStruct</code>, that points to <code>soapStruct</code>. Finally, <code>soapStruct2</code> takes a <code>varArray</code> that points to a string array.</p>
+
+<br>
+
+
+<a name=return_values><h3> Input/Output Parameters and Return Values</h3></a>
+
+<p>Operations defined in WSDL can have multiple input, output and input-output parameters. Since parameters are named, when there are multiple output (including input-output) parameters, a map is returned. In the above example, the last call, <code>echoStructAsSimpleTypes</code>, takes a struct but returns three values: <code>outputString</code>, <code>outputInteger</code> and <code>outputFloat</code>. Its definition is like this:</p>
+
+<font  color=black><pre>
+&lt;definition&gt;
+  ......
+  &lt;wsdl:message name="echoStructAsSimpleTypesRequest"&gt;
+    &lt;wsdl:part name="inputStruct" type="tns1:SOAPStruct" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:message name="echoStructAsSimpleTypesResponse"&gt;
+    &lt;wsdl:part name="outputString" type="xsd:string" /&gt; 
+    &lt;wsdl:part name="outputInteger" type="xsd:int" /&gt; 
+    &lt;wsdl:part name="outputFloat" type="xsd:float" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:operation name="echoStructAsSimpleTypes"
+    parameterOrder="inputStruct outputString outputInteger outputFloat"&gt;
+    &lt;wsdl:input message="impl:echoStructAsSimpleTypesRequest" name="echoStructAsSimpleTypesRequest" /&gt; 
+    &lt;wsdl:output message="impl:echoStructAsSimpleTypesResponse" name="echoStructAsSimpleTypesResponse" /&gt; 
+  &lt;/wsdl:operation&gt;
+  ......
+&lt;/definition&gt;
+</pre></font>
+
+<p>The output of the <code>echoStructAsSimpleTypes</code> is:</p>
+
+<font  color=black><pre>
+echoStructAsSimpleTypes: {outputFloat=1.01, outputInteger=1, outputString=xyz}
+</pre></font>
+
+<p>If there is only one output parameter, the value is returned without its name.</p>
+
+<p>As for the input and input-output parameters, since Judo doesn't support named parameters (yet?), they have to be specified in the order as defined in the WSDL.</p>
+
+<br>
+
+
+<a name=diff_in_types><h3> Different Input Types for Maps and Structs</h3></a>
+
+<p>The difference between SOAP map and struct parameters is that, structs have predefined fields, whereas maps are collections of arbitrary name-value pairs. In Judo, for SOAP structs, you can pass any data structures and objects (including Java objects, COM/ActiveX components, etc.) that have the named properties; for SOAP maps, you can pass <code>Object</code> and user-defined classes as well as <code>java.util.Map</code> instances as SOAP map parameters. The following example demonstrates this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="map_values.judo">Listing 28.4</a> map_values.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+judoObj = { varString='xyz', varInt=1, varFloat=1.01 };
+javaMap = new java::HashMap( varString='xyz', varInt=1, varFloat=1.01 );
+javaObj = new java::Object {
+            String varString;
+            int    varInt;
+            float  varFloat;
+
+            constructor {
+              super();
+              varString = 'xyz';
+              varInt = 1;
+              varFloat = 1.01;
+            }
+          };
+
+println 'Object      as Map:        ', wsdl.echoMap( judoObj );
+println 'Java Map    as Map:        ', wsdl.echoMap( javaMap );
+
+println 'Object      as SOAPStruct: ', wsdl.echoStruct( judoObj );
+println 'Java Map    as SOAPStruct: ', wsdl.echoStruct( javaMap );
+println 'Java Object as SOAPStruct: ', wsdl.echoStruct( javaObj );
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>First of all, we established values of three different types with the same field values: a Judo <code>Object</code>, a <code>java.util.HashMap</code> and a Java object created as a Java adapter. The <code>Object</code> and <code>HashMap</code> are passed to the <code>echoMap</code> and <code>echoStruct</code> operations, and the Java object was passed to <code>echoStruct</code> only. The result is:</p>
+
+<font  color=black><pre>
+Object      as Map:        {varInt=1, varString=xyz, varFloat=1.01}
+Java Map    as Map:        {varInt=1, varString=xyz, varFloat=1.01}
+Object      as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+Java Map    as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+Java Object as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+</pre></font>
+
+<br>
+
+
+<a name=summary><h3> Summary of SOAP Web Service Scripting</h3></a>
+
+<p>To summarize, scripting SOAP web services in Judo is very similar to scripting other value systems such as Java scripting and COM/ActiveX scripting. The rules are simple and natural:</p>
+
+<ol>
+<li>You obtain a handle to a WSDL documentation.</li>
+<li>Call its <i>operations</i> just like invoking methods on an object. Judo marshals the values to the intended parameter data types defined in the WSDL.</li>
+<li>Invocation input parameters are passed in to the operation in the order as specified in the WSDL.</li>
+<li>Return values are returned in a <code>java.util.Map</code> object if there are multiple output parameters, or simply the value if there is only one output value.</li>
+<li>For SOAP maps and structs, various types of data structures can be passed in as long as they hold name-value pairs. For SOAP structs, the defined fields must be present in those data structures; custom Java class instances (or Java beans) can also be passed in, which must define properties corresponding to the SOAP struct definition.</li>
+</ol>
+
+<p>With this and the plethora of available web services, including those created by yourselves, you can truly enjoy the next-generation of <i>webified</i> information technologies! We conclude Judo web service scripting with a case study that takes advantage of the Google search web service client.</p>
+
+<p>Google ... <font color=gray>TODO: <i></i></font> </p>
+
+<br>
+
+<br>
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+
+
+<BR><IMG src="../../../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../../../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

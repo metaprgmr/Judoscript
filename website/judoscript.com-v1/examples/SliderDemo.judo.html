@@ -1,0 +1,104 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/SliderDemo.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing slide component, displaying images and
+    using Swing timer and its event handling.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+
+FPS_INIT = 15;    //initial frames per second
+frameNumber = 0;
+frozen = false;
+delay = 1000 / FPS_INIT;
+
+//Create the slider and its label
+sliderLabel = new java::JLabel("Frames Per Second", (java::JLabel).CENTER);
+sliderLabel.setAlignmentX((java::Component).CENTER_ALIGNMENT);
+
+framesPerSecond = new java::JSlider((java::JSlider).HORIZONTAL, 0, 30, FPS_INIT);
+
+//Turn on labels at major tick marks.
+framesPerSecond.setMajorTickSpacing(10);
+framesPerSecond.setMinorTickSpacing(1);
+framesPerSecond.setPaintTicks(true);
+framesPerSecond.setPaintLabels(true);
+framesPerSecond.setBorder((java::BorderFactory).createEmptyBorder(0,0,10,0));
+
+//Create the label for the animation.
+picture = new java::JLabel(new java::ImageIcon("images/doggy/T" @ frameNumber @ ".gif"),
+                           (java::JLabel).CENTER);
+picture.setAlignmentX((java::Component).CENTER_ALIGNMENT);
+picture.setBorder(
+  (java::BorderFactory).createCompoundBorder((java::BorderFactory).createLoweredBevelBorder(),
+                                             (java::BorderFactory).createEmptyBorder(10,10,10,10)));
+
+//Put everything in the content pane.
+contentPane = new java::JPanel;
+contentPane.setLayout(new java::BoxLayout(contentPane, (java::BoxLayout).Y_AXIS));
+contentPane.add(sliderLabel);
+contentPane.add(framesPerSecond);
+contentPane.add(picture);
+contentPane.setBorder((java::BorderFactory).createEmptyBorder(10,10,10,10));
+
+demoFrame = new java::JFrame("SliderDemo");
+demoFrame.setContentPane(contentPane);
+
+//Set up a timer that calls this object's action handler.
+timer = new java::Timer(delay, timerHandler());
+timer.setInitialDelay(delay * 10); //pauses animation after frames
+                                     //0 and 6 by restarting the timer
+timer.setCoalesce(true);
+
+function startAnimation {
+  timer.start();
+  frozen = false;
+}
+
+function stopAnimation {
+  timer.stop();
+  frozen = true;
+}
+
+gui::events {
+  &lt;timer : Action : actionPerformed> :
+    var source = $_.getSource();
+    //Advance the animation frame.
+    if frameNumber==13 { frameNumber = 0; }
+    else { ++frameNumber; }
+    picture.setIcon(new java::ImageIcon("images/doggy/T" @ frameNumber @ ".gif"));
+    if (frameNumber==0) || (frameNumber==6) {
+      timer.restart();
+    }
+
+  &lt;framesPerSecond : Change : stateChanged> :
+    var source = $_.getSource();
+    if !source.getValueIsAdjusting() {
+      var fps = source.getValue();
+      if fps == 0 {
+        if !frozen { stopAnimation(); }
+      } else {
+        delay = 1000 / fps;
+        timer.setDelay(delay);
+        timer.setInitialDelay(delay * 10);
+        if frozen { startAnimation(); }
+      }
+    }    
+
+  &lt;demoFrame : Window : windowIconified> :   stopAnimation();
+  &lt;demoFrame : Window : windowDeiconified> : startAnimation();
+  &lt;demoFrame : Window : windowClosing> :     exit(0);
+}  
+
+demoFrame.pack();
+demoFrame.setVisible(true);
+startAnimation();
+</pre></td></tr></table></body></html>

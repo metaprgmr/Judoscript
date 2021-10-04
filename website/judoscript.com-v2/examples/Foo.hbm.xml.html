@@ -1,0 +1,25 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_hibernate/CustomTypes/Foo.hbm.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+&lt;!DOCTYPE hibernate-mapping SYSTEM
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+&lt;hibernate-mapping>
+
+  &lt;class name="Foo" table="`foos`" batch-size="4">
+
+    &lt;id name="key" type="string" column="fooidcolumnname123">
+      &lt;column name="`foo_id`" length="36"/>
+      &lt;generator class="uuid.hex">
+        &lt;param name="seperator">:&lt;/param>
+      &lt;/generator>
+    &lt;/id>
+
+    &lt;property name="custom" type="DoubleStringType" access="field">
+      &lt;column name="first_name" length="66"/>
+      &lt;column name="surname" length="66"/>
+    &lt;/property>
+
+  &lt;/class>
+
+&lt;/hibernate-mapping>
+</pre></td></tr></table></body></html>

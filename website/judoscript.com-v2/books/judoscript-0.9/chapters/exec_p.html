@@ -1,0 +1,499 @@
+<html><head><title>Chapter 16. Run Executables</title>
+      <link href="../../../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro">Introduction to Running Native Programs</a></li><li><a href="#cmdline">The Command-Line Format</a></li><li><a href="#options">Return Value, Running Modes and Options</a></li><br>&#187;&nbsp;<a href="#retval">Return Value</a><br>&#187;&nbsp;<a href="#sync">Synchronous and Asynchronous Runs</a><br>&#187;&nbsp;<a href="#envvars">Environment Variables</a><br>&#187;&nbsp;<a href="#startup">Start-Up Directory</a><li><a href="#execio">Process Executable Input And/Or Output</a></li><br>&#187;&nbsp;<a href="#userinput">User Input for the Executable</a><br>&#187;&nbsp;<a href="#input">Provide User Input from the Script</a><br>&#187;&nbsp;<a href="#output">Read Executable Output into the Script</a><br>&#187;&nbsp;<a href="#inout">Write to and Read from the Executable</a><li><a href="#buidjudo">Case Study: Build and Test the Judo Software</a></li>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+<p class=tiny>Book: <a href="../toc_details.html">The Judo Language 0.9</a></p>
+ <h1>Chapter 16. Run Executables</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<br><a href="exec.html">non-printer version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+Judo provides an <b><code>exec</code></b> facility that executes OS native programs in ways that are similar to OS shells and beyond. For instance, you can easily write code to feed input into and read in the output of the running executable at the same time. You can specify the starting directory and environment variables for the new process, and <b><code>exec</code></b> supports a sophisticated command format that allows you to pipe multiple executables together and redirect input and output between files.
+</td></tr></table></td></tr></table>
+
+
+<h2>&nbsp;<br><a name=intro> Introduction to Running Native Programs</a></h2>
+
+<p>The <b><code>exec</code></b> command provides a flexible way of executing native operating system programs. In a nutshell, you can specify shell-like command lines including pipes and redirections, and set environment variables and start directory; you can pump input to that executable and receive output out of that executable as well. You can receive the return value. By default the executable is run synchronously, but it can be run asynchronously. The complete syntax is:</p>
+
+<a name="Exec"><table border=0 class=secondary3>
+<tr><td valign=top><i>exec</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>exec</code></b> [ <b><code>&&</code></b> | <b><code>&lt;</code></b> <i>returnVar</i> <b><code>&gt;</code></b> ] <i>Expr</i> <i>StartOptions</i> <i>InputOutput</i></td></tr>
+<tr><td valign=top><i>StartOptions</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>[ <b><code>from</code></b> <i>workdir</i> ] [ <b><code>with</code></b> [ <b><code>&lt;</code></b> <b><code>new</code></b> <b><code>&gt;</code></b> ] [ <i>Expr</i> | ( <i>IDENTIFIER</i> <b><code>=</code></b> <i>Expr</i> ) ( <b><code>,</code></b> <i>IDENTIFIER</i> <b><code>=</code></b> <i>Expr</i> )* ] </td></tr>
+<tr><td valign=top><i>InputOutput</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>[ <b><code>needSystemInput</code></b> ] ( <i>OutputBlock</i> | <b><code>;</code></b> ) | <i>InputBlock</i> [ <i>OutputBlock</i> ]</td></tr>
+<tr><td valign=top><i>InputBlock</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>input</code></b> <i>Block</i></td></tr>
+<tr><td valign=top><i>OutputBlock</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>output</code></b> <i>Block</i></td></tr>
+</table></a>
+
+<p>This looks like a lot of knobs that you can turn. The core elements of running any executables are:</p>
+
+<ol>
+<li>the command line</li>
+<li>the start-up directory, and</li>
+<li>environment variables for the launched process.</li>
+</ol>
+
+<p>In most cases, these are all you need. The following are some examples that do not need a lot of explanations.</p>
+
+<font  color=black><pre>
+exec 'ls > files.txt';
+
+exec 'ls > ~/tempfiles.txt' from '/temp';
+
+exec && 'java foo.bar.FooBarClass' with CLASSPATH=${mycp};
+</pre></font>
+
+<p>The <code>&&</code> option is to run asynchronously. We will cover all the options and uses of this versatile command later. Before getting into details, beware that Judo ultimately uses Java to run native executables, which has limitations. The JDK documentation for class <code>java.lang.Runtime</code> states:</p>
+
+<blockquote>"The Runtime.exec methods may not work well for special processes on certain native platforms, such as native windowing processes, daemon processes, Win16/DOS processes on Win32, or shell scripts."</blockquote>
+
+<p>Thus far, I have successfully run Unix and Win32 commands, shell scripts and batch files. Nevertheless, always test out the scripts on the intended platforms with the native executables. In this chapter, we will mostly use Unix and Windows commands and the following three Java programs to demonstrate various uses.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="Hello.java">Listing 16.1</a> Hello.java</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+package test;
+
+public class Hello
+{
+  public static void main(String[] args) {
+    System.out.println("Hello, World!");
+    if (args.length > 0)
+      System.err.println("Hello, Error!");
+    System.exit(123);
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="Echo.java">Listing 16.2</a> Echo.java</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+package test;
+
+public class Echo
+{
+  public static void main(String[] args) {
+    try {
+      int len;
+      byte[] buf = new byte[256];
+      while ((len = System.in.read(buf)) > 0) {
+        System.out.write(buf,0,len);
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="ToLower.java">Listing 16.3</a> ToLower.java</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+package test;
+import java.io.*;
+
+public class ToLower
+{
+  public static void main(String[] args) {
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      while (true) {
+        String line = br.readLine();
+        if (line == null) break;
+        System.out.println(line.toLowerCase());
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Let us run <code>test.Hello</code> first.</p>
+
+<font  color=black><pre>
+exec &lt;a> 'java test.Hello';
+println a; // prints 123
+</pre></font>
+
+<p>Here, variable <code>a</code> receives the return code from the program. Since class <code>test.Hello</code> can print to standard output or standard error, let us see how to receive them.</p>
+
+<font  color=black><pre>
+setOut "stdout.txt";      // set standard output to this file
+setErr "stderr.txt";      // set standard error to this file
+exec 'java test.Hello';   // to stdout
+exec 'java test.Hello a'; // to stderr
+</pre></font>
+
+<p>After running, file <code>stdout.txt</code> contains:</p>
+
+<font  color=black><pre>
+Hello, World!
+Hello, World!
+</pre></font>
+
+<p>and file <code>stderr.txt</code> contains:</p>
+
+<font  color=black><pre>
+Hello, Error!
+</pre></font>
+
+<p>In the rest of this chapter, we are going to detail on the command-line format, start-up options, return value, execution synchronization, and input/output.</p>
+
+
+
+<h2>&nbsp;<br><a name=cmdline> The Command-Line Format</a></h2>
+
+<p>The <i>Expr</i> in the syntax rules above is evaluated to a string value representing a command line, and is parsed by Judo to launch executables. The command line is usually a string literal, and it can be multi-line to achieve better readability. For instance,</p>
+
+<font  color=black><pre>
+exec [[* ${j13home}/bin/javac -d ${tmp}/classes
+                  ${generated}/*.java
+                  ${src}/*judo*.java
+                  ${src}/com/judoscript/*.java
+                  ${src}/com/judoscript/parser/helper/*.java
+                  ${src}/com/judoscript/bio/*.java
+                  ${src}/com/judoscript/db/*.java
+                  ${src}/com/judoscript/xml/*.java
+                  ${src}/com/judoscript/gui/*.java
+                  ${src}/com/judoscript/studio/*.java
+                  ${src}/com/judoscript/jusp/*.java
+                  ${src}/com/judoscript/ext/FactoryUtil.java
+     *]]
+     with PATH      = j13path,
+          JAVA_HOME = j13home,
+          CLASSPATH = '${cp}${:}${lib}/j2ee1.3.jar${:}${lib}/bsf-2.3.jar'
+;
+</pre></font>
+
+<p>Judo supports a shell-like, sophisticated command line format, defined in BNF as:</p>
+
+<a name=""><table border=0 class=secondary3>
+<tr><td valign=top><i>command_line</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>executable1</i> ( | <i>executable</i> )*</td></tr>
+<tr><td valign=top><i>executable1</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>program</i> ( <i>input_redirect</i> | <i>output_redirect</i> )*</td></tr>
+<tr><td valign=top><i>executable</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>program</i> ( <i>output_redirect</i> )*</td></tr>
+<tr><td valign=top><i>input_redirect</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>&lt;</code></b> <i>file</i></td></tr>
+<tr><td valign=top><i>output_redirect</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>write_to</i> | <i>append_to</i></td></tr>
+<tr><td valign=top><i>write_to</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>&gt;</code></b> | <b><code>1&gt;</code></b> | <b><code>2&gt;</code></b> | <b><code>2&gt;&1</code></b> | <b><code>1&gt;&2</code></b> ) <i>file</i> | <b><code>2&gt;&1</code></b> | <b><code>1&gt;&2</code></b></td></tr>
+<tr><td valign=top><i>append_to</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>&gt;&gt;</code></b> | <b><code>1&gt;&gt;</code></b> | <b><code>2&gt;&gt;</code></b> | <b><code>2&gt;&gt;&1</code></b> | <b><code>1&gt;&gt;&2</code></b> ) <i>file</i> | <b><code>2&gt;&gt;&1</code></b> | <b><code>1&gt;&gt;&2</code></b></td></tr>
+</table></a>
+
+<p>Redirecting and piping are familiar to most computer users. On most operating systems, a program can take input from the system input stream and write to system output and error streams; they are commonly referred to as <code>stdin</code>, <code>stdout</code> and <code>stderr</code>, following the tradition of Unix and the C programming language. In many OS shells, you can <i>redirect</i> <code>stdin</code>, <code>stdout</code> and/or <code>stderr</code> to files; you can also <i>pipe</i> the output of a program into the input of another program. In many Unix shells, you can optionally combine <code>stdout</code> and <code>stderr</code> and send the content into a single file.</p>
+
+<p>The Judo's command-line format is even more flexible: you can pipe up programs, and each program can optionally write output to files at the same time. Only the first program's input can be redirected to a file, as subsequent programs are taking the previous program's output as input. In most Unix shells, only the last program in a pipe can write to a file. In Judo, the last program can redirect output and error into separate files.</p>
+
+<table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table 16.1 Output Redirect Options</b></caption>
+<tr><th>Write-To</th><th>Append-To</th><th>Output Redirection</th></tr>
+<tr><td valign=top><b><code>&gt;</code></b> <i>file</i></td><td valign=top><b><code>&gt;&gt;</code></b> <i>file</i></td><td valign=top><code>stdout</code> to a file</td></tr>
+<tr><td valign=top><b><code>1></code></b> <i>file</i></td><td valign=top><b><code>1>></code></b> <i>file</i></td><td valign=top><code>stdout</code> to a file</td></tr>
+<tr><td valign=top><b><code>2></code></b> <i>file</i></td><td valign=top><b><code>2>></code></b> <i>file</i></td><td valign=top><code>stderr</code> to a file</td></tr>
+<tr><td valign=top><b><code>2>&1</code></b></td><td valign=top><b><code>2>>&1</code></b></td><td valign=top><code>stderr</code> to <code>stdout</code></td></tr>
+<tr><td valign=top><b><code>1>&2</code></b></td><td valign=top><b><code>1>>&2</code></b></td><td valign=top><code>stdout</code> to <code>stderr</code></td></tr>
+<tr><td valign=top><b><code>2>&1</code></b> <i>file</i></td><td valign=top><b><code>2>>&1</code></b> <i>file</i></td><td valign=top><code>stderr</code> and <code>stdout</code> to file</td></tr>
+<tr><td valign=top><b><code>1>&2</code></b> <i>file</i></td><td valign=top><b><code>1>>&2</code></b> <i>file</i></td><td valign=top><code>stdout</code> and <code>stderr</code> to file</td></tr>
+</table>
+
+<p>When <b><code>1>&2</code></b>, <b><code>2>&1</code></b>, <b><code>1>>&2</code></b> or <b><code>2>>&1</code></b> occurs, that should be the only output redirection.</p>
+
+<p>You can redirect the input from a file, and sent the output to a file:</p>
+
+<font  color=black><pre>
+exec 'java test.Echo < lines.txt > alfa';
+</pre></font>
+
+<p>You can append to a file, redirect output or error to one file or merge them. The following session is recorded on a Windows machine, and we run the Judo software with the <code>-x</code> option which runs the Judo program from the command-line:</p>
+
+<font  color=black><pre>
+c:\>java judo -x "exec 'java test.Hello a 2>&1'"
+Hello, World!
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 1> alfa 2> beta'"
+
+c:\>type alfa
+Hello, World!
+
+c:\>type beta
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 2>&1 alfa'"
+
+c:\>type alfa
+Hello, World!
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 2>>&1 alfa'"
+
+c:\>type alfa
+Hello, World!
+Hello, Error!
+Hello, World!
+Hello, Error!
+
+c:\>
+</pre></font>
+
+<p>The following session tries out piping:</p>
+
+<font  color=black><pre>
+c:\>java judo -x "exec 'java test.Hello a 2>&1 | java test.ToLower | java test.Echo > alfa'"
+
+c:\>type alfa
+hello, world!
+hello, error!
+
+c:\>
+</pre></font>
+
+<p>You can send the output to a file and at the same time pipe into another program. With the help of the <code>test.Echo</code>, we can create a <i>tee</i> utility:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="">Listing 16.4</a> tee.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+outfile = #args[0].neverEmpty('output.dump');
+exec 'java test.Echo > ${outfile} | java test.Echo' needSystemIn;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The <b><code>needSystemIn</code></b> indicates this program needs user input. Here is the result:</p>
+
+<font  color=black><pre>
+c:\>echo ABCDEFG | java judo tee.judo alfa
+ABCDEFG
+
+c:\>type alfa
+ABCDEFG
+</pre></font>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=options> Return Value, Running Modes and Options</a></h2>
+
+
+<a name=retval><h3> Return Value</h3></a>
+
+<p>Native executables may return a value, which is typically a string representing an integer. You can specify a variable name in <b><code>&lt; &gt;</code></b> following <b><code>exec</code></b> to receive this return value. To get the return value, Judo runs the executable synchronously and waits for it to finish.</p>
+
+<br>
+
+
+<a name=sync><h3> Synchronous and Asynchronous Runs</h3></a>
+
+<p>Programs can be run either synchronously, by default, or asynchronously. To run asynchronously, specify <b><code>&&</code></b> following the <b><code>exec</code></b> keyword. The following program shows the difference.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="sync_async.judo">Listing 16.5</a> sync_async.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+exec 'dir';
+println "--- I am done with: exec command.";
+
+exec && 'dir';
+println "--- I am done with: exec && command.";
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Its output is:</p>
+
+<font  color=black><pre>
+exit_code.judo  out_err.judo     sync_async.judo
+in2script.judo  redir.judo       tee.judo
+in_out.judo     script_out.judo  workdir_envvar.judo
+--- I am done with: exec command.
+--- I am done with: exec && command.
+exit_code.judo  out_err.judo     sync_async.judo
+in2script.judo  redir.judo       tee.judo
+in_out.judo     script_out.judo  workdir_envvar.judo
+</pre></font>
+
+<p>The second <b><code>exec</code></b> is run asynchronously, therefore the following <b><code>println</code></b> is run immediately after <b><code>exec</code></b>, and the Windows <code>dir</code> command finishes afterwards. In contrast, the first <b><code>exec</code></b> waits till the <code>dir</code> commands completes and moves on to the next <b><code>println</code></b> statement.</p>
+
+<br>
+
+
+<a name=envvars><h3> Environment Variables</h3></a>
+
+<p>By default, <b><code>exec</code></b> command launches the child process with all the environment variables of the current JVM process. You can set new environment variables or change values of existing ones using the <b><code>with</code></b> clause. Optionally, you can choose <i>not</i> to inherit any parent environment variables with the <b><code>&lt;new&gt;</code></b> option.</p>
+
+<p>The <b><code>with</code></b> clause usually takes name-value pairs for environment variable values. It can also take an expression that evaluates either to an <code>Object</code> or a Java instance of <code>java.util.Map</code>, whose elements are used. The following example demonstrates these choices.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="envvars.judo">Listing 16.6</a> envvars.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+cmdline = 'java judo -x "for x in getEnvVars() { println x; }"';
+
+println nl, '--- Run with inherited env variables from parent JVM process:';
+exec cmdline;
+
+println nl, '--- Run with no env variables except for PATH and CLASSPATH:';
+exec cmdline
+     with &lt;new>
+     PATH = ${PATH},
+     CLASSPATH = ${CLASSPATH}
+;
+
+println nl, '--- Run with a new env variable:';
+exec cmdline with CLASSPATH = 'c:/temp';
+
+println nl, '--- Run with a set of new env variables:';
+newEVs = { // an Object
+  FOO = 'foo',
+  BAR = 'bar'
+};
+exec cmdline with newEVs;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>This script runs an external program specified in the variable <code>cmdline</code>, which happens to be an in-line execution of a short Judo program. The third <b><code>exec</code></b> in this program fails, because the <code>CLASSPATH</code> is not valid, so Judo software is not found anywhere.</p>
+
+<br>
+
+
+<a name=startup><h3> Start-Up Directory</h3></a>
+
+<p>Sometimes, it matters where to start the program. For instance, some shell scripts may have used relative directories to access other resources and hence must start from a particular directory structure. The <b><code>exec</code></b> command uses the <b><code>from</code></b> clause to specify this.</p>
+
+<font  color=black><pre>
+exec 'build.sh' from ${BUILD_HOME};
+</pre></font>
+
+<p>The following example creates a batch file on a Windows machine and runs it from where it resides.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="run_batch.judo">Listing 16.7</a> run_batch.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+testDir = 'c:/temp';
+bat_file = '${testDir}${/}alfa.bat';
+
+f = openTextFile(bat_file, 'w');
+flush &lt;f> [[*
+  @echo 'This is some garbage.' > alfa.alfa
+  @echo ABCDEFG=%ABCDEFG%
+  @echo PATH=%PATH%
+*]];
+f.close();
+
+exec bat_file
+     from testDir
+     with ABCDEFG = 1234567,
+          PATH    = testDir;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>So far, we have covered all the basic topics regarding running executables in Judo. Next is a more exciting topic of manipulating the input to and the output from a running executable.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=execio> Process Executable Input And/Or Output</a></h2>
+
+<p>Executables may take user input and/or write out results. The <b><code>exec</code></b>'s <b><code>needSystemIn</code></b>, <b><code>input</code></b> and <b><code>output</code></b> clauses provide ways to manipulate these aspects.</p>
+
+
+<a name=userinput><h3> User Input for the Executable</h3></a>
+
+<p>If a native program taks user input, things may get interesting when it is launched from within another agent, such as a shell script or Judo. It is not uncommon to see a background job hanging, only waiting to read some input that will never come. In <b><code>exec</code></b>, by default Judo sends an EOF (End-Of-File) to the input stream if no input redirection is present. This is to avoid the hang as mentioned above. To allow user input, you need to explicitly so specify via the <b><code>needSystemIn</code></b>:</p>
+
+<font  color=black><pre>
+C:\>java judo -x "exec 'java test.ToLower' needSystemIn"
+abc
+abc
+ABC
+abc
+^Z
+
+C:\>
+</pre></font>
+
+<br>
+
+
+<a name=input><h3> Provide User Input from the Script</h3></a>
+
+<p>Judo allows you to provide the user input from within the script. This is achieved by the <b><code>input</code></b> block, where you can print to a predefined output destiny, <code>&lt;pipe&gt;</code>. Here is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="in2script.judo">Listing 16.8</a> in2script.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+exec 'java test.ToLower | java test.Echo'
+input {
+  println &lt;pipe&gt; 'You should see this message in lower case, not UPPER CASE!';
+  println &lt;pipe&gt; 'Cheers!';
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<br>
+
+
+<a name=output><h3> Read Executable Output into the Script</h3></a>
+
+<p>Judo also allows you to read in the output from the program:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="script_out.judo">Listing 16.9</a> script_out.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+exec 'java test.ToLower' needSystemIn
+output {
+  while (line=readPipe()) != eof {
+    println '  #', loopIndex()+1, ': ', line;
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<br>
+
+
+<a name=inout><h3> Write to and Read from the Executable</h3></a>
+
+<p>You can write into <i>and</i> read from a command line at the same time.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="in_out.judo">Listing 16.10</a> in_out.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+exec 'java test.ToLower | java test.Echo'
+input {
+  println &lt;pipe&gt; 'Hello,';
+  println &lt;pipe&gt; 'World!';
+}
+output {
+  while (line=readPipe()) != eof {
+    println '  #', loopIndex()+1, ': ', line;
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The <b><code>output</code></b> block is actually run in a separate thread, so your code need to follow thread programming guideline. For details of thread programming, see <i><a href="thread.html">8. Threads and Dynamic Evaluation</a></i>.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=buidjudo> Case Study: Build and Test the Judo Software</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>

@@ -1,0 +1,722 @@
+<html><head>
+<title>Uses of JudoScript</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>Uses of JudoScript</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#dataproc">Data Processing Applications</a>
+<br>&#187;  <a href="#xdb">Cross-Database Transfer and Processing</a>
+<br>&#187;  <a href="#xfmt">Multi-format Data Processing</a>
+<br>&#187;  <a href="#arch">Data Archiving and Backups</a>
+<li> <a href="#dev">Software Development</a>
+<br>&#187;  <a href="#eng">Controller and Glue for Animations and Screenplays</a>
+<br>&#187;  <a href="#prot">Prototyping</a>
+<br>&#187;  <a href="#qa">Quality Assurance</a>
+<br>&#187;  <a href="#pkg">Product Packaging and Installation</a>
+<br>&#187;  <a href="#doc">Technical Documentation</a>
+<li> <a href="#online">Online System Applications</a>
+<br>&#187;  <a href="#job">Background Jobs</a>
+<br>&#187;  <a href="#mon">System Configuration and Monitoring</a>
+<li> <a href="#quick">Quick Uses</a>
+<br>&#187;  <a href="#clock">Date/Time and Clock</a>
+<br>&#187;  <a href="#listcopy">Manage Files and Archives</a>
+<br>&#187;  <a href="#file">Process Files</a>
+<br>&#187;  <a href="#jdbc">Database Quick Fixes</a>
+<br>&#187;  <a href="#email">Sending E-Mails</a>
+<br>&#187;  <a href="#xml">XML Processing</a>
+<br>&#187;  <a href="#html">HTML Scraping</a>
+<br>&#187;  <a href="#http">HTTP Server and Proxy Server</a>
+<br>&#187;  <a href="#calc">Calculator and Converter</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+October 2001 &nbsp;
+
+<font face="Arial" style="font-size:9px">UPDATED:</font> July 2003
+<p><b>Abstract</b> &nbsp;
+
+<em>JudoScript</em> is an agglomeration of numerous useful mechanisms on top of a
+general-purpose programming language with seamless Java support. It is
+built to help minute-to-minute, day-to-day and even night-to-night
+computing for individuals and enterprises. We present some of its uses
+just to give you some concrete ideas. Scripting languages are good for
+some tasks and not-so-good for others. We discuss a few scenarios where
+<em>JudoScript</em> is most appropriate for MIS, software development and business
+services, and some quick tricks that everybody can take advantage of.
+<hr>
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+<p>
+<em>JudoScript</em> is a general-purpose programming language, with many built-in
+features and subsystems that can be readily used for tasks big and small.
+Since it is built on and for the Java platform, it is naturally
+cross-platform. Because of its strong support for Java classes, moving
+functionality between scripts and Java code is smooth and flexible. 
+
+<p>
+Scripting languages have their own uses. Developing full-blown software
+is not one of them. If a piece of software is developed mainly in some
+scripting language, chances are, it is still at prototyping stage. <em>JudoScript</em>
+is ideal for many aspects of business applications and software
+product/service development tasks like prototyping, automated testing,
+background jobs, cross-database transfers, multi-format data aggregation
+and processing, data archiving and backups, on-line system monitoring,
+etc. It also has so many niceties that everyone can take advantage of
+on a regular basis for personal needs, one-time tasks, basic utilities,
+on-the-fly tests, quick database queries and fixes, impromtu reporting
+and formatting, calculators ...
+
+<p>
+In some cases, this article presents source code as examples, assuming
+you are a guru in <em>JudoScript</em>. If you don't feel that way yet, please refer to
+the respective articles for details.
+
+
+
+<h2><a name=dataproc>1. Data Processing Applications</a></h2><p>
+
+<h3><a name=xdb>Cross-Database Transfer and Processing</a></h3><p>
+
+<p>
+<em>JudoScript</em> is ideal for cross-database data transfer and transformation, data
+mining and reporting, because it is designed to be a JDBC scripting
+language. From JDBC's point of view, all the supported databases are
+equal. <em>JudoScript</em> is a general-purpose programming language, too, so
+complicated computations and transformations can be done effectively.
+Such tasks can be run as a job with the <b><code>schedule</code></b> command,
+which is remotely manageable via a HTTP interface.
+
+
+
+<h3><a name=xfmt>Multi-format Data Processing</a></h3><p>
+
+<p>
+<em>JudoScript</em> is ideal for processing, reporting and exchanging data from
+multiple sources in multiple formats of XML, HTML, text documents
+and databases. Data may be obtained from databases, web sites and
+other data and service providers. Such tasks can be run as scheduled
+jobs or passively initiated.
+
+
+<h3><a name=arch>Data Archiving and Backups</a></h3><p>
+
+<p>
+<em>JudoScript</em>'s multi-source file compressing and archiving features coupled
+with JDBC scripting makes it great for automated data backup and
+archiving processes. Such tasks can be run as scheduled jobs or
+activated by human operators.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=dev>2. Software Development</a></h2><p>
+
+<h3><a name=eng>Controller and Glue for Animations and Screenplays</a></h3><p>
+
+<p>
+Animation and screenplay-like software such as games, educational,
+simulation and electronic arts all have vast number of variations
+occurring around a growing set of predefined graphical or conceptual
+elements. The key is dynamic-ness. <em>JudoScript</em> is a superb glue language to
+serve as a controlling agent for such systems. Its capabilities of
+seamless Java interaction, thread programming, scheduled events,
+dynamic code execution, networking, database interaction and
+document processing are all important requirements for such systems,
+and they are presented in an easy-to-use fashion, meeting the needs
+of frequent modifications and continued evolution. Performance is
+not an issue because the percentage of CPU time spent on controller
+is very small, where the bulk of CPU time is probably used by
+graphical engines and/or special-purpose inference engines, which
+may be written in Java or native code or even as device drivers.
+
+
+
+<h3><a name=prot>Prototyping</a></h3><p>
+
+<p>
+<em>JudoScript</em> is perfect for Java software idea prototyping, be it a web-, GUI-,
+XML-, database- or network-based appplication or a combination of
+these, because it is not only a modern general-purpose programming
+language natively supporting all these features plus threads, but also
+extremely Java friendly. With <em>JudoScript</em>, prototypes are fast to develop and
+easy to modify and adapt. Front-end to back-end, online servers to
+background jobs, database creation to data management, test data
+loading to use case emulation, <em>JudoScript</em> has means to satisfy most if not
+all. As the object-oriented analysis and design process goes round and
+round, more and more subsystems, that is, objects or clusters of
+objects, start to emerge. The prototype may continue to server as a
+test bed, allowing pieces of software components to evolve. Over time,
+some pieces of the prototype may even stay with the production system,
+such as database creation and management scripts, background jobs that
+does asynchronous data processing and/or transaction processing, etc.,
+and other scripts may become the core of the test suite.
+
+
+
+<h3><a name=qa>Quality Assurance</a></h3><p>
+
+<p>
+<em>JudoScript</em> is ideal for testing software and services, especially
+coordinated and automated tests.
+
+<p>
+<b><i>Unit Tests</i></b> &nbsp; Java classes, transactions, use cases, 
+enterprise Java beans, work flows, private network protocols, ...
+these can be tested easily with <em>JudoScript</em>'s Java, JDBC and other
+capabilities.
+
+<p>
+<b><i>Load Tests</i></b> &nbsp; <em>JudoScript</em> supports thread and HTTP client and
+server programming. These are invaluable for load testing web sites.
+The HTTP client can save and load cookies. One scenario would be,
+declare a thread that emulates the whole process of a user session
+with random delays and a number of usage paths; for one test instance,
+fire up certain number of such threads at once. This script can be
+run from multiple machines; to synchronize the tests to emulate
+larger number of simultaneous users, create a mini HTTP server in
+each script, and have a "master" script send a start command to
+them around the same time.
+
+<p>
+<b><i>Automated Testing</i></b> &nbsp; In software development, any changes
+can introduce new features, desired or not. To ensure the software
+behave as wanted, complete test coverage should be done as much as
+possible. The majority of test cases would pass, only the failed few
+should be examined and identified. <em>JudoScript</em> has <b><code>assert()</code></b> and
+exception catching capability. You can resume execution after an
+exception. Automated tests are highly feasible and easy to implement.
+With a fully automated test suite, you would expect to either see a
+"success" messsage at the end or a handful of errors, where the
+tester will review and verify.
+
+
+<h3><a name=pkg>Product Packaging and Installation</a></h3><p>
+
+<p>
+<em>JudoScript</em> has strong support for manipulating files, directories and zip
+archives. It can run executables, too. When a product is ready to
+ship, a <em>JudoScript</em> can pick the right files and directories, create
+appropriate zip or jar files, generate last-minute information, and
+build a shipping package. Similarly, installation process can be
+automated, so that the package can be installed on any
+<em>JudoScript</em>/Java enabled machines.
+
+
+<h3><a name=doc>Technical Documentation</a></h3><p>
+
+<p>
+<em>JudoScript</em> is a data processing language. It processes textual documents
+from XML, HTML to text files, and interacts with database through
+JDBC. This is great for automated document processing and management,
+especially in a team environment of technical development. For
+instance, one can write a Java parser (using tools like JavaCC), and
+turn all the Java source files into a DOM-like tree; once this is
+done, you can use <em>JudoScript</em> to navigate, query or associate pieces of Java
+classes with any specific documents. Another example is, define a few
+special tags and use them in the HTML documentation, and have a few
+<em>JudoScript</em> programs process them into real HTML pages (kind of server-side
+stylesheet), and collect all the information to generate catelogs,
+references, code listings, figure listings, table of contents, etc.;
+this is exactly how <em>JudoScript</em> documents (including this article) were prepared.
+
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=online>3. Online System Applications</a></h2><p>
+
+<h3><a name=job>Background Jobs</a></h3><p>
+
+<p>
+E-commerce and other web-based customer services have a lot going
+on behind the scene. For instance, in order to maintain a good
+response time to users in front of browsers for complicated
+transactions, a commonly used model is to quickly accept user's
+input, process it in the background, and send the result to the
+user via e-mail. <em>JudoScript</em> is design with this kind of tasks in mind,
+with features like <b><code>schedule</code></b> statement, sending e-mails,
+database interaction, EJB container interaction, HTTP connection
+and general networking, file system operations, flexible native
+program execution and even password protection. The centerpiece is
+the <b><code>schedule</code></b> statement. It schedules events at fixed rate
+or at absolute moments, and also has a built-in HTTP server that
+administrators can remotely view the job status and/or control
+various aspects of the job itself.
+
+
+
+<h3><a name=mon>System Configuration and Monitoring</a></h3><p>
+
+<p>
+As the cliche goes, a picture is worth a thousand words; this can not
+be more true for monitoring and configuration tasks. In addition to all
+the good things mentioned earlier, <em>JudoScript</em> is also a Java GUI language,
+easy to implement AWT and Swing GUIs; it is also a HTTP server language,
+equally capable of creating web UIs. (You can create a multi-threaded
+web server with less than 80 characters, seriously.)
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=quick>4. Quick Uses</a></h2><p>
+
+<p>
+There are many features in <em>JudoScript</em> you can take advantage of to make your
+everyday life easy. First let us review how to run <em>JudoScript</em> programs.
+
+<p>
+<em>JudoScript</em> programs are usually put in text files typically with extension
+".judo". To run, first make sure <em>JudoScript</em> and supporting Java class libraries
+(such as JDBC drivers and your own Java class files) are in the
+classpath. JDK1.3 and up is required. Issue a command line like this:
+
+<blockquote><font><pre>
+%java judo foo.judo parm1 parm2 /option1=val1 /option2
+</pre></font></blockquote>
+
+Command line "java judo -x" will take the first parameter as a program
+(the rest of the parameters become its parameters), like this:
+
+<blockquote><font><pre>
+%java judo -x "ls '*.jud*' except '*/alfa*,*/test*' recursive noHidden"
+</pre></font></blockquote>
+
+You can do a lot with a short program like this. I create short aliases
+to make using them easier: <b><code>j</code></b> or <b><code>j.bat</code></b>, for <u>java
+judo</u>. <b><code>jx</code></b> or <b><code>jx.bat</code></b>, for <u>java judo -x</u>.
+
+<blockquote><font><pre>
+%jx "copy '*.jud*,*.java' except '*/alfa*,*/test*'
+     recursive noHidden echo to 'arch.zip';"
+%jx ". getFileContent('servlets.properties');"
+</pre></font></blockquote>
+
+In the second line, the dot command is a shortcut for <b><code>println</code></b>.
+You will see a lot of it.
+
+
+
+<h3><a name=clock>Date/Time and Clock</a></h3><p>
+
+<p>
+Time zone conversion and listing all the time zone IDs:
+
+<blockquote><font><pre>
+%jx ". date().fmtDate(null,'Asia/Shanghai');"
+%jx "for x in (javaclass java.util.TimeZone).getAvailableIDs() { . x; }"
+</pre></font></blockquote>
+
+Find out the day of week for a date, the date after so many days and
+the number of days between two dates:
+
+<blockquote><font><pre>
+%jx ". date(2012,1,1).fmtDate('EEEE');"
+%jx "d=date(2001,10,25); d.date+=10; . d;"
+%jx ". (date(2012,1,1).int() - date(2001,10,25).int())/(24*3600000);"
+</pre></font></blockquote>
+
+
+<h3><a name=listcopy>Manage Files and Archives</a></h3><p>
+
+<p>
+Search for files:
+
+<blockquote><font><pre>
+%jx "ls '*.judo,*.java' in 'c:\\temp' except '*/alfa*' recursive;"
+%jx "ls '*.judo,*.java' in 'save.zip' except '*/alfa*' recursive;"
+%jx "list 'save/*' recursive size;  . $$fs_result;"
+%jx "list 'save/*' recursive count; . $$fs_result;"
+</pre></font></blockquote>
+
+Find files and do something with them:
+
+<blockquote><font><pre>
+list '*.jud*, *.java' in 'dev/' recursive noHidden;
+for $x in $$fs_result {
+  $f = openTextFile($x);
+  . $f.readLine();
+  $f.close();
+}
+</pre></font></blockquote>
+
+Copy files to another directory or a zip file:
+
+<blockquote><font><pre>
+%jx "copy '*.htm*,*.gif,*.jp*,*.css' in '~/devroot/'
+     recursive noHidden echo to '/sys/docroot/';"
+%jx "copy '*.htm*,*.gif,*.jp*,*.css' in '~/devroot/'
+     recursive noHidden echo to '~/save.zip';"
+</pre></font></blockquote>
+
+Remove a directory:
+
+<blockquote><font><pre>
+jx "rmdir 'c:/test force;"
+</pre></font></blockquote>
+
+Save multiple trees into a single zip file:
+
+<blockquote><font><pre>
+$zip = createZip('save.zip');
+copy '*.htm*,*.gif,*.jp*,*.css' in '~/docroot/'
+     recursive noHidden echo to $zip;
+copy '*.jud*,*.java' except '*/alfa*' in '~/devroot/'
+     recursive noHidden echo to $zip;
+$zip.close();
+</pre></font></blockquote>
+
+Download a file:
+
+<blockquote><font><pre>
+%jx "copyStreams openFile('http://www.xxxx.com/cesoir.mp3'),
+     openFile('cesoir.mp3','w');"
+</pre></font></blockquote>
+
+
+<h3><a name=file>Process Files</a></h3><p>
+
+<p>
+Create and write to files:
+
+<blockquote><font><pre>
+$file = openTextFile('foo.txt','w'); // create
+println <$file> 'Hello, World!';
+$file.close();
+
+$file = openTextFile('foo.txt','a'); // append
+println <$file> 'Again Hello, World!';
+$file.close();
+
+$file = openGZippedTextFile('foo.txt.gz','w');
+println <$file> 'Hello, New World!';
+$file.close();
+</pre></font></blockquote>
+
+<p>
+Read from files and process text:
+
+<blockquote><font><pre>
+$file = openGZippedTextFile('data.txt.gz');
+while ($line = $file.readLine()) != eof {
+  $dat = $line.csv(',');
+  . $dat[0]:<10, $dat[1]:5.2, $dat[2]:>10;
+}
+$file.close();
+</pre></font></blockquote>
+
+Sort a file:
+
+<blockquote><font><pre>
+arr = [];
+file = openTextFile('FountainValley.java');
+while (line = file.readLine()) != eof { arr.append($line); }
+file.close();
+arr.sort();
+for x in arr { . x; }
+</pre></font></blockquote>
+
+
+<h3><a name=jdbc>Database Quick Fixes</a></h3><p>
+
+<p>
+Run some SQL statements against database:
+
+<blockquote><font><pre>
+const #url = 'jdbc:oracle:thin:@localhost:1521:crescent';
+const #user = 'dbuser';
+const #pass = secret('*"&#~!&)*');
+connect to #url, #user, #pass;
+
+executeSQL
+{
+  create table people
+  ( personID  int primary key,
+    name      varchar(20) not null,
+    alias     varchar(20),
+    birthDay  date,
+    sex       varchar(1),  // 'M', 'F'
+    addTime   date
+  );
+
+  create table media
+  ( folderID  varchar(512) not null, // relative path
+    fileName  varchar(128) not null, // file name w/o path
+    type      varchar(1) not null,   // I: image, M: movie, A: audio
+    fileTime  date,
+    bytes     int,
+    addTime   date,
+    constraint pathName primary key ( folderID, fileName )
+  );
+
+  create table participants
+  ( folderID  varchar(512),
+    fileName  varchar(128),
+    personID  int,
+    constraint ref_media  foreign key (folderID,fileName)
+                          references media (folderID,fileName),
+    constraint ref_people foreign key (personID)
+                          references people (personID)
+  );
+}
+</pre></font></blockquote>
+
+Query database:
+
+<blockquote><font><pre>
+connect to #url, #user, #pass;
+
+preparedExecuteQuery $a:
+  select name, alias from people where addTime < ?;
+with @1:date = date(2001,10,1);
+
+while $a.next() {
+  . 'New user: ', $a.name:<22, ', alias: ', $a.alias;
+}
+</pre></font></blockquote>
+
+Try out stored procecures:
+
+<blockquote><font><pre>
+connect to #url, #user, #pass;
+
+executeAny [[*
+  create or replace
+  procedure test_proc(param_io IN OUT number,
+                      param_i IN varchar,
+                      param_o OUT varchar)
+  as begin
+    param_o := param_i;
+    if param_io is not null then
+      param_io := param_io + 1;
+    else
+      param_io := -1;
+    end if;
+  end;
+*]];
+
+prepareCall: { call test_proc(?,?,?) };
+
+println '$x = ', $x = 1;
+println '$y = ', $y = 'abcd';
+executeSQL with @1:int <=> $x, @2:varchar =  $y, @3:varchar => $z;
+println '$x = ', $x;
+println '$z = ', $z;
+</pre></font></blockquote>
+
+Cross-database data transfer:
+
+<blockquote><font><pre>
+connect $oracle to #oracle_url, #user, #pass;
+connect $mssql  to 'jdbc:odbc:myDSN', 'dbuser', secret('%$#)(!');
+
+executeQuery $a using $oracle: // query from Oracle
+  select personID, name, alias, birthDay, sex, addTime from people;
+
+while $a.next() {
+  preparedExecuteUpdate using $mssql: // insert into MS-SQL
+    insert into people ( personID, name, alias, birthDay, sex, addTime)
+    values (?,?,?,?,?,?);
+  with @1:int  = $a.personID,
+       @2      = $a.name,
+       @3      = $a.alias,
+       @4:date = $a.birthDay,
+       @5:int  = $a.sex,
+       @6:date = $a.addTime
+  ;
+}
+</pre></font></blockquote>
+
+
+
+<h3><a name=email>Sending E-Mails</a></h3><p>
+
+<blockquote><font><pre>
+sendMail
+     from: 'info@judoscript.com'
+       to: 'smarty@yahoo.cum'
+  subject: 'The software. Thank you!'
+   attach: 'readme.txt, software.zip'
+     body: [[*
+           Dear Ms Smarty,
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           &lt;html&gt;&lt;body&gt;
+           &lt;p&gt;Dear Ms Smarty,
+
+           &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+           Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+           text&lt;/u&gt; file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p&gt;Please visit &lt;a href=www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+           for the latest news and information. Thank you!
+
+           &lt;p&gt;Sincerely,
+           &lt;p&gt;JudoScript
+           &lt;/body&gt;&lt;/html&gt;
+           *]]
+;
+</pre></font></blockquote>
+
+
+<h3><a name=xml>XML Processing</a></h3><p>
+
+<p>
+(TBD).
+
+
+<h3><a name=html>HTML Scraping</a></h3><p>
+
+<p>
+Print all external links of a HTML page:
+
+<blockquote><font><pre>
+do 'http://www.judoscript.com' as html
+{
+BEFORE:   . 'From www.judoscript.com/';
+AFTER:    . '------------------------';
+&lt;a&gt;:      . if $_.href.startsWith('http://') { . $_.href; }
+}
+</pre></font></blockquote>
+
+
+<h3><a name=http>HTTP Server and Proxy Server</a></h3><p>
+
+<p>
+Set up a simple HTTP server for others to see or download files:
+
+<blockquote><font><pre>
+$ss = startServer(8088);
+while {
+  start thread $c = acceptHttp($ss) { $c.serveFile(); }
+}
+</pre></font></blockquote>
+
+Set up a proxy server to monitor headers going between browsers and servers:
+
+<blockquote><font><pre>
+$ss = startServer(8088);
+while {
+  relay(acceptHttp($ss)); // single-thread
+}
+
+function relay $c {
+  // Connect to server; browser should send absolute URL.
+  $url = $c.getUrl();
+  $doPost = $c.getMethod().equalsIgnoreCase('post');
+  . '&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ', $url, ' &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;';
+  if $doPost {
+    $s = httpPost($url);
+  } else {
+    $s = httpGet($url);
+  }
+
+  // pass all client headers and content to server
+  for $x in $c.getAllHeaders() {
+    $s.($x) = $c.($x);
+    . $x, ': ', $c.($x);
+  }
+  if $doPost {
+    copyStreams $c.getInputStream(), $s.getOutputStream();
+  }
+
+  // pass all server headers and content to client
+  . '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; ', $url, ' &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;';
+  for $x in $s.getAllHeaders() {
+    $c.($x) = $s.($x);
+    . $x, ': ', $s.($x);
+  }
+  copyStreams $s.getInputStream(), $c.getOutputStream();
+
+catch:
+  . &lt;err&gt; '[', $_.name, '] ', $_.message;
+finally:
+  .; // separate requests.
+}
+</pre></font></blockquote>
+
+
+<h3><a name=calc>Calculator and Converter</a></h3><p>
+
+<blockquote><font><pre>
+%jx ". 365*24*3600;"
+%jx ". (1.05).pow(20).fractionDigits(2);"
+%jx ". (30).sin_d();"
+</pre></font></blockquote>
+
+<p>
+The following lines do various conversions.
+
+<blockquote><font><pre>
+%jx ". (123456).fmtHex();"
+%jx ". (123456).fmtOctal();"
+%jx ". 0xFF, ' ', 0xCC, ' ', 0x99;"
+%jx ". (0x34).chr();"
+%jx ". 'q'.ascii();"
+</pre></font></blockquote>
+
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

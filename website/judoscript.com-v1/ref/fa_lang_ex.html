@@ -1,0 +1,19 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Exception Handling</u></h3>
+  <p>Exceptions can be raised during program execution, either by the JudoScript language engine or by
+  the Java code invoked in the program. Both types of exceptions are handled in the same way.</p>
+
+  <p>In most blocks, at the end a <font class=kw>catch</font> <font class=kw><nobr>:</nobr></font>  and <font class=kw>finally</font> <font class=kw><nobr>:</nobr></font>  label can be used. Statements
+  following <font class=kw>catch</font> <font class=kw><nobr>:</nobr></font>  are executed when an exception is raised. The built-in variable, <font class=kw><nobr>$_</nobr></font> ,
+  in this context represents the exception object. The <font class=kw>resume</font>  statement is new to Java
+  programmers; it allows program to continue following the line where the exception is thrown.
+  Statements following <font class=kw>finally</font> <font class=kw><nobr>:</nobr></font>  are executed when control is leaving the current block.
+  These two are independent of each other but if <font class=kw>catch</font>  is present, <font class=kw>finally</font>  has to appear
+  after.</p>
+
+  <p>You can use <font class=kw>throw</font>  statement to throw a new error exception or a Java exception, or
+  re-throw an existing one.</p>
+<h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('Block')">Block</a></font><li><font class=nt><a href="javascript:showNT('ResumeStatement')">ResumeStatement</a></font><li><font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font></ul><h4>Related Object Types</h4><ul><li><font class=obj><a href="javascript:showObj('ExcptError')">ExcptError</a></font><li><font class=obj><a href="javascript:showObj('ExcptJava')">ExcptJava</a></font></ul></body></html>

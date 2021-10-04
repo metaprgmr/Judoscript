@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/output.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+           Use `...` to read the output of an executable, or
+           use ``...`` to read the output as lines.
+         *]];
+}
+
+println '--- ', `dir *.judo`;   // one string
+
+println;
+
+for x in ``dir *.judo`` { // an array of strings
+  println '::: ', x;
+}
+</pre></td></tr></table></body></html>

@@ -1,0 +1,1050 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>JudoScript White Paper</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="JudoScript, Scripting Java, Java scripting language, scripting language for Java, data processing, cross-database transfer, data mining, data archiving, software prototyping, glue language, quality assurance, software testing" name=keywords>
+<LINK href="../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../home.html')"><IMG alt="Home" hspace=0 src="../share/home_gray.gif" border=0></A><A href="javascript:go_to('../judo.html')"><IMG alt="Judo Language" hspace=0 src="../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Article: JudoScript White Paper</b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../share/spacer.gif" height=7 width=1 border=0><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="JudoScript White Paper" author="James Jianbo Huang" created="October 2002" last="July 2003" keywords="JudoScript, Scripting Java, Java scripting language, scripting language for Java, data processing, cross-database transfer, data mining, data archiving, software prototyping, glue language, quality assurance, software testing">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#intro">Introduction To JudoScript</a>
+<br>&#187;  <a href="#i_need">The Need Of Scripting Java</a>
+<br>&#187;  <a href="#i_def">Definition of Scripting</a>
+<br>&#187;  <a href="#i_goal">Design Goals Of JudoScript</a>
+<li> <a href="#design">JudoScript Language Design</a>
+<br>&#187;  <a href="#trad_dsgn">Traditional Programming Language Design</a>
+<br>&#187;  <a href="#js_dsgn">JudoScript Language Design</a>
+<br>&#187;  <a href="#i_strct">JudoScript Language Structure</a>
+<li> <a href="#core">Key Language Component I -- The Core Language</a>
+<li> <a href="#java">Key Language Component II -- Java Scripting</a>
+<br>&#187;  <a href="#extend_java">Extend Java Class and Interfaces</a>
+<br>&#187;  <a href="#embed_in">Embed JudoScript In Java Software</a>
+<li> <a href="#apps">Key Language Component III -- Domain-Specific Programming</a>
+<li> <a href="#uses">Uses Of JudoScript</a>
+<br>&#187;  <a href="#uses_datap">Multi-Source/Format Data Processing and Reporting</a>
+<br>&#187;  <a href="#uses_doc">Document Processing and Creation</a>
+<br>&#187;  <a href="#uses_test">Testing for Java Distributed and Web Applications</a>
+<br>&#187;  <a href="#uses_prot">Prototyping for Java and Web Applications</a>
+<br>&#187;  <a href="#uses_evydy">Everyday Uses</a>
+<br>&#187;  <a href="#uses_fun">Entertainment</a>
+<li> <a href="#compare">Compare JudoScript To Other Languages</a>
+<li> <a href="#history">History</a>
+<li> <a href="#coop">Coorporation Oppurtunities</a>
+<li> <a href="#listings">Code Listings</a>
+
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>JudoScript White Paper</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;October 2002 &nbsp;<font face="Arial" style="font-size:9px">UPDATED:</font> July 2003 &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="whitepaper_p.html">printer-friendly version</a><p><b>Abstract</b> &nbsp;
+<p><u><em>JudoScript</em>, or <em>Judo</em> for short, is a general-purpose, Java scripting and multi-domain language</u>.
+A full-fledged general-purpose scripting language with full capability of Java scripting,
+<em>JudoScript</em> intimately supports most of today's key computing areas.
+It is born out of the needs of directly using Java platform resources, intended to be a
+more user-friendly scripting language with a 3GL-and-4GL design philosophy.
+The result is a very high level language built atop a powerful programming environment
+which greedily takes advantage of the vast amount of resources avaible to Java. 
+Its 4GL-style, domain-specific declarative programming features allow many tasks to be
+<em>specified</em> intuitively, effectively and elegantly, avoiding tedious, error-prone,
+high-stress, low-efficiency and no-fun <em>programming</em> as much as possible.
+In enterprises, it is great for multi-source, multi-format data processing and reporting,
+Java software prototyping and testing, off-line batch jobs, etc.
+For individuals, <em>JudoScript</em> is a big collection of nifty and versatile productivity tools.
+In your leisure as a programmer, <em>JudoScript</em> is also a fun language, intended to have rich and
+powerful entertainment computing features.
+<em>JudoScript</em> is <em>the</em> scripting language for the Java-Age.</p>
+
+<p>This white paper describes its background, design philosophy and language structure.
+It introduces the three key components of the language, namely the core language,
+Java scripting and list of supported application features.
+Sample code embellishes relevant sections for programmers to get a first-hand feel.
+It compares <em>JudoScript</em> to other scripting languages, especially the Java-based ones,
+and touches on its history and origin.</p>
+<hr>
+
+<p>&nbsp;</p>
+
+
+<h2><a name=intro>1. Introduction To JudoScript</a></h2><p>
+
+<p><em>JudoScript</em> is a <u>general-purpose, Java scripting and multi-domain language</u>.
+What this means is, it has three tightly integrated parts:
+<em>a)</em> a general-purpose scripting language,
+<em>b)</em> a fully capable Java scripting tool, and
+<em>c)</em> support for multiple domain-specific features.
+It is designed and implemented in pure Java, born out of the needs of <em>using</em>
+the riches in the Java platforms (J2SE and J2EE) and beyond.
+Its design embraces both 3GL and 4GL philosophies, providing not only strong programming
+support but also special mechanisms of "WYSIWYG" ("What-You-See-Is-What-You-Get") programming
+for most of today's popular computing areas, making their uses easy, effective and elegant.
+It is a higher-level language integrated in a robust, general-purpose Java scripting environment.</p>
+
+<p><em>JudoScript</em> is released under LGPL (Lesser GNU Public License), so you can do anything with it and
+its source code, commercial or not, provided that the original copyright notice is retained.
+It will follow up with the latest Java development,
+and integrate with more cool LGPL or GPL open source Java projects.
+The principle is simple: if something is useful and available,
+<em>JudoScript</em> will make it easier to use and readily scriptable.</p>
+
+
+<h3><a name=i_need>The Need Of Scripting Java</a></h3><p>
+
+<p>Today, Java is far beyond a programming language.
+Going through Java packages shipped with J2SE and J2EE, one finds functionalities from basic
+computing to enterprise computing. Open source projects provide even more functionalities,
+so we can do SSH/SCP, PDF generation, FTP, Telnet, Windows ActiveX scripting, Unix syslog, ... all in Java.
+Java has become a vast, growing pool of readily usable resources on multiple (if not all) platforms.</p>
+
+<p>To use Java, however, coding in Java is not feasible.
+Often times we need to quickly fix up something, such as going through a directory tree to
+manipulate files, or checking a database for unprocessed orders, or retrieving information in an
+XML document to create a report. For these one-time actions, rigorous Java coding is an overkill.
+Other times, we create scripts for repetitive tasks that are run manually or automatically.
+These scripts takes frequent updates and performance is not critical.
+Edit-and-run can make a huge difference in productivity.
+Another problem is verbosity of Java programs.
+Java is a system language with low-level, fine-granularity APIs and language constructs
+that enforce good software engineering. They become obstacles for scripting.</p>
+
+<p>More over, coding in Java requires expertise that is at times not available or desirable.
+Imaging trying to put a few files into a ZIP file using Java but you have never used
+<code>java.util.zip</code> package.
+The javadoc lists so many classes, you need to understand their meanings and relationships
+before you can do anything with them.
+As a user, I do not care whether <code>java.util.zip.ZipFile</code> or
+<code>bill.wonderutils.ZipArchive</code> is used.  All I care about is to create a zip file!
+That is, the focus of the problem domain is easily blurred by implementational details of the APIs.</p>
+
+<p>On the other hand, being a object-based platform, Java is natural for object scripting.
+Every public class in Java can be scripted. It is a dream platform for scripting langauges.
+Programmers should definitely take advantage of this, not limiting themselves to mere programming.
+At the very least, this can make testing and prototyping much easier and more efficient.
+In fact, with a good scripting tool, you can do so much more. Java is the future of scripting!</p>
+
+
+<h3><a name=i_def>Definition of Scripting</a></h3><p>
+
+<p>When we talk about scripting, we mean doing things easily and quickly.
+Here is <em>a definition of scripting and scripting languages</em>:
+
+<blockquote><a name="def_scripting"> </a>
+  <b>Scripting (in programming sense)</b> is to do things easily, intuitively, obviously and accurately,
+  so much so that when another person with the same domain knowledge sees a chunk of code,
+  he immediately understands it without even a hint of reasoning (ideally). 
+</blockquote>
+
+<blockquote><a name="def_scriptingsupport"> </a>
+  <b>Scripting Support</b> means very-high-abstraction-level language constructs or even domain-specific languages.
+</blockquote>
+
+<blockquote><a name="def_scriptinglangs"> </a>
+  <b>Scripting languages</b> are (usually) general-purpose programming languages with one or more scripting support.
+  They are usually edit-and-run, and optionally provide compiling tools for performance, security and other reasons.
+  They are typically used for gluing applications and/or components to accomplish useful tasks easily, quickly and efficiently.
+</blockquote>
+
+<p>The follwoing are a few observations based on the needs to script and our definition of scripting.
+<ul>
+<li> <u>Game scripting languages</u> are perfect examples.
+     They may be based on a general-purpose language but with very high level abstraction,
+     so that, for instance, a series of movements can be easily assembled by built-in constructs for twists and turns.
+<li> <u><em>JudoScript</em></u> is a multi-domain scripting language, -- for OS level scripting, JDBC scripting, XML and SGML scripting, ActiveX scripting, and more.
+<li> <u>Unix shells</u> are single-domain scripting languages, -- for OS level scripting.
+<li> <u>SQL</u> is a domain-specific language but not a scripting language because you can't program with it.
+<li> <u>C, C++, Java, Perl, Python, Jython, Beanshell, JavaScript, Visual Basic, <em>JudoScript</em>, ...</u>
+     are all programming languages for general purposes.
+<li> <u>Jython, Beanshell, Rhino and <em>JudoScript</em></u> are Java scripting languages for the "domain" of Java.
+     (Any potent Java programmer can recognize the Java usages in the code without much trouble.)
+<li> <u>Visual Basic (including VBA)</u> is a scripting langauge for the "domain" of COM/ActiveX.
+<li> <u>Prolog?</u> not so sure... there are certainly other categories that it can fit into (logic programming language or whatever).
+</ul>
+</p>
+
+
+<h3><a name=i_goal>Design Goals Of JudoScript</a></h3><p>
+
+<p>What is the difference between Unix platforms and Java platforms from a programmer's perspective?
+The abstraction level of built-in system features.
+Java includes standard features that were considered pure application areas in Unix, such as JDBC,
+internet, zip/jar, XML, encryption, etc. Today, they are an essential part of our everday lives.
+Java has started an exciting era of converging all computing resources onto a single platform (with the exception of <em>.Net</em>)!</p>
+
+<p>All the Java-based scripting languages before <em>JudoScript</em> only provide generic Java object-level scripting;
+their OS- and application-level scripting essentially relies on Java's standard APIs, which are low-level and of fine granularity.</p>
+
+<p><b>The design goal of <em>JudoScript</em> is
+to provide an extraordinarily easy-to-use and powerful scripting tool, taking full advantage of the underlying Java platforms.
+It shall be a good scripting language at the Java object level, OS level and application level for many popular areas.</b>
+Specifically,
+</p>
+
+<ol>
+<li><em>JudoScript</em> shall be a powerful programming language that provides all of Java's programmability in a simpler and scripting way.
+    That is, its programming model shall be more flexible and easier to learn and use than that of Java.
+
+<li>It shall be able to script Java objects and methods with few limitations.
+
+<li>For many common computing tasks, it shall require as little coding as possible.
+    When coding is necessary, it shall be as intuitive as possible.
+    Therefore, it shall have a large number of programming tools at various abstraction levels,
+    from data structures to utilities to completely domain-specific constructs.
+
+<li>It shall be easily extensible, particularly by Java libraries.
+    New application features shall be able to be extended seamlessly by any Java packages
+    without having to modify the language specification itself.
+
+<li>It shall be complete and fun!
+    Its capabilities shall cover enterprise computing, individual productivity as well as
+    entertainment computing.
+
+<li>As a policy, the language shall be open to any application areas that are or
+will be appealing to general public, and make their uses as intuitively as possible.
+New additions to the language shall maintain backward compatibility.
+</ol>
+
+<p>The last requirement is not technical but rather a promise to grow the language with time.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=design>2. JudoScript Language Design</a></h2><p>
+
+<p>Computer languages can be generally categorized as <em>algorithmic</em> and <em>declarative</em>.
+Algorithmic languages are mostly general-purpose.
+Declarative languages are more domain-specific or computing-model-specific (e.g. SQL, VHDL and Prolog).
+When people talk about programming languages, they normally refer to algorithmic languages.
+<em>JudoScript</em> embraces both.</p>
+
+
+<h3><a name=trad_dsgn>Traditional Programming Language Design</a></h3><p>
+
+<p>Traditionally, programming language definition includes two key components:
+the basic <em>programming constructs</em> and an <em>expansion mechanism</em>.
+The programming constructs include things like variable, expressions, flow control,
+function and/or procedure, class and objects.
+A programming language can be a complete language but totally useless,
+without proper interface to the underlying operating system.
+The extension mechanism is commonly known as libraries, packages or modules;
+with that, language capabilities can be expanded unlimitedly.
+Most languages implement the operating system interaction as libraries as a part of
+<em>the "standard" library that is defined to be a part of the language</em>.
+Therefore, a programming language specification includes a <em>language definition</em>
+and a <em>standard library</em>.<br>
+
+<a name="trad_prog_lang"><center><img src="../share/trad_prog_lang.gif"></center></a>
+Examples of such languages include C, C++, Java, Perl, Visual Basic, ...
+</p>
+
+
+<h3><a name=js_dsgn>JudoScript Language Design</a></h3><p>
+
+<p>Java is a totally object-based platform, with intricate object support including late binding and reflection API;
+the "Platform Objects" portion in the diagram of the <a href="#trad_dsgn">traditional programming language design</a>
+becomes more important in Java-based scripting language designs,
+and the importance of "Extension Libraries" diminishes -- since platform objects <em>are</em> libraries.</p>
+
+<p>The following diagram shows <em>JudoScript</em>'s language design:<br>
+
+<a name="judo_design"><center><img src="../share/judo_design.gif"></center></a>
+
+This diagram is simpler and cleaner than that of the <a href="#trad_dsgn">traditional programming languages</a>,
+reflecting the fact that <em>JudoScript</em> is simpler in structure (without sacrificing computing power).
+<em>JudoScript</em> includes many <em>application features</em> in the language definition,
+and the library part has shrunk to virtually nothing.
+To extend <em>JudoScript</em>, just write in Java!</a>
+If some functionality is worth sharing across many applications, write a Java class, perhaps of static memthods
+only and <a href="../ref/index.html?l=_synn.html&r=synn_StaticJavaFunctionDeclaration.html">alias them as
+<em>JudoScript</em> methods</a>.
+(If no sufficient Java expertise is available, write <em>JudoScript</em> functions and classes and
+<a href="../ref/index.html?l=_synn.html&r=synn_IncludeDirective.html">include</a> them in other programs.)
+In other words, <b>the burden of library development has been shifted to Java development,
+which is a good thing because
+<em>a)</em> such libraries can be used by Java software as well, and
+<em>b)</em> reusable components are better developed in strongly-typed Java than
+in type-unsafe scripting languages</b>.</p>
+
+<p>Other lighter-weight Java-based scripting languages are pretty much designed the same way,
+except for <em>a)</em> few built-in application features and
+<em>b)</em> less powerful programming support as <em>JudoScript</em>.
+There is a vague term "Java extension languages" floating around; these languages may likely be what it refers to.</p>
+
+<h3><a name=i_strct>JudoScript Language Structure</a></h3><p>
+
+<p><em>JudoScript</em> adopts a procedural, object-oriented and thread hybrid programming model.
+<p>Functionally, <em>JudoScript</em> can be considered as composed of a base language system and various application features.
+The base system is further divided into a language engine and a Java interaction engine.
+Structurally, <em>JudoScript</em> includes three key components:
+
+<ol>
+<li> syntax (general-purpose and special-purpose statements)
+<li> a set of system functions and
+<li> built-in object types.
+</ol>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=core>3. Key Language Component I -- The Core Language</a></h2><p>
+
+<p>The <em>JudoScript</em> core language is a familiar and powerful programming system.
+It is a block-scoped language using curly-braces ("{" and "}").
+<em>JudoScript</em> uses typeless variables with typed values. Each value is an object of primitive types or some class.
+The primitive data types include integral and floating-point numbers, string, and date/time.
+Objects can also be an instance of a user-defined class, a Java object, class or array,
+a function reference, or any of its built-in object types and data structures, such as:</p>
+
+<table border="1" cellspacing="0" class="secondary3">
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td>array</td><td>one- or multi-dimensional linear container.</td></tr>
+<tr><td>linkedList</td>
+ <td>same as array but is implemented as a linked list.</td></tr>
+<tr><td>Object</td><td>a map; is the root of all user-defined classes.  User-defined classes can extend this.</td></tr>
+<tr><td>OrderedMap</td>
+ <td>same as struct except the order of keys added is retained.  User-defined classes can extend this, too.</td></tr>
+<tr><td>SortedMap</td>
+ <td>similar to OrderedMap except the keys added are sorted.  User-defined classes can <em>not</em> extend this.</td></tr>
+<tr><td>Stack</td><td>a first-in-last-out container.</td></tr>
+<tr><td>Queue</td><td>a first-in-first-out container.</td></tr>
+<tr><td>Set and sorted set</td><td>a one-dimensional container that contains no duplicate elements,
+        and is optimized for testing of the existance of an element.</td></tr>
+<tr><td>TableData</td>
+ <td>a two-dimensional array with column captions and methods for retrieving rows or columns.</td></tr>
+<tr><td>TreeNode</td>
+ <td>a convenience for building a tree. User-defined classes can extend this.</td></tr>
+</table>
+
+<p>These built-in data structures are an integral part of the language with dedicated syntactic support,
+allowing less coding for basic computing needs.</p>
+
+<p>Classes and functions can be declared anywhere, in any order.
+Classes can extend others; the root of user-defined class can be Object, OrderedMap, SortedMap or TreeNode.
+Classes are nothing but a struct associated with a number of methods;
+once an object is instantiated, it can be transposed to a compatible class.</p>
+
+<p>Expressions are similar to Java or C; so are flow control statements.
+The parentheses for the expression in if-else, switch, while and for are optional.
+There is an extended for loop statement for enumerating array elements.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="for_switch">Listing 1</a>. Array and For, Switch Statements</th>
+          </thead><tr><td class=code><pre>
+arr = [ 0, 1, 2, 3, 4 ];
+for x in arr {
+  switch x {
+  case 0:  println 'zero'; break;
+  case 1:  println 'uno';  break;
+  default: println x;      break;
+  }
+}
+</pre></td></tr></table></p><p>
+
+<p>Functions can be referenced and stored in variables.
+This can be used for, say, special sorting of arrays:</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="array_sort">Listing 2</a>. Custom Array Sorting</th>
+          </thead><tr><td class=code><pre>
+a = [ '1.2', '3', '1.10', '1.2.1', '2.3' ];
+a.sort( &my_comparator );
+println a;
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  for i from 0 to la.size() {
+   if la[i].int() < ra[i].int() { return -1; }
+   if la[i].int() > ra[i].int() { return 1; }
+  }
+  if la.size() == ra.size() { return 0; }
+  return la.size() > ra.size();
+}
+</pre></td></tr></table></p><p>
+
+<p>In this example, we want '1.10' to appear after '1.2';
+had we used array's default <code>sort()</code> method, it would be an alphabetical sort and '1.10' would go first.</p>
+
+<p>Exceptions can be thrown by the JudoScript language engine or by the executed Java code.
+They can be captured and handled. There is a <code>resume</code> statement (not found in Java).</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="excpt">Listing 3</a>. Exception Handling</th>
+          </thead><tr><td class=code><pre>
+  a = 1;
+  println 'a + "xyz" = ',  a + "xyz"; // exception
+  println 'xyz' @ a = ',   "xyz" @ a; // concat
+catch:
+  println 'EXCEPTION: ', $_.message;
+  resume;
+finally:
+  println 'Done.';
+
+//The result:
+// a + "xyz" = EXCEPTION: Invalid number format: xyz
+// 'xyz' @ a = xyz1
+// Done.
+</pre></td></tr></table></p><p>
+
+<p>Thread programming is easy! A thread is declared just like a function.
+The next example shows a multi-threaded HTTP server:</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="thread">Listing 4</a>. Multi-Threaded HTTP Server</th>
+          </thead><tr><td class=code><pre>
+thread httpHandler req {
+  req.serveFile(docRoot);
+}
+docRoot = '/var/share/';
+println &lt;err> 'Port: 8088';
+ss = startServer(8088);
+while {
+  start thread httpHandler(acceptHttp(ss));
+}
+//Singled-threaded HTTP server, use these:
+// function httpHandler req { req.serveFile(docRoot); }
+// while { httpHandler(acceptHttp(ss)); }
+</pre></td></tr></table></p><p>
+
+<p>In traditional programming areas, <em>JudoScript</em> provides "syntactic sugar" and convenience
+system functions to make them easier.
+The following example shows how to easily read lines from a text file and process them
+as comma-separated values:</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="dolines">Listing 5</a>. Read Files as Lines</th>
+          </thead><tr><td class=code><pre>
+do 'data.txt' as lines {
+  rec = $_.csv(',');
+  println rec[0] :<10, ' ', rec[1] :>20, rec[2] :>20;
+  //      left-align        right-align  right-align
+}
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="dolinesinzip">Listing 6</a>. Read Files Within a Zip File as Lines</th>
+          </thead><tr><td class=code><pre>
+do 'data.txt' in 'arch.zip' as lines {
+  println $_;
+}
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="gzipfileasstring">Listing 7</a>. Print the Content Of a GZipped Text File</th>
+          </thead><tr><td class=code><pre>
+println getGZippedFileAsString('anything.txt.gz');
+</pre></td></tr></table></p><p>
+
+<p><em>JudoScript</em> is full of such conveniences.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=java>4. Key Language Component II -- Java Scripting</a></h2><p>
+
+<p>Java scripting in <em>JudoScript</em> starts with the operator <code>javanew</code>.
+(The <code>new</code> operator is used for <em>JudoScript</em>'s own classes and objects.)
+Once a Java object or array is created, they are used just like normal <em>JudoScript</em> objects or arrays, in most cases.
+</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="hashtable">Listing 8</a>. Use Hashtable</th>
+          </thead><tr><td class=code><pre>
+hash = javanew java.util.Hashtable;
+hash.put( 'date',    date(2001,1,1) );
+hash.put( 'integer', 1 );
+hash.put( 'double',  10.01 );
+hash.put( 'string', 'Hello, World!' );
+keys = hash.keys();
+while keys.hasMoreElements() {
+  k = keys.nextElement();
+  println k, ' = ', hash.get(k);
+}
+</pre></td></tr></table></p><p>
+  
+<p>The following example demonstrates the use of Java arrays:</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="javaarray">Listing 9</a>. Use Java Arrays</th>
+          </thead><tr><td class=code><pre>
+ba = javanew byte[]{ 0, 1, 2 };
+for x in ba { println x; }
+oa = javanew java.lang.Object[3];
+oa[0] = javanew java.io.File('abc');
+oa[1] = java.lang.System::out;
+oa[2] = javanew java.util.Hashtable;
+for x in oa { println x; }
+</pre></td></tr></table></p><p>
+
+<p>As you have seen, static members of a Java class is accessed by the <code>::</code> operator.
+You can even alias a Java static method to become a JudoScript function;
+some of the JudoScript system functions are indeed Java static methods.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="staticjava">Listing 10</a>. Use Java Static Methods as Functions</th>
+          </thead><tr><td class=code><pre>
+function gc for java.lang.System::gc();
+function props for java.lang.System::getProperties();
+function getProp for java.lang.System::getProperty();
+</pre></td></tr></table></p><p>
+
+<p>The system function <code>initialContext()</code> is designed specifically for EJB and JNDI client scripting.
+It also has a number of convenience functions for major application server products such as
+<code>weblogicInitialContext()</code>, <code>websphereInitialContext()</code>, etc.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="jndi">Listing 11</a>. Create EJB Clients</th>
+          </thead><tr><td class=code><pre>
+const #OrderHome = 'com.myecom.OrderHome';
+ctx = weblogicInitialContext('t3://server','user','pass');
+home = ctx.lookup(#OrderHome);
+key = javanew com.myecom.OrderKey('00134');
+order = home.findByPrimaryKey(key);
+// ...
+</pre></td></tr></table></p><p>
+
+<p>No long list of imports, no declaration of variables with long class names,
+no casting everywhere and exceptions catching ...
+Combined with JDBC scripting (such as querying for order keys), your scripts can do a lot of powerful work!</p>
+
+
+<h3><a name=extend_java>Extend Java Class and Interfaces</a></h3><p>
+
+<p><em>JudoScript</em> can extend Java classes and implement Java interfaces through the mechanism of
+<a href="../ref/s.html?fa=java_extend">Java extension class</a>.
+Java extension classs are dynamically created Java classes whose methods are implemented in <em>JudoScript</em> code.
+They can declare Java fields and methods, all of which are always public.
+Abstract methods, if not implemented, are given empty implementations.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="extend_class">Listing 12</a>. Extend Java Class</th>
+          </thead><tr><td class=code><pre>
+class MyHashtable extendsjava java.util.Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in keys() { arr.append(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    iter = values().iterator();
+    while iter.hasNext() { arr.append(iter.next()); }
+    return arr.toObjectArray();
+  }
+}
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="extend_class_itf">Listing 13</a>. Extend Java Class and Interfaces</th>
+          </thead><tr><td class=code><pre>
+class MySetIterator extendsjava java.util.HashSet, java.util.Iterator
+{
+  java.util.Iterator iter;
+
+  // Iterator method
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+
+  // Iterator method
+  java.lang.Object next() {
+    return (iter == null) ? null : iter.next();
+  }
+}
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="extend_absclass">Listing 14</a>. Extend Java Abstract Class</th>
+          </thead><tr><td class=code><pre>
+class MyStringWriter extendsjava java.io.Writer
+{
+  // Data members
+  java.lang.StringBuffer buf;
+
+  // The optional one-and-only constructor
+  constructor initText {
+    super();
+    this.buf = javanew java.lang.StringBuffer;
+    if initText { buf.append(initText); }
+  }
+
+  // Abstract method given an empty implementation.
+  //void flush() {}
+
+  // Implement parent's abstract method
+  void close() { buf.setLength(0); }
+
+  // Implement parent's abstract method
+  void write(char[] cbuf, int off, int len) {
+    for i=off; i&lt;off+len; ++i { buf.append(cbuf[i]); }
+  }
+
+  // Override parent's non-abstract methods
+  String toString { return buf.toString(); }
+
+  // Own method
+  String getString {
+    ret = buf.toString();
+    close();
+    return ret;
+  }
+
+} // end of Java extension class MyStringWriter.
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="extend_itf">Listing 15</a>. Extend (Implement) Java Interface</th>
+          </thead><tr><td class=code><pre>
+class MyIterator extendsjava java.util.Iterator
+{
+  // All methods are given emty implementations. -- Just a test.
+}
+</pre></td></tr></table></p><p>
+
+
+<h3><a name=embed_in>Embed JudoScript In Java Software</a></h3><p>
+
+<p><em>JudoScript</em> provides two interfaces for embedding it in other Java software,
+one is its own <a href="../ref/s.html?fa=java_judo_eng">engine API</a>,
+the other is the <a href="../ref/s.html?fa=java_judo_bsf">support for BSF</a>.
+BSF (<a href="http://www-124.ibm.com/developerworks/projects/bsf">Bean-Script-Framework</a>) is a common API
+(developed by IBM) for Java software (e.g. Apache Ant) to interact with various scripting languages.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=apps>5. Key Language Component III -- Domain-Specific Programming</a></h2><p>
+
+<p>Domain-specific programming provides a way for WYSIWYG (What-You-See-Is-What-You-Get) coding.
+WYSIWYG is a term for document editing software that displays the documents the same way as their printed counterpart.
+It is borrowed here for <em>JudoScript</em>'s 4GL features to describe exactly what you want to do without rigorous algorithmic programming.</p>
+
+<p>The following is an incomplete list of <em>JudoScript</em> application features.
+Some of them are implemented as system functions and objects, like the one in the HTTP,
+server example above; some use WYSIWYG syntax, such as send mail, file and archives, etc.</p>
+
+<ul>
+<li><a href="jdbc.html">JDBC scripting</a>
+<li><a href="xml.html">XML SAX-style scripting, DOM programming and XSLT</a>
+<li><a href="http_html.html#html">HTML/SGML scraping</a>
+<li><a href="activex.html">Microsoft ActiveX scripting</a>
+<li><a href="file_dir.html">File operation, in file systems and in ZIP, TAR or GZip archives</a>
+<li><a href="file_dir.html#copy">Copy files and directories between combinations of file systems and ZIP or TAR archives</a>
+<li><a href="sched_exec_mail.html#email">Send mail</a>
+<li><a href="http_html.html">HTTP server and client handling, including cookie</a>
+<li><a href="sched_exec_mail.html#sched">Schedule</a>
+<li><a href="sched_exec_mail.html#exec">Versatile execution of command-lines</a>
+<li><a href="gui.html">Java GUI scripting</a>
+<li><a href="sched_exec_mail.html#sshscp">SSH and SCP</a> (via ISNetworks' MindTerm package)
+<li>Encryption and decryption (based on JCE)
+<li>Image Processing and Graphics
+<li>Sound and Music
+</ul>
+
+<p>The rest of this section presents some simple examples, just to show enough of the particluar features.
+More detailed and complete examples are available in the <a href="index.html">technical articles</a>.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="sendmail">Listing 16</a>. Send Mail</th>
+          </thead><tr><td class=code><pre>
+sendMail
+to:      'tom@tom_jerry.org, jerry@tom_jerry.org'
+cc:      'mike@tom_jerry.org'
+from:    'james@tom_jerry.org'
+subject: 'Test test'
+attach:  'data.zip, readme.txt'
+body:    [[*
+         Hi Tom and Jerry,
+         Attached is the data and usage. Enjoy!
+         -James
+         *]]
+htmlBody: [[*
+         &lt;html>&lt;body>
+         &lt;p>Hi Tom and Jerry,&lt;/p>
+         &lt;p>Attached is the data and usage.
+            &lt;b>Enjoy!&lt;/b>&lt;/p>
+         &lt;p>-James&lt;/p>
+         &lt;/body>&lt;/html>
+         *]]
+;
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="ExcelTest">Listing 17</a>. Excel Test using ActiveX Scripting</th>
+          </thead><tr><td class=code><pre>
+xl = createActiveXComponent('Excel.Application');
+println 'Version: ', xl.Version;
+xl.Visible = true;
+
+workbooks = xl.Workbooks;
+workbook  = workbooks.Add;
+sheet = workbook.ActiveSheet;
+a1 = sheet['Range', 'A1'];
+a2 = sheet['Range', 'A2'];
+a1.Value   = 123.456;
+a2.Formula = '=A1*2';
+println 'a1 from excel: ', a1.Value;
+println 'a2 from excel: ', a2.Value;
+
+workbook.Close();
+xl.Quit();
+</pre></td></tr></table></p><p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="arch">Listing 18</a>. Copying Files Into A Jar Archive</th>
+          </thead><tr><td class=code><pre>
+// copy original Java files into src.jar
+copy '*.java, *.judo' except '*/parser/*.java'
+     in srcDir recursive noHidden echo
+     into 'src.jar';
+// archive original Java files and docs
+jarFile = createJar('save.jar');
+copy '*.java, *.judo' except '*/parser/*.java'
+     in srcDir recursive noHidden echo
+     into jarFile under 'src/';
+copy '*' in docDor recursive noHidden echo
+     into jarFile under 'doc/';
+jarFile.close();
+</pre></td></tr></table></p><p>
+
+<p>XML SAX scripting, HTML scraping and Java GUI scripting use an event-driven model.
+GUI programs do produce events, so it is natural.
+For XML and HTML documents, the parser creates an "event" for each tag, which also include text,
+and <em>JudoScript</em> allows to specify handlers for these events.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="html">Listing 19</a>. HTML Scraping</th>
+          </thead><tr><td class=code><pre>
+// print out links and text lengths in HTML
+do 'http://www.yahoo.com' as sgml {
+&lt;a>:    println 'URL:  ", $_.href;
+&lt;img>:  println 'URL:  ", $_.src;
+&lt;link>: println 'URL:  ", $_.src;
+TEXT:   println 'Text: length=', $_.length();
+}
+</pre></td></tr></table></p><p>
+
+<p>This HTML/SGML scripting feature has been used extensively to produce
+<em>JudoScript</em>'s documentation.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="gui">Listing 20</a>. Simplest Java GUI</th>
+          </thead><tr><td class=code><pre>
+// A Swing GUI that does nothing.
+frame = javanew javax.swing.JFrame("Hi!");
+frame.setVisible(true);
+guiEvents {
+&lt;frame : Window : windowClosing> :  exit(0);
+}
+</pre></td></tr></table></p><p>
+
+<p>The built-in variable $_ representes the current event.
+In the case of HTML or XML, it represents the tag itself.
+In GUI programs, it is the event object in various listener methods.</p>
+
+<p>A few other areas involve more complicated, special-purpose statements.
+This includes schedule, command-line execution, and JDBC scripting.</p>
+
+<p>JDBC scripting is one of the major inspirations for this very language.
+SQL statements can be easily executed, either individually, in a group or in a batch.
+Statements can be prepared, then executed with bound variables.
+Stored procedures can be executed the same ways. The following example demonstrates creating tables,
+inserting and querying with both prepared and direct executions.
+Note the JDBC driver is automatically loaded based on the URL,
+because JudoScript has knowledge about many JDBC drivers.</p>
+
+<p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="jdbc">Listing 21</a>. JDBC Scripting</th>
+          </thead><tr><td class=code><pre>
+connect 'jdbc:mysql://localhost/mydb', 'user', 'pass';
+
+// (re-)create tables
+tables = [ 'participants', 'media', 'people' ];
+for x in tables { // drop tables if exist already
+  if tableExists(x) {
+    executeSQL: drop table (* x *);
+  }
+}
+executeSQL {
+  create table people
+  ( personID  int primary key,
+    name      varchar(20) not null,
+    alias     varchar(20),
+    sex       varchar(1),  // 'M', 'F'
+    addTime   date
+  );
+  create table media
+  ( folderID  varchar(255) not null,
+    fileName  varchar(128) not null,
+    type      varchar(1) not null,
+    fileTime  date,
+    bytes     int,
+    addTime   date,
+    constraint pathName primary key (folderID,fileName)
+  );
+  create table participants
+  ( folderID  varchar(255),
+    fileName  varchar(128),
+    personID  int,
+    constraint ref_media  foreign key (folderID,fileName)
+               references media (folderID,fileName),
+    constraint ref_people foreign key (personID)
+               references people (personID)
+  );
+} // end of executeSQL.
+
+// insert
+prepare mediatbl:
+  insert into media
+    (folderID,fileName,type,fileTime,bytes,addTime)
+  values (?,?,?,?,?,now())
+;
+executeUpdate mediatbl
+  with @1 = '/2001-06', // default type is "string".
+       @2 = 'DSC00001.jpg',
+       @3 = 'I',
+       @4:date = date(2001,6,3),
+       @5:int = 45044
+;
+println unit(mediatbl.updateCount,'row'),
+        " inserted into 'media' table.";
+preparedExecuteUpdate partbl: // one-step prepare & execute.
+  insert into participants (folderID,fileName,personID)
+  values (?,?,?)
+; with @1 = '/2001-06',
+       @2 = 'DSC00001.jpg',
+       @3:int = 1  // for alias 'bear'
+;
+println unit(partbl.updateCount,'row'),
+        " inserted into 'participants' table.";
+
+// query
+executeQuery q: select * from people order by alias ;
+while q.next() {
+  println 'personID: ', q[1];
+  println '    name: ', q[2];
+  println '   alias: ', q[3];
+  println '     sex: ', q.SEX;
+  println ' addTime: ', q.addTime, nl, '--------';
+}
+
+catch:   $_.printStackTrace();
+finally: disconnect();
+</pre></td></tr></table></p><p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=uses>6. Uses Of JudoScript</a></h2><p>
+
+<p><em>JudoScript</em> is a general-purpose scripting language, and is designed to do many computing tasks quickly and effectively,
+i.e., typically less coding is needed than strongly-typed system languages.
+Because of its intimate built-in application support, <em>JudoScript</em> is especially strong for certain applications.
+The following lists some of these.</p>
+
+
+<h3><a name=uses_datap>Multi-Source/Format Data Processing and Reporting</a></h3><p>
+
+<p>Today, enterprise data reside in many locations in drastically different formats.
+Relational database is probably the biggest data source,
+but text files and spreadsheets are just as popular.
+XML has gained so much momentum that the amount of data in XML and web services is expected to explode.
+Sometimes, general SGML documents are used to store data.
+With the commoditization of application servers, more complex data are commonplace, too.
+For instance, on a J2EE platform, data can be represented in the form of enterprise Java beans,
+which wrap around a number of database tables or data sources.
+Data can also come from other running applications through connectors.</p>
+
+<p><em>JudoScript</em> is a perfect tool for multi-source, multi-format data processing.
+Its native scripting support for JDBC, XML, SGML and Java software,
+on top of the fundation of a powerful programming system,
+provide all the necessary tools for cross-data-source tranformation, aggregation, analysis, reporting and transfer. 
+For instance, you can easily use the JDBC-ODBC bridge to read data stored in Microsoft Excel spreadsheet,
+query a customer web application database and use the rules stored in an XML document to
+synthesize a detailed user profile, and finally feed that information into an ERP system through a Java connector.
+It is possible to create a <em>JudoScript</em>-based data processing system.</p>
+
+<p>It is especially powerful for reporting for multi-source, multi-format data sources,
+thanks to its ease of data access, programmability and accessibility to any Java resources.
+It is possible to create a <em>JudoScript</em>-based reporting tool.</p>
+
+
+<h3><a name=uses_doc>Document Processing and Creation</a></h3><p>
+
+<p><em>JudoScript</em>'s HTML/SGML scraping feature is very handy and can be used to create powerful documentation system.
+In fact, all the documents on <jsite> are generated from a central information repository,
+which employs its own tagging system (i.e., general SGML documents).
+There are various scripts to process different parts of the documents such as articles, references.
+It is easy to modify a few scripts and change the whole look-and-feel.
+The benefit of SGML-based system is that, you can take advantage of the programmability of
+<em>JudoScript</em> to collect statistics and create global entities such as indices, etc.
+SGML programming in <em>JudoScript</em> is almost identical to XML SAX-style programming in <em>JudoScript</em> but lighter weight.</p>
+
+
+<h3><a name=uses_test>Testing for Java Distributed and Web Applications</a></h3><p>
+
+<p><em>JudoScript</em> is great for testing J2EE and other distributed applications,
+thanks to its built-in support for JNDI and networking.
+You can retrieve an enterprise bean and tweak it so easily.
+Working together with JDBC scripting and other features,
+it is really easy to set up the test environment,
+run the test and verify the result wither in database or in the file system or even on web (through HTML scraping).</p>
+
+<p><em>JudoScript</em> is also great for Java code unit testing.
+It supports a pair of special tags, <code>/*[judo] [judo]*/</code>, as a special Java/C/C++ comment,
+so you can embed test code right in the Java source file; the <em>JudoScript</em> engine ignores anything outside these tags.</p>
+
+<p>It is possible to create a <em>JudoScript</em>-based testing tool for Java white-box testing and distributed application testing.</p>
+
+
+<h3><a name=uses_prot>Prototyping for Java and Web Applications</a></h3><p>
+
+<p>Scripting languages are well-known to be good for software prototyping.
+<em>JudoScript</em>'s coding style is similar to Java, and it can use Java at will,
+therefore <em>JudoScript</em> is a perfect tool for Java application prototyping.
+Prototyping can be done in a single, homogeneous environment.
+The Java classes created along the way are tested and inspected in the process,
+and can very well become part of the real software.
+The scripts that sets up the database and other environment can well evolve into scripts for the final production system.</p>
+
+
+<h3><a name=uses_evydy>Everyday Uses</a></h3><p>
+
+<p><em>JudoScript</em> is a unified platform for all the tools I have created so far as well for tools to be created in the future.
+There are so many nifty utilities built right in besides the major functional areas mentioned above.
+You can use them for everyday chores and actually enjoy them.</p>
+
+<p>For instance, it has a database table dump utility allowing you to dump the whole or part of a database table.
+It has a file chopping/unchopping  utility to chop big files down to floppy, zip drive, CD-ROM or any size sub-files.
+It has HTTP facilities to manipulate web resources easily.
+It supports rich file operations that you can deal files stored in file systems and archives alike.
+With a couple of lines of code, you can set up a HTTP server to publish your files to the network.
+The versatile print statement can print out reports neatly.
+Data value format transform, date/time convertions, ... there are many others.</p>
+
+<p>One of the most performed action is file, directory and archive manipulation.
+<em>JudoScript</em> provides, among other file manipulation commands, a powerful "copy" command that goes way beyond the basics.
+It allows you to selectively copy files from a source, be it a directory or a jar/zip/tar archive,
+into a destination, which can also be a directory or an archive of jar/zip/tar file.
+You can even perform transformations of the files in the process.
+For instance, you can prepend a copyright notice to all the source files in a directory tree,
+or filter out files based on complex criteria beyond mere inclusive/exclusive patterns.</p>
+
+
+<h3><a name=uses_fun>Entertainment</a></h3><p>
+
+<p><em>JudoScript</em> is a fun idea, and it is built for fun.
+The most fun you can have with a computer is probably through visual and audio effects.
+<em>JudoScript</em> is intended to be strong in these areas, especially 2D and 3D graphics,
+animation and music processing such as MIDI orchestra.
+An experimental JMDL (JudoScript Music Description Language) has been defined.
+This whole entertainment area is yet to be fully researched and explored at this writing.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=compare>7. Compare JudoScript To Other Languages</a></h2><p>
+
+<p>The <a href="#i_def">definition of scripting and scripting languages</a> provides the basis for meaningfully comparing <em>JudoScript</em> and others.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=history>8. History</a></h2><p>
+
+<p>In July 2001, the idea of making a JDBC scripting language somehow took shape.
+A JDBC scripting language actually has to be a full-fledged programming language.
+Before long, the idea also embraced EJB scripting and XML scripting. A study was conducted,
+which concluded that such a scripting language based on Java had definite advantages over existing Java-based scripting languages. 
+Development commenced and progressed smoothly, and soon the language specification extended to more application fields.</p>
+
+<p>In November of 2001, the first version was publicized, with the most of the functionalities as today and many articles.</p>
+
+<p>During 2002, development continued. It was open-sourced in March.
+In the meantime, numerous internal projects are carried out with heavy use of <em>JudoScript</em> itself,
+such as the projects of comprehensive documentation and web-site building.</p>
+
+<p>In December of 2002, version v0.8a is released.
+The major additions included Java class extension and ActiveX scripting.
+Thus, <em>JudoScript</em> is close to feature-complete, with the only exception of entertainment features
+(mainly image processing and music features).</p>
+
+<p>A programming language includes a language specification and its implementation and companion tools.
+What is described above is for the language specification.
+<em>JudoScript</em> has a command-line and a simple Swing GUI shell since its inception.
+As the language specification is settling down, more and more tools will be produced, such as pre-compiler,
+GUI debugger and studio, etc.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=coop>9. Coorporation Oppurtunities</a></h2><p>
+
+<p><em>JudoScript</em> is a great toolkit itself, and its licensing terms encourage people to use it within Java software products.
+In fact, it has features specifically designed for easy customization.</p>
+
+<p>As stated in the last point of the <a href="#i_goal">language design goal</a>, <em>JudoScript</em> is open to good features with
+decent Java implementation. So if you are a open-source Java developer, you are welcome to contact us to explore the
+possibility to obtain native support in <em>JudoScript</em> for your features, because again,
+<u>if something is useful and available, <em>JudoScript</em> will make it easier to use and readily scriptable.</u>
+Since <em>JudoScript</em> is under LGPL, it is recommended that your software be under LGPL or even more open as well;
+this way, your feature may be immediately available to any <em>JudoScript</em> users.
+Otherwise, <em>JudoScript</em> may not be able to include your software, so the end users would have to make a separate download.</p>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  | &nbsp;<a href=#July 2003>This Section</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>10. Code Listings</a></h2><p>
+<ol><li> <a href=#for_switch>Array and For, Switch Statements</a><li> <a href=#array_sort>Custom Array Sorting</a><li> <a href=#excpt>Exception Handling</a><li> <a href=#thread>Multi-Threaded HTTP Server</a><li> <a href=#dolines>Read Files as Lines</a><li> <a href=#dolinesinzip>Read Files Within a Zip File as Lines</a><li> <a href=#gzipfileasstring>Print the Content Of a GZipped Text File</a><li> <a href=#hashtable>Use Hashtable</a><li> <a href=#javaarray>Use Java Arrays</a><li> <a href=#staticjava>Use Java Static Methods as Functions</a><li> <a href=#jndi>Create EJB Clients</a><li> <a href=#extend_class>Extend Java Class</a><li> <a href=#extend_class_itf>Extend Java Class and Interfaces</a><li> <a href=#extend_absclass>Extend Java Abstract Class</a><li> <a href=#extend_itf>Extend (Implement) Java Interface</a><li> <a href=#sendmail>Send Mail</a><li> <a href=#ExcelTest>Excel Test using ActiveX Scripting</a><li> <a href=#arch>Copying Files Into A Jar Archive</a><li> <a href=#html>HTML Scraping</a><li> <a href=#gui>Simplest Java GUI</a><li> <a href=#jdbc>JDBC Scripting</a></ol>
+
+
+</td></tr></table>
+<br>
+
+
+<BR><IMG src="../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

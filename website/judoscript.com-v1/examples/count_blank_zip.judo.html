@@ -1,0 +1,21 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/count_blank_zip.judo:</b></td></tr><tr><td><pre>
+cnt1 = 0;
+cnt2 = 0;
+
+listFiles 'src/com/judoscript/*.java, src/com/judoscript/*.jj'
+          in 'C:/src.jar' recursive
+{
+  do $_ in $$archive as lines {
+    // now, $_ has become the line just read!
+    if ($_.isEmpty())
+      ++cnt1;
+    else
+      ++cnt2;
+  }
+}
+
+println '    Blank lines: ', cnt1:>7;
+println 'Non-Blank lines: ', cnt2:>7;
+println '    Total Files: ', $_.length:>7;
+</pre></td></tr></table></body></html>

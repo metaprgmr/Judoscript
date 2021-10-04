@@ -1,0 +1,75 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_dom/dom_namespace.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc   = [[*
+    Reads in the XML data at the end of this script and builds a
+    DOM tree. Then search for and list nodes based on their names,
+    namespaces and some other criteria.
+  *]];
+}
+
+doc = do $$local as dom with namespace;
+
+ns_ex = "judoscript/xml/dom_namespace";
+_local = "a";
+ns_c24 = "http://www.c24solutions.com";
+         
+// Get a list of Nodes by TagName Namespace
+println "Elements in the '", ns_ex, "' namespace...";
+nodelist = doc.getElementsByTagNameNS(ns_ex,"*");
+for i from 0 to nodelist.getLength()-1 {
+  local n = nodelist.item(i);
+  println n.getNodeName();
+}
+
+// Use the "local name" 
+println nl, "Elements with a local name of '", _local, "'...";
+nodelist = doc.getElementsByTagNameNS("*",_local);
+for i from 0 to nodelist.getLength()-1 {
+  local n = nodelist.item(i);
+  println n.getNodeName();
+}
+
+// Get all nodes and look for specified Attributes...
+println nl, "Attributes in the ", ns_c24, " namespace...";
+nodelist = doc.getElementsByTagName("*");
+for i from 0 to nodelist.getLength()-1 {
+  if nodelist.item(i).instanceof(#Element) {
+    // Save the text part
+    local t = nodelist.item(i).getFirstChild();
+
+    // Search for particular attributes, no wildcards here!
+    local e = nodelist.item(i);
+    local a = e.getAttributeNodeNS(ns_c24,"class");
+
+    if a != null { // a is the attribute
+      local val = a.getNodeValue();
+      println "&lt;", val, ">", t.getNodeValue(), "&lt;/", val, ">";
+    }
+  }
+}
+
+EndScript -----------------------------------------------------
+&lt;?xml version='1.0' encoding='utf-8'?>
+
+&lt;DOMExample>
+
+ &lt;section xmlns="judoscript/xml/dom_namespace">
+  &lt;title price="$49.95">XML with JudoScript&lt;/title>
+  &lt;chapter title="DOM Programming">
+   &lt;author title="Mr." name="James Huang"/>
+  &lt;/chapter>
+ &lt;/section>
+
+ &lt;order xmlns:html="http://www.c24solutions.com">
+  &lt;name html:class="H1">Vince Muller&lt;/name>
+  &lt;payment type="credit" html:class="H3">Paid&lt;/payment>
+  &lt;html:a href="/jsp/prebookings?order-ref=0527658">Check order&lt;/html:a>
+  &lt;date location="London" html:class="H3">2002-02-22&lt;/date>
+ &lt;/order>
+
+&lt;/DOMExample>
+</pre></td></tr></table></body></html>

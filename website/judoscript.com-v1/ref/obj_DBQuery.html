@@ -1,0 +1,60 @@
+<html><head><title>JudoScript Object - DBQuery</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>DBQuery</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=DBQuery_close></a>close<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Closes this prepared statement.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_dumpResult></a>dumpResult<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> limit</font><br><font class=param> promptSegment</font><br></td><td valign=top>
+  Dumps the whole result or up to <font class=param>limit</font> rows into a <font class=obj><a href="javascript:showObj('tableDump')">tableDump</a></font> file.
+  If <font class=param>fileName</font> is not specified, use the table name (of the first column)
+  suffixed with ".tdmp". The optional <font class=param>promptSegment</font> is an integer such as
+  100; if specified, whenever every so many rows are saved to the file, a dot indicator is
+  printed to system out. This is a helpful hint for large table dumping which can take a
+  long while.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getColumnAttributes></a><a name=DBQuery_getColumnAttrs></a>getColumnAttributes<br>getColumnAttrs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the column attributes for this query as an instance of <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getPreparedStatement></a>getPreparedStatement<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the prepared statement (an instance of <code>java.sql.PreparedStatement</code>)
+  for this query.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getResult></a>getResult<br></font></td><td valign=top><font class=param>limit</font><br></td><td valign=top>
+  This is a convenience method that returns the whole result or up to <font class=param>limit</font>,
+  if specified; the result is either an array if the result has only one column, or a
+  <font class=obj><a href="javascript:showObj('TableData')">TableData</a></font> if multiple columns are selected.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getResultSet></a>getResultSet<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the result set (an instance of <code>java.sql.ResultSet</code>)
+  of the last query run.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getResultSetMetaData></a>getResultSetMetaData<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the meta data for the result set (an instance of <code>java.sql.ResultSet</code>)
+  of the last query run.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getResultSetType></a>getResultSetType<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the result set type, which is one of these: "forward_only",
+  "scroll_insensitive" or "scroll_sensitive".
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_getSQL></a>getSQL<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the SQL statement for this query.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_hasResult></a>hasResult<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the last run has results.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=DBQuery_next></a>next<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the result still has rows, and moves the result set pointer
+  to the next row. Valied only after a run.
+</td></tr>
+</table>
+</body></html>

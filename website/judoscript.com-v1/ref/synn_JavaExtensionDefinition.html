@@ -1,0 +1,44 @@
+<html><head><title>JudoScript Semantics - JavaExtensionDefinition</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>JavaExtensionDefinition</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=JavaExtensionDefinition>JavaExtensionDefinition</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>class</font>  <font class=t>IDENTIFIER</font>  <font class=kw>extends</font>  <font class=kw>java</font>  <font class=kw><nobr>::</nobr></font>   (  <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   ),+  <br> <font class=kw><nobr>{</nobr></font>  <br>  (  <font class=nt><a href="javascript:showNT('ConstructorDeclaration')">ConstructorDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('JavaType')">JavaType</a></font>  (  <font class=t>IDENTIFIER</font>   ),+  <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('JavaType')">JavaType</a></font> <font class=t>IDENTIFIER</font>  <font class=kw><nobr>(</nobr></font>   (  <font class=nt><a href="javascript:showNT('JavaType')">JavaType</a></font> <font class=t>IDENTIFIER</font>   ),+  <font class=kw><nobr>)</nobr></font>  <font class=nt><a href="javascript:showNT('Block')">Block</a></font> <br>  )*  <br> <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('JavaExtensionDefinition'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The Java extension mechanism allows Java classes to be extended and/or interfaces implemented in
+  JudoScript. The <font class=kw>extends</font>  <font class=kw>java</font>  <font class=kw><nobr>::</nobr></font>  clause can have one Java class (must be the first) and any number
+  of Java interfaces.</p>
+
+  <p>The content of a Java extension class is not the same as regular JudoScript classes. These are the points:
+  <ol>
+  <li> A Java extension class is defined with the <kw>extends> <font class=kw>java</font>  <font class=kw><nobr>::</nobr></font>  </kw> clause,
+       which can take zero or one Java class and any number of Java interfaces, all separated
+       by comma. The resultant class is a Java class with that name without any package names.
+  <li> Methods are declared with Java return type and Java-typed parameters just like Java
+       methods; fields are declared with Java types like Java. No access control can be
+       specified as they are always public; they can never be static. Methods are never
+       declared with exceptions.
+  <li> Method bodies are implemented in JudoScript code. The parent class's methods, public or
+       protected, can be invoked by the <kw>super</kw> decorator. You can also invoke own
+       methods, and access this and parent's data fields, public or protected.
+  <li> When abstract methods from the parent class/interfaces are not explicitly implemented,
+       they are given empty bodies, so the resultant Java class can be instantiated.
+  <li> Data fields can be initialized only in the constructor.
+  <li> There can be up to one constructor in a Java extension class. This constructor may
+       take untyped, JudoScript parameters. Within the constructor, there must be one and only one
+       invocation of <code>super()</code>, which is one of the parent class's constructors.
+       This call must precede data member initializations and invocations of any other
+       methods.
+  </ol>
+ </body></html>

@@ -1,0 +1,31 @@
+<html><head><title>JudoScript Semantics - FormalParameters</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>FormalParameters</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=FormalParameters>FormalParameters</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw><nobr>(</nobr></font>   )?   (  <font class=kw><nobr>..</nobr></font>   |   (  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>=</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   ),+   (  <font class=kw><nobr>,</nobr></font>  <font class=kw><nobr>..</nobr></font>   )?   )?   (  <font class=kw><nobr>)</nobr></font>   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('FormalParameters'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Parameter definition is used in function and thread declaration. Parameters are
+  variable names separated by commas. Variables may have initializers, which can be
+  constant values or expressions (such as <code>date()</code>).</p>
+
+  <p>Functions and threads can be invoked/started with different number of parameters
+  than declared. If fewer, the uninitialized parameters are <font class=kw>null</font> 's. If more, the
+  extra parameters beyond the declared ones are accessed via the predefined array
+  variable, <font class=kw><nobr>!!args</nobr></font> .</p>
+
+  <p>To emphasize the fact that a function or thread takes variable number of
+  parameters, end the parameter list with <font class=kw><nobr>..</nobr></font> . It does not do anything other than
+  serving as an indicator.</p>
+ </body></html>

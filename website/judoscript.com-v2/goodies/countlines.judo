@@ -1,0 +1,21 @@
+switch #args.length() {
+case 0:  list recursive; break;
+case 1:  list #args[0] recursive; break;
+default: list #args[0] except #args[1] recursive;
+}
+
+$fileCnt = 0;
+$lineCnt = 0;
+for $x in $$fs_result {
+  if !$x.isFile() { continue; }
+  $file = openTextFile($x);
+  ++$fileCnt;
+  while ($line = $file.readLine()) != eof {
+    ++$lineCnt;
+  }
+  $file.close();
+}
+
+println "Total files: ", $fileCnt;
+println "Total lines: ", $lineCnt;
+

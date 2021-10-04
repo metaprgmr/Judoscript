@@ -1,0 +1,27 @@
+// If this file looks funny in your browser, please view its source.
+
+if #args.length==0 {
+  . <err> 'Usage:  java judo ', #prog, ' file_or_url';
+  exit 0;
+}
+
+$spaces = '  ';
+
+do #args[0] as html
+{
+BEFORE:   $indent = 0;
+AFTER:    flush;
+<table>:  . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</table>: --$indent;
+          . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<tbody>:  . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<tr>:     . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</tr>:    --$indent;
+          . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<td>:     . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</td>:    --$indent;
+          . $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+}

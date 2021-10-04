@@ -1,0 +1,73 @@
+<html><head><title>JudoScript Object - Object</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>Object</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=Object_assertHas></a>assertHas<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Throws an assertion if a member with its key named <font class=param>name</font> does not exist.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_clear></a>clear<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Removes all the data members.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_copy></a>copy<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a copy of this object. All keys and values are cloned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_get></a>get<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns the value referenced by the key <font class=param>name</font>. This is the same
+  as this operator: <code>astruct.(<font class=param>name</font>)</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_has></a>has<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if a member named as <font class=param>name</font> exists.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_hasMethod></a>hasMethod<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if the method named as <font class=param>name</font> exists.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keys></a>keys<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the keys.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keysFiltered></a>keysFiltered<br></font></td><td valign=top><font class=param>filterFunction</font><br></td><td valign=top>
+  Returns an array of the keys filtered by <font class=param>filterFunction</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keysFilteredAndSortedByValue></a>keysFilteredAndSortedByValue<br></font></td><td valign=top><font class=param>filterFunction</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Returns the keys that correspond to the values filtered by the function
+  <font class=param>filterFunction</font>, which must be specified, and also sorted
+  with <font class=param>comparatorFunction</font> if specified, or the natural comparator.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keysFilteredByValue></a>keysFilteredByValue<br></font></td><td valign=top><font class=param>filterFunction</font><br></td><td valign=top>
+  Returns the keys that correspond to the values filtered by the function
+  <font class=param>filterFunction</font>, which must be specified.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keysSorted></a>keysSorted<br></font></td><td valign=top><font class=param>comparatorFunction</font><br></td><td valign=top>
+  Returns an array of all the keys, sorted by <font class=param>comparatorFunction</font> function if
+  specified or by natural order.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_keysSortedByValue></a>keysSortedByValue<br></font></td><td valign=top><font class=param>comparatorFunction</font><br></td><td valign=top>
+  Returns the keys that correspond to the values sorted by with 
+  <font class=param>comparatorFunction</font> if specified, or the natural comparator.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_remove></a>remove<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Removes the data member with its key named <font class=param>name</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_set></a><a name=Object_add></a>set<br>add<br></font></td><td valign=top><font class=param>name</font><br><font class=param> value</font><br></td><td valign=top>
+  Set the <font class=param>value</font> to the key <font class=param>name</font>. This is the same
+  as this operator: <code>astruct.(<font class=param>name</font>) = <font class=param>value</font>;</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_size></a><a name=Object_length></a>size<br>length<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of data members.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_transpose></a>transpose<br></font></td><td valign=top><font class=param>className</font><br></td><td valign=top>
+  Transposes this object to type <font class=param>className</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Object_values></a>values<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the values.
+</td></tr>
+</table>
+</body></html>

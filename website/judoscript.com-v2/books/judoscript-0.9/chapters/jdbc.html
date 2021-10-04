@@ -1,0 +1,917 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Chapter 22. JDBC (SQL) Scripting</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="" name=keywords>
+<LINK href="../../../share/main.css" type=text/css rel=stylesheet>
+<script language=JavaScript src="../../../share/judolib.js"></script>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0 marginheight=0 marginwidth=0>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR>
+    <TD vAlign=top align=left><A href="http://www.judoscript.com"><IMG height=75 alt="JudoScript.COM"
+     src="../../../share/site_logo.gif" width=357 border=0></A></TD>
+    <TD vAlign=top align=right><IMG src="../../../share/judo_principle.gif" alt="Design principles of Judo the sport and the language" border=0></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+  <TR><TD vAlign=top noWrap><A href="javascript:go_to('../../../home.html')"><IMG alt="Home" hspace=0 src="../../../share/home_gray.gif" border=0></A><A href="javascript:go_to('../../../judo.html')"><IMG alt="Judo Language" hspace=0 src="../../../share/judo_lang_black.gif" border=0></A><A href="javascript:go_to('../../../jusp.html')"><IMG alt="JuSP Platform" hspace=0 src="../../../share/jusp_plaf_gray.gif" border=0></A><A href="javascript:go_to('../../../jamaica.html')"><IMG alt="Jamaica Language" hspace=0 src="../../../share/jamaica_lang_gray.gif" border=0></A></TD><TD class=tiny>&nbsp;</TD></TR>
+  <TR>
+    <TD bgColor=#ffffff colSpan=2>
+      <TABLE height=25 cellSpacing=1 cellPadding=0 width="100%" bgColor=#ffffff border=0><TBODY>
+        <TR bgColor=#ffffff>
+<TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../ref/index.html')">Judo Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../jusp.html')">JuSP Reference</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../wiki_weblog.html')">Wiki/Weblog</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../tut_pres.html')">Tutorials/Presentations</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../download.html')">Downloads</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('../../../goodies/index.html')">Goodies</A></TD><TD style="PADDING-RIGHT:8px; PADDING-LEFT:8px" align=middle bgColor=#000088 nowrap><A class=nolinewhite href="javascript:go_to('http://www.judoscript.com/feedback.jusp')">Feedback</A></TD>
+<TD style="PADDING-RIGHT: 8px; PADDING-LEFT: 8px" noWrap width="100%" bgColor=#000088>&nbsp;</TD>
+</TR></TBODY></TABLE>
+  </TD></TR>
+  <TR height=24><TD style="BORDER-RIGHT:#fff 1px solid; BORDER-LEFT:#fff 1px solid; color:#FFFFFF"
+    vAlign=center align=center bgColor=#BBBBBB colSpan=2 height=24 class=secondary2><b>Book: <a href="../toc_details.html" class=tinywhite>The Judo Language 0.9</a></b>
+  </TD></TR></TBODY></TABLE></NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY><TR>
+
+<TD style="BORDER-LEFT: #fff 1px solid" vAlign=top width=160 bgColor=#000088 rowSpan=3><NOINDEX>
+<TABLE cellSpacing=0 cellPadding=0 width=160 bgColor=#000088 border=0><TBODY>
+<TR><TD bgColor=#000088 colSpan=2><IMG src="../../../share/spacer.gif" height=1 width=160 border=0></TD></TR>
+<TR>
+ <TD vAlign=top width=10 bgColor=#000088>&nbsp;</TD>
+ <TD vAlign=top width=150 bgColor=#000088>
+<P class=navheader style="MARGIN: 0px">Judo Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language whitepaper" href="javascript:go_to('../../../articles/whitepaper.html')">Whitepaper</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language reference" href="javascript:go_to('../../../ref/index.html')">Reference</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language articles" href="javascript:go_to('../../../articles/index.html')">Articles</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language example library" href="javascript:go_to('../../../examples/index.html')">Examples</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language frequently asked questions" href="javascript:go_to('../../../faq.html')">FAQs</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo release note" href="javascript:go_to('../../../relnote.html')">Release Note</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Judo language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSP Platform</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP Comprehensive Tutorial" href="javascript:go_to('../../../jusptut/index.jusp')">Tutorial</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSP documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">JuSPT CM Kit</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="JuSPT documentation" href="javascript:go_to('../../../jusp.html')">Documentation</A></P>
+<BR><BR>
+<P class=navheader style="MARGIN: 0px">Jamaica Language</P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica documentation" href="javascript:go_to('../../../articles/jamaica.html')">Documentation</A></P><P class=nav3 style="PADDING-LEFT:8px; MARGIN:0px 4px 0px 12px; TEXT-INDENT:-12px"><A class=nav3 title="Jamaica language license" href="javascript:go_to('../../../license.html')">License (LGPL)</A></P>
+<BR><BR>
+</NOINDEX><NOINDEX><IMG src="../../../share/spacer.gif" height=5 width=10 border=0><br></NOINDEX>
+</TD></TR>
+</TBODY></TABLE></NOINDEX></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+
+<TD vAlign=top width="100%" class=secondary3><IMG src="../../../share/spacer.gif" height=7 width=1 border=0>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro">Introduction to JDBC Scripting</a></li><br>&#187;&nbsp;<a href="#intro_1">Java, JDBC and RDBMS</a><br>&#187;&nbsp;<a href="#intro_2">SQL, JDBC and JDK Versions</a><br>&#187;&nbsp;<a href="#intro_3">JDBC SQL Data Types</a><br>&#187;&nbsp;<a href="#intro_4">JDBC and ODBC</a><br>&#187;&nbsp;<a href="#intro_5">SQL/JDBC Scripting in Judo</a><li><a href="#con">Connections and Drivers</a></li><br>&#187;&nbsp;<a href="#con_1">JDBC Drivers</a><br>&#187;&nbsp;<a href="#con_2">Connection Attributes</a><li><a href="#runsql">Direct and Batch Execution of SQL</a></li><br>&#187;&nbsp;<a href="#runsql_1">Run SQL Directly</a><br>&#187;&nbsp;<a href="#runsql_2">Run Raw SQL and Database Language Scripts</a><br>&#187;&nbsp;<a href="#runsql_3">Run SQL in Batches</a><li><a href="#sf">Run SQL Script Files</a></li><li><a href="#prep">Parameterized SQL</a></li><li><a href="#upd">Run SQL Update Statements</a></li><li><a href="#qr">Queries and Query Results</a></li><li><a href="#asis">Execute Database Scripts As-Is</a></li><li><a href="#call">Call Stored Procedures</a></li><li><a href="#advtype">Use Advanced SQL Types</a></li><li><a href="#dbmeta">Database Meta-Information and Utilities</a></li>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+
+ <h1>Chapter 22. JDBC (SQL) Scripting</h1>
+ By <i>James Jianbo Huang</i><br><br>
+<img src="../../../share/printer.gif"> <a href="jdbc_p.html">printer-friendly version</a>
+ </td></tr></table>
+ </td></tr>
+</td></tr><tr><td valign=top><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+Judo's JDBC scripting support is one of its key features and major inspirations. There are direct syntactical support to run SQL statements directly, preparedly or in batches. You can easily bind variables and process query results. Judo allows named bind variables within SQL in addition to question marks (<code>?</code>). You can conveniently invoke stored procedures and issue database commands. JDBC scripting, or SQL scripting, allows IT workers to easily handle data issues, produce reports and automate and integrate backend testing with enterprise applications.
+</td></tr></table></td></tr></table>
+
+
+<h2>&nbsp;<br><a name=intro> Introduction to JDBC Scripting</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+
+<a name=intro_1><h3> Java, JDBC and RDBMS</h3></a>
+
+<br>
+
+
+<a name=intro_2><h3> SQL, JDBC and JDK Versions</h3></a>
+
+<br>
+
+
+<a name=intro_3><h3> JDBC SQL Data Types</h3></a>
+
+<br>
+
+
+<a name=intro_4><h3> JDBC and ODBC</h3></a>
+
+<br>
+
+
+<a name=intro_5><h3> SQL/JDBC Scripting in Judo</h3></a>
+
+<p>SQL statements are generally partitioned into <i>data definition language</i> (DDL) and <i>data manipulation language</i> (DML). DDL are the statements that creates and destroys the database schema objects; the statements are: <code>CREATE</code> and <code>DROP</code>. DML includes queries (the <code>SELECT</code> statement) and updates (the <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code> statements.) When DDL statements are run, they eigher succeed or fail. In the world of Java, a failure is signified by an exception raised. DML statements may succeed or fail; in case of success, the RDBMS returns results. For updates, the results are simply counts that indicate how many rows are affected; for queries, the results can be complicated and big.</p>
+
+<p>There are three main families of statements in Judo that run SQL statements: <code>db::query</code>, <code>db::update</code> and <code>db::sql</code>. SQL statements in JDBC can be run directly, or be prepared first before run. The <code>db::prepare</code> statement explicitly prepares a SQL statement; all three execute-family statements can run both prepared and unprepared SQL. The <code>db::query</code> statements are for SQL queries, most notably the SQL <code>SELECT</code> statement but occasionally some others as well. The <code>db::query</code> statements are for DML update statements: <code>UPDATE</code>, <code>INSERT</code> and <code>DELETE</code>. These statements return a single value as the count of affected rows. Lastly, the <code>db::sql</code> statements are for DDLs, i.e., <code>CREATE</code> and <code>DROP</code>, and for DML updates that you don't really care about the results (such as <code>INSERT</code>'s.)</p>
+
+<p>SQL is not case sensitive. In this book, we use this convention: any SQL keywords are in all-upper-case; data object and attribute names are in lower or mixed case. For instance, <code>SELECT salary FROM emp</code>. In this chapter, we focus on explaining all the facilities in Judo for JDBC scripting, and use Oracle as the RDBMS. Most SQL statements are generic and applicable to any RDBMSs, except for situations such as date/time functions and store procedures.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=con> Connections and Drivers</a></h2>
+
+<p>Before any database operations, you must connect to the database. This is done by the <code>connect</code> command. This is its syntax:</p>
+
+<a name="Connect"><table border=0 class=secondary3>
+<tr><td valign=top><i>Connect</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::connect</code></b> [ [ <i>Variable</i> ] [ <i>attributes</i> ] <b><code>to</code></b> ] <i>url</i> [ <b><code>,</code></b> <i>username</i> [ <b><code>,</code></b> <i>password</i> ] ]</td></tr>
+<tr><td valign=top><i>attributes</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>(</code></b> <i>attribute</i> ( <b><code>,</code></b> <i>attribute</i> )* <b><code>)</code></b></td></tr>
+<tr><td valign=top><i>attribute</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>driver</code></b> | <b><code>autoCommit</code></b> | <b><code>readOnly</code></b> | <b><code>catalog</code></b> | <b><code>typeMap</code></b> | <b><code>transactionIsolation</code></b> ) <b><code>=</code></b> <i>Expr</i></td></tr>
+<tr><td valign=top><i>url</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+<tr><td valign=top><i>username</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+<tr><td valign=top><i>password</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>Expr</i></td></tr>
+</table></a>
+
+<p>For example, the following statement connects to an Oracle database using its "thin" driver, and assigns the connection into the variable <code>mycon</code>.
+
+<font  color=black><pre>
+db::connect mycon to 'jdbc:oracle:thin:@dbsvr:1521:dbname', 'user', 'pass';
+</pre></font>
+
+<p>The connection variable is used by subsequent database commands like this:</p>
+
+<font  color=black><pre>
+db::sql use mycon { ... }
+</pre></font>
+
+<p>If the variable is omitted, the <code>db::connect</code> command will store the connection object into a predefined global variable <code>$$con</code>. Database commands without explicit <code>use</code> clause all use <code>$$con</code>. Most programs are single-connection, so you don't have to explicitly use a connection variable name.</p>
+
+<p>The connection object has a number of methods; the most important ones are <code>disconnect()</code>, <code>commit()</code> and <code>rollback()</code>. The <code>disconnect()</code> method must be called when the database operations are finished. The system functions <code>db::disconnect()</code>, <code>db::commit()</code> and <code>db::rollback()</code> all call the corresponding methods of the <code>$$con</code> object. We will discuss more database-wide operations using the connection object in the section <i><a href="jdbc.html#dbmeta">Database Meta-Information and Utilities</a></i>.</p>
+
+
+<a name=con_1><h3> JDBC Drivers</h3></a>
+
+<p>How does Judo load the JDBC driver? Judo maintains a list of known JDBC driver class names and their corresponding URL prefixes in the properties file <code>com/judoscript/db/jdbcdrivers.properties</code>. The following is an excerption:</p>
+
+<font  color=black><pre>
+cloudscape      = COM.cloudscape.core.JDBCDriver
+db2             = COM.ibm.db2.jdbc.net.DB2Driver
+easysoft        = easysoft.sql.jobDriver
+firebird        = org.firebirdsql.jdbc.FBDriver
+frontbase       = jdbc.FrontBase.FBJDriver
+hsqldb          = org.hsqldb.jdbcDriver
+idb             = org.enhydra.instantdb.jdbc.idbDriver
+informix-sqli   = com.informix.jdbc.IfxDriver
+interbase       = interbase.interclient.Driver
+jdbcprogress    = com.progress.sql.jdbc.JdbcProgressDriver
+jtds            = net.sourceforge.jtds.jdbc.Driver
+mckoi           = com.mckoi.JDBCDriver
+microsoft       = com.microsoft.jdbc.sqlserver.SQLServerDriver
+msql            = com.imaginary.sql.msql.MsqlDriver
+mysql           = com.mysql.jdbc.Driver,org.gjt.mm.mysql.Driver
+nilostep        = com.nilostep.xlsql.jdbc.xlDriver
+odbc            = sun.jdbc.odbc.JdbcOdbcDriver
+openbase        = com.openbase.jdbc.ObDriver
+oracle          = oracle.jdbc.driver.OracleDriver
+pointbase       = com.pointbase.jdbc.jdbcUniversalDriver
+postgres95      = postgres95.PGDriver
+postgresql      = org.postgresql.Driver,postgresql.Driver
+sapdb           = com.sap.dbtech.jdbc.DriverSapDB
+solid           = solid.jdbc.SolidDriver
+sqlbase         = centura.java.sqlbase.SqlbaseDriver
+sybase          = com.sybase.jdbc2.jdbc.SybDriver
+sybase:tds      = com.sybase.jdbc.SybDriver
+timesten:client = com.timesten.jdbc.TimesTenClientDriver
+timesten:direct = com.timesten.jdbc.TimesTenDriver
+</pre></font>
+
+<p>The first two prefixes following <code>jdbc:</code> are checked first for a know driver class; if not found, Judo then try the first prefix following <code>jdbc:</code>. For instance, when Judo sees "oracle" in <code>jdbc:oracle:...</code>, it loads the Oracle JDBC driver class <code>oracle.jdbc.driver.JdbcDriver</code>. You may have noticed some of the prefixes have multiple driver classes like <code>mysql</code>; this is because over time some JDBC drivers evolved and there can be multiple classes for different users for the same RDBMS. In fact, the <code>jdbcdrivers.properties</code> file also lists known <i>dialects</i> for Hibernate scripting (see <i><a href="hib.html#setup">Set-Up and Initialization of Hibernate</a></i>.)</p>
+
+<p>If a driver is not in the list, it can be specified as an <code>driver</code> attribute, or be loaded via the old-fashion Java style:</p>
+
+<font  color=black><pre>
+// Java style
+(java::Class).forName('my.db.jdbc.driver');
+
+// Judo style
+db::connect ( driver='my.db.jdbc.driver' ) to 'jdbc:mydb:...', '', '';
+</pre></font>
+
+<br>
+
+
+<a name=con_2><h3> Connection Attributes</h3></a>
+
+<p>Other than the <code>driver</code> attribute mentioned earlier, the <code>db::connect</code> command allows a few more attributes.</p>
+
+<p>The <code>autoCommit</code> and <code>readOnly</code> attributes take boolean values; they do what the names suggest.</p>
+
+<p>The <code>catalog</code> attribute takes a string that is the name of a catalog, which is used to select a subspace of the database in which to work. If the driver does not support catalogs, it is ignored.</p>
+
+<p>The <code>typeMap</code> attribte takes a <code>java.util.Map</code> instance as the type map for this connection. The type map will be used for the custom mapping of SQL structured types and distinct types.</p>
+
+<p>The <code>transactionIsolation</code> attribute can take one of these values: "transaction_none", "transaction_read_uncommitted", "transaction_read_committed" and "transaction_serializable".</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=runsql> Direct and Batch Execution of SQL</a></h2>
+
+<p>In this section, we will explain how to directly run DDL and DML udpates statements, either individually, in groups or in batches.</p>
+
+
+<a name=runsql_1><h3> Run SQL Directly</h3></a>
+
+<p>SQL statements such as <code>CREATE</code>, <code>DROP</code> and <code>INSERT</code> either work or fail; in the context of Java and JDBC, a failure means an exception is raised. In Judo, these statements are run with the <code>db::sql</code> statement, which has the following syntax:</p>
+
+<a name="ExecuteSQL"><table border=0 class=secondary3>
+<tr><td valign=top><i>ExecuteSQL</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>ExecuteSQL_group</i> | <i>ExecuteSQL_individual</i> | <i>ExecuteSQL_prepraed</i></td></tr>
+<tr><td valign=top><i>ExecuteSQL_group</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::sql</code></b> [ <b><code>use</code></b> <i>variable</i> ] <b><code>{</code></b> ( <i>sql_statement</i> <b><code>;</code></b> )+ <b><code>}</code></b></td></tr>
+<tr><td valign=top><i>ExecuteSQL_individual</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::sql</code></b> [ <b><code>use</code></b> <i>variable</i> ] <b><code>:</code></b> <i>sql_statement</i> <b><code>;</code></b> [ <i>BindVariableList</i> <b><code>;</code></b> ]</td></tr>
+<tr><td valign=top><i>ExecuteSQL_prepared</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::sql</code></b> <i>variable</i> [ <i>BindVariableList</i> ] <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The <i>ExecuteSQL_individual</i> and <i>ExecuteSQL_prepared</i> can also take a <i>BindVariableList</i>, which means the <i>sql_statement</i> can be parameterized. We will discuss parameterized SQL runs later.</p>
+
+<p>The <b><code>db::sql</code></b> group statement is often used to run a number of SQL statements to create database objects and initialize tables. Let's create a simple table and insert some rows therein; this table is used in this chapter to explain Judo's JDBC scripting support. It includes a file, <code>db::connect.judi</code>, that simply connects to the database; this file is included in all the examples. It is listed first.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="connect.judi">Listing 22.1</a> connect.judi</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+db::connect to 'jdbc:oracle:thin:@dbsvr:1521:dbname', 'user', 'pass';
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="init.judo">Listing 22.2</a> init.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'connect.judi'
+if tableExists('EMP') {
+  db::sql:
+    DROP TABLE emp /* 'emp' is case-insensitive */ ;
+}
+db::sql {
+  CREATE TABLE emp(emp_no      INTEGER PRIMARY KEY,
+                   first_name  VARCHAR(100),   // First Name
+                   last_name   VARCHAR(100),   // Last Name
+                   birth_date  DATE,           -- Birth Date
+                   salary      NUMBER);        -- Salary
+
+  CREATE INDEX emp_fname  ON emp(first_name);
+  CREATE INDEX emp_lname  ON emp(last_name);
+  CREATE INDEX emp_bday   ON emp(birth_date);
+  CREATE INDEX emp_salary ON emp(salary);
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES( 100, 'Jim', 'Malone', to_date('1-3-1954','dd-mm-yyyy'), 86500.0);
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES( 101, 'Linda', 'Jordan', to_date('24-7-1980','dd-mm-yyyy'), 45250.0);
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES( 102, 'Kathy', 'Yao', to_date('8-4-1970','dd-mm-yyyy'), 78500.0);
+}
+
+println 'db::sql result: ', $_;
+
+disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>This script first connects to the database, in the included <code>connect.judi</code> file, and then drops the table if the table already exists. The <code>tableExists()</code> system function, like <code>disconnect()</code>, is another shortcut for the name-sake method of the global variable, <code>$$con</code>. Once this is done, the big <code>db::sql</code> statement creates the database table and its indices, and inserts a few rows.</p>
+
+<p>In this script, we have used <code>db::sql</code> to run a single SQL statement and a group of them. SQL statements in group are separated by semi-colons (<code>;</code>) and are run one by one.
+
+ The <code>db::sql</code> statement may fail, in which case an exception will be raised, typically from the JDBC driver. If the execution is successful, it returns the execute results in an array, as was printed out close to the end in the script like this:</p>
+
+<font  color=black><pre>
+db::sql result: [-1,-1,-1,-1,-1,1,1,1]
+</pre></font>
+
+<p>In Judo, SQL statements are free form. All forms of Judo comment can be used within SQL statements, and there is an additional form of line comment that starts with <code>--</code>. This kind of line comment is commonly supported by many RDBMSs, and Judo honors this fact. These comments can appear in both situations of single-SQL-statemenet and multiple-SQL-statement commands.</p>
+
+<p>Like the <b><code>[[* *]]</code></b> syntax, <b><code>(* *)</code></b> can be used to embed expressions within <i>any</i> SQL statements, either individually or in groups. The following example demonstrates its usage:</p>
+
+<font  color=black><pre>
+// Construct an IN list for the query
+last_names = [ 'Olajuwon', 'Yao' ]; // an array
+in_expr = last_names.toCsv(',', function(x){ return "'"+x+"'"; });
+
+// Now run the query
+db::query qry:
+  SELECT * FROM emp WHERE last_name IN ( (* in_expr *) )
+;
+</pre></font>
+
+<p>In the code above, we used Array's <code>toCsv()</code> method and supplied an anonymous function to quote the values. The resultant SQL statement is: <code>SELECT * FROM emp WHERE last_name IN ( 'Olajuwon','Yao' )</code>. The <code>toCsv()</code> can also return a subset of the array, which can be very useful. Suppose we are going to update a database table for a number of records; the record IDs are stored in a text file and may be tens of thousands. The SQL statement is something like this:</p>
+
+<font  color=black><pre>
+UPDATE record_tbl SET status = 1
+WHERE record_id in ( .... ) AND status = 0
+</pre></font>
+
+<p>The problem is, there may be tens of thousands of records to update; constructing such a long "in" list will probably make JDBC driver fail. The following is a solution:</p>
+
+<font  color=black><pre>
+arr = [];
+arr.loadAsLines(#args[0]);
+
+db::connect (autoCommit=false) to dbUrl, dbUser, dbPass;
+
+cnt = 0;
+len = 100;
+for start=0; start < arr.length; start += len {
+  in_expr = arr.toCsv(',', function(x){ return "'"+x+"'"; }, start, len);
+
+  db::update upd:
+    UPDATE record_tbl SET status = 1
+    WHERE record_id in ( (* in_expr *) ) AND status = 0
+  ;
+
+  cnt += upd.getResult();
+}
+
+commit();
+disconnect();
+println 'Processed ', unit(cnt, 'record');
+
+catch:
+  rollback();
+</pre></font>
+
+<p>The idea is to turn auto-commit off, update the table for up to 100 IDs at a time, and commit at the end. In this example, we used Array's <code>loadAsLines()</code> method to read in all the IDs from the file specified from the command line.</p>
+
+<br>
+
+
+<a name=runsql_2><h3> Run Raw SQL and Database Language Scripts</h3></a>
+
+<p>In <code>db::sql{}</code>, semi-colons (<code>;</code>) are used to separate SQL statements. This assumes that semi-colons are never part of the SQL text. This may not be always true. For instance, Oracle PL/SQL code use semi-colons as statement delimitors; the code need be passed as a whole through JDBC to the server and execute. Judo's <code>db::any</code> statement does just this. The syntax is:</p>
+
+<a name="ExecuteAny"><table border=0 class=secondary3>
+<tr><td valign=top><i>ExecuteAny</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::any</code></b> [ <b><code>use</code></b> <i>variable</i> ] <i>Expr</i></td></tr>
+</table></a>
+
+<p>The <i>Expr</i> is evaluated to be a text string, and is sent to the database. The following example creates an Oracle stored procedure:</p>
+
+<font  color=black><pre>
+db::any [[*
+  CREATE PROCEDURE test_proc(
+    param_io IN OUT NUMBER,
+    param_i  IN     VARCHAR,
+    param_o  OUT    VARCHAR)
+  AS BEGIN
+    param_o := param_i;
+    IF param_io IS NOT NULL THEN
+      param_io := param_io + 1;
+    ELSE
+      param_io := -1000;
+    END IF;
+  END;
+*]];
+</pre></font>
+
+<br>
+
+
+<a name=runsql_3><h3> Run SQL in Batches</h3></a>
+
+<p>JDBC defines a mode of <i>batch</i> run of SQL statements. In Judo, you can run a number of SQL statements in a static batch, or you can programmatically construct a dynamic batch job and run.</p>
+
+<p><b>Static batch</b><br>You can specify multiple SQL statements in a <code>executeBatch</code> much like <code>db::sql</code> and run the batch. The syntax is:</p>
+
+<a name="ExecuteBatch"><table border=0 class=secondary3>
+<tr><td valign=top><i>ExecuteBatch</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>executeBatch</code></b> [ <b><code>use</code></b> <i>variable</i> ] <b><code>{</code></b> ( <i>sql_statement</i> <b><code>;</code></b> )+ <b><code>}</code></b></td></tr>
+</table></a>
+
+<p>Again, you have the choice of a connection object; if nothing specified, the global <code>$$con</code> variable is assumed. The batch run returns in an array of update counts for each SQL statement in the batch; the result is stored in the local variable <code>$_</code>.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="batch_insert.judo">Listing 22.3</a> batch_insert.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+executeBatch {
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 103, 'Scott', 'Williamson', to_date('5-3-1956','dd-mm-yyyy'), 92500.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 104, 'Louis', 'Tan', to_date('24-10-1983','dd-mm-yyyy'), 55250.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 105, 'Shiva', 'Patel', to_date('8-4-1979','dd-mm-yyyy'), 48000.0 );
+}
+println 'executeBatch result = ', $_;
+
+disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The above example prints the result like this:</p>
+
+<font  color=black><pre>
+executeBatch result = [1,1,1]
+</pre></font>
+
+<p><b>Dynamic batch</b><br>In Judo, you can create a batch object, add SQL statements and execute. Batch objects are created by the database connection's <code>createBatch()</code> method. The batch object's <code>add()</code> is used to add SQL statements; the <code>size()</code> method returns the number of SQL statements currently held in the batch object, and the <code>execute()</code> method runs and returns the result in an array of update counts. There is a <code>addBatch</code> command that does the same as the batch object's <code>add()</code> method but is easier to write SQL; its syntax is:</p>
+
+<a name="AddBatch"><table border=0 class=secondary3>
+<tr><td valign=top><i>AddBatch</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>addBatch</code></b> [ <b><code>to</code></b> ] <i>IDENTIFIER</i> <b><code>:</code></b> <i>sql_statement</i></td></tr>
+</table></a>
+
+<p>Here is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="dyn_batch_insert.judo">Listing 22.4</a> dyn_batch_insert.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+rows = [
+  [ 'Chrinstine', 'Lin',     '24-5-1985', 50250.0 ],
+  [ 'John',       'Johnson', '13-7-1978', 45200.0 ],
+];
+id = 106; // start value.
+
+batch = createBatch(); // use $$con
+for row in rows {
+  addBatch to batch:
+    INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+    VALUES ( (* id++ *), '(* row[0] *)', '(* row[1] *)',
+           to_date('(* row[2] *)','dd-mm-yyyy'), (* row[3] *) )
+  ;
+}
+println 'batch size before run: ', batch.size;
+res = batch.execute();
+println 'batch size after run:  ', batch.size, nl,
+        'executeBatch results = ', res;
+
+disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>This program keeps the row data in an array, add them all to the batch object with the <code>addBatch</code> command and runs them. The execution result is:</p>
+
+<font  color=black><pre>
+batch size before run: 2
+batch size after run:  0
+executeBatch results = [1,1]
+</pre></font>
+
+<p>Batch object can be re-used for multiple batches, as demonstrated below:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="dyn_batch_insert1.judo">Listing 22.5</a> dyn_batch_insert1.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+rows = [
+  [ 'Richard', 'Brown', '23-5-1985', 60150.0 ],
+  [ 'Smith',   'Green', '9-7-1977',  45600.0 ],
+];
+id = 108; // start value.
+
+batch = createBatch(); // use $$con
+for row in rows {
+  sql = [[*
+    INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+    VALUES ( (* id++ *), '(* row[0] *)', '(* row[1] *)',
+           to_date('(* row[2] *)','dd-mm-yyyy'), (* row[3] *) )
+  *]];
+  batch.add(sql);
+
+  println 'batch size before run: ', batch.size;
+  res = batch.execute();
+  println 'batch size after run:  ', batch.size, nl,
+          'executeBatch results = ', res;
+}
+
+disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In this example, we used the <code>add()</code> method of the batch object. Each iteration adds just one SQL and runs, only to demonstrate the re-use of the batch object. The result is:</p>
+
+<font  color=black><pre>
+batch size before run: 1
+batch size after run:  0
+executeBatch results = [1]
+batch size before run: 1
+batch size after run:  0
+executeBatch results = [1]
+</pre></font>
+
+<p>We have covered executing DDL and DM update SQL statements in Judo. There are cases where SQL statements are kept in SQL script files; they are generally RDBMS-specific. Judo's <code>db::sql {}</code> and <code>db::any</code> commands take many popular SQL file formats and can run those files directly. This will be covered in the next section.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=sf> Run SQL Script Files</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+
+<br>
+
+
+<h2>&nbsp;<br><a name=prep> Parameterized SQL</a></h2>
+
+<p>JDBC supports running not only static SQL statements but also parameterized SQL. Parameters in the SQL statements are denoted as question marks (<code>?</code>) in the SQL, and are referenced by their positions starting from 1. In JDBC, the process is:</p>
+
+<ol>
+<li><i>Prepare</i> a parameterized SQL</li>
+<li><i>Bind</i> values to the parameters in the SQL</li>
+<li>Execute the SQL</li>
+<li>If there are more runs, go to 2; otherwise, quit</li>
+</ol>
+
+<p>Note that any SQL statement, parameterized or not, can be prepared and run. Why would you prepare a non-parameterized SQL? Preparing a SQL gives the JDBC driver software and even the RDBMS software to "understand" the SQL to be run, and possibly do some intelligent optimization. If you have a SQL that is known to be run repeatedly, preparing first is always preferred.</p>
+
+<p>A parameterized SQL can be a query, an update or a stored procedure call. In Judo, it is prepared by the <code>db::prepare</code> and <code>db::prepareCall</code> commands. The syntax is:</p>
+
+<a name="Prepare"><table border=0 class=secondary3>
+<tr><td valign=top><i>Prepare</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>( <b><code>prepare</code></b> | <b><code>prepareCall</code></b> ) [ <i>IDENTIFIER</i> ] [ <b><code>use</code></b> <i>IDENTIFIER</i> ] <b><code>:</code></b> <i>sql_statement</i> <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The prepared SQL statement is stored in the variable identified by the first <i>IDENTIFIER</i>. The connection used for this preparation process is specified by the <b><code>use</code></b> clause; if the <b><code>use</code></b> clause is not specified, it uses the connection stored in the global variable <code>$$con</code>. A prepared SQL can be run by <code>db::sql</code>, <code>db::query</code>, <code>db::queryCall</code>, <code>db::update</code> and <code>db::updateCall</code>. In the grammar of <i>ExecuteSQL</i>, we saw the <i>BindVariableList</i>, which is defined as follows:</p>
+
+<a name="BindVariableList"><table border=0 class=secondary3>
+<tr><td valign=top><i>BindVariableList</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>with</code></b> <i>BindVariable</i> ( <b><code>,</code></b> <i>BindVariable</i> )*</td></tr>
+<tr><td valign=top><i>BindVariable</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>@</code></b> ( <i>INTEGER_LITERAL</i> | <i>IDENTIFIER</i> ) [ <b><code>:</code></b> <i>SQLType</i> ] ( <b><code>=</code></b> | <b><code>=&gt;</code></b> | <b><code>&lt;=&gt;</code></b> ) <i>Expr</i><br> | <b><code>@</code></b> <i>INTEGER_LITERAL</i> <b><code>.</code></b> <i>IDENTIFIER</i> <b><code>(</code></b> <i>Arguments</i> <b><code>)</code></b></td></tr>
+</table></a>
+
+<a name="SQLType"><table border=0 class=secondary3>
+<tr><td valign=top><i>SQLType</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>SQLType_basic</i> | <i>SQLType_advanced</i></td></tr>
+<tr><td valign=top><i>SQLType_basic</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><i><code>BIGDECIMAL</code></i></b> | <b><i><code>BIT</code></i></b> | <b><i><code>BOOLEAN</code></i></b> | <b><i><code>BYTE</code></i></b> | <b><i><code>DATE</code></i></b> | <b><i><code>DOUBLE</code></i></b> | <b><i><code>FLOAT</code></i></b> | <b><i><code>INT</code></i></b> | <b><i><code>INTEGER</code></i></b> | <b><i><code>LONG</code></i></b> | <b><i><code>NUMBER</code></i></b> | <b><i><code>NUMERIC</code></i></b> | <b><i><code>SHORT</code></i></b> | <b><i><code>STRING</code></i></b> | <b><i><code>TIME</code></i></b> | <b><i><code>TIMESTAMP</code></i></b> | <b><i><code>VARCHAR</code></i></b></td></tr>
+<tr><td valign=top><i>SQLType_advanced</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><i><code>ARRAY</code></i></b> | <b><i><code>BLOB</code></i></b> | <b><i><code>BYTES</code></i></b> | <b><i><code>CLOB</code></i></b> | <b><i><code>LONGVARCHAR</code></i></b> | <b><i><code>REF</code></i></b> | <b><i><code>STRUCT</code></i></b> | <b><i><code>JAVA_OBJECT</code></i></b> | <b><i><code>OTHER</code></i></b> | <b><i><code>ORACLE_BFILE</code></i></b> | <b><i><code>ORACLE_CURSOR</code></i></b> | <b><i><code>ORACLE_ROWID</code></i></b></td></tr>
+</table></a>
+
+<p>Note <i>SQLType</i> names are case-insensitive. It is easier to look at an example before explaining all these. The following examples uses <code>db::sql</code> to run a prepared, parameterized SQL:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="prepared_execute1.judo">Listing 22.6</a> prepared_execute1.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+rows = [
+  [ 'Richard', 'Brown', Date(1985,5,23), 60150.0 ],
+  [ 'Smith',   'Green', Date(1977,9,7),  45600.0 ],
+];
+id = 108; // start value.
+
+db::prepare ins:
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES (?,?,?,?,?)
+;
+
+for row in rows {
+  db::sql ins with @1:Integer = id++,
+                      @2         = row[0],
+                      @3         = row[1],
+                      @4:Date    = row[2],
+                      @5:Number  = row[3];
+}
+
+disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In this example, the <code>db::prepare</code> command prepares the paramiterized SQL and stores in the variable <code>ins</code>. In the subsequent <code>db::sql</code> statement, the prepared SQL (stored in <code>ins</code>) is run with values assigned to the parameters. For details, we will discuss shortly in the appropriate sections.</p>
+
+<p>This example shows that values are bound to parameters in the SQL via the <code>@<i>n</i>:<i>type</i></code> expressions in the <code>with</code> clause, where <code><i>n</i></code> starts from 1 for the first parameter. The <code><i>type</i></code> can be one of the <i>SQLType_basic</i> name. If no type name is specified, it is assumed <code>VARCHAR</code>. The value on the righthand-side of <code>=</code> must be of a compatible type and is converted to the corresponding SQL type.</p>
+
+<p>Now look at the SQL statement above. It has five question marks (<code>?</code>). This is in compliance with the current JDBC specification, but it has obvious potential problems. If we add a column value into this <code>INSERT</code> statement, say, before column <code>first_name</code>, then the bind variable indices are affected. If you have a long list of bind variables, this can easily cause problems. To remedy this, Judo supports <i>named bind variables</i> within prepared SQL statements, demonstrated below:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="prepared_execute.judo">Listing 22.7</a> prepared_execute.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+// all other pieces are omitted
+
+db::prepare ins:
+  INSERT INTO    emp( emp_no, first_name, last_name, birth_date, salary  )
+              VALUES( :empNo, :firstName, :lastName, :birthDate, :salary )
+;
+
+for row in rows {
+  db::sql ins with @empNo    :Integer = id++,
+                      @firstName         = row[0],
+                      @lastName          = row[1],
+                      @birthDate:Date    = row[2],
+                      @salary   :Number  = row[3];
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The names must be identifiers. Since variable names are position-invariant, this is simply less error-prone, and is certainly is much more convenient to change the bind variable list.</p>
+
+<p>The bind values can be bound with other operators, namely, <code>=&gt;</code> and <code>&lt;=&gt;</code>; they are used to designate in- and in-out parameters in stored procedure calls, which will be discussed later.</p>
+
+<p>Another way to bind values, especially non-basic type values, is to call a method for the bind parameter. Suppose the table has a column of <code>CLOB</code>, and you are to upload the context of a text file to it; you can do it like this:</p>
+
+<font  color=black><pre>
+file = openTextFile('foo.txt');
+db::sql ins with @1.setCharacterStream(file, 1000);
+file.close();
+</pre></font>
+
+<p>Depending on the RDBMS, there may be more operations to deal with situations involving advanced SQL types, and this is only to illustrate calling methods as a way to bind parameters. We will discuss this more.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=upd> Run SQL Update Statements</a></h2>
+
+<p>SQL update statements can be run by <code>db::sql</code>, as we saw earlier, or by <code>db::update</code> command. Generally, <code>db::sql</code> is meant for DDL and groups of SQL update statements; the major difference between <code>db::sql</code> and <code>db::update</code> is, <code>db::update</code> returns an update count, whereas <code>db::sql</code> doesn't return anything. The syntax for <code>db::update</code> is:</p>
+
+<a name="ExecuteUpdate"><table border=0 class=secondary3>
+<tr><td valign=top><i>ExecuteUpdate</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>ExecuteUpdate_1</i> | <i>ExecuteUpdate_2</i></td></tr>
+<tr><td valign=top><i>ExecuteUpdate_1</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::update</code></b> [ <i>IDENTIFIER</i> ] [ <b><code>use</code></b> <i>IDENTIFIER</i> ] <b><code>:</code></b> <i>sql_statement</i> <b><code>;</code></b> [ <i>BindVariableList</i> <b><code>;</code></b> ]</td></tr>
+<tr><td valign=top><i>ExecuteUpdate_2</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::update</code></b> [ <i>IDENTIFIER</i> ] [ <i>BindVariableList</i> ] <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>The <code>db::update</code> can directly run a SQL, parameterized or not; it can also run a prepared SQL. The result is slightly different.</p>
+
+<p><b>Run prepared SQL updates</b><br>When running a prepared SQL update statement, the prepared SQL object has only one method, <code>getResult()</code>, that returns the update count of the last run. The following example demonstrates this.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="prepared_insert.judo">Listing 22.8</a> prepared_insert.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+rows = [
+  [ 'Richard', 'Brown', Date(1985,5,23), 60150.0 ],
+  [ 'Smith',   'Green', Date(1977,9,7),  45600.0 ],
+];
+id = 108; // start value.
+
+db::prepare ins:
+  INSERT INTO    emp( emp_no, first_name, last_name, birth_date, salary )
+              VALUES( :empNo, :firstName, :lastName, :birthDate, :salary )
+;
+
+cnt = 0;
+for row in rows {
+  db::update ins with @empNo    :Integer = id++,
+                         @firstName         = row[0],
+                         @lastName          = row[1],
+                         @birthDate:Date    = row[2],
+                         @salary   :Number  = row[3];
+  cnt += ins.getResult();
+}
+println unit(cnt, 'Row has', 'Rows have'), ' been inserted.';
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In the above example, both <code>db::prepare</code> and <code>db::update</code> may not take any variable names (the <code>ins</code> in the code); if this case, the prepared SQL object is stored in <code>$_</code>. The <code>unit()</code> system function is a convenience for displaying the singular and plural English names based on the count.</p>
+
+<p><b>Directly run SQL updates</b><br>When directly running a SQL, it returns an update count, that is, the number of rows affected by the SQL update, as demonstrated by the following example.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="update.judo">Listing 22.9</a> update.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+db::update upd:
+  UPDATE emp SET salary=48500.0 WHERE emp_no=105
+;
+
+println 'db::update result = ',  upd;
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>In this example, if the variable <code>upd</code> is not specified, then <code>$_</code> is used. In any case, the result is an integer. You can also run parameterized SQL update statement, like this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="update1.judo">Listing 22.10</a> update1.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+db::update:
+  UPDATE emp SET salary=:salary WHERE emp_no=105
+; with @salary:Number = 48500.5;
+
+println 'db::update result = ', $_;
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>Some may wonder, since it is a one-time deal, why bother to use parameterized SQL rather than simply put the value in? This is true with this example, but in a function, parameterized SQL may be the only choice:</p>
+
+<font  color=black><pre>
+function setSalary empID, newSalary, conn {
+  if conn == null { conn = $$con; }
+  db::update upd use conn:
+    UPDATE emp SET salary=:salary WHERE emp_no=:empNo
+  ; with @salary:Number = newSalary, @empNo:Integer = empID;
+
+  return upd;
+}
+</pre></font>
+
+<p>This function may return 1 or 0, as the <code>empID</code> may or may not be valid.</p>
+
+<p>Next, we are going to discuss query and query result processing.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=qr> Queries and Query Results</a></h2>
+
+<p>Queries are probably the most frequently used operations against RDBMSs in applications and reporting. Unlike DDLs an DML update SQL statements, which may or may not return simple update counts, queries return a collection of results referred to as <i>result sets</i>, in JDBC parlance. Most likely, a query is a SQL <code>SELECT</code> statement, but sometimes specific RDBMS may support commands that also return result sets. In Judo, the <code>db::query</code> statement executes queries; its syntax is:</p>
+
+<a name="ExecuteQuery"><table border=0 class=secondary3>
+<tr><td valign=top><i>ExecuteQuery</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><i>ExecuteQuery_1</i> | <i>ExecuteQuery_2</i></td></tr>
+<tr><td valign=top><i>ExecuteQuery_1</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::query</code></b> [ <i>IDENTIFIER</i> ] [ <i>QueryOptions</i> ] [ <b><code>use</code></b> <i>IDENTIFIER</i> ] <b><code>:</code></b> <i>sql_statement</i> <b><code>;</code></b> [ <i>BindVariableList</i> <b><code>;</code></b> ]</td></tr>
+<tr><td valign=top><i>QueryOptions</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>(</code></b> ( (<b><code>type</code></b>|<b><code>fetch</code></b>|<b><code>concur</code></b>) <b><code>=</code></b> <i>Expr</i> ),+ <b><code>)</code></b></td></tr>
+<tr><td valign=top><i>ExecuteQuery_2</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>db::query</code></b> <i>IDENTIFIER</i> [ <i>BindVariableList</i> ] <b><code>;</code></b></td></tr>
+</table></a>
+
+<p>Syntactically and semantically, <code>db::query</code> is very similar to <code>db::update</code>, except for the outcome and consequently the <i>QueryOption</i>. The fun starts with the query result set.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="simple_query.judo">Listing 22.11</a> simple_query.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+db::query qry:
+  SELECT emp_no, first_name, last_name, birth_date, salary
+  FROM emp
+;
+
+println 'ID   First-Name  Last-Name    Salary    Birth-Date', nl
+        '---  ----------  -----------  --------  ----------';
+while  qry.next() {
+  println qry[1].int()   :<5,
+          qry.first_name :<12,
+          qry.last_name  :<12,
+          qry.salary     :*7.1, '  ',
+          qry.birth_date.fmtDate('yyyy-MM-dd');
+}
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The query object stored in the variable <code>qry</code> is an entity of many faces. When a query is executed or prepared, this query object represents the query itself. After execution, it also represents the result set after run. The result set has a number of methods, and one of the most important ones is <code>next()</code>, which allows Judo code to traverse the results. For each iteration, the query object represents the current row, too! Each column in the row can be accessed either via an index (the first column has index 1) or via the column name. In this example, we use <code>qry[1]</code> to reference the column named "emp_no", and other columns are referenced by their names.</p>
+
+<p>The column values are converted to Judo data types. For instance, the SQL date, time and timestamp types are all converted to Judo <code>Date</code>. In the example, the <code>qry.birth_date</code> returns a <code>Date</code> value, therefore we call its <code>fmtDate()</code> method.</p>
+
+<p>It is common to format the query result like we do in the example. The result is:</p>
+
+<font  color=black><pre>
+ID   First-Name  Last-Name    Salary    Birth-Date
+---  ----------  -----------  --------  ----------
+100  Mary        Malone        86500    1954-03-01
+101  Linda       Jordan        45250    1980-07-24
+102  Kathy       Yao           78500    1970-04-08
+103  Scott       Williamson    92500    1956-03-05
+104  Louis       Tan           55250    1983-10-24
+105  Shiva       Patel         48500.5  1979-04-08
+106  Chrinstine  Lin           50250    1985-05-24
+107  John        Johnson       45200    1978-07-13
+109  Smith       Green         45600    1977-09-07
+108  Richard     Brown         60150    1985-05-23
+</pre></font>
+
+<p>Parameterized queries can be run by binding values to all the parameters. The result is the same.</p>
+
+<p><b>Query options</b><br>Query options include <b><code>type</code></b>, <b><code>fetch</code></b> and <b><code>concur</code></b>. They take textural names as their values.</p>
+
+<p>The <b><code>type</code></b> option can be "scroll_insensitive", "scroll_sensitive" or "forward_only". Default is "forward_only".</p>
+
+<p>The <b><code>fetch</code></b> option can be "forward" or "reverse". Default is "forward".</p>
+
+<p>The <b><code>concur</code></b> option can be "read_only" or "updatable". Default is "read_only".</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=asis> Execute Database Scripts As-Is</a></h2>
+
+<p>We saw earlier that <code>db::sql{}</code> can execute multiple SQL statements. SQL statements in the block are delimited by a semicolon (;). Sometimes semicolons are legitimate text to be sent to the database. In such situations, use the db::any statement; all text is sent to the database server as-is. The following example creates an Oracle stored procedure that we will use in the next section:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="test_proc.judo">Listing 22.12</a> test_proc.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+db::any [[*
+  CREATE PROCEDURE test_proc(
+    param_io IN OUT NUMBER,
+    param_i  IN     VARCHAR,
+    param_o  OUT    VARCHAR)
+  AS BEGIN
+    param_o := param_i;
+    IF param_io IS NOT NULL THEN
+      param_io := param_io + 1;
+    ELSE
+      param_io := -1000;
+    END IF;
+  END;
+*]];
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The <code>[[* *]]</code> syntax is used to quote a chunk of text that may include new lines. The leading spaces in each line are stripped, so you can indent them in the source, making your code look nice. You can also embed expressions with (* *) syntax.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=call> Call Stored Procedures</a></h2>
+
+<p>Major RDBMSs support stored procedures. JDBC defines a standard syntax for calling stored procedure like this:</p>
+
+<font  color=black><pre>
+{ ? = call foo(?,?,?) }
+</pre></font>
+
+<p>The parameters, unlike regular SQL, can be IN, OUT, and IN OUT. They can certainly be named as well like in any prepared statements.</p>
+
+<p>Let's call the procedure created in the previous <code>db::any</code> example. It returns a value in parameter param_io and passes the value of param_i to param_o. This is the code:</p>
+
+<font  color=black><pre>
+db::prepareCall: { call test_proc( :paramIO, :paramIn, :paramOut ) };
+
+x = null;
+y = 'abcd';
+
+db::sql with @paramIO :int     &lt;=&gt; x,
+             @paramIn :varchar =  y,
+             @paramOut:varchar =&gt; z; // z will be the same as y
+
+println 'x = ', x;  // Prints: x = -1000
+println 'z = ', z;  // Prints: z = abcd
+</pre></font>
+
+<p>RDBMSs may have their own extensions. Oracle, for instance, can return result sets from stored procedures. Because of the prevalence of Oracle, Judo supports a few Oracle-specific SQL data types, as we saw earlier in the <i>SQLType</i> grammar. The following example shows how to use result set returned from a procedure:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="test_proc_rs.judo">Listing 22.13</a> test_proc_rs.judo</th>
+      </thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+!include 'setup/connect.judi'
+
+//
+// create the stored procedure
+//
+db::any [[*
+  create package types
+  as
+    type cursortype is ref cursor;
+  end;
+*]];
+
+db::any [[*
+  create function ListPeople return types.cursortype
+  as
+    l_cursor types.cursorType;
+  begin
+    open l_cursor for
+      select emp_no, first_name, last_name, birth_date, salary
+      from emp;
+    return l_cursor;
+  end;
+*]];
+
+//
+// test it
+//
+db::prepareCall: { :ret = call ListPeople };
+
+db::sql with @ret:oracle_cursor =&gt; res;
+
+while res.next() {
+  println res[3] :<12, res[4].fmtDate('yyyy-MM-dd');
+}
+
+db::disconnect();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+<p>The Oracle function, <code>ListPeople</code>, returns a "cursortype" which is a <code>ref cursor</code> defined in a package named <code>types</code>. The Judo <code>db::sql</code> statement returns this as a <code>oracle_cursor</code> into variable <code>res</code>, which is used in the subsequent loop to print out some results.</code>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=advtype> Use Advanced SQL Types</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=dbmeta> Database Meta-Information and Utilities</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<p>The connection object is fundamentally a <code>java.sql.Connection</code> object, (or more precisely, a wrapper object of a <code>java.sql.Connection</code> object, so you can access all public methods of that Java class.) Sometimes you can obtain a connection, say, via a Java method call; it can be used just like one obtained through the <code>db::connect</code> statement.</p>
+
+<br>
+
+
+</td></tr></table>&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>
+
+
+<BR><IMG src="../../../share/spacer.gif" height=1 width=452 border=0></TD>
+<TD width=10><IMG src="../../../share/spacer.gif" height=1 width=10 border=0></TD>
+</TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+<TR><TD bgColor=#cccccc colSpan=9><IMG src="../../../share/spacer.gif" height=1 width=1 border=0></TD></TR>
+<TR><TD>
+ <P class=tiny align=center><BR><BR>Copyright &copy; 2001-2005 JudoScript.COM. All Rights Reserved.</P>
+</TD></TR></TBODY></TABLE><!-- %= #year % -->
+
+</BODY></HTML>

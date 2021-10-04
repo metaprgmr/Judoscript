@@ -1,0 +1,33 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_java/extend_class_itf.judo:</b></td></tr><tr><td><pre>
+class MySetIterator extends java::HashSet, Iterator
+{
+  Iterator iter;
+
+  constructor a, b, c {
+    super();
+    iter = null;
+    if c != null { add(c); }
+    if b != null { add(b); }
+    if a != null { add(a); }
+  }
+
+  // Iterator methods
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+  Object next() {
+    return (iter==null) ? null : iter.next();
+  }
+}
+
+o = new MySetIterator('Hi!', 9);
+o.add('abc');
+o.add(Date(2003,7,4));
+
+for x in o { println x; }
+
+</pre></td></tr></table></body></html>

@@ -1,0 +1,39 @@
+<html><head><title>JudoScript Semantics - GuiEventsStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>GuiEventsStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=GuiEventsStatement>GuiEventsStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>guiEvents</font>  <font class=kw><nobr>{</nobr></font>  <br>  (  <font class=kw><nobr>&lt;</nobr></font>   (  <br>  (  <font class=kw><nobr>?</nobr></font>  <font class=t>IDENTIFIER</font>   |   (  <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font>  ),+   )  <br> <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>  <br> <font class=kw><nobr>:</nobr></font>   (  <font class=t>IDENTIFIER</font>   ),+  <br>  ),+  <font class=kw><nobr>&gt;</nobr></font>  <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )+  <br>  )*  <br> <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('GuiEventsStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement allows event handlers be specified for all Java GUI events,
+  either for one or more components, or as a generic handler that can be
+  dynamically attached to any number of components. One GUI program can have
+  more than one GUI event handler statment. This statement eliminates the need
+  to define tons of anonymous classes for handling GUI events.</p>
+  <p>Each handler starts with a <font class=kw><nobr>&lt;</nobr></font>  <font class=kw><nobr>&gt;</nobr></font>  <font class=kw><nobr>:</nobr></font>  event-binding section
+  followed by a number of statements, where <font class=kw><nobr>$_</nobr></font>  represents the current event
+  object.</p>
+  <p>In the event-binding section, there are three parts, separated by <font class=kw><nobr>:</nobr></font> 's.
+  The first part, which normally is one or more <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font> that
+  are evaluated to be Java GUI components, are the event receivers. This part
+  can also be a name preceded by a <font class=kw><nobr>?</nobr></font>  that defines a named, generic event
+  handler, which can be later dynamically attached to any components (see
+  <font class=sfn><a href="javascript:showSF('getGuiHandler')">getGuiHandler()</a></font>). The second part of the event-binding section
+  is an "event name", which corresponds to the name portion of a Java GUI event
+  listener name, e.g. <code>Window</code> in <code>java.awt.event.WindowListener</code>.
+  The third part of the event-binding section can be one or more event listener
+  method names, such as <code>windowOpened</code> and <code>windowIconified</code>.
+  Normally, the event object itself (<font class=kw><nobr>$_</nobr></font> ) has a field indicating the message
+  type as well the source and/or target of the event.</p>
+ </body></html>

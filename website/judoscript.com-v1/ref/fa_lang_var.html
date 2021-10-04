@@ -1,0 +1,21 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Variables, Scope and Runtime Contexts</u></h3>
+  <p>Variables do not need be declared before using, but they do have scopes. The smallest scope
+  is a block between a pair of <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font>  that enclose the statements. (The only exception is
+  the <font class=nt><a href="javascript:showNT('IfStatement')">IfStatement</a></font>, whose <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font>  are used only to group statements and do not
+  constitute blocks.) A block can be enclosed in another block. A function and a thread body is
+  a block, and it does not have a parent scope. For statements without any <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font> , they
+  are in the one and only global scope.</p>
+
+  <p>When a variable is assigned a value, the runtime engine traces the scope stack trying to find
+  the variable; if a variable is found, it is used; otherwise, a new variable is created in the
+  inner-most scope. To force the variable to be local to the current scope, declare the variable
+  as <font class=kw>local</font> . A local variable shields any same-name variable beyond the current scope.</p>
+
+  <p>A variable in the global scope is called a global variable. To explicitly access a global
+  variable, precede the name with the <font class=kw><nobr>::</nobr></font>  decorator. This may happen from within functions,
+  class methods or threads.</p>
+<h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('LocalVariableDecleration')">LocalVariableDecleration</a></font><li><font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font></ul></body></html>

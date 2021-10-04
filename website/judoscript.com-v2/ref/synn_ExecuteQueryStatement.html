@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - ExecuteQueryStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ExecuteQueryStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ExecuteQueryStatement>ExecuteQueryStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>executeQuery</font>  <br>  (   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   )?  <font class=kw><nobr>:</nobr></font>  <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |   (  <font class=t>IDENTIFIER</font>   )?   (  <font class=kw>with</font>  <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font>  )?  <font class=kw><nobr>;</nobr></font>  <br>  )   (  <font class=kw><nobr>;</nobr></font>   |  <font class=kw>onSuccess</font>  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  (  <font class=kw>else</font>  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font>  )?   )  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ExecuteQueryStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This is actually 2 statements: one that executes a SQL statement directly, the other
+  one (using the <font class=kw>width</font>  clause>) executes a prepared statement. In either case, the
+  query is stored in the <font class=obj><a href="javascript:showObj('DBHandle')">DBHandle</a></font> variable (default is <font class=kw><nobr>$$</nobr></font> ) that can be
+  retrived. If a query is known to return no more than one row, can use the <font class=kw>onSuccess</font> 
+  and <font class=kw>else</font>  to specify code to handle that single row.</p>
+ </body></html>

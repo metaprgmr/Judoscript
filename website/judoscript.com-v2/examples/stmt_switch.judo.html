@@ -1,0 +1,20 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/stmt_switch.judo:</b></td></tr><tr><td><pre>
+values = [ 9,
+           Date(2001,11,20),
+           new java::HashMap,
+           'uvw',
+           'XYZ',
+           '{}'
+         ];
+
+for a in values {
+  switch a {
+  case 9:                 println 'CASE OF number: ', a; break;
+  case 'uvw':             println 'CASE OF string: ', a; break;
+  case Date(2001,11,20):  println 'CASE OF Date:   ', a; break;
+  case new java::HashMap: println 'CASE OF Java:   ', a; break;
+  default:                println 'DEFAULT:        ', a; break;
+  }
+}
+</pre></td></tr></table></body></html>

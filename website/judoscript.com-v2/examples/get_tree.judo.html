@@ -1,0 +1,11 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/get_tree.judo:</b></td></tr><tr><td><pre>
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp'
+  recursive as tree;
+
+println $_;
+
+for x in $_.getChildren() {
+  println x;
+}
+</pre></td></tr></table></body></html>

@@ -1,0 +1,192 @@
+<html><head><title>JudoScript Object - Array</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>Array</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=Array_append></a><a name=Array_add></a>append<br>add<br></font></td><td valign=top><font class=param>elem</font><br><font class=param> ...</font><br></td><td valign=top>
+  Adds all the elements at the end of this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_appendArray></a>appendArray<br></font></td><td valign=top><font class=param>anArray</font><br><font class=param> ...</font><br></td><td valign=top>
+  Adds all the elements in all the arrays at the end of this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_average></a><a name=Array_avg></a>average<br>avg<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the average of all the numbers in this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_clear></a>clear<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Clears all the elements in this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_concat></a><a name=Array_toCsv></a>concat<br>toCsv<br></font></td><td valign=top><font class=param>separator</font><br><font class=param> valueDecorator</font><br><font class=param> start</font><br><font class=param> length</font><br></td><td valign=top>
+  Returns a string that is a concatenation of all the elements, separated by <font class=param>separator</font>.
+  If no <font class=param>separator</font> specified, default use ','.
+  The optoinal <font class=param>valueDecorator</font> function takes one parameter and returns a string.
+  The optional <font class=param>start</font> specifies where to start, and the optional <font class=param>length</font>
+  specifies how many elements to concatenate, up to the end of the array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_convert></a>convert<br></font></td><td valign=top><font class=param>convertFunction</font><br><font class=param> locally</font><br></td><td valign=top>
+  Converts all the elements with the the <font class=param>convertFunction</font>. If <font class=param>locally</font>
+  is <font class=kw>true</font> , these elements are stored locally and returns self; otherwise, the filtered elements
+  are returned in a new array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_exists></a>exists<br></font></td><td valign=top><font class=param>value</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if a match of <font class=param>value</font> in this array is found, based on the
+  <font class=param>comparatorFunction</font>, or -1 if not found. If no <font class=param>comparatorFunction</font>
+  specified, use the "natural" order.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_filter></a>filter<br></font></td><td valign=top><font class=param>filterFunction</font><br><font class=param> locally</font><br></td><td valign=top>
+  Filters the elements by the <font class=param>filterFunction</font>. If <font class=param>locally</font> is <font class=kw>true</font> ,
+  these elements are stored locally and returns self; otherwise, the filtered elements are returned
+  in a new array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_first></a>first<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the first element, or <font class=kw>null</font>  if not elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_indexOf></a>indexOf<br></font></td><td valign=top><font class=param>value</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Returns the index of the first match of <font class=param>value</font> in this array, based on the
+  <font class=param>comparatorFunction</font>, or -1 if not found. If no <font class=param>comparatorFunction</font>
+  specified, use the "natural" order.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_insert></a>insert<br></font></td><td valign=top><font class=param>elem</font><br><font class=param> index</font><br></td><td valign=top>
+  Inserts the <font class=param>elem</font> at <font class=param>index</font>; if <font class=param>index</font>
+  is not specified, insert at 0.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_last></a>last<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the last element, or <font class=kw>null</font>  if not elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_lastIndex></a>lastIndex<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the index of the last element, which is size - 1.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_lastIndexOf></a>lastIndexOf<br></font></td><td valign=top><font class=param>value</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Returns the index of the last match of <font class=param>value</font> in this array, based on the
+  <font class=param>comparatorFunction</font>, or -1 if not found. If no <font class=param>comparatorFunction</font>
+  specified, use the "natural" order.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_loadAsLine></a>loadAsLine<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  Load all lines in the text file as elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_max></a>max<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the biggest of all the numbers in this array. It is an integer if all
+  the elements are integers; otherwise it is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_min></a>min<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the smallest of all the numbers in this array. It is an integer if all
+  the elements are integers; otherwise it is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_prepand></a>prepand<br></font></td><td valign=top><font class=param>elem</font><br><font class=param> ...</font><br></td><td valign=top>
+  Inserts all the new elements at the beginning of this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_prependArray></a>prependArray<br></font></td><td valign=top><font class=param>anArray</font><br><font class=param> ...</font><br></td><td valign=top>
+  Inserts all the elements in all the arrays at the beginning of this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_range></a>range<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of two values: the smallest and biggest. They are integers if all
+  the elements are integers; otherwise they are float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_remove></a>remove<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Removes the element at <font class=param>index</font>, and returns the removed element.
+  The following elements are moved up to fill the empty spot.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_reverse></a>reverse<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Reverse all the elements in this array and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_saveAsLine></a>saveAsLine<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  Write all elements into a file as lines. If values are strings containing newlines, the values will be confused.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_setSize></a>setSize<br></font></td><td valign=top><font class=param>newSize</font><br><font class=param> fillValue</font><br></td><td valign=top>
+  If <font class=param>newSize</font> is greater than the current size,
+  enlarge to that by filling new elements with <font class=param>fillValue</font>.
+  If <font class=param>newSize</font> is less than the current size, shrink to that size.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_size></a><a name=Array_length></a>size<br>length<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the size of this array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_sort></a>sort<br></font></td><td valign=top><font class=param>comparatorFunction</font><br></td><td valign=top>
+  Sorts this array locally and returns self. If <font class=param>comparatorFunction</font> is
+  not specified, use the "natural" order of the elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_sortAsDate></a>sortAsDate<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this array as dates locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_sortAsNumber></a>sortAsNumber<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this array as numbers locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_sortAsString></a>sortAsString<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this array as strings locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_subarray></a>subarray<br></font></td><td valign=top><font class=param>startIndex</font><br><font class=param> endIndex</font><br></td><td valign=top>
+  Returns a sub-array of this, starting at <font class=param>startindex</font> inclusive to
+  <font class=param>endIndex</font> exclusive. If <font class=param>endIndex</font> is not specified or
+  beyond range, the end of array is used.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_sum></a>sum<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the sum of all the numbers in this array. The sum is an integer if all
+  the elements are integers; otherwise sum is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toBooleanArray></a>toBooleanArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>boolean[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toBooleanObjectArray></a>toBooleanObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Boolean[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toByteArray></a>toByteArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>byte[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toByteObjectArray></a>toByteObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Byte[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toCharArray></a>toCharArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>char[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toCharObjectArray></a>toCharObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Character[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toDoubleArray></a>toDoubleArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>double[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toDoubleObjectArray></a>toDoubleObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Double[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toFixedPositionString></a>toFixedPositionString<br></font></td><td valign=top><font class=param>len</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns a string of the concatenation of all the elements, each with specified length. That is,
+  each element is at a fixed position in the resultant string. (This method applies to Java arrays
+  and <code>java.util.List</code> instances.)
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toFloatArray></a>toFloatArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>float[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toFloatObjectArray></a>toFloatObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Float[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toIntArray></a>toIntArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>int[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toIntObjectArray></a>toIntObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Integer[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toLongArray></a>toLongArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>long[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toLongObjectArray></a>toLongObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Long[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toObjectArray></a>toObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Object[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toShortArray></a>toShortArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>short[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toShortObjectArray></a>toShortObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Short[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Array_toStringArray></a>toStringArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.String[]</code>.
+</td></tr>
+</table>
+</body></html>

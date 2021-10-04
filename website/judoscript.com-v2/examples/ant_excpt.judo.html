@@ -1,0 +1,7 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_anttask/ant_excpt.judo:</b></td></tr><tr><td><pre>
+anttask::&lt;exec executable="do_not_exist" />
+
+catch:
+  println &lt;err> '---- Ant task deliberately failed:', nl, $_;
+</pre></td></tr></table></body></html>

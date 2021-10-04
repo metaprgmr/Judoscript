@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - FSMakeRemoveDirStatements</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>FSMakeRemoveDirStatements</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=FSMakeRemoveDirStatements>FSMakeRemoveDirStatements</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>removeDir</font>   |  <font class=kw>rmdir</font>   |  <font class=kw>makeDir</font>   |  <font class=kw>mkdir</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>force</font>   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('FSMakeRemoveDirStatements'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Makes or removes a directory. When removing a directory, by default it fails
+  if the directory is not empty. Use <font class=kw>force</font>  to remove all the content and then
+  remove that directory. If there is an access privilege violation, this may still
+  fail, of course.</p>
+ </body></html>

@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - IncludeDirective</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>IncludeDirective</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=IncludeDirective>IncludeDirective</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw><nobr>!include</nobr></font>   (  <font class=kw>if</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>ifexists</font>   |   (  <font class=kw>ifdef</font>   |  <font class=kw>ifndef</font>   )  <font class=t>CONST_NAME</font>   )?  <font class=t>STRING_LIT</font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('IncludeDirective'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>A script can include other scripts. Files are simply copied into the enclosing file,
+  and included files can include others.</p>
+  <p>Conditional include is supported either based on an <em>boolean</em> <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>ession, on
+  the existence or non-existence of a constant, or simply if the included file exists or not.</p>
+ </body></html>

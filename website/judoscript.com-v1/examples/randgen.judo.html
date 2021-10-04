@@ -1,0 +1,40 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/4.adv_embedinjava/randgen.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-12-06';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    A simple AWT application, with a button to generate a random number.
+    Can be used stand-alone or started from the "BSFTest.java" program
+    via Bean Scripting Framework, or from the "EmbedTest.java" program.
+    When not standalone, its 'frame' is created and passed on from Java,
+    and its show() is called by Java. If standalone, it is created locally.
+  *]];
+}
+
+standalone = (frame == null); // frame may be set in Java!
+
+if standalone {
+  frame = javanew java.awt.Frame('RandGen - standalone JudoScript');
+} else {
+  {
+    $$bsf.registerBean("title", 'RandGen - JudoScript thru BSF');
+  catch: // if not BSF
+    ::title = 'RandGen - JudoScript in Java';
+  }
+}
+
+result = javanew java.awt.TextField("0");
+button = javanew java.awt.Button('next');
+frame.resize(400, 100);
+frame.add("North", result);
+frame.add("Center", button);
+if standalone { frame.show(); }
+
+// *** handle data entry keys
+guiEvents {
+  &lt;frame : Window : windowClosing> :   exit 0;
+  &lt;button: Action : actionPerformed> : result.text = rand(0,100);
+}
+</pre></td></tr></table></body></html>

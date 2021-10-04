@@ -1,0 +1,504 @@
+<html><head><title>Chapter 20. Ant Scripting and Scripting Ant</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 20. Ant Scripting and Scripting Ant</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro">Introduction to Ant</a></li><br>&#187;&nbsp;<a href="#whatis">What is Ant?</a><br>&#187;&nbsp;<a href="#antbuild">Ant Build Scripts</a><br>&#187;&nbsp;<a href="#j_and_ant">Judo and Ant</a><li><a href="#inant">Embed Judo in Ant Build Script</a></li><br>&#187;&nbsp;<a href="#anttag">The Ant &lt;judoscript&gt; Task</a><br>&#187;&nbsp;<a href="#passant">Passing Information between Ant and the &lt;judoscript&gt; Tag</a><br>&#187;&nbsp;<a href="#antcall">Call Other Ant Targets and Access Other Resources</a><li><a href="#anttask">Script Ant Tasks</a></li><br>&#187;&nbsp;<a href="#passanttask">Passing Information between code and Ant tasks</a><br>&#187;&nbsp;<a href="#antfail">Handle Ant task execution failures</a><br>&#187;&nbsp;<a href="#whenwhy">When and why to script Ant tasks in Judo</a></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+<!-- SYNOPSIS PART --><tr><td valign=top>
+ <table border=0 cellpadding=5><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+
+Ant is a popular software build tool based on XML and Java. The two interesting points about Ant and Judo are:</p>
+<ol>
+<li>Judo provides a custom Ant task, <code>&lt;judoscript></code>, that makes using Judo within Ant build script easy and convenient. Embedded Judo code can intimately interact with the Ant environment, and invoke another Ant target with the native system function <code>antcall()</code>, allowing Judo to be a flow control language in the Ant build script.</li>
+<li>Because Ant employs an extensible architecture, anyone can provide a <i>custom Ant task</i>. Many practical operations have been built as Ant tasks and this collection of Ant tasks comprise a special form of extremely useful software library. Judo can take advantage of this software resource via its Ant scripting support, i.e., the <b><code>anttask::</code></b><i>XMLLiteral</i> syntax. The task itself is the same XML code you would use in an Ant build script.</li>
+</ol>
+ </td></tr></table>
+</td></tr><!-- SYNOPSIS PART -->
+</table>
+
+
+
+<h2>&nbsp;<br><a name=intro> Introduction to Ant</a></h2>
+
+
+<a name=whatis><h3> What is Ant?</h3></a>
+
+<p><i>Ant</i> is an XML-based make tool, build in Java. It is a Java counterpart for the <i>make</i> utility on Unix and other platforms. It uses an XML document to specify rules, actions and targets. Each action is realized by a Java class that implements a particular <i>Task</i> interface.</p>
+
+<p>Key advantages of Ant over traditional make tools include:</p>
+
+<ol>
+<li> Ant is built in Java and runs anywhere Java runs.</li>
+<li> Ant is XML-based, so the build files are more descriptive.</li>
+</ol>
+
+<p>The flip side of these advantages are:</p>
+
+<ol>
+<li>Traditional make utilities use shell commands for tasks; this gives them the liberty to run any commands available in your operating system shell. Ant actions, however, must be implemented in a Java class. If you have a new native tool to be added to the build process, you would have to create a new Java class following the Ant protocol and define a set of XML syntax (such as attribute names and meanings of values, embedded elements, etc.)</li>
+<li>Because each task is arbitrarily defined by a developer, that developer defines new rules on top of the original task rules (e.g., command-line parameter format); hence, there are as many new rules as there are tasks. Although the basic build rules such as dependencies and targets are easy to memorize, mastering all the task-specific rules is virtually impossible. Some may argue that the task XML rules are more readable and user-friendly; other may wonder, "I need to know the original tool anyway, why a new set of rules on top of that?"</li>
+<li>Because of XML, it is verbose. However, since build files are created once and sparsely modified, this is not a huge concern.</li>
+</ol>
+
+<p>Like it or not, Ant's popularity has soared with that of Java. Today, most Java projects are built with Ant; so do many non-Java or even non-software projects. Ant has become the <i>de facto</i> build tool and an important part of Java application development.</p>
+
+<p>Let's first understand what Ant build scripts are and how they work, and clarify the use of terminologies.</p>
+
+<br>
+
+
+<a name=antbuild><h3> Ant Build Scripts</h3></a>
+
+<p>An Ant build script is an XML document with a root node called <code>&lt;project&gt;</code>, which contains one or more <code>&lt;target&gt;</code> tags. Targets can depend on other targets, and may contain its own <i>tasks</i> as <code>&lt;task&gt;</code> tags. It is the tasks that performs various actions of the build process.</p>
+
+<p>The Ant package has defined a number of <i>core</i> tasks and a number of <i>optional</i> tasks. Developers can also define new tasks for any purposes. In the core tasks, just a handful are for the build process control, such as <code>&lt;ant&gt;</code>, <code>&lt;antcall&gt;</code> and <code>&lt;taskdef&gt;</code>. Let's call them as <i>process control</i> tasks. All other tasks perform specific practical actions, and let's call them <i>action</i> tasks.</p>
+
+<p>Today, the core and optional tasks alone include well over 100 Ant action tasks defined, documented and shipped in the Ant package. Many third parties have supplied support for their own action tasks. Some implementations of the action tasks are in pure Java; many others are simply Java wrapper classes that run native commands, such as tasks for <i>Rational ClearCase</i>, <i>Visual Source Safe</i> (VSS), etc. This creates a uniquely interesting phenomenon, that a Java-based build tool has actually amassed a huge repository of practical utilities! In software engineering parlance, Ant tasks comprise a special type of software library that is uniquely useful.</p>
+
+<p>In Judo, the <code>anttask::</code> operator allows you to take advantage of any Ant action task in your scripts. This is detailed later in this chapter.</p>
+
+<p>Ant has a <code>&lt;script&gt;</code> tag to embedded scripting languages as a flexible task. The <code>&lt;script&gt;</code> supports any scripting languages, including Judo, that conform to the <i>Bean Scripting Framework</i> (BSF) API. Judo provides a simple <code>&lt;judoscript&gt;</code>, making Judo code scripting in Ant easier. What are the benefits of scripting in Judo rather than using Ant tasks? You can do a lot of work with minimal amount of code, and sometimes Judo scripts carry out many sophisticated tasks. For instance, you can:</p>
+
+<ul>
+<li>use JDBC scripting to set up, test and clean up your data-driven applications,</li>
+<li>transform file contents during various build steps,</li>
+<li>do complicated archiving and file processing,</li>
+<li>launch Judo scripts to automate document creation,</li>
+<li>etc., etc.</li>
+</ul>
+
+<p>The <code>&lt;judoscript&gt;</code> is discussed in detail next. Before we go into introducing Judo support for Ant, let's take a look at a sample Ant build script and see how it works, and what matters between the Ant environment and Judo's Ant support.</p>
+
+<font color=gray>TODO: <i>provide the example and explanation.</i></font>
+
+<br>
+
+
+<a name=j_and_ant><h3> Judo and Ant</h3></a>
+
+<p>
+
+<p><b>Ant task scripting in Judo</b><br><i>Ant task scripting</i> is to take advantage of this sector of software resources for practical uses. Different languages and tools can have different ways to do this. Judo provides a native, intuitive way to script Ant tasks. It simply uses the XML format to run an Ant task in your script. The benefit is, all Ant tasks are documented with examples in XML; you can simply cut-and-paste the examples into a Judo program for use and modify. There is no extra step in between to convert the XML rules to another syntax, hence no chance for ambiguity or mistakes.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=inant> Embed Judo in Ant Build Script</a></h2>
+
+<p>Judo code and programs can be used in Ant build scripts in two ways:</p>
+
+<ol>
+<li> through Ants support for the <i>Bean Scripting Framework</i> (BSF) mechanism; this will be discussed as a case study for <i><a href="embedjava.html#withbsf">BSF Support for Judo</a></i>. Or</li>
+<li> through the <code>&lt;judoscript&gt;</code> ant task. This is what we discuss here.</li>
+</ol>
+
+
+<a name=anttag><h3> The Ant &lt;judoscript&gt; Task</h3></a>
+
+<p>Judo provides an Ant task implementation to run a Judo program, either as embedded code or in an external script file. The Ant task class is <code>com.judoscript.AntJudoScriptTask</code>, and is mapped to the task tag name <code>&lt;judoscript&gt;</code>:</p>
+
+<font color=black><pre>
+&lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/&gt;
+</pre></font>
+
+<p>This Ant task is very simple; it can take a <code>src</code> attribute as the external script file and a <code>params</code> attribute for the program attributes. The <code>src</code> attribute is optional; if not specified, the embedded text, which is likely to be quoted in <code>&lt;![CDATA[</code> and <code>]]&gt;</code>, is expected as program code. In either case, the <code>params</code> can be used to specify command-line parameters. The following Ant build file demonstrates both usages:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="snoop.xml">Listing 20.1</a> snoop.xml</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+&lt;?xml version="1.0"?&gt;
+
+&lt;project name="test" default="target1" basedir="."
+         description="Illustrates both ways of using the &lt;judoscript&gt; tag."&gt;
+
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/&gt;
+
+  &lt;target name="target1" description="Run Judo code specified herein."&gt;
+    &lt;judoscript params="abc -x:1 def ghi -y:something"&gt;
+      // This is the code of snoop.judo copied verbatim.
+
+      println '#cmd_args: ', #cmd_args;
+      for x in #cmd_args {
+        println '  #cmd_args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#args: ', #args;
+      for x in #args {
+        println '  #args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#options: ', #options;
+      for x in #options {
+        println '  #options[', x, '] = ', #options.(x);
+      }
+
+      println nl, 'Original os.name = ${os.name}';
+      #sysprops.('os.name') = 'XXXXXXXXXXXXXX';
+      println     'Now,     os.name = ${os.name}';
+    &lt;/judoscript&gt;
+  &lt;/target&gt;
+
+  &lt;target name="target2" description="Run a Judo script (in the same JVM)."&gt;
+    &lt;judoscript src="snoop.judo" params="abc -x:1 def ghi -y:something" /&gt;
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The first <code>&lt;judoscript&gt;</code> tag runs a segment of code embedded in the tag itself, and passes some command-line parameters. The code simply prints out values of different kinds. The second <code>&lt;judoscript&gt;</code> tag runs an external program, <code>build.judo</code>, whose content is exactly the same as the embedded code in the first tag.</p>
+
+<br>
+
+
+<a name=passant><h3> Passing Information between Ant and the &lt;judoscript&gt; Tag</h3></a>
+
+<p>Although the format of the <code>&lt;judoscript&gt;</code> tag is simple, this tag is different from other Ant action tasks by nature. Most other Ant tasks perform a specific job, whereas <code>&lt;judoscript&gt;</code> contains code of a general scripting language. One of the most important aspect of embedding code is, how to pass values between the Ant build environment and the embedded code.</p>
+
+<p>The <code>&lt;judoscript&gt;</code> tag can, like any Ant tags, use the <code>${<i>name</i>}</code> in attribute values. Note, however, in the embedded Judo code, the <code>${<i>name</i>}</code> notation is for accessing Judo variables, not as expansion of Ant property values as you might assume. Programmatically, the code used in <code>&lt;judoscript&gt;</code>, whether is directly embedded or in an external file, exchanges information through the system properties. The following example demonstrates this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="pass_value.xml">Listing 20.2</a> pass_value.xml</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+&lt;?xml version="1.0"?&gt;
+
+&lt;project name="test" default="main" basedir="."&gt;
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/&gt;
+
+  &lt;target name="main" depends="step1,step2,step3" /&gt;
+
+  &lt;target name="step1"&gt;
+    &lt;property name="user.prop" value="Ant is everywhere." /&gt;
+    &lt;echo message=" ${user.prop}" /&gt;
+  &lt;/target&gt;
+
+  &lt;target name="step2"&gt;
+    &lt;judoscript&gt;
+      println ${user.prop}; // returns the system property value
+
+      #sysprops.('user.prop') = 'Judo is fun!';
+    &lt;/judoscript&gt;
+  &lt;/target&gt;
+
+  &lt;target name="step3"&gt;
+    &lt;echo message=" ${user.prop}" /&gt;
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The test build script runs three steps:</p>
+
+<ol>
+<li>Set a property in the project.</li>
+<li>The embedded Judo code prints out the current property, then set that property to a different value.</li>
+<li>Back in the project, the last task prints out the property value again.</li>
+</ol>
+
+<p>The output is:</p>
+
+<font color=black><pre>
+Buildfile: pass_value.xml
+
+step1:
+     [echo]  Ant is everywhere.
+
+step2:
+[judoscript] Ant is everywhere.
+
+step3:
+     [echo]  Judo is fun!
+
+main:
+
+BUILD SUCCESSFUL
+</pre></font>
+
+<p>Note that the same <code>${user.prop}</code> expression occurred twice in this build script: once in step 1 as embedded in the <code>message</code> attribute of <code>&lt;echo&gt;</code>, and once in step 2 in the Judo code. Although syntactically they appear to be the same and so are the results, the meanings are totally different. In step 1, <code>${user.prop}</code> is expanded by Ant with its system property value; in step 2, <code>${user.prop}</code> is a Judo expression that returns that system property value within the Judo language engine.</p>
+
+<p><b>Accessing environment variables</b><br>You can not set any environment variables from Judo, Ant or Java itself; hence, regardless of how you access environment variables in Ant build scripts, the embedded Judo code, like Judo code in a stand-alone program, still accesses environment variables as global variables. The following build script prints out the environment variable <code>TEMP</code> from Ant and embedded Judo:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="show_env.xml">Listing 20.3</a> show_env.xml</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+&lt;?xml version="1.0"?&gt;
+
+&lt;project name="test" default="main" basedir="."&gt;
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/&gt;
+
+  &lt;target name="main" depends="step1,step2" /&gt;
+
+  &lt;target name="step1"&gt;
+    &lt;property environment="env" /&gt;
+    &lt;echo message=" ${env.TEMP}" /&gt;
+  &lt;/target&gt;
+
+  &lt;target name="step2"&gt;
+    &lt;judoscript&gt;
+      println ${TEMP};
+    &lt;/judoscript&gt;
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+
+<a name=antcall><h3> Call Other Ant Targets and Access Other Resources</h3></a>
+
+<p>Judo provides a special-purpose system function, <code>antcall()</code>, to call Ant tasks in the same build script from the embedded Judo code. The following example demonstrates this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="antcall.xml">Listing 20.4</a> antcall.xml</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+&lt;?xml version="1.0"?>
+
+&lt;project name="test" default="main" basedir=".">
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  &lt;target name="t1" depends="t1.1">
+    &lt;echo message="Target One." />
+  &lt;/target>
+
+  &lt;target name="t1.1">
+    &lt;echo message="Target One'." />
+  &lt;/target>
+
+  &lt;target name="t2">
+    &lt;echo message="Target Two." />
+  &lt;/target>
+
+  &lt;target name="main">
+    &lt;judoscript>
+      println '-------------';
+      antcall 't1', 't2';
+      println '-------------';
+    &lt;/judoscript>
+  &lt;/target>
+
+&lt;/project>
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The output is:</p>
+
+<font color=black><pre>
+Buildfile: callant.xml
+
+main:
+[judoscript] -------------
+
+t1.1:
+     [echo] Target One'.
+
+t1:
+     [echo] Target One.
+
+t2:
+     [echo] Target Two.
+-------------
+
+BUILD SUCCESSFUL
+</pre></font>
+
+<p>The <code>antcall()</code> function can take variable number of parameters, which are Ant target names. If no parameters are provided, it will have no effect. This function effectively makes Judo a flow-control language for Ant build scripts.</p>
+
+<p><b>Accessing other Ant services</b><br>Other than system properties, there is a predefined variable, <code>$$anttask</code>, available to both the embedded Judo code or the external program. That variable holds the Ant task object. It is the actual Ant task, which is an instance of <code>com.judoscript.AntJudoScriptTask</code>; this class extends <code>org.apache.tools.ant.Task</code>, so that you can call any of its methods, such as the <code>getProject()</code>, which in turn provides access to most services within Ant. Please refer to Ant's documentation for its Java APIs.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=anttask> Script Ant Tasks</a></h2>
+
+<p>As we discussed earlier, Ant tasks comprise a unique type of library of extremely practical utilities. This is a great resource for scripting language users. Judo provides an easy and intuitive way to take advantage of this. The syntax is very simple:</p>
+
+<a name="anttask"><table border=0>
+<tr><td valign=top><i>AntTaskStatement</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>anttask::</code></b><i>XMLLiteral</i></td></tr>
+</table></a>
+
+<p>The <i>XMLLiteral</i> specifies the Ant task as documented in XML format. These tasks should all be action tasks, and the following tags are prohibited:</p>
+
+<ul>
+<li><code>&lt;ant&gt;</code></li>
+<li><code>&lt;anttask&gt;</code></li>
+<li><code>&lt;fail&gt;</code></li>
+<li><code>&lt;target&gt;</code></li>
+</ul>
+
+<p>The following example uses the <code>&lt;echo&gt;</code> Ant task twice:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ant_echo.judo">Listing 20.5</a> ant_echo.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+a = 'ants';
+
+anttask::&lt;echo message="Hello, ${a}!"/&gt;
+
+anttask::&lt;echo&gt;
+  Hello, more ${a}!
+&lt;/echo&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In this example, <code>${a}</code> is used in both the attribute value and in the embedded tag text. This is the way to pass values to an Ant task. Such expression can't be used to create tag names or tag attribute names. The output of this program is:</p>
+
+<font color=black><pre>
+     [echo] Hello, ants!
+     [echo]
+     [echo]   Hello, more ants!
+</pre></font>
+
+<p>Ant tasks used in Judo should be individual action tasks, and they are not expected to contain other subtasks. However, they can contain embedded elements, as demonstrated in this example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ant_exec.judo">Listing 20.6</a> ant_exec.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+src = '.';
+
+anttask::
+  &lt;exec dir="${src}" executable="cmd.exe" os="Windows 2000" output="dir.txt"&gt;
+    &lt;arg line="/c dir"/&gt;
+  &lt;/exec&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>As you would expect, Ant tasks have to "live" in an Ant project; Judo maintains a single project for all the Ant tasks invoked.</p>
+
+
+<a name=passanttask><h3> Passing Information between code and Ant tasks</h3></a>
+
+<p>Different Ant tasks can define different ways to communicate their results back to the Ant environment (i.e., the Ant <i>project</i>;) the most common way is through setting system properties, such as Ant core tasks <code>&lt;basename&gt;</code>, <code>&lt;condition&gt;</code>, <code>&lt;uptodate&gt;</code>, etc. Other may choose to use more <i>ad hoc</i> means; for instance, the core Ant task <code>&lt;checksum&gt;</code> returns the checksum of a file in a text file. Let's see an example that uses system properties to pass values:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ant_basename.judo">Listing 20.7</a> ant_basename.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+filename = '/usr/bin/judo';
+
+anttask::&lt;basename property="base.name" file="${filename}"/&gt;
+
+println 'Base name: ', ${base.name};
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The output is:</p>
+
+<font color=black><pre>
+Base name: judo
+</pre></font>
+
+<br>
+
+
+<a name=antfail><h3> Handle Ant task execution failures</h3></a>
+
+<p>Ant tasks may fail by throwing an instanceof <code>org.apache.tools.ant.BuildException</code>, which is a wrapper of another exception. Judo captures this <code>BuildException</code>, retrieves and throws the original one. You can capture this exception:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ant_excpt.judo">Listing 20.8</a> ant_excpt.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+anttask::&lt;exec executable="do_not_exist" /&gt;
+
+catch:
+  println &lt;err&gt; '--- Ant task deliberately failed:';
+  $_.printStackTrace();
+  println &lt;err&gt; '--- Stack trace printed.';
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<br>
+
+<br>
+
+
+<a name=whenwhy><h3> When and why to script Ant tasks in Judo</h3></a>
+
+<p>As we have discussed earlier, Ant tasks comprise a special type of software library of many practical utilities. Ant tasks are designed for use by the Ant build system, but can also be utilized by Java and Java scripting languages. Judo provides an easy language facade for scripting Ant tasks. This turns Ant tasks into truly practical utilities.</p>
+
+<p>Judo is a rich functional scripting language; it embeds a lot of useful, practical utilities right in the language itself. Many Ant core action tasks have their counterpart in Judo, where the Judo counterparts are generally easier to use, more flexible and intuitive. Such tasks include those that deal with file systems, file archives, RDBMSs, native execution, e-mail, and any data and file processing.</p>
+
+<p>Hence, Ant tasks that do not have Judo counterparts are the best to be used. These include <i>configuration management</i> system access (e.g., CVS, ClearCase, Microsoft Visual Source Safe, etc.) Tasks such as FTP, SCP, etc. can also be good candidate, as these usages are more challenging and system-dependent; sharing the same code (Ant scriptlet) between Judo code and Ant build scripts may be desirable. There are also many other tasks for performing compilation, javadoc generation, etc., that can be useful at times.</p>
+
+<p>Ant allows developers to develop new tasks. Now that you can script Ant tasks in Judo, this can also be a great way to extend Judo language. You can register a custom task just like you would in an Ant build script, assuming your new task is not shipped with the Ant software package. The following is an example that registers a new task and uses it:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="antburger.judo">Listing 20.9</a> antburger.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+anttask::&lt;taskdef name="js" classname="com.judoscript.AntJudoScriptTask"/&gt;
+
+anttask::&lt;js&gt;
+  println 'This is Judo-in-Ant-in-Judo, a.k.a. AntBurger!',
+          nl, nl, 'AntBurger is delicious!';
+&lt;/js&gt;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>This program registers a <code>&lt;js&gt;</code> to embed Judo code, then uses this <code>&lt;js&gt;</code> to invoke the embedded Judo code. The output is;</p>
+
+<font color=black><pre>
+This is Judo-in-Ant-in-Judo, a.k.a. AntBurger!
+
+AntBurger is delicious!
+</pre></font>
+
+<p>If you have a custom Ant task, you can do something similar.</p>
+
+<br>
+
+<br>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

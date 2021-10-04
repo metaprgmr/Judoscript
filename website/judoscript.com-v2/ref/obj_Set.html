@@ -1,0 +1,137 @@
+<html><head><title>JudoScript Object - Set</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>Set</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=Set_average></a><a name=Set_avg></a>average<br>avg<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the average of all the numbers in this set.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_clear></a>clear<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Clears all the elements in this set.
+</function. <function sig="add elem, ..." alias="append">
+  Adds all the elements into this set.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_concat></a>concat<br></font></td><td valign=top><font class=param>separator</font><br></td><td valign=top>
+  Returns a string that is a concatenation of all the elements, separated by <font class=param>separator</font>.
+  If no <font class=param>separator</font> specified, default use ','.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_exists></a>exists<br></font></td><td valign=top><font class=param>value</font><br><font class=param> comparatorFunction</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if a match of <font class=param>value</font> in this set is found, based on the
+  <font class=param>comparatorFunction</font>, or -1 if not found. If no <font class=param>comparatorFunction</font>
+  specified, use the "natural" order.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_loadAsLine></a>loadAsLine<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  Load all lines in the text file as elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_max></a>max<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the biggest of all the numbers in this set. It is an integer if all
+  the elements are integers; otherwise it is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_min></a>min<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the smallest of all the numbers in this set. It is an integer if all
+  the elements are integers; otherwise it is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_range></a>range<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of two values: the smallest and biggest. They are integers if all
+  the elements are integers; otherwise they are float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_remove></a>remove<br></font></td><td valign=top><font class=param>elem</font><br></td><td valign=top>
+  Removes the <font class=param>elem</font>, if it exists.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_saveAsLine></a>saveAsLine<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  Write all elements into a file as lines. If values are strings containing newlines, the values will be confused.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_size></a><a name=Set_length></a>size<br>length<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the size of this set.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_sort></a>sort<br></font></td><td valign=top><font class=param>comparatorFunction</font><br></td><td valign=top>
+  Sorts this set locally and returns self. If <font class=param>comparatorFunction</font> is
+  not specified, use the "natural" order of the elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_sortAsDate></a>sortAsDate<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this set as dates locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_sortAsNumber></a>sortAsNumber<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this set as numbers locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_sortAsString></a>sortAsString<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sorts this set as strings locally and returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_subset></a>subset<br></font></td><td valign=top><font class=param>filterFunction</font><br></td><td valign=top>
+  Returns a sub-set of this for elements that are qualified by <font class=param>filterFunction</font>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_sum></a>sum<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the sum of all the numbers in this set. The sum is an integer if all
+  the elements are integers; otherwise sum is float.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toArray></a>toArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the elements.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toBooleanArray></a>toBooleanArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>boolean[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toBooleanObjectArray></a>toBooleanObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Boolean[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toByteArray></a>toByteArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>byte[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toByteObjectArray></a>toByteObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Byte[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toCharArray></a>toCharArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>char[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toCharObjectArray></a>toCharObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Character[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toDoubleArray></a>toDoubleArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>double[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toDoubleObjectArray></a>toDoubleObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Double[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toFloatArray></a>toFloatArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>float[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toFloatObjectArray></a>toFloatObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Float[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toIntArray></a>toIntArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>int[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toIntObjectArray></a>toIntObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Integer[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toJavaSet></a>toJavaSet<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.util.Set</code> instance containing all the elements
+  as <code>java.lang.Object</code>'s.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toLongArray></a>toLongArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>long[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toLongObjectArray></a>toLongObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Long[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toObjectArray></a>toObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Object[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toShortArray></a>toShortArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>short[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toShortObjectArray></a>toShortObjectArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.Short[]</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Set_toStringArray></a>toStringArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java array of <code>java.lang.String[]</code>.
+</td></tr>
+</table>
+</body></html>

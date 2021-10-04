@@ -1,0 +1,43 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_sgml/do_as_jsp.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2004-11-14';
+  desc    = [[*
+    Demonstrates the usage parsing JSP pages.
+
+    You can use this to either transform JSPs, or simply
+    use the JSP-like syntax to create custom templates.
+    SGML tags are not affected and are treated as text.
+  *]];
+}
+
+do $$local as jsp {
+&lt;%@page>: println $_;
+&lt;%>:      println $_;
+&lt;%=>:     println $_;
+&lt;%!>:     println $_;
+&lt;%-->:    println $_;
+//:TEXT:    println $_;
+}
+
+EndScript =============================================
+
+&lt;%@ page contentType="text/html; charset=utf-8" %>
+&lt;HTML>
+&lt;%@ page import="com.judoscript.foo.*, com.judoscript.foo.bean.*"
+         errorPage="ViewError.jsp" %>
+&lt;%
+  response.setHeader("Pragma", "no-cache");
+  response.setHeader("Cache-Control", "no-cache");
+  response.setDateHeader("Expires", 0);
+
+  String displayName = Util.getDisplayName(request);
+%>
+&lt;%-- Done with initialization --%>
+
+&lt;HEAD>&lt;TITLE>My Page for &lt;%=displayName%>&lt;/TITLE>&lt;/HEAD>
+&lt;BODY>
+&lt;H1>Welcome, &lt;%=displayName%>!&lt;/H1>
+&lt;/BODY>&lt;/HTML>
+</pre></td></tr></table></body></html>

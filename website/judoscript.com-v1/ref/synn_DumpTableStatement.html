@@ -1,0 +1,29 @@
+<html><head><title>JudoScript Semantics - DumpTableStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>DumpTableStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=DumpTableStatement>DumpTableStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>dumpTable</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <br>  (  <font class=kw>using</font>  <font class=t>IDENTIFIER</font>   |  <font class=kw>into</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>limit</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>prompt</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )*  <br>  (  <font class=kw>where</font>  <font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font>  )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('DumpTableStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Dumps whole or part of a database table into a file. The first parameter is the table name.
+  The <font class=kw>using</font>  clause specifies the database connection; if not specified, use the default
+  connection <font class=kw><nobr>$$con</nobr></font> . The optional <font class=kw>into</font>  clause allows to specify a file name; the default
+  file namd is the table name with extension ".tdmp". The <font class=kw>limit</font>  clause limits the number of
+  rows to be dumped. The <font class=kw>promp</font>  clause takes a number; for every such number of rows dumped,
+  display a "." on the screen to show the progress. The <font class=kw>where</font>  clause can be used to limit
+  or select the rows to be dumped.</p>
+
+  <p>The table dump file is handled by the <font class=obj><a href="javascript:showObj('TableDump')">TableDump</a></font> object, which is returned by the
+  system function <font class=sfn><a href="javascript:showSF('openTableDump')">openTableDump()</a></font>.</p>
+ </body></html>

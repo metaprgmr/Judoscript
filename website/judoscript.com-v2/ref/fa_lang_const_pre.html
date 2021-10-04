@@ -1,0 +1,57 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Predefined Constants</u></h3>
+  <p>JudoScript runtime engine defines a number of internal constants, some of which reflects the
+  underlying runtime environment, others describe the characteristics of this script and
+  this instance. They are all listed in the following table.</p>
+
+  <table border="1">
+  <tr><th>Constant</th><th>Descriptoin</th></tr>
+  <tr><td>#versionInfo</td>
+      <td>The JudoScript version information.</td>
+  </tr>
+  <tr><td>#versionID</td>
+      <td>The JudoScript version identifier.</td>
+  </tr>
+  <tr><td>#pathSep</td>
+      <td>The same as <code>java.lang.File.pathSeparator</code>. This is the same as the shortcut expression <font class=kw><nobr>&#36;{:}</nobr></font> .</td>
+  </tr>
+  <tr><td>#fileSep</td>
+      <td>The same as <code>java.lang.File.separator</code>. This is the same as the shortcut expression <font class=kw><nobr>&#36;{/}</nobr></font> .</td>
+  </tr>
+  <tr><td>#home</td>
+      <td>The home directory for the user of the current run. This is the same as the shortcut expressoin <font class=kw><nobr>&#36;{~}</nobr></font> .</td>
+  </tr>
+  <tr><td>#here</td>
+      <td>The current directory for the user of the current run. This is the same as the shortcut expressoin <font class=kw><nobr>&#36;{.}</nobr></font> .</td>
+  </tr>
+  <tr><td>#os</td>
+      <td>The operation system name.</td>
+  </tr>
+  <tr><td>#user</td>
+      <td>The user name.</td>
+  </tr>
+  <tr><td>#prog</td>
+      <td>The name of this script.</td>
+  </tr>
+  <tr><td>#args</td>
+      <td>A string array of the arguments specified on the command line. This does not include options.</td>
+  </tr>
+  <tr><td>#options</td>
+      <td>An ordered map of the command-line options. Command-line options are -name=value or -name:value pairs.</td>
+  </tr>
+  <tr><td>#cmd_args</td>
+      <td>A string array of the original command-line parameters.</td>
+  </tr>
+  <tr><td>#usage</td>
+      <td>This is a hashtable that holds the information <a href="javascript:showNT('UsageDeclaration')">specified
+          by the user in the script</a>.
+      </td>
+  </tr>
+  <tr><td>#year</td>
+      <td>The current year.</td>
+  </tr>
+  </table>
+</body></html>

@@ -1,0 +1,21 @@
+<html><head><title>JudoScript Semantics - StructAllocator</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>StructAllocator</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=StructAllocator>StructAllocator</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw><nobr>{</nobr></font>   (  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>:</nobr></font>   |  <font class=kw><nobr>=</nobr></font>   )   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showNT('Dom')">Dom</a></font>  )   ),*   (  <font class=kw><nobr>,</nobr></font>   )?  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('StructAllocator'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>In addition to the "formal" Struct/Object creation by <font class=kw>new</font>  operator, this is
+  the more commonly used initialization.</p>
+ </body></html>

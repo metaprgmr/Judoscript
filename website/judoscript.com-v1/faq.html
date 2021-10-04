@@ -1,0 +1,1063 @@
+<html><head>
+<title>JudoScript FAQ</title>
+<meta http-equiv="Content-Type" content="text/html;">
+<meta name="keywords" content="faq,FAQ,why JudoScript">
+<link href="share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor=#ffffff topmargin=0 leftmargin=0>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+ <td width=138 style="background:url( share/home_tl.gif)" valign=bottom>
+<!--
+<FORM ACTION="" METHOD=GET  target=_self>
+<INPUT TYPE=TEXT NAME=query SIZE=9><br>
+<small><INPUT TYPE=SUBMIT VALUE=" Find "></small><br>
+</FORM>
+-->
+<!--img src=share/spacer.gif width=1 height=1 border=0-->
+</td>
+ <td style="background:url( share/home_tm.gif)" align=center><a
+href="http://www.judoscript.com"><img src=share/home_main.gif height=120 border=0></a></td>
+ <td width=72><img src=share/home_tr.gif width=72 height=120 border=0></td>
+</tr>
+<tr>
+ <td width=138 valign=top class=menuText style="background:url( share/home_lm.gif)">
+&nbsp;<nobr class=menuText1><b>home</b></nobr><br>
+&nbsp;<nobr><b><a href="JudoScript.swf">intro (Flash)</a></b></nobr><br>
+&nbsp;<nobr><b><a href="articles/whitepaper.html">white paper</a></b></nobr><br>
+&nbsp;<nobr><a href="faq.html">FAQ</a></nobr><br>
+&nbsp;<nobr><a href="sitemap.html">site map</a></nobr><br>
+&nbsp;<nobr><a href="mailto:judoscript@judoscript.com">feedback</a></nobr><br>
+&nbsp;<nobr><a href="weblinks.html">useful links</a></nobr><br>
+&nbsp;<nobr><a href="contrib/index.html">contributions</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="/jusptut/">JuSP</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="articles/jamaica.html">Jamaica</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="download.html">download</a></nobr><br>
+&nbsp;<nobr><a href="relnote.html">release note</a></nobr><br>
+&nbsp;<nobr><a href="license.html">license (LGPL)</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="articles/index.html">articles</a></nobr><br>
+&nbsp;<nobr><a href="books/judoscript-0.9/chapters/java.html">Java Scripting</a></nobr><br>
+&nbsp;<nobr><a href="books/judoscript-0.9/chapters/jdbc.html">JDBC Scripting</a></nobr><br>
+&nbsp;<nobr><a href="books/judoscript-0.9/chapters/wsdl.html">SOAP Scripting</a></nobr><br>
+&nbsp;<nobr><a href="articles/activex.html">COM Scripting</a></nobr><br>
+&nbsp;<nobr><a href="articles/xml.html">XML Scripting</a></nobr><br>
+&nbsp;<nobr><a href="books/judoscript-0.9/chapters/ant.html">Ant Scripting</a></nobr><br>
+&nbsp;<nobr><a href="articles/index.html">.........</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="examples/index.html">examples</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="ref/index.html">reference</a></nobr><br>
+&nbsp;<nobr><a href="ref/index.html?l=_fa.html&r=fa.html">functional areas</a></nobr><br>
+&nbsp;<nobr><a href="ref/index.html?l=_syn.html&r=syn.html">syntax/semantics</a></nobr><br>
+&nbsp;<nobr><a href="ref/index.html?l=_sfn.html&r=sfn.html">system functions</a></nobr><br>
+&nbsp;<nobr><a href="ref/index.html?l=_obj.html&r=obj.html">built-in objects</a></nobr><br>
+&nbsp;<nobr class=menuText1><a href="goodies/index.html">goodies</a></nobr><br>
+<br>
+<!-- -- -- /MENU PANE -- -- -->
+</td>
+<td rowspan=2 colspan=2 align=left valign=top class=bodyText>&nbsp;
+<!-- ========================= CONTENT PANE ========================= -->
+<a name=begin></a><h2>JudoScript FAQ</h2>
+<h3>General Language Questions</h3><ol start=1>
+
+
+
+<li><a href=#q1><b>
+What is the difference between JudoScript and other scripting languages?
+What is the compelling hook over others?
+</b></a>
+<li><a href=#q2><b>
+How does JudoScript compare to J/Python?
+</b></a>
+<li><a href=#q3><b>
+Is JudoScript hard to learn? Do I have to know Java?
+</b></a>
+<li><a href=#q4><b>
+Is it hard to learn JudoScript's application features?
+</b></a>
+<li><a href=#q5><b>
+What is the licensing term of JudoScript?
+</b></a>
+<li><a href=#q6><b>
+When NOT to use JudoScript?
+</b></a>
+<li><a href=#q7><b>
+Why the name JudoScript?
+</b></a>
+<li><a href=#q8><b>
+What are JudoScript's shortcomings?
+</b></a>
+<li><a href=#q9><b>
+What about JudoScript's Performance?
+</b></a>
+<li><a href=#q10><b>
+Can you list some facts about JudoScript?
+</b></a>
+<li><a href=#q11><b>
+Why you created JudoScript?
+</b></a>
+<li><a href=#q12><b>
+How can I contribute to JudoScript?
+</b></a>
+<li><a href=#q13><b>
+Is JudoScript embeddable in Java software?
+</b></a>
+<li><a href=#q14><b>
+How to use threads in JudoScript? Can I use Java thread objects?
+</b></a>
+<li><a href=#q15><b>
+Can I script Java classes of the JudoScript engine?
+</b></a>
+<li><a href=#q16><b>
+What is 
+<em>
+native support
+</em>
+ in JudoScript? What is a non-native support then?
+</b></a>
+</ol>
+<h3>JudoScript Usage Questions</h3><ol start=17>
+
+
+
+<li><a href=#q17><b>
+Are JudoScript's JDBC scripts cross-RDBMS's?
+</b></a>
+<li><a href=#q18><b>
+How to specify a (non-built-in) JDBC driver class?
+</b></a>
+<li><a href=#q19><b>
+How to copy multiple directories into a single ZIP file?
+</b></a>
+<li><a href=#q20><b>
+How to serialize executable runs?
+</b></a>
+<li><a href=#q21><b>
+Can I use 
+<em>
+my
+</em>
+ Java classes? Do I have to specify my long Java class names everytime?
+</b></a>
+<li><a href=articles/java_excpt.html#extend><b>
+Can I use a Java interface? How?
+</b></a>
+<li><a href=/articles/java_excpt.html#extend><b>
+Can I extend and use a Java abstract class and interfaces? How?
+</b></a>
+<li><a href=#q24><b>
+How to use Java static members and methods?
+</b></a>
+<li><a href=#q25><b>
+What is the easiest way to read a text file, line-by-line?
+</b></a>
+<li><a href=#q26><b>
+Is JudoScript good for templates?
+</b></a>
+</ol>
+<hr width=90%><br>
+<table border=0 cellpadding=5 cellspacing=5>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=diff></a>
+<b><a name=q1></a><b>1. 
+What is the difference between JudoScript and other scripting languages?
+What is the compelling hook over others?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+JudoScript is as a potent programming and Java scripting language as any other Java-based scripting ones.
+What differs it from others is, JudoScript has many built-in language constructs for popular application areas,
+making their uses intuitive, natural and elegant.
+See the 
+<a href="articles/whitepaper.html#i_def">
+definition of scripting
+</a>
+ to learn why JudoScript is so
+different than programming languages that you are so familiar with.
+With such a 3GL-4GL language design, JudoScript puts extraordinary emphasis on ease-of-use as well as ease-of-program.
+
+</p>
+
+
+
+<p>
+Take Python, a perfect example of traditional programming languages, especially so-called scripting
+languages. It employs a small set of core language syntax and constructs, including a library mechanism
+that allows users to extend functionalities of the language. A library is a collection of APIs that
+application software are built upon. To ensure maximum reusablity and applicability, APIs are generally
+low-level and detailed relative to the problem you are trying to solve. Such is the 3GL approach.
+</p>
+
+
+
+<p>
+If 4GL is a new term to you, think about Unix shells. Unix shells are legitimate programming
+languages, and has special commands that pertain to topics common to all Unix system users, such as
+file system manipulation, process control, system configuration, etc. For instance, you use 'cp'
+command to copy files, instead of coding a job-control-language (with APIs) to do the same.
+JudoScript is the first and only Java-based scripting language that does all the above but extends its
+reach into many of today's popular application fields, such as JDBC scritping, XML scripting, SGML
+scraping, COM scripting, internet scripting, GUI scripting, etc. This is the compelling hook over
+most other scripting languages.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=jython></a>
+<b><a name=q2></a><b>2. 
+How does JudoScript compare to J/Python?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Jython, BeanShell, Rhino, JudoScript and other Java-based scripting languages are all general-purpose programming languages
+and are capable of scripting Java, despite their syntax differences.
+On top of that, JudoScript also provides many application level scripting features 
+<em>
+at the language level
+</em>
+,
+so JudoScript supports object-level, OS-level and application-level scripting.
+See the 
+<a href="articles/whitepaper.html#i_def">
+definition of scripting
+</a>
+ for a more meaningful comparison.
+</p>
+
+
+
+<b>
+Thus, in terms of functionality, any of Jython, BeanShell, Rhino, ... at language level is strictly a subset of JudoScript.
+<b>
+
+
+</p>
+
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=learn></a>
+<b><a name=q3></a><b>3. 
+Is JudoScript hard to learn? Do I have to know Java?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+The core JudoScript language uses syntax and programming model similar to JavaScript.
+Variables are not typed and no declaration is needed. Like any modern languages,
+it adopts an object-oriented language design, every kind of value has a set of operations (methods).
+JudoScript is 
+<a href="ref/">
+well documented
+</a>
+ with
+
+<a href="examples/">
+ample examples
+</a>
+ and
+
+<a href="articles/">
+technical articles
+</a>
+.
+</p>
+
+
+<p>
+You will need to know how to run Java software on your platform (Unix, Windows, ...) in
+order to run JudoScript programs. For instance, if you want to use JDBC scripting to handle
+data in an Oracle database, you will need to know how to add Oracle's JDBC driver into the
+class path. JudoScript is a powerful scripting langauge itself and has many powerful
+functionality to do most work.
+</p>
+
+
+<p>
+One of JudoScript's key features is Java scripting. This is essentially designed for Java
+programmers, but some times non-Java programmers may have to use Java as well. An example is
+the Java byte array used in binary file read and write.
+</p>
+
+
+<p>
+The recommended way to extend JudoScript is write Java code, although you can definitely
+create JudoScript functions and classes to do the same. Writing Java extension library is
+good because the same code can be shared by JudoScript and Java programs; they are typically
+more performant and robust thanks to Java's strong-typedness.
+</p>
+
+
+<p>
+In short, 
+<u>
+Java knowledge is not required for end users, but is extremely important to
+take full advantage of JudoScript
+</u>
+.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=learn_app></a>
+<b><a name=q4></a><b>4. 
+Is it hard to learn JudoScript's application features?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+How hard can it be to learn these?
+</p>
+
+
+<table border=0 cellspacing=0 cellpadding=0><tr bgcolor=#DDDDDD><td><pre>
+sendMail
+    from: 'feedback@judoscript.com'
+      to: 'A@some-site.cum'
+      cc: 'A@other-site.cum'
+ subject: 'The software. Thank you!'
+  attach: 'judo.jar.zip, src.jar'
+    body: [[*
+          Dear Mr. A,
+
+          Thank you very much for your interest in this software.
+          Attached is the software and source code.
+          Please visit www.judoscript.com for the latest news
+          and information. Thank you!
+
+          Sincerely,
+          JudoScript
+          *]]
+htmlBody: [[*
+          &lt;html>&lt;body>
+          &lt;p>Dear Mr. A,
+          &lt;p>Thank you very much for your interest in &lt;i>this software&lt;/i>.
+          Attached is the software and source code.&lt;/p>
+          &lt;p>Please visit &lt;a href=www.judoscript.com>www.judoscript.com&lt;/a>
+          for the latest news and information. Thank you!&lt;/p>
+          &lt;p>Sincerely,&lt;/p>
+          &lt;p>JudoScript&lt;/p>
+          &lt;/body>&lt;/html>
+          *]]
+;
+</pre></td></tr></table>
+
+
+<p>
+Compare this to coding with 
+<code>
+javax.mail.*
+</code>
+ packages, especially if you don't
+know how to program 
+<code>
+javax.mail.*
+</code>
+ yet.
+</p>
+
+
+
+<table border=0 cellspacing=0 cellpadding=0><tr bgcolor=#DDDDDD><td><pre>
+do 'http://www.yahoo.com' as sgml
+{
+&lt;a>:    if $_.href { println $_.href; }
+&lt;img>:  println $_.src; // $_ represents the current tag.
+}
+</pre></td></tr></table>
+
+
+<p>
+This program prints out the URLs in &lt;a> and &lt;img> tags of an HTML page.
+This is similar to XML SAX programming but is significantly more concise and elegant.
+JudoScript supports XML SAX programming exactly the same way.
+</p>
+
+
+
+<p>
+JudoScript application features are designed based on the needs of the topic; they
+are natural and intuitive to the problem domain, and are easy to use and learn; this is
+especially true when compared to their Java counterpart.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=lgpl></a>
+<b><a name=q5></a><b>5. 
+What is the licensing term of JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+LGPL. You are essentially free to do anything with the software and its source code.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=notuse></a>
+<b><a name=q6></a><b>6. 
+When NOT to use JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Scripting languages are great for doing things quickly, or tasks that are simple,
+straightforward and take frequently updates.
+Scripting languages are not designed for building big software;
+that is the job of 
+<em>
+system languages
+</em>
+ such as C, C++ or Java.
+If a big software project is coded in a scripting language, you can pretty much assume it is still in prototype stage.
+Why? because system languages have mechanisms that enable compilers enforce stringent rules so as to prevent many potential problems;
+compilers can also optimize the final product to gain more performance.
+</p>
+
+
+<p>
+JudoScript, being a pure scripting language, is no exception to this rule.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=itsname></a>
+<b><a name=q7></a><b>7. 
+Why the name JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Better names are already taken. The name is chosen because a) it sounds ok, and b)
+it starts with "J".
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=shtcmg></a>
+<b><a name=q8></a><b>8. 
+What are JudoScript's shortcomings?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+JudoScript is totally based on Sun's Java. Java implements the common denominator of
+all supported platforms, and is not great to deal with popular platform features such
+as 'chmod' on Unix. JudoScript tries hard to provide features on popular platforms by
+working around Java's problems (for instance, 'chmod' and 'chown' are implemented for
+Unix platforms, environment variables are handled, etc.), but there must be situations
+where platform native code (through JNI) is needed. The classic example is COM scripting.
+This does not necessarily break the "100% Pure Java"-ness of JudoScript, because such
+features are declared to be optional. By the way, JudoScript never bothered to pass the
+"100% Pure Java" test.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=perf></a>
+<b><a name=q9></a><b>9. 
+What about JudoScript's Performance?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+JudoScript's performance is surprisingly good, most probably thanks to the JVM JIT compilers.
+The start-up is not that fast; on Windows 2000 and (slower) Linux machines,
+small to medium size scripts take 2 to 4 seconds to begin executing.
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=facts></a>
+<b><a name=q10></a><b>10. 
+Can you list some facts about JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<ol>
+
+
+<li>
+ Designed ground-up just for Java.
+
+<li>
+ Pure Java.
+
+<li>
+ Open-source freeware under LGPL; can be use for commercial or any purposes.
+
+<li>
+ Is a 3GL and a 4GL.
+
+<li>
+ Hybrid procedural and object-oriented language.
+
+<li>
+ Basic data types include integer, floating-point number, date/time
+     and string; each with large number of operations (methods).
+
+<li>
+ Advanced data structures:
+     
+<ul>
+
+     
+<li>
+ array and linked list; flexible sorting and filtering
+     
+<li>
+ struct and ordered map; flexible sorting and filtering
+     
+<li>
+ stack and queue
+     
+<li>
+ tree
+     
+<li>
+ table data; in-memory relational database features
+     
+</ul>
+
+
+<li>
+ Support advanced programming techniques:
+     
+<ul>
+
+     
+<li>
+ user-defined classes and inheritance
+     
+<li>
+ exception handling and resume statement
+     
+<li>
+ thread programming similar to functions
+     
+<li>
+ user-defined functions; can take variable number of parameters, and
+          parameters can have default values
+     
+<li>
+ function variables and lambda functions
+     
+<li>
+ dynamic evaluation of code and files
+     
+<li>
+ flexible iterations of arrays and linked lists
+     
+</ul>
+
+
+<li>
+ Java-like statements and expressions.
+
+<li>
+ Syntactic sugar, including various comment formats for Unix auto-run and
+     code disabling.
+
+<li>
+ Seamless uses of Java classes, objects and arrays.
+
+<li>
+ Java collection classes share same syntax as JudoScript
+     container data structures.
+
+<li>
+ Java static methods can be aliased to become JudoScript functions.
+
+<li>
+ Explicit JNDI support to facilitate RMI and EJB scripting.
+
+<li>
+ Is extensible by Java classes or by JudoScript libraries or a mixture of both.
+     Library code can be moved from JudoScript into Java (later) without changing
+     the interface.
+
+<li>
+ All existing Java software tool packages, commercial or free, can be used
+     directly in JudoScript.
+
+<li>
+ Sophisticated JDBC scripting and database manipulation features.
+
+<li>
+ Many built-in application features; some with special syntax (hence 4GL),
+     others are system functions. An incomplete list includes:
+     
+<ul>
+
+     
+<li>
+ JDBC scripting
+     
+<li>
+ XML scripting
+     
+<li>
+ HTML/SGML scraping
+     
+<li>
+ Microsoft COM scripting
+     
+<li>
+ HTTP/HTTPS client and server
+     
+<li>
+ Schedule jobs with HTTP monitors
+     
+<li>
+ Flexible file copying and archiving between file systems, JAR, ZIP
+          and TAR files
+     
+<li>
+ Consistent I/O model for local files, files within JAR/ZIP/TAR archives,
+          gzipped files, internet resources and string data sources
+     
+<li>
+ FTP, SSH, SCP, networking services, Windows registry editing, Unix syslog
+     
+<li>
+ Encryption
+     
+<li>
+ Send mail
+     
+<li>
+ Versatile executable running
+     
+<li>
+ Java GUI creation
+     
+<li>
+ Text and data processing features
+     
+</ul>
+
+
+<li>
+ Embeddable by Java software either by Bean-Scripting-Framework
+     or via its own engine.
+
+<li>
+ Is interpreted. Precompilation is planned.
+
+<li>
+ Rich documentation for reference, tutorials and examples.
+
+</ol>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=whyto></a>
+<b><a name=q11></a><b>11. 
+Why you created JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+To use Java for 
+<em>
+everything
+</em>
+, not just programming. Specifically,
+
+<ol>
+
+
+<li>
+ to scripting Java,
+
+<li>
+ to scripting many tasks extremely easily, and
+
+<li>
+ to do these within an easy and powerful programming environment.
+
+</ol>
+
+
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=contrib></a>
+<b><a name=q12></a><b>12. 
+How can I contribute to JudoScript?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+If you create open source Java software, you are already contributing to JudoScript!
+It would be even better if you license your software under LGPL or more open licensing
+terms, so that JudoScript may provide native support for your package and include your
+software in its distribution.
+</p>
+
+
+<p>
+There are 
+<a href="opensource.html">
+projects
+</a>
+ that you
+can help with.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=embed></a>
+<b><a name=q13></a><b>13. 
+Is JudoScript embeddable in Java software?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Yes, in one of the two ways:
+
+<a href="ref/s.html?fa=java_judo_eng">
+its engine API
+</a>
+ and
+
+<a href="ref/s.html?fa=java_judo_bsf">
+its BSF support
+</a>
+.
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=thrd></a>
+<b><a name=q14></a><b>14. 
+How to use threads in JudoScript? Can I use Java thread objects?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+JudoScript supports an easier 
+
+<a href="ref/s.html?fa=lang_thrd">
+thread
+programming model
+</a>
+. Since you can use any Java objects in JudoScript programs,
+nothing prevents you from using 
+<code>
+java.lang.Thread
+</code>
+ objects, but this is
+strongly discouraged.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=jscls></a>
+<b><a name=q15></a><b>15. 
+Can I script Java classes of the JudoScript engine?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+This is strongly discouraged except for the 
+<code>
+com.judoscript.util.*
+</code>
+ package and its sub-packages.
+And their uses are not documented or guaranteed.
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=natsup></a>
+<b><a name=q16></a><b>16. 
+What is 
+<em>
+native support
+</em>
+ in JudoScript? What is a non-native support then?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+A 
+<em>
+native support in JudoScript
+</em>
+ generally means specific syntax support in JudoScript,
+sometimes it is just a built-in function. A "non-native" support for a Java software or feature
+basically means you have to program using the Java APIs.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q17></a><b>17. 
+Are JudoScript's JDBC scripts cross-RDBMS's?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+This question is equivalent to "Is Java's JDBC cross-RDBMS's", because JudoScript does
+not provide anything beyond what JDBC drivers provide. In other words, JudoScript passes
+SQL and other parameters via JDBC API to the specific JDBC driver being used without further
+filtering and interpretation.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q18></a><b>18. 
+How to specify a (non-built-in) JDBC driver class?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+You can use the Java way of 
+<code>
+Class.forName(jdbcDriverClassName)
+</code>
+, or specify
+it as an attribute of "driver" in the 
+<a href="ref/s.html?syn=ConnectStatement">
+database
+connection statement
+</a>
+.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q19></a><b>19. 
+How to copy multiple directories into a single ZIP file?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Use 
+<code>
+createJar()
+</code>
+, 
+<code>
+createZip()
+</code>
+ or 
+<code>
+createTar()
+</code>
+
+system functions to create a ZIP or tar archive, then use the
+
+<a href="ref/s.html?syn=FSCopyStatement">
+<code>
+copy
+</code>
+</a>
+
+command for each directory into that archive before finally call the
+
+<code>
+close()
+</code>
+ method of the archive object to complete.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q20></a><b>20. 
+How to serialize executable runs?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+By specifying a variable to receive the return value of the executable, you can effectively
+serialize multiple executable runs.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q21></a><b>21. 
+Can I use 
+<em>
+my
+</em>
+ Java classes? Do I have to specify my long Java class names everytime?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Any Java classes can be used in JudoScript. Use the
+
+<a href="ref/s.html?syn=JavaClassShortcuts">
+Java package name shortcut
+</a>
+
+mechanism to make it easier to use if your Java class names have long package names.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q22></a><b>22. 
+Can I use a Java interface? How?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+See 
+<a href="articles/java_excpt.html#extend">
+here
+</a>
+.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q23></a><b>23. 
+Can I extend and use a Java abstract class and interfaces? How?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+See 
+<a href="articles/java_excpt.html#extend">
+here
+</a>
+.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q24></a><b>24. 
+How to use Java static members and methods?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Use 
+<code>
+::
+</code>
+ between the Java class name and the static method or member
+name to use them. Or, If a static Java method is repeatedly used, can use the
+
+<a href="ref/s.html?syn=StaticJavaFunctionDeclaration">
+static
+Java method alias
+</a>
+ mechanism to make them look like regular JudoScript functions.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<b><a name=q25></a><b>25. 
+What is the easiest way to read a text file, line-by-line?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+
+<p>
+Use the 
+<a href="ref/s.html?syn=LinesStatement">
+<code>
+do ... as lines {}
+</code>
+</a>
+ statement.
+</p>
+
+
+<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>
+<tr bgcolor=lightblue><td colspan=2>
+<a name=template></a>
+<b><a name=q26></a><b>26. 
+Is JudoScript good for templates?
+</b></td></tr>
+<tr><td valign=top><b>Answer:</b></td><td>
+
+You have two ways to create a templating system in JudoScript,
+
+<ol>
+
+
+<li>
+ For simple text replacement, use the 
+<a href="ref/s.html?syn=LinesStatement">
+<code>
+do ... as lines {}
+</code>
+</a>
+ statement.
+
+<li>
+ You can define your own SGML format with tags, case-sensitively or insensitively, and eaily create processing software with
+     the 
+<a href="ref/s.html?syn=SgmlStatement">
+<code>
+do ... as sgml {}
+</code>
+</a>
+ statement.
+
+</ol>
+
+
+Another convenience is the 
+<a href="ref/s.html?fa=localdata">
+Local Data
+</a>
+ mechanism, that you can attach a template right
+at the end of the script.
+
+
+</table><center><br> <hr size=1 width=99% color=#66CCFF>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+Better viewed with IE5+, NN6+ and Mozilla. </font>
+</center>
+<!-- ========================= /CONTENT PANE ========================= -->
+</td><td width=15><img src=share/spacer.gif width=1 height=1 border=0></td></tr>
+<tr>
+ <td width=138 valign=top><img src=share/home_lb.gif width=138 height=36 border=0><img src=share/spacer.gif width=1 height=1 border=0></td>
+</tr>
+</table></body></html>

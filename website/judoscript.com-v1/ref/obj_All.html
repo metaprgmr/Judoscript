@@ -1,0 +1,64 @@
+<html><head><title>JudoScript Object - All</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u><em>All</em></u></h3>
+
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=All_isA></a>isA<br></font></td><td valign=top><font class=param>typeName</font><br></td><td valign=top>
+  Checks the <font class=param>typeName</font> against the type name of this object, and returns
+  <font class=kw>true</font>  if they are compatible.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isArray></a>isArray<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for arrays, linked lists and Java arrays.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isDate></a>isDate<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for date values and Java object of <code>java.util.Date</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isFloat></a><a name=All_isDouble></a>isFloat<br>isDouble<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnes <font class=kw>true</font>  if this value is a floating-point number. This also includes any integer
+  types plus Java objects of <code>java.lang.Float</code> and <code>java.lang.Double</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isFunction></a>isFunction<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this value is a function reference.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isInt></a><a name=All_isInteger></a>isInt<br>isInteger<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnes <font class=kw>true</font>  if this value is an integer. This includes integer, boolean and date.
+  Java primitive-type objects except for <code>java.lang.Float</code> and <code>java.lang.Double</code>
+  are also integers.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isJava></a>isJava<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for Java objects, arrays and class instances.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isNumber></a>isNumber<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Same as <code>isFloat()</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isQueue></a>isQueue<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for <font class=kw>queue</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isSet></a>isSet<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for sets. It returns <font class=kw>false</font>  for Java objects of <code>java.util.Set</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isStack></a>isStack<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for <font class=kw>stack</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isString></a>isString<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for string values and Java object of <code>java.lang.String</code>.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_isStruct></a>isStruct<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  for <font class=kw>struct</font> , <font class=kw>orderedMap</font> , <font class=kw>sortedMap</font> , <font class=kw>treeNode</font>  and all
+  user-defined classes.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_toString></a>toString<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string representation of this value. User-defined classes can override this method.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=All_typeName></a>typeName<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the type name for this value.
+</td></tr>
+</table>
+</body></html>

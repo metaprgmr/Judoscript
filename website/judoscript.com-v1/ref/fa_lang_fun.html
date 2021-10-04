@@ -1,0 +1,23 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Function and Method</u></h3>
+  <p>Functions can be declared, in the global context or class context. Functions in classes
+  are commonly called methods. See <a href="javascript:showFALinke('lang_var')">Variables, Scope
+  and Runtime Contexts</a> for variable scopes.</p>
+
+  <p>Any function calls can take any number of parameters. In a function/method declaration, the
+  named parameters can be used in the code as local variables. If not enough number of parameters
+  are specified at the runtime, <font class=kw>null</font>  is used for the missing values. If there are more than
+  the declared parameters, those extra parameters (beyond the declared ones) are accessed via the
+  built-in array <font class=kw><nobr>$$args</nobr></font> . A function declaration can explicitly declare that it takes variable
+  number of parameters by <font class=kw><nobr>..</nobr></font> ; it does not actually do anything.</p>
+
+  <p>For class methods, data members should be accessed with <font class=kw>this</font> <font class=kw><nobr>.</nobr></font>  prefix, otherwise they
+  may be confused with variables. For a name without <font class=kw>this</font> <font class=kw><nobr>.</nobr></font> , if a non-<font class=kw>null</font>  variable value
+  is found, that variable/value is used; otherwise, try to find a data member with that name.</p>
+
+  <p>A class method is overridden by a same-name method in a derived class. The code in the
+  child class method can invoke the parent's same-name method with the prefix <font class=kw>super</font> <font class=kw><nobr>.</nobr></font> .</p>
+<h4>Related Functional Areas</h4><ul><li><font class=fa><a href="javascript:showFA('lang_var')">Variables, Scope and Runtime Contexts</a></font></ul><h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('FunctionDeclaration')">FunctionDeclaration</a></font><li><font class=nt><a href="javascript:showNT('ReturnStatement')">ReturnStatement</a></font><li><font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font><li><font class=nt><a href="javascript:showNT('ClassDefinition')">ClassDefinition</a></font></ul></body></html>

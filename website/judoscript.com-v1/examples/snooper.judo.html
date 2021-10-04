@@ -1,0 +1,54 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_httpserver/snooper.judo:</b></td></tr><tr><td><pre>
+println &lt;err> [[*
+  Connect with a browser at
+
+    http://localhost:8088/snoop/abc?a=1&amp;b=2
+
+  It returns a HTML page that echoes all the request information.
+
+*]];
+
+ss = startServer(8088);
+while {
+  start thread snooper(acceptHttp(ss));
+}
+
+thread snooper a {
+  path = a.getPath();
+  if path.indexOf('snoop') &lt; 0 {
+    a.serveFile();
+    return;
+  }
+  a.'Content-Type' = 'text/html';
+  os = a.getTextOutput();
+  flush &lt;os> [[*
+    &lt;html>&lt;body>
+    &lt;h1>Snooper Server&lt;/h1>
+    &lt;table>
+    &lt;tr>&lt;td>&amp;nbsp;&lt;/td>&lt;td>&amp;nbsp;&amp;nbsp;&lt;/td>&lt;td>&lt;em>Request URI Parts&lt;/em>&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Server Name&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getServerName() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Server Port&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getServerPort() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>URI&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getUrl() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Host&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getHost() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Port&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getPort() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Domain&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getDomain() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Path&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getPath() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>File&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getFile() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Query String&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getQuery() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;b>Ref&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.getRef() *)&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;em>Request Headers&lt;/em>&lt;/td>&lt;/tr>
+  *]];
+  for x in a.getAllHeaders() {
+    flush &lt;os> [[* &lt;tr>&lt;td nowrap>&lt;b>(* x *)&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* a.(x) *)&lt;/td>&lt;/tr> *]];
+  }
+  flush &lt;os> '&lt;tr>&lt;td>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;em>Cookies&lt;/em>&lt;/td>&lt;/tr>';
+  for x in a.getCookies() {
+    flush &lt;os> [[* &lt;tr>&lt;td>&lt;b>(* x.getName() *)&lt;/b>&lt;/td>&lt;td>&lt;/td>&lt;td>(* x.getValue() *)&lt;/td>&lt;/tr> *]];
+  }
+
+  flush &lt;os> '&lt;/table>&lt;/body>&lt;/html>';
+  os.close();
+}
+</pre></td></tr></table></body></html>

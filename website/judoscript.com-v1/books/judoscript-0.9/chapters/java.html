@@ -1,0 +1,978 @@
+<html><head><title>Chapter 11. Java Scripting</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 11. Java Scripting</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#intro">Introduction to Java and Object Scripting</a></li><li><a href="#jobjcls">Use Java Objects and Classes</a></li><br>&#187;&nbsp;<a href="#jobj">Create and Use Java Objects</a><br>&#187;&nbsp;<a href="#clsnames">Resolving Java Class Names</a><br>&#187;&nbsp;<a href="#jcallvals">Pass Judo Values To Java Methods</a><br>&#187;&nbsp;<a href="#jcls">Use Java Classes and Class Static Members</a><br>&#187;&nbsp;<a href="#alias">Alias Java Static Methods as Functions</a><li><a href="#jarr">Create and Use Java Arrays</a></li><li><a href="#jds">Native Judo Operations for Java Data Structures</a></li><br>&#187;&nbsp;<a href="#map">Initialize and Access java.util.Map Values</a><br>&#187;&nbsp;<a href="#iter">Iterate Java Data Structures and Objects</a><br>&#187;&nbsp;<a href="#jlist">Access elements in java.util.List</a><li><a href="#xjava">Extend Java Classes and Implement Java Interfaces</a></li><li><a href="#adapter">Java Interface Adapters</a></li><li><a href="#rmiejb">Making Clients for JNDI, RMI and EJB</a></li><br>&#187;&nbsp;<a href="#jndi">Obtain JNDI Initial Context</a><br>&#187;&nbsp;<a href="#rmi">RMI</a><li><a href="#testing">Java Software Testing and JUnit</a></li><li><a href="#prototyping">Java Software Prototyping</a></li><li><a href="#threads">Thread and Other Considerations</a></li><li><a href="#summary">Summary</a></li></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+<!-- SYNOPSIS PART --><tr><td valign=top>
+ <table border=0 cellpadding=5><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+
+Judo is a top-of-the-line Java scripting language. You can script any Java publically accessible objects and arrays, that is, you can create Java objects and arrays, access their data members and invoke their methods. Judo also allows you to implement Java interfaces and extend Java classes with Judo code, and provide anonymous interface adapters similarly. There are preferential treatment for instances of <code>java.util.List</code>, <code>java.util.List</code>, <code>java.util.Iterator</code>, <code>java.util.Enumeration</code> and Java arrays, allowing them to use native Judo operators. Such potent Java scripting capability makes Judo a great tool to write J2EE client programs, such as clients for JMX, JMS, EJB, web services and other distributed services. Java scripting naturally opens the door to all the Java resources available; in fact, many Judo language featres are internally implemented via Java scripting. Java scripting, along with features like <i><a href="jdbc.html">22. JDBC (SQL) Scripting</a></i>, <i><a href="xml.html">26. XML Scripting - SAX Style</a></i> and <i><a href="ant.html">20. Ant Scripting and Scripting Ant</a></i>, makes Judo a powerful tools' platform to automate most J2EE development, testing and deployment tasks.
+ </td></tr></table>
+</td></tr><!-- SYNOPSIS PART -->
+</table>
+
+
+
+<h2>&nbsp;<br><a name=intro> Introduction to Java and Object Scripting</a></h2>
+
+<p>What exactly is Java scripting? Java scripting means to use Java objects, arrays and classes from languages other than Java. Generally speaking, it is a special case of object scripting. There are many other cases of object scripting. In the latest web browsers, for instance, objects of various sizes and importance are "exposed" to embedded scripting language engines like JavaScript or VBScript; you can write JavaScript code in a HTML page to manipulate the page content through these objects, and can even handle events from various objects. On Windows platforms, the Component Object Model (COM) architecture exposes many Windows executable code in the form of readily-available objects that can be accessed by any capable scripting tools, such as Visual Basic, C#, Judo or C/C++.</p>
+
+<p><b>Some Object-Orientation Terminologies</b><br>A class represents one kind of objects. An object of that class is called an instance of the class, or simply, instance. Objects have <i>methods</i> and <i>properties</i>, collectively called <i>members</i>. Any software using an object is a client; they can be called the objects methods and access its properties. In Java classes, there are <i>methods</i> and <i>fields</i>; fields are naturally properties. A Java class may follow a design pattern and support a property by providing a getter and a setter method. For instance, the following class implements a property called "name":</p>
+
+<font color=brown><pre>public class Person {
+  private String _name;
+
+  public String getName() { return _name; }
+  public void setName(String name) { _name = name; }
+}
+</pre></font>
+
+<p>When scripting object, how does one know about the objects and their members? You need to find the objects' documentation. For Java, as Java developers well know, classes are documented via the <i>javadoc</i> mechanism, which are HTML pages generated out of special comments within the source code (put in by the class designer.) For objects on other platforms such as Windows ActiveX controls, you need to locate their documentation somehow. They may be under different names. For example, the Microsoft Word ActiveX control is documented by the Word Object Model, and is available in books describing Microsoft Word macros and VBA.</p>
+
+<p><b>Java and object scripting</b><br>Java is a dynamic platform perfect for object scripting. Objects on other platforms, say, Windows COM, need to expose their interfaces through a specification, that is, a contract between objects and users; this can be commonly defined in some kind of interface definition languages (IDLs). For Java, the IDL is Java itself, as Java virtual machine (JVM) objects are indeed Java objects; they are complete with RTTI (Run-Time Type Information), so a scripting agent can correctly direct users' requests, as long as appropriate information is present. One important aspect of object-orientation is inheritance. JVMs allow dynamically construct classes and objects at runtime; this opens doors to capable Java scripting languages to dynamically extend Java classes. But JVMs are not without limitations for scripting agents. For security reasons, Java has <i>public</i>, <i>protected</i>, <i>private</i> and <i>default</i> access control. Generally only <i>public</i> classes and members can be accessed by an agent. Thanks to the possibility of dynamic inheritance, some of the limitations are alleviated.<p>
+
+<p><b>What can potent Java scripting languages do</b><br>Different Java scripting languages may choose to support different levels of sophistication for Java scripting. At a minimum, Java scripting languages should be able to <i>a)</i> create Java objects, <i>b)</i> use the public members of Java objects, <i>c)</i> create Java arrays, <i>d)</i> use Java arrays, and <i>e)</i> use public classes' public static members. More sophisticated Java scripting languages would be able to extend Java classes and implement Java interfaces, and even create new Java classes (written in the scripting language.</p>
+
+<p><b>Judo is a fully capable Java scripting language</b><br>Judo supports all the above. Java scripting is an integral part of the Judo language. All Java-related activities are in a special namespace called "java"; otherwise they are very close to native Judo operations. Judo natively treats Java arrays and <code>java.util</code> classes. Java's getter/setter methods can be treated as properties in Judo. Java class names are resolved much the same way in Java with the <code>import</code> directive. Judo's built-in data structures are, in theory, totally separated from any Java classes; when calling Java methods, they may need be converted to Java arrays or objects. These Judo data structures have built-in methods for this purpose. This chapter covers all the details, and has a few case studies in the end.</p>
+
+<p>This chapter assumes you are experienced with Java and Java programming.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=jobjcls> Use Java Objects and Classes</a></h2>
+
+
+<a name=jobj><h3> Create and Use Java Objects</h3></a>
+
+<p>Java objects are created the same way as objects in Judo, from a special namspace called "java".</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="hashtable.judo">Listing 11.1</a> hashtable.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+a = new java::java.util.Hashtable;
+a.put('date',      Date(2001,1,1));
+a.put('integer',   1);
+a.put('double',    10.01);
+a.put('string',    'Hello, World!');
+a.put('Dimension', new java::java.awt.Dimension(10,20));
+
+for k in a.keys() { // for-in statement handles Enumeration/Iterator
+  println k:>10, ' = ', a.get(k);
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>When calling Java methods and constructors, generally just pass Judo variables as parameters, Judo tries to pick the right method. This should work most of the time, but is not always possible when there are overloaded methods with different numbers of parameters. (Overloaded methods are those in a same class with the same name but different parameters.)</p>
+
+<p><b>Casting values and instanceof test</b><br>Let's see two Java classes, <code>Foo</code> and <code>Foo1</code>; both have methods with the same name, <code>bar()</code>, and one parameter of various types.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="Foo.java">Listing 11.2</a> Foo.java</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+public class Foo
+{
+  public String bar(byte x)           { return "byte"; }
+  public String bar(char x)           { return "char"; }
+  public String bar(Integer x)        { return "Integer"; }
+  public String bar(java.util.Date x) { return "Date"; }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="Foo1.java">Listing 11.3</a> Foo1.java</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+public class Foo1 extends Foo
+{
+  public String bar(int x)            { return "int";  }
+  public String bar(long x)           { return "long";  }
+  public String bar(double x)         { return "double";  }
+  public String bar(String x)         { return "String"; }
+  public String bar(java.sql.Date x)  { return "SQLDate"; }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The following Judo program conducts three sets of tests: calling <code>Foo</code>, calling <code>Foo1</code> and calling <code>Foo1</code> with precise Java types.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="casting.judo">Listing 11.4</a> casting.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+foo = new java::Foo;
+foo1 = new java::Foo1;
+
+sqldate  = new java::java.sql.Date(1000);
+sqldate_ = sqld.cast(java::java.util.Date);
+
+println foo.bar('a')       ; // char
+println foo.bar('abc')     ; // char
+println foo.bar(1)         ; // Integer
+println foo.bar(1.01)      ; // Integer
+println foo.bar(Date())    ; // Date
+println foo.bar(sqldate)   ; // Date
+
+println foo1.bar('a')      ; // String
+println foo1.bar('abc')    ; // String
+println foo1.bar(1)        ; // long
+println foo1.bar(1.01)     ; // double
+println foo1.bar(Date())   ; // Date
+println foo1.bar(sqldate)  ; // SQLDate
+println foo1.bar(sqldate_) ; // Date
+
+println foo1.bar(char('1')); // char
+println foo1.bar(byte(1))  ; // byte
+println foo1.bar(char(1))  ; // char
+println foo1.bar(short(1)) ; // int
+println foo1.bar(int(1))   ; // int
+println foo1.bar(long(1))  ; // long
+println foo1.bar(float(1)) ; // double
+println foo1.bar(double(1)); // double
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Look closely at the output of all test cases and refer to each Java method invoked. As you see, Judo guesses reasonably well even in confusing situations. By casting Judo primitive values to specific Java types, you can invoke a particular method. The casting operators for Java primitive types look like functions, such as <code>char(1)</code>; this syntax is consistent with JavaScript's. Java objects are cast with the <code>cast()</code> method.</p>
+
+<p>All Java objects in Judo have two built-in methods: <code>cast()</code> and <code>instanceof()</code>; this usage is different from Java but serves the same purposes. Generally object casting is not needed in method calls, since the object type is precise and there is no ambiguity. Java object casting is needed to use public members of an instance of a non-public class that implements public interfaces or extends other classes with public methods. To access the publicly accessible methods and fields, you would have to cast that object to the Java interface or parent class which are public. You will see this in examples of EJBs (Enterprise Java Beans).</p>
+
+<p>The <code>instanceof()</code> is used to check the class of an Java object. It can take a string representing the fully qualified Java class name or a Java class object, which is discussed later.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="instof.judo">Listing 11.5</a> instof.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+date1 = new java::java.sql.Date(1000);
+if date1.instanceof('java.util.Date') {
+  println 'Yes, this is a java.util.Date.';
+} else {
+  println 'No, this is NOT a java.util.Date.';
+}
+if date1.instanceof(java::java.sql.Date) {
+  println 'Yes, this is a java.sql.Date.';
+} else {
+  println 'No, this is NOT a java.sql.Date.';
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<br>
+
+
+<a name=clsnames><h3> Resolving Java Class Names</h3></a>
+
+<p>Fully qualified Java class names include a number of package names and the class name itself, separated by dots; they are usually quite long. Judo uses the same Java <code>import</code> directive to allow programs use class names without package prefixes. In Java, the <code>import</code> directives must appear at the beginning in the source code; in Judo, however, <code>import</code> directives can appear anywhere a statement is allowed, and they only affect Java class resolutions thereafter.</p>
+
+<p><b>Pre-imported standard Java packages</b><br>Following explicit import directives, these three Java packages are pre-imported: <code>java.lang.*</code>, <code>java.io.*</code> and <code>java.util.*</code>. Thus, you can directly use classes like <code>System</code>, <code>HashMap</code>, <code>InputStream</code>, etc.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="import.judo">Listing 11.6</a> import.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+x = new java::Date;
+println x.getClass().getName(); // java.util.Date
+
+import java.awt.*;
+import java.sql.Date;
+
+x = new java::Dimension(100,200);
+println x.getClass().getName(); // java.awt.Dimension
+
+x = new java::Date(10000);
+println x.getClass().getName(); // java.sql.Date
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In the above example, the first <code>x</code> is <code>java.util.Date</code> because of the rule of pre-imported <code>java.util.*</code> package. The second <code>x</code> is resolved by matching a class in the imported <code>java.awt.*</code> package, and the latest <code>x</code> is an exact match for the imported <code>java.sql.Date</code> class, not <code>java.util.Date</code>.
+
+<p><b>Inner class names</b><br>Java classes can contain other class definitions; the contained classes are called <i>inner classes</i>. The inner class name is separated from its containing class with a dollar sign ($).</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="Foo2.java">Listing 11.7</a> Foo2.java</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+public class Foo2
+{
+  public static class Bar
+  {
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="innercls.judo">Listing 11.8</a> innercls.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+x = new java::Foo2$Bar;
+
+println x.getClass().getName(); // prints: Foo2$Bar
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In Java, using inner classes is more of a style than necessity. Only <code>public static</code> inner classes can be created in Judo; the name of the enclosing class serves the role of a namespace in this case. This topic of inner class itself is beyond the scope of Judo.</p>
+
+<br>
+
+
+<a name=jcallvals><h3> Pass Judo Values To Java Methods</h3></a>
+
+<p>Judo primitive values can be passed directly into Java methods like we have seen earlier. This includes integers, floats, strings and <code>Date</code>s. Other native Judo data structures including arrays generally can not be passed into Java methods. Judo array objects have a number of built-in methods that return various Java arrays for the values in the array.</p>
+
+<font color=black><pre>
+Array.toBooleanArray()       // boolean[]
+Array.toBooleanObjectArray() // Boolean[]
+Array.toByteArray()          // byte[]
+Array.toByteObjectArray()    // Byte[]
+Array.toCharArray()          // char[]
+Array.toCharObjectArray()    // Character[]
+Array.toShortArray()         // short[]
+Array.toShortObjectArray()   // Short[]
+Array.toIntArray()           // int[]
+Array.toIntObjectArray()     // Integer[]
+Array.toLongArray()          // long[]
+Array.toLongObjectArray()    // Long[]
+Array.toFloatArray()         // float[]
+Array.toFloatObjectArray()   // Float[]
+Array.toDoubleArray()        // double[]
+Array.toDoubleObjectArray()  // Double[]
+Array.toObjectArray()        // Object[]
+Array.toStringArray()        // String[]
+</pre></font>
+
+<p>Otherwise, you need to explicitly convert the Judo data structure into a particular Java class instance.</p>
+
+<br>
+
+
+<a name=jcls><h3> Use Java Classes and Class Static Members</h3></a>
+
+<p>Java classes are special objects within JVMs. In Judo, the <code>java::</code> operator returns Java class objects. They can be stored in variables or assigned to constants, and the variables and constants can be used to instantiate classes or arrays.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="javacls.judo">Listing 11.9</a> javacls.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+const #Dimension = java::java.awt.Dimension;
+CDim = java::java.awt.Dimension;
+
+println new #Dimension(100,200);
+println new :CDim(100,200);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Once the class object is in a constant or variable, you can use the <code>new</code> without "java" namespace prefix, because the information about the class object is already there. In the <code>new</code> operator, the variable name must be prefixed with <code>:</code>; otherwise, Judo would take the variable name as a (native) class name and try to instantiate an object of that name.</p>
+
+<p>One of the main reasons to use Java class objects is to use Java class static members. Java classes' static methods and fields are class-wide members and can be accessed without creating individual instances. In Judo, you need to use the Java class objects to use their static members:</p>
+
+<font color=black><pre>
+println (java::System).currentTimeMillis();
+</pre></font>
+
+<p>This works, but the syntax is a little cumbersome. In fact, Judo treats Java class names as namespaces, so that Java class static members can be accessed directly like this:
+
+<font color=black><pre>
+println System::currentTimeMillis();
+
+System::out.println('abc');
+
+mode = java.awt.Frame::MAXIMIZED_BOTH;
+</pre></font>
+
+<p>The following example prints out the values of <code>java.sql.Types</code>'s static fields.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="sqltypes.judo">Listing 11.10</a> sqltypes.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+const #Types = java::java.sql.Types;
+fields = [ 'BIT', 'TINYINT', 'SMALLINT', 'INTEGER', 'BIGINT',
+  'FLOAT', 'REAL', 'DOUBLE', 'NUMERIC', 'DECIMAL', 'CHAR',
+  'VARCHAR', 'LONGVARCHAR', 'DATE', 'TIME', 'TIMESTAMP',
+  'BINARY', 'VARBINARY', 'LONGVARBINARY', 'NULL', 'OTHER',
+  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'BLOB', 'CLOB',
+  'REF'
+];
+
+println 'JDBC types in Java ', sysProperty('java.version'), ':';
+for fld in fields {
+  println fld:<13, ': ', #Types.(fld);
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In the loop, we used the <code>.()</code> to access the static fields. The result is:</code>
+
+<font color=black><pre>
+JDBC types in Java 1.4.1_01:
+BIT          : -7
+TINYINT      : -6
+SMALLINT     : 5
+INTEGER      : 4
+BIGINT       : -5
+FLOAT        : 6
+REAL         : 7
+DOUBLE       : 8
+NUMERIC      : 2
+DECIMAL      : 3
+CHAR         : 1
+VARCHAR      : 12
+LONGVARCHAR  : -1
+DATE         : 91
+TIME         : 92
+TIMESTAMP    : 93
+BINARY       : -2
+VARBINARY    : -3
+LONGVARBINARY: -4
+NULL         : 0
+OTHER        : 1111
+JAVA_OBJECT  : 2000
+DISTINCT     : 2001
+STRUCT       : 2002
+ARRAY        : 2003
+BLOB         : 2004
+CLOB         : 2005
+REF          : 2006
+</pre></font>
+
+<br>
+
+
+<a name=alias><h3> Alias Java Static Methods as Functions</h3></a>
+
+<p>You can create function aliases for static Java methods; these function aliases behave like regular Judo functions. This is a great way to build Judo/Java libraries: you can choose to implement a function as a Java static method and alias it. In fact, many of Judo's own system functions are implemented this way. The syntax is:</p>
+
+<a name="FunctionAlias"><table border=0>
+<i>FunctionAlias</i> ::= <b><code>function</code></b> <i>IDENTIFIER</i> <b><code>for</code></b> <b><code>java::</code></b><i>JavaClassName</i> [ <b><code>(</code></b><b><code>)</code></b> ] <b><code>;</code></b>
+</table></a>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="func_alias.judo">Listing 11.11</a> func_alias.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+function prop for java::System.getProperty();
+function now  for java::System.currentTimeMillis();
+function rt   for java::Runtime.getRuntime();
+
+println now(), nl;
+println prop('java.class.path'), nl;
+rt().gc();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Note that function aliases don't care about the parameters of the Java static method. If a function alias is to take variable number of parameters, the Java class must have the name-sake static methods with parameters of all permutations. For instance, the Judo system function <code>initialContext()</code> is an alias to get the initial JNDI context:</p>
+
+<font color=black><pre>
+function initialContext for java::com.judoscript.bio.SysFunLib.initCtxt;
+</pre></font>
+
+<p>That function may take no parameters, or a factory name and optionally <i>url</i>, <i>user</i>, <i>password</i> and <i>auth</i> as parameters. Hence, the class <code>com.judoscript.bio.SysFunLib</code> has these methods for that function alias:</p>
+
+<font color=black><pre>
+public class SysFunLib
+{
+  static InitialContext initCtxt();
+  static InitialContext initCtxt(String factory);
+  static InitialContext initCtxt(String factory, String url);
+  static InitialContext initCtxt(String factory, String url, String user);
+  static InitialContext initCtxt(String factory, String url, String user, String pwd);
+  static InitialContext initCtxt(String factory, String url, String user, String pwd, String auth);
+}
+</pre></font>
+
+<p>Another system function, <code>startServer()</code>, is also an alias. Among methods of various parameter combinations, two of them take two parameters but of different types. That equates to two static methods as well.</code>
+
+<font color=black><pre>
+public class SysFunLib
+{
+  public static ServerSocket startServer(int port, String addr) throws IOException { ... }
+  public static ServerSocket startServer(int port, InetAddress addr) throws IOException { ... }
+}
+</pre></font>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=jarr> Create and Use Java Arrays</a></h2>
+
+<p>Like in Java, in Judo you can create Java arrays of primitive types and objects, either by size or by initialization:</p>
+
+<font color=black><pre>
+// Create array by size
+a = new java::int[3];
+a[0] = 1;
+a[1] = 2;
+a[2] = 4;
+for x in a { println x; }
+
+// Create array by initialization
+a = new java::String[] { 'abcd', 'efg', 8, 9 };
+for x in a { println x; }
+</pre></font>
+
+<p>The <code>for in</code> statement is useful for iterating through Java and Judo arrays. Java arrays can be passed to Java methods:</p>
+
+<font color=black><pre>
+a = new java::String[] { 'abcd', 'efg', 8, "ab" };
+Arrays::sort(a);
+for x in a { println x; }
+</pre></font>
+
+<p>Multi-dimensional arrays are created and used similarly:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="java_array.judo">Listing 11.12</a> java_array.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+ia = new java::int[][][] {
+       { { 1, 2, 3 }, {  4, 5, 6 } },
+       { { 7, 8, 9 }, { 10 } }
+     };
+Fa = new java::Float[][][] {
+       { { 1.5, 2.5, 3.5 }, {  4.5, 5.5, 6.5 } },
+       { { 7.5, 8.5, 9.5 }, { 10.5 } }
+     };
+ba = new java::boolean[][][] {
+       { { true, false, true }, { false, true, true } },
+       { { true, true,  true }, { true, true } }
+     };
+Ba = new java::Boolean[][][] {
+       { { true, false, true }, { false, true, true } },
+       { { true, true,  true }, { true, true } }
+     };
+ca = new java::char[][][] {
+       { { 'A', 'B', 'C' }, { 'D', 'E', 'F' } },
+       { { 'G', 'H', 'I' }, { 'J', 'K' } }
+     };
+Oa = new java::Object[][][] {
+       { { 'a', 'b', 'c' }, { 'd', 'e', 'f' } },
+       { { 'g', 'h', 'i' }, { 'j', 'k' } }
+     };
+
+print3d ia;
+print3d Fa;
+print3d ba;
+print3d Ba;
+print3d ca;
+print3d Oa;
+
+function print3d a {
+  println '----- print 3D: ', a;
+  for i from 0 to a.length-1 {
+    for j from 0 to a[i].length-1 {
+      for k from 0 to a[i][j].length-1 {
+        println i, ' ', j, ' ', k, ' => ', a[i][j][k];
+      }
+    }
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>When a value is assigned to an array element, Judo tries to convert it to the array element type.</p>
+
+<p>Judo has special treatment of common Java data structures including arrays, some of which we have already seen. This is the topic of the next section.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=jds> Native Judo Operations for Java Data Structures</a></h2>
+
+<p>Java data structures are treated almost identical to their Judo counterparts.</p>
+
+
+<a name=map><h3> Initialize and Access java.util.Map Values</h3></a>
+
+<p>The <code>java.util.Map</code> interface is treated almost the same as Judo's own <code>Object</code>. That is, <code>java.util.Map</code> instance can be initialized with name-value pairs, and the member-access operator, <code>.()</code> can be used to get and set values instead of <code>Map</code>'s <code>get()</code> and <code>put()</code> methods. In addition, if the key value is a string, you can access its value by directly using that string as an "attribute" name, seen in the following example.</p>
+
+<font color=black><pre>
+ht = new java::Hashtable; // is a Map.
+ht.Hello       = 'Hello, World!';
+ht.'Hi, World' = 'Hello, World!';
+
+println ht.Hello;       // prints: Hello, World!
+println ht.'Hi, World'; // prints: Hello, World!
+println ht.DontExist;   // prints nothing.
+</pre></font>
+
+<p>The most commonly used classes that implement the <code>Map</code> interfaces are <code>HashMap</code>, <code>Hashtable</code> and <code>Properties</code>. The following example creates a <code>Properties</code> instance with initial values:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="props.judo">Listing 11.13</a> props.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+props = new java::Properties(
+          a.b.c.d.e.f.g = 'a thru g',
+          h.i.j.k.l.m.n = 'h thru n'
+        );
+
+println props;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<br>
+
+
+<a name=iter><h3> Iterate Java Data Structures and Objects</h3></a>
+
+<p>Earlier, we have seen that the <code>for in</code> statement can be used to iterate through Java arrays. In fact, <code>for in</code> can be used to iterate these Java data structures:</p>
+
+<ol>
+<li>Java arrays</li>
+<li><code>java.util.Iterator</code> instances</li>
+<li><code>java.util.Enumeration</code> instances</li>
+<li><code>java.util.List</code> instances</li>
+<li><code>java.util.Collection</code> instances</li>
+<li><code>java.util.Map</code> instances (through their keys)</li>
+<li>Any Java objects that have an <code>iterator()</code> method that returns a <code>java.util.Iterator</code></li>
+<li>Any Java objects that have only one method that takes no parameters and returns a <code>java.util.Iterator</code> or <code>java.util.Enumeration</code></li>
+</ol>
+
+<p>The rules should be obvious, except perhaps the last two. The following Java source file contains three classes; they are all ordinary classes but have those "signature" methods.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="IterationDemo.java">Listing 11.14</a> IterationDemo.java</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+import java.util.*;
+
+// A class with one iterator() method
+public class IterationDemo
+{
+  int i = 0;
+  public Iterator iterator() {
+    i = 0;
+    return new Iterator() {
+      public boolean hasNext() { return i++<3; }
+      public Object next() { return "iterator()-" + i; }
+      public void remove() {}
+    };
+  }
+
+  // A class with one method that returns
+  // an Iterator and takes no parameters
+  public static class WithOneIterator {
+    int i = 0;
+    public Iterator foo() {
+      i = 0;
+      return new Iterator() {
+        public boolean hasNext() { return i++<3; }
+        public Object next() { return "foo()-" + i; }
+        public void remove() {}
+      };
+    }
+  }
+
+  // A class with one method that returns
+  // an Enumeration and takes no parameters
+  public static class WithOneEnumeration {
+    int i = 0;
+    public Enumeration bar() {
+      i = 0;
+      return new Enumeration() {
+        public boolean hasMoreElements() { return i++<3; }
+        public Object nextElement() { return "bar()-" + i; }
+      };
+    }
+  }
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The following Judo program uses the <code>for in</code> statement to iterate through each of them.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="for_in_iter.judo">Listing 11.15</a> for_in_iter.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+o = new java::IterationDemo;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneIterator;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneEnumeration;
+for x in o { println x; }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<br>
+
+
+<a name=jlist><h3> Access elements in java.util.List</h3></a>
+
+<p>Objects of <code>java.util.List</code> are treated very much like Judo arrays. For instance, they can be iterated forward and backward, and elements can be accessed via the array element access operator <code>[]</code>, as shown the following example.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="javalists.judo">Listing 11.16</a> javalists.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+testList new java::java.util.Vector();
+testList new java::java.util.ArrayList();
+testList new java::java.util.LinkedList();
+
+function testList lst {
+  println nl, '=== ', lst.getClass().getName(), ' ===';
+  lst.add( Date(2001,1,1) );
+  lst.add( 1 );
+  lst.add( 10.01 );
+  lst.add( 'Hello, World!' );
+
+  println 'lst[0] = ', lst[0];
+  println 'lst[1] = ', lst[1];
+  println 'lst[2] = ', lst[2];
+  println 'lst[3] = ', lst[3];
+  println 'lst[4] = ', lst[4];
+
+  lst[9] = 'XYZ';
+  println 'lst[9] = ', lst[9];
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>For the first <code>testList()</code> call, for instance, the output is:</code>
+
+<font color=black><pre>
+=== java.util.Vector ===
+--- size: 4 ---
+lst[0] = 1/1/01 12:00 AM
+lst[1] = 1
+lst[2] = 10.01
+lst[3] = Hello, World!
+lst[4] =
+lst[9] = XYZ
+</pre></font>
+
+<p>So far we have covered all the basic Java scripting topics in Judo. Other than the special "java" namespace prefix, the operations are natural to both Judo and Java. Next, we are going to look at extending Java classes, including implementing Java interfaces.</p>
+
+<br>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=xjava> Extend Java Classes and Implement Java Interfaces</a></h2>
+
+<p>The capability for a Java scripting language to extend Java classes and implement Java interfaces is important, because sometimes Java methods expect parameters of interfaces and require the client program to provide implementation classes. A classical use case is event handling. For instance, in a GUI program, you construct the GUI by assembling various components; based on user interaction, GUI components fire events by calling the controller object. This requires that the controller class implement certain interfaces, so the components "know" how to communicate with it. Such a call-back mechanism is not unique to GUI programs. A Java scripting language incapable of extending Java classes and implementing interfaces has serious limitations in terms of full-scale Java scripting.</p>
+
+<p>Judo itself is an object-oriented language, and can extend/implement Java classes and interfaces; such classes are called <i>Java extension classes</i> in Judo. They are defined with the presence of the <code>extends java::</code> clause. These are the rules governing Java extension classes:</p>
+
+<ol>
+<li> A Java extension class is defined as a Judo class that <code>extends</code> zero or one Java classes and zero or more interfaces, separated by comma. The resultant class is a Java class with that class name without any package names. This user-defined class are created like a normal Judo class via the <code>new</code> operator without "java" namespace prefix.
+<li> Methods are declared with Java return type and Java-typed parameters just like Java methods; fields are declared with Java types like Java. No access control can be specified as they are always public; they can never be static. Methods are never declared with exceptions.
+<li> <i>Method bodies are implemented in Judo code.</i> The parent class's methods, public or protected, can be invoked by the <code>super</code> decorator. You can also invoke own methods, and access this and parent's data fields, public or protected.
+<li> When abstract methods from the parent class/interfaces are not explicitly implemented, they are given empty bodies, so the resultant Java class can be instantiated.
+<li> Data fields can be initialized only in the constructor.
+<li> There can be up to one constructor in a Java extension class. This constructor may take untyped Judo parameters. Within the constructor, there must be one and only one invocation of <code>super()</code>, which is one of the parent class's constructors. This call must precede data member initializations and invocations of any other methods.
+</ol>
+
+<p>The most important things to remember are, the class itself is defined very much like a Java class, except the method bodies are written in Judo; everything is public; and constructor is a special issue. Let's look at examples now.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="extend_class.judo">Listing 11.17</a> extend_class.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+class MyHashtable extends java::Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in this { arr.add(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    for x in values() { arr.add(x); }
+    return arr.toObjectArray();
+  }
+}
+
+mht = new MyHashtable;
+mht.put('adate', Date(2004, 6, 6));
+mht.put('anumber', 2);
+mht.put('astring', 'string');
+
+println '    keys: ', mht.getKeys();
+println '  values: ', mht.getValues();
+println 'hashCode: ', mht.hashCode();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The <code>hashCode()</code> method overrides the existing method in the parent class, and it invokes the parent's name-sake method. The two new methods, <code>getKeys()</code> and <code>getValues()</code>, use Judo arrays to collect keys and values, and eventually return them as <code>Object[]</code>'s.</p>
+
+<p>Java interfaces can be extended (implemented) exactly the same way. The following example defines a Java extension class that implements <code>java.util.Iterator</code> without implementing any of the methods, because any unimplemented abstract methods in a Java extension class are given empty bodies, so the new class we define is still a concrete (Java) class.</p>
+ 
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="extend_itf.judo">Listing 11.18</a> extend_itf.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+class MyIterator extends java::Iterator
+{
+}
+
+println o = new MyIterator;
+for x in o { println x; }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The following program extends a Java class and a Java interface. You can implement any number of Java interfaces, separated by comma(s); but you can extend no more than one Java class as you would expect.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="extend_class_itf.judo">Listing 11.19</a> extend_class_itf.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+class MySetIterator extends java::HashSet, Iterator
+{
+  Iterator iter;
+
+  constructor a, b, c {
+    super();
+    iter = null;
+    if c != null { add(c); }
+    if b != null { add(b); }
+    if a != null { add(a); }
+  }
+
+  // Iterator methods
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+  Object next() {
+    return (iter==null) ? null : iter.next();
+  }
+}
+
+o = new MySetIterator('Hi!', 9);
+o.add('abc');
+o.add(Date(2003,7,4));
+
+for x in o { println x; }
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>All these examples are to demonstrate Judo's Java extension classes; they may not make much practical sense. This time, we declared a data member, <code>iter</code>. They can <i>only</i> be initialized in the constructor. The constructor takes <i>up to</i> three parameters; in the testing, we passed two parameters. The program's output is:</p>
+
+<font color=black><pre>
+Hi!
+9
+abc
+7/4/03 12:00 AM
+</pre></font>
+
+<p>So, we have covered all the topics of Java scripting in Judo, from the very basics to advanced topics and everything in between. Java scripting is used extensively in building Java GUIs of AWT or Swing, as you will find out a lot in chapter <i><a href="gui.html">19. Java GUI Scripting</a></i>. Next, we present some practical J2EE topics as further examples of Java scripting applications.
+
+<br>
+
+
+<h2>&nbsp;<br><a name=adapter> Java Interface Adapters</a></h2>
+
+<p><i>Java interface adapters</i> are nothing but anonymous Java objects that implement some Java interfaces. Java interface adapters happen most frequently in event handling, notably in Java GUI programs:</p>
+
+<font color=brown><pre>
+import java.awt.Frame;
+import java.awt.event.*;
+
+Frame f = new Frame();
+f.addWindowListener(
+  new WindowListener() {
+    public void windowClosing(WindowEvent e) { System.exit(0); }
+    public void windowClosed(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {}
+  }
+);
+f.setVisible(true);
+</pre></font>
+
+<p>In Judo, this is done via the Java extension class mechanism like this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="adapter.judo">Listing 11.20</a> adapter.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+import java.awt.Frame;
+import java.awt.event.*;
+
+f = new java::Frame;
+f.addWindowListener(
+  new java::WindowListener {
+    void windowClosing(WindowEvent e) { exit 0; }
+  }
+);
+f.setVisible(true);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>As discussed earlier, the unimplemented methods in the interface are given default (empty) implementations.</p>
+
+<p>In Java, an interface adapter can implement just one interface; in Judo, you can implement as many interfaces as you want. In fact, you can even extend a class that has a default constructor. The following example demonstrates:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="fromPaMa.judo">Listing 11.21</a> fromPaMa.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+a = new java::Papa, Mama, Foo {
+  void playBall() {
+    println 'Make a few dents!';
+  }
+  void singSong() {
+    println 'Utter some sound.';
+  }
+};
+
+a.playBall();
+a.singSong();
+
+println "Height: " + a.height();
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In this example, <code>Papa</code> and <code>Mama</code> are two interfaces, and <code>Foo</code> is a class with a default constructor:</p>
+
+<font color=brown><pre>
+public interface Papa
+{
+  void playBall();
+  int height();
+}
+
+public interface Mama
+{
+  void singSong();
+  int height();
+}
+
+public class Foo
+{
+}
+</pre></font>
+
+<p>Both <code>Papa</code> and <code>Mama</code> have a <code>height()</code> method. What if they have same parameter types but different return types? The result may be unpredictable; it's the user's responsibility to prevent this from happening. The output of the example is:</p>
+
+<font color=black><pre>
+Make a few dents!
+Utter some sound.
+Height: 0
+</pre></font>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=rmiejb> Making Clients for JNDI, RMI and EJB</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+
+<a name=jndi><h3> Obtain JNDI Initial Context</h3></a>
+
+<p>Creating EJB clients in Judo is natural. It is easier to write than in Java because the ubiquitous casting is not needed at all. Coupled with Judo's JDBC capabilities, this constitutes a perfect testing platform for EJBs. With the built-in scheduling support, practical uses of EJBs are just as easy.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="ejb_client.judo">Listing 11.22</a> ejb_client</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+1: //ctx = getInitialContext('weblogic.jndi.WLInitialContextFactory', 't3://server');
+2: ctx   = getWeblogicContext('t3://server'); // shortcut for Weblogic.
+3: home  = ctx.lookup(OrderHome);
+4: key   = new java::OrderPK('00234');
+5: order = home.findByPrimaryKey(key);
+6: // do something with order.
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>This is a hypothetical case where an order entity bean is retrieved from the server for some operations. Line 1, which is commented out, is the system function <code>getInitialContext()</code>. Judo has a number of convenience functions to get initial contexts for popular J2EE application servers, including WebLogic, WebSphere, JBoss, Oracle 9iAS and IONA; see line 2. On line 3, OrderHome holds the unique registered home interface name, which is typically the same as its class name. The rest is just using Java classes.</p>
+
+<br>
+
+
+<a name=rmi><h3> RMI</h3></a>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=testing> Java Software Testing and JUnit</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=prototyping> Java Software Prototyping</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=threads> Thread and Other Considerations</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+<p>Judo internal classes, i.e., classes in packages <code>com.judoscript.*</code>, etc., are prohibited from being used. Classes in <code>com.judoscript.util.*</code>, however, are allowed, because these classes have nothing to do with the Judo language engine.</p>
+
+<br>
+
+
+<h2>&nbsp;<br><a name=summary> Summary</a><sub><font color=red>&nbsp; &nbsp;to be done</font></sub></h2>
+
+
+
+<br>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

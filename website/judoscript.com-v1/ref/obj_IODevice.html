@@ -1,0 +1,48 @@
+<html><head><title>JudoScript Object - IODevice</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>IODevice</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font>, <font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font>: <code>java.io.InputStream, java.io.BufferedReader, java.io.OutputStream, java.io.PrintWriter, java.io.RandomAccessFile</code></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=IODevice_isBigEndian></a>isBigEndian<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the underlying input or output stream uses big-endian sequence.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_isLittleEndian></a>isLittleEndian<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the underlying input or output stream uses little-endian sequence.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_lastModified></a>lastModified<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the last modified time of the input file. It may not be available, in which case 0 is returned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_readBytesAsString></a>readBytesAsString<br></font></td><td valign=top><font class=param>length</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Reads <font class=param>length</font> bytes and returns a string with <font class=param>encoding</font>.
+  If <font class=param>encoding</pram> is not specified, use the JVM's current default text encoding.
+  If <font class=param>length</font> is not specified, read a single byte.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_setBigEndian></a>setBigEndian<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sets the underlying input or output stream to use big-endian sequence.
+  This is typically called before any I/O operations.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_setLittleEndian></a>setLittleEndian<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Sets the underlying input or output stream to use little-endian sequence.
+  This is typically called before any I/O operations.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_size></a><a name=IODevice_length></a>size<br>length<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the size of the input file. It may not be available, in which case 0 is returned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_toTextInput></a>toTextInput<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a buffered reader for the underlying input stream. If this is a buffered reader
+  already, returns self.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=IODevice_toTextOutput></a>toTextOutput<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a print writer for the underlying output stream. If this is a print writer
+  already, returns self.
+</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,49 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Start-Up Environment and Command-Line</u></h3>
+  <p>The main class to run JudoScript on the command-line is <code>judo</code>. It normally runs a
+  script file, but can run a short program specified on the command-line itself, or compile
+  a script without executing.</p>
+
+  <p>To run a script, this is the general format:
+  <pre>java <em>[ java-options ]</em> judo <em>[ judo-option ] script_name [ script-parameters ]</em></pre>
+  JudoScript script file names normally end with <code>.judo</code>, although it can be anything;
+  included file names normally end with <code>.judi</code>.</p>
+
+  <p>The script file and its included files, if any, are located in this order:
+  <ol>
+  <li> the specified path
+  <li> directories listed in a system propertied called <code>JUDOPATH</code>
+  <li> <code>$HOME/.judobase</code>
+  <li> <code>c:/judobase</code> on Windows or <code>/usr/judobase</code> otherwise
+  <li> the CLASSPATH for the current JVM (can be turned off with <code>-Dnocp</code> Java option.)
+  </ol>
+  Item 3 and 4 allow users to store common programs in a common place. <code>JUDOPATH</code>
+  uses the same format as Java <code>CLASSPATH</code> except that ZIP or JAR files are not
+  supported. It is optional, and is defined as a JVM system property (the -D option).
+  JVM CLASSPATH is searched last, ZIP and JAR files can include JudoScript scripts. This can be
+  turned off if the JVM system property <code>nocp</code> is specified.</p>
+
+  <p><b><u>Judo-Option</u></b>:
+  <ul>
+  <li> <code>-c</code>: to compile the script only to check for the syntax.
+  <li> <code>-q</code>: quite mode, not to display the copy notice.
+  <li> <code>-x</code>: to execute the code specified on the command-line. All on rest of the
+                        command-line are concatenated, and an extra <font class=kw><nobr>;</nobr></font>  is appended.
+  </ul></p>
+
+  <p><b><u>Script-Parameters</u></b>: any further parameters on the command-line are passed in
+  to the script as its parameters; they are accessible in the program by the predefined constant
+  array, <font class=kw><nobr>#cmd_args</nobr></font> . JudoScript supports a simple yet useful parameter format: if specified parameter
+  is like <code>-name=value</code> or <code>-name:value</code>, it is deemed as an option; the
+  value can be omitted which will be defaulted to 1. These options are accessible in the program
+  by the predefined constant ordered map <font class=kw><nobr>#options</nobr></font> . The rest of the parameters are accessed as
+  constant array <font class=kw><nobr>#args</nobr></font> .</p>
+
+  <p>A special JudoScript option, <code>-?</code> or <code>--helper</code>, tells the JudoScript engine to print
+  out a help message, specified at the beginning of the script as <font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font>. The
+  <font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font> can also specify a minimum number of arguments, and if the number of
+  arguments on the command-line is less than that, the engine also displays the help message and aborts.</p>
+<h4>Related Functional Areas</h4><ul><li><font class=fa><a href="javascript:showFA('lang_const')">Constant</a></font></ul><h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font></ul><h4>Related Object Types</h4><ul><li><font class=obj><a href="javascript:showObj('orderedMap')">orderedMap</a></font><li><font class=obj><a href="javascript:showObj('array')">array</a></font></ul></body></html>

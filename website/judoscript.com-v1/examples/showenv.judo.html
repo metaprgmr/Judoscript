@@ -1,0 +1,29 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/showenv.judo:</b></td></tr><tr><td><pre>
+usage {
+  author = 'James Huang';
+  desc   = [[*
+    This program prints out the environment variables for the current process.
+    In the end, it prints out the components in the CLASSPATH variable.
+  *]];
+}
+
+if #args.length > 0 {
+  for x in #args { println x:>25, ' => ', getEnvVar(x); }
+  return;
+}
+
+//
+// If no parameters, display major ones.
+//
+
+vars = getEnvVars();
+for x in vars.keys() { println x:>25, ' => ', vars.(x); }
+
+println nl, 'Path:', nl, '-----';
+for x in ${PATH}.csv(pathSep()) { println x; }
+
+println nl, 'CLASSPATH:', nl, '----------';
+for x in ${CLASSPATH}.csv(pathSep()) { println x; }
+//for x in getEnvVar('CLASSPATH').csv(pathSep()) { . x; }
+</pre></td></tr></table></body></html>

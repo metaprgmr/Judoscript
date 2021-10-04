@@ -1,0 +1,8 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_httpclient/show_cookies.judo:</b></td></tr><tr><td><pre>
+h = httpGet('http://www.google.com');
+
+for x in h.getCookies() {
+  println x;
+}
+</pre></td></tr></table></body></html>

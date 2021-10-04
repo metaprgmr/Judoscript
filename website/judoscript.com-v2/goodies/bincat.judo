@@ -1,0 +1,41 @@
+if #args.length() == 0 {
+  . <err> 'Usage: java judo ', #prog, ' <filename> [ <offset=0> [ <length>=256] ]';
+  exit 0;
+}
+
+$offset = #args.length < 2 ? 0   : #args[1];
+$bytes  = #args.length < 3 ? 256 : #args[2];
+
+$file = openFile(#args[0]);
+$file.skip($offset);
+$buf = javanew byte[256];
+
+$i = 0;
+. ($i++).fmtHex():>3 {16}, '   ', (($i++)-16).fmtHex() {16};
+. ' --' {16}, '   ', '-' {16};
+
+while $bytes > 0 {
+  $len = $file.read($buf);
+  if $len <= 0 { break; }
+  $bytes -= $len;
+  $asc = null;
+  $i=0;
+  for ; $i < $len; ++$i {
+    if $i > 0 && $i % 16 == 0 { // print the ASCII form
+      . '   ', $asc;
+      $asc = null;
+    }
+    print $buf[$i].fmtHex():>3;
+    if $buf[$i] > 26 && $buf[$i] <= 0x7F {
+      $asc @= $buf[$i].chr();
+    } else {
+      $asc @= ' ';
+    }
+  }
+  if $asc {
+    . '   '{16-$i%16}, '   ', $asc;
+  }
+}
+
+$file.close();
+

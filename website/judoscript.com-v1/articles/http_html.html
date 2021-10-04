@@ -1,0 +1,943 @@
+<html><head>
+<title>HTTP Fun and HTML Processing</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" >
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>HTTP Fun and HTML Processing</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+<blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+
+<li> <a href="#http">Make HTTP Requests</a>
+<br>&#187;  <a href="#useproxy">Use a Proxy Server</a>
+<br>&#187;  <a href="#cookie">Save and Load Cookies</a>
+<li> <a href="#html">HTML Document Processing</a>
+<li> <a href="#server">Your Own HTTP Server</a>
+<li> <a href="#proxy">Hack the Web with Proxy Server</a>
+<li> <a href="#jusp">Server-Side Scripting with JUSP</a>
+<li> <a href="#summary">Summary</a>
+<li> <a href="#listings">Code Listings</a>
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+
+<font face="Arial" style="font-size:9px">BY</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;
+October 2001 &nbsp;
+
+<p><b>Abstract</b> &nbsp;
+
+<em>JudoScript</em> is an effective HTTP client and server language. HTTP requests can be
+made to servers with any HTTP headers and content. In particular, cookies
+can be examined, saved and loaded. For HTML pages, <em>JudoScript</em> has <b><code>do..as
+html</code></b> event-driven statement that processes the document and treats
+each tag as an event, for which actions can be specified. There are
+special events like <b><code>:BEFORE</code></b>, <b><code>:AFTER</code></b> and <b><code>:TEXT</code></b>.
+<em>JudoScript</em> is also a HTTP server language because of the <b><code>startServer()</code></b>
+and <b><code>acceptHttp()</code></b> system functions. Combining client and server
+capabilities, we get HTTP proxy servers, useful to debug web applications
+and hack the web. The <em>JudoScript</em> <em>Server Page</em> (JUSP) is another
+server-side scripting technology. JUSP pages are identical to JSP and
+ASP to embed code in the pages. Servlet <b><code>com.judoscript.jusp.JuspServlet</code></b>
+runs the JUSP pages. It provides a few predefined variables in the code
+and a couple of Java classes as a convenience.
+<hr>
+
+<p>&nbsp;</p>
+<!-- ARTICLE CONTENT -->
+
+
+
+
+<h2><a name=http>1. Make HTTP Requests</a></h2><p>
+
+<p>
+<em>JudoScript</em> allows you to fully control all aspects of a HTTP request. However,
+if all you need is to read a file off the web, it suffices to call
+<b><code>openFile()</code></b> or <b><code>openTextFile()</code></b> with a URL: 
+
+<blockquote><font><pre>
+copyStream openFile('http://www.xxxxx.com/collections/cesoir.mp3'),
+           openFile('cesoir.mp3','w');
+</pre></font></blockquote>
+
+That's too easy. It is also easy to make more detailed HTTP requests with
+system function <b><code>httpGet()</code></b> and <b><code>httpPost()</code></b>. They prepare
+and returns a HTTP object but the server is not connected. This HTTP
+object has general, request and response methods. The general methods
+returns information about this connection:
+
+<blockquote>
+<b><code>getUrl()</code></b> <br>
+<b><code>getHost()</code></b> <br>
+<b><code>getPort()</code></b> <br>
+<b><code>getDomain()</code></b> <br>
+<b><code>getPath()</code></b> <br>
+<b><code>getFile()</code></b> <br>
+<b><code>getQuery()</code></b> <br>
+<b><code>getRef()</code></b> <br>
+<b><code>getMethod()</code></b>
+</blockquote>
+
+The request methods are for setting HTTP request headers and getting
+the output stream for writing content; if nothing to write, call the
+<code>connect()</code> to explicitly initiate the connection.
+
+<blockquote>
+<b><code>getTextOutput()</code></b> <br>
+<b><code>getOutputStream()</code></b> <br>
+<b><code>connect()</code></b> <br>
+<b><code>addCookie(</code></b><em>cookie</em> | <em>name</em><b><code>,</code></b><em>value</em><b><code>)</code></b> <br>
+<b><code>loadCookies(</code></b><em>filename</em><b><code>)</code></b>
+</blockquote>
+
+Why there are no methods for setting headers? HTTP request headers are
+set with the struct member syntax:
+
+<blockquote><font><pre>
+h.'Content-Type' = 'text/html';
+h.'Content-Length' = 2840;
+h.Date = date(2001,10,1,14,30,0);
+h.addCookie(cookie);
+</pre></font></blockquote>
+
+Notice on the third line that a date value is formated to a HTTP date
+automatically. Likewise, use the same syntax to get response headers
+except for date headers. The following methods are for response:
+
+<blockquote>
+<b><code>getDateHeader(</code></b><em>header</em><b><code>)</code></b> <br>
+<b><code>getAllHeaders()</code></b> <br>
+<b><code>getStatusCode</code></b>|<b><code>getStatus</code></b><b><code>()</code></b> <br>
+<b><code>getResponseMsg</code></b>|<b><code>getResponseMessage</code></b><b><code>()</code></b> <br>
+<b><code>getTextInput()</code></b> <br>
+<b><code>getInputStream()</code></b> <br>
+<b><code>getCookies()</code></b> <br>
+<b><code>saveCookies(</code></b><em>filename</em><b><code>)</code></b>
+</blockquote>
+
+To see all HTTP headers, for instance, do this:
+
+<p align=center><table width=640><thead>
+<th><a name="http_headers">Listing 1</a>. http_headers.judo</th>
+</thead><tr><td class=code><pre>
+
+1: url = 'http://www.yahoo.com';
+2: h = httpGet(url);
+3: for x in h.getHeaders() {
+4:   println x, ': ', h.(x);
+5: }
+</pre></td></tr></table></p><p>
+
+
+For posting, call the HTTP object's <b><code>getOutputStream()</code></b> to write
+data up to the server. If you can store multiple files (such as music) on
+a web site, a script can handle any number of files, which is extremely
+convenient.
+
+
+
+<h3><a name=useproxy>Use a Proxy Server</a></h3><p>
+
+<p>
+HTTP requests are internally made by Java classes <b><code>java.net.URL</code></b>
+and <b><code>java.net.URLConnection</code></b>. They can use a HTTP proxy server
+to make the network connection. In <em>JudoScript</em>, simply call the system function
+<b><code>setHttpProxy()</code></b> with a host and port number to set this proxy
+server setting.
+
+
+<h3><a name=cookie>Save and Load Cookies</a></h3><p>
+
+<p>
+<em>JudoScript</em> allows you to intercept cookies set by server and save them to files.
+You can retrieve them any time and send them back to relevant servers in
+the subsequent HTTP requests. The following program displays all the
+cookies set by the server:
+
+<p align=center><table width=640><thead>
+<th><a name="show_cookies">Listing 2</a>. show_cookies.judo</th>
+</thead><tr><td class=code><pre>
+
+1: url = 'http://localhost:8080';
+2: h = httpGet(url);
+3: for x in h.getCookies() { println x; }
+</pre></td></tr></table></p><p>
+
+
+The <b><code>saveCookies()</code></b> saves the cookies to a file; if the file name
+is missing, it defaults to "cookies.txt" in the current directory. The
+same-name cookies will be overwritten, provided the cookie's max-age is
+positive; if not, the cookie will be removed or not set if did not exist.
+The <b><code>loadCookies()</code></b> reads in the cookies from a file; if the file
+name is missing, it defaults to "cookies.txt" in the current directory.
+Only the cookies that match the domain and path of this request are set
+to the "Cookie" header.
+
+<p>
+To create a new cookie, whether to be sent to the server or set to the
+client (see below), use the system function <b><code>cookie()</code></b>:
+
+<blockquote>
+<b><code>cookie(</code></b><em>name</em>,<em>value</em><b><code>)</code></b>
+</blockquote>
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Can you open a URL like a file? What's the difference?
+<li> The system functions <b><code>httpGet()</code></b> and <b><code>httpPost()</code></b>
+           creates a HTTP object; when is the server connection started?
+<li> How to set request headers? How to get response headers? How
+           to get all the response headers?
+<li> How to make HTTP requests through a proxy server?
+<li> What parameters does <b><code>addCookie()</code></b> method take?
+           How to generate a new cookie?
+<li> How to save cookies to a file for a request? What cookies are
+           not saved?
+<li> When you call <b><code>loadCookies()</code></b> method of a HTTP object,
+           are all the cookies in the file set to the request? 
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=html>2. HTML Document Processing</a></h2><p>
+
+<p>
+The majority of the web is HTML pages and increasing number of
+multimedia files. HTML pages may contain information needed by other
+software. Ultimately web services should prevail with HTTP, XML and
+emerging new technologies; but they are not here yet, and the
+information may not be as affordable and accessible as HTML pages.
+Other times you may want a mini robot to make private collections of
+stuff you are fond of.
+
+<p>
+<em>JudoScript</em> has a HTML processing engine that treats each tag (including text)
+as an event. Actions can be specified for certain tags. For example,
+the following program prints out all the &lt;a&gt; links:
+
+<blockquote><font><pre>
+do url as html {
+&lt;a&gt;: if $_.href { println $_.href; }
+}
+</pre></font></blockquote>
+
+The dot command is the shortcut for <b><code>println</code></b>. The internal
+variable <b><code>$_</code></b> represents the current tag. The tag's attributes
+are accessed as its data members, which are case insensitive. A tag can
+be closed as in XML; if so, <b><code>$_.isClosed()</code></b> returns <b><code>true</code></b>;
+the corresponding end-tag event is <em>not</em> fired. Text in the page
+is represented by a special tag, <b><code>:TEXT</code></b>. Other special tags include
+<b><code>:BEFORE</code></b>, <b><code>:AFTER</code></b>, <b><code>&lt;?&gt;</code></b>, <b><code>&lt;!&gt;</code></b>,
+<b><code>&lt;!--&gt;</code></b> and &lt;&gt;; the last one matches any unhandled
+regular tags. The following reproduces a HTML page:
+
+<blockquote><font><pre>
+do url as html {
+:TEXT: flush $_;
+&lt;&gt;:    flush $_;
+&lt;!&gt;:   flush $_;
+&lt;?&gt;:   flush $_;
+}
+</pre></font></blockquote>
+
+The source can be a HTTP URL, a file name, or any input stream.
+Note that <b><code>&lt;!&gt;</code></b> includes <b><code>&lt;!--&gt;</code></b> only if
+the latter does not have a handler.
+
+<p>
+Next is a practical program that retrieves quotes data from Yahoo
+Financial web site. It implements a state machine to get to the
+right information, based on a study of the page structure that
+the information we need is in a HTML table like this:
+
+<a href="yahoo_quotes.gif"><img src="yahoo_quotes_1.gif" border="0" alt="Click to see big version"></a>
+<br>
+
+What it does is a) construct a URL containing all the symbols
+(lines 43 through 45), b) get the page back, and c) scrape it for
+interested pieces (lines 49 through 73). The <b><code>abort</code></b>
+statement (line 65) aborts this HTML statement.
+
+<p align=center><table width=640><thead>
+<th><a name="get_quotes">Listing 3</a>. get_quotes.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: /*  Usage: java judo get_quotes.judo sym1 sym2 ....
+ 2:  *
+ 3:  *  This script scapes quotes date from a Yahoo Financial page, whose
+ 4:  *  center piece is a HTML table like that in 'yahoo_quotes.html'.
+ 5:  *  A state machine is used to retrieve pieces of information:
+ 6:  *
+ 7:  *   ---------- ------------------ -------- ------
+ 8:  *   From State       Input        To State Output
+ 9:  *   ---------- ------------------ -------- ------
+10:  *       0            &lt;th&gt;             1
+11:  *       1       :TEXT:"Last Trade"    2
+12:  *       2            &lt;tr&gt;             3
+13:  *       3            &lt;td&gt;             4
+14:  *       4      &lt;a href="/q?s=.."&gt;     5
+15:  *       5      (text > 10 char's)   abort
+16:  *       5           :TEXT             6    symbol
+17:  *       6            &lt;td&gt;             7
+18:  *       7           :TEXT             8    time
+19:  *       8            &lt;td&gt;             9
+20:  *       9           :TEXT            10    quote
+21:  *      10            &lt;td&gt;            11
+22:  *      11            &lt;td&gt;            12
+23:  *      12           :TEXT            13    delta
+24:  *      13            &lt;td&gt;            14
+25:  *      14           :TEXT             2    volumn
+26:  *   ---------- ------------------ -------- ------
+27:  *
+28:  *  Note: this state machine is based on such a Yahoo page; if Yahoo
+29:  *  changes the structure of the page, this state machine may very
+30:  *  well become invalid and need to be updated.
+31:  */
+32: 
+33: if #args.length==0 {
+34:   println [[*
+35:      Usage:  java judo (*#prog*) "^DJI" "^IXIC" ibm msft csco jdsu
+36:      Symbol names should comply with "http://quote.yahoo.com",
+37:      especially the standard indices.
+38:   *]];
+39:   exit 0;
+40: }
+41: 
+42: // construct the URL --
+43: url = 'http://quote.yahoo.com/q?s=';
+44: for sym in #args { url @= sym @ '+'; }
+45: url @= '&amp;d=v1';
+46: println url;
+47: 
+48: // get the quotes --
+49: do url as html
+50: {
+51:   :BEFORE: state = 0;
+52:   &lt;th&gt;:   if state == 0 { ++state; }
+53:   &lt;tr&gt;:   if state == 2 { ++state; }
+54:   &lt;td&gt;:
+55:           switch state {
+56:           case 3: case 6: case 8: case 10: case 11: case 13:
+57:              ++state;
+58:           }
+59:   &lt;a&gt;:    if state == 4 {
+60:             if $_.href.startsWith("/q?s=") { ++state; }
+61:           }
+62:   :TEXT:  switch state {
+63:           case 1:  if $_ == "Last Trade" { ++state; }
+64:                    break;
+65:           case 5:  if $_.length() &gt; 10 { abort; }
+66:                    flush $_:8;   ++state; break; // symbol
+67:           case 7:  flush $_:8;   ++state; break; // date/time
+68:           case 9:  flush $_:6.2; ++state; break; // price
+69:           case 12: flush $_:&gt;9;  ++state; break; // delta%
+70:           case 14: println $_:&gt;13; state=2; break; // volumn
+71:           }
+72: 
+73: } // end of do as html.
+</pre></td></tr></table></p><p>
+
+
+<em>JudoScript</em> does not really know or care about HTML tags -- it treats any tags
+equally. In processing the documentation for <em>JudoScript</em> itself, I used many
+custom tags that make the documents look terse and clean. The documents
+are processed by programs to yield HTML. In fact, sometimes the code
+can cohabit with the document, using the <em>local data</em> feature:
+
+<p align=center><table width=640><thead>
+<th><a name="body">Listing 4</a>. body.htmx</th>
+</thead><tr><td class=code><pre>
+
+ 1: do $$local as html
+ 2: {
+ 3: :BEFORE: html = openTextFile(#prog.replace(".htmx",".html"),"w");
+ 4: &lt;doc&gt;:  println &lt;html&gt; [[*
+ 5:           &lt;html&gt;&lt;head&gt;&lt;title&gt;$_.title&lt;/title&gt;&lt;/html&gt;&lt;body&gt;
+ 6:           &lt;center&gt;&lt;table width=650&gt;&lt;tr&gt;&lt;td&gt; &lt;h1&gt;(* $_.title *)&lt;/h1&gt;
+ 7:         *]];
+ 8: :AFTER: println &lt;html&gt; '&lt;hr&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt; &lt;/center&gt;&lt;/body&gt;&lt;/html&gt;';
+ 9:         html.close();
+10: :TEXT:  print &lt;html&gt; $_;
+11: &lt;&gt;:     print &lt;html&gt; $_;
+12: &lt;?&gt;:    print &lt;html&gt; $_;
+13: &lt;!&gt;:    print &lt;html&gt; $_;
+14: 
+15: &lt;quote&gt;:  print &lt;html&gt; '&lt;blockquote&gt;&lt;font size=-1&gt;';
+16: &lt;/quote&gt;: print &lt;html&gt; '&lt;/font&gt;&lt;/blockquote&gt;';
+17: }
+18: 
+19: EndScript ------------------------------------------------
+20: 
+21: &lt;doc title="Body Systems"&gt;
+22: &lt;p&gt;
+23: The body can be thought of as a number of systems:
+24: &lt;ul&gt;
+25: &lt;li&gt; skeleon
+26: &lt;li&gt; musculature
+27: &lt;li&gt; cardiovascular system
+28: &lt;li&gt; digestive system
+29: &lt;li&gt; excretory system
+30: &lt;li&gt; immune system
+31: &lt;li&gt; respiratory system
+32: &lt;li&gt; reproductive system
+33: &lt;/ul&gt;
+34: &lt;quote&gt;
+35: "The digestive system breaks down food and turns
+36: it into the right chemicals for the body to use."
+37: &lt;/quote&gt;
+</pre></td></tr></table></p><p>
+
+
+When the document is modified, run
+
+<blockquote><font><pre>
+%java judo body.htmx
+</pre></font></blockquote>
+
+and the HTML page is generated. On line 1, the <b><code>$$local</code></b> is an
+input stream that contains the content below the line of <b><code>EndScript</code></b>
+on line 19. On line 3, before the processing begin, a text file is
+opened with the same name but extension of ".html"; it is closed when
+the document is processed (line 9). The header of the page is printed
+when processing the tag "&lt;doc&gt;" (lines 5 and 6), and footer after
+processing (line 8). For the rest, it basically prints out the content
+as-is (lines 10 through 13). This serves as a server-side style support;
+but you can do much more than just changing styles. For instance, for
+this article, all the captions are centrally managed, and sample code
+were collected to produce the final code listing.
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Can you specify a file name in a HTML statement?
+<li> Write a program to collect all image URLs in a HTML file.
+<li> Write a mini robot that downloads a page along with all the
+           enclosed images from the same site.
+<li> What are the special events BEFOER and AFTER in a HTML statement?
+<li> What is the difference and relationship between <b><code>httpGet()</code></b>
+           system function and <b><code>do..as html</code></b> statement?
+<li> Many HTML pages contain many characters that are useless for
+           page rendering, a senseless waste of network bandwidth. Write
+           a program to clean up unwanted whitespaces in the TEXT handler.
+           (Hint: take care of &lt;pre&gt; tags and string literals in
+           script source code.)
+<li> Write a program to get rid of all the HTML comments except for
+           those between &lt;script&gt; and &lt;/script&gt; tags.
+<li> What is <b><code>$$local</code></b>?
+           What is the outut of the following program?
+<blockquote><font><pre>
+sum = 0;
+while (line = $$local.readLine()) != eof {
+  println line : > 20;
+  sum += line;
+}
+println '-----------' : > 20;
+println sum : > 20;
+
+EndScript ---------------------------------
+
+1345
+98789797
+344
+</pre></font></blockquote>
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=server>3. Your Own HTTP Server</a></h2><p>
+
+<p>
+Have you ever written a web server? CGIs or servlets do not count because
+they are web server extensions. With <em>JudoScript</em>, writing a server is surprisingly simple.
+
+<p align=center><table width=640><thead>
+<th><a name="mini_server">Listing 5</a>. mini_server.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   start thread miniHandler(acceptHttp(ss));
+ 4: }
+ 5:
+ 6: thread miniHandler a {
+ 7:   a.'Content-Type' = 'text/html';
+ 8:   os = a.getTextOutput();
+ 9:   println &lt;os&gt; '&lt;html&gt;&lt;body&gt;This is all you get.&lt;/body&gt;&lt;/html&gt;';
+l0:   os.close();
+11: }
+</pre></td></tr></table></p><p>
+
+
+On line 1, the system function <b><code>startServer()</code></b> takes a port number
+and opens a server socket. Anything can come in; it depends on handlers
+to decide which protocol(s) to support. On line 3, another system call
+<b><code>acceptHttp()</code></b> (waits and) accepts client connections on the server
+socket, and returns a HTTP service object, which is passed as a parameter
+to a newly created thread that handles this HTTP request. How it is
+handled is up to the thread code. In our case, lines 6 through 11, it
+always prints out a HTML page with message "This is all you get.".
+
+<p>
+The HTTP service object is very similar to the HTTP client object. It has
+the same struct member access syntax to get headers and these methods for
+client requests:
+
+<blockquote>
+<b><code>getServerName()</code></b> <br>
+<b><code>getServerPort()</code></b> <br>
+<b><code>serveFile(</code></b>[<em>doc_root</em>]<b><code>)</code></b> <br>
+<b><code>serveError(</code></b><em>status</em><b><code>)</code></b> <br>
+<b><code>getUrl()</code></b> <br>
+<b><code>getHost()</code></b> <br>
+<b><code>getPort()</code></b> <br>
+<b><code>getDomain()</code></b> <br>
+<b><code>getPath()</code></b> <br>
+<b><code>getFile()</code></b> <br>
+<b><code>getQuery()</code></b> <br>
+<b><code>getRef()</code></b> <br>
+<b><code>getMethod()</code></b> <br>
+<b><code>getDateHeader(</code></b><em>header</em><b><code>)</code></b> <br>
+<b><code>getAllHeaders()</code></b> <br>
+<b><code>getTextInput()</code></b> <br>
+<b><code>getInputStream()</code></b> <br>
+<b><code>getCookies()</code></b> <br>
+</blockquote>
+
+It also has struct set member syntax to set headers and these methods
+for sending response to client:
+
+<blockquote>
+<b><code>getTextOutput()</code></b> <br>
+<b><code>getOutputStream()</code></b> <br>
+<b><code>addCookie(</code></b><em>cookie</em> | <em>name</em><b><code>,</code></b><em>value</em><b><code>)</code></b> <br>
+</blockquote>
+
+The following program does an "echo" on everything the client sends,
+which can serve as a reference and template for other server handlers.
+
+<p align=center><table width=640><thead>
+<th><a name="snooper">Listing 6</a>. snooper.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   start thread snooper(acceptHttp(ss));
+ 4: }
+ 5: 
+ 6: thread snooper a {
+ 7:   path = a.getPath();
+ 8:   if path.indexOf('snoop') &lt; 0 {
+ 9:     a.serveFile();
+10:     return;
+11:   }
+12:   a.'Content-Type' = 'text/html';
+13:   os = a.getTextOutput();
+14:   flush &lt;os&gt; [[*
+15:   &lt;html&gt;&lt;body&gt;
+16:   &lt;h1&gt;Snooper Server&lt;/h1&gt;
+17:   &lt;table&gt;
+18:   &lt;tr&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Request URI Parts&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+19:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Name&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getServerName() *)&lt;/td&gt;&lt;/tr&gt;
+20:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Port&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getServerPort() *)&lt;/td&gt;&lt;/tr&gt;
+21:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;URI&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getUrl() *)&lt;/td&gt;&lt;/tr&gt;
+22:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Host&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getHost() *)&lt;/td&gt;&lt;/tr&gt;
+23:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Port&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getPort() *)&lt;/td&gt;&lt;/tr&gt;
+24:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Domain&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getDomain() *)&lt;/td&gt;&lt;/tr&gt;
+25:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Path&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getPath() *)&lt;/td&gt;&lt;/tr&gt;
+26:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;File&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getFile() *)&lt;/td&gt;&lt;/tr&gt;
+27:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Query String&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getQuery() *)&lt;/td&gt;&lt;/tr&gt;
+28:     &lt;tr&gt;&lt;td&gt;&lt;b&gt;Ref&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getRef() *)&lt;/td&gt;&lt;/tr&gt;
+29:   &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+30:   &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Request Headers&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+31:   *]];
+32:   for x in a.getAllHeaders() {
+33:     flush &lt;os&gt; [[*
+34:       &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;(* x *)&lt;/b&gt;&lt;/td&gt;
+35:       &lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.(x) *)&lt;/td&gt;&lt;/tr&gt;
+36:     *]];
+37:   }
+38:   flush &lt;os&gt; [[*
+39:     &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;
+40:     &lt;td&gt;&lt;em&gt;Cookies&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+41:   *]];
+42:   for x in a.getCookies() {
+43:     flush &lt;os&gt; [[*
+44:       &lt;tr&gt;&lt;td&gt;&lt;b&gt;(* x.getName() *)&lt;/b&gt;&lt;/td&gt;
+45:       &lt;td&gt;&lt;/td&gt;&lt;td&gt;(* x.getValue() *)&lt;/td&gt;&lt;/tr&gt;
+46:     *]];
+47:   }
+48: 
+49:   flush &lt;os&gt; '&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;';
+50:   os.close();
+51: }
+</pre></td></tr></table></p><p>
+
+
+In the while loop on line 3, a thread <code>snooper()</code>, is started
+for each connection. The bulk of the program prints out HTML code in a
+here-doc string, with embedded expressions for various values. Don't
+worry about performance, because the <b><code>print</code></b> and <b><code>flush</code></b>
+statements are smart enough to directly print out each value in a string
+concatenation expression.
+
+<p>
+Lines 8 through 11 checks the URL for the word "snoop"; if found, do
+snooping. Otherwise, treat it as a file request and tries to serve it
+with method <b><code>serveFile()</code></b>. This is a fairly common pattern for
+implementation your own server. The <b><code>serveFile()</code></b> uses a system
+mime-type map, which is accessible via the system function
+<b><code>getMimeTypeMap()</code></b>, a struct that maps file extensions to
+mime-types. You may add more to it. If a doc-root directory is not
+specified, it uses the current directory. Similar to <b><code>serveFile()</code></b>
+method is <b><code>serveError()</code></b>, which taks a response status code;
+default is 500.
+
+<h3><em>Review Questions</em></h3><ul>
+<li> Using <b><code>startServer()</code></b>, how to implement a server that
+           runs the protocol you defined yesterday?
+<li> Using the HTTP service object's <b><code>serveFile()</code></b> methods,
+           implement a simplest multi-threaded web server.
+<li> Then extend the server to check URLs that starts with "/ext/";
+           if found, based on the rest of the path, call a function to
+           handle the request. Try to formalize this as much as possible;
+           think about servlet API or CGI.
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=proxy>4. Hack the Web with Proxy Server</a></h2><p>
+
+<p>
+We can create a HTTP server; we can create HTTP clients. Combining these
+two, we get a HTTP proxy server. Proxy servers are typically used for
+network security reasons, or for machines running on local area network
+to share a single internet connection. You might want to create a proxy
+server for this purpose, but this is probably unlikely. The reason we are
+interested in proxies is to monitor the content going through the wire
+between the client (a web browser) and servers.
+
+<p>
+HTTP proxy servers handle HTTP requests natively, that is, they
+understands HTTP protocols and do a lot more than just passing things
+through. HTTP proxy servers typically handles other protocols by passing
+them through. Suppose a browser is set to use a HTTP proxy server for
+all its internet requests; when it is making an FTP or HTTPS request, it
+actually sends a HTTP request to the proxy server with an FTP or HTTPS URI.
+Seeing a protocol it does not handle, the proxy sets out to do pass-through.
+
+<p>
+We do not want to do too much with proxies such as caching, persistent
+connection, etc. All we want is to see what goes across the wire.
+Though sounds simple, it may be invaluable in debugging web applications
+and hacking web browsers and servers.
+
+<p align=center><table width=640><thead>
+<th><a name="proxy">Listing 7</a>. proxy.judo</th>
+</thead><tr><td class=code><pre>
+
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   relay(acceptHttp(ss)); // single-thread
+ 4: }
+ 5:
+ 6: function relay c {
+ 7:   // Connect to server; browser should send absolute URL.
+ 8:   url = c.getUrl();
+ 9:   doPost = c.getMethod().equalsIgnoreCase('post');
+10:   println '&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ', url, ' &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;';
+11:   if doPost {
+12:     s = httpPost(url);
+13:   } else {
+14:     s = httpGet(url);
+15:   }
+16:
+17:   // pass all client headers and content to server
+18:   for x in c.getAllHeaders() {
+19:     s.(x) = c.(x);
+20:     println x, ': ', c.(x);
+21:   }
+22:   if doPost {
+23:     copyStreams c.getInputStream(), s.getOutputStream();
+24:   }
+25:
+26:   // pass all server headers and content to client
+27:   println '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; ', url, ' &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;';
+28:   for x in s.getAllHeaders() {
+29:     c.(x) = s.(x);
+30:     println x, ': ', s.(x);
+31:   }
+32:   copyStreams s.getInputStream(), c.getOutputStream();
+33:
+34: catch:
+35:   println &lt;err&gt; '[', $_.name, '] ', $_.message;
+36: finally:
+37:   println; // separate requests.
+38: }
+</pre></td></tr></table></p><p>
+
+
+Lines accepts a client request, and calls function <code>relay()</code>.
+It is better to call a handler function than start a thread, because
+we want to see serialized output for consecutive requests. Line 8 obtains
+the request URL, and makes its own request to the server on behalf of the
+client (lines 12 and 14). Older browsers may send a relative URI and use
+the "Host" header to indicate which server; we don't care. Then it relay
+headers and content from the client to the server (lines 17 through 24)
+and vice versa (lines 26 through 32). That's all it does. Open your browser,
+click the network settings for the browser and set it to use a HTTP proxy
+server at localhost:8080 and access some web sites. The following is the
+output for an Internet Explorer 5 visite of a server run locally; the output
+is slightly edited to fit the page.
+
+<blockquote><font><pre>
+>>>>>>>> http://localhost:8080/ >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg,
+        application/vnd.ms-excel, application/msword, */*
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=2890
+proxy-connection: Keep-Alive
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+<<<<<<<< http://localhost:8080/ <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:07 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Set-Cookie: generic=mtoeX2jZb;Expires=Tue, 28-Oct-2003 01:02:07 GMT;Path=/
+Content-Type: text/html
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 2890
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/mystyles.css >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=1600
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/mystyles.css <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Set-Cookie: generic=mtoeX2jZb;Expires=Tue, 28-Oct-2003 01:02:09 GMT;Path=/
+Content-Type: text/css
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 1600
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/judoscript.gif >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=3298
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/judoscript.gif <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Content-Type: image/gif
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 3298
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/bo2.gif >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=4202
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/bo2.gif <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Content-Type: image/gif
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 4202
+Content-Language: en
+
+</pre></font></blockquote>
+
+<h3><em>Review Questions</em></h3><ul>
+<li> If a LAN uses IRONGATE:8024 as a gateway to internet. How
+           to modify <a href=#proxy>listing 0</a> to make it work?
+<li> Modify <a href=#proxy>listing 0</a> so that any HTML page is saved
+           to directory "c:\fbi" if it contains the word "anthrax".
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=jusp>5. Server-Side Scripting with JUSP</a></h2><p>
+
+<p>
+<em>JudoScript</em> <em>Server Page</em> technology is <em>JudoScript</em>'s server-side scripting.
+It's syntax is identical to JSP or ASP, except it does not have an
+XML counterpart. To summarize, inside a JUSP page, <b><code>&lt;%</code></b> and
+<b><code>%&gt;</code></b> quotes <em>JudoScript</em> statements and <b><code>&lt;%=</code></b> and <b><code>%&gt;</code></b>
+quotes expressions. Anything outside these are treated as HTML text.
+In the code, these variables are available:
+
+<blockquote><font><pre>
+servlet
+request
+response
+session
+</pre></font></blockquote>
+
+and these Java classes are predefined:
+
+<blockquote><font><pre>
+const #Cookie   = javaclass javax.servlet.http.Cookie;
+const #HttpUtil = javaclass javax.servlet.http.HttpUtil;
+</pre></font></blockquote>
+
+<p align=center><table width=640><thead>
+<th><a name="first">Listing 8</a>. first.jusp</th>
+</thead><tr><td class=code><pre>
+
+ 1: &lt;%
+ 2:    response.setContentType('text/html');
+ 3:    a = 'The Very First Time!';
+ 4:    b = 'This is the very first test of JUSP!';
+ 5: %&gt;
+ 6: &lt;HTML&gt;
+ 7: &lt;HEAD&gt; &lt;%=a%&gt; &lt;/HEAD&gt;
+ 8: &lt;BODY&gt;
+ 9:   &lt;H1&gt;&lt;%=a%&gt;&lt;/H1&gt;
+10:   &lt;%=b%&gt;
+11: &lt;/BODY&gt;&lt;/HTML&gt;
+</pre></td></tr></table></p><p>
+
+
+In order to use JUSP, you need to configure a servlet of class
+<b><code>com.judoscript.jusp.JuspServlet</code></b> onto your servlet-enabled web
+server. This server takes an init parameter <b><code>juspRoot</code></b> to
+tell the servlet where to look for JUSP pages.
+
+<h3><em>Review Questions</em></h3><ul>
+<li> What are the differences and commonalities between JUSP and JSP?
+<li> Which variables can you use in a JUSP page?
+           Which Java classes are predefined as constants?
+<li> Create a JUSP page that sets a session cookie.
+</ul>
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=summary>6. Summary</a></h2><p>
+
+<p>
+<em>JudoScript</em> nicely supports various aspects of the web technologies, from
+clients to servers and in between. They can be combined to create
+powerful web tools, or used as communication agents such as sharing
+resources or mini messaging systems.
+
+<p>
+To get documents from the web, simply call <b><code>openFile()</code></b> or
+<b><code>openTextFile()</code></b> with a HTTP URL. For more detailed web
+interactions, such as sites that use cookis to maintain sessions, use
+<b><code>httpGet()</code></b> or <b><code>httpPost()</code></b>, which return a HTTP object
+that allows to manipulate HTTP headers and contents for both
+directions. In particular, cookies can be examined, saved (to file)
+and loaded and sent back to the sites.
+
+<p>
+HTML pages may contain useful information that programs want to extract.
+Using the <b><code>do..as html</code></b> statement, you can easily specify actions
+for each tag (including text). The <b><code>$_</code></b> variable contains the
+current tag, its attributes are accessed as its data members. Some
+special tags represent special tags and events, such as <b><code>:BEFORE</code></b>,
+<b><code>AFTER</code></b>, <b><code>&lt;!&gt;</code></b> and <b><code>&lt;?&gt;</code></b>. Unmatched
+"normal" tags are collectively represented by <b><code>&lt;&gt;</code></b>.
+
+<p>
+To create a HTTP server in <em>JudoScript</em>, call <b><code>startServer()</code></b> to start a
+server socket, then repeatedly call <b><code>acceptHttp()</code></b> to accept user
+connections, turn that socket into HTTP service objects and pass them
+to a handler. The handler is normally a thread but can also be a
+function, so that the server is single-threaded. The HTTP service object
+is in many ways similar to the HTTP object but the role is reversed.
+The handler can call helper functions, <b><code>serveFile()</code></b> and
+<b><code>serveError()</code></b>. The difference between such a server and Apache
+or Tomcat is, it does not have rigorous configuration to support servlet,
+CGI, ... Your handler function or thread controls everything.
+
+<p>
+By combining a HTTP client and server, a proxy server is born. It may
+be extremely helpful for, say, monitoring what is going on across the
+wire. To do so, create a single-thread server that takes client
+connections and relay everything between the server and client; modify
+your brower's proxy setting to point to this little one.
+
+<p>
+The <em>JudoScript</em> <em>server page</em> (JUSP) technology allows you to develop
+web sites with your favorate language, i.e., <em>JudoScript</em>. The page structure is
+identical to JSP or ASP that code and expressions can be embedded in
+the pages. Servlet <b><code>com.judoscript.jusp.JuspServlet</code></b> handles the pages,
+and establishes these variables for the code in the page:
+<b><code>servlet</code></b>, <b><code>request</code></b> and <b><code>response</code></b>. The
+following Java classes are predefined for your convenience:
+<b><code>#Cookie</code></b> for <b><code>javax.servlet.http.Cookie</code></b> and
+<b><code>#HttpUtil</code></b> for <b><code>javax.servlet.http.HttpUtil</code></b>.
+
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=listings>7. Code Listings</a></h2><p>
+
+<ol><li> <a href=#http_headers>http_headers.judo</a><li> <a href=#show_cookies>show_cookies.judo</a><li> <a href=#get_quotes>get_quotes.judo</a><li> <a href=#body>body.htmx</a><li> <a href=#mini_server>mini_server.judo</a><li> <a href=#snooper>snooper.judo</a><li> <a href=#proxy>proxy.judo</a><li> <a href=#first>first.jusp</a></ol>
+
+
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<br> <hr size=1 width=95%>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2021 <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+
+<a href="http://www.judoscript.com">home</a> |
+<a href="../download.html">download</a> |
+<a href="../articles/">articles</a> |
+<a href="../ref/">references</a> |
+<a href="../examples">examples</a>
+<br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+</body></html>
+

@@ -1,0 +1,44 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_hibernate/CustomTypes/CustomTypeORM.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2005-1-30';
+  desc    = [[*
+
+  *]];
+}
+
+//
+// A function to use hib::save() to create persistent instances.
+//
+function createNewFoo firstName, surname {
+  x = new java::Foo;
+  x.setCustom( new java::String[]{ firstName, surname } );
+
+  hib::save(x);
+}
+
+//
+// Initialize the Hibernate environment using MySQL.
+//
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  Foo
+;
+println nl, 'Hibernate initialized. Ready to go!', nl;
+
+//
+// Create new objects and save them.
+//
+createNewFoo 'Tony', 'Polisci';
+createNewFoo 'George', 'Blair';
+createNewFoo 'Dick', 'Kerry';
+createNewFoo 'John', 'Chenny';
+
+hib::close;
+</pre></td></tr></table></body></html>

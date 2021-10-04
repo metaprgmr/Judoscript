@@ -1,0 +1,29 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_hibernate/buildOM.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2005-1-18';
+  desc    = [[*
+    For each test case, the object model is specified in *.hbm.xml files.
+    This script is to generate the Java source files and compile them.
+    All Java classes belong to the default package for simplicity.
+    This script must be run from where the *.hbm.xml files reside.
+
+    This script uses Hibernate hbm2java tool and javac. You must have
+    Hibernate libraries in the classpath, and javac in the path.
+  *]];
+}
+
+import net.sf.hibernate.tool.hbm2java.CodeGenerator;
+
+
+println '::: Generate Java source files into "generated/" from HBM descriptors.';
+// Unlike javac below, the hbm2java tool takes individual file names...
+listFiles '*.hbm.xml';  // returns file names in $_ as an array named.
+CodeGenerator::main($_.toStringArray());
+
+println '::: Compile the Java files.';
+exec 'javac -d ./ generated/*.java';
+
+catch: $_.pist();
+</pre></td></tr></table></body></html>

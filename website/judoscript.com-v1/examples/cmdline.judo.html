@@ -1,0 +1,15 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_env_sys/cmdline.judo:</b></td></tr><tr><td><pre>
+print '#cmd_args: ';
+for x in #cmd_args {
+  print x, ' ';
+}
+print nl, '    #args: ';
+for x in #args {
+  print x, ' ';
+}
+println nl, ' #options: ';
+for x in #options.keys() {
+  println '           ', x, '=', #options[x];
+}
+</pre></td></tr></table></body></html>

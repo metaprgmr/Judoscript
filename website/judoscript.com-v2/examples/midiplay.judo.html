@@ -1,0 +1,60 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/midiplay.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args = 'filename.midi';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Plays a music file of these types: midi, rmf
+    (adapted from Java Sound API sample code.)
+  *]];
+}
+
+midiEOM = false;
+
+file = new java::File(#args[0]);
+local sound;
+{ sound = MidiSystem.getSequence(file);
+catch:
+  sound = new java::BufferedInputStream(new java::FileInputStream(file), 1024);
+}
+
+sequencer = MidiSystem.getSequencer();
+if sequencer.instanceof('Synthesizer') {
+  channels = synthesizer.getChannels();
+} 
+
+sequencer.cast(Sequencer).addMetaEventListener(
+           adapter for MetaEventListener {
+             &lt;meta>: if $_.getType() == 47 { // end of track
+                       midiEOM = true;
+                     }
+           });
+
+sequencer.open();
+sequencer.cast(Sequencer).setSequence(sound);
+
+value = 50.0;
+value = (VALUE + 100.0) / 200.0 * 127.0;
+for x in channels {
+  x.controlChange(10, value);
+}
+
+value = 0.8;
+for x in channels {
+  x.controlChange(7, value*127.0);
+}
+
+sequencer.start();
+while !midiEOM {
+  sleep(599);
+  println 'midiEOM = ', midiEOM.fmtBool();
+}
+sequencer.stop();
+sequencer.close();
+
+exit 0; // necessary to keep dangling threads.
+
+</pre></td></tr></table></body></html>

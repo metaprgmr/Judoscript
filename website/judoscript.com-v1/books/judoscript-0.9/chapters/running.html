@@ -1,0 +1,563 @@
+<html><head><title>Chapter 4. Running Judo</title>
+<link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+<table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+<td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+ href="../../../articles/index.html"><img
+ src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+ <h1>Chapter 4. Running Judo</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+<img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+</td></tr></table>
+<center><table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<!-- TOC PART --><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<li><a href="#startup">Start-Up Environment</a></li><li><a href="#classpath">Classpath</a></li><br>&#187;&nbsp;<a href="#jclsconst">Java Class Constants</a><li><a href="#sysprop_envvars">System Properties and Environment Variables</a></li><li><a href="#include">Include Other Scripts</a></li><li><a href="#pragma">Pragma</a></li><li><a href="#autorun">Make Scripts Executable</a></li><br>&#187;&nbsp;<a href="#win">Make Scripts Executable on Windows</a><br>&#187;&nbsp;<a href="#unix">Make Scripts Executable on Unix</a><li><a href="#logging">Logging</a></li><br>&#187;&nbsp;<a href="#log_pragma">Judo Logging Sources and Logging Pragma</a><br>&#187;&nbsp;<a href="#log_pragma2">Non-Judo Logging Sources</a><br>&#187;&nbsp;<a href="#log4j_jdk14">Logging with Log4J and JDK 1.4 Logging API</a><li><a href="#usage">Program Documentation</a></li></ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><!-- bottoms -->
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<!-- AUTHOR PART --><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+ By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+ <hr size=1>
+ </td></tr></table>
+ </td></tr>
+</td></tr><!-- AUTHOR PART -->
+<!-- SYNOPSIS PART --><tr><td valign=top>
+ <table border=0 cellpadding=5><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+
+This chapter details the running of the Judo language. Judo can be run in various modes, including standalone, as a server and as an embedded language engine in Java software.
+ </td></tr></table>
+</td></tr><!-- SYNOPSIS PART -->
+</table>
+
+
+
+<h2>&nbsp;<br><a name=startup> Start-Up Environment</a></h2>
+
+<p>To run Judo, you need Java and Judo software installed. The command line to run is <code>judo</code>. It normally runs a script file, but can run a short program specified on the command line itself, or compile a script without executing.</p>
+
+<p>To run a script, this is the general format:</p>
+
+<font color=black><pre>
+java <i>[ java-options ]</i> judo <i>[ judo-option ] script_name [ script-parameters ]</i>
+</pre></font>
+
+<p>Judo script file names normally end with <code>.judo</code>, although it can be anything; included file names normally end with <code>.judi</code>.</p>
+
+<p>The script file and its included files, if any, are located in this order:</p>
+
+<ol>
+<li> the specified path</li>
+<li> directories listed in a system propertied called <code>JUDOPATH</code></li>
+<li> <code>~/.judobase</code></li>
+<li> <code>c:/judobase</code> on Windows or <code>/usr/judobase</code> otherwise</li>
+<li> the CLASSPATH for the current JVM (can be turned off with <code>-Dnocp</code> Java option.)</li>
+</ol>
+
+<p>Item 3 and 4 allow users to store common programs in a common place. <code>JUDOPATH</code> uses the same format as Java <code>CLASSPATH</code> except that ZIP or JAR files are not supported. It is optional, and is defined as a JVM system property (the -D option). JVM CLASSPATH is searched last, and Judo scripts can reside within zip or jar files. This can be turned off if the JVM system property <code>nocp</code> is specified.</p>
+
+<p><b>Judo runtime options</b><br></p>
+
+<ul>
+<li><code>-c</code>: to compile the script only to check for the syntax.</li>
+<li><code>-q</code>: quite mode, run the script without displaying the copyright notice.</li>
+<li><code>-x</code>: to execute the code specified on the command line. Everything on the command line is concatenated, and an extra <code>;</code> is appended. For instance, the following are some sample command lines:
+<font color=black><pre>
+java judo -x "println #versionInfo"
+java judo -x "println (1234).fmtRoman('M')"
+java judo -x "println (1234).fmtHex()"
+java judo -x "println 0x4D2"
+java judo -x "println 49.95 * 1.0825"
+</pre></font>
+</li>
+</ul>
+
+<p><b>Script parameters and options</b><br>Any parameters on the command line following the script name are passed in to the script; they are accessible in the program by the predefined constant array, <code>#cmd_args</code>. Judo supports a simple yet useful parameter format: if specified parameter is like <code>-name:value</code>, it is deemed as an option; the value can be omitted which will be defaulted to <code>true</code>. These options are accessible in the program by the predefined constant <code>#options</code>, which is an <code>OrderedMap</code>. The option values are generally strings; but if multiple occurrences of a same option are specified, the value for that option is an array. The rest of the parameters are accessed as constant array <code>#args</code>. If not options are specified, then <code>#args</code> is the same as <code>#cmd_args</code>.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="cmdline.judo">Listing 4.1</a> cmdline.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+print '#cmd_args: ';
+for x in #cmd_args {
+  print x, ' ';
+}
+print nl, '    #args: ';
+for x in #args {
+  print x, ' ';
+}
+println nl, ' #options: ';
+for x in #options.keys() {
+  println '           ', x, '=', #options[x];
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Let's run with this command line:</p>
+
+<font color=black><pre>
+java judo -q cmdline.judo uvw -aa:1 -bb -aa:2 xyz
+</pre></font>
+
+<p>The result is:</p>
+
+<font color=black><pre>
+#cmd_args: uvw -aa:1 -bb -aa:2 xyz
+    #args: uvw xyz
+ #options:
+           aa=[1,2]
+           bb=true
+</pre></font>
+
+<p>In this example, the <code>aa</code> option has two values, stored in an array. The <code>bb</code> is specified without value, and is assumed <code>true</code>.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=classpath> Classpath</a></h2>
+
+<p>When Judo starts, the JVM has an initial classpath called <i>system classpath</i>. Judo also allows additional <i>user classpaths</i>. This is done through the predefined constant, <code>#classpath</code> object.</p>
+
+<p>To add a user classpath component, which can be either a file system directory name or a zip or jar file, use the <code>add()</code> method of <code>#classpath</code>, which can add individual class path name or an array of them. When Judo tries to load a Java class or a resource, the classpaths are searched first; if the class or resource is not found, Judo tries the system classpath. The following program demonstrates how to use this object:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="add_classpath.judo">Listing 4.2</a> add_classpath.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+println '---- Just system classpath ----', nl, #classpath;
+
+#classpath.add('c:/temp');
+println '---- Added user classpaths ----', nl, #classpath;
+
+a = new java::alfa;
+println nl, a;
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>The <i>toString()</i> method of <code>#classpath</code> prints out the complete classpath at the time of execution, where user classpaths are displayed first. The <code>alfa</code> is a test class put in the <code>c:\test</code>. You can inspect classpath components stored in <code>#classpath</code> like this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="list_classpath.judo">Listing 4.3</a> list_classpath.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+#classpath.add('c:/temp');
+
+println '---- User classpath components ----';
+for x in #classpath.userClasspaths {
+  println x;
+}
+
+println nl, '---- System classpath components ----';
+for x in #classpath.systemClasspaths {
+  println x;
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>To add an array of class path names, such the jar or zip files under some <code>lib</code> directory, do this:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="add_libjar_2cp.judo">Listing 4.4</a> add_libjar_2cp.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+/*
+ * To add all the jar/zip files in ${deploy}/lib and ${thirdparty}/lib
+ * into the (user) classpath.
+ */
+arr = [];
+listFiles &lt;arr&gt; '*.jar, *.zip' in '${deploy}/lib';
+listFiles &lt;arr&gt; '*.jar, *.zip' in '${thirdparty}/lib';
+
+#classpath.add(arr);
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+
+<a name=jclsconst><h3> Java Class Constants</h3></a>
+
+<p>Java classes can be loaded into constants in Judo. Keep in mind that user classpaths are added at runtime, where constants are set at compile time. So the following code would fail:</p>
+
+<font color=black><pre>
+#classpath.add('c:/temp');
+
+const #CDimension = java::java.awt.Dimension; // OK
+
+const #CAlfa = java::alfa; // fails, even though alfa.class in in c:/temp!
+</pre></font>
+
+<p>Java classes in the system classpath are ok.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=sysprop_envvars> System Properties and Environment Variables</a></h2>
+
+<p>As you may well know, when you run any Java software, the JVM contains a set of system properties. In the class <code>java.lang.System</code>, its static method <code>getProperties()</code> returns a <code>java.util.Properties</code>, which is essentially a name-value pair map, that includes all the system properties. You can specify runtime attributes on the command-line like this:</p>
+
+<font color=black><pre>
+java -Dabc=1 -Dxyz=aaa judo sysprops.judo
+</pre></font>
+
+<p>User defined properties are also part of the <code>java.util.Properties</code> returned by <code>System.getProperties()</code> method. The JVM predefines a list of system properties that describes various aspects of the JVM, system and runtime information. The following table lists what is defined in Java version 1.4:</p>
+
+<table border=1><caption align=left><b>Table 4.1 Predefined System Properties in Java 1.4</b></caption>
+<tr><th>Key</th><th>Description of Associated Value</th></tr>
+<tr><td valign=top>java.version</td><td valign=top>Java Runtime Environment version</td></tr>
+<tr><td valign=top>java.vendor</td><td valign=top>Java Runtime Environment vendor</td></tr>
+<tr><td valign=top>java.vendor.url</td><td valign=top>Java vendor URL</td></tr>
+<tr><td valign=top>java.home</td><td valign=top>Java installation directory</td></tr>
+<tr><td valign=top>java.vm.specification.version</td><td valign=top>Java Virtual Machine specification version</td></tr>
+<tr><td valign=top>java.vm.specification.vendor</td><td valign=top>Java Virtual Machine specification vendor</td></tr>
+<tr><td valign=top>java.vm.specification.name</td><td valign=top>Java Virtual Machine specification name</td></tr>
+<tr><td valign=top>java.vm.version Java</td><td valign=top>Virtual Machine implementation version</td></tr>
+<tr><td valign=top>java.vm.vendor Java</td><td valign=top>Virtual Machine implementation vendor</td></tr>
+<tr><td valign=top>java.vm.name Java</td><td valign=top>Virtual Machine implementation name</td></tr>
+<tr><td valign=top>java.specification.version</td><td valign=top>Java Runtime Environment specification version</td></tr>
+<tr><td valign=top>java.specification.vendor</td><td valign=top>Java Runtime Environment specification vendor</td></tr>
+<tr><td valign=top>java.specification.name</td><td valign=top>Java Runtime Environment specification name</td></tr>
+<tr><td valign=top>java.class.version</td><td valign=top>Java class format version number</td></tr>
+<tr><td valign=top>java.class.path</td><td valign=top>Java class path</td></tr>
+<tr><td valign=top>java.library.path</td><td valign=top>List of paths to search when loading libraries</td></tr>
+<tr><td valign=top>java.io.tmpdir</td><td valign=top>Default temp file path</td></tr>
+<tr><td valign=top>java.compiler</td><td valign=top>Name of JIT compiler to use</td></tr>
+<tr><td valign=top>java.ext.dirs</td><td valign=top>Path of extension directory or directories</td></tr>
+<tr><td valign=top>os.name</td><td valign=top>Operating system name</td></tr>
+<tr><td valign=top>os.arch</td><td valign=top>Operating system architecture</td></tr>
+<tr><td valign=top>os.version</td><td valign=top>Operating system version</td></tr>
+<tr><td valign=top>file.separator</td><td valign=top>File separator ("/" on UNIX)</td></tr>
+<tr><td valign=top>path.separator</td><td valign=top>Path separator (":" on UNIX)</td></tr>
+<tr><td valign=top>line.separator</td><td valign=top>Line separator ("\n" on UNIX)</td></tr>
+<tr><td valign=top>user.name</td><td valign=top>User's account name</td></tr>
+<tr><td valign=top>user.home</td><td valign=top>User's home directory</td></tr>
+<tr><td valign=top>user.dir</td><td valign=top>User's current working directory</td></tr>
+</table>
+
+<p>Judo's built-in constant, <code>#sysprops</code>, refers to the system properties.</p>
+
+<p>JVM system properties are different from environment variables. The environment variables are for the operating system process that runs the current JVM. In Judo, there are two system functions, <code>getenvs()</code> and <code>getenv(name)</code>. Alternatively, you can use the <code>${name}</code> notation in place of <code>getenv(name)</code>; <code>${name}</code> can appear within string literals as well; see <i><a href="datatypes.html#string">String and Character</a></i> for details. Let's look at an example.</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="sysprops.judo">Listing 4.5</a> sysprops.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+// Print out system class path:
+cp = systemProperty('java.class.path').csv(${:});
+for x in cp { // print class path nicely.
+  if loopIndex() == 0 {
+    println 'Java class path: ', x;
+  } else {
+    println '                 ', x;
+  }
+}
+
+// Print out a few pieces of system information:
+println 'OS Name:    ', osName();
+println 'isMac:      ', isMac();
+println 'isWindows:  ', isWindows();
+println 'isHP:       ', isHP();
+println 'isLinux:    ', isLinux();
+println 'isSunOS:    ', isSunOS();
+println 'javaVendor: ', javaVendor();
+println;
+println 'fileSep:    ', ${/};
+println 'pathSep:    ', ${:};
+println 'homeDir:    ', ${~};
+println 'curDir:     ', ${.};
+println "cd '/'";
+cd '/';   // change curDir().
+println 'curDir:     ', ${.};
+println 'userName:   ', #user;
+
+// Print out all the system properties:
+println nl, '=======================',
+        nl, ' All system properties',
+        nl, '=======================';
+for k in #sysprops {
+  println k:>26, ' = ', #sysprops.(k);
+}
+
+// Print out all the environment variables of this JVM process:
+println nl, '==========================',
+        nl, ' All environment variables',
+        nl, '==========================';
+envvars = getenvs();
+for k in envvars {
+  println k:>26, ' = ', envvars.(k);
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>In this program, it first prints out the JVM's class path; then it prints out some system information. The <code>osName()</code>, <code>javaVendor()</code> and the <code>isXXX()</code> functions are all Judo system functions that obtain information from the system properties. Finally, it prints out all the system properties and environment variables.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=include> Include Other Scripts</a></h2>
+
+<p>Judo programs can include other scripts with the <code>!include</code> clause like this:</p>
+
+<font color=black><pre>
+!include 'common.judi'
+</pre></font>
+
+<p>By convention, scripts intended to be included have their file names end with <code>.judi</code>. The included files texturally become a part of the current script. Usually included files are used for libraries of functions, user-defined classes, constants, and sometimes global variables or initialization/clearn-up code. Generally, it is not a good idea to put a lot of executable code in included files because this may lead to subtle bugs that are hard to figure out. This is a style issue.</p>
+
+<p><b>Conditional include</b><br>Files can be conditionally included. The complete syntax for <code>!include</code> is as follows:</p>
+
+<a name="Include"><table border=0>
+<tr><td valign=top><i>Include</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>!include</code></b> ( <b><code>if</code></b> <i>Expr</i> | <b><code>ifexists</code></b> | ( <b><code>ifdef</code></b> | <b><code>ifndef</code></b> ) <i>CONST_NAME</i> )? <i>STRING_LITERAL</i></td></tr>
+</table></a>
+
+<p>Between <code>!include</code> and the file path, you can specify a condition; if the condition is an expression, it must be a constant expression. Only when the condition is <code>true</code> will the file be included. The conditions can be the existence or otherwises of a constant, the existence of the included file itself, or a boolean expression. The following shows some examples of conditional include:</p>
+
+<font color=black><pre>
+!include if ${LOCALE}==null     'messages_en.judi'
+!include if ${LOCALE}=='en'     'messages_en.judi'
+!include if ${LOCALE}=='es'     'messages_es.judi'
+!include if ${LOCALE}=='sim_cn' 'messages_cn_s.judi'
+!include if ${LOCALE}=='tra_cn' 'messages_cn_t.judi'
+
+
+!include ifexists 'init.judi'
+
+!include ifdef #debug 'debuglib.judi'
+</pre></font>
+
+<p>The syntax of <code>${LOCALE}</code> accesses the environment variable at runtime. For more details, see <i><a href="datatypes.html#string">String and Character</a></i>.</p>
+
+<p><b>Environment variables in include file path</b><br>The <code>${}</code> syntax can also be embedded in string literals. In the case of <code>!include</code>, <code>${}</code>'s are only interpreted as environment variables. So you can include files like this:</p>
+
+<font color=black><pre>
+!include '${ENVROOT}/bonanza/common.judi'
+</pre></font>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=pragma> Pragma</a></h2>
+
+<p>Pragmas are instructions inside program source files to modify the behavior of Judo language system at different levels, such as parsing, script internal states and runtime characteristics. Pragmas take this general syntax:</p>
+
+<a name="Pragma"><table border=0>
+<tr><td valign=top><i>pragma</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><b><code>!pragma</code></b> <i>PRAGMA_NAME</i> <b><code>=</code></b> <i>LITERAL</i></td></tr>
+</table></a>
+
+<p>where the <i>PRAGMA_NAME</i> is a dot (<code>.</code>) separated name, exactly like a qualified Java class name. Each pragma follows its own rules and has its own use, which will be discussed in various parts of this book.</p>
+
+<p>Collectively, <b><code>!include</code></b>, <b><code>!pragma</code></b> and any other mechanisms in Judo that starts with an exclamation mark (<code>!</code>) are called language <i>directives</i>, which is a not-so-useful concept.</p>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=autorun> Make Scripts Executable</a></h2>
+
+<p>Judo scripts can be made executable on both Windows and Unix platforms. Let's see how they can be done on Windows and Unix.</p>
+
+
+<a name=win><h3> Make Scripts Executable on Windows</h3></a>
+
+<p>On Windows, we create a simple batch file to run Judo:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="judo.bat">Listing 4.6</a> judo.bat</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+java judo -q %1 %2 %3 %4 %5 %6 %7 %8 %9
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>This script assumes that all the necessary Java software libraries, including <code>judo.jar</code>, are in the <code>CLASSPATH</code> environment variable. Then, you can run Judo scripts like this:
+
+<font color=black><pre>
+judo myscript.judo param1 param2
+</pre></font>
+
+<p>Next, use the Windows Explorer to associate this batch file to files with extensions of <code>.judo</code>, <code>.jud</code>, <code>.judi</code> and any extensions you like to use for Judo scripts. To do this, first start Windows Explorer and navigate to a file of one of those extensions; right-click on that, and choose "Open With" and then "Choose Program". The "Open With" dialog box shows up; check the box of "Always use this program to open these files"; click on the "Other" button, navigate to the <code>judo.bat</code> you have created, and finish. Next time, you can run a Judo script by either double-clicking on a Judo script in the Windows Explorer, or directly type the script name in a console window (DOS box).</p>
+
+<br>
+
+
+<a name=unix><h3> Make Scripts Executable on Unix</h3></a>
+
+<p>It is easy to create an executable script on Unix to run Judo:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="unix-judo">Listing 4.7</a> /usr/local/bin/judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+java judo $*
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>Certainly, don't forget to <code>chmod</code> it to be executable. So you can run Judo on the command line like this:</p>
+
+<font color=black><pre>
+judo myscript.jdo param1 param2
+</pre></font>
+
+<p>To make the Judo scripts auto-run, put the following as the first line in the script:</p>
+
+<font color=black><pre>
+#!/usr/bin/env judo
+</pre></font>
+
+<p>And don't forget to <code>chmod</code> the Judo script to be executable. It seems that the following should also work:</p>
+
+<font color=black><pre>
+#!/usr/local/bin/judo
+</pre></font>
+
+<p>But there are reports that the first approach works better in most shells.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=logging> Logging</a></h2>
+
+<p>Internally, the Judo engine logs various messages. These messages are classified as <i>trace</i>, <i>debug</i>, <i>info</i>, <i>warning</i>, <i>error</i> and <i>fatal</i>; they are collectively called <i>logging levels</i>. A program can programmatically change the logging level via <b><code>!pragma</code></b> mechanism.</p>
+
+
+<a name=log_pragma><h3> Judo Logging Sources and Logging Pragma</h3></a>
+
+<p>Judo has these logging sources within the language engine:</p>
+
+<table border=1><caption align=left><b>Table 4.2 Judo Logging Sources</b></caption>
+<tr><th>Logger Name</th><th>Description</th></tr>
+<tr><td valign=top><code>judo</code></td><td valign=top>The general logger for the whole language engine.</td></tr>
+<tr><td valign=top><code>judo.user</code></td><td valign=top>The user log writable via the <code>print &lt;log&gt;</code> statement.</td></tr>
+<tr><td valign=top><code>judo.jdbc</code></td><td valign=top>The JDBC logger. This logger is set to <code>java.sql.DriverManager</code> via a call to its <code>setLogWriter()</code> method.</td></tr>
+<tr><td valign=top><code>jdbc.hibernate</code></td><td valign=top>The Judo logger for its Hibernate scripting events.</td></tr>
+<tr><td valign=top><code>jdbc.schedule</code></td><td valign=top>The logger for the <code>schedule</code> statement.</td></tr>
+</table>
+
+<p>When the language engine starts, all the loggers are initialized to a same logging level, depending on the configuration. Logging levels for any of these sources can be modified via the logging pragma like this:</p>
+
+<font color=black><pre>
+!pragma logger.judo = 'warn'
+!pragma logger.judo.user = 'trace'
+!pragma logger.judo.jdbc = 'debug'
+!pragma logger.judo.hibernate = 'info'
+</pre></font>
+
+<p>The logging levels have priorities, from lowest to highest in this order: <code>trace</code>, <code>debug</code>, <code>info</code>, <code>warn</code>, <code>error</code> and <code>fatal</code>. The lower the priority, the more verbose. For instance, if a logger is set to <code>warn</code> level, then all <i>warning</i>, <i>error</i> and <i>fatal</i> messages will be logged. You can also specify an <code>all</code> level, which equates to <code>trace</code>. You can also set an <code>off</code> level to turn off logging altogether.</p>
+
+<p>A special case is to set the logging level for <code>judo.user</code>; you can use <code>logger</code> without suffix to represent <code>judo.user</code>:</p>
+
+<font color=black><pre>
+!pragma logger = 'trace'
+</pre></font>
+
+<br>
+
+
+<a name=log_pragma2><h3> Non-Judo Logging Sources</h3></a>
+
+<p>There may be Java software packages used with your Judo programs. A classical example is Hibernate. These packages often log various messages from different parts.</p>
+
+<p>Logging is a basic part of any software package. Java software can choose their own way of logging, such as writing to <code>System.err</code> or <code>System.out</code>, a file, operating system system logs or even databases. In modern Java, there are a few common choices, notably the JDK 1.4 logging API and the <i>Apache Log4J</i> logging framework. In addition, there is a light-weight wrapper API called <code>Apache commons-logging</code> package that provides a common API to various logging implementations. This is what is used by Judo, Hibernate and many other open source and commercial software products and projects. We need to discuss this package in a little more detail.</p>
+
+<p><b>Apache commons-logging package</b><br></p>
+
+<p>As just mentioned, the <i>Apache commons-logging package</i> is a wrapper on top of various logging APIs. It is closely modeled after <i>Log4J</i>, and provides a <code>SimpleLog</code> of its own in case no other logging implementation is present. By default <i>commons-logging</i> picks a logger with this discovery strategy:</p>
+
+<ol>
+<li>use <i>Log4J</i> if it is available in the classpath. Otherwise,</li>
+<li>use the JDK 1.4 logging API if the system is running on JDK 1.4. Otherwise,</li>
+<li>use the <code>org.apache.commons.logging.impl.SimpleLog</code>.</li>
+</ol>
+
+<p>If the non-Judo software package does use <i>commons-logging</i> API, you can set the logging level for them as well: simply append the logger name to <code>logger.</code> in the pragma:</p>
+
+<font color=black><pre>
+!pragma logger.org.hibernate = 'warn'
+!pragma logger.org.hibernate.SQL = 'warn'
+</pre></font>
+
+<br>
+
+
+<a name=log4j_jdk14><h3> Logging with Log4J and JDK 1.4 Logging API</h3></a>
+
+<p>The <i>commons-logging</i> API has no special requirements for configuration; the logging configuration must be provided for the used logging mechanism. For instance, <i>Log4J</i> takes a <code>log4j.properties</code> file in the root of the classpath (among other means), and JDK 1.4 logging API reads a <code>logging.properties</code> at start, also from the root of the classpath.</p>
+
+<p>Judo installation provides a default <code>log4j.properties</code> and <code>logging.properties</code>. They are not in the classpath automatically. Take a look at them if you intend to use, and edit them based on your needs, such as setting the logging levels, logging destinations and/or mechanism. The details of these two logging APIs are beyond the scope of this book, and you can find a lot of resources on them both online and in books.</p>
+
+<br>
+
+<br>
+
+
+
+<h2>&nbsp;<br><a name=usage> Program Documentation</a></h2>
+
+<p>Judo has a special mechanism for structured documentation of programs, the <code>usage</code> block at the beginning of scripts. Its contents are key-value pairs, where the values are any literals. There are three particular keys, <code>minArgs</code>, <code>args</code> and <code>desc</code>. The key <code>minArgs</code> must take an integer number; if it is specified and the number of arguments is less than that, Judo prints out <code>args</code> and <code>desc</code>. The <code>args</code> can be any format and does not serve any other particular purposes other than displaying. The following is an example:</p>
+
+<p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+<th align=left><a name="usage.judo">Listing 4.8</a> usage.judo</th>
+</thead><tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr><tr><td bgcolor="#DDDDDD"><pre>
+
+usage {
+  desc    = [[*
+                This program displays a text file of any encoding in a simple Java GUI.
+                It is easy to use. Simply provide a text file name and optionally an
+                encoding name; the default is your current Java default encoding.
+            *]];
+  minArgs = 1;
+  args    = 'file [encoding]';
+  author  = 'James Huang';
+  created = '2002-11-14';
+  lastMod = '2004-06-28';
+}
+</pre></td></tr><tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr></table></p><p>
+
+
+<p>When run it without any parameters, it prints out the help message like this:</p>
+
+<font color=black><pre>
+% java judo usage.judo
+
+Usage: java judo usage.judo file [encoding]
+
+This program displays a text file of any encoding in a simple Java GUI.
+It is easy to use. Simply provide a text file name and optionally an
+encoding name; the default is your current Java default encoding.
+</pre></font>
+
+<p>The special options, <code>-?</code> and <code>--helper</code>, tell the Judo engine to print out the same help message and exist the script.</p>
+
+The <code>usage</code> block can appear only once in a script. If the script includes other scripts, only the main script's <code>usage</code> is used.
+
+<br>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-2021 James Jianbo Huang</center>
+</body></html>
+

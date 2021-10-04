@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_COM/VBScript.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This program obtains a ScriptControl for VBScript and evaluates a
+    series of expressions.
+
+    Adapted from &lt;a href="http://www.danadler.com/jacob">JACOB&lt;/a>
+    file 'samples/test/speed.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+sc = new com::ScriptControl;
+sc.Language = 'VBScript';
+
+for i=0; i&lt;10; ++i {
+  println sc.Eval(i @ '+1001');
+}
+</pre></td></tr></table></body></html>

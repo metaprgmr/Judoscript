@@ -1,0 +1,31 @@
+<html><head><title>JudoScript Semantics - BindVariableList</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>BindVariableList</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=BindVariableList>BindVariableList</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw><nobr>@</nobr></font>  <font class=t>INT_LIT</font>  <br>  (  <font class=kw><nobr>::</nobr></font>  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showNT('Arguments')">Arguments</a></font> <br>  |   (  <font class=kw><nobr>:</nobr></font>  <font class=kw>array</font>   |  <font class=kw>bigDecimal</font>   |  <font class=kw>blob</font>   |  <font class=kw>boolean</font>   |  <font class=kw>byte</font>   |  <font class=kw>bytes</font>   |  <font class=kw>clob</font>   |  <font class=kw>Date</font>   |  <font class=kw>double</font>  <br>  |  <font class=kw>float</font>   |  <font class=kw>int</font>   |  <font class=kw>long</font>   |  <font class=kw>Numeric</font>   |  <font class=kw>ref</font>   |  <font class=kw>short</font>   |  <font class=kw>String</font>   |  <font class=kw>Struct</font>   |  <font class=kw>time</font>  <br>  |  <font class=kw>timestamp</font>   |  <font class=kw>varchar</font>   |  <font class=kw>other</font>   |  <font class=kw>oracle_rowid</font>   |  <font class=kw>oracle_cursor</font>   |  <font class=kw>oracle_bfile</font>  <br>  )?   (  <font class=kw><nobr>=</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw><nobr>=&gt;</nobr></font>  <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font>  |  <font class=kw><nobr>&lt;=&gt;</nobr></font>  <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font>  )?  <br>  )   ),+  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('BindVariableList'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Each bind variable (the ? in the prepared SQL statement) is represented by
+  its index, with 1 being the first. The type of the bind variable can be
+  specified after <font class=kw><nobr>:</nobr></font> ; default is string. If the SQL is not a procedure call,
+  a value is bound to the variable. For procedure calls, input variables can be
+  bound to values with <font class=kw><nobr>=</nobr></font> , and output and bi-directional variables can be
+  bound to a JudoScript variable with <font class=kw><nobr>=&gt;</nobr></font>  or <font class=kw><nobr>&lt;=&gt;</nobr></font> .</p>
+  <p>For some RDBMSs, the result column is not a simple value, but rather is an
+  object such as an input or output stream (in the case of BLOBs). Instead of
+  binding values or variables, use the <font class=kw><nobr>::</nobr></font>  notation to call the method. These
+  methods of the JDBC result set almost always take a column index as the first
+  parameter; this index is part of <font class=kw><nobr>@</nobr></font>  here, so call that method with the rest
+  of the required parameters, if any.</p>
+ </body></html>

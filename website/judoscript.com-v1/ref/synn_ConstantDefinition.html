@@ -1,0 +1,24 @@
+<html><head><title>JudoScript Semantics - ConstantDefinition</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ConstantDefinition</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ConstantDefinition>ConstantDefinition</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>const</font>   )?  <font class=t>CONST_NAME</font>  <font class=kw><nobr>=</nobr></font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  |  <font class=nt><a href="javascript:showNT('ArrayAllocator')">ArrayAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('StructAllocator')">StructAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('SetAllocator')">SetAllocator</a></font>  )   (  <font class=kw>ifndef</font>   |  <font class=kw>if</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ConstantDefinition'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>A constant is defined, or evaluated, before a script is run, no matter where it
+  is defined. The value expression should be constant as well.</p>
+
+  <p>Conditional definition is supported, either to check on itself or a boolean
+  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>ession.</p>
+ </body></html>

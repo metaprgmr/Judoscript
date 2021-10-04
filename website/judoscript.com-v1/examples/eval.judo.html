@@ -1,0 +1,11 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_eval/eval.judo:</b></td></tr><tr><td><pre>
+x = 'aliens';
+eval [[*
+  println 'Hello, you ', x, '!';
+  y = 9;
+*]];
+println 'y was set within eval; now, y = ', y, nl;
+
+evalSeparate "println 'Hello, you ', x, '!'; ";
+</pre></td></tr></table></body></html>

@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - ComparatorDecl</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ComparatorDecl</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ComparatorDecl>ComparatorDecl</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw><nobr>&lt;</nobr></font>   (   (  <font class=kw>Number</font>   |  <font class=kw>String</font>   |  <font class=kw>Date</font>   )   (  <font class=kw><nobr>-</nobr></font>   |  <font class=kw><nobr>+</nobr></font>   )?   |  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=kw><nobr>&gt;</nobr></font>   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ComparatorDecl'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>If an <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> is enclosed, it must be a user-defined comparator function. Or,
+  it can use the predefined comparators for number, string and date/time. If no
+  comparator is explicitly specified, it uses a natural comparator, which compares
+  the Java object values or string values if that object is not comparable.</p>
+ </body></html>

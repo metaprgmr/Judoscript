@@ -1,0 +1,28 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/addlinenum.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args    = '[-e] [-w=3] filename';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-13';
+  desc    = [[*
+    Adds line numbers to any text files. If -e is specified, it does
+    HTML-escaping. The line number field width can be specified with
+    the -w option (such as -w:4); default is 3.
+  *]];
+}
+
+escape = (defined #options) &amp;&amp; #options.has('e');
+width  = ((defined #options) &amp;&amp; #options.has('w')) ? #options.w : 3;
+
+lineNum = 1;
+do #args[0] as lines {
+  if escape {
+    $_ = $_.replace('&amp;','&amp;amp;');
+    $_ = $_.replace('&lt;','&amp;lt;');
+    $_ = $_.replace('>','&amp;gt;');
+  }
+  println lineNum++ :>width, ': ', $_;
+}
+</pre></td></tr></table></body></html>

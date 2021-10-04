@@ -1,0 +1,61 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/ToolBarDemo.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing tool bar for a frame.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+frame = new java::JFrame('ToolBarDemo');
+
+//Create the toolbar.
+toolBar = new java::JToolBar;
+
+//first button
+button1 = new java::JButton(new java::ImageIcon("images/left.gif"));
+button1.setToolTipText("This is the left button");
+toolBar.add(button1);
+
+//second button
+button2 = new java::JButton(new java::ImageIcon("images/middle.gif"));
+button2.setToolTipText("This is the middle button");
+toolBar.add(button2);
+
+//third button
+button3 = new java::JButton(new java::ImageIcon("images/right.gif"));
+button3.setToolTipText("This is the right button");
+toolBar.add(button3);
+
+//Create the text area used for output.
+textArea = new java::JTextArea(5, 30);
+scrollPane = new java::JScrollPane(textArea);
+
+//Lay out the content pane.
+contentPane = new java::JPanel;
+contentPane.setLayout(new java::BorderLayout);
+contentPane.setPreferredSize(new java::Dimension(400, 100));
+contentPane.add(toolBar, (java::BorderLayout).NORTH);
+contentPane.add(scrollPane, (java::BorderLayout).CENTER);
+frame.setContentPane(contentPane);
+
+function displayResult actionDescription {
+  textArea.append(actionDescription @ lineSep());
+}
+
+gui::events {
+  &lt;button1 : Action : actionPerformed> : displayResult("Action for first button");
+  &lt;button2 : Action : actionPerformed> : displayResult("Action for second button");
+  &lt;button3 : Action : actionPerformed> : displayResult("Action for third button");
+  &lt;frame : Window : windowClosing> :     exit(0);
+}
+
+frame.pack();
+frame.setVisible(true);
+</pre></td></tr></table></body></html>

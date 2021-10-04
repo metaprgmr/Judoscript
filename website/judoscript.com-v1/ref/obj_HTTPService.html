@@ -1,0 +1,102 @@
+<html><head><title>JudoScript Object - HTTPService</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>HTTPService</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=HTTPService_addCookie></a>addCookie<br></font></td><td valign=top><font class=param>cookie</font><br><font class=param> cookieValue</font><br></td><td valign=top>
+  Adds a cookie <font class=param>cookie</font> with value <font class=param>cookieValue</font> to the
+  response headers. This should be called before the response body is sent to the
+  client. If only <font class=param>cookie</font>, it should be a <font class=obj><a href="javascript:showObj('Cookie')">Cookie</a></font> instance.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_close></a>close<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Close the connection to the client.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getAllHeaders></a>getAllHeaders<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of all the header names for the HTTP request.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getContentLength></a>getContentLength<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the "Content-Length" header of the HTTP reponse. If it is not present,
+  -1 is returned.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getCookies></a>getCookies<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns an array of <font class=obj><a href="javascript:showObj('Cookie')">Cookie</a></font>'s from the HTTP request.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getDateHeader></a>getDateHeader<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns a date object for the <font class=param>name</font> HTTP request header.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getDomain></a>getDomain<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the domain of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getFileName></a>getFileName<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the file name of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getHost></a>getHost<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the host of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getInputStream></a>getInputStream<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the input stream for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getMethod></a>getMethod<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the HTTP method for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getOutputStream></a>getOutputStream<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the output stream for the client connection.
+  This implicitly makes the connection if not connected yet.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getPath></a>getPath<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the path of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getPort></a>getPort<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the port of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getQuery></a>getQuery<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the query string of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getRef></a>getRef<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the reference of the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getServerName></a>getServerName<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns this machine's host name.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getServerPort></a>getServerPort<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns this server socket's local port number.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getTextInput></a>getTextInput<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the text input (a buffered reader) for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getTextOutput></a>getTextOutput<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the text output (a print writer) for the client connection.
+  This implicitly makes the connection if not connected yet.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_getUrl></a>getUrl<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the URL for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_parseFormVars></a>parseFormVars<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns form variables, whether it is posted or in the query string for a GET request,
+  as a <font class=kw>struct</font> . Each value is usually a string or a string array.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_serveError></a>serveError<br></font></td><td valign=top><font class=param>code</font><br></td><td valign=top>
+  Sends an error response with <font class=param>code</font> to the client.
+  If no <font class=param>code</font> is specified, defaut to 500.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_serveFile></a>serveFile<br></font></td><td valign=top><font class=param>docRoot</font><br></td><td valign=top>
+  Sends the file whose is composed of <font class=param>docRoot</font> and the virtual path of the URL.
+  The mime-type is based on the file extension and the internal mime type table. For unknown
+  extensions, default mime type is "text/plain".
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_setResponseMessage></a><a name=HTTPService_setResponseMsg></a>setResponseMessage<br>setResponseMsg<br></font></td><td valign=top><font class=param>msg</font><br></td><td valign=top>
+  Sets the HTTP response message to <font class=param>msg</font> for the client connection.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=HTTPService_setStatusCode></a><a name=HTTPService_setStatus></a>setStatusCode<br>setStatus<br></font></td><td valign=top><font class=param>code</font><br></td><td valign=top>
+  Sets the HTTP response code to <font class=param>code</font> for the client connection.
+</td></tr>
+</table>
+</body></html>

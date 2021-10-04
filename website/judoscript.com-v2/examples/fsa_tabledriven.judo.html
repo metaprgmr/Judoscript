@@ -1,0 +1,221 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/fsa_tabledriven.judo:</b></td></tr><tr><td><pre>
+//    From  Input   To   ID  Action 
+//    ====  =====  ====  ==  ======
+fsa = [
+
+  [ /* 0*/ [ '(',    1,  1,  'add' ],
+    /* 0*/ [ ';',   15,  0,  'push back; exit' ],
+    /* 0*/ [ '}',   15,  0,  'push back; exit' ],
+    /* 0*/ [ '/',    9,  2,  'mark; add' ],
+    /* 0*/ [ '-',   13,  2,  'mark; add' ],
+    /* 0*/ [ null,   0,  1,  'add' ],
+  ],
+  [ /* 1*/ [ '*',    2,  1,  'add' ],
+    /* 1*/ [ null,   0,  1,  'add' ],
+  ],
+  [ /* 2*/ [ ')',    0,  1,  'add' ],
+    /* 2*/ [ ' ',    2,  1,  'add' ],
+    /* 2*/ [ '\t',   2,  1,  'add' ],
+    /* 2*/ [ '\r',   2,  1,  'add' ],
+    /* 2*/ [ '\n',   2,  1,  'add' ],
+    /* 2*/ [ null,   3,  1,  'add' ],
+  ],
+  [ /* 3*/ [ '*',    4,  1,  'add' ],
+    /* 3*/ [ '\'',   5,  1,  'add' ],
+    /* 3*/ [ '"',    7,  1,  'add' ],
+    /* 3*/ [ null,   3,  1,  'add' ],
+  ],
+  [ /* 4*/ [ ')',    0,  1,  'add' ],
+    /* 4*/ [ null,   3,  1,  'add' ],
+  ],
+  [ /* 5*/ [ '\\',   6,  1,  'add' ],
+    /* 5*/ [ '\'',   3,  1,  'add' ],
+    /* 5*/ [ null,   5,  1,  'add' ],
+  ],
+  [ /* 6*/ [ null,   5,  1,  'add' ],
+  ],
+  [ /* 7*/ [ '\\',   8,  1,  'add' ],
+    /* 7*/ [ '"',    3,  1,  'add' ],
+    /* 7*/ [ null,   7,  1,  'add' ],
+  ],
+  [ /* 8*/ [ null,   7,  1,  'add' ],
+  ],
+  [ /* 9*/ [ '*',   10,  1,  'add' ],
+    /* 9*/ [ '/',   12,  1,  'add' ],
+    /* 9*/ [ null,   0,  3,  'add; clear mark' ],
+  ],
+  [ /*10*/ [ '*',   11,  1,  'add' ],
+    /*10*/ [ null,  10,  1,  'add' ],
+  ],
+  [ /*11*/ [ '/',    0,  4,  'remove from mark; clear mark' ],
+    /*11*/ [ null,  10,  1,  'add' ],
+  ],
+  [ /*12*/ [ '\r',   0,  5,  'remove from mark; clear mark; add' ],
+    /*12*/ [ '\n',   0,  5,  'remove from mark; clear mark; add' ],
+    /*12*/ [ null,  12,  1,  'add' ],
+  ],
+  [ /*13*/ [ '-',   14,  1,  'add' ],
+    /*13*/ [ null,   0,  1,  'add' ],
+  ],
+  [ /*14*/ [ '\r',   0,  5,  'remove from mark; clear mark; add' ],
+    /*14*/ [ '\n',   0,  5,  'remove from mark; clear mark; add' ],
+    /*14*/ [ null,  14,  1,  'add' ],
+  ],
+];
+
+
+// step 1. generate states and actions for "other".
+state_other = [];
+action_other = [];
+
+for state in fsa {
+  for transit in state {
+    if transit[0] == null {
+      state_other.add(transit[1]);
+      action_other.add(transit[2]);
+    }
+  }
+}
+
+// step 2. find the biggest value of the character;
+//         also, collect all action names.
+max_ch = 0;
+action_names = {};
+for state in fsa {
+  idx = loopIndex();
+  for transit in state {
+    x = transit[0].ascii();
+    if x > max_ch { max_ch = x; }
+
+    action_names.(transit[2]) = transit[3];
+  }
+
+}
+
+// step 3. generate the state-transition table.
+statex = [];
+actionx = [];
+
+// populate both arrays with "other" values.
+max_state = fsa.lastIndex();
+for i from 0 to max_ch {
+  astate = [];
+  aaction = [];
+
+  for j from 0 to max_state {
+    astate.add(state_other[j]);
+    aaction.add(action_other[j]);
+  }
+
+  statex.add(astate);
+  actionx.add(aaction);
+}
+
+// fill in specific state transitions and corresponding actions
+for x in fsa {
+  start_state = loopIndex();
+  for y in x {
+    i = y[0].ascii();
+    statex[i][start_state] = y[1];
+    actionx[i][start_state] = y[2];
+  }
+}
+
+//
+// Now, write out Java code for the FSA implementation.
+//
+
+// writer out max char/state.
+println '  static final int max_char = ', max_ch, ';';
+println '  static final int max_state = ', max_state, ';', nl;
+
+// write out states
+println '  static final int[][] states = {';
+i = 0;
+println '  //           ', i++:>4 { max_state+1 };
+println '  //           ', '  --' { max_state+1 };
+for x in statex {
+  i = loopIndex();
+  print '  /* ', i :&lt;3, ' ', i>32 ? i.chr() : ' ', ' */ { ';
+  for y in x {
+    if loopIndex() > 0 { print ','; }
+    print y:>3;
+  }
+  print ' ]';
+  if loopIndex() &lt; max_ch { print ','; }
+  println;
+}
+println '  };', nl;
+
+// write out states_other
+println '  static final int[] states_other =';
+i = 0;
+println '  //           ', i++:>4 { max_state+1 };
+println '  //           ', '  --' { max_state+1 };
+print '              { ';
+for x in state_other {
+  if loopIndex() > 0 { print ','; }
+  print x:>3;
+}
+println ' };', nl;
+
+// write out actions
+println '  static final int[][] actions = {';
+i = 0;
+println '  //           ', i++:>4 { max_state+1 };
+println '  //           ', '  --' { max_state+1 };
+for x in actionx {
+  i = loopIndex();
+  print '  /* ', i :&lt;3, ' ', i>32 ? i.chr() : ' ', ' */ { ';
+  for y in x {
+    if loopIndex() > 0 { print ','; }
+    print y:>3;
+  }
+  print ' }';
+  if loopIndex() &lt; max_ch { print ','; }
+  println;
+}
+println '  };', nl;
+
+// write out actions_other
+println '  static final int[] actions_other =';
+i = 0;
+println '  //           ', i++:>4 { max_state+1 };
+println '  //           ', '  --' { max_state+1 };
+print '              { ';
+for x in action_other {
+  if loopIndex() > 0 { print ','; }
+  print x:>3;
+}
+println ' };';
+
+// write out a method template
+print [[[*
+  // TODO: implement readChar().
+  void fsa() {
+
+    int action = -1;
+    int state = 0;
+    while (true) {
+      int ch = readChar();
+      if (ch &lt; 0) break; // the loop
+      if (ch &lt;= max_ch) {
+        state = states[ch][state];
+        action = actions[ch][state];
+      } else {
+        state = states_other[state];
+        action = actions_other[state];
+      }
+      switch(action) {
+*]];
+for k in action_names.keysSorted() {
+  println '      case ', k, ': // TODO: implmement: ', action_names.(k);
+}
+println [[[*
+      }      
+    }
+  }
+*]];
+
+</pre></td></tr></table></body></html>

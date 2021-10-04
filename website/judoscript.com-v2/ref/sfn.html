@@ -1,0 +1,537 @@
+<html><head><title>JudoScript System Functions</title>
+<link rel=stylesheet type=text/css href="../share/judo_styles.css">
+<script language=JavaScript src="../share/judolib.js"></script>
+</head><body style="margin-left:20px">
+<h1>System Functions</h1>
+<p>System functions are an integral part of the many features of JudoScript language.</p>
+<table border=1><tr><th>Name</th><th>Arguments</th><th>Description</th><th>Examples</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=sfn_acceptHttp></a>acceptHttp<br></font></td><td valign=top><font class=param>serverSocket</font><br></td><td valign=top>
+  <p>Accepts a connection from the <font class=param>serverSocket</font> and returns a
+  <font class=obj><a href="javascript:showObj('HttpService')">HttpService</a></font> object for a HTTP connection.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_addMimeType></a>addMimeType<br></font></td><td valign=top><font class=param>ext</font><br><font class=param> value</font><br></td><td valign=top>
+  <p>Sets the mime type for file extension <font class=param>ext</font> to <font class=param>value</font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_antcall></a>antcall<br></font></td><td valign=top><font class=param>target</font><br><font class=param> ...</font><br></td><td valign=top>
+  <u>This function is only valid within embedded code inside Ant build scripts.</u>
+  It runs the named Ant targets of the enclosing Ant build script.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_assert></a>assert<br></font></td><td valign=top><font class=param>boolExpr</font><br></td><td valign=top>
+  Takes a boolean expression and, if assertion is on (see <font class=sfn><a href="javascript:showSF('setAssert')">setAssert()</a></font>),
+  evaluates the expression. If the result is <font class=kw>false</font> , throws an assertion exception.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_compare></a>compare<br></font></td><td valign=top><font class=param>left</font><br><font class=param> right</font><br></td><td valign=top>
+  Returns 1, 0 or -1 by comparing <font class=param>left</font> to <font class=param>right</font> as
+  numerical or <code>java.lang.Comparable</code> values.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_connectMailServer></a>connectMailServer<br></font></td><td valign=top><font class=param>host</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Connects to the mail server referenced by <font class=param>host</font>.
+  Only one mail server connection is allowed in a program. Once done
+  with sending mails, should call <font class=sfn><a href="javascript:showSF('disconnectMailServer')">disconnectMailServer()</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_convertToVariables></a>convertToVariables<br></font></td><td valign=top><font class=param>map</font><br><font class=param> isLocal</font><br></td><td valign=top>
+  This function takes a <font class=param>map</font> which is either <font class=kw>Object</font>  or
+  a <code>java.util.Map</code>, and converts all the data elements into
+  variables in the current scope. If <font class=param>isLocal</font> is specified
+  and is <font class=kw>true</font> , local variables are created; otherwise, normal scoping
+  rules decide where the variables are.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_cookie></a>cookie<br></font></td><td valign=top><font class=param>name</font><br><font class=param> value</font><br></td><td valign=top>
+  <p>Creates and returns a cookie object for <font class=param>name</font> with <font class=param>value</font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_copyStream></a><a name=sfn_copyStreams></a>copyStream<br>copyStreams<br></font></td><td valign=top><font class=param>input</font><br><font class=param> output</font><br><font class=param> closeStreams</font><br></td><td valign=top>
+  <p>Copies all the bytes from <font class=param>input</font> stream to the <font class=param>output</font>.
+  Closes both streams if <font class=param>closeStreams</font> is <font class=kw>true</font> . The <font class=param>input</font>
+  can be a file, a URL or an open stream (such as of a open <font class=obj><a href="javascript:showObj('HTTPConnection')">HTTPConnection</a></font>.
+  The <font class=param>output</font> can be a file name or any open output stream. It can be
+  omitted, in which case the system standard output stream is used.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_crc32></a>crc32<br></font></td><td valign=top><font class=param>src</font><br><font class=param> offset</font><br><font class=param> length</font><br><font class=param> prevCrc</font><br></td><td valign=top>
+  Returns the CRC32 value of the source. The <font class=param>src</font> can be an input stream, a java.io.File
+  of a string as file name, in which case only one parameter is allowed. It can also be a byte array,
+  and <font class=param>offset</font>, <font class=param>length</font> and <font class=param>prevCrc</font> may apply.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_createCOMObject></a><a name=sfn_createActiveXComponent></a>createCOMObject<br>createActiveXComponent<br></font></td><td valign=top><font class=param>id</font><br></td><td valign=top>
+  <p>Returns a Microsoft COM IDispatch instance. The parameter can be a program ID such as
+  "Word.Application", or a class ID in the form of "{FB7FDAE2-89B8-11CF-9BE8-00A0C90A632C}".</p>
+
+  <p>The returned object's methods can be called directly like any regular object methods
+  (that is, without using the IDispatch interface method <code>invoke()</code>), and its
+  properties can be set and got like any regular object data members.</p>
+
+  <p>This feature requires <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom/">JCom</a> support,
+  which is only available on Wintel platforms. JCom 2.2.3 is included in JudoScript, and make
+  sure that <u>jcom.dll</u> is in the path. (If you download a newer version of JCom, make
+  sure the new jcom.dll is before JudoScript's in the PATH environment variable, and its
+  jcom.jar is before judo.jar in the CLASSPATH.)</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_createDom></a>createDom<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a new, empty <font class=obj><a href="javascript:showObj('DOMDoc')">DOMDoc</a></font> object.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_createJar></a>createJar<br></font></td><td valign=top><font class=param>jarFileName</font><br><font class=param> manifest</font><br></td><td valign=top>
+  Returns an open <font class=obj><a href="javascript:showObj('ZipArchive')">ZipArchive</a></font> for the <font class=param>jarFileName</font>. The <font class=param>manifest</font>
+  is optional; if present, is the content of the manifest file put in the jar file.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_createTar></a>createTar<br></font></td><td valign=top><font class=param>tarFileName</font><br></td><td valign=top>
+  Returns an open <font class=obj><a href="javascript:showObj('TarArchive')">TarArchive</a></font> for the <font class=param>tarFileName</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_createZip></a>createZip<br></font></td><td valign=top><font class=param>zipFileName</font><br></td><td valign=top>
+  Returns an open <font class=obj><a href="javascript:showObj('ZipArchive')">ZipArchive</a></font> for the <font class=param>zipFileName</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_date></a>date<br></font></td><td valign=top><font class=param>year</font><br><font class=param> month</font><br><font class=param> day</font><br><font class=param> hour</font><br><font class=param> minute</font><br><font class=param> second</font><br></td><td valign=top>
+  Creates a <font class=kw>date</font>  value with the provided attributes. These attributes, if omitted,
+  are defaulted to 0 or 1 except for <font class=param>year</font>; if no parameters specified,
+  creates a <font class=kw>date</font>  for the current time.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_decrypt></a>decrypt<br></font></td><td valign=top><font class=param>password</font><br><font class=param> input</font><br></td><td valign=top>
+  <p>The <font class=param>input</font> is a byte array. This function uses a password-based
+  encryptor class to decrypt the input byte array and returns the result as a byte array.</p>
+  <addnote id="EncryptorClass">
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_decryptFile></a>decryptFile<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  <p>Decrypts the <font class=param>inputFile</font> with the <font class=param>password</font> using an
+  encryptor class and writes the result into the <font class=param>outputFile</font>.</p>
+  <addnote id="EncryptorClass">
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_disconnectMailServer></a>disconnectMailServer<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Disconnects the one and only mail server connection.
+  If the mail server connection was not open,  no effect.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_encode></a>encode<br></font></td><td valign=top><font class=param>input</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Takes an <font class=param>input</font>, which can be a string or a byte array, and returns a
+  string encoded with <font class=param>encoding</font>. If <font class=param>encoding</font> is omitted, use
+  the default text encoding scheme. Base-64 encoding is support as <font class=param>encoding</font>
+  being "base64".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_encrypt></a>encrypt<br></font></td><td valign=top><font class=param>password</font><br><font class=param> input</font><br></td><td valign=top>
+  <p>The <font class=param>input</font> is a byte array. This function uses a password-based
+  encryptor class to encrypt the input byte array and returns the result as a byte array.</p>
+  <addnote id="EncryptorClass">
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_encryptFile></a>encryptFile<br></font></td><td valign=top><font class=param>password</font><br><font class=param> inputFile</font><br><font class=param> outputFile</font><br></td><td valign=top>
+  <p>Encrypts the <font class=param>inputFile</font> with the <font class=param>password</font> using an
+  encryptor class and writes the result into the <font class=param>outputFile</font>.</p>
+  <addnote id="EncryptorClass">
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_escapeHtml></a>escapeHtml<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_escapeJava></a>escapeJava<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_escapeJavaScript></a>escapeJavaScript<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_escapeSql></a>escapeSql<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_escapeXml></a>escapeXml<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_exit></a>exit<br></font></td><td valign=top><font class=param>exitValue</font><br></td><td valign=top>
+  Exits the current session, optionally with <font class=param>exitValue</font> (default is 0).
+  Note this is not the same as calling <code>java.lang.System.exit()</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_fileChop></a>fileChop<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> [baseName]</font><br><font class=param> subFileSize</font><br></td><td valign=top>
+  <p>This utility function takes a (big) file <font class=param>fileName</font> and
+  generates a number of smaller files of the size <font class=param>subFileSize</font>.
+  The new files have <font class=param>baseName</font> plus "." and incremented indices
+  starting from 1. If <font class=param>basename</font> is missing, the default base
+  name is the same as <font class=param>fileName</font>.</p>
+  <p>The <font class=param>subFileSize</font> can be a number or a string such as "floppy"
+  (for the size of a 1.44M floppy diskette), "zip100" or "zip250" for 100M/250M
+  ZIP drive, or "CD" (for a 650M CD-ROM). It can also be a number followed by
+  "M" or "m" (for megabytes) or "K" or "k" (for kilobytes). The number must be
+  integer. If no <font class=param>subFileSize</font> specified, default size is for
+  floppy diskettes.</p>
+  <p>This function returns an integer array of all the sub-file sizes.
+  Typically the last one is different than the others.</p>
+  <p>See <font class=sfn><a href="javascript:showSF('fileUnchop')">fileUnchop()</a></font> and <font class=sfn><a href="javascript:showSF('fileChopCheck')">fileChopCheck()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_fileChopCheck></a>fileChopCheck<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> subFileSize</font><br></td><td valign=top>
+  <p>This utility function works with <font class=sfn><a href="javascript:showSF('fileChop')">fileChop()</a></font>. It returns
+  an integer array for the sub-file sizes if the input file is to be
+  chopped. The parameters are the same as in <font class=sfn><a href="javascript:showSF('fileChop')">fileChop()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_fileUnchop></a>fileUnchop<br></font></td><td valign=top><font class=param>baseName</font><br><font class=param> outfileName</font><br></td><td valign=top>
+  <p>This utility function does the reverse of <font class=sfn><a href="javascript:showSF('fileChop')">fileChop()</a></font>: it
+  goes through a series of files that starts with the <font class=param>baseName</font>
+  followed by "." and incremented indices, and assembles them into the
+  output file. If <font class=param>outfileName</font> is not empty, it is used for
+  the output file name, otherwise defaulted to <font class=param>baseName</font>.</p>
+  <p>See <font class=sfn><a href="javascript:showSF('fileChop')">fileChop()</a></font> and <font class=sfn><a href="javascript:showSF('fileChopCheck')">fileChopCheck()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getApacheContext></a><a name=sfn_apacheContext></a>getApacheContext<br>apacheContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for a WebSphere application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "org.apache.naming.java.javaURLContextFactory". This is
+  typically used on Tomcat.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getCharset></a>getCharset<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  <p>Returns the current character of the system. Default character set is
+  used by <font class=nt><a href="javascript:showNT('SendMailStatement')">SendMailStatement</a></font>.</p>
+  <p>See <font class=sfn><a href="javascript:showSF('setCharset')">setCharset()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getDefaultDateFormat></a><a name=sfn_defaultDateFormat></a>getDefaultDateFormat<br>defaultDateFormat<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the default date format as a string.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getEnvVar></a><a name=sfn_getenv></a>getEnvVar<br>getenv<br></font></td><td valign=top><font class=param>varName</font><br></td><td valign=top>
+  Returns the environment variable value for <font class=param>varName</font> of the current JVM process.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getEnvVars></a><a name=sfn_getenvs></a>getEnvVars<br>getenvs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a <code>java.util.Properties</code> that all the environment variable values of the current JVM process.
+  The <code>java.util.Properties</code>'s values can be updated, and the next call to <code>getEnvVars()</code>
+  will return this modified one.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getErr></a>getErr<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system error output.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getFileAsBytes></a>getFileAsBytes<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> limit</font><br><font class=param> encoding</font><br></td><td valign=top>
+  <p>Returns a byte array that is the content of the file <font class=param>fileName</font>.
+  <font class=param>limit</font> and <font class=param>encoding</font> are optional.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getFileAsBytesFromCP></a>getFileAsBytesFromCP<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  <p>Returns a byte array that is the content of the file <font class=param>fileName</font> which resides somewhere on the classpath.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getFileAsString></a>getFileAsString<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> limit</font><br><font class=param> encoding</font><br></td><td valign=top>
+  <p>Returns a string that is the content of the file <font class=param>fileName</font>.
+  <font class=param>limit</font> and <font class=param>encoding</font> are optional.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getFileAsStringFromCP></a>getFileAsStringFromCP<br></font></td><td valign=top><font class=param>fileName</font><br><font class=param> limit</font><br><font class=param> encoding</font><br></td><td valign=top>
+  <p>Returns a string that is the content of the file <font class=param>fileName</font>
+  which resides somewhere on the classpath. <font class=param>limit</font> and
+  <font class=param>encoding</font> are optional.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getFunctions></a>getFunctions<br></font></td><td valign=top><font class=param>namePattern</font><br></td><td valign=top>
+  Returns a string array of the function names defined in the system that match <font class=param>namePattern</font>.
+  If <font class=param>namePattern</font> is <font class=kw>null</font> , returns all the names.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getGZipFileAsBytes></a>getGZipFileAsBytes<br></font></td><td valign=top><font class=param>gzipName</font><br></td><td valign=top>
+  <p>Returns a byte array that is the content of the GZipped file <font class=param>gzipName</font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getGZipFileAsString></a>getGZipFileAsString<br></font></td><td valign=top><font class=param>gzipName</font><br><font class=param> limit</font><br><font class=param> encoding</font><br></td><td valign=top>
+  <p>Returns a string that is the content of the GZipped file <font class=param>gzipName</font>.
+  <font class=param>limit</font> and <font class=param>encoding</font> are optional.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getGuiHandler></a><a name=sfn_guiHandler></a><a name=sfn_timerHandler></a>getGuiHandler<br>guiHandler<br>timerHandler<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  <p>In a JudoScript GUI program, there is only one Java <code>ActionListener</code>
+  object; it receives and dispatches all the GUI events to user-defined event
+  handlers, which may be defined in multiple <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font> statements.
+  This statement actually returns this Java <code>ActionListener</code>.</p>
+  <p>This function is most useful for <code>javax.swing.Timer</code>'s 
+  constructor, which takes a <code>java.awt.event.ActionListener</code> as
+  its second parameter.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getHttpResponseMsg></a>getHttpResponseMsg<br></font></td><td valign=top><font class=param>code</font><br></td><td valign=top>
+  <p>Returns a short message that corresponds to the HTTP response <font class=param>code</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getIn></a>getIn<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system standard input.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getInStream></a>getInStream<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system standard binary input stream.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getInitialContext></a><a name=sfn_initialContext></a>getInitialContext<br>initialContext<br></font></td><td valign=top><font class=param>factory</font><br><font class=param> url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  <p>Returns a <code>javax.naming.InitialContext</code> for the initial context
+  <font class=param>factory</font> class name and the other parameters.</p>
+  <p>Also see <font class=sfn><a href="javascript:showSF('getWeblogicContext')">getWeblogicContext()</a></font>, <font class=sfn><a href="javascript:showSF('getWebsphereContext')">getWebsphereContext()</a></font>,
+  <font class=sfn><a href="javascript:showSF('getOracle9iASContext')">getOracle9iASContext()</a></font>, <font class=sfn><a href="javascript:showSF('getJBossContext')">getJBossContext()</a></font> and <font class=sfn><a href="javascript:showSF('getIonaContext')">getIonaContext()</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getIonaContext></a><a name=sfn_ionaContext></a>getIonaContext<br>ionaContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for an IONA application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "com.ejbhome.nameing.spi.rmi.RMIInitCtxFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getJBossContext></a><a name=sfn_jbossContext></a>getJBossContext<br>jbossContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for a JBoss application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "org.jnp.interfaces.NamingContextFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getLog></a>getLog<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system logger output.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getMimeTypeMap></a>getMimeTypeMap<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  <p>Returns a <code>java.util.Hashtable</code> that contains all the mime type mapping currently
+  used by the <font class=obj><a href="javascript:showObj('HTTPConnection')">HTTPConnection</a></font>. The mapping maps file extensions to mime types.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getOracle9iASContext></a><a name=sfn_oracle9iASContext></a>getOracle9iASContext<br>oracle9iASContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for an Oracle 9iAS application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "com.evermind.server.rmi.RMIInitialContextFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getOut></a>getOut<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system standard output.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getOutStream></a>getOutStream<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current system standard binary output stream.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getSunContext></a><a name=sfn_sunContext></a>getSunContext<br>sunContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for a Sun One application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "com.sun.jndi.cosnaming.CNCtxFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getThreads></a>getThreads<br></font></td><td valign=top><font class=param>namePattern</font><br></td><td valign=top>
+  Returns a string array of the thread names defined in the system that match <font class=param>namePattern</font>.
+  If <font class=param>namePattern</font> is <font class=kw>null</font> , returns all the names.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getVariable></a>getVariable<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns the named variable.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getWeblogicContext></a><a name=sfn_weblogicContext></a>getWeblogicContext<br>weblogicContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for a WebLogic application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "weblogic.jndi.WLInitialContextFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getWebsphereContext></a><a name=sfn_websphereContext></a>getWebsphereContext<br>websphereContext<br></font></td><td valign=top><font class=param>url</font><br><font class=param> username</font><br><font class=param> password</font><br></td><td valign=top>
+  Returns a <code>javax.naming.InitialContext</code> for a WebSphere application
+  server context. It is a shortcut for <font class=sfn><a href="javascript:showSF('getInitialContext')">getInitialContext()</a></font> with the
+  first parameter being "com.ibm.websphere.naming.WsnInitialContextFactory".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_getWindowsRegistry></a>getWindowsRegistry<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a Java object of
+  <a href="http://www.gjt.org/javadoc/com/ice/jni/registry/package-summary.html"><code>com.ice.jni.registry.Registry</code></a>,
+  for manipulating Windows registry. The <a href="http://www.trustice.com/java/jnireg/index.shtml">JNI
+  Windows Registry library by Tim Endre</a> must be installed.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_httpGet></a>httpGet<br></font></td><td valign=top><font class=param>url</font><br></td><td valign=top>
+  <p>Issues a HTTP GET request to the <font class=param>url</font>.  Returns a HTTPConnection object.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_httpPost></a>httpPost<br></font></td><td valign=top><font class=param>url</font><br></td><td valign=top>
+  <p>Issues a HTTP POST request to the <font class=param>url</font>.  Returns a HTTPConnection object.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isHP></a>isHP<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "HP-UX".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isLinux></a>isLinux<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "Linux".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isMac></a>isMac<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "Mac".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isNetscape></a>isNetscape<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "java.vendor" contains "Netscape".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isNewer></a>isNewer<br></font></td><td valign=top><font class=param>file1</font><br><font class=param> file2</font><br></td><td valign=top>
+  Compares the two files based on their time stamps. Also handles the cases where
+  one of the files does not exist. Returns <font class=kw>true</font>  if file <font class=param>file1</font>
+  is newer than file <font class=param>file2</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isOS400></a><a name=sfn_isAS400></a>isOS400<br>isAS400<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "/400".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isSunOS></a>isSunOS<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "SunOS".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isSunVendor></a>isSunVendor<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "java.vendor" contains "Sun".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isUnix></a>isUnix<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" does not contain "/400",
+  and <code>java.io.File.pathSeparatorChar</code> is ":" and
+  <code>java.io.File.separatorChar</code> is "/".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_isWindows></a>isWindows<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if the system property for "os.name" contains "Windows".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_javaVendor></a>javaVendor<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the system property for "java.vendor".
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_loadProperties></a>loadProperties<br></font></td><td valign=top><font class=param>propsFile</font><br></td><td valign=top>
+  Returns a <code>java.util.Properties</code> that holds the property values of the <font class=param>propsFile</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_lock></a>lock<br></font></td><td valign=top><font class=param>lockName</font><br></td><td valign=top>
+  <p>Locks are used to protect shared resources among multiple threads.
+  They reside only in the root context, so that all threads have access to.
+  A lock is simply represented by a name, <font class=param>lockName</font>. If a lock
+  is already acquired by one thread, another thread requesting the same lock
+  will wait, until the <font class=sfn><a href="javascript:showSF('unlock')">unlock()</a></font> is called by the holding thread.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_loopIndex></a>loopIndex<br></font></td><td valign=top><font class=param>level</font><br></td><td valign=top>
+  This is only used in loops. Typically <font class=param>level</font> is not specified, and this function
+  returns the loop index; the index for the first iteration is 0. For embedded loops, -1 denotes
+  the outer loop's index, -2 denotes the second outer loop's, and so on.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_max></a>max<br></font></td><td valign=top><font class=param>value1</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns the greatest numeric value among all the parameters.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_min></a>min<br></font></td><td valign=top><font class=param>value1</font><br><font class=param> ...</font><br></td><td valign=top>
+  Returns the smallest numeric value among all the parameters.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_neverEmpty></a>neverEmpty<br></font></td><td valign=top><font class=param>value</font><br><font class=param> default_value</font><br></td><td valign=top>
+  If the <font class=param>value</font> is empty, that is, <font class=kw>null</font>  or only containing
+  whitespace characters, returns the <font class=param>default_value</font>, which is
+  required. Otherwise, returns the original value.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_neverNull></a>neverNull<br></font></td><td valign=top><font class=param>value</font><br><font class=param> default_value</font><br></td><td valign=top>
+  If the <font class=param>value</font> is <font class=kw>null</font> , returns the <font class=param>default_value</font>;
+  if not <font class=param>default_value</font> specified, return ''. Otherwise, returns the
+  original value.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_notify></a>notify<br></font></td><td valign=top><font class=param>signalName</font><br></td><td valign=top>
+  <p>Sends out a signal of <font class=param>signalName</font> for the threads waiting for it
+  (see <font class=sfn><a href="javascript:showSF('waitFor')">waitFor()</a></font>). One of the waiting threads will be awakened.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_notifyAll></a>notifyAll<br></font></td><td valign=top><font class=param>signalName</font><br></td><td valign=top>
+  <p>Sends out a signal of <font class=param>signalName</font> for the threads waiting for it
+  (see <font class=sfn><a href="javascript:showSF('waitFor')">waitFor()</a></font>). All of the waiting threads will be awakened.</p>
+  <p>See <font class=sfn><a href="javascript:showSF('notify')">notify()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_obtainUsage></a>obtainUsage<br></font></td><td valign=top><font class=param>scriptName</font><br></td><td valign=top>
+  Returns the usage block (a Hashtable) of the script <font class=param>scriptName</font>,
+  if it has one; otherwise, returns <font class=kw>null</font> . See <font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openFile></a>openFile<br></font></td><td valign=top><font class=param>file_name</font><br><font class=param> mode</font><br></td><td valign=top>
+  Opens a binary file for <font class=param>file_name</font>; <font class=param>mode</font> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append). Returns an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openGZippedFile></a>openGZippedFile<br></font></td><td valign=top><font class=param>file_name</font><br><font class=param> mode</font><br></td><td valign=top>
+  Opens a GZipped binary file for <font class=param>file_name</font>; <font class=param>mode</font> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append). Returns an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openGZippedTextFile></a>openGZippedTextFile<br></font></td><td valign=top><font class=param>file_name</font><br><font class=param> mode</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Opens a GZipped text file for <font class=param>file_name</font>; <font class=param>mode</font> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append); <font class=param>encoding</font> is the text encoding, default is to
+  use the JVM's current text encoding. Returns an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openRandomAccessFile></a>openRandomAccessFile<br></font></td><td valign=top><font class=param>file_name</font><br><font class=param> mode</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Opens a random-access binary file for <font class=param>file_name</font>; <font class=param>mode</font> can be 'r' for read (default),
+  'w' (for write) or 'rw' (for read/write). Returns an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openTableDump></a>openTableDump<br></font></td><td valign=top><font class=param>fileName</font><br></td><td valign=top>
+  Opens the file as a table dump and returns a <font class=obj><a href="javascript:showObj('TableDump')">TableDump</a></font> object.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openTextFile></a>openTextFile<br></font></td><td valign=top><font class=param>file_name</font><br><font class=param> mode</font><br><font class=param> encoding</font><br></td><td valign=top>
+  Opens a text file for <font class=param>file_name</font>; <font class=param>mode</font> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append); <font class=param>encoding</font> is the text encoding, default is to
+  use the JVM's current text encoding. Returns an <font class=obj><a href="javascript:showObj('IODevice')">IODevice</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_openZip></a>openZip<br></font></td><td valign=top><font class=param>file_name</font><br></td><td valign=top>
+  Opens a zip or jar file for <font class=param>file_name</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_rand></a><a name=sfn_random></a>rand<br>random<br></font></td><td valign=top><font class=param>[lower]</font><br><font class=param> upper</font><br></td><td valign=top>
+  <p>If no parameters, it returns a random between 0.0 and 1.0.</p>
+  <p>If <font class=param>lower</font> is missing, it is defaulted to 0 or 0.0.
+  If <font class=param>lower</font> is present and is an integer, this function
+  will return a uniformly distributed random number between <font class=param>lower</font>
+  and <font class=param>upper</font>; if <font class=param>lower</font> is a floating-point,
+  the result is a float as well. If <font class=param>lower</font> is not present,
+  the return type is the same as <font class=param>upper</font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_readLine></a>readLine<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns a string by reading from the system input. It can return <font class=kw>eof</font> .
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_resourceBundle></a>resourceBundle<br></font></td><td valign=top><font class=param>resourceName</font><br></td><td valign=top>
+  <p>Returns a <code>java.util.ResourceBundle</code> for <font class=param>resourceName</font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_saveProperties></a>saveProperties<br></font></td><td valign=top><font class=param>properties</font><br><font class=param> propsFile</font><br><font class=param> head</font><br></td><td valign=top>
+  Saves <font class=param>properties</font> into <font class=param>propsFile</font>. It cleans up the content first.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_secret></a>secret<br></font></td><td valign=top><font class=param>encryptedValue</font><br><font class=param> cryptoAgent</font><br></td><td valign=top>
+  <p>This is a special-type value <font class=obj><a href="javascript:showObj('Secret')">Secret</a></font> that can be only used by certain
+  system functions and statements. It is not accesible by regular print statements
+  or string operations.</p>
+  <p>The <font class=param>cryptoAgent</font> is a Java crypto class. If not present, the
+  <font class=param>encryptedValue</font> is used verbatim (no encryption).</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setAssert></a><a name=sfn_setAssertion></a>setAssert<br>setAssertion<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Turns on or off the assertion. See <font class=sfn><a href="javascript:showSF('assert')">assert()</a></font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setCharset></a>setCharset<br></font></td><td valign=top><font class=param>charset</font><br></td><td valign=top>
+  <p>Sets the current character set to <font class=param>charset</font> for the system.
+  Default character set is used by <font class=nt><a href="javascript:showNT('MailStatement')">MailStatement</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setDefaultDateFormat></a>setDefaultDateFormat<br></font></td><td valign=top><font class=param>format</font><br></td><td valign=top>
+  Sets the default date format.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setErr></a>setErr<br></font></td><td valign=top><font class=param>textOutput</font><br></td><td valign=top>
+  Sets the current system error output. The very original one is reserved
+  and can be restored by calling this function without the parameter.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setGuiListener></a>setGuiListener<br></font></td><td valign=top><font class=param>handlerName</font><br><font class=param> comp1</font><br><font class=param> ...</font><br></td><td valign=top>
+  <p>This function is used in conjunction with <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font>'s <em>generic
+  handler</em> feature. A generic handler is a named handler that is not bound
+  to any specific GUI component.</p>
+  <p>The first parameter <font class=param>handlerName</font> is that for the handler name.
+  The following parameters are one or more GUI components to add the handler to.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setHttpProxy></a>setHttpProxy<br></font></td><td valign=top><font class=param>host</font><br><font class=param> port</font><br></td><td valign=top>
+  <p>If no <font class=param>host</font> and <font class=param>port</font> specified, put "false" into
+  the system property "http.proxySet".</p>
+  <p>Otherwise, set the system property "http.proxySet" to "true" as well as those
+  for "http.proxyHost" and "http.proxyPort". The <font class=param>port</font> can be omitted,
+  which will be defaulted to 80.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setIn></a>setIn<br></font></td><td valign=top><font class=param>inputFile</font><br></td><td valign=top>
+  Sets the input stream to the input file <font class=param>inputFile</font>. The very
+  original one is reserved and can be restored by calling this function
+  without the parameter.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setLog></a>setLog<br></font></td><td valign=top><font class=param>textOutput</font><br></td><td valign=top>
+  Sets the current system logger output. The very original one is reserved
+  and can be restored by calling this function wihout the parameter.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setOut></a>setOut<br></font></td><td valign=top><font class=param>textOutput</font><br></td><td valign=top>
+  Sets the current system standard output. The very original one is reserved
+  and can be restored by calling this function without the parameter.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_setVariable></a>setVariable<br></font></td><td valign=top><font class=param>name</font><br><font class=param> value</font><br><font class=param> isLocal</font><br></td><td valign=top>
+  Creates a variable with <font class=param>name</font>. If <font class=param>isLocal</font>
+  is specified and is <font class=kw>true</font> , local variables are created; otherwise,
+  normal scoping rules decide where the variables are.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_sleep></a>sleep<br></font></td><td valign=top><font class=param>duration</font><br></td><td valign=top>
+  Forces the current thread to sleep for <font class=param>duration</font> milliseconds.
+  If no <font class=param>duration</font> specified, sleep forever.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_ssh></a>ssh<br></font></td><td valign=top><font class=param>host</font><br><font class=param> username</font><br><font class=param> password</font><br><font class=param> cipher</font><br></td><td valign=top>
+  Starts a connection to <font class=param>host</font> with the <font class=param>username</font> and
+  <font class=param>password</font>. The <font class=param>cipher</font> can be omitted or <font class=kw>null</font> .
+  The <font class=param>host</font> may include a port number separated by colon ":"; default port
+  is 22. Returns a <font class=obj><a href="javascript:showObj('SSHConnection')">SSHConnection</a></font> object.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_startServer></a>startServer<br></font></td><td valign=top><font class=param>port</font><br><font class=param> address</font><br><font class=param> backlog</font><br></td><td valign=top>
+  <p>Starts and returns a <code>java.net.ServerSocket</code> for the given <font class=param>port</font>,
+  and optionally the bind address (a string or a java.net.InetAddress) and backlog.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_thisFile></a>thisFile<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current source file name.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_thisLine></a>thisLine<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the current line number in the script, relative to the current source file
+  (see <font class=sfn><a href="javascript:showSF('thisFile')">thisFile()</a></font>).
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_time></a>time<br></font></td><td valign=top><font class=param>hour</font><br><font class=param> minute</font><br><font class=param> second</font><br></td><td valign=top>
+  Creates a <font class=kw>date</font>  value with the provided attribute. The year/month/day values are 0.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_timeToday></a>timeToday<br></font></td><td valign=top><font class=param>hour</font><br><font class=param> minute</font><br><font class=param> second</font><br></td><td valign=top>
+  Creates a <font class=kw>date</font>  value for today but with the provided <font class=param>hour</font>,
+  <font class=param>minute</font> and <font class=param>second</font>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unescapeHtml></a>unescapeHtml<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unescapeJava></a>unescapeJava<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unescapeJavaScript></a>unescapeJavaScript<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unescapeXml></a>unescapeXml<br></font></td><td valign=top><font class=param>str</font><br></td><td valign=top>
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unit></a>unit<br></font></td><td valign=top><font class=param>count</font><br><font class=param> nameSingular</font><br><font class=param> namePlural</font><br></td><td valign=top>
+  This is a convenience function returning a string that displays the number
+  of <font class=param>count</font> followed by the namd in correct English. If
+  <font class=param>namePlural</font> is omitted, when <font class=param>number</font> is not 1,
+  an 's' is append to <font class=param>nameSingular</font>. If <font class=param>namePlural</font>
+  is present, then it is used if <font class=param>count</font> is not 1.
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_unlock></a>unlock<br></font></td><td valign=top><font class=param>lockName</font><br></td><td valign=top>
+  <p>See <font class=sfn><a href="javascript:showSF('lock')">lock()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+<tr><td valign=top><font class=sfn><a name=sfn_waitFor></a>waitFor<br></font></td><td valign=top><font class=param>signalName</font><br></td><td valign=top>
+  <p>Signals are used to synchronize different threads. A signal is just a name
+  <font class=param>signalName</font>. See <font class=sfn><a href="javascript:showSF('notify')">notify()</a></font> and <font class=sfn><a href="javascript:showSF('notifyAll')">notifyAll()</a></font>.</p>
+</td><td valign=top>&nbsp;</td></tr>
+</table></body></html>

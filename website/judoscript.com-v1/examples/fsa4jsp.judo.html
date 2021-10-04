@@ -1,0 +1,113 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/fsa4jsp.judo:</b></td></tr><tr><td><pre>
+// Generates a switch-based preliminary lexer for JSP pages.
+// Java code will do further processing.
+
+//    From  Input   To   ID  Type       Action 
+//    ====  =====  ====  ==  =====      ======
+fsa = [
+
+  [ /* 0*/ [ '&lt;',    1,  0,  'void',    'possible begin of a JSP tag' ],
+    /* 0*/ [ null,   0,  0,  'void',    'nothing' ],
+  ],
+  [ /* 1*/ [ '%',    2,  0,  'void',    'a JSP' ],
+    /* 1*/ [ null,   0,  0,  'void',    'not a JSP tag' ],
+  ],
+  [ /* 2*/ [ '%',    3,  1,  'void',    'possible end of the JSP tag' ],
+    /* 2*/ [ '\"',   4,  1,  'void',    'into string' ],
+    /* 2*/ [ '\'',   6,  1,  'void',    'into string' ],
+    /* 2*/ [ null,   2,  1,  'void',    'add' ],
+  ],
+  [ /* 3*/ [ '>',    0,  0,  'void',    'is the end of the JSP tag' ],
+    /* 3*/ [ null,   2,  1,  'void',    'add' ],
+  ],
+  [ /* 4*/ [ '\"',   2,  1,  'void',    'end of string' ],
+    /* 4*/ [ '\\',   5,  1,  'void',    'escape' ],
+    /* 4*/ [ null,   4,  1,  'void',    'add' ],
+  ],
+  [ /* 5*/ [ null,   4,  1,  'void',    'continue the string' ],
+  ],
+  [ /* 6*/ [ '\'',   2,  1,  'void',    'end of string' ],
+    /* 6*/ [ '\\',   7,  1,  'void',    'escape' ],
+    /* 6*/ [ null,   6,  1,  'void',    'add' ],
+  ],
+  [ /* 7*/ [ null,   6,  1,  'void',    'continue the string' ],
+  ],
+];
+
+
+// step 1. collect all action names.
+action_names = {};
+for state in fsa {
+  idx = loopIndex();
+  for transit in state {
+    x = transit[0].ascii();
+    if x > max_ch { max_ch = x; }
+    action_names.(transit[2]) = transit[4];
+  }
+}
+
+// step 2. generate the fsa
+print [[[*
+  /**
+   * ==================
+   *  Generated method
+   * ==================
+   *
+   * Need these methods:
+   *
+   *  readChar() -- should handle EOF
+*]];
+for k in action_names.keysSorted() {
+  println '   *  action', k, '() -- ', action_names.(k);
+}
+print '   */';
+  
+print [[[*
+  private void fsa() throws IOException {
+    state = 0;
+loop:
+    while(true) {
+      ch = readChar();
+      //int old_state = state;
+      switch(state) {
+*]];
+
+for from_state in fsa {
+  state = loopIndex();
+  println '      case ', state, ':', nl,
+          '        switch(ch) {';
+  for transit in from_state {
+    see = transit[0];
+    if see == null {
+      print '        default  ';
+    } else {
+      print "        case '";
+      switch(see) {
+      case '\r': print "\\r'"; break;
+      case '\t': print "\\t'"; break;
+      case '\n': print "\\n'"; break;
+      case '\'': print "\\''"; break;
+      case '\\': print "\\\\'"; break;
+      default:   print see, "' "; break;
+      }
+    }
+    if transit[3] == 'boolean' {
+      print ': if (action', transit[2], '()) break loop;';
+    } else {
+      print ': action', transit[2], '();';
+    }
+    if state != transit[1] { print ' state=', transit[1], ';'; }
+    println ' break;';
+  }
+  println '        }', nl,
+          '        break;';
+}
+println [[[*      }
+      //System.out.println("["+old_state+"]--" + ((char)ch) + "-->["+state+"] (mark: " + mark + "): " + sb);
+    }
+  } // end of fsa().
+
+} // end of class.
+*]];
+</pre></td></tr></table></body></html>

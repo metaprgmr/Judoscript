@@ -1,0 +1,247 @@
+<html><head><title>Content Management With JudoScript</title><meta content="content management, cm, managed content, generate HTML" name=keywords>
+      <link href="../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3><blockquote><font color=red>This article is old and is being consolidated into
+the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+sections are not completed yet, you can use this article.<br>Refer to the
+examples as they are tested against the latest code.</font></blockquote>
+<center><table border=0 width=98% class=bodyText><tr><td>
+<doc title="Content Management With JudoScript" author="James Jianbo Huang" created="April 2004" keywords="content management, cm, managed content, generate HTML" nolisting="true">
+
+<br><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><td style="background:url(../share/portlet_tm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><tr><td width=9 style="background:url(../share/portlet_l.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td valign=top><h3>Table Of Content</h3><ol>
+<li> <a href="#intro">Introduction to CM</a>
+<li> <a href="#basis">The Basis for CM With JudoScript</a>
+<li> <a href="#judosite">The Structure of JudoScript.Com</a>
+<li> <a href="#sample">Sample Site</a>
+<li> <a href="#dl"><a href=/store/sample_site_build.zip>Sample Download</a></a>
+<li> <a href="#sum">Summary</a>
+</ol></td><td width=13 style="background:url(../share/portlet_r.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td></tr><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><td style="background:url(../share/portlet_bm.gif)"><IMG src="../share/spacer.gif" height=1 width=1 border=0></td><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+
+<h2>Content Management With JudoScript</h2><font style="font-size:9px">By</font> <em>James Jianbo Huang</em></font> &nbsp; &nbsp;April 2004 &nbsp; &nbsp; &nbsp; <a href="cm.html">non-printer version</a><p><b>Abstract</b> &nbsp;
+A content management system enables users to easily add and manipulate
+content for publication services. The content is processed, either
+statically or dynamically (real-time), into viewable format such as
+HTML. SGML is one of the most commonly used format for content encoding,
+and with <em>JudoScript</em>'s convenient SGML statement, one can easily establish a
+efficient CM for writing and publishing. The
+<a href="http://www.judoscript.com">judoscript.com</a> site, for example,
+is managed by a custom CM system written totally in <em>JudoScript</em>.
+<p>
+This short article demonstrates how to create a CM with <em>JudoScript</em>, describes
+the strcuture of the judoscript.com site, and has included a sample
+site that is a subset of the real CM system.
+<hr>
+<p>&nbsp;</p>
+
+
+<h2><a name=intro>1. Introduction to CM</a></h2><p>
+
+<p>
+A content management (CM) system enables users to easily add and
+manipulate content for publication services, including web sites. The
+content is almost always independent of its presentation. Content can
+be stored in any format, such as SGML, XML or relational database. Many
+publication institutions have developed their own content management
+systems.  Although most of them allow authors to use Microsoft Word&reg;
+to write books or articles, they typically mandate that authors strictly
+use the publishers' Word template, so that manuscripts can be easily
+converted to their internal content management format.
+
+<p>
+SGML is a very viable format for publishing content. For instance, the
+<a href="http://www.jclark.com/dsssl/">Document Style Semantics and
+Specification Language (DSSSL)</a> is one of the efforts to define an
+SGML format that covers most of the publishing needs. XML is a more
+formalized variant of SGML, and many XML tools can be used to flexibly
+produce different presentation, or produce statistics, reports, etc.
+However, XML may be too rigid for book and article writing. For
+DOM-based XML software, large documents may pose memory problems. SGML
+is, in many situations, sufficient.
+
+<p>
+The presentation of content can be static or dynamic. Static
+presentation is to preprocess all the content into HTML for publication.
+Dynamimc presentation is to run a presentation engine (such as using
+JSP/servlets, PHP or any web application frameworks) to dynamically
+return pages to viewers. There are pros and cons for both, and it is
+totally dependent on your specific needs and requirements. Whenever
+possible, static presentation is preferred, because the generated HTML
+pages can be deployed to any kinds of web servers or on local PCs; it
+is easier and more performant. Static or dynamica is not related to
+the way content is encoded, as this is the nature of CM systems.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=basis>2. The Basis for CM With JudoScript</a></h2><p>
+
+<p>
+<em>JudoScript</em>'s SGML scraping statement is the basis for SGML-based content
+management systems. You can define custom tags to your hearts' content,
+and at the same time maintain other tags such as those defined in HTML.
+For instance, the following is the content of a document stored in a
+file called <code>article-1.sgml</code>:
+
+<blockquote><font class=secondary3><pre>
+&lt;doc title="La-la-la">
+
+&lt;!-- the first sentence -->
+&lt;J> is &lt;em>the&lt;/em> &lt;u>shell and scripting tool&lt;/u> for Java!
+
+&lt;/doc>
+</pre></font></blockquote>
+
+The following code processes it into a HTML page:
+
+<blockquote><font class=secondary3><pre>
+// Process that document into a HTML --
+procDoc 'article-1.sgml', 'articles-1.html';
+
+/**
+ * The "style-sheet" impl. for the type "article" documents
+ */
+function procArticle srcFile, destFile {
+  htmlOut = openTextFile(destDir, 'w');
+
+  do srcFile as sgml {
+  &lt;doc>:
+    print &lt;htmlOut> [[*
+      &lt;html>
+      &lt;head>&lt;title>(* $_.title *)&lt;/title>
+      &lt;/head>
+      &lt;body>
+      &lt;h1>(* $_.title *)&lt;/h1>
+    *]];
+  
+  &lt;j>:
+    print &lt;htmlOut> '&lt;b>JudoScript&lt;/b>';
+
+  TEXT, &lt;>, &lt;!>:
+    print &lt;htmlOut> $_; // any other tags and text, print verbatim.
+
+  &lt;/doc>:
+    println &lt;htmlOut> '&lt;/body>&lt;/html>';
+  }
+
+  htmlOut.close();
+}
+</pre></font></blockquote>
+
+Documents in a content management system are always stored separately
+from their presentations. The following code sample processes all the
+articles and put them onto a web site:
+
+<blockquote><font class=secondary3><pre>
+!include 'cm.judi'
+// defines these 2 variables: cmroot and docroot
+// and the procArticle() function.
+
+function procAllArticles {
+  list '*.sgml' in '${cmroot}/articles';
+  for fname in $$fs_result {
+    destFile = fname.getFileName().replace('.sgml', '.html');
+    procArticle fname, '${docroot}/articles/${destFile}';
+  }
+}
+</pre></font></blockquote>
+
+Voil&#225;! There you have a SGML-based content management system.
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=judosite>3. The Structure of JudoScript.Com</a></h2><p>
+
+<p>
+The whole <a href="http://www.judoscript.com">judoscript.com</a> site
+is completely managed by a custom content management system. There are
+three groups of all the site content:
+
+<ol>
+<li> Articles -- this is very much like the demonstration discussed
+in the previous section.
+<li> Reference -- this is a very complicated system. There are only
+a handful of document files, and they are processed into many HTML
+pages, which, along with sophisticated JavaScript code in HTML,
+accomplish the <a href="http://www.judoscript.com/ref/">JudoScript
+Reference</a>.
+<li> Web site -- there are a few <i>ad-hoc</i> content formats. The
+downloadable sample site is a cut-down version of this part. This is
+discussed in detail in the next section.
+</ol>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=sample>4. Sample Site</a></h2><p>
+
+<p>
+The sample site download contains such a directory structure:
+
+<blockquote><font class=secondary3><pre>
+/buidtools/build.judo
+          /site.judo
+          /common.judi
+
+/home_src/home.sgml
+         /articles.html
+         /weblinks.html
+         /contributions.html
+         /sitemap.html
+
+/share/....
+</pre></font></blockquote>
+
+The <code>build.judo</code> is a menu-driven build script. It also
+does some simple processing but the major tasks are delegated to the
+<code>site.judo</code> script.
+
+<p>
+The <a href="http://www.judoscript.com">judoscript.com</a> site-wide
+pages all employ a consistent look-and-feel: the logo and search box
+at the top, a menu column on the left and the content pane in the
+south-east corner, except for <a href="http://www.judoscript.com/sitemap.html">site
+map</a>, which does not have a menu column because this page lists
+all choices.
+
+<p>
+There are two kinds of contents in this mini system. The content of
+the home page uses a custom tag system, so it needs a corresponding
+tag routine. The majority of the pages, however, are just plain HTML
+content to be copied onto the content pane in the final page. Thus,
+we have three content processing routines:
+
+<blockquote><font class=secondary3><pre>
+genHomePage();
+genSiteMapPage();
+genSitePage();  // this is general-purpose.
+</pre></font></blockquote>
+
+Please refer to the <code>site.judo</code> script for details. So
+the complete building process can be illustrated as follows:
+
+<blockquote><font class=secondary3><pre>
+Content Source                                     Resultant Web Site
+==============                                     ==================
+share/* --------------------- copied ------------> ${docroot}/share/*
+home_src/home.sgml ---------- genHomePage() -----> ${docroot}/index.html
+home_src/sitemap.sgml ------- genSiteMapPage() --> ${docroot}/sitemap.html
+home_src/weblinks.html ------ genSitePage(..) ---> ${docroot}/weblinks.html
+home_src/articles.html ------ genSitePage(..) ---> ${docroot}/articles/index.html
+home_src/contribution.html -- genSitePage(..) ---> ${docroot}/contrib/index.html
+</pre></font></blockquote>
+
+
+ <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a>  &#171;&#171;&#171;</center><p>&nbsp;<p><h2><a name=sum>5. Summary</a></h2><p>
+
+<p>
+Anyone writing and publishing any content quickly realizes how critical
+a content management system can be. With a consistent data format for
+your content, you can deliver them into different formats, collect
+statitistics and reports, produce cross-references, on and on ...
+
+<p>
+SGML is one of the most commonly used format for content mangement.
+With <em>JudoScript</em>'s convenient SGML statement, one can easily set up a content
+management system. It may start with something simple, such as putting
+a page layout around content, and then evolve into more complicated
+pages.
+
+
+</td></tr></table>
+<br>
+<P class=tiny align=center><hr width="98%">Copyright c 2001-2021 JudoScript.COM. All Rights Reserved.</P> </center></body></html>
