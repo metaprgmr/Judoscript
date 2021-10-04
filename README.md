@@ -21,3 +21,6 @@ The website, whose content is more or less built along with each release of the 
 * In museum: [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
 * In museum: [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
 * In museum: [Building the language software and website](https://metaprgmr.github.io/Judoscript/website/)
+
+### Known issues
+* It appears that a HTML page whose file name starts with an underscore is hidden by github.io (404). This is a problem for the judoscript.com site for many documentation areas. Need to work around this problem.
