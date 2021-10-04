@@ -1,0 +1,23 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/html/treeDemo/td_xml.html:</b></td></tr><tr><td><pre>
+&lt;html>&lt;head>&lt;title>XML Scripting and XSLT>&lt;/title>&lt;/header>
+&lt;body>&lt;h1>XML Scripting and XSLT&lt;/h1>
+
+XML scripting is one of the main motivations for &lt;em>JudoScript&lt;/em> itself. &lt;em>JudoScript&lt;/em> supports
+SAX and DOM programming and XSL transformation. In the &lt;kw>do..as xml&lt;/kw>
+event-driven statement, SAX events, including tags, are denoted as labels,
+followed by handler code. &lt;em>JudoScript&lt;/em> extends SAX with a &lt;em>text&lt;/em> tag, which is
+a compound tag that includes the opening, closing tags and the text enclosed
+within. The opening tag's attributes are accessible, too. If a tag has mixed
+content, you have the option to copy or ignore all the embedded tags. For
+each event, the built-in variable &lt;kw>$_&lt;/kw> represents the tag or the
+event. XML data can be read into a DOM by the &lt;kw>do..as dom&lt;/kw> expression,
+which returns an &lt;code>org.w3c.dom.Document&lt;/code> object. You can use a
+function variable as a node filter when using the Java DOM traversal API. To
+create a DOM, use system functions &lt;kw>createDom()&lt;/kw>. The &lt;kw>xslt&lt;/kw>
+statement applies XSL transformations and also copies XML documents and
+outputs files or DOMs.
+&lt;/abstract>
+
+&lt;/body>&lt;/html>
+</pre></td></tr></table></body></html>

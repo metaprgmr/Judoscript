@@ -27,7 +27,8 @@ examples  = '${myroot}/testcases/';
 const #indent = 16;
 
 // Make sure the target directories and copy the shared files.
-copy '*' in getScriptPath().getFilePath() + 'examples_static' to '${docroot}/examples';
+mkdir '${docroot}/examples/';
+copy '*' in getScriptPath().getFilePath() + 'examples_static' to '${docroot}/examples/';
 
 listFiles '*.judo, *.judi, *.java, *.htm?, *.x?l, *.dtd, *.jusp' in examples
   except '*/save*, */audio*, */static*, *JavaGUI/image*, *JavaGUI/html*, */baseline*, */readme.*, */bugs/*'
@@ -50,7 +51,7 @@ function generateNavPage open_node
   if (!open_node.isDir)
     return;
 
-  path = '${docroot}/examples/_' + open_node.path.getFileName() + '.html';
+  path = '${docroot}/examples/x_' + open_node.path.getFileName() + '.html';
   println 'Generating navigation: ', path;
   file = openTextFile(path, 'w');
   println <file> [[*
@@ -101,7 +102,7 @@ function writeNavItems startNode, openNode, file
   println <file> [[*
      <nobr><img src="../share/spacer.gif" height=1 width=(* #indent*level *) border=0>
      <a name="(* id *)"><img src="../share/(* icon *).gif" border=0></a>
-     <a href="javascript:showPanes('_(* nav_id *).html','(* id *).html')">
+     <a href="javascript:showPanes('x_(* nav_id *).html','(* id *).html')">
      (* deco *)(* id *)(* _deco *)</a></nobr><br>
   *]];
 
