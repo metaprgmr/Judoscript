@@ -19,8 +19,8 @@ Judoscript language was quite complete in terms of its implementation of funcion
 -----------
 ## Quick Links
 * [Judoscript on Wikipedia](https://en.wikipedia.org/wiki/Judoscript)
-* In museum: [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
-* In museum: [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
+* In museum: live [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
+* In museum: live [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
 * In museum: [Building the language software and website](https://metaprgmr.github.io/Judoscript/website/)
 * View this as a [website](https://metaprgmr.github.io/Judoscript/) (when in source mode)
 
