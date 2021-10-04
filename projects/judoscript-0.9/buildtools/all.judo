@@ -50,7 +50,7 @@ menuItems = [
   '. . Build Functional Areas',    // 19 -> funcareas.judo
   '. . Build System Functions',    // 20 -> sysfuns.judo
   '. . Build Built-in Objects',    // 21 -> objtypes.judo
-  '. Create TreeDemo Content',     // 22
+  'X Create TreeDemo Content',     // 22
 
   'Build All Examples',            // 23
 

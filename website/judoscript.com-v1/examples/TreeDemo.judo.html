@@ -103,30 +103,30 @@ class BookInfo
 function displayURL url { htmlPane.setPage(url); }
 
 function createNodes top {
-  books = [ "Introduction to JudoScript",      "_intro.html",
-            "Uses of JudoScript",              "_uses.html",
-            "Embed JudoScript in Java",        "_embed.html"
+  books = [ "Introduction to JudoScript",      "td_intro.html",
+            "Uses of JudoScript",              "td_uses.html",
+            "Embed JudoScript in Java",        "td_embed.html"
           ];
   addNode(top, "General", books);
 
-  books = [ "Values and Data Structures",      "_value_ds.html",
-            "Function, Class, Thread, Eval",   "_fxn_cls_etc.html",
-            "Java, Exceptions and EJB",        "_java_excpt.html",
-            "Miscellaneous Topics",            "_misc.html",
-            "Files, Direcotires and Archives", "_file_dir.html"
+  books = [ "Values and Data Structures",      "td_value_ds.html",
+            "Function, Class, Thread, Eval",   "td_fxn_cls_etc.html",
+            "Java, Exceptions and EJB",        "td_java_excpt.html",
+            "Miscellaneous Topics",            "td_misc.html",
+            "Files, Direcotires and Archives", "td_file_dir.html"
           ];
   addNode(top, "Essential Programming", books);
 
-  books = [ "JDBC Scripting",                  "_jdbc.html",
-            "XML Document Processing",         "_xml.html",
-            "Schedule, Executable, E-Mail, SSH, SCP", "_sched_exec_mail.html",
-            "HTTP Fun and HTML Processing",    "_http_html.html",
-            "Build GUI Applications",          "_gui.html"
+  books = [ "JDBC Scripting",                  "td_jdbc.html",
+            "XML Document Processing",         "td_xml.html",
+            "Schedule, Executable, E-Mail, SSH, SCP", "td_sched_exec_mail.html",
+            "HTTP Fun and HTML Processing",    "td_http_html.html",
+            "Build GUI Applications",          "td_gui.html"
           ];
   addNode(top, "Applications", books);
 
-  books = [ "Java Software Unit Testing",      "_col_qa.html",
-            "Load Testing",                    "_col_loadtest.html"
+  books = [ "Java Software Unit Testing",      "td_col_qa.html",
+            "Load Testing",                    "td_col_loadtest.html"
           ];
   addNode(top, "Software Testing", books);
 }
