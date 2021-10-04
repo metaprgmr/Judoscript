@@ -9,9 +9,9 @@ For its characteristics, the story, and reflections on the <i>Judoscript Idea</i
 
 This museum exhibits a rather complete setting for the Judoscript language development, its documentation building and website building. In other words, previously, the development bits and pieces were just sitting on my development machine, where only the source code and certain artifacts of the language were checked into _sourceforge_; but here, it contains both the source code and the build environment for the whole operation, so that, if someone is willing, he or she can [rebuild the language, as well as the website](https://metaprgmr.github.io/Judoscript/website/).
 
-One of the reason of doing this, as well as an interesting fact, is that all the build tools are [written in Judoscript](https://metaprgmr.github.io/Judoscript/website/)! This is the best way to show case its capability and characteristics.
+One of the reasons for doing this, as well as an interesting fact, is that all the build tools are _written in Judoscript_! This is the best way to show case its capability and characteristics.
 
-The website, whose content is more or less built along with each release of the software for the shared documentation, has undergone one major change; hence there is a [version 1 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/) and a [version 2 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/); both are re-created and open, thanks to <u>github.io</u>.
+The website, whose content is built along with each release of the software for the shared documentation, has undergone one major change; hence there is a [version 1 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/) and a [version 2 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/); both are re-created and live, thanks to <u>github.io</u>.
 
 Judoscript language was quite complete in terms of its implementation of funcionalities. However, due to its diverse nature, documentation and educational material takes vast amount of time to prepare. Therefore, up to its ending, it had always been work-in-progress, a fact that is reflected in the scatchiness of the website content. That has been the state of the website, and the best source of truth lies in examples/test cases.
 
