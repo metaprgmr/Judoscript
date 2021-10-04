@@ -1,7 +1,7 @@
 # The _Judoscript_ Museum
 This is the Museum for the Judoscript language.
 
-Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain and general-purpose programming language; it was also one of the handful of the earliest Java scripting languages.
+Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain and general-purpose programming language; it was also one of the handful earliest Java scripting languages.
 
 For its characteristics as well as the story, please see [this Wikipedia article](https://en.wikipedia.org/wiki/Judoscript).
 
@@ -14,3 +14,13 @@ One interesting fact is that, all the build tools are [written in Judoscript](ht
 The website, whose content is more or less built along with each release of the software for the shared documentation, has undergone one major change; hence there is a [version 1 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/) and a [version 2 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/); both are re-created and open, thanks to <u>github.io</u>.
 
 (More instructions will be provided for running the build processes later.)
+
+-----------
+## Quick Links
+* [Judoscript on Wikipedia](https://en.wikipedia.org/wiki/Judoscript)
+* In museum: [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
+* In museum: [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
+* In museum: [Building the language software and website](https://metaprgmr.github.io/Judoscript/website/)
+
+### Known issues
+* It appears that a HTML page whose file name starts with an underscore is hidden by github.io (404). This is a problem for the judoscript.com site for many documentation areas. Need to work around this problem.
