@@ -1,5 +1,0 @@
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic CREATE -mbean "JavaOneDomain:Type=JDBCConnectionPool,Name=myPool"
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic SET -mbean "JavaOneDomain:Name=myPool,Type=JDBCConnectionPool" -property DriverName "com.pointbase.jdbc.jdbcUniversalDriver" -property URL "jdbc:pointbase:server://localhost/demo" -property Password PBPUBLIC -property MaxCapacity 5
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic SET -mbean "JavaOneDomain:Name=myPool,Type=JDBCConnectionPool" -property Properties "user=PBPUBLIC"
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "JavaOneDomain:Name=myPool,Type=JDBCConnectionPool" -method addTarget "JavaOneDomain:Name=managed,Type=Server"
-

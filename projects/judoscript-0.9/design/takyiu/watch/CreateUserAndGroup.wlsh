@@ -1,6 +1,0 @@
-connect localhost:7001 system weblogic
-auth=Security:/typeless/myrealmDefaultAuthenticator
-invoke $auth/createGroup managers "managers Group"
-invoke $auth/createUser joe weblogic "manager User"
-invoke $auth/createUser mary weblogic "employee User"
-invoke $auth/addMemberToGroup managers joe

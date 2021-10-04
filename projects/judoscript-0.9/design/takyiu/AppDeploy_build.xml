@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<project name="test_prj" default="deploy" basedir=".">
-
-<target name="deploy">
-	<wldeploy action="deploy" source="c:/studentWLSA11/labs/lab10/applications/timeoff.war" name="abc" user="system" password="weblogic" verbose="true" adminurl="t3://localhost:7001" debug="true" targets="managed" />
-</target>
-
-</project>

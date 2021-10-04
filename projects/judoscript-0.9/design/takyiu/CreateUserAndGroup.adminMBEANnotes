@@ -1,8 +1,0 @@
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "Security:Name=myrealmDefaultAuthenticator" -method createGroup managers "managers Group"
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "Security:Name=myrealmDefaultAuthenticator" -method createUser joe weblogic "manager User"
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "Security:Name=myrealmDefaultAuthenticator" -method createUser mary weblogic "employee User"
-java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "Security:Name=myrealmDefaultAuthenticator" -method addMemberToGroup managers joe
-
-
-
-

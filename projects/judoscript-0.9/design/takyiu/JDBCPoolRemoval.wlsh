@@ -1,9 +1,0 @@
-connect localhost:7001 system weblogic
-pool=myPool
-server=managed
-cd /JDBCConnectionPool/$pool
-invoke removeTarget /Server/$server
-get -v Targets
-cd ..
-rd $pool
-invoke $savedom $DOMAIN

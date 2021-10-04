@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<project name="test_prj" default="deploy" basedir=".">
-
-<target name="deploy">
-	<wldeploy action="undeploy" name="abc" user="system" password="weblogic" verbose="true" adminurl="t3://localhost:7001" debug="true"  />
-</target>
-
-</project>

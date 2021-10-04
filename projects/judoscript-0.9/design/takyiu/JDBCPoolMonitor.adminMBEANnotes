@@ -1,5 +1,0 @@
-java weblogic.Admin -url localhost:8001 -username system -password weblogic GET -pretty -mbean "JavaOneDomain:Location=managed,Name=myPool,ServerRuntime=managed,Type=JDBCConnectionPoolRuntime" -property ActiveConnectionsCurrentCount
-
-
-
-
