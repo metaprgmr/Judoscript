@@ -13,7 +13,8 @@ One interesting fact is that, all the build tools are [written in Judoscript](ht
 
 The website, whose content is more or less built along with each release of the software for the shared documentation, has undergone one major change; hence there is a [version 1 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/) and a [version 2 site](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/); both are re-created and open, thanks to <u>github.io</u>.
 
-(More instructions will be provided for running the build processes later.)
+Judoscript language was quite complete in terms of its implementation of funcionalities. However, due to its diverse nature, documentation and educational material takes vast amount of time to prepare. Therefore, up to its ending, it had always been work-in-progress, a fact that is reflected in the scatchiness of the website content. That has been the state of the website, and the best source of truth lies in examples/test cases.
+
 
 -----------
 ## Quick Links
