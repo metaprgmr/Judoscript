@@ -75,7 +75,7 @@ do '${j09ref}/bnf.sgml' as sgml
            <tr><td width=200 valign=top nowrap>
            <b>&nbsp; <font class=nt><a name=(*$_.nt*)>(*$_.nt*)</a></font> &nbsp;::=</b></td>
            <td class=anno>
-           <a href="JavaScript:;" onmouseup="switchDisplay('_(*$_.nt*)')">used by</a> &nbsp; &nbsp;
+           <a href="JavaScript:;" onmouseup="switchDisplay('x_(*$_.nt*)')">used by</a> &nbsp; &nbsp;
            &nbsp; <a href="JavaScript:showNT('(*$_.nt*)')">semantics</a>&nbsp;<br>
            <div id=_(*$_.nt*) style="display=none;width:200;" class=used></div>
            </td></tr>

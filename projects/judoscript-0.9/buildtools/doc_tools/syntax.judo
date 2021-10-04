@@ -212,7 +212,7 @@ print <$out> [[*
     var str = '';
     for (var i=0; i<arr.length; ++i) {
       var id = arr[i];
-      str += '<a href="javascript:showPanes(\\\'_synn.html#synn_'+id+'\\\',\\\'synn_'+id+'.html\\\')">'
+      str += '<a href="javascript:showPanes(\\\'x_synn.html#synn_'+id+'\\\',\\\'synn_'+id+'.html\\\')">'
              +id+'</a> &nbsp; ';
     }
     return str;

@@ -88,7 +88,7 @@ class TOCRoot extends TOCItem
     if node.('isLeaf') {
       icon = 'icon_page';
     } else {
-      jumpUrl = '_' + id + '.html' + jumpUrl;
+      jumpUrl = 'x_' + id + '.html' + jumpUrl;
       icon = 'icon_book';
       if isOpen { icon += '_open'; }
     }
@@ -103,7 +103,7 @@ class TOCRoot extends TOCItem
       else { deco += '<font class=' + style + '>'; _deco = '</font>' + _deco; }
     }
     link = "javascript:showPanes(";
-    link += node.isLeaf() ? "null" : ("'_" + node.id + ".html'");
+    link += node.isLeaf() ? "null" : ("'x_" + node.id + ".html'");
     if node.id.startsWith('sfn_') {
       link += ",'sfn.html#" + node.id + "')";
     } else {
