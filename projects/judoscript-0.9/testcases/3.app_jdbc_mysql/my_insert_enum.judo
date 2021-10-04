@@ -1,0 +1,14 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into enum_table(c_enum) values('a');
+  insert into enum_table(c_enum) values('b');
+  insert into enum_table(c_enum) values('x'); // not valid.
+}
+
+db::prepare:
+  insert into enum_table(c_enum) values( :val );
+
+db::update with @val = 'c';
+
+db::disconnect();

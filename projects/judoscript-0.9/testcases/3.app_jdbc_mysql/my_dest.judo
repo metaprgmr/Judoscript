@@ -1,0 +1,6 @@
+!include 'mysql_connection.judi'
+
+cols = describe('int_table');
+for x in cols { println x; }
+
+db::disconnect();

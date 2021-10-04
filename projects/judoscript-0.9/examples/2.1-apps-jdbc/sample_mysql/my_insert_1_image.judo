@@ -1,0 +1,39 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Inserts one image file to media table and associate it with "bear"
+    in the participants table, using prepared SQL statements.
+  *]];
+}
+
+!include 'mysql_connection.judi'
+
+prepare mediatbl:
+  insert into media (folderID,fileName,type,fileTime,bytes,width,height,addTime)
+  values (?,?,?,?,?,?,?,now());
+
+prepare partbl:
+  insert into participants (folderID,fileName,personID)
+  values (?,?,?);
+
+executeUpdate mediatbl
+         with @1 = '/2001-06',      // default type is "string".
+              @2 = 'DSC00001.jpg',
+              @3 = 'I',
+              @4:date = date(2001,6,3),
+              @5:int = 45044,
+              @6:int = null,
+              @7:int = null
+;
+println unit(mediatbl.updateCount,'row'), " inserted into 'media' table.";
+
+executeUpdate partbl
+         with @1 = '/2001-06',
+              @2 = 'DSC00001.jpg',
+              @3:int = 1            // for alias 'bear'
+;
+println unit(partbl.updateCount,'row'), " inserted into 'participants' table.";
+
+disconnect();

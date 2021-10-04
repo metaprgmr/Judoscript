@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_text.judo:</b></td></tr><tr><td><pre>
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into text_table(c_char255,c_char,c_char10bin,c_varchar255,c_varchar10bin)
+                  values('abc', 'abc', 'abc', 'abc', 'abc' );
+}
+
+prepare:
+  insert into text_table(c_char255,c_char,c_char10bin,c_varchar255,c_varchar10bin)
+         values( :char255, :_char, :char10bin, :varchar255, :varchar10bin )
+;
+
+db::update with @char255      = 'ABC',
+                @_char        = 'ABC',
+                @char10bin    = 'ABC',
+                @varchar255   = 'ABC',
+                @varchar10bin = 'ABC';
+
+db::disconnect();
+</pre></td></tr></table></body></html>

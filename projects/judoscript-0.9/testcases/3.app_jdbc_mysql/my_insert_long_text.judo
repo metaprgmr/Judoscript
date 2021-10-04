@@ -1,0 +1,31 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into long_text_table(c_blob,c_text,c_mediumblob,c_mediumtext,c_longblob,c_longtext)
+                  values('abc', 'abc', 'abc', 'abc', 'abc', 'abc' );
+}
+
+db::prepare:
+  insert into long_text_table(c_blob,c_text,c_mediumblob,c_mediumtext,c_longblob,c_longtext)
+         values( :_blob, :_text, :mediumBlob, :mediumText, :longBlob, :longText )
+  ;
+
+db::update with @_blob:bytes      = 'ABC',
+                @_text:bytes      = 'ABC',
+                @mediumBlob:bytes = 'ABC',
+                @mediumText:bytes = 'ABC',
+                @longBlob:bytes   = 'ABC',
+                @longText:bytes   = 'ABC';
+
+f1 = openFile('insert_date.judo');
+f2 = openFile('insert_text.judo');
+db::update with @_blob = null,
+                @_text = null,
+                @mediumBlob.setBinaryStream(f1, f1.size()),
+                @mediumText.setBinaryStream(f1, f1.size()),
+                @longBlob.setBinaryStream(f2, f2.size()),
+                @longText.setBinaryStream(f2, f2.size());
+f1.close();
+f2.close();
+
+db::disconnect();

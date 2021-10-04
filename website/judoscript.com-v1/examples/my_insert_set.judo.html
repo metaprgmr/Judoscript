@@ -1,0 +1,18 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_set.judo:</b></td></tr><tr><td><pre>
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into set_table(c_set) values( 'a,b' );
+  insert into set_table(c_set) values( 'b,c' );
+  insert into set_table(c_set) values( 'x' );
+}
+
+db::prepare:
+  insert into set_table(c_set) values( :val );
+
+db::update with @val:int = 7;
+db::update with @val     = 'a,x,y';
+
+db::disconnect();
+</pre></td></tr></table></body></html>

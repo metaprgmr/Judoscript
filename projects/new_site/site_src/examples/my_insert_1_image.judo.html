@@ -1,0 +1,44 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_1_image.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Inserts one image file to media table and associate it with "bear"
+    in the participants table, using prepared SQL statements.
+  *]];
+}
+
+!include 'mysql_connection.judi'
+
+db::prepare mediatbl:
+  insert into media (folderID,fileName,type,fileTime,bytes,width,height,addTime)
+  values ( :folderID, :fileName, :type, :fileTime, :bytes, :width, :height, now())
+;
+
+db::prepare partbl:
+  insert into participants (folderID,fileName,personID)
+  values ( :folderID, :fileName, :personID)
+;
+
+db::update mediatbl
+         with @folderID      = '/2001-06',     // default type is "string".
+              @fileName      = 'DSC00001.jpg',
+              @type          = 'I',
+              @fileTime:date = date(2001,6,3),
+              @bytes:int     = 45044,
+              @widths:int    = null,
+              @height:int    = null
+;
+println unit(mediatbl.updateCount,'row'), " inserted into 'media' table.";
+
+db::update partbl
+         with @folderID      = '/2001-06',
+              @fileName2     = 'DSC00001.jpg',
+              @personID:int  = 1               // for alias 'bear'
+;
+println unit(partbl.updateCount,'row'), " inserted into 'participants' table.";
+
+db::disconnect();
+</pre></td></tr></table></body></html>

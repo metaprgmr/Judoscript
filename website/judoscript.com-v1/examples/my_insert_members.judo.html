@@ -1,0 +1,37 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_members.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Runs a bunch of SQL insert statements using db::sql {}
+    to insert into people table.
+  *]];
+}
+
+!include 'mysql_connection.judi'
+
+db::sql
+{
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 1, 'Little Bear', 'bear', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 2, 'Father Bear', 'father', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 3, 'Mother Bear', 'mother', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 4, 'Emily', 'emily', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 5, 'Aunty Hen', 'hen', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 6, 'Cat', 'cat', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 7, 'Owl', 'owl', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 8, 'No Feet', 'snake', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 9, 'Duck', 'duck', null, 'F', now());
+}
+
+db::disconnect();
+</pre></td></tr></table></body></html>

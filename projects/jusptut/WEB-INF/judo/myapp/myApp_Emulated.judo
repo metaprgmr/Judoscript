@@ -1,0 +1,129 @@
+#!##############################################################
+#!
+#!  Sample application code
+#!
+#!  Used by lesson 12 of the JUSP Comprehensive Tutorial
+#!
+#!##############################################################
+
+
+////////////////////////////////////////////////////////////////
+// Global declarations and variables: the Model component
+//
+
+class Item
+{
+  // Attributes:
+  //
+  // id:       the unique identifier
+  // name:     the name
+  // desc:     the description
+  // price:    the price
+  // currency: the currency
+  // inStock:  the inventory
+  //
+
+  constructor form { // a copy constructor
+    if (!form) return;
+    this.name     = form.name;
+    this.desc     = form.desc;
+    this.price    = form.price;
+    this.currency = form.currency;
+    this.inStock  = form.inStock;
+  }
+
+  function getPrice { // for display
+    return this.currency + this.price.float();
+  }
+
+  function buy num {
+    if (!num) num = 1;
+    if (this.inStock < num)
+      throw 'There are only ' + unit(this.inStock, 'item') + ' in inventory.';
+
+    this.inStock -= num;
+    return num;
+  }
+
+  function addInventory num {
+    if (!num) num = 1;
+    this.inStock += num;
+  }
+
+} // end of class Item.
+
+var _sellers = Set[ 'sam' ];
+var _buyers  = Set[ 'jim' ];
+
+// emulate a database:
+var _db = { }; // { user_name -> item }
+var _items = { }; // { id -> item }
+var _id_seed = 1;
+
+
+////////////////////////////////////////////////////////////////
+// Business functions
+//
+
+function auth user, type {
+  if ( (type=='seller') ? !_sellers.contains(user) : !_buyers.contains(user) )
+    throw 'Invalid user name or user type.';
+}
+
+// item's id is auto-generated.
+function addItem user, item {
+  var items = _db.(user);
+  if (!items) _db.(user) = (items = [ ]);
+
+  // put a hard limit:
+  if (items.length > 3)
+    throw 'Too many items for user ' + user;
+
+  item.id = _id_seed++;
+
+  items.add(item); // for the user
+  _items.(item.id) = item;
+
+  return item.id;
+}
+
+function getItems user { return _db.(user); }
+function getItem id { return _items.(id.int()); }
+function getAllItems { return _items.values(); }
+
+function updateItem form {
+  var item = getItem(form.id);
+  if (item==null)
+    throw 'Unable to update non-existing item [' + form.id + '].';
+  item := form; // copy operator.
+}
+
+// pre-populate a few items for "sam"
+
+addItem 'sam', new Item(name='JudoScript', price=54.95, currency='$', inStock=10);
+addItem 'sam', new Item(name='Java', price=29.95, currency='$', inStock=7);
+
+////////////////////////////////////////////////////////////////
+// Custom tags
+//
+
+var currencies = [ '$', 'CAN$' ];
+var currencyNames = [ 'US Dollar', 'Canadian Dollar' ];
+
+function jusp$currency ctxt, name {
+  jusp$select ctxt, name, currencies, currencyNames;
+}
+
+function jusp$itemCaption ctxt {
+  print<ctxt.writer>
+    '<tr><th>Name</th><th>Description</th><th>price</th><th>inventory</th><th>&nbsp;</th></tr>';
+}
+
+function jusp$itemRow ctxt, item, actionName, actionUri {
+  print<ctxt.writer> [[*
+    <tr><td>(* item.name *)</td><td>(* item.desc.neverEmpty('&nbsp;') *)</td>
+    <td>(* item.getPrice() *)</td><td align=center>(* item.inStock *)</td>
+    <td><a href="(* actionUri *)&id=(* item.id *)">(* actionName *)</a></td></tr>
+  *]];
+}
+

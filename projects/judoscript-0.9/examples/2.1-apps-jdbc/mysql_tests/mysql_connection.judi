@@ -1,0 +1,6 @@
+const #dbUrl = 'jdbc:mysql://localhost/test';
+const #dbUser = 'dbuser';
+const #dbPass = 'dbpass';
+
+connect to #dbUrl, #dbUser, #dbPass;
+

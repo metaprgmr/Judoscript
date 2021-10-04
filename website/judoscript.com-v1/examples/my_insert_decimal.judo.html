@@ -1,0 +1,16 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_decimal.judo:</b></td></tr><tr><td><pre>
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into decimal_table(c_decimal)
+  values(1234567890.123);
+}
+
+db::prepare:
+  insert into decimal_table(c_decimal) values( :val );
+
+db::update with @val:float = 1234567890.123;
+
+db::disconnect();
+</pre></td></tr></table></body></html>

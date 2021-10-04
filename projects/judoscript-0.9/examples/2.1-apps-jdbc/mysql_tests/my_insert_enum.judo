@@ -1,0 +1,14 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into enum_table(c_enum) values('a');
+  insert into enum_table(c_enum) values('b');
+  insert into enum_table(c_enum) values('x'); // not valid.
+}
+
+prepare:
+  insert into enum_table(c_enum) values(?);
+
+executeUpdate with @1 = 'c';
+
+disconnect();

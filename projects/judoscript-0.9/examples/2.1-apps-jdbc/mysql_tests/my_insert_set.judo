@@ -1,0 +1,15 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into set_table(c_set) values( 'a,b' );
+  insert into set_table(c_set) values( 'b,c' );
+  insert into set_table(c_set) values( 'x' );
+}
+
+prepare:
+  insert into set_table(c_set) values(?);
+
+executeUpdate with @1:int = 7;
+executeUpdate with @1 = 'a,x,y';
+
+disconnect();

@@ -1,0 +1,34 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Runs a bunch of SQL insert statements using executeSQL{}
+    to insert into people table.
+  *]];
+}
+
+!include 'mysql_connection.judi'
+
+executeSQL
+{
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 1, 'Little Bear', 'bear', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 2, 'Father Bear', 'father', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 3, 'Mother Bear', 'mother', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 4, 'Emily', 'emily', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 5, 'Aunty Hen', 'hen', null, 'F', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 6, 'Cat', 'cat', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 7, 'Owl', 'owl', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 8, 'No Feet', 'snake', null, 'M', now());
+  insert into people ( personID, name, alias, birthDay, sex, addTime)
+       values ( 9, 'Duck', 'duck', null, 'F', now());
+}
+
+disconnect();

@@ -1,0 +1,13 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into decimal_table(c_decimal)
+  values(1234567890.123);
+}
+
+prepare:
+  insert into decimal_table(c_decimal) values(?);
+
+executeUpdate with @1:float  = 1234567890.123;
+
+disconnect();

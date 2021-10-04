@@ -1,0 +1,14 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into auto_inc_table(c_name) values('abc');
+  insert into auto_inc_table(c_name) values('def');
+}
+
+prepare:
+  insert into auto_inc_table(c_name) values(?);
+
+executeSQL with @1 = 'fghijk';
+println $$.ps.getLastInsertID(); // MySQL specific call.
+
+disconnect();

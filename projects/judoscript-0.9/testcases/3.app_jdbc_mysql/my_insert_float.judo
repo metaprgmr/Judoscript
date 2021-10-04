@@ -1,0 +1,15 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into float_table(c_float, c_double)
+  values(123456789012345678901234.123,
+         123456789012345678901234567890123456789012345678901234.123);
+}
+
+db::prepare:
+  insert into float_table(c_float, c_double) values(?,?);
+
+db::update with @1:float  = 923456789012345678901234.123,
+                @2:double = 923456789012345678901234567890123456789012345678901234.123;
+
+db::disconnect();

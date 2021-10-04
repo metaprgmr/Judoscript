@@ -1,0 +1,81 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Use an array of struct's to carry information about a number of media files, 
+    and run prepared SQL insert statements to load them to the database.
+  *]];
+}
+
+!include 'mysql_connection.judi'
+
+db::prepare mediatbl:
+  insert into media (folderID,fileName,type,fileTime,bytes,width,height,addTime)
+  values (?,?,?,?,?,?,?,now())
+;
+
+db::prepare partbl:
+  insert into participants (folderID,fileName,personID)
+  values (?,?,?)
+;
+
+// Insert from an array of media files.
+
+const #folder1 = '/2001-07';
+const #folder2 = '/2001-08';
+const #folder3 = '/2001-09';
+
+media_files = { new struct( folder   = #folder1,
+                            filename = 'DSC00002.jpg',
+                            type     = 'I',
+                            filetime = date(2001,7,4),
+                            bytes    = 45056,
+                            people   = 'bear,father,mother'  // aliases
+                          ),
+                new struct( folder   = #folder2,
+                            filename = 'recital.mp3',
+                            type     = 'A',
+                            filetime = date(2001,8,5),
+                            bytes    = 3048005,
+                            people   = 'bear,emily'
+                          )
+              };
+
+for x in media_files
+{
+  // insert into media table (handle mediatbl):
+  db::update mediatbl
+        with @1 = x.folder,
+             @2 = x.filename,
+             @3 = x.type,
+             @4:date = x.filetime,
+             @5:int = x.bytes,
+             @6:int = x.width,  // null
+             @7:int = x.height  // null
+  ;
+  // insert into participants table (handle partbl).
+  // this is done for each participants listed in x.people;
+  names = x.people.csv(',');
+  for y in names
+  {
+    // because y is an alias, find the personID
+    local personID = null;
+    db::query getID:
+      select personID from people where alias = ?;
+    with @1 = y
+    onSuccess {
+      personID = getID[1]; 
+    }
+
+    if personID {
+      db::updatepartbl
+            with @1 = x.folder,
+                 @2 = x.filename,
+                 @3:int = personID
+      ;
+    }
+  }
+}
+
+db::disconnect();

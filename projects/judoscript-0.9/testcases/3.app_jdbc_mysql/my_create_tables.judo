@@ -1,0 +1,54 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Creates tables with db::sql. Drops the tables first if exist.';
+}
+
+!include 'mysql_connection.judi'
+
+// drop the tables, if exist already
+tables = { 'participants', 'media', 'people' };
+
+for x in tables {
+  if tableExists(x) {
+    db::sql: drop table (* x *);
+  }
+}
+
+db::sql
+{
+  create table people
+  ( personID  int primary key,
+    name      varchar(20) not null,
+    alias     varchar(20),
+    birthDay  date,
+    sex       varchar(1),  // 'M', 'F'
+    addTime   date
+  );
+
+  create table media
+  ( folderID  varchar(255) not null, // relative path
+    fileName  varchar(128) not null, // file name w/o path
+    type      varchar(1) not null, // I: image, M: movie, A: audio
+    fileTime  date,
+    bytes     int,
+    width     int,  // DEV NOTE: A GOOD CANDIDATE FOR ARRAY/STRUCT
+    height    int,  //           BASED ON type: IMAGES,MOVIES,AUDIOS
+    addTime   date,
+    constraint pathName primary key ( folderID, fileName )
+  );
+
+  create table participants
+  ( folderID  varchar(255),
+    fileName  varchar(128),
+    personID  int,
+    constraint ref_media  foreign key (folderID,fileName)
+                          references media (folderID,fileName),
+    constraint ref_people foreign key (personID)
+                          references people (personID)
+  );
+
+} // end of db::sql.
+
+db::disconnect();

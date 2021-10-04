@@ -1,0 +1,14 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into auto_inc_table(c_name) values('abc');
+  insert into auto_inc_table(c_name) values('def');
+}
+
+db::prepare:
+  insert into auto_inc_table(c_name) values( :val );
+
+db::sql with @val = 'fghijk';
+println $_.ps.getLastInsertID(); // MySQL specific call.
+
+db::disconnect();

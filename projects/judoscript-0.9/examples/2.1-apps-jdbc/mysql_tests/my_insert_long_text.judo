@@ -1,0 +1,30 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into long_text_table(c_blob,c_text,c_mediumblob,c_mediumtext,c_longblob,c_longtext)
+                  values('abc', 'abc', 'abc', 'abc', 'abc', 'abc' );
+}
+
+prepare:
+  insert into long_text_table(c_blob,c_text,c_mediumblob,c_mediumtext,c_longblob,c_longtext)
+                  values(?,?,?,?,?,?);
+
+executeUpdate with @1:bytes = 'ABC',
+                   @2:bytes = 'ABC',
+                   @3:bytes = 'ABC',
+                   @4:bytes = 'ABC',
+                   @5:bytes = 'ABC',
+                   @6:bytes = 'ABC';
+
+f1 = openFile('insert_date.judo');
+f2 = openFile('insert_text.judo');
+executeUpdate with @1 = null,
+                   @2 = null,
+                   @3::setBinaryStream(f1, f1.size()),
+                   @4::setBinaryStream(f1, f1.size()),
+                   @5::setBinaryStream(f2, f2.size()),
+                   @6::setBinaryStream(f2, f2.size());
+f1.close();
+f2.close();
+
+disconnect();

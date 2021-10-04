@@ -1,0 +1,15 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into set_table(c_set) values( 'a,b' );
+  insert into set_table(c_set) values( 'b,c' );
+  insert into set_table(c_set) values( 'x' );
+}
+
+db::prepare:
+  insert into set_table(c_set) values( :val );
+
+db::update with @val:int = 7;
+db::update with @val     = 'a,x,y';
+
+db::disconnect();

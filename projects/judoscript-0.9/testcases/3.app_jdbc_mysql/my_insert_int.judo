@@ -1,0 +1,21 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into int_table(c_tinyint, c_smallint, c_mediumint, c_int, c_bigint)
+                 values(-128, -32768, -8388608, -2147483648, -9223372036854775808);
+  insert into int_table(c_tinyint, c_smallint, c_mediumint, c_int, c_bigint)
+                 values(127, 32767, 8388607, 2147483647, 9223372036854775807);
+}
+
+db::prepare:
+  insert into int_table(c_tinyint, c_smallint, c_mediumint, c_int, c_bigint)
+                 values( :tinyInt, :smallInt, :mediumInt, :_int, :bigInt )
+  ;
+
+db::update with @tinyInt  :int  = 126,
+                @smallInt :int  = 32766,
+                @mediumInt:int  = 8388606,
+                @_int     :int  = 2147483646,
+                @bigInt   :long = 9223372036854775806;
+
+db::disconnect();

@@ -1,0 +1,18 @@
+!include 'mysql_connection.judi'
+
+executeSQL {
+  insert into date_time_table(c_date,c_time,c_timestamp,c_year2,c_year4)
+                       values( '2001-12-22','10:05:59','2001-12-22 10:05:59','01','2001');
+}
+
+prepare:
+  insert into date_time_table(c_date,c_time,c_timestamp,c_year2,c_year4)
+                       values(?,?,?,?,?);
+
+executeUpdate with @1:date = date(2001,12,23),
+                   @2:time = time(15,5,59),
+                   @3:timestamp = date(2001,12,23,15,5,59),
+                   @4:date = date(2001,1,1),
+                   @5:date = date(2001,1,1);
+
+disconnect();

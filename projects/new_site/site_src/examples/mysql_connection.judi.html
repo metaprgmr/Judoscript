@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/mysql_connection.judi:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Does JDBC connection to a MySQL data source.
+    This file is included by all. Modify for your environment.
+  *]];
+}
+
+const #dbUrl = 'jdbc:mysql://localhost/crescent';
+const #dbUser = 'dbuser';
+const #dbPass = 'dbpass';
+
+db::connect to #dbUrl, #dbUser, #dbPass;
+</pre></td></tr></table></body></html>

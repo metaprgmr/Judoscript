@@ -1,0 +1,13 @@
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into decimal_table(c_decimal)
+  values(1234567890.123);
+}
+
+db::prepare:
+  insert into decimal_table(c_decimal) values( :val );
+
+db::update with @val:float = 1234567890.123;
+
+db::disconnect();

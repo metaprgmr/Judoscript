@@ -1,0 +1,14 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Does JDBC connection to a MySQL data source.
+    This file is included by all. Modify for your environment.
+  *]];
+}
+
+const #dbUrl = 'jdbc:mysql://localhost/crescent';
+const #dbUser = 'dbuser';
+const #dbPass = 'dbpass';
+
+connect to #dbUrl, #dbUser, #dbPass;

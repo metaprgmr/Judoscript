@@ -1,0 +1,24 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Does a simple query using direct db::query and display the result.';
+}
+
+!include 'mysql_connection.judi'
+
+db::query a:
+  select * from people order by alias
+;
+
+while a.next() {
+  println 'personID: ', a[1];
+  println '    name: ', a[2];
+  println '   alias: ', a[3];
+  println 'birthDay: ', a.birthDay;
+  println '     sex: ', a.SEX;
+  println ' addTime: ', a.addTime;
+  println '--------';
+}
+
+db::disconnect();

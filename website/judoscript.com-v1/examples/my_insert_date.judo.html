@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_mysql/my_insert_date.judo:</b></td></tr><tr><td><pre>
+!include 'mysql_connection.judi'
+
+db::sql {
+  insert into date_time_table(c_date,c_time,c_timestamp,c_year2,c_year4)
+                       values( '2001-12-22','10:05:59','2001-12-22 10:05:59','01','2001');
+}
+
+db::prepare:
+  insert into date_time_table(c_date,c_time,c_timestamp,c_year2,c_year4)
+              values( :_date, :_time, :_timestamp, :year2, :year4 )
+;
+
+db::update with @_date:date           = date(2001,12,23),
+                @_time:time           = time(15,5,59),
+                @_timestamp:timestamp = date(2001,12,23,15,5,59),
+                @year2:date           = date(2001,1,1),
+                @year4:date           = date(2001,1,1);
+
+db::disconnect();
+</pre></td></tr></table></body></html>
