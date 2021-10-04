@@ -1,7 +1,7 @@
 # The _Judoscript_ Museum
 This is the Museum for the Judoscript language.
 
-Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain and general-purpose programming language; it was also one of the handful of the earliest Java scripting languages.
+Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain and general-purpose programming language; it was also one of the handful earliest Java scripting languages.
 
 For its characteristics as well as the story, please see [this Wikipedia article](https://en.wikipedia.org/wiki/Judoscript).
 
