@@ -1,5 +1,5 @@
 # The _Judoscript_ Museum
-This is the Museum for the Judoscript language.
+This is the Museum for the **Judoscript** language.
 
 Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain and general-purpose programming language; it was also one of the handful earliest Java scripting languages.
 
@@ -22,5 +22,5 @@ Judoscript language was quite complete in terms of its implementation of funcion
 * In museum: [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
 * In museum: [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
 * In museum: [Building the language software and website](https://metaprgmr.github.io/Judoscript/website/)
-* View this as a [website](https://metaprgmr.github.io/Judoscript/)
+* View this as a [website](https://metaprgmr.github.io/Judoscript/) (when in source mode)
 
