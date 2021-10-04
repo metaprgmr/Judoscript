@@ -70,3 +70,4 @@ This is the earlier one. The key to remember is that _articles_ and _references_
 
 * The live [version 1 site](judoscript.com-v1)
 * The live [version 2 site](judoscript.com-v2)
+* The [Home page](..)
