@@ -44,27 +44,27 @@ Before either build, first, set up the environment:
 
 This is the later one, so let us start here. The key to remember is that _articles_, _references_ and _book chapters_ are all in the module of <code>projects/new_site</code> already.
 
-1. <code>cd $JUDOROOT/projects/judoscript-0.9/buildtools/</code>, and run <code>judo all</code>.
+1. <code>cd projects/judoscript-0.9/buildtools/</code>, run <code>judo all</code>.
    * Build the software and create the executable jar.
    * Build all examples.
-2. <code>cd $JUDOROOT/projects/jamaica-1.0/buildtools/</code>, and run <code>judo build</code>.
-3. <code>cd $JUDOROOT/projects/new_site/buildtools/</code>, and run <code>judo build</code>, all options.
-4. <code>cd $JUDOROOT/projects/judoscript-0.9/buildtools/</code>, and run <code>judo all</code>, "Ship It!".
-5. <code>cd $JUDOROOT/projects/new_site/buildtools/</code>, and run <code>judo build</code>, "Build site juspt contnet", again.
+2. <code>cd projects/jamaica-1.0/buildtools/</code>, run <code>judo build</code>.
+3. <code>cd projects/new_site/buildtools/</code>, run <code>judo build</code>, all options.
+4. <code>cd projects/judoscript-0.9/buildtools/</code>, run <code>judo all</code>, "Ship It!".
+5. <code>cd projects/new_site/buildtools/</code>, run <code>judo build</code>, "Build site juspt contnet", again.
 
 ### Building with version 1 website
 
 This is the earlier one. The key to remember is that _articles_ and _references_ are included in the the module of <code>projects/judoscript-0.9</code>, while _book chapters_ are in a separate module, <code>projects/bookwriting</code>.
 
-1. <code>cd $JUDOROOT/projects/judoscript-0.9/buildtools/</code>, and run <code>judo all</code>.
+1. <code>cd projects/judoscript-0.9/buildtools/</code>, run <code>judo all</code>.
    * Build the software and create the executable jar.
    * Build all documentations, including articles and references.
    * Build all examples.
-2. <code>cd $JUDOROOT/projects/jamaica-1.0/buildtools/</code>, and run <code>judo build</code>.
-3. <code>cd $JUDOROOT/projects/bookwriting/buildtools/</code>, and run <code>judo build</code>.
-4. <code>cd $JUDOROOT/projects/judoscript.com/buildtools/</code>, and run <code>judo build</code>, all options.
-5. <code>cd $JUDOROOT/projects/judoscript-0.9/buildtools/</code>, and run <code>judo all</code>, "Ship It!".
-6. <code>cd $JUDOROOT/projects/judoscript.com/buildtools/</code>, and run <code>judo build</code>, "Build Pages", again.
+2. <code>cd projects/jamaica-1.0/buildtools/</code>, run <code>judo build</code>.
+3. <code>cd projects/bookwriting/buildtools/</code>, run <code>judo build</code>.
+4. <code>cd projects/judoscript.com/buildtools/</code>, run <code>judo build</code>, all options.
+5. <code>cd projects/judoscript-0.9/buildtools/</code>, run <code>judo all</code>, "Ship It!".
+6. <code>cd projects/judoscript.com/buildtools/</code>, run <code>judo build</code>, "Build Pages", again.
 
 ## The live sites in this Museum
 
