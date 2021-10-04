@@ -47,10 +47,10 @@ if #args.length <= 0 {
 }
 
 switch option {
-  case 1:   copyStatic(); buildPages(); break;
-  case 2:   copyStatic();               break;
-  case 3:   buildPages();               break;
-  case 4:   archive();                  break;
+  case 2:   copyStatic(); break;
+  case 1:   copyStatic(); // fall thru
+  case 3:   buildPages(); break;
+  case 4:   archive();    break;
   default:  ;
 }
 

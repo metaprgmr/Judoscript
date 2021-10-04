@@ -59,7 +59,7 @@ class TOCRoot extends TOCItem
   function generateNavPages open_node {
     leaves = [];
     if open_node.isLeaf() { leaves.append(open_node); }
-    fileName = '${::docroot}/ref/_' + open_node.id + '.html';
+    fileName = '${::docroot}/ref/x_' + open_node.id + '.html';
     . 'Generating ', fileName;
     this.file = openTextFile(fileName, 'w');
     title = 'JudoScript Reference';
