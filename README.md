@@ -5,7 +5,7 @@ Judoscript is a quite unique scripting language. It is the first (and possibly t
 
 For its characteristics, the story, and reflections on the <i>Judoscript Idea</i>, please see [this Wikipedia article](https://en.wikipedia.org/wiki/Judoscript).
 
-Judoscript's journey started in late 2001, but sadly stopped short by the end of 2005. It was a work-in-progress without final fruition; however, the language software was completed according to the desired plan. As life goes on, it is worth keeping its vestige in the digital ether. Hence, this museum is set up, not for the sake of immortality but rather in a sense of social responsibility.
+<img src="JianboHuang-small.png" align="right" border="0">Judoscript's journey started in late 2001, but sadly stopped short by the end of 2005. It was a work-in-progress without final fruition; however, the language software was completed according to the desired plan. As life goes on, it is worth keeping its vestige in the digital ether. Hence, this museum is set up, not for the sake of immortality but rather in a sense of social responsibility.
 
 This museum exhibits a rather complete setting for the Judoscript language development, its documentation building and website building. In other words, previously the development bits and pieces were just sitting on my development machine, where only the source code and certain artifacts of the language were checked into sourceforge; but here, it contains both the source code and the build environment for the whole operation, so that, if someone is willing, he or she can rebuild the language, as well as the website.
 
