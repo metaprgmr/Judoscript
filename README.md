@@ -16,7 +16,7 @@ The website, whose content is more or less built along with each release of the 
 (More instructions will be provided for running the build processes later.)
 
 -----------
-##Quick Links
+## Quick Links
 * [Judoscript on Wikipedia](https://en.wikipedia.org/wiki/Judoscript)
 * In museum: [Judoscript.com Website Version 1](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v1/)
 * In museum: [Judoscript.com Website Version 2](https://metaprgmr.github.io/Judoscript/website/judoscript.com-v2/)
