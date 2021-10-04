@@ -1,0 +1,7 @@
+<html>
+<head><title><%= title %></title>
+<%!stylesheet 'images/jstyles.css' %>
+</head>
+<body background="#BBBBBB" style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px">
+<center><table cellpadding=10 cellspacing=0 width="100%">
+<tr><td>&nbsp;</td><td bgcolor="#FFFFFF" width="700px">

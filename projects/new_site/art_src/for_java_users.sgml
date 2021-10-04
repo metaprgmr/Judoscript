@@ -1,0 +1,264 @@
+<doc title="For Java Users" author="James Huang"
+ created="May 2003"
+ keywords="JudoScript, Scripting Java, Java scripting language, scripting language for Java, data processing, cross-database transfer, data mining, data archiving, software prototyping, glue language, quality assurance, software testing">
+
+<sectiondefs>
+<sectiondef name=compjava caption="JudoScript vs. Java">
+ <sectiondef name=vars     sub=1 caption="Variable Handling">
+ <sectiondef name=pgmstrct sub=1 caption="Program Structure">
+ <sectiondef name=sugar    sub=1 caption="Syntactic Sugar">
+ <sectiondef name=why1     sub=1 caption="That Is Why To Script Java?">
+<sectiondef name=javascpt caption="Scripting Java in JudoScript">
+ <sectiondef name=why2     sub=1 caption="That Is Why To Script Java?">
+<sectiondef name=dataproc caption="Universal Data Processing">
+ <sectiondef name=jdbc     sub=1 caption="JDBC Scripting">
+ <sectiondef name=xml      sub=1 caption="XML Scripting">
+ <sectiondef name=sgml_txt sub=1 caption="SGML and Text File Scripting">
+ <sectiondef name=ejb      sub=1 caption="EJB Scripting">
+ <sectiondef name=why3     sub=1 caption="This Is Why To Script Java!">
+<sectiondef name=nifty    caption="Other Nifty Features in JudoScript">
+<sectiondef name=sum      caption="Summary">
+</sectiondefs>
+
+<abstract>
+This article is to help Java programmers understand <J>, and possibly ease some fears about a new language.
+It explains the difference between Java and scripting languages, and briefly mentions some of <J>'s important features.
+It advocates to use Java in addition to programming, and <J> is the product of and facilitator for this ideal.
+</abstract>
+
+</doc>
+
+
+<p>Java programmers are loyal to and take great pride in the language.
+Some of them want to use Java for everything, and I am definitely one of these, because Java has
+embodied almost all computing areas, and open-source projects cover even more.
+A few projects tended to use Java directly as a scripting language by interpreting exactly the same language.
+Some innovated by defining a scripting langauge with a syntax very close to Java and enjoys great success.
+Others ported existing languages like Python, JavaScript, TCL, etc.
+But somehow I felt they are not enough, because all of these languages are not too far off
+the idea of using Java itself as a scripting language. Well, what is wrong with that idea?
+</p>
+
+<p>As we know, Java is a system language, with low-level, fine-granularity APIs designed for building software.
+Using Java for everyday tasks is tedious even with an "easier" language.
+Think about copying a tree of files into a zip archive, or sending an e-mail, or process an XML document with SAX....
+how much coding is involved? 
+If possible, I would rather focus on the tasks at hand, not worrying too much about Java classes and APIs --
+what I call "implementational details" that at times become nuisances.
+(See the <a href="whitepaper.html#i_def">definition of <em>scripting</em></a> in the White Paper.)
+</p>
+
+<p>Being an object-based platform, Java is a dream platform for scripting languages.
+Object-based platforms provide superior modularity, reusability and scriptability.
+Take Windows as an example. With a capable tool, you can instantiate an ActiveX control,
+access its properties and use its services (methods).
+An object-oriented language does not necessarily guarantee scriptability.
+For instance, there is no such thing as a "C++ object" at run-time.
+Java, being a platform and a language, make language objects and run-time objects the same.
+Run-time objects can all be dynamically inspected, instantiated and used.
+Java is a dream platform for scripting languages and language designers.
+It is clearly an ideal basis for a cross-platform, cross-RDBMS, readily usable, easily extensible, powerful scripting tool.
+Java is the future of scripting. 
+</p>
+
+<p>In mid-2001, I dreamed about a tool that does: (1) JDBC scripting, (2) XML scripting and (3) EJB scripting.
+By the end of that year, a new, all-around scripting language was born.
+I was about to name it "JavaScript", only to receive a name-already-taken exception. 
+Then, this new language was named <J>, because I like to have letter J in the front.
+</p>
+
+
+
+<section name=compjava>
+
+<p>Scripting languages have some fundamental differences than system languages like Java and C.
+In the rest of this article, we use <J> as an example of scripting language and Java as system language.</p>
+
+
+
+<section name=vars>
+
+<p>The most important difference is probably the handling of variables.
+In Java, variables are statically typed; their types determines their uses. For instance, in this example,
+
+<demo>
+String s = " toys";
+System.out.println(2 + s);
+</demo>
+
+In <J>, a variable is a container for any values.
+A value is either of a simple type (number or string) or an object of some kind.
+In the former situation, the value is weakly typed, so the uses determine what type it is intended.
+For instance,
+
+<demo>
+x = '1';
+y = 1;
+println x + y; // print out: 2
+println x @ y; // print out: 11
+</demo>
+
+The <code>@</code> operator is the only one in <J> that is different from its Java's counterpart -- string concatenation.
+</p>
+
+If a variable holds an object, normally they are strongly typed and you can only use their defined properties and methods, like this:
+
+<demo>
+x = new java::java.util.Vector;
+println x.size(); // print out: 0
+</demo>
+
+except for some Java objects like <code>java.lang.Number</code> instances:
+
+<demo>
+x = new java::java.lang.Integer(5);
+print x + 1; // print out: 6
+</demo>
+</p>
+
+</section>
+
+
+<section name=pgmstrct>
+
+<p>As a mordern scripting language, <J> uses a hybrid programming model of procedural, object-oriented and dynamic programming.
+You can simply type in statements in the global scope and run, or organize code into functions, classes and threads.
+<a href="whitepaper.html#core">It is a very powerful programming system</a>.</p>
+
+</section>
+
+
+<section name=sugar>
+
+<p>Scripting languages have so-called "syntactic sugar" that make coding easier and more relaxed. For instance,
+
+<demo>
+x = [[*
+  Scripting is to do things easily, intuitively, obviously and accurately, so
+  much so that when another person with the same domain knowledge sees a chunk of
+  code, he immediately understands it without even a hint of reasoning (ideally). 
+
+  Scripting Support means very-high-abstraction-level language constructs or even
+  domain-specific languages. 
+*]];
+</demo>
+
+this example puts a chunk of text into a variable.
+The leading indentations are stripped, so the code can look nice and neat.
+</p>
+
+</section>
+
+
+<section name=why1>
+
+<p>Of course not. A powerful language engine is the basis for other good things.</p>
+
+</section>
+
+
+
+<section name=javascpt>
+
+<p><J> is a <a href="whitepaper.html#java">totally capable Java scripting langauge</a>.
+This is required by our goal of EJB scripting, and is one of the backbones of the language.</p>
+
+</section>
+
+
+<section name=why2>
+
+<p>Not quite. Interestingly, this is the sole goal of many other Java scripting languages.</p>
+
+</section>
+
+
+<section name=dataproc>
+
+<p><J> has intimate data processing support for relational databases, XML, SGML, text and abstract data such as EJBs.
+It is one of its greatest strengths.
+</p>
+
+</section>
+
+
+<section name=jdbc>
+
+<p><a href="jdbc.html">JDBC scripting</a> is one of the major reasons for this language.</p>
+
+</section>
+
+
+<section name=xml>
+
+<p><a href="xml.html">XML scripting</a> is another major reason for this language.
+<J> has a <a href="xml.html#sax">special statement for SAX style programming</a>, and also supports DOM and XSLT scripting.</p>
+
+</section>
+
+
+<section name=sgml_txt>
+
+<p><J> supports an SGML statement similar to XML SAX programming: 
+
+<demo>
+do 'http://www.yahoo.com' as sgml {
+&lt;a>:   println 'web link: ', $_.href;
+&lt;img>: println 'img link: ', $_.source;
+}
+</demo>
+
+In addition to regular file operations, <J> has a text file statement:
+
+<demo>
+cnt = 1;
+do 'Test.java' as lines {
+  println cnt :>3,   // right-aligned with width 3
+          ': ', $_;  // add a line number to the line.
+  ++cnt;
+}
+</demo>
+</p>
+
+</section>
+
+
+<section name=ejb>
+
+<p><a href="java_excpt.html#ejb">EJB scripting is very easy</a>.
+<J> has a number of convenience system function to get an initial context for popular J2EE products like Weblogic.
+Once you have the context, use JNDI to obtain your intended target objects.
+It is faster to write an EJB client than Java because you do not have to type all the class names.
+</section>
+
+
+<section name=why3>
+
+<p>With these high-level support, you are empowered to do a lot of things efficiently and effectively.
+Do not underestimate the potential of such conveniences. For instance, during a software upgrade,
+I conducted a series of data analysis using <J> JDBC scripting assisted with data structures,
+and eventually led to an optimal solution. This is a good demonstration of the power of <J> over sheer SQL.
+</section>
+
+
+<section name=nifty>
+
+<p><J> has many other nifty features that are very useful, and people love them. <a href="whitepaper.html#apps">Check them out</a>!
+
+</section>
+
+
+<section name=sum>
+
+<p><J> is a three-in-one language: general-purpose programming, Java scripting and multi-domain support.
+Its power comes from the synergy of all three. You can use it to handle many tasks easily; if necessary,
+extend it with Java code (you can alias a Java static method as a <J> function). I use <J> to test Java code,
+archive and back up data, do data analysis and reporting, process text files and almost everything.</p>
+
+<p>Java programmers, do something for yourselves! You have been creating cross-platform software for the masses,
+why don't you take advantage of Java, an incredible cross-platform resource youselves?
+It is capable and powerful; and with <J>, it is possible and doable.</p>
+
+<p>Happy using Java!</p>
+
+</section>

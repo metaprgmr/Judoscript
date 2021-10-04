@@ -1,0 +1,185 @@
+
+public class IfTest
+{
+  public static void main(String[] args) {
+    int         ivar;
+    long        lvar;
+    float       fvar;
+    double      dvar;
+    boolean     xvar;
+    byte        bvar;
+    char        cvar;
+    short       svar;
+    String      str;
+    ArrayList   obj;
+
+    int[]       iarr;
+    long[]      larr;
+    float[]     farr;
+    double[]    darr;
+    String[]    strarr;
+    ArrayList[] objarr;
+
+// -- Initialize all values
+
+    %set ivar = 5
+    %set lvar = 5
+    %set fvar = 5.5
+    %set dvar = 5.5
+    %set xvar = true
+    %set bvar = 45
+    %set cvar = 'h'
+    %set svar = 0
+    %set str = "abc"
+    %set obj = %object ArrayList
+    %set iarr = %array int[] { 1, 2, 3 }
+    %set larr = %array long[] { 100000, 2000000, 300000 }
+    %set farr = %array float[] { 5.5, 6.5, 0.00003 }
+    %set darr = %array double[] { 5.5, 6.5, 0.00003 }
+    %set strarr = %array String[] { "ab", "cd", "ef" }
+    %set objarr = null
+
+    %println "ivar = ", ivar
+    %println "lvar = ", lvar
+    %println "fvar = ", fvar
+    %println "dvar = ", dvar
+    %println "xvar = ", xvar
+    %println "bvar = ", bvar
+    %println "cvar = ", cvar
+    %println "svar = ", svar
+    %println "str  = ", str
+    %println "obj  = ", obj
+    %println "iarr[0] = ", iarr[0]
+    %println "iarr[1] = ", iarr[1]
+    %println "iarr[2] = ", iarr[2]
+    %println "larr[0] = ", larr[0]
+    %println "larr[1] = ", larr[1]
+    %println "larr[2] = ", larr[2]
+    %println "farr[0] = ", farr[0]
+    %println "farr[1] = ", farr[1]
+    %println "farr[2] = ", farr[2]
+    %println "darr[0] = ", darr[0]
+    %println "darr[1] = ", darr[1]
+    %println "darr[2] = ", darr[2]
+    %println "strarr[0] = ", strarr[0]
+    %println "strarr[1] = ", strarr[1]
+    %println "strarr[2] = ", strarr[2]
+
+// -- Test object in-/equality
+
+    %if str == obj
+      %println "str == obj"
+    %else
+      %println "NOT str == obj"
+    %end_if
+
+    %if str != obj
+      %println "str != obj"
+    %end_if
+
+// -- Test int/0 comparisons
+
+    %if ivar > 0
+      %println "ivar > 0"
+    %else
+      %println "NOT ivar > 0"
+    %end_if
+
+    %if xvar == false
+      %println "xvar == false"
+    %else
+      %println "NOT xvar == false"
+    %end_if
+
+// -- Test number/constant comparisons
+
+    %if ivar >= 5
+      %println "ivar >= 5"
+    %else
+      %println "NOT ivar >= 5"
+    %end_if
+
+    %if lvar < 5
+      %println "lvar < 5"
+    %else
+      %println "NOT lvar < 5"
+    %end_if
+
+    %if fvar > 5.5
+      %println "fvar > 5.5"
+    %else
+      %println "NOT fvar > 5.5"
+    %end_if
+
+    %if dvar <= 5.5
+      %println "dvar <= 5.5"
+    %else
+      %println "NOT dvar <= 5.5"
+    %end_if
+
+    %if bvar != 45
+      %println "bvar != 45"
+    %else
+      %println "NOT bvar != 45"
+    %end_if
+
+    %if cvar == 'h'
+      %println "cvar == 'h'"
+    %else
+      %println "NOT cvar == 'h'"
+    %end_if
+
+// -- Test int comparisons
+
+    %if ivar > svar
+      %println "ivar > svar"
+    %else
+      %println "NOT ivar > svar"
+    %end_if
+
+    %if svar == cvar
+      %println "svar == cvar"
+    %else
+      %println "NOT svar == cvar"
+    %end_if
+
+    %if svar > iarr[2]
+      %println "svar > iarr[2]"
+    %else
+      %println "NOT svar > iarr[2]"
+    %end_if
+
+// -- Test float comparisons
+
+    %if fvar <= farr[2]
+      %println "fvar <= farr[2]"
+    %else
+      %println "NOT fvar <= farr[2]"
+    %end_if
+
+// -- Test double comparisons
+
+    %if dvar > darr[1]
+      %println "dvar <= darr[1]"
+    %else
+      %println "NOT dvar <= darr[1]"
+    %end_if
+
+
+// -- Test mixed-type comparisons
+
+    %if ivar > larr[0]
+      %println "ivar > larr[0]"
+    %else
+      %println "NOT ivar > larr[0]"
+    %end_if
+
+    %if ivar != darr[1]
+      %println "ivar != darr[1]"
+    %else
+      %println "NOT ivar != darr[1]"
+    %end_if
+
+  }
+
+}

@@ -1,0 +1,126 @@
+usage {
+  desc =[[*
+    This program contains a list of small program fragment, each assigns a
+    value to variable 'a', and displays the results of its isXXX() methods.
+
+    The program fragments are evaluated dynamically and the code is
+    displayed along with the result.
+  *]];
+}
+
+println '            Legend:';
+println '              NUL  - isNull()    CLX  - isComplex()  INT  - isInt()    FLT  - isFloat()';
+println '              STR  - isString()  DAT  - isDate()     ARR  - isArray()  SET  - isSet()';
+println '              STT  - isStruct()  STK  - isStack()    QUE  - isQueue()  JAV  - isJava()';
+println '              OBJ  - isObject()  FUN  - isFunction()';
+println;
+println '                                          N C I F N S D A S S S Q J O F';
+println '                                          U L N L U T A R E T T U A B U';
+println 'Expression                                L X T T M R T R T T K E V J N  Type Name';
+println '----------------------------------------- - - - - - - - - - - - - - - -  ---------';
+
+exprs = [
+  [[* a = null; *]],
+  [[* a = true; *]],
+  [[* a = 1; *]],
+  [[* a = 1.0; *]],
+  [[* a = '1'; *]],
+  [[* a = '1.0'; *]],
+  [[* a = '0xabc'; *]],
+  [[* a = '0777'; *]],
+  [[* a = '1e34'; *]],
+  [[* a = 'abc'; *]],
+  [[* a = 'xyz'; *]],
+  [[* a = javanew java.lang.String('Xyz'); *]],
+  [[* a = javanew java.lang.Boolean(true); *]],
+  [[* a = javanew java.lang.Byte(1); *]],
+  [[* a = javanew java.lang.Character('c'); *]],
+  [[* a = javanew java.lang.Short(1); *]],
+  [[* a = javanew java.lang.Float(1.01); *]],
+  [[* a = javanew java.lang.Double(1.01); *]],
+  [[* a = Date(); *]],
+  [[* a = javanew java.util.Date; *]],
+  [[* a = new array; *]],
+  [[* a = []; *]],
+  [[* a = LinkedList[]; *]],
+  [[* a = javanew byte[4]; *]],
+  [[* a = javanew java.util.Date[2]; *]],
+  [[* a = javanew java.util.Hashtable; *]],
+  [[* a = createDom(); *]],
+  [[* a = createDom().cast('org.w3c.dom.Node'); *]],
+  [[* a = new Set; *]],
+  [[* a = Set<Number>[]; *]],
+  [[* a = {}; *]],
+  [[* a = new Struct; *]],
+  [[* a = new OrderedMap; *]],
+  [[* a = new SortedMap<String>; *]],
+  [[* a = new TreeNode; *]],
+  [[* a = new Stack; *]],
+  [[* a = new Queue; *]],
+  [[* a = new TableData; *]],
+  [[* a = openFile(#prog); *]],
+  [[* a = openTextFile(#prog); *]],
+  [[*
+      class C {}
+      a = new C;
+  *]],
+  [[*
+      class C extends OrderedMap {}
+      a = new C;
+  *]],
+  [[*
+      class C extends TreeNode {}
+      a = new C;
+  *]],
+  [[*
+      class D extends C {}
+      a = new D;
+  *]],
+  [[* a = lambda {}; *]],
+  [[*
+      do ('<a>').getReader() as sgml {
+      <a>: a = $_;
+      }
+  *]],
+  [[*
+      do ('</a>').getReader() as sgml {
+      </a>: a = $_;
+      }
+  *]],
+  [[*
+      do ('</a>  ').getReader() as sgml {
+      TEXT: a = $_;
+      }
+  *]],
+
+];
+
+for expr in exprs {
+  eval expr; // all of them evaluate to 'a' in the current context.
+
+  firstLine = true;
+  do expr.getReader() as lines {
+    if firstLine {
+      println $_ :<41,
+              a.isNull()    .fmtBool('.','X') :> 2,
+              a.isComplex() .fmtBool('.','X') :> 2,
+              a.isInt()     .fmtBool('.','X') :> 2,
+              a.isFloat()   .fmtBool('.','X') :> 2,
+              a.isNumber()  .fmtBool('.','X') :> 2,
+              a.isString()  .fmtBool('.','X') :> 2,
+              a.isDate()    .fmtBool('.','X') :> 2,
+              a.isArray()   .fmtBool('.','X') :> 2,
+              a.isSet()     .fmtBool('.','X') :> 2,
+              a.isStruct()  .fmtBool('.','X') :> 2,
+              a.isStack()   .fmtBool('.','X') :> 2,
+              a.isQueue()   .fmtBool('.','X') :> 2,
+              a.isJava()    .fmtBool('.','X') :> 2,
+              a.isObject()  .fmtBool('.','X') :> 2,
+              a.isFunction().fmtBool('.','X') :> 2,
+              '  ', a.getTypeName();
+      firstLine = false;
+    } else {
+      println $_;
+    }
+  }
+}

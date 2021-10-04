@@ -1,0 +1,9 @@
+a = Set[ 199, 'xyz' ];
+println '199: ', a.exists(199);
+println 'xyz: ', a.exists('xyz');
+println 'yz:  ', a.exists('yz');
+
+println '----- all elements -----';
+for x in a {
+  println x;
+}

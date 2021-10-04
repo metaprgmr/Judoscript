@@ -1,0 +1,9 @@
+class CFoo {
+  ctor {
+    this.a = function(_this){ println _this.b; };
+    this.b = 'abcd';
+  }
+}
+
+o = new CFoo;
+o.a(o);

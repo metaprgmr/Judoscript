@@ -1,0 +1,24 @@
+<%-------  This is a pure control page.  -------%>
+
+<%!include 'header.jusp' %><%-- checks on user authentication, etc. --%>
+<%
+  switch form.do {
+  case 'buy':
+    try {
+      var item = getItem(form.id);
+      if (item == null)
+        error.add( 'Item (' + form.id + ') is not found!' );
+      else {
+        item.buy(form.qty);
+        break;
+      }
+    } catch {
+      error.add( $_.message );
+    }
+    %><%!forward 'buy.jusp' %><%
+
+  case 'to_buy':
+    %><%!forward 'buy.jusp' %><%
+  }
+%>
+<%!forward 'list4buy.jusp' %>

@@ -1,0 +1,23 @@
+<html><head><title>JudoScript Semantics - ForFromToStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>ForFromToStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=ForFromToStatement>ForFromToStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=t>LABEL_NAME</font>  <font class=kw><nobr>:</nobr></font>   )?  <font class=kw>for</font>   (  <font class=kw><nobr>(</nobr></font>   )?  <font class=t>IDENTIFIER</font>   (  <font class=kw>from</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>to</font>   |  <font class=kw>downto</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>step</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw><nobr>)</nobr></font>   )?  <br> <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font> </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('ForFromToStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This for statement iterates through a series of integer values. The variable in the
+  <font class=kw>for</font>  clause is a local one if not already defined. The scope of the integers are
+  specified by <font class=kw>from</font> , <font class=kw>to</font> , <font class=kw>downto</font>  and <font class=kw>step</font> . If <font class=kw>from</font>  is missing, default
+  from 0.</p>
+ </body></html>

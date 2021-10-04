@@ -1,0 +1,501 @@
+<doc title="Use JudoScript for J2EE Development" author="James Jianbo Huang"
+ created="May 2003"
+ keywords="JudoScript, Scripting Java, Java scripting language, scripting language for Java, j2ee, ejb, jsp, jdbc">
+
+<sectiondefs>
+<sectiondef name=jdbc       caption="Use JDBC in Your Work">
+ <sectiondef name=fake      caption="Set Up Schema and Generate Fake Test Data" sub=1>
+ <sectiondef name=spsrc     caption="Get Oracle Stored Procedure Source Code" sub=1>
+<sectiondef name=ejb        caption="Use JudoScript for EJBs">
+ <sectiondef name=ejbclnt   caption="A Session Bean Client" sub=1>
+ <sectiondef name=makejar   caption="Create an EJB Jar File" sub=1>
+<sectiondef name=jms        caption="Use JudoScript for JMS">
+ <sectiondef name=qsend     caption="Send a JMS Message" sub=1>
+ <sectiondef name=qget      caption="Get a JMS Message" sub=1>
+ <sectiondef name=jmssub    caption="Create a JMS Subscriber" sub=1>
+<sectiondef name=ssdev      caption="Server-Side Development with JudoScript">
+ <sectiondef name=webqsend  caption="A Web JMS Message Sender with JUSP" sub=1>
+<sectiondef name=mail       caption="Send Mail">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+<J> is a powerful tool for J2EE developers, thanks to its superb Java scripting capability,
+enterprise computing and general features. This article demonstrates some of them with a
+list of <J>'s J2EE use cases, which you can adapt to use in your cases.
+It may grow to include more cases over time.
+</abstract>
+
+</doc>
+
+
+<p><J> code is supposed to be obvious to Java programmers.
+In the example source code, we put a special comment that starts with
+<code>//{{NOTE}}</code> to indicate it is a <J> usage note.
+Otherwise, it is a valid comment for the program itself.
+
+
+<section name=jdbc>
+
+<p><J> is the first JDBC scripting language. You can easily execute SQL statements in various modes,
+such as directly, preparedly or in batches. It is simply easier to write the SQL and bind parameters.
+We give two practical examples that are easy for you to adapt and use in your work.
+</p>
+
+<section name=fake>
+
+<p>The following example creates an "employee" table and generates a number of fake records.</p>
+
+<codelist name="FakeData" caption="CreateTestData.judo">
+firstNames = [ 'James', 'Jim', 'Jimmy' ];
+lastNames  = [ 'Huang', 'Hwang', 'Wang', 'Wong' ];
+
+connect to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+           'dbuser', 'dbpass';
+
+executeSQL {
+  create table emp (id         integer,
+                    first_name varchar(20),
+                    last_name  varchar(20),
+                    salary     integer
+                   );
+  alter table emp add primary key(id);
+  create sequence emp_id starting with 100;
+}
+
+prepare upd:
+  insert into emp (id, first_name, last_name, salary)
+  values (emp_id.nextval, ?, ?, ?)
+;
+
+repeat 8 times {
+  executeUpdate upd with
+    @1 = firstName[ random(0,firstName.length) ],
+    @2 = lastName[ random(0,lastName.length) ],
+    @3:int = random(25000,150000);
+}
+//{{NOTE}} bind parameters are by default string,
+//{{NOTE}} unless specified explicitly like the last one.
+
+disconnect();
+</codelist>
+
+</section>
+
+
+<section name=spsrc>
+
+<p>In Oracle, stored procedure source code is stored in a table.
+For user procedures, they can be obtained through view <code>user_source</code>.
+Each line of source code is stored as a row, each row contains the procedure name, type, line number and code itself.
+</p>
+
+<codelist name="SPSource" caption="SPSource.judo">
+connect oraCon to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+                  'dbuser', 'dbpass';
+
+executeQuery qry using oraCon:
+   select distinct type, name, line, text
+     from user_source
+     order by name, type, line
+;
+
+name = null;
+while qry.next() {
+  if name != qry.name { // beginning of a new procedure
+    if name != null {   // last procedure ..
+      prinltn nl;       // print a new line
+    }
+    name = qry.name;
+    prinltn name, ':';
+  }
+  flush '  ', qry.text; // print the code --
+  //{{NOTE}} Oracle keeps a new-line at the end of text.
+  //{{NOTE}} So use flush instead of println.
+}
+
+oraCon.disconnect();
+</codelist>
+
+<p>One thing worth noting: the connection is named with <code>oraCon</code>, and
+the <code>executeQuery</code> statement has a <code>using oraCon</code> clause.
+Named connections allow multiple connections to different (kinds of) databases simultaneously.</p>
+
+<p>Let us enhance the script so it can print out source for specific procedures specified on the command-line.
+In <J>, command-line parameters are stored in a pre-defined constant array, <code>#args</code>.
+More over, we want to save individual procedures into their own <code>.proc</code> files.
+</p>
+
+<codelist name="SPSource1" caption="SPSource1.judo">
+// construct a where clause
+whereClause = '';
+if #args.length > 0 {
+  whereClause = 'where name in (';
+  for i=0; i<#args.length; ++i {
+    if i>0 { whereClause @= ', '; } //{{NOTE}} @ is string concat op.
+    whereClause @= "'" @ #args[i].toUpper() @ "'";
+  }
+  whereClause @= ')';
+}
+
+connect oraCon to 'jdbc:oracle:thin:@dbserver:1521:mysid',
+                  'dbuser', 'dbpass';
+
+executeQuery qry using oraCon:
+   select distinct type, name, line, text
+     from user_source
+     order by name, type, line
+     (* whereClause *)
+;
+//{{NOTE}} can contain dynamic text for the SQL statement.
+
+name = null;
+file = null;
+while qry.next() {
+  if name != qry.name { // beginning of a new procedure
+    name = qry.name;
+    if file != null {
+      flush <file>;
+      file.close();     // close the previous file
+    }
+    // open a new file for the object
+    file = openTextFile(name @ '.' @ qry.type, 'w');
+  }
+  print <file> qry.text; //{{NOTE}} write the code into the file
+}
+if file != null { // for the last file.
+  flush <file>;
+  file.close();
+}
+
+oraCon.disconnect();
+</codelist>
+
+</section>
+
+
+<section name=ejb>
+</section>
+
+
+<section name=ejbclnt>
+
+<p>The following program is an EJB client that retrieves a session bean
+and invoke a method on it:
+
+<codelist name="EJBClient" caption="EJBClient.judo">
+const #custName = 'com.example.ejb.customer.CustomerManagerHome';
+
+ctx = weblogicContext('t3://jhuang:7301','weblogic','system32');
+custMgr = ctx.lookup(#custName)
+             .cast(#custName)    //{{NOTE}} Why must cast? See below.
+             .create();
+custs = custMgr.findCustomersByFirstName('James'); // returns java.util.List
+//{{NOTE}} Java collection data structures can be iterated
+//{{NOTE}} the same way as <J> arrays, like so:
+for x in custs {
+  println x.getFirstName(), ' ', x.getLastName();
+}
+</codelist>
+
+The <code>.cast()</code> in most cases are required and should be interesting to Java programmers.
+The reason is a limitation (actually, a feature) in Java reflection API.
+As we know, when using RMI and EJB, you define (remote) interfaces, and rmic or ejbc will generate
+stubs and skeletons, which are normally not public but do implement those interfaces.
+<J> uses Java reflection to find all the classes extended and interfaces implemented by the stub class;
+in this case, it will only fail because the stub is not public.
+Thus, you have to explicitly call the <code>.cast(className)</code> which is a <J>-built-in method for
+Java objects (the other <J>-built-in mehtod for Java objects is <code>.instanceof(className)</code>).
+</p>
+
+</section>
+
+
+<section name=makejar>
+
+<p><J> has rich support for O.S. and file system operations.
+We can use them to compile Java and package jar files for EJBs.
+This step-by-step process is easy and straightforward.</p>
+
+<p>Suppose we have such a directory structure for the source code:
+
+<demo>
+~/dev/src/com/example/ECommerce.java
+~/dev/src/com/example/util/EComUtil.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManager.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManagerBean.java
+~/dev/ejb/src/com/example/ejb/customer/CustomerManagerHome.java
+~/dev/ejb/META-INF/ejb-jar.xml
+~/dev/ejb/META-INF/weblogic-ejb-jar.xml
+</demo>
+
+and we intend to make two jar files: <code>~/dist/ecom.jar</code> for non-EJB classes and
+<code>~/dist/ejbs.jar</code> for EJBs.
+In the process, we use <code>~/temp/classes/</code> to store compiled class files.
+
+<codelist name="BuildEJBs" caption="BuildEJBs.judo">
+src_dir  = '~/dev/';
+tmp_dir  = '~/temp/classes/';
+dist_dir = '~/dist/';
+
+rmdir tmp_dir force; // clear first
+mkdir tmp_dir;       // create the dir to store class files.
+
+// Step 1. Compile Java files
+
+// first, construct the Java source file list
+list '*' except '*/META-INF*' in src_dir dirOnly recursive;
+//{{NOTE}} list returns paths in $$fs_result (array).
+
+java_files = $$fs_result.toCsv(' ', lambda x { return x @ '/*.java'; });
+//{{NOTE}} lambda is an anonymous function.
+//{{NOTE}} <J> functions may take function references as parameters.
+//{{NOTE}} Classic example is a compartor function for array sorting.
+
+exec &lt;> [[*
+   javac -classpath ${CLASSPATH}${:}${MY_CP}
+         -d (* tmp_dir *)
+         (* java_files *)
+*]];
+//{{NOTE}} a) &lt;> forces this exec to be synchronous.
+//{{NOTE}}    &lt;x> returns the exit value in x; exec is synchronous.
+//{{NOTE}} b) a command-line can span many lines
+//{{NOTE}} c) ${} expands variable values or environment variables
+//{{NOTE}}    if name-sake variable does not exist.
+//{{NOTE}}    ${:} is for platform path separator,
+//{{NOTE}}    ${/} is for platform file name separator, and
+//{{NOTE}}    ${~} denotes the home directory.
+//{{NOTE}} d) (* *) encloses expressions.
+
+// Step 2. Create the jar files
+
+// create jar for non-EJB classes
+copy 'com/*.class' except '*/ejb/*' in tmp_dir recursive
+     into dist_dir @ 'ecom.jar';
+//{{NOTE}} 'into' puts into archives.
+//{{NOTE}} 'to' puts into a directory or a target file.
+
+// create jar for EJB classes:
+jar = createJar(dist_dir @ 'ejbs.jar');
+copy 'com/*/ejb/*.class' in tmp_dir recursive into jar;
+copy 'META-INF/*' in src_dir @ 'ejb' recursive into jar;
+jar.close();
+//{{NOTE}} Need to open a jar object to do multiple copies.
+</codelist>
+
+</p>
+
+
+</section>
+
+
+<section name=jms>
+</section>
+
+
+<section name=qsend>
+
+<p>The following script sends a text message to a JMS queue named
+"weblogic.examples.jms.exampleQueue" running on a Weblogic server:
+
+<codelist name="QueueSend" caption="QueueSend.judo">
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+      //{{NOTE}} There are other built-in context reteivers, e.g.,
+      //{{NOTE}} sunContext(), websphereContect(), jbossContext(), ...
+qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+qcon = qconFactory.createQueueConnection();
+qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+qsender = qsession.createSender(queue);
+msg = qsession.createTextMessage();
+qcon.start();
+msg.setText('Hello JMS Queue World!');
+qsender.send(msg);
+</codelist>
+
+The code is the same as its Java countpart, only a lot less typing.
+</p>
+
+</section>
+
+
+<section name=qget>
+
+<p>The following script gets and prints out a text message from a JMS queue
+named "weblogic.examples.jms.exampleQueue" running on a Weblogic server:
+
+<codelist name="QueueGet" caption="QueueGet.judo">
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+qcon = qconFactory.createQueueConnection();
+qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+qreceiver = qsession.createReceiver(queue);
+qcon.start();
+msg = qreceiver.receive();
+println 'Received: ', msg.getText();
+</codelist>
+</p>
+
+</section>
+
+
+<section name=jmssub>
+
+<p>The following script subscribes to a JMS topic named
+"weblogic.examples.jms.exampleTopic" running on a Weblogic server and
+prints out text messages received until user types a line of "q" on the keyboard:
+
+<codelist name="TopicSub" caption="TopicSub.judo">
+//{{NOTE}} <J> can extend Java classes/interfaces with "Java extension class".
+//{{NOTE}} (<J> also has its own support of classes.)
+//{{NOTE}} Note the Java method signatures are always public,
+//{{NOTE}} but the method body is <J> code!
+class TextListener extendsjava javax.jms.MessageListener
+{
+  void onMessage(javax.jms.Message msg) {
+    if msg.instanceof('javax.jms.TextMessage') {
+      println 'Got message: ', msg.cast('javax.jms.TextMessage').getText();
+    } else {
+      println 'Got wrong type message: ', msg.getClass().getName();
+    }
+  }
+}
+
+ctx = weblogicContext('t3://localhost:7001', 'weblogic', 'system32');
+tconFactory = ctx.lookup('javax.jms.TopicConnectionFactory');
+tcon = tconFactory.createTopicConnection();
+tsession = tcon.createTopicSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+topic = ctx.lookup('weblogic.examples.jms.exampleTopic');
+tsubscriber = tsession.createSubscriber(topic);
+tlistener = new TextListener;
+tsubscriber.setMessageListener(tlistener);
+tcon.start();
+while {
+  line = readLine();
+  if line == 'q' { break; }
+}
+</codelist>
+</p>
+
+</section>
+
+
+<section name=ssdev>
+
+<p><J> is easy to integrate with Java software. It has an easy-to-use engine API,
+and also supports Bean Scripting Framework (BSF).
+In theory, it can be used in JSPs by setting language to "judoscript", and can easily be extended for
+JSP Expression Language (EL). This may be done in the near future.</p>
+
+<p><J> does have a server-side scripting feature now, called <J> Server Page (JUSP).
+It works almost the same way as JSPs, using special tags like &lt;%> and &lt;%=> to quote scriptlets.
+In the JUSP pages, you can do anything that <J> can do as long as security allows.
+Each page has a number of predefined objects such as <code>request</code>, <code>response</code>,
+<code>session</code>, etc. You must install its servlet, <code>com.judoscript.jusp.JuspServlet</code>,
+in order to use this feature. (This may likely be deprecated in favor of using <J> within standard JSP.)
+</p>
+
+</section>
+
+
+<section name=webqsend>
+
+<p>This example is a simple JUSP page that allows users to type in a message and send to a JMS queue.
+
+<codelist name="WebQueueSend" caption="webqueuesend.jusp">
+&lt;html>
+&lt;head>&lt;title>Message Sender&lt;/title>&lt;/head>
+&lt;body>
+&lt;%
+  txt = request.getParameter('msg');
+  if txt.isNotEmpty() {
+    // send the message to the queue
+    ctx = com.example.util.Util::getInitialContext();
+          //{{NOTE}} Call a static helper method to get the context.
+    qconFactory = ctx.lookup('javax.jms.QueueConnectionFactory');
+    qcon = qconFactory.createQueueConnection();
+    qsession = qcon.createQueueSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE);
+    queue = ctx.lookup('weblogic.examples.jms.exampleQueue');
+    qsender = qsession.createSender(queue);
+    msg = qsession.createTextMessage();
+    qcon.start();
+    msg.setText(txt);
+    qsender.send(msg);
+  }
+%>
+
+&lt;form method=POST>
+&lt;textarea name=msg rows=5 cols=40>&lt;/textarea>&lt;br>
+&lt;input type=submit value="Send">
+&lt;/form>
+&lt;/body>&lt;html>
+</codelist>
+</p>
+
+</section>
+
+
+<section name=mail>
+
+<p>Strictly speaking, spamming is not a feature of J2EE. Just kidding. But it is easy to spam
+with <code>javax.mail</code>, and with <J>, boy, it is almost tempting!
+
+<codelist name="SendMail" caption="SendMail.judo">
+connectMailServer 'mail_server', 'mail_login', 'mail_password';
+
+sendMail
+    from: 'info@judoscript.com'
+      to: 'slee@example.com'
+ subject: 'The software. Thank you!'
+  attach: 'readme.txt, software.zip'
+    body: [[*
+          Dear Mr. Lee,
+
+          Thank you very much for your interest in this software.
+          Attached is a zip file for the software and a readme
+          text file. Follow the instructions therein for
+          installation and using. Enjoy!
+
+          Please visit www.judoscript.com for the latest news
+          and information. Thank you!
+
+          Sincerely,
+          JudoScript
+          *]]
+htmlBody: [[*
+          &lt;html&gt;&lt;body&gt;
+          &lt;p&gt;Dear Mr. &lt;b>Lee&lt;/b>,
+
+          &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+          Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+          text&lt;/u&gt; file. Follow the instructions therein for installation
+          and using. Enjoy!
+
+          &lt;p&gt;Please visit &lt;a href=http://www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+          for the latest news and information. Thank you!
+
+          &lt;p&gt;Sincerely,
+          &lt;p&gt;JudoScript
+          &lt;/body&gt;&lt;/html&gt;
+          *]]
+;
+
+disconnectMailServer();
+</codelist>
+
+All clauses in this <code>sendMail</code> command can take expressions, so
+you can hook up with database, Excel spreadsheet (via ActiveX scripting), XML, ...
+what have you, and do a lot of damage to the network bandwidth.
+(Disclaimer: <J> is not responsible for any spams if it is used for spamming;
+it is the killer that kills, not the gun.)
+</p>
+
+</section>
+
+
+
+<section name=listings>
+<insert name="codelistings">
+</section>
+

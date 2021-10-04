@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_fxn/fxn_default_params.judo:</b></td></tr><tr><td><pre>
+// Default values in a function
+function foo a, b=1 { return a + b; }
+println foo(3);
+
+// Default values in a method
+class MyCls {
+  function foo a, b=alfa { // alfa should be a data member.
+    return a + b;
+  }
+}
+
+a = new MyCls( alfa = 9 );
+a.alfa = 100;
+println a.foo(3);
+</pre></td></tr></table></body></html>

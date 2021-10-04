@@ -1,0 +1,36 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2001-11-12';
+  desc    = 'Simple program to use ordered map.';
+}
+
+println 'Normal map:';
+a = new struct (    a = 1,
+                    b = 1,
+                    g = 1,
+                    d = 1,
+                    e = 1,
+                    f = 1,
+                    g = 1,
+                    h = 1,
+                    i = 1,
+                    j = 1,
+                    k = 1
+                  );
+for x in a.keys() { println x; }
+
+println 'Orderd map:';
+a = new orderedMap( a = 1,
+                    b = 1,
+                    g = 1,
+                    d = 1,
+                    e = 1,
+                    f = 1,
+                    g = 1,
+                    h = 1,
+                    i = 1,
+                    j = 1,
+                    k = 1
+                  );
+for x in a.keys() { println x; }

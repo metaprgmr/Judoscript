@@ -1,0 +1,852 @@
+<doc title="HTTP Fun and HTML Processing"
+ author="James Jianbo Huang"
+ created="October 2001"
+ keywords="Java scripting language, JudoScript, scripting language for Java, HTTP, HTTP requests, proxy server, using proxy server, make proxy server, cookie, load cookie, save cookie, HTTP server, HTML scraping, HTML processing, HTML information retrieval, JUSP, JudoScript Page, httpGet, httpPost, do as html, startServer, acceptHttp, getDateHeader, getAllHeaders, BEFORE, AFTER, TEXT, getUrl, getHost, getPort, getDomain, getPath, getFile, getQuery, getRef, getMethod, getDateHeader, getAllHeaders, getStatusCode, getResponseMsg, getTextInput, getInputStream, getCookies, saveCookies, getServerName, getServerPort, serveFile, serveError, getUrl, getHost, getPort, getDomain, getPath, getFile, getQuery, getRef, getMethod"
+>
+
+<sectiondefs>
+<sectiondef name="http"     caption="Make HTTP Requests">
+<sectiondef name="useproxy" sub="1" caption="Use a Proxy Server">
+<sectiondef name="cookie"   sub="1" caption="Save and Load Cookies">
+<sectiondef name="html"     caption="HTML Document Processing">
+<sectiondef name="server"   caption="Your Own HTTP Server">
+<sectiondef name="proxy"    caption="Hack the Web with Proxy Server">
+<sectiondef name="jusp"     caption="Server-Side Scripting with JUSP">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+<J> is an effective HTTP client and server language. HTTP requests can be
+made to servers with any HTTP headers and content. In particular, cookies
+can be examined, saved and loaded. For HTML pages, <J> has <kw>do..as
+html</kw> event-driven statement that processes the document and treats
+each tag as an event, for which actions can be specified. There are
+special events like <kw>:BEFORE</kw>, <kw>:AFTER</kw> and <kw>:TEXT</kw>.
+<J> is also a HTTP server language because of the <kw>startServer()</kw>
+and <kw>acceptHttp()</kw> system functions. Combining client and server
+capabilities, we get HTTP proxy servers, useful to debug web applications
+and hack the web. The <J> <em>Server Page</em> (JUSP) is another
+server-side scripting technology. JUSP pages are identical to JSP and
+ASP to embed code in the pages. Servlet <kw>com.judoscript.jusp.JuspServlet</kw>
+runs the JUSP pages. It provides a few predefined variables in the code
+and a couple of Java classes as a convenience.
+</abstract>
+</doc>
+
+
+<section name=http>
+
+<p>
+<J> allows you to fully control all aspects of a HTTP request. However,
+if all you need is to read a file off the web, it suffices to call
+<kw>openFile()</kw> or <kw>openTextFile()</kw> with a URL: 
+
+<demo>
+copyStream openFile('http://www.xxxxx.com/collections/cesoir.mp3'),
+           openFile('cesoir.mp3','w');
+</demo>
+
+That's too easy. It is also easy to make more detailed HTTP requests with
+system function <kw>httpGet()</kw> and <kw>httpPost()</kw>. They prepare
+and returns a HTTP object but the server is not connected. This HTTP
+object has general, request and response methods. The general methods
+returns information about this connection:
+
+<gramma>
+<kw>getUrl()</kw> <br>
+<kw>getHost()</kw> <br>
+<kw>getPort()</kw> <br>
+<kw>getDomain()</kw> <br>
+<kw>getPath()</kw> <br>
+<kw>getFile()</kw> <br>
+<kw>getQuery()</kw> <br>
+<kw>getRef()</kw> <br>
+<kw>getMethod()</kw>
+</gramma>
+
+The request methods are for setting HTTP request headers and getting
+the output stream for writing content; if nothing to write, call the
+<code>connect()</code> to explicitly initiate the connection.
+
+<gramma>
+<kw>getTextOutput()</kw> <br>
+<kw>getOutputStream()</kw> <br>
+<kw>connect()</kw> <br>
+<kw>addCookie(</kw><nt>cookie</nt> | <nt>name</nt><kw>,</kw><nt>value</nt><kw>)</kw> <br>
+<kw>loadCookies(</kw><nt>filename</nt><kw>)</kw>
+</gramma>
+
+Why there are no methods for setting headers? HTTP request headers are
+set with the struct member syntax:
+
+<demo>
+h.'Content-Type' = 'text/html';
+h.'Content-Length' = 2840;
+h.Date = date(2001,10,1,14,30,0);
+h.addCookie(cookie);
+</demo>
+
+Notice on the third line that a date value is formated to a HTTP date
+automatically. Likewise, use the same syntax to get response headers
+except for date headers. The following methods are for response:
+
+<gramma>
+<kw>getDateHeader(</kw><nt>header</nt><kw>)</kw> <br>
+<kw>getAllHeaders()</kw> <br>
+<kw>getStatusCode</kw>|<kw>getStatus</kw><kw>()</kw> <br>
+<kw>getResponseMsg</kw>|<kw>getResponseMessage</kw><kw>()</kw> <br>
+<kw>getTextInput()</kw> <br>
+<kw>getInputStream()</kw> <br>
+<kw>getCookies()</kw> <br>
+<kw>saveCookies(</kw><nt>filename</nt><kw>)</kw>
+</gramma>
+
+To see all HTTP headers, for instance, do this:
+
+<codelist name="http_headers" caption="http_headers.judo">
+1: url = 'http://www.yahoo.com';
+2: h = httpGet(url);
+3: for x in h.getHeaders() {
+4:   println x, ': ', h.(x);
+5: }
+</codelist>
+
+For posting, call the HTTP object's <kw>getOutputStream()</kw> to write
+data up to the server. If you can store multiple files (such as music) on
+a web site, a script can handle any number of files, which is extremely
+convenient.
+
+
+
+<section name="useproxy">
+
+<p>
+HTTP requests are internally made by Java classes <kw>java.net.URL</kw>
+and <kw>java.net.URLConnection</kw>. They can use a HTTP proxy server
+to make the network connection. In <J>, simply call the system function
+<kw>setHttpProxy()</kw> with a host and port number to set this proxy
+server setting.
+
+
+<section name="cookie">
+
+<p>
+<J> allows you to intercept cookies set by server and save them to files.
+You can retrieve them any time and send them back to relevant servers in
+the subsequent HTTP requests. The following program displays all the
+cookies set by the server:
+
+<codelist name="show_cookies" caption="show_cookies.judo">
+1: url = 'http://localhost:8080';
+2: h = httpGet(url);
+3: for x in h.getCookies() { println x; }
+</codelist>
+
+The <kw>saveCookies()</kw> saves the cookies to a file; if the file name
+is missing, it defaults to "cookies.txt" in the current directory. The
+same-name cookies will be overwritten, provided the cookie's max-age is
+positive; if not, the cookie will be removed or not set if did not exist.
+The <kw>loadCookies()</kw> reads in the cookies from a file; if the file
+name is missing, it defaults to "cookies.txt" in the current directory.
+Only the cookies that match the domain and path of this request are set
+to the "Cookie" header.
+
+<p>
+To create a new cookie, whether to be sent to the server or set to the
+client (see below), use the system function <kw>cookie()</kw>:
+
+<gramma>
+<kw>cookie(</kw><nt>name</nt>,<nt>value</nt><kw>)</kw>
+</gramma>
+
+<review>
+<question> Can you open a URL like a file? What's the difference?
+<question> The system functions <kw>httpGet()</kw> and <kw>httpPost()</kw>
+           creates a HTTP object; when is the server connection started?
+<question> How to set request headers? How to get response headers? How
+           to get all the response headers?
+<question> How to make HTTP requests through a proxy server?
+<question> What parameters does <kw>addCookie()</kw> method take?
+           How to generate a new cookie?
+<question> How to save cookies to a file for a request? What cookies are
+           not saved?
+<question> When you call <kw>loadCookies()</kw> method of a HTTP object,
+           are all the cookies in the file set to the request? 
+</review>
+
+
+
+<section name="html">
+
+<p>
+The majority of the web is HTML pages and increasing number of
+multimedia files. HTML pages may contain information needed by other
+software. Ultimately web services should prevail with HTTP, XML and
+emerging new technologies; but they are not here yet, and the
+information may not be as affordable and accessible as HTML pages.
+Other times you may want a mini robot to make private collections of
+stuff you are fond of.
+
+<p>
+<J> has a HTML processing engine that treats each tag (including text)
+as an event. Actions can be specified for certain tags. For example,
+the following program prints out all the &lt;a&gt; links:
+
+<demo>
+do url as html {
+&lt;a&gt;: if $_.href { println $_.href; }
+}
+</demo>
+
+The dot command is the shortcut for <kw>println</kw>. The internal
+variable <kw>$_</kw> represents the current tag. The tag's attributes
+are accessed as its data members, which are case insensitive. A tag can
+be closed as in XML; if so, <kw>$_.isClosed()</kw> returns <kw>true</kw>;
+the corresponding end-tag event is <em>not</em> fired. Text in the page
+is represented by a special tag, <kw>:TEXT</kw>. Other special tags include
+<kw>:BEFORE</kw>, <kw>:AFTER</kw>, <kw>&lt;?&gt;</kw>, <kw>&lt;!&gt;</kw>,
+<kw>&lt;!--&gt;</kw> and &lt;&gt;; the last one matches any unhandled
+regular tags. The following reproduces a HTML page:
+
+<demo>
+do url as html {
+:TEXT: flush $_;
+&lt;&gt;:    flush $_;
+&lt;!&gt;:   flush $_;
+&lt;?&gt;:   flush $_;
+}
+</demo>
+
+The source can be a HTTP URL, a file name, or any input stream.
+Note that <kw>&lt;!&gt;</kw> includes <kw>&lt;!--&gt;</kw> only if
+the latter does not have a handler.
+
+<p>
+Next is a practical program that retrieves quotes data from Yahoo
+Financial web site. It implements a state machine to get to the
+right information, based on a study of the page structure that
+the information we need is in a HTML table like this:
+
+<a href=yahoo_quotes.gif><img src=yahoo_quotes_1.gif
+ border=0 alt="Click to see big version"></a>
+<br>
+
+What it does is a) construct a URL containing all the symbols
+(lines 43 through 45), b) get the page back, and c) scrape it for
+interested pieces (lines 49 through 73). The <kw>abort</kw>
+statement (line 65) aborts this HTML statement.
+
+<codelist name="get_quotes" caption="get_quotes.judo">
+ 1: /*  Usage: java judo get_quotes.judo sym1 sym2 ....
+ 2:  *
+ 3:  *  This script scapes quotes date from a Yahoo Financial page, whose
+ 4:  *  center piece is a HTML table like that in 'yahoo_quotes.html'.
+ 5:  *  A state machine is used to retrieve pieces of information:
+ 6:  *
+ 7:  *   ---------- ------------------ -------- ------
+ 8:  *   From State       Input        To State Output
+ 9:  *   ---------- ------------------ -------- ------
+10:  *       0            &lt;th&gt;             1
+11:  *       1       :TEXT:"Last Trade"    2
+12:  *       2            &lt;tr&gt;             3
+13:  *       3            &lt;td&gt;             4
+14:  *       4      &lt;a href="/q?s=.."&gt;     5
+15:  *       5      (text > 10 char's)   abort
+16:  *       5           :TEXT             6    symbol
+17:  *       6            &lt;td&gt;             7
+18:  *       7           :TEXT             8    time
+19:  *       8            &lt;td&gt;             9
+20:  *       9           :TEXT            10    quote
+21:  *      10            &lt;td&gt;            11
+22:  *      11            &lt;td&gt;            12
+23:  *      12           :TEXT            13    delta
+24:  *      13            &lt;td&gt;            14
+25:  *      14           :TEXT             2    volumn
+26:  *   ---------- ------------------ -------- ------
+27:  *
+28:  *  Note: this state machine is based on such a Yahoo page; if Yahoo
+29:  *  changes the structure of the page, this state machine may very
+30:  *  well become invalid and need to be updated.
+31:  */
+32: 
+33: if #args.length==0 {
+34:   println [[*
+35:      Usage:  java judo (*#prog*) "^DJI" "^IXIC" ibm msft csco jdsu
+36:      Symbol names should comply with "http://quote.yahoo.com",
+37:      especially the standard indices.
+38:   *]];
+39:   exit 0;
+40: }
+41: 
+42: // construct the URL --
+43: url = 'http://quote.yahoo.com/q?s=';
+44: for sym in #args { url @= sym @ '+'; }
+45: url @= '&amp;d=v1';
+46: println url;
+47: 
+48: // get the quotes --
+49: do url as html
+50: {
+51:   :BEFORE: state = 0;
+52:   &lt;th&gt;:   if state == 0 { ++state; }
+53:   &lt;tr&gt;:   if state == 2 { ++state; }
+54:   &lt;td&gt;:
+55:           switch state {
+56:           case 3: case 6: case 8: case 10: case 11: case 13:
+57:              ++state;
+58:           }
+59:   &lt;a&gt;:    if state == 4 {
+60:             if $_.href.startsWith("/q?s=") { ++state; }
+61:           }
+62:   :TEXT:  switch state {
+63:           case 1:  if $_ == "Last Trade" { ++state; }
+64:                    break;
+65:           case 5:  if $_.length() &gt; 10 { abort; }
+66:                    flush $_:8;   ++state; break; // symbol
+67:           case 7:  flush $_:8;   ++state; break; // date/time
+68:           case 9:  flush $_:6.2; ++state; break; // price
+69:           case 12: flush $_:&gt;9;  ++state; break; // delta%
+70:           case 14: println $_:&gt;13; state=2; break; // volumn
+71:           }
+72: 
+73: } // end of do as html.
+</codelist>
+
+<J> does not really know or care about HTML tags -- it treats any tags
+equally. In processing the documentation for <J> itself, I used many
+custom tags that make the documents look terse and clean. The documents
+are processed by programs to yield HTML. In fact, sometimes the code
+can cohabit with the document, using the <em>local data</em> feature:
+
+<codelist name="body" caption="body.htmx">
+ 1: do $$local as html
+ 2: {
+ 3: :BEFORE: html = openTextFile(#prog.replace(".htmx",".html"),"w");
+ 4: &lt;doc&gt;:  println &lt;html&gt; [[*
+ 5:           &lt;html&gt;&lt;head&gt;&lt;title&gt;$_.title&lt;/title&gt;&lt;/html&gt;&lt;body&gt;
+ 6:           &lt;center&gt;&lt;table width=650&gt;&lt;tr&gt;&lt;td&gt; &lt;h1&gt;(* $_.title *)&lt;/h1&gt;
+ 7:         *]];
+ 8: :AFTER: println &lt;html&gt; '&lt;hr&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt; &lt;/center&gt;&lt;/body&gt;&lt;/html&gt;';
+ 9:         html.close();
+10: :TEXT:  print &lt;html&gt; $_;
+11: &lt;&gt;:     print &lt;html&gt; $_;
+12: &lt;?&gt;:    print &lt;html&gt; $_;
+13: &lt;!&gt;:    print &lt;html&gt; $_;
+14: 
+15: &lt;quote&gt;:  print &lt;html&gt; '&lt;blockquote&gt;&lt;font size=-1&gt;';
+16: &lt;/quote&gt;: print &lt;html&gt; '&lt;/font&gt;&lt;/blockquote&gt;';
+17: }
+18: 
+19: EndScript ------------------------------------------------
+20: 
+21: &lt;doc title="Body Systems"&gt;
+22: &lt;p&gt;
+23: The body can be thought of as a number of systems:
+24: &lt;ul&gt;
+25: &lt;li&gt; skeleon
+26: &lt;li&gt; musculature
+27: &lt;li&gt; cardiovascular system
+28: &lt;li&gt; digestive system
+29: &lt;li&gt; excretory system
+30: &lt;li&gt; immune system
+31: &lt;li&gt; respiratory system
+32: &lt;li&gt; reproductive system
+33: &lt;/ul&gt;
+34: &lt;quote&gt;
+35: "The digestive system breaks down food and turns
+36: it into the right chemicals for the body to use."
+37: &lt;/quote&gt;
+</codelist>
+
+When the document is modified, run
+
+<demo>
+%java judo body.htmx
+</demo>
+
+and the HTML page is generated. On line 1, the <kw>$$local</kw> is an
+input stream that contains the content below the line of <kw>EndScript</kw>
+on line 19. On line 3, before the processing begin, a text file is
+opened with the same name but extension of ".html"; it is closed when
+the document is processed (line 9). The header of the page is printed
+when processing the tag "&lt;doc&gt;" (lines 5 and 6), and footer after
+processing (line 8). For the rest, it basically prints out the content
+as-is (lines 10 through 13). This serves as a server-side style support;
+but you can do much more than just changing styles. For instance, for
+this article, all the captions are centrally managed, and sample code
+were collected to produce the final code listing.
+
+<review>
+<question> Can you specify a file name in a HTML statement?
+<question> Write a program to collect all image URLs in a HTML file.
+<question> Write a mini robot that downloads a page along with all the
+           enclosed images from the same site.
+<question> What are the special events BEFOER and AFTER in a HTML statement?
+<question> What is the difference and relationship between <kw>httpGet()</kw>
+           system function and <kw>do..as html</kw> statement?
+<question> Many HTML pages contain many characters that are useless for
+           page rendering, a senseless waste of network bandwidth. Write
+           a program to clean up unwanted whitespaces in the TEXT handler.
+           (Hint: take care of &lt;pre&gt; tags and string literals in
+           script source code.)
+<question> Write a program to get rid of all the HTML comments except for
+           those between &lt;script&gt; and &lt;/script&gt; tags.
+<question> What is <kw>$$local</kw>?
+           What is the outut of the following program?
+<demo>
+sum = 0;
+while (line = $$local.readLine()) != eof {
+  println line : > 20;
+  sum += line;
+}
+println '-----------' : > 20;
+println sum : > 20;
+
+EndScript ---------------------------------
+
+1345
+98789797
+344
+</demo>
+</review>
+
+
+
+<section name="server">
+
+<p>
+Have you ever written a web server? CGIs or servlets do not count because
+they are web server extensions. With <J>, writing a server is surprisingly simple.
+
+<codelist name="mini_server" caption="mini_server.judo">
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   start thread miniHandler(acceptHttp(ss));
+ 4: }
+ 5:
+ 6: thread miniHandler a {
+ 7:   a.'Content-Type' = 'text/html';
+ 8:   os = a.getTextOutput();
+ 9:   println &lt;os&gt; '&lt;html&gt;&lt;body&gt;This is all you get.&lt;/body&gt;&lt;/html&gt;';
+l0:   os.close();
+11: }
+</codelist>
+
+On line 1, the system function <kw>startServer()</kw> takes a port number
+and opens a server socket. Anything can come in; it depends on handlers
+to decide which protocol(s) to support. On line 3, another system call
+<kw>acceptHttp()</kw> (waits and) accepts client connections on the server
+socket, and returns a HTTP service object, which is passed as a parameter
+to a newly created thread that handles this HTTP request. How it is
+handled is up to the thread code. In our case, lines 6 through 11, it
+always prints out a HTML page with message "This is all you get.".
+
+<p>
+The HTTP service object is very similar to the HTTP client object. It has
+the same struct member access syntax to get headers and these methods for
+client requests:
+
+<gramma>
+<kw>getServerName()</kw> <br>
+<kw>getServerPort()</kw> <br>
+<kw>serveFile(</kw>[<nt>doc_root</nt>]<kw>)</kw> <br>
+<kw>serveError(</kw><nt>status</nt><kw>)</kw> <br>
+<kw>getUrl()</kw> <br>
+<kw>getHost()</kw> <br>
+<kw>getPort()</kw> <br>
+<kw>getDomain()</kw> <br>
+<kw>getPath()</kw> <br>
+<kw>getFile()</kw> <br>
+<kw>getQuery()</kw> <br>
+<kw>getRef()</kw> <br>
+<kw>getMethod()</kw> <br>
+<kw>getDateHeader(</kw><nt>header</nt><kw>)</kw> <br>
+<kw>getAllHeaders()</kw> <br>
+<kw>getTextInput()</kw> <br>
+<kw>getInputStream()</kw> <br>
+<kw>getCookies()</kw> <br>
+</gramma>
+
+It also has struct set member syntax to set headers and these methods
+for sending response to client:
+
+<gramma>
+<kw>getTextOutput()</kw> <br>
+<kw>getOutputStream()</kw> <br>
+<kw>addCookie(</kw><nt>cookie</nt> | <nt>name</nt><kw>,</kw><nt>value</nt><kw>)</kw> <br>
+</gramma>
+
+The following program does an "echo" on everything the client sends,
+which can serve as a reference and template for other server handlers.
+
+<codelist name="snooper" caption="snooper.judo">
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   start thread snooper(acceptHttp(ss));
+ 4: }
+ 5: 
+ 6: thread snooper a {
+ 7:   path = a.getPath();
+ 8:   if path.indexOf('snoop') &lt; 0 {
+ 9:     a.serveFile();
+10:     return;
+11:   }
+12:   a.'Content-Type' = 'text/html';
+13:   os = a.getTextOutput();
+14:   flush &lt;os&gt; [[*
+15:   &lt;html&gt;&lt;body&gt;
+16:   &lt;h1&gt;Snooper Server&lt;/h1&gt;
+17:   &lt;table&gt;
+18:   &lt;tr&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Request URI Parts&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+19:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Name&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getServerName() *)&lt;/td&gt;&lt;/tr&gt;
+20:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Port&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getServerPort() *)&lt;/td&gt;&lt;/tr&gt;
+21:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;URI&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getUrl() *)&lt;/td&gt;&lt;/tr&gt;
+22:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Host&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getHost() *)&lt;/td&gt;&lt;/tr&gt;
+23:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Port&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getPort() *)&lt;/td&gt;&lt;/tr&gt;
+24:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Domain&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getDomain() *)&lt;/td&gt;&lt;/tr&gt;
+25:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Path&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getPath() *)&lt;/td&gt;&lt;/tr&gt;
+26:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;File&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getFile() *)&lt;/td&gt;&lt;/tr&gt;
+27:   &lt;tr&gt;&lt;td&gt;&lt;b&gt;Query String&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getQuery() *)&lt;/td&gt;&lt;/tr&gt;
+28:     &lt;tr&gt;&lt;td&gt;&lt;b&gt;Ref&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.getRef() *)&lt;/td&gt;&lt;/tr&gt;
+29:   &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+30:   &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;em&gt;Request Headers&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+31:   *]];
+32:   for x in a.getAllHeaders() {
+33:     flush &lt;os&gt; [[*
+34:       &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;(* x *)&lt;/b&gt;&lt;/td&gt;
+35:       &lt;td&gt;&lt;/td&gt;&lt;td&gt;(* a.(x) *)&lt;/td&gt;&lt;/tr&gt;
+36:     *]];
+37:   }
+38:   flush &lt;os&gt; [[*
+39:     &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;
+40:     &lt;td&gt;&lt;em&gt;Cookies&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+41:   *]];
+42:   for x in a.getCookies() {
+43:     flush &lt;os&gt; [[*
+44:       &lt;tr&gt;&lt;td&gt;&lt;b&gt;(* x.getName() *)&lt;/b&gt;&lt;/td&gt;
+45:       &lt;td&gt;&lt;/td&gt;&lt;td&gt;(* x.getValue() *)&lt;/td&gt;&lt;/tr&gt;
+46:     *]];
+47:   }
+48: 
+49:   flush &lt;os&gt; '&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;';
+50:   os.close();
+51: }
+</codelist>
+
+In the while loop on line 3, a thread <code>snooper()</code>, is started
+for each connection. The bulk of the program prints out HTML code in a
+here-doc string, with embedded expressions for various values. Don't
+worry about performance, because the <kw>print</kw> and <kw>flush</kw>
+statements are smart enough to directly print out each value in a string
+concatenation expression.
+
+<p>
+Lines 8 through 11 checks the URL for the word "snoop"; if found, do
+snooping. Otherwise, treat it as a file request and tries to serve it
+with method <kw>serveFile()</kw>. This is a fairly common pattern for
+implementation your own server. The <kw>serveFile()</kw> uses a system
+mime-type map, which is accessible via the system function
+<kw>getMimeTypeMap()</kw>, a struct that maps file extensions to
+mime-types. You may add more to it. If a doc-root directory is not
+specified, it uses the current directory. Similar to <kw>serveFile()</kw>
+method is <kw>serveError()</kw>, which taks a response status code;
+default is 500.
+
+<review>
+<question> Using <kw>startServer()</kw>, how to implement a server that
+           runs the protocol you defined yesterday?
+<question> Using the HTTP service object's <kw>serveFile()</kw> methods,
+           implement a simplest multi-threaded web server.
+<question> Then extend the server to check URLs that starts with "/ext/";
+           if found, based on the rest of the path, call a function to
+           handle the request. Try to formalize this as much as possible;
+           think about servlet API or CGI.
+</review>
+
+
+
+<section name="proxy">
+
+<p>
+We can create a HTTP server; we can create HTTP clients. Combining these
+two, we get a HTTP proxy server. Proxy servers are typically used for
+network security reasons, or for machines running on local area network
+to share a single internet connection. You might want to create a proxy
+server for this purpose, but this is probably unlikely. The reason we are
+interested in proxies is to monitor the content going through the wire
+between the client (a web browser) and servers.
+
+<p>
+HTTP proxy servers handle HTTP requests natively, that is, they
+understands HTTP protocols and do a lot more than just passing things
+through. HTTP proxy servers typically handles other protocols by passing
+them through. Suppose a browser is set to use a HTTP proxy server for
+all its internet requests; when it is making an FTP or HTTPS request, it
+actually sends a HTTP request to the proxy server with an FTP or HTTPS URI.
+Seeing a protocol it does not handle, the proxy sets out to do pass-through.
+
+<p>
+We do not want to do too much with proxies such as caching, persistent
+connection, etc. All we want is to see what goes across the wire.
+Though sounds simple, it may be invaluable in debugging web applications
+and hacking web browsers and servers.
+
+<codelist name="proxy" caption="proxy.judo">
+ 1: ss = startServer(8088);
+ 2: while {
+ 3:   relay(acceptHttp(ss)); // single-thread
+ 4: }
+ 5:
+ 6: function relay c {
+ 7:   // Connect to server; browser should send absolute URL.
+ 8:   url = c.getUrl();
+ 9:   doPost = c.getMethod().equalsIgnoreCase('post');
+10:   println '&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ', url, ' &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;';
+11:   if doPost {
+12:     s = httpPost(url);
+13:   } else {
+14:     s = httpGet(url);
+15:   }
+16:
+17:   // pass all client headers and content to server
+18:   for x in c.getAllHeaders() {
+19:     s.(x) = c.(x);
+20:     println x, ': ', c.(x);
+21:   }
+22:   if doPost {
+23:     copyStreams c.getInputStream(), s.getOutputStream();
+24:   }
+25:
+26:   // pass all server headers and content to client
+27:   println '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; ', url, ' &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;';
+28:   for x in s.getAllHeaders() {
+29:     c.(x) = s.(x);
+30:     println x, ': ', s.(x);
+31:   }
+32:   copyStreams s.getInputStream(), c.getOutputStream();
+33:
+34: catch:
+35:   println &lt;err&gt; '[', $_.name, '] ', $_.message;
+36: finally:
+37:   println; // separate requests.
+38: }
+</codelist>
+
+Lines accepts a client request, and calls function <code>relay()</code>.
+It is better to call a handler function than start a thread, because
+we want to see serialized output for consecutive requests. Line 8 obtains
+the request URL, and makes its own request to the server on behalf of the
+client (lines 12 and 14). Older browsers may send a relative URI and use
+the "Host" header to indicate which server; we don't care. Then it relay
+headers and content from the client to the server (lines 17 through 24)
+and vice versa (lines 26 through 32). That's all it does. Open your browser,
+click the network settings for the browser and set it to use a HTTP proxy
+server at localhost:8080 and access some web sites. The following is the
+output for an Internet Explorer 5 visite of a server run locally; the output
+is slightly edited to fit the page.
+
+<demo>
+>>>>>>>> http://localhost:8080/ >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg,
+        application/vnd.ms-excel, application/msword, */*
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=2890
+proxy-connection: Keep-Alive
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+<<<<<<<< http://localhost:8080/ <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:07 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Set-Cookie: generic=mtoeX2jZb;Expires=Tue, 28-Oct-2003 01:02:07 GMT;Path=/
+Content-Type: text/html
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 2890
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/mystyles.css >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=1600
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/mystyles.css <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Set-Cookie: generic=mtoeX2jZb;Expires=Tue, 28-Oct-2003 01:02:09 GMT;Path=/
+Content-Type: text/css
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 1600
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/judoscript.gif >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=3298
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/judoscript.gif <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Content-Type: image/gif
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 3298
+Content-Language: en
+
+>>>>>>>> http://localhost:8080/bo2.gif >>>>>>>>
+accept-language: en-us
+cookie: generic=mtoeX2jZb
+accept: */*
+proxy-connection: Keep-Alive
+host: localhost:8080
+if-modified-since: Fri, 26 Oct 2001 04:17:08 GMT; length=4202
+user-agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+referer: http://localhost:8080/
+<<<<<<<< http://localhost:8080/bo2.gif <<<<<<<<
+Date: Sun, 28 Oct 2001 01:02:09 GMT
+Status: 200
+Servlet-Engine: Tomcat Web Server/3.1 (JSP 1.1; Servlet 2.2; Java 1.3.0;
+                Windows 2000 5.0 x86; java.vendor=Sun Microsystems Inc.)
+Content-Type: image/gif
+Last-Modified: Fri, 26 Oct 2001 04:17:08 GMT
+Content-Length: 4202
+Content-Language: en
+
+</demo>
+
+<review>
+<question> If a LAN uses IRONGATE:8024 as a gateway to internet. How
+           to modify <codelist href=proxy> to make it work?
+<question> Modify <codelist href=proxy> so that any HTML page is saved
+           to directory "c:\fbi" if it contains the word "anthrax".
+</review>
+
+
+
+<section name="jusp">
+
+<p>
+<J> <em>Server Page</em> technology is <J>'s server-side scripting.
+It's syntax is identical to JSP or ASP, except it does not have an
+XML counterpart. To summarize, inside a JUSP page, <kw>&lt;%</kw> and
+<kw>%&gt;</kw> quotes <J> statements and <kw>&lt;%=</kw> and <kw>%&gt;</kw>
+quotes expressions. Anything outside these are treated as HTML text.
+In the code, these variables are available:
+
+<demo>
+servlet
+request
+response
+session
+</demo>
+
+and these Java classes are predefined:
+
+<demo>
+const #Cookie   = javaclass javax.servlet.http.Cookie;
+const #HttpUtil = javaclass javax.servlet.http.HttpUtil;
+</demo>
+
+<codelist name="first" caption="first.jusp">
+ 1: &lt;%
+ 2:    response.setContentType('text/html');
+ 3:    a = 'The Very First Time!';
+ 4:    b = 'This is the very first test of JUSP!';
+ 5: %&gt;
+ 6: &lt;HTML&gt;
+ 7: &lt;HEAD&gt; &lt;%=a%&gt; &lt;/HEAD&gt;
+ 8: &lt;BODY&gt;
+ 9:   &lt;H1&gt;&lt;%=a%&gt;&lt;/H1&gt;
+10:   &lt;%=b%&gt;
+11: &lt;/BODY&gt;&lt;/HTML&gt;
+</codelist>
+
+In order to use JUSP, you need to configure a servlet of class
+<kw>com.judoscript.jusp.JuspServlet</kw> onto your servlet-enabled web
+server. This server takes an init parameter <kw>juspRoot</kw> to
+tell the servlet where to look for JUSP pages.
+
+<review>
+<question> What are the differences and commonalities between JUSP and JSP?
+<question> Which variables can you use in a JUSP page?
+           Which Java classes are predefined as constants?
+<question> Create a JUSP page that sets a session cookie.
+</review>
+
+
+
+<section name=summary>
+
+<p>
+<J> nicely supports various aspects of the web technologies, from
+clients to servers and in between. They can be combined to create
+powerful web tools, or used as communication agents such as sharing
+resources or mini messaging systems.
+
+<p>
+To get documents from the web, simply call <kw>openFile()</kw> or
+<kw>openTextFile()</kw> with a HTTP URL. For more detailed web
+interactions, such as sites that use cookis to maintain sessions, use
+<kw>httpGet()</kw> or <kw>httpPost()</kw>, which return a HTTP object
+that allows to manipulate HTTP headers and contents for both
+directions. In particular, cookies can be examined, saved (to file)
+and loaded and sent back to the sites.
+
+<p>
+HTML pages may contain useful information that programs want to extract.
+Using the <kw>do..as html</kw> statement, you can easily specify actions
+for each tag (including text). The <kw>$_</kw> variable contains the
+current tag, its attributes are accessed as its data members. Some
+special tags represent special tags and events, such as <kw>:BEFORE</kw>,
+<kw>AFTER</kw>, <kw>&lt;!&gt;</kw> and <kw>&lt;?&gt;</kw>. Unmatched
+"normal" tags are collectively represented by <kw>&lt;&gt;</kw>.
+
+<p>
+To create a HTTP server in <J>, call <kw>startServer()</kw> to start a
+server socket, then repeatedly call <kw>acceptHttp()</kw> to accept user
+connections, turn that socket into HTTP service objects and pass them
+to a handler. The handler is normally a thread but can also be a
+function, so that the server is single-threaded. The HTTP service object
+is in many ways similar to the HTTP object but the role is reversed.
+The handler can call helper functions, <kw>serveFile()</kw> and
+<kw>serveError()</kw>. The difference between such a server and Apache
+or Tomcat is, it does not have rigorous configuration to support servlet,
+CGI, ... Your handler function or thread controls everything.
+
+<p>
+By combining a HTTP client and server, a proxy server is born. It may
+be extremely helpful for, say, monitoring what is going on across the
+wire. To do so, create a single-thread server that takes client
+connections and relay everything between the server and client; modify
+your brower's proxy setting to point to this little one.
+
+<p>
+The <J> <em>server page</em> (JUSP) technology allows you to develop
+web sites with your favorate language, i.e., <J>. The page structure is
+identical to JSP or ASP that code and expressions can be embedded in
+the pages. Servlet <kw>com.judoscript.jusp.JuspServlet</kw> handles the pages,
+and establishes these variables for the code in the page:
+<kw>servlet</kw>, <kw>request</kw> and <kw>response</kw>. The
+following Java classes are predefined for your convenience:
+<kw>#Cookie</kw> for <kw>javax.servlet.http.Cookie</kw> and
+<kw>#HttpUtil</kw> for <kw>javax.servlet.http.HttpUtil</kw>.
+
+
+
+<section name=listings>
+
+<insert name="codelistings">
+

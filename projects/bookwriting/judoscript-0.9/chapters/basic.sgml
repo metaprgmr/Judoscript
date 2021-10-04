@@ -1,0 +1,298 @@
+<synopsis>
+This chapter introduces the most elementary parts of <J> as a general-purpose programming language, including its lexical structure, variables and constants, start-up environment and environment interfaction, including sub-scripts, etc.
+</synopsis>
+
+<p><J> is a free-form, case-sensitive, block-structured language. Whitespaces and line breaks are ignored except for within string literals. Statements are ended by semicolons (<code>;</code>). Multiple statements and any language constructs can be on the same line, although style-wise this may not be desirable most of the time.</p>
+
+<p>Most language entities are case-sensitive. There are a few situations where names can be case-insensitive; one example is SQL statements and types, as SQL is a case-insensitive language and is only natural to ignore the case.</p>
+
+<p>The basic structure of <J> language is block-based, just like Java, C or C++. A pair of curly braces (<code>{ }</code>) delimits a block; each block defines a scope. A block can exist by its own, or it can be an integral part of a statement (such as <code>if</code>, <code>while</code>, etc.) or a construct (such as a class body). Blocks, like statements, can be enclosed in other blocks. Blocks may be of different semantic meanings, depending on their usages. For instance, a class body means quite differently to a function body or a SGML statement block, even though syntactically they are all blocks.</p>
+
+<!--===============================================================-->
+<section1 title="Lexical Structure" id="lex" status="green">
+
+<!------------------------------------->
+<section2 title="Identifiers, Variable and Constants" id="iden" status="green">
+
+<p><J> identifiers are used for many purposes, including names for variables, functions, threads, user-defined classes, and labels. Letters, digits, underscore (<code>_</code>) and dollar sign (<code>$</code>) are legitimate constituents of <J> identifiers; identifiers can start with letters, dollar signs, underscores but not digits. Identifiers starting with <code>$$</code> are reserved for <J> internal variables, which can be accessed but can not be assigned. The following are examples of legitimate identifiers:</p>
+
+<asis>
+Hello
+$likeperl
+basic$1$2$3
+_priv
+_1
+</asis>
+
+<p>The following are examples illegal attempts for identifiers:</p>
+
+<asis>
+1st
+reg-expr
+.bashrc
+</asis>
+
+<p>Constant names starts with a pound sign (<code>#</code>); the rest is the same as variable names. For using constants, see <ref id="const"/>.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Reserved Words" id="keywords" status="red">
+
+<todo desc="list all reserved words">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Comments" id="comment">
+
+<p><J> supports as many as five formats of comments. Four of them are general comment, and one is only valid in SQL statements.</p>
+
+<p><title3>Java-like comments</title3>The two most commonly used comments are the same as those of Java or C++, i.e., multi-line comment are enclosed between <code>/* */</code>, and anything following <code>//</code> up to the end of line is comment. Here is some examples.</p>
+
+<asis>
+/*
+   This is a multi-line comment.
+   This is a multi-line comment.
+   This is a multi-line comment.
+*/
+
+// this is a single line comment.
+</asis>
+
+<p><title3>Comment for disabling code</title3>The third form of comment in <J> is <code>/? ?/</code>. This is similar to <code>/* */</code>; the reason for this format is to disable a large chunk of code. For instance,</p>
+
+<asis>
+/? --- DISABLE THIS CHUNK OF THE CODE FOR NOW.
+  if a != 'init' { // for this condition
+    /*
+     * Some code comment
+     */
+    do_something(a);
+  }
+--- ?/
+</asis>
+
+<p>The outer comment block <code>/? ?/</code> "hides" everything within, including other comments such as <code>/* */</code>. In fact, an outer block of <code>/* */</code> can also hide <code>/? ?/</code>; by convention, <code>/* */</code> is more for regular comments, and <code>/? ?/</code> is for disabling code.</p>
+
+<p><title3>Unix auto-run comment</title3>In most Unix shells, files that start with <code>#!</code> can be run automatically by the program specified on that line (and, of course, the file mode must be set to executable.) <J> supports the same mechanism with the special single-line comment, <code>#!</code>:</p>
+
+<asis>
+#! /usr/bin/env judo
+</asis>
+
+<p>We will discusss this topic specifically in section <ref id="running:unix"/>.</p>
+
+<p><title3>SQL comment</title3>Scripts of many RDBMSs support single-line comment that starts with <code>--</code>. In <J>, within SQL statements, this format of comment is also supported. This makes SQL statements in <J> appear even closer to the native SQL scripts, and is also important to run native SQL scripts verbatim (in many situations.) The following is a couple of examples:</p>
+
+<asis>
+executeSQL: // individual SQL
+  UPDATE emp SET first_name='James'
+  WHERE emp_no=100         -- Employee #100.
+;
+
+executeSQL { // group SQLs
+  /*
+   * All other types of comments are also valid.
+   */
+
+  UPDATE emp SET first_name='James'
+  WHERE emp_no=100;        -- Employee #100.
+
+  UPDATE emp SET first_name='Jim'
+  WHERE emp_no=101;        -- Employee #101.
+}
+</asis>
+
+<p>Note that, for individual SQL statements, the <code>--</code> comment must appear before the ending semicolon (<code>;</code>); for group SQL statements, comments can appear anywhere within <code>{ }</code>. Within SQL statements, other forms of comments are also legitimate.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Variables and Scopes" id="var" status="green">
+
+<p><J> variables are not typed; the values held in <J> variables, though, are typed. This is called <i>dynamic typing</i>. Anywhere in the program, the value of a variable is assumed known, so that corresponding attributes (properties and methods) can be accessed. This is the nature of most scripting languages. The benefit is simple and easy to use, the cost is uncertainty. Parameters in functions and methods are also variables. <j1note>variable static typing will be added; dynamic typing will still stay.</j1note></p>
+
+<p>Variable names can be any legitimate identifiers. Variable names can start with a dollar sign (<code>$</code>). Names starting with a double dollar sign (<code>$$</code>) are reserved for <J> internal variables, as discussed below.</p>
+
+<p><title3>Variable scopes</title3>Variables have scopes, which is roughly equivalent to certain blocks delimited by <code>{</code> and <code>}</code>. One scope may enclose other scopes, where the outer ones are the parents of the enclosed scopes. A variable resides in one scope, and can be accessed by the enclosed scopes. If a same-name variable exists in the enclosed scope, the one in the parent scope is shield and not accessible.</p>
+
+<p>Compound statements such as <code>for</code> and <code>while</code> loops have a mandatory body and hence create new scopes. These are discussed in more details later.</p>
+
+<p>Two <i>big exceptions</i> are the <code>if/elif/else</code> and <code>switch/case/default</code> statements! These two statements have blocks but do not create new scopes. This is because they are simple branching statements.</p>
+
+<p>When a variable is assigned a value, <J> tries to locate the variable starting from the current scope; if not found, it looks in the parent scope and so on, until either it is either found or a <i>terminal</i> scope is reached, discussed blow. If that variable is not located, a local variable with that name will be created in the current scope. To explicitly create a local variable, so declare a variable with <code>var</code>, as demonstrated with this example:</p>
+
+<asis>
+{
+  a = 9;  // a variable here.
+  {
+    println a; // result: 9
+
+    var a = 5;
+
+    println a; // result: 5
+  }
+}
+</asis>
+
+<p><title3>Terminal scopes</title3>A terminal scope is one of the following: the <i>global scope</i>, a <i>function or thread scope</i>, and a <i>user-defined class scope</i>.</p>
+
+<p>When a program starts, it is in its global scope. A global scope is a terminal scope. Variables in the global scope can be accessed explicitly via the <code>::</code> decorator for the variable name, demonstrated below:</p>
+
+<asis>
+a = 9; // a global variable
+{
+  println a; // result: 9
+
+  var a = 5;
+  println a; // result: 5
+
+  println ::a; // result: 9
+}
+</asis>
+
+<p>This <code>::</code> global variable access decorator can be used anywhere, including within function, method and thread bodies.</p>
+
+<p>Functions and threads in <J> are defined very similarly, although their usages are totally different. A function or thread scope is a terminal scope. This will be discussed in detail in <ref id="flow:fxn"/> and chapter <ref id="thread:"/>.</p>
+
+<p>User-defined classes can have methods, which are functions attached to an object of that class. Method scopes, unlike non-method functions, are not terminal scope; they have a parent scope, the class scope, which is a terminal. This will be discussed more in chapter <ref id="oop:"/>.</p>
+
+<p><title3>The special variable <code>$_</code></title3>This is a variable that is used in many situations by <J>, when a result is expected but no explicit variable reference is given. Such <code>$_</code> variables are always in the local scope (variable scope is discussed later). For instance, in JDBC scripting, <code>executeQuery</code>, <code>executeUpdate</code> and <code>executeSQL</code> can optionally take a variable name; if no variable name is supplied, <code>$_</code> will be used. To be safe, you should try to specify a variable explicitly rather than use <code>$_</code>. In other cases, such as the file system list command, where you don't have a chance to specify a different variable name, try to assign <code>$_</code> to a variable before going too far.</p>
+
+<p><title3>Other special variables</title3><J> has defined a few special variables, like the global variable <code>$$con</code> that holds the default database connection and <code>$$args</code> in a function that is an array that holds all the passed-in parameters. These variables are generally read-only by the application code.</p>
+
+<p><title3>Dynamic variables</title3>In <J>, variables can be created programmatically through two system functions, <code>setVariable()</code> and <code>convertToVariables()</code>. The <code>setVariable()</code> function takes a name and a value, and optionally can take a boolean flag indicating whether the variable should be created locally; if not specified or is <code>false</code>, the variable is set or created according to the usual rule for variable assignment. The <code>convertToVariables()</code> function convers values stored in an <code>Object</code> into variables, using the same rules for <code>setVariable()</code>. Note that the names must be legitimate variable names; otherwise they are simply ignored. The following example shows how this can be done:</p>
+
+<codelist name="dyn_vars.judo" id="dyn_vars.judo">
+// Dynamically set one variable
+setVariable('xyz', 5);
+
+// Dynamically set a number of variables
+a = { x = 'x as set in Object',
+      y = 9,
+      '09898aa' = "this won't be a variable."
+    };
+convertToVariables(a);
+
+println 'xyz = ', xyz; // result: 5
+println 'x = ', x;     // result: x as set in Object
+println 'y = ', y;     // result: 9
+</codelist>
+
+</section1><!--=====================================================-->
+
+<p>The <code>{ }</code> declares a literal value for a new <code>Object</code>. In that object, <code>a</code>, there are three keys; the last one is not a valid variable name and hence not accessible in the program once the keys and values are converted to be variables.</p>
+
+<!--===============================================================-->
+<section1 title="Constants" id="const" status="green">
+
+<p>Constants are defined with the <code>const</code> decorator, and once a constant is defined, it can not be reassigned. Constants always have global scoping.</p>
+
+<asis>
+const #PI = 3.1415926536;
+</asis>
+
+<p>Constant declaration is a compile-time activity. Similar compile-time activities include function and thread declaration and user-defined class declaration. These declarations are collected at compile time, and are instantiated prior to the sciprt is executed. Therefore, these declarations can appear anywhere in a script and are still applicable to the whole script. For instance,</p>
+
+<codelist name="const.judo" id="const.judo">
+println '    #PI = ', #PI : 2.7;
+println '5 * #PI = ', 5 * #PI : 2.7;
+
+const #PI = 3.1415926536;
+println '    #PI = ', #PI : 2.7;
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+    #PI =  3.1415927
+5 * #PI = 15.7079633
+    #PI =  3.1415927
+</asis>
+
+<p>Constants can be defined with any values and any constant expressions. For example,</p>
+
+<codelist name="apple_pi.judo" id="apple_pi.judo">
+const #PI = 3.1415926536;
+const #apple_PI = 'Apple ' + #PI;
+
+println #apple_PI;
+</codelist>
+
+<p>yields:</p>
+
+<asis>
+Apple 3.1415926536
+</asis>
+
+<p><title3>Detect the existence of constants</title3>The <code>defined</code> expression can be used to detect whether a constant has been defined or not. Alternatively, you can compare a constnat against the <code>undefined</code> value for the same purpose.</p>
+
+<codelist name="defined.judo" id="defined.judo">
+const #ccc = 1;
+
+if defined #ccc {
+  println '#ccc is defined.';
+}
+
+if #ccc != undefined {
+  println '#ccc is defined.';
+}
+</codelist>
+
+<p><title3>Conditional constant declaration</title3>The complete constant declaration syntax is:</p>
+
+<grammar id="const">
+<rule name="Constant"><kw>const</kw> <nt>CONST_NAME</nt> <kw>=</kw> <nt>Expr</nt> [ <kw>ifndef</kw> | <kw>if</kw> <nt>Expr</nt> ] <nt>;</nt>
+</grammar>
+
+<p>Constants can be conditionally defined. This is useful when another file is included in the current script and you want to make sure a constant is defined. The first form with <code>ifndef</code> is equivalent to do a <code>defined</code> check on the current constant being defined. The second form is obvious. A usage would be like this:</p>
+
+<asis>
+!include 'common.judi'
+
+const #tmp = '~/tmp/' ifndef;
+
+mkdir #tmp;
+</asis>
+
+<p>File inclusion is discussed in <ref id="running:include"/>.
+
+<!------------------------------------->
+<section2 title="Predefined Constants" id="preconst" status="green">
+
+<p><J> has a number of predefined constants, listed below.</p>
+
+<table id="pre_consts" name="Predefined Constants">
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td><code>#versionInfo</code></td><td>the version information of the current <J> runtime, such as "JudoScript Language v0.9 2004-6-26 (JDK1.3+)".</td></tr>
+<tr><td><code>#versionID</code></td><td>the version ID of the current <J> runtime, such as "v0.9".</td></tr>
+<tr><td><code>#user</code></td><td>the current user name running the script.</td></tr>
+<tr><td><code>#year</code></td><td>the current year of running.</td></tr>
+<tr><td><code>#script</code></td><td>the script file path. Subsequently, you can get the script file name with <code>#script.getFileName()</code> and the directory where the script resides with <code>#script.getFilePath()</code>.</td></tr>
+<tr><td><code>#prog</code></td><td>the script name. For regular script files, this is the same as <code>#script.getFileName()</code>; in special situations, <code>#prog</code> may be set where <code>#script</code> is not valid.</td></tr>
+<tr><td><code>#cmd_args</code></td><td>an array that contains all the command line arguments.</td></tr>
+<tr><td><code>#args</code></td><td>an array that contains the command line arguments except for options; see <ref id="running:startup"/> for details.</td></tr>
+<tr><td><code>#options</code></td><td>an object that contains the command line options; see <ref id="running:startup"/> for details.</td></tr>
+<tr><td><code>#sysprops</code></td><td>the system properties of the currenv JVM. See <ref id="running:sysprop_envvars"/> for details.</td></tr>
+<tr><td><code>#classpath</code></td><td>the classpath object. See <ref id="running:classpath"/> for details.</td></tr>
+<tr><td><code>#usage</code></td><td>an object that documents this script; see <ref id="running:usage"/> for details.</td></tr>
+</table>
+
+<p>There are a few constant values in <J> that are represented in other formats, such as:</p>
+
+<table id="pre_consts1" name="Predefined Constants In Other Forms">
+<tr><td><code>${:}</code></td><td>the platform-dependent path separator. On Unix it is <code>:</code>; on Windows it is <code>;</code>. This character is frequently used in constructing classpaths.</td></tr>
+<tr><td><code>${/}</code></td><td>the platform-dependent file name separator, that is, the character that separates the file name and directory names in a path. On Unix it is <code>/</code>; on Windows it is <code>\</code>.</td></tr>
+<tr><td><code>${~}</code></td><td>the home directory of the user running the script.</td></tr>
+<tr><td><code>${.}</code></td><td>the current directory. This can be changed by the <code>cd</code> command, so it is not strictly a constant value; it starts with the current directory when the script is being run.</td></tr>
+</table>
+
+<p>These notations can be, like any <code>${<i>xyz</i>}</code>, embedded in string literals, as discussed in <ref id="datatypes:string"/>.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->

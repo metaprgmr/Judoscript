@@ -1,0 +1,4 @@
+const #PI = 3.1415926536;
+const #apple_PI = 'Apple-' + #PI;
+
+println #apple_PI;

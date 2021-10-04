@@ -1,0 +1,159 @@
+<notyet href="../../../articles/http_html.html">
+
+
+<!--===============================================================-->
+<section1 title="HTTP Client Features" status="red">
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="HTTP Server Features" status="red">
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Create A HTTP Proxy Server" status="red">
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="UDP and Broadcasting" status="red">
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Send Mail" id="mail" status="yellow">
+
+<p>You can send e-mails directly from <J>. To use the e-mail feature, you need to have the <kw>javax.mail</kw> packages in the class path. It can be obtained from various places, such as the "j2ee.jar" file in the J2EE installation. Before sending any messages, you must first connect to a mail server by calling the system function:</p>
+
+<asis>
+mail::connect( server [ , username [ , password ] ] );
+mail::disconnect;
+</asis>
+
+<p>The server may include a port number, separated by a colon. Once connected, you can easily send one, two, fitfy or a million e-mails from a simple <J> script; spamming is never easier. Well, if one does want to spam, there are zillions of ways anyway.</p>
+
+<p>The syntax for sending mail is:</p>
+
+<grammar id="SendMail">
+<nt>SendMail</nt> ::= <kw>mail::send</kw> [ <nt>charset</nt> ]
+( ( <kw>from</kw> | <kw>to</kw> | <kw>cc</kw> | <kw>bcc</kw> | <kw>attach</kw> | <kw>subject</kw> | <kw>body</kw> | <kw>htmlBody</kw> ) <kw>:</kw> <nt>Expr</nt>
+)+ 
+</grammar>
+
+<p>As you see, text and/or HTML messages can be sent at the same time. You can specify character sets for addresses, subject and bodies. If <nt>charset</nt> is set to <kw>mail::send</kw>, both the text and HTML bodies will use it. A <nt>charset</nt> can have "charest=". The following two examples are equivalent:</p>
+
+<asis>
+  mail::send 'iso-2022-jp' ...
+  mail::send 'charset=iso-2022-jp' ...
+</asis>
+
+<p>Alternatively, you can call the system function <kw>setCharset()</kw> to set the language character set for the whole language environment. The <kw>mail::send</kw> command uses that if no <nt>charset</nt> is explicitly specified in itself. This global character set may affect text encoding used in other places.</p>
+
+<p>Files can be attached; messages can be sent to a list of "to", "cc" and/or "bcc" recipients; within each list, recipients are separated by commas. Each clause can appear at most once. For the message bodies, the here-doc is a big convenience. Here is an example:</p>
+
+<asis>
+mail::send
+   from: 'syang@exotic.nat'
+     to: 'foodback@judoscript.com, syang56@yahoo.cum'
+subject: 'bug report'
+   body: [[*
+         Hi there,
+
+         Judo is cool. I'm doing a lot and will do a lot more
+         with it.
+
+         I think I've found a bug. I have a program, 'tvcontrol.judo';
+         there is a function like this:
+
+           function switchTV $on {
+             if $on { turnOnTV(); } else { turnOffTV(); }
+           }
+
+         however, when it is called with $on=3, it turns off my VCR!
+         I believe this is a bug in Judo that, when the value
+         is not 0 or 1, it emits erroneous radio shock waves that
+         affect other appliances than the intended one. Please take
+         a look. Thank you!
+
+         Best regards,
+         -- Steve Young
+         *]];
+</asis>
+
+<p>The following example sends out trial software to newly registered users, whose information is stored in a database. For each user with status "NEW", a zip file and a "readme.txt" file are sent, and his/her status is changed to "TRIAL VERSION" in the database. This program is likely executed by a scheduled job that runs at midnight or later.</p>
+
+<asis>
+db::connect to 'jdbc:oracle:thin:@localhost:1521:userdb', 'onlyme', 'uggess';
+
+db::query u:
+  select email, lastname, solute from usertbl where status='NEW';
+
+db::prepare: update userdb set status='TRIAL VERSION' where email=?;
+while u.next() {
+  sendSoftware(u.email, u.lastname, u.solute);
+  db::update with @1 = u.email;
+}
+
+function sendSoftware email, lname, solute
+{
+  mail::send
+     from: 'info@judoscript.com'
+       to: email
+  subject: 'The software. Thank you!'
+   attach: 'readme.txt, software.zip'
+     body: [[*
+           Dear (* solute *) (* lname *),
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           Judo
+           *]]
+ htmlBody: [[*
+           &lt;html&gt;&lt;body&gt;
+           &lt;p&gt;Dear (* solute *) (* lname *),
+
+           &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+           Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+           text&lt;/u&gt; file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p&gt;Please visit &lt;a href=http://www.judoscript.com&gt;judoscript.com&lt;/a&gt;
+           for the latest news and information. Thank you!
+
+           &lt;p&gt;Sincerely,
+           &lt;p&gt;Judo
+           &lt;/body&gt;&lt;/html&gt;
+           *]]
+  ;
+}
+</asis>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="SSH and SCP" status="red">
+
+<p>The SSH and SCP features uses ISNetworks' distribution of MindTerm package, a GPL'ed open-source pure Java SSH/SCP bundle. It is a GUI program that you can use daily; its SCP screen looks like a FTP GUI client. Very handy! Download it from <ref href="http://www.isnetworks.com/ssh">ISNetworks</ref>. Make sure the version is "version 1.2.1 SCP release 3" or up. Unpack and put the class jar file into your classpath, and run</p>
+
+<asis>
+%java mindbright.application.MindTerm
+</asis>
+
+<p>If it is the first time use, it prompts you for host, user and password, and generates necessary keys automatically. You should run it to establish such environment before using <J>'s SSH/SCP features. By the way, the nice SCP screen is available on its "File" menu, not so obvious to the first-time users.</p>
+
+<p>Once the jar file is in the classpath and you have set up the environment, please refer to the language spec for how to use. It is rather straightforward.</p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="FTP" status="red">
+
+</section1><!--=====================================================-->

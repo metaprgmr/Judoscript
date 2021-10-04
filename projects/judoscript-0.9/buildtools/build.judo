@@ -1,0 +1,441 @@
+/////////////////////////////////////////////////////////////////////
+// Environment
+/////////////////////////////////////////////////////////////////////
+
+!include '${JUDOROOT}/projects/common.judi'
+
+versionId  = 'judoscript-0.9';
+myroot     = '${projects}/${versionId}';
+tmp        = '${TMPROOT}/${versionId}';
+sysJudo    = isWindows() ? 'c:/bin/classes' : '/usr/local/classes';
+
+src        = '${myroot}/src';
+srcOthers  = '${myroot}/src_others';
+srcJ       = '${myroot}/src/com/judoscript';
+srcJJ      = '${tmp}/jj/com/judoscript/parser';
+testcases  = '${myroot}/testcases';
+testresult = '${tmp}/testresult';
+buildtools = '${myroot}/buildtools';
+
+mkdir tmp;
+mkdir srcJJ;
+mkdir '${tmp}/classes';
+mkdir testresult;
+
+cp = '${tmp}/classes' +
+     '${:}${ant_jar}' +
+     '${:}${commons_lang_jar}' +
+     '${:}${commons_logging_jar}' +
+     '${:}${commons_fileupload_jar}';
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+menuItems = [ // all are referenced by 'all.judo'.
+  'Clobber All',                // 1
+  'Build All',                  // 2
+  '  Generate Parser',          // 3
+  'X Compile Base+User',        // 4
+  'X Compile JDK1.4',           // 5
+  'X Compile Ext-JCom',         // 6
+  'X Compile Ext-Registry',     // 7
+  'X Compile Ext-SSH',          // 8
+  '  Compile User',             // 9
+  '  Compile Util',             // 10
+  '  Compile Third-Party',      // 11
+  '  Copy JuSP scripts',        // 12
+  '  Create Executable Jar',    // 13
+  'X Create Third-Party Jar',   // 14
+  'Run All Test Cases',         // 15
+  '  +  Values',                // 16
+  '  +  Data Structure',        // 17
+  '  +  Statements',            // 18
+  '  +  Dynamic Eval',          // 19
+  '  +  Function',              // 20
+  '  +  Java',                  // 21
+  '  +  Miscellaneous',         // 22
+  '  +  Env/System',            // 23
+  '  +  Print',                 // 24
+  '  ?  JDBC/Oracle',           // 25
+  '  -  JDBC/MySQL',            // 26
+];
+
+option = 0;
+
+note = [[*
+
+  ********************** Project (* versionId *) *********************
+
+  To compile source files in the base, specify them on the command line.
+  For instance:  judo build VersionInfo.java db/*.java
+
+  To directly run a target, specify the option on the command line.
+  For instance:  judo build 4
+
+  To see the options, run: judo build 0
+
+  To run a Judo script with the new version, run: judo build 999 param ...
+*]];
+
+if #args.length <= 0 {
+  println <err> note;
+  choice menu(menuItems, false); // no confirm
+} elif #args[0].isInt() {
+  for opt in #args {
+    if opt.isInt() {
+      choice opt;
+      if (opt == 999) break;
+    } else {
+      println <err> 'Option ', opt, ' ignored.';
+    }
+  }
+} else {
+  compileSomeSource #args;
+}
+return;
+
+function choice opt {
+  switch opt {
+  case 1:   println <err> nl, '::: To clobber all, manually remove this directory: ', nl, '  ', tmp; break;
+  case 2:   buildAll();              break;
+  case 3:   generateParser();        break;
+  case 4:   //compileBaseSource();     break;
+  case 5:   //compileJdk14Source();    break;
+  case 6:   //compileJComSource();     break;
+  case 7:   //compileRegistrySource(); break;
+  case 8:   //compileSSHSource();      break;
+            println <err> "::: Let's not do this any more; instead, just build all (choice 2)."; break;
+  case 9:   compileUserSource();     break;
+  case 10:  compileUtilSource();     break;
+  case 11:  compile3rdPartySource(); break;
+
+  case 12:  copyJuSPScripts();       break;
+  case 13:  createExecJar();         break;
+//case 14:  create3rdPartyJar();     break;
+  case 14:  println <err> "::: Let's not create 3rd part jar any more."; break;
+
+  case 15:  // add all test cases:
+	    runStaticTestCases("1.lang_vals");
+	    runStaticTestCases("1.lang_ds");
+	    runStaticTestCases("1.lang_stmts");
+	    runStaticTestCases("1.lang_eval");
+	    runStaticTestCases("1.lang_java");
+	    runStaticTestCases("1.lang_misc");
+	    runStaticTestCases("2.ess_print");
+	    runStaticTestCases("2.ess_env_sys");
+	    runStaticTestCases("3.app_jdbc_oracle");
+	    runStaticTestCases("3.app_jdbc_mysql");
+	    break;
+  case 16:  runStaticTestCases("1.lang_vals");       break;
+  case 17:  runStaticTestCases("1.lang_ds");         break;
+  case 18:  runStaticTestCases("1.lang_stmts");      break;
+  case 19:  runStaticTestCases("1.lang_eval");       break;
+  case 20:  runStaticTestCases("1.lang_fxn");        break;
+  case 21:  runStaticTestCases("1.lang_java");       break;
+  case 22:  runStaticTestCases("1.lang_misc");       break;
+  case 23:  runStaticTestCases("2.ess_env_sys");     break;
+  case 24:  runStaticTestCases("2.ess_print");       break;
+  case 25:  runStaticTestCases("3.app_jdbc_oracle"); break;
+  case 26:  runStaticTestCases("3.app_jdbc_mysql");  break;
+
+  case 999: runBare(#args.subarray(1)); break;
+
+  case 0:   println <err> note; // show all help stuff.
+	    idx = 1;
+	    for m in menuItems {
+	      println <err> idx:>2, ': ', m;
+	      ++idx;
+	    }
+  default:  ;
+  }
+}
+
+function buildAll {
+  generateParser();
+  compile3rdPartySource();
+  compileUtilSource();
+  compileBaseSource();
+  compileJdk14Source();
+  compileSSHSource();
+  compileJComSource();
+  compileRegistrySource();
+  createExecJar();
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// Build Targets
+/////////////////////////////////////////////////////////////////////
+
+function generateParser {
+  println <err> nl, '::: Javacc judo.jj ...', nl;
+  exec javacc + ' -OUTPUT_DIRECTORY:${srcJJ} ${srcJ}/parser/judo.jj';
+}
+
+function compileSomeSource files {
+  println <err> nl, '::: Javac some source code ...', nl;
+  if files == null || files.length <= 0 { return; }
+  cmdline = '${javac} -d ${tmp}/classes';
+  for f in files {
+    cmdline += ' ${srcJ}/${f}';
+  }
+  exec cmdline
+       with CLASSPATH = '${cp}${:}${j2ee_jar${:}${bsf_jar${:}${log4j_jar';
+  ;
+}
+
+function compileBaseSource {
+  println <err> nl, '::: Javac base source code ...', nl;
+
+  files = getJavaFiles(
+      '${srcJJ}/*.java ' +
+      '${src}/*judo*.java ' +
+      '${srcJ}/*.java ' +
+      '${srcJ}/parser/helper/*.java ' +
+      '${srcJ}/bio/*.java ' +
+      '${srcJ}/user/*.java ' +
+      '${srcJ}/db/*.java ' +
+      '${srcJ}/hibernate/*.java ' +
+      '${srcJ}/xml/*.java ' +
+      '${srcJ}/gui/*.java ' +
+      '${srcJ}/studio/*.java ' +
+      '${srcJ}/jusp/*.java ' +
+      '${srcJ}/ext/*.java ' +
+      '${srcJ}/ext/win32/*.java');
+  exec '${javac} -d ${tmp}/classes ' + files
+       with CLASSPATH = '${cp}' +
+                        '${:}${log4j_jar}' +
+                        '${:}${mail_jar}' +
+                        '${:}${axis_jar}' +
+                        '${:}${wsdl4j_jar}' +
+                        '${:}${jaxrpc_jar}' +
+                        '${:}${servlet_jar}' +
+                        '${:}${saaj_jar}' +
+                        '${:}${hibernate3_jar}' +
+                        '${:}${bsf_jar}' +
+                        '${:}${xalan_jar}' +
+                        '${:}${ISNetworksMindTermSCP_jar}' +
+                        '${:}${jcom_jar}'
+
+  ;
+
+  copy '*.xml, *.jud*, *.properties' except '*~, */log4j.properties, */logging.properties'
+       in src to '${tmp}/classes' recursive;
+
+  exec '${java} judo -x ". versionInfo(); catch:pist()"'
+       with CLASSPATH=cp;
+
+  println <err> nl, "On the local machine, don't forget to deploy the executable jar!";
+}
+
+function copyJuSPScripts {
+  copy '*.jud*' except '*~' in src to '${tmp}/classes' recursive;
+  copy '*.jud*' except '*~' in src to '${BINDRV}/bin/classes' recursive;
+}
+
+function compileUserSource {
+  println <err> nl, '::: Javac user source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ' + getJavaFiles('${srcJ}/user/*.java')
+       with CLASSPATH = '${cp}${:}${lib}/j2ee1.3.jar${:}${lib}/axis11all.jar${:}'
+  ;
+}
+
+function compileUtilSource {
+  println <err> nl, '::: Javac util source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ' + getJavaFiles('${srcJ}/util/*.java ${srcJ}/util/classfile/*.java')
+       with CLASSPATH = '${cp}${:}${lib}/j2ee1.3.jar${:}${lib}/mail.jar'
+  ;
+}
+
+function compile3rdPartySource {
+  println <err> nl, '::: Javac thirty-party source code ...', nl;
+
+ files = getJavaFiles(
+     '${src}/test/*.java ' +
+     '${srcOthers}/Acme_Labs/Acme/*.java ' +
+     '${srcOthers}/EnterpriseDT/com/enterprisedt/net/ftp/*.java ' +
+     '${srcOthers}/Tim_Endres/com/ice/tar/*.java ' +
+     '${srcOthers}/Tim_Endres/com/ice/jni/registry/*.java ');
+//     '${srcOthers}/jcom-2.2.3/jp/ne/so_net/ga2/no_ji/jcom/*.java ');
+  exec '${javac} -d ${tmp}/classes ' + files
+       with CLASSPATH = '${cp}${:}${lib}/j2ee1.3.jar'
+  ;
+}
+
+function compileJdk14Source {
+  println <err> nl, '::: Javac JDK1.4 source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ' + getJavaFiles('${srcJ}/jdk14/*.java')
+       with CLASSPATH = '${cp}${:}${lib}/log4j-1.2.8.jar';
+  ;
+}
+
+function compileJComSource {
+  println <err> nl, '::: Javac JCom source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ' + getJavaFiles("${srcJ}/ext/win32/*.java ${srcJ}/ext/COMFactory.java")
+       with CLASSPATH = '${cp}${:}${lib}/jcom.jar'
+  ;
+}
+
+function compileRegistrySource {
+  println <err> nl, '::: Javac Windows Registry source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ${srcJ}/ext/WindowsRegistry.java'
+       with CLASSPATH = cp
+  ;
+}
+
+function compileSSHSource {
+  println <err> nl, '::: Javac SSH source code ...', nl;
+
+  exec '${javac} -d ${tmp}/classes ' + getJavaFiles('${srcJ}/ext/SSH*.java')
+       with CLASSPATH = '${cp}${:}${lib}/ISNetworksMindTermSCP.jar'
+  ;
+}
+
+/////////////////////////////////////////////////////////////////////
+// Package Target
+/////////////////////////////////////////////////////////////////////
+
+function createExecJar {
+  println <err> nl, '::: Create judo.jar ...';
+
+  manif = [[*
+    Manifest-Version: 1.0
+    Main-Class: judo
+    Created-By: James Jianbo Huang (c) 2001-(* #year *)
+  *]];
+
+  jar = createJar('${tmp}/judo.jar', manif);
+  copy '*.class, *.properties' in '${lib}/commons-lang-2.0.jar'       recursive store into jar;
+  copy '*.class, *.properties' in '${lib}/commons-logging-1.0.4.jar'  recursive store into jar;
+  copy '*.class, *.properties' in '${lib}/commons-fileupload-1.0.jar' recursive store into jar;
+  copy '*.class, *.xml, *.properties' in '${tmp}/classes'             recursive store into jar;
+//  copy '*.class, *.properties' in '${lib}/bsf-2.3.jar'
+//       except '*/debug/*, */dbline/*, */engines/*'                    recursive store into jar;
+  copy '*/jusp/*.judo' in src recursive store into jar;
+  jar.close();
+
+  println <err> '::: Create src.jar ...';
+  copy 'src/*, src_native/*, src_others/*' except '*/.*, *~, */alfa*, */jakarta*' in myroot
+       recursive into '${tmp}/src.jar';
+
+  println <err> '::: Create generated.jar ...';
+  copy '*.java' in '${tmp}/jj' recursive into '${tmp}/generated.jar' under 'src';
+}
+
+function create3rdPartyJar {
+  println <err> nl, '::: Create thirdparties.jar ...';
+
+  jar = createJar('${tmp}/thirdparties.jar');
+
+  copy 'Acme/*.class' in '${tmp}/classes' recursive store into jar;
+  copy 'com/enterprisedt/*.class' in '${tmp}/classes' recursive store into jar;
+  copy 'com/ice/*.class' in '${tmp}/classes' recursive store into jar;
+  copy 'jp/ne/*.class' in '${tmp}/classes' recursive store into jar;
+
+  jar.close();
+}
+
+/////////////////////////////////////////////////////////////////////
+// Test Targets
+/////////////////////////////////////////////////////////////////////
+
+function runBare params {
+  cmdline = 'java judo -q ' + params.toCsv(' ');
+  println <err> nl, '::: Running with bare JudoScript: ', cmdline, nl;
+  exec cmdline with CLASSPATH=cp;
+}
+
+//
+// jdkVersion: 'JDK1.4', 'JDK1.5'; default: 'JDK1.3'.
+//
+function runStaticTestCases testcaseset, jdkVersion {
+  println <err> nl, '::: Run test cases for "${testcaseset}" ...', nl;
+
+  owncp = '${cp}${:}${testcases}/${testcaseset}';
+  fname = '${testcases}/${testcaseset}/setup/classpath';
+  if fname.fileExists() {
+    do fname as lines { owncp += '${:}${lib}/${$_}'; }
+  }
+
+  setupTestCase testcaseset, 'setup/init.judo', owncp;
+
+  listFiles '${testcaseset}/*.judo' except '*baseline*, */alfa*, */beta*' in testcases fileOnly;
+  caseList = new Object;
+  for fname in $$fs_result {
+    scriptRoot = fname.getFilePath().trunc(1).getFileName();
+    scriptName = fname.getFileName();
+    arr = caseList.(scriptRoot);
+    if arr != null {
+      arr.add(scriptName);
+    } else {
+      arr = [ scriptName ];
+      caseList.(scriptRoot) = arr;
+    }
+  }
+
+  for scriptRoot in caseList {
+    mkdir '${testresult}/${scriptRoot}';
+    arr = caseList.(scriptRoot);
+    for scriptName in arr {
+      staticTestCase scriptRoot, scriptName, owncp;
+    }
+  }
+
+  setupTestCase testcaseset, 'setup/cleanup.judo', owncp;
+}
+
+function staticTestCase root, name, owncp {
+  flush <err> ' +++ ', root:<15, ' ', name:<25, ' +++ ';
+
+  baselinedir = '${testcases}/${root}/baseline';
+  mkdir baselinedir;
+
+  script = '${testcases}/${root}/${name}';
+  baseline = '${baselinedir}/${name}.baseline';
+  outfile = baseline;
+  createBaseline = !baseline.fileExists() || (script.fileTime() > baseline.fileTime());
+  outfile = createBaseline ? baseline : '${testresult}/${root}/${name}.baseline';
+
+  exec '${java} judo -q ${script} > ${outfile}'
+       with CLASSPATH=owncp,
+            JUDOROOT = ${JUDOROOT},
+            TMPROOT = ${TMPROOT};
+
+  if createBaseline {
+    println <err> 'created: ', name, '.baseline';
+  } elif getFileAsString(outfile) != getFileAsString(baseline) {
+    println <err> 'inconsistent output.';
+  } else {
+    println <err>;
+  }
+}
+
+function setupTestCase testcaseset, name, cp {
+  fname = '${testcases}/${testcaseset}/${name}';
+  if fname.fileExists() {
+    println <err> ' --- ', testcaseset:<15, ' ', name;
+    exec <ret> '${java} judo -q ${fname}'
+         with CLASSPATH = cp,
+              JUDOROOT  = JUDOROOT,
+              TMPROOT   = TMPROOT;
+    if ret != 0 { return; }
+  }
+}
+
+// apparently javac 8+ does not take wildcards;
+// so have to collect individual java file names explicitly.
+function getJavaFiles patterns {
+  ret = [];
+  parr = patterns.split(' ');
+  for i=0; i<parr.length; ++i {
+    listFiles parr[i];
+    ret.appendArray($_);
+  }
+  return ret.concat(' ');
+}

@@ -1,0 +1,50 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Gets the stored procedure source code owned by this user.';
+}
+
+!include 'ora_connection.judi'
+
+executeQuery a:
+   select distinct type, name, line, text
+     from user_source
+     order by name, type, line
+;
+
+name = null;
+while a.next() {
+  if name != a[2] {
+    if name != null { . nl; }
+    name = a[2];
+    println name, ':';
+  }
+  flush '    ', a[4];
+}
+
+// Or, save the code to files
+// -- modify to suit your needs, e.g. "create" scripts, etc.
+
+/***
+name = null;
+file = null;
+while a.next() {
+  if name != a[2] {
+    name = a[2];
+    if file != null {
+      // anything AFTER the stored procedure code
+      file.close();
+    }
+    file = openTextFile(name @ '.' @ a[1], 'w');
+    // anything BEFORE the stored procedure code
+  }
+  print <file> a[4];
+}
+if file != null {
+  // anything AFTER the stored procedure code -- for the last one.
+  file.close();
+}
+***/
+
+disconnect();

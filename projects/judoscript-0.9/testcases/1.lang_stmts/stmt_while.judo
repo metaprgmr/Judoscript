@@ -1,0 +1,13 @@
+println 'while() {}';
+a = 3;
+while a >= 0 {
+  println a;
+  --a;
+}
+
+println;
+println 'do {} while.';
+do {
+  println a;
+  a++;
+} while a < 2;

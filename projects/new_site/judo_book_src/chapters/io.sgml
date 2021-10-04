@@ -1,0 +1,51 @@
+<synopsis>
+
+</synopsis>
+
+
+<!--===============================================================-->
+<section1 title="Print and Formatting" id="print_fmt" status="yellow">
+
+<!------------------------------------->
+<section2 title="Printing" id="print">
+
+<p>The <kw>println</kw> statement must be the most used statement in this book or basically any scripting language books. <J> has three print statements, <kw>print</kw>, <kw>println</kw> and <kw>flush</kw>. They can all write texts to the system output streams, to an open text file or any textural output stream such as an internet connection. The <kw>flush</kw> command is exactly like <kw>print</kw> and it also flushes the output stream. The <kw>println</kw> prints the content and a new-line, and also flushes.</p>
+
+<p>The 
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Print Into Variables" id="print2var">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Using System Input and Output Streams" id="sysinout">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Read and Write Binary Files" id="file" status="red">
+
+<!------------------------------------->
+<section2 title="Read and Write Binary Files Sequentially">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Random Access Files">
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Read and Write Files Within Zip Files" id="fileinzip" status="red">
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="In-Script Data" id="local" status="red">
+
+</section1><!--=====================================================-->

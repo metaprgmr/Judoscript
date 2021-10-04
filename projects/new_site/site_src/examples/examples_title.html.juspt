@@ -1,0 +1,11 @@
+<%
+  var title = 'Judo Language Examples';
+  var keywords = "judo, judoscript, jusp, juspt, jamaica, java scripting, jdbc scripting, hibernate scripting, xml scripting, html scraping, os shell scripting, shell scripting, soap scripting, web app, jusp platform, juspt transform, jvm bytecode, jvm macro assembler, bytecode assembler";
+  var base = '../';
+  var tabID = 'judo';
+  var subTitle = title;
+  var noLeftNavBar = true;
+%>
+<%!include '../include/header.jusp' %>
+
+<TD>&nbsp;</TD></TR></TABLE></BODY></HTML>

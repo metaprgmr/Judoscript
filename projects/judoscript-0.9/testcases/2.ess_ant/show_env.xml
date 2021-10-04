@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<!--
+   Demonstrates accessing environment variables from Ant
+   and from JudoScript (embedded code).
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+<project name="test" default="main" basedir=".">
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  <target name="main" depends="step1,step2" />
+
+  <target name="step1">
+    <property environment="env" />
+    <echo message=" ${env.TEMP}" />
+  </target>
+
+  <target name="step2">
+    <judoscript>
+      println ${TEMP};
+    </judoscript>
+  </target>
+
+</project>

@@ -1,0 +1,74 @@
+<q id=precomp>Precompiler</q>
+<ans>
+<p>The precompiler converts JudoScript scripts into persisted internal code that can be quickly loaded and run.
+May need to device a "packaging" mechanism for buildling libraries of compiled code.</p>
+<p>After this project, you will know all the components in the language, a good starting point to get into the language engine.</p>
+</ans>
+
+<q id=precomp>JudoScript-To-Java Translator</q>
+<ans>
+<p>The JudoScript-To-Java Translator converts JudoScript scripts into Java source code that works in conjunction
+with <code>com.judoscript.util</code> package, which is language-independent.</p>
+<p>This project requires good JavaCC skills, and should be progressive from core <J> language to domain-specific support.</p>
+</ans>
+
+<q id=debugger>Language Debug Support</q>
+<ans>
+<p>Currently the language engine has just a little debugging support.
+This project is to define a full-fledged debugging support for console-based debugging
+but should have all the support for a GUI-based debugger.</p>
+<p>After this project, you will know the language engine runtime <em>really</em> well.</p>
+</ans>
+
+<q id=guidebug>GUI Debugger</q>
+<ans>
+<p>This project is to develop a Java Swing GUI debugger for JudoScript. It uses the language engine's debugging support.
+During the process, it is likely to further enhance that support.</p>
+<p>You are the GUI expert!
+This debugger is the basis for a JudoScript development studio, where many exciting features can be put in.</p>
+</ans>
+
+<q id=shell>JudoScript Shell</q>
+<ans>
+<p>This shell allows users to interactively specify JudoScript commands and statements and get the result.
+This is the Unix shell equivalent for Java platform!
+A console-based shell is a must, but a GUI shell is preferrable for user experience.</p>
+<p>You will need to tweak the parser quite a bit, and also deal a lot with the runtime environment,
+most likely creating your own runtime context object.
+Also, you have to introduce more commands that are shell-specific.</p>
+</ans>
+
+<q id=imgproc>Image Processing and Chart Creation</q>
+<ans>
+<p>JudoScript has always planned this feature to
+<ul>
+<li> use primitives to generate graphics and pictures.
+<li> image processing functionalities.
+<li> animation features.
+</ul>
+This is is an important part for a gaming engine, and is also useful by itself.</p>
+<p>You will have the authority to define this exciting new feature in the language,
+and in the meantime learn the full-cycle development to add new features to the language.</p>
+</ans>
+
+<q id=soundmusic>Music, Sound and Signal Processing</q>
+<ans>
+<p>To define and develope JudoScript's music and sound features. This should include at least parts:
+<ul>
+<li> play sound and music, either from files or by sound primitives or music scores (via MIDI).
+<li> read, create and process music notations for MIDI files.
+<li> sound signal processing features.
+</ul>
+It is nice to keep in mind that these features can be used in a gaming/movie environment,
+where a "super-conductor" can conduct all sorts of audio and visual effects!</p>
+<p>You will have the authority to define this exciting new feature in the language,
+and in the meantime learn the full-cycle development to add new features to the language.</p>
+</ans>
+
+<q id=j3d>Java3D and Gaming</q>
+<ans>
+<p>To research the Java 3D and add support to JudoScript at language level.
+This can be a very importantn part to control a gaming engine.</p>
+<p>This project is not urgent.</p>
+</ans>
+

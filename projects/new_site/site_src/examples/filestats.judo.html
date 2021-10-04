@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/filestats.judo:</b></td></tr><tr><td><pre>
+listFiles '*.java' fileOnly lines perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats:>8, '  ', f;
+}
+
+listFiles '*.java' fileOnly size lines words perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats[0]:>8, '  ', stats[1]:>6, '  ', stats[2]:>6, '  ', f;
+}
+</pre></td></tr></table></body></html>

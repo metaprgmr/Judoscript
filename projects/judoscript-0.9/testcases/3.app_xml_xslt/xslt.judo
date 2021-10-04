@@ -1,0 +1,7 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-02-20';
+  desc    = "Applies XSLT of 'calls.xsl' upon 'calls.xml'.";
+}
+
+xslt 'calls.xsl' on 'calls.xml' to #prog.replace('.judo','.html.out');

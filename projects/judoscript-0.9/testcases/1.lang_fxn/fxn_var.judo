@@ -1,0 +1,16 @@
+function foo1 a, b { return a + b; }
+function foo2 a, b { return a * b; }
+function whichFoo f, a, b { return f(a,b); }
+
+println 'whichFoo(&foo1, 2, 3) = ', whichFoo(&foo1, 2, 3);
+println 'whichFoo(&foo2, 2, 3) = ', whichFoo(&foo2, 2, 3);
+
+x = [ &foo1, &foo2 ];
+println 'x = ', x;
+println 'x[0](2, 3) = ', x[0](2, 3);
+println 'x[1](2, 3) = ', x[1](2, 3);
+
+y = { fxn1 = &foo1, fxn2 = &foo2 };
+println 'y = ', y;
+println 'y.fxn1(4, 6) = ', y.fxn1(4, 6);
+println 'y.fxn2(4, 6) = ', y.fxn2(4, 6);

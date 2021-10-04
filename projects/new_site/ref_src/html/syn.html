@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>JudoScript Reference - Syntax and Semantics</title>
+<script language=JavaScript src=../share/judolib.js></script>
+<link rel=stylesheet type=text/css href="../share/bnf.css">
+</head>
+<body style="margin-left:10px; margin-right:10px">
+
+<h2>Syntax and Semantics</h2>
+
+<p>The JudoScript grammar comprises of
+
+<ul>
+<li> <a href="javascript:showPanes('_synn.html','synn.html')">Non-terminal nodes (or <em>non-termnials</em>)</a>.
+<li> <a href="javascript:showPanes('_synt.html','synt.html')">Terminal nodes (or <em>terminals</em>)</a> and
+<li> <a href="javascript:showPanes('_synk.html','synk.html')">Reserved words (or <em>keywords</em>)</a>,
+</ul></p>
+
+<p>The non-terminals are expressed in an extended BNF (Backus-Naur Form).
+Keywords are shown like <font class=kw>prepare</font>; terminals are
+<font class=t>IDENTIFIER</font>, and non-terminals are <font class=nt>Statement</font>.
+The following table lists all the extended BNF symbols.</p>
+
+<center><table border=1>
+<tr><th>Symbol</th><th>Meaning</th></tr>
+<tr><td class=op align=center><b>::=</b></td><td> "is defined as" </td></tr>
+<tr><td class=op align=center> | </td><td> or </td><tr>
+<tr><td class=op align=center> ( ) </td><td> as a group </td></tr>
+<tr><td class=op align=center> ( )* </td><td> a group that can repeat 0 or more times</td></tr>
+<tr><td class=op align=center> ( )+ </td><td> a group that can repeat 1 or more times</td></tr>
+<tr><td class=op align=center> ( )? </td><td> a group that may or may not be present</td></tr>
+<tr><td class=op align=center> [ ] </td><td> a group that may or may not be present; same as <font class=op>( )?</font></td></tr>
+<tr><td class=op align=center> ( ),* </td><td> a group that can repeat 0 or more times, with commas separating each other</td></tr>
+<tr><td class=op align=center> ( ),+ </td><td> a group that can repeat 1 or more times, with commas separating each other</td></tr>
+</table></center>
+
+<p>Terminals are described in English.</p>
+
+<p>Keywords are listed with the non-terminals that they are used. Refer
+to the semantics of each non-terminal for how the keywords are used.</p>
+
+</body></html>

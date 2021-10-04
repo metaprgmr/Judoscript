@@ -1,0 +1,30 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/workdir_envvar.judo:</b></td></tr><tr><td><pre>
+
+testDir = 'c:/temp';
+bat_file = 'alfa.bat';
+script = [[*
+  @echo "This is some garbage." > alfa.alfa
+  @echo ABCDEFG=%ABCDEFG%
+  @echo PATH=%PATH%
+*]];
+
+if !isWindows() {
+  println 'Please modify script for your platform.';
+  exit 0;
+}
+if ! testDir.isDir() {
+  println 'Please modify testDir to point to a valid directory before running.';
+  exit 0;
+}
+
+// generate the batch or shell script for our testing.
+bat = openTextFile(testDir @ ${/} @ bat_file,'w');
+flush &lt;bat> script;
+bat.close();
+
+. testDir;
+exec testDir @ fileSep() @ bat_file
+     from testDir
+     with ABCDEFG=1234567, PATH=testDir;
+</pre></td></tr></table></body></html>

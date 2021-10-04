@@ -1,0 +1,11 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/countlines.judo:</b></td></tr><tr><td><pre>
+switch #args.length() {
+case 0:  list recursive countLines; break;
+case 1:  list #args[0] recursive countLines; break;
+default: list #args[0] except #args[1] recursive countLines;
+}
+
+println "Total lines: ", $$fs_result;
+
+</pre></td></tr></table></body></html>

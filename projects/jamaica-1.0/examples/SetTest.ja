@@ -1,0 +1,12 @@
+public class SetTest
+{
+  static int i;
+
+  public static void main(String[] args) {
+    long l = 9;
+
+    %set i = l
+
+    %println i
+  }
+}

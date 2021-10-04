@@ -1,0 +1,32 @@
+usage {
+  desc = [[*
+    This program obtains an Outlook instance and prints out its folder
+    names.
+
+    Adapted from <a href="http://www.danadler.com/jacob">JACOB</a>
+    file 'samples/test/Outlook.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+outlook = new com::Outlook.Application;
+println 'version:   ', outlook.Version;
+println 'Namespace: ', outlook.Session;
+recurseFolders(0, outlook.Session);
+outlook.Quit();
+
+
+function recurseFolders indent, o {
+  if o == null { return; }
+  folders = o.Folders;
+  if folders == null { return; }
+
+  for f=folders.GetFirst; ; f=folders.GetNext {
+    fname = f.Name;
+    if fname == null { break; }
+    println ' ' {indent}, fname;
+    recurseFolders(indent+4, f);
+  }
+}

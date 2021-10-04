@@ -1,0 +1,20 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Tests while() and do..while() statements.';
+}
+
+println 'while() {}';
+a = 10;
+while a >= 0 {
+  println a;
+  --a;
+}
+
+println;
+println 'do {} while.';
+do {
+  println a;
+  a++;
+} while a < 5;

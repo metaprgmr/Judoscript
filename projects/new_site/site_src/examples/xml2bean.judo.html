@@ -1,0 +1,94 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_sax/xml2bean.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2004-11-9';
+  args    = 'input.xml, output.java';
+  minArgs = 2;
+  desc    = [[*
+    This program generates a Java source class from a bean
+    definition XML document using the SAX-style processing.
+    The bean definition has only properties.
+
+    For demo purposes, a sample XML document is attached.
+    Cut-n-paste it into a file named Test.java and run this
+    script.
+  *]];
+}
+
+xml2bean(#args[0], #args[1]);
+
+function xml2bean(infile, outfile) {
+  result = openTextFile(outfile, 'w');
+
+  var clsName = null;
+  var superName = null;
+  var impls = null;
+
+  do infile as xml {
+  &lt;javabean>:
+    clsName = $_.name;
+    if ($_.comments) {
+      println &lt;result> '/**';
+      do $_.comments.getReader() as lines {
+        println &lt;result> ' * ', $_;
+      }
+      println &lt;result> ' */';
+    }
+
+  &lt;package>TEXT:
+    println &lt;result> 'package ', $_, ';', nl;
+
+  &lt;import>TEXT:
+    println &lt;result> 'import ', $_, ';';
+
+  &lt;superclass>:
+    superName = $_.name;
+    if (superName == 'Object')
+    superName = null;
+
+  &lt;implements>:
+    impls = $_.name.csv();
+
+  &lt;properties>: // begin a class:
+    print &lt;result> nl, 'public class ', clsName;
+    if (superName != null)
+      print &lt;result> ' extends ', superName;
+    if (impls != null &amp;&amp; impls.length > 0)
+      print &lt;result> ' implements ', impls.toCsv();
+    println &lt;result> nl, '{';
+
+  &lt;property>:
+    if ($_.comments)
+      println &lt;result> '  // ', $_.comments;
+    name = $_.name;
+    Name = name.capFirst();
+    type = $_.type;
+    println &lt;result> '  private ', type, ' ', name, ';', nl,
+                      '  public ', type, ' get', Name, '() { return ', name, '; }', nl,
+                      '  public void set', Name, '(', type, ' v) { ', name, '=v; }', nl;
+
+  &lt;/javabean>: // finish a class:
+  println &lt;result> '} // end of class ', clsName, '.';
+  }
+
+  result.close();
+}
+
+EndScript ==============================================
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;javabean name="TestView" comments="Test form showing all possible types.">
+  &lt;package>com.judoscript.something.interesting.views&lt;/package>
+  &lt;imports>
+    &lt;import>com.judoscript.something.interesting.ActionView&lt;/import>
+  &lt;/imports>
+  &lt;superclass name="Object"/>
+  &lt;implements name="ActionView"/>
+  &lt;properties>
+    &lt;property name="stringValue" type="String" comments="a string value"/>
+    &lt;property name="intValue" type="int" comments="an integer value"/>
+    &lt;property name="booleanValue" type="boolean" comments="a boolean value"/>
+    &lt;property name="collectionValue" type="java.util.Collection" comments="a collection"/>
+  &lt;/properties>
+&lt;/javabean>
+</pre></td></tr></table></body></html>

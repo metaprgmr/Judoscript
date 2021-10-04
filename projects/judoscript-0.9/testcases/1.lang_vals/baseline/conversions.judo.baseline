@@ -1,0 +1,43 @@
+i1 = 62
+i2 = 12345678
+f1 = 54.12345
+f2 = 54.56789
+f3 = 54.56123
+c = "A"
+s = "abcdefg"
+
+=== integer <=> float ===
+i1.float()  = 62.0
+f1.int()    = 54
+f2.int()    = 54
+
+=== character <=> number ===
+i1.chr()    = >
+i2.chr()    = ?
+f1.chr()    = 6
+c.ascii()   = 65
+s.ascii()   = 97
+c.unicode() = 65
+s.unicode() = 97
+
+=== float and integer precision control and formatting ===
+f1.ceil(), f1.floor(), f1.round() =  55.0  54.0  54
+f2.ceil(), f2.floor(), f2.round() =  55.0  54.0  55
+i2.groupNumber()      = 12,345,678
+i2.groupNumber(4)     = 1234,5678
+i2.groupNumber(4,'.') = 1234.5678
+f2.fractionDigits()   = 55
+f2.fractionDigits(2)  = 54.57
+f3.fractionDigits(2)  = 54.56
+i1.fmtCurrency()      = $62.00
+f3.fmtCurrency()      = $54.56
+
+=== numbers => Java objects ===
+i1.toBoolean()   is a java.lang.Boolean
+i1.toByte()      is a java.lang.Byte
+i1.toCharacter() is a java.lang.Character
+i1.toShort()     is a java.lang.Short
+i1.toInteger()   is a java.lang.Integer
+i1.toLong()      is a java.lang.Long
+i1.toFloat()     is a java.lang.Float
+i1.toDouble()    is a java.lang.Double

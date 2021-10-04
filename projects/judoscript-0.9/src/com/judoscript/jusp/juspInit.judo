@@ -1,0 +1,92 @@
+#!##############################################################
+#!
+#!  Sample juspInit.judo file
+#!
+#!  Should be in "WEB-INF/judo/".
+#!
+#!##############################################################
+
+
+#!##############################################################
+#! Global application settings
+#!
+
+!pragma logger='info' // 'error', 'warn', 'info', 'debug' (--> more verbose)
+// !pragma assertAs='ignore' // default: 'warn'
+
+
+#! Custom error handling:
+
+juspContext.setUserErrorPageURI('/appErrorPage.jusp');
+println <log:info> 'Set application error page to "appErrorPage.jusp".';
+
+juspContext.setSystemErrorPageURI('/sysErrorPage.jusp');
+println <log:info> 'Set system error page to "sysErrorPage.jusp".';
+
+// juspContext.setPrintStackTrace(false);
+
+#! Upload file settings:
+
+// juspContext.setUploadLimits(10485760, 10485760);
+// juspContext.setUploadTempDir('/tmp/uploads');
+
+
+#! Custom post-page-rendering clean-up:
+
+/*
+var juspFinally =
+  function (ctxt) { // an anonymous function.
+    try {
+      println <log:info> 'Page: "', ctxt.request.getRequestURI(), '" is done.';
+    } catch {
+      // ignore.
+    }
+  };
+*/
+
+
+#! Set this flag to 'true' tells the JUSP engine to check the
+#! timestamps of the preprocessed JUSP pages for each request.
+#!
+#! For production systems, it should be set to 'false'.
+
+juspContext.setCheckTimestamp(true);
+println <log:info> 'Check JUSP page timestamps for each request.';
+
+
+#!##############################################################
+#! Custom tag:
+#!
+
+// Sample custom tag -- prints out a date with different styles
+// Format: <%!my$fmtdate aDate, style %>
+// Params: aDate -- the date value
+//         style -- a boolean.
+// 
+function jusp$my$fmtdate ctxt/* mandatory */, aDate, style {
+  print <ctxt.writer> aDate.fmtDate(style ? 'yyyy-MM-dd' : 'dd MMM, yy');
+}
+println <log:info> 'Custom tag <%!dateDisplay aDate, style %> available to all pages.';
+
+// View the source of any pages, using the juspview.jusp page.
+// Format: <%!viewsrc uri, prefix %>
+// Params: uri    -- the page to view
+//         prefix -- [optional] the prefix for the URI of juspview.judo
+// 
+function jusp$viewsrc ctxt, uri, prefix {
+  print <ctxt.writer> '<a href="${prefix}juspview.jusp?file=${uri}">source of <code>${uri}</code></a>';
+}
+
+
+#!##############################################################
+#! Application Specifics
+#!
+
+#! You can include any number of library scripts ...
+
+!include 'myapp/myApp_Emulated.judo'
+//!include 'myapp/myApp_JDBC.judo'
+//!include 'myapp/myApp_Hibernate.judo'
+//!include 'myapp/myApp_EJB.judo'
+//!include 'myapp/myApp_SOAP.judo'
+

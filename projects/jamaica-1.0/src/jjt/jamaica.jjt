@@ -1,0 +1,1467 @@
+/* Jamaica, The Java Virtual Machine (JVM) Macro Assembly Language
+ * Copyright (C) 2004- James Huang,
+ * http://www.judoscript.com/jamaica/index.html
+ *
+ * This is free software; you can embed, modify and redistribute
+ * it under the terms of the GNU Lesser General Public License
+ * version 2.1 or up as published by the Free Software Foundation,
+ * which you should have received a copy along with this software.
+ * In case you did not, please download it from the internet at
+ * http://www.gnu.org/copyleft/lesser.html
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ *************************** CHANGE LOG ***************************
+ *
+ * Authors: JH  = James Jianbo Huang, judoscript@hotmail.com
+ *
+ * 03-14-2004  JH   Initial release.
+ *
+ **********  No tabs. Indent 2 spaces. Follow the style. **********/
+
+options {
+  STATIC = false;
+  JAVA_UNICODE_ESCAPE = true;
+  MULTI = true;
+  VISITOR = true;
+  VISITOR_EXCEPTION = "Exception";
+  BUILD_NODE_FILES = false;
+//  DEBUG_PARSER = true;
+}
+
+PARSER_BEGIN(JamaicaParser)
+package com.judoscript.jamaica.parser;
+
+import com.judoscript.jamaica.MyUtils;
+import com.judoscript.jamaica.JavaClassCreator;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.io.*;
+
+public class JamaicaParser extends MyUtils
+{
+  /////////////////////////////////////////////////////////////
+  // Parser Helpers
+  /////////////////////////////////////////////////////////////
+
+  String pkgPrefix = null;
+  ArrayList importList = new ArrayList();
+
+  String className = null;
+  String superClassName = "java.lang.Object";
+
+  int blockIdx = 1;
+
+  String getNextBlockID() { return "" + (blockIdx++); }
+
+  void setClassName(String clsName) {
+    if (pkgPrefix == null)
+      className = clsName;
+    else {
+      className = pkgPrefix + '.' + clsName;
+      importList.add(className);
+    }
+  }
+
+  String handleClassName(String name) {
+    int idx = name.indexOf('.');
+    if (idx > 0)
+      return name;
+
+    if (pkgPrefix != null) {
+      try {
+        Class.forName(pkgPrefix + '.' + name);
+        return pkgPrefix + '.' + name;
+      } catch(Exception e) {}
+    }
+
+    int len = importList == null ? 0 : importList.size();
+    for (int i=0; i<len; ++i) {
+      String s = (String)importList.get(i);
+      if (s.endsWith(".")) { // import ----.*
+        try {
+          Class.forName(s + name);
+          return s + name;
+        } catch(Exception e) {}
+      } else if (s.endsWith("." + name)) { // import ----.---
+        return s;
+      }
+    }
+
+    // try java.lang.*
+    try {
+      Class.forName("java.lang." + name);
+      return "java.lang." + name;
+    } catch(Exception e) {}
+
+    // try java.util.*
+    try {
+      Class.forName("java.util." + name);
+      return "java.util." + name;
+    } catch(Exception e) {}
+
+    // try java.io.*
+    try {
+      Class.forName("java.io." + name);
+      return "java.io." + name;
+    } catch(Exception e) {}
+
+    return name;
+  }
+
+  void setMemberAccess(String s, ASTCodeMemberAccess jjt) {
+    int idx = s.lastIndexOf('.');
+    String name = s;
+    if (idx < 0) {
+      s = className;
+    } else {
+      name = s.substring(idx+1);
+      s = handleClassName(s.substring(0,idx));
+    }
+    jjt.setClassName(s);
+    jjt.setName(name);
+  }
+
+  /////////////////////////////////////////////////////////////
+  // Constant and Expression Support
+  /////////////////////////////////////////////////////////////
+
+  HashMap constants = new HashMap();
+
+  Object resolveConst(String value, String typeHint) throws ParseException {
+    int idx = value.lastIndexOf('.');
+    if (idx < 0) {
+      Object o = constants.get(value);
+      if (o == null)
+        throw new ParseException("Constant " + value + " not defined.");
+      return value2object(o, typeHint);
+    } else {
+      String clsName = handleClassName(value.substring(0, idx));
+      String fldName = value.substring(idx+1);
+      try {
+        Class cls = Class.forName(clsName);
+        Field fld = cls.getField(fldName);
+        int flags = fld.getModifiers();
+        if (Modifier.isFinal(flags) && Modifier.isStatic(flags) && !Modifier.isPrivate(flags))
+          return value2object(fld.get(null), typeHint);
+        throw new ParseException("Class field " + value + " is not a constant.");
+      } catch(ParseException pe) {
+        throw pe;
+      } catch(Exception e) {
+        throw new ParseException("Class constant " + value + " not found.");
+      }
+    }
+  }
+
+  void collectConsts(String clsNames[]) {
+    for (int i=0; i<clsNames.length; ++i)
+      collectConsts(clsNames[i]);
+  }
+
+  void collectConsts(String clsName) {
+    try {
+      Class cls = Class.forName(handleClassName(clsName));
+      Field[] flds = cls.getFields();
+      int len = flds == null ? 0 : flds.length;
+      for (int i=len-1; i>=0; --i) {
+        Field fld = flds[i];
+        int flags = fld.getModifiers();
+        if (Modifier.isFinal(flags) && Modifier.isStatic(flags))
+          constants.put(fld.getName(), fld.get(null));
+      }
+    } catch(Exception e) {}
+  }
+
+} // end of class.
+PARSER_END(JamaicaParser)
+
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r" | "\f"
+}
+
+<ASM_EOL>
+SKIP :
+{
+  " " | "\t" | "\f"
+}
+
+<ASM_EOL>
+SKIP :
+{
+  < "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<ASM_EOL>
+MORE :
+{
+  ";" : IN_SINGLE_LINE_COMMENT
+| "//" : IN_SINGLE_LINE_COMMENT
+| <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+| "/*" : IN_MULTI_LINE_COMMENT
+}
+
+/* COMMENTS */
+
+MORE :
+{
+  "//" : IN_SINGLE_LINE_COMMENT
+| <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+| "/*" : IN_MULTI_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+
+/* RESERVED WORDS AND LITERALS */
+
+TOKEN :
+{
+  < CATCH: "catch" >
+| < _DEFAULT: "default" >
+
+| < _DEFAULT_C_TOR: "%default_constructor" >
+| < _DEFAULT_CTOR: "%default_ctor" >
+| < _SET: "%set" >
+| < _LOAD: "%load" >
+//| < _STORE: "%store" >
+| < _PRINT:   "%print" >
+| < _PRINTLN: "%println" >
+| < _FLUSH:   "%flush" >
+| < _OBJECT: "%object" >
+| < _ARRAY: "%array" >
+| < _CONCAT: "%concat" >
+| < _ITERATE: "%iterate" >
+| < _END_ITERATE: "%end_iterate" >
+| < _ARRAY_ITERATE: "%array_iterate" >
+| < _END_ARRAY_ITERATE: "%end_array_iterate" >
+| < _IF: "%if" >
+| < _ELSE: "%else" >
+| < _END_IF: "%end_if" >
+
+| < ABSTRACT: "abstract" >
+| < FINAL: "final" >
+| < STATIC: "static" >
+| < PRIVATE: "private" >
+| < PROTECTED: "protected" >
+| < PUBLIC: "public" >
+| < SYNCHRONIZED: "synchronized" >
+| < NATIVE: "native" >
+| < TRANSIENT: "transient" >
+| < VOLATILE: "volatile" >
+
+| < IMPORT: "import" >
+| < PACKAGE: "package">
+| < CLASS: "class" >
+| < INTERFACE: "interface" >
+| < IMPLEMENTS: "implements" >
+| < EXTENDS: "extends" >
+| < THROWS: "throws" >
+
+| < CONST: ".const" >
+
+| < VOID: "void" >
+| < BOOLEAN: "boolean" >
+| < BYTE: "byte" >
+| < CHAR: "char" >
+| < SHORT: "short" >
+| < INT: "int" >
+| < LONG: "long" >
+| < FLOAT: "float" >
+| < DOUBLE: "double" >
+
+| < NULL: "null" >
+| < TRUE: "true" >
+| < FALSE: "false" >
+
+| <NOP_:             "nop"            > //   0
+| <ACONST_NULL_:     "aconst_null"    > //   1
+| <ICONST_M1_:       "iconst_m1"      > //   2
+| <ICONST_0_:        "iconst_0"       > //   3
+| <ICONST_1_:        "iconst_1"       > //   4
+| <ICONST_2_:        "iconst_2"       > //   5
+| <ICONST_3_:        "iconst_3"       > //   6
+| <ICONST_4_:        "iconst_4"       > //   7
+| <ICONST_5_:        "iconst_5"       > //   8
+| <LCONST_0_:        "lconst_0"       > //   9
+| <LCONST_1_:        "lconst_1"       > //  10
+| <FCONST_0_:        "fconst_0"       > //  11
+| <FCONST_1_:        "fconst_1"       > //  12
+| <FCONST_2_:        "fconst_2"       > //  13
+| <DCONST_0_:        "dconst_0"       > //  14
+| <DCONST_1_:        "dconst_1"       > //  15
+| <BIPUSH_:          "bipush"         > //  16
+| <SIPUSH_:          "sipush"         > //  17
+| <LDC_:             "ldc"            > //  18
+| <LDC_W_:           "ldc_w"          > //  19
+| <LDC2_W_:          "ldc2_w"         > //  20
+| <ILOAD_:           "iload"          > //  21
+| <LLOAD_:           "lload"          > //  22
+| <FLOAD_:           "fload"          > //  23
+| <DLOAD_:           "dload"          > //  24
+| <ALOAD_:           "aload"          > //  25
+| <ILOAD_0_:         "iload_0"        > //  26
+| <ILOAD_1_:         "iload_1"        > //  27
+| <ILOAD_2_:         "iload_2"        > //  28
+| <ILOAD_3_:         "iload_3"        > //  29
+| <LLOAD_0_:         "lload_0"        > //  30
+| <LLOAD_1_:         "lload_1"        > //  31
+| <LLOAD_2_:         "lload_2"        > //  32
+| <LLOAD_3_:         "lload_3"        > //  33
+| <FLOAD_0_:         "fload_0"        > //  34
+| <FLOAD_1_:         "fload_1"        > //  35
+| <FLOAD_2_:         "fload_2"        > //  36
+| <FLOAD_3_:         "fload_3"        > //  37
+| <DLOAD_0_:         "dload_0"        > //  38
+| <DLOAD_1_:         "dload_1"        > //  39
+| <DLOAD_2_:         "dload_2"        > //  40
+| <DLOAD_3_:         "dload_3"        > //  41
+| <ALOAD_0_:         "aload_0"        > //  42
+| <ALOAD_1_:         "aload_1"        > //  43
+| <ALOAD_2_:         "aload_2"        > //  44
+| <ALOAD_3_:         "aload_3"        > //  45
+| <IALOAD_:          "iaload"         > //  46
+| <LALOAD_:          "laload"         > //  47
+| <FALOAD_:          "faload"         > //  48
+| <DALOAD_:          "daload"         > //  49
+| <AALOAD_:          "aaload"         > //  50
+| <BALOAD_:          "baload"         > //  51
+| <CALOAD_:          "caload"         > //  52
+| <SALOAD_:          "saload"         > //  53
+| <ISTORE_:          "istore"         > //  54
+| <LSTORE_:          "lstore"         > //  55
+| <FSTORE_:          "fstore"         > //  56
+| <DSTORE_:          "dstore"         > //  57
+| <ASTORE_:          "astore"         > //  58
+| <ISTORE_0_:        "istore_0"       > //  59
+| <ISTORE_1_:        "istore_1"       > //  60
+| <ISTORE_2_:        "istore_2"       > //  61
+| <ISTORE_3_:        "istore_3"       > //  62
+| <LSTORE_0_:        "lstore_0"       > //  63
+| <LSTORE_1_:        "lstore_1"       > //  64
+| <LSTORE_2_:        "lstore_2"       > //  65
+| <LSTORE_3_:        "lstore_3"       > //  66
+| <FSTORE_0_:        "fstore_0"       > //  67
+| <FSTORE_1_:        "fstore_1"       > //  68
+| <FSTORE_2_:        "fstore_2"       > //  69
+| <FSTORE_3_:        "fstore_3"       > //  70
+| <DSTORE_0_:        "dstore_0"       > //  71
+| <DSTORE_1_:        "dstore_1"       > //  72
+| <DSTORE_2_:        "dstore_2"       > //  73
+| <DSTORE_3_:        "dstore_3"       > //  74
+| <ASTORE_0_:        "astore_0"       > //  75
+| <ASTORE_1_:        "astore_1"       > //  76
+| <ASTORE_2_:        "astore_2"       > //  77
+| <ASTORE_3_:        "astore_3"       > //  78
+| <IASTORE_:         "iastore"        > //  79
+| <LASTORE_:         "lastore"        > //  80
+| <FASTORE_:         "fastore"        > //  81
+| <DASTORE_:         "dastore"        > //  82
+| <AASTORE_:         "aastore"        > //  83
+| <BASTORE_:         "bastore"        > //  84
+| <CASTORE_:         "castore"        > //  85
+| <SASTORE_:         "sastore"        > //  86
+| <POP_:             "pop"            > //  87
+| <POP2_:            "pop2"           > //  88
+| <DUP_:             "dup"            > //  89
+| <DUP_X1_:          "dup_x1"         > //  90
+| <DUP_X2_:          "dup_x2"         > //  91
+| <DUP2_:            "dup2"           > //  92
+| <DUP2_X1_:         "dup2_x1"        > //  93
+| <DUP2_X2_:         "dup2_x2"        > //  94
+| <SWAP_:            "swap"           > //  95
+| <IADD_:            "iadd"           > //  96
+| <LADD_:            "ladd"           > //  97
+| <FADD_:            "fadd"           > //  98
+| <DADD_:            "dadd"           > //  99
+| <ISUB_:            "isub"           > // 100
+| <LSUB_:            "lsub"           > // 101
+| <FSUB_:            "fsub"           > // 102
+| <DSUB_:            "dsub"           > // 103
+| <IMUL_:            "imul"           > // 104
+| <LMUL_:            "lmul"           > // 105
+| <FMUL_:            "fmul"           > // 106
+| <DMUL_:            "dmul"           > // 107
+| <IDIV_:            "idiv"           > // 108
+| <LDIV_:            "ldiv"           > // 109
+| <FDIV_:            "fdiv"           > // 110
+| <DDIV_:            "ddiv"           > // 111
+| <IREM_:            "irem"           > // 112
+| <LREM_:            "lrem"           > // 113
+| <FREM_:            "frem"           > // 114
+| <DREM_:            "drem"           > // 115
+| <INEG_:            "ineg"           > // 116
+| <LNEG_:            "lneg"           > // 117
+| <FNEG_:            "fneg"           > // 118
+| <DNEG_:            "dneg"           > // 119
+| <ISHL_:            "ishl"           > // 120
+| <LSHL_:            "lshl"           > // 121
+| <ISHR_:            "ishr"           > // 122
+| <LSHR_:            "lshr"           > // 123
+| <IUSHR_:           "iushr"          > // 124
+| <LUSHR_:           "lushr"          > // 125
+| <IAND_:            "iand"           > // 126
+| <LAND_:            "land"           > // 127
+| <IOR_:             "ior"            > // 128
+| <LOR_:             "lor"            > // 129
+| <IXOR_:            "ixor"           > // 130
+| <LXOR_:            "lxor"           > // 131
+| <IINC_:            "iinc"           > // 132
+| <I2L_:             "i2l"            > // 133
+| <I2F_:             "i2f"            > // 134
+| <I2D_:             "i2d"            > // 135
+| <L2I_:             "l2i"            > // 136
+| <L2F_:             "l2f"            > // 137
+| <L2D_:             "l2d"            > // 138
+| <F2I_:             "f2i"            > // 139
+| <F2L_:             "f2l"            > // 140
+| <F2D_:             "f2d"            > // 141
+| <D2I_:             "d2i"            > // 142
+| <D2L_:             "d2l"            > // 143
+| <D2F_:             "d2f"            > // 144
+| <I2B_:             "i2b"            > // 145
+| <I2C_:             "i2c"            > // 146
+| <I2S_:             "i2s"            > // 147
+| <LCMP_:            "lcmp"           > // 148
+| <FCMPL_:           "fcmpl"          > // 149
+| <FCMPG_:           "fcmpg"          > // 150
+| <DCMPL_:           "dcmpl"          > // 151
+| <DCMPG_:           "dcmpg"          > // 152
+| <IFEQ_:            "ifeq"           > // 153
+| <IFNE_:            "ifne"           > // 154
+| <IFLT_:            "iflt"           > // 155
+| <IFGE_:            "ifge"           > // 156
+| <IFGT_:            "ifgt"           > // 157
+| <IFLE_:            "ifle"           > // 158
+| <IF_ICMPEQ_:       "if_icmpeq"      > // 159
+| <IF_ICMPNE_:       "if_icmpne"      > // 160
+| <IF_ICMPLT_:       "if_icmplt"      > // 161
+| <IF_ICMPGE_:       "if_icmpge"      > // 162
+| <IF_ICMPGT_:       "if_icmpgt"      > // 163
+| <IF_ICMPLE_:       "if_icmple"      > // 164
+| <IF_ACMPEQ_:       "if_acmpeq"      > // 165
+| <IF_ACMPNE_:       "if_acmpne"      > // 166
+| <GOTO_:            "goto"           > // 167
+| <JSR_:             "jsr"            > // 168
+| <RET_:             "ret"            > // 169
+| <SWITCH_:          "switch"         > // -1
+| <TABLESWITCH_:     "tableswitch"    > // 170
+| <LOOKUPSWITCH_:    "lookupswitch"   > // 171
+| <IRETURN_:         "ireturn"        > // 172
+| <LRETURN_:         "lreturn"        > // 173
+| <FRETURN_:         "freturn"        > // 174
+| <DRETURN_:         "dreturn"        > // 175
+| <ARETURN_:         "areturn"        > // 176
+| <RETURN_:          "return"         > // 177
+| <GETSTATIC_:       "getstatic"      > // 178
+| <PUTSTATIC_:       "putstatic"      > // 179
+| <GETFIELD_:        "getfield"       > // 180
+| <PUTFIELD_:        "putfield"       > // 181
+| <INVOKEVIRTUAL_:   "invokevirtual"  > // 182
+| <INVOKESPECIAL_:   "invokespecial"  > // 183
+| <INVOKESTATIC_:    "invokestatic"   > // 184
+| <INVOKEINTERFACE_: "invokeinterface"> // 185
+| <NEW_:             "new"            > // 187
+| <NEWARRAY_:        "newarray"       > // 188
+| <ANEWARRAY_:       "anewarray"      > // 189
+| <ARRAYLENGTH_:     "arraylength"    > // 190
+| <ATHROW_:          "athrow"         > // 191
+| <CHECKCAST_:       "checkcast"      > // 192
+| <INSTANCEOF_:      "instanceof"     > // 193
+| <MONITORENTER_:    "monitorenter"   > // 194
+| <MONITOREXIT_:     "monitorexit"    > // 195
+| <WIDE_:            "wide"           > // 196
+| <MULTIANEWARRAY_:  "multianewarray" > // 197
+| <IFNULL_:          "ifnull"         > // 198
+| <IFNONNULL_:       "ifnonnull"      > // 199
+| <GOTO_W_:          "goto_w"         > // 200
+| <JSR_W_:           "jsr_w"          > // 201
+}
+
+/* LITERALS */
+
+TOKEN :
+{
+  <INTEGER_LITERAL:
+    ( <DECIMAL_LITERAL> | <HEX_LITERAL> | <OCTAL_LITERAL> ) (["l","L"])? >
+| < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+| < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+| < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+| < FLOAT_LITERAL:
+      (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+    | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+    | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+    | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #CHAR_ESCAPE:
+    "\\" ( ["n","t","b","r","f","\\","'","\""]
+         | ["0"-"7"] ( ["0"-"7"] )?
+         | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+         )
+  >
+| < CHARACTER_LITERAL: "'" ( ~["'","\\","\n","\r"] | <CHAR_ESCAPE> ) "'" >
+| < STRING_LITERAL: "\"" ( ~["\"","\\","\n","\r"] | <CHAR_ESCAPE> )* "\"" >
+}
+
+/* IDENTIFIERS */
+
+TOKEN :
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+| < #LETTER:
+      [
+       "\u0024",
+       "\u0041"-"\u005a",
+       "\u005f",
+       "\u0061"-"\u007a",
+       "\u00c0"-"\u00d6",
+       "\u00d8"-"\u00f6",
+       "\u00f8"-"\u00ff",
+       "\u0100"-"\u1fff",
+       "\u3040"-"\u318f",
+       "\u3300"-"\u337f",
+       "\u3400"-"\u3d2d",
+       "\u4e00"-"\u9fff",
+       "\uf900"-"\ufaff"
+      ]
+  >
+| < #DIGIT:
+      [
+       "\u0030"-"\u0039",
+       "\u0660"-"\u0669",
+       "\u06f0"-"\u06f9",
+       "\u0966"-"\u096f",
+       "\u09e6"-"\u09ef",
+       "\u0a66"-"\u0a6f",
+       "\u0ae6"-"\u0aef",
+       "\u0b66"-"\u0b6f",
+       "\u0be7"-"\u0bef",
+       "\u0c66"-"\u0c6f",
+       "\u0ce6"-"\u0cef",
+       "\u0d66"-"\u0d6f",
+       "\u0e50"-"\u0e59",
+       "\u0ed0"-"\u0ed9",
+       "\u1040"-"\u1049"
+      ]
+  >
+}
+
+/* SEPARATORS */
+
+TOKEN :
+{
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LANGLE: "<" >
+| < RANGLE: ">" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
+| < ASSIGN: "=" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < EQ: "==" >
+| < NE: "!=" >
+}
+
+/********************************************
+ * LOW-LEVEL RULES                          *
+ ********************************************/
+
+void AnyName() #void :
+{
+}
+{
+  <IDENTIFIER>
+}
+
+Object Param(String typeHint) #void :
+{
+  Object o;
+  Object oa[];
+}
+{
+  ( o=Constant(typeHint)
+  | <IDENTIFIER>         { o = new JavaClassCreator.VarAccess(token.image, token.beginLine); }
+    [ MultiDimList((JavaClassCreator.VarAccess)o) ]
+  )                      { return o; }
+}
+
+void ParamList(ASTMacroBase base) #void :
+{
+  Object o;
+}
+{
+  o=Param(null)          { base.addParam(o); }
+  ( "," o=Param(null)    { base.addParam(o); }
+  )*
+}
+
+void MultiDimList(JavaClassCreator.VarAccess var) #void :
+{
+  ArrayList list = new ArrayList();
+  Object o;
+}
+{
+  ( "[" o=Param(null) "]"  { list.add(o); }
+  )+                       { var.setIndex(list.toArray()); }
+}
+
+/********************************************
+ * CONSTANTS AND CONSTANT EXPRESSIONS       *
+ ********************************************/
+
+Object Constant(String typeHint) #void :
+{
+  Object o;
+}
+{
+  <INTEGER_LITERAL>      { return parseIntObject(token.image, typeHint); }
+| <CHARACTER_LITERAL>    { return parseCharLiteral(token.image, typeHint); }
+| <FLOAT_LITERAL>        { return parseFloatObject(token.image, typeHint); }
+| <STRING_LITERAL>       { return processStringLiteral(token.image); }
+| "null"                 { return null; }
+| "true"                 { return Boolean.TRUE; }
+| "false"                { return Boolean.FALSE; }
+| "{" o=ConstExpr(typeHint) "}" { return o; }
+}
+
+Object ConstantDef(String typeHint) #void :
+{
+  Object o;
+}
+{
+  <INTEGER_LITERAL>      { return parseIntObject(token.image, typeHint); }
+| <CHARACTER_LITERAL>    { return parseCharLiteral(token.image, typeHint); }
+| <FLOAT_LITERAL>        { return parseFloatObject(token.image, typeHint); }
+| <STRING_LITERAL>       { return processStringLiteral(token.image); }
+| "null"                 { return null; }
+| "true"                 { return Boolean.TRUE; }
+| "false"                { return Boolean.FALSE; }
+| o=ConstExpr(typeHint)  { return o; }
+}
+
+Object ConstExpr(String typeHint) #void : // TODO
+{
+  String s;
+}
+{
+  s=ClassName(false)     { return resolveConst(s, typeHint); }
+}
+
+/********************************************
+ * THE JASM123 LANGUAGE GRAMMAR STARTS HERE *
+ ********************************************/
+
+/*
+ * Program structuring syntax follows.
+ */
+
+ASTInterfaceDeclaration CompilationUnit() #void : {
+  String s;
+  Object o;
+}
+{
+  [ "package" pkgPrefix=ClassName(false) ";" ]
+  ( "import" s=ClassName(false) [ "." "*" {s+=".*";} ]
+    ";"                         { importList.add(s); }
+  )*
+  ( "%const" <IDENTIFIER>       { s = token.image; }
+    "=" o=ConstantDef(null)     { constants.put(s,o); }
+  )*
+
+  ( LOOKAHEAD( ( "abstract" | "final" | "public" )* "class" ) ClassDeclaration()
+  | InterfaceDeclaration()
+  )
+  <EOF>                         { return (ASTInterfaceDeclaration)jjtree.popNode(); }
+}
+
+/*
+ * Declaration syntax follows.
+ */
+
+void ClassDeclaration() #void :
+{
+  int accessFlags = 0;
+}
+{
+  ( "abstract"                  { accessFlags |= Modifier.ABSTRACT; }
+  | "final"                     { accessFlags |= Modifier.FINAL; }
+  | "public"                    { accessFlags |= Modifier.PUBLIC; }
+  )*
+  UnmodifiedClassDeclaration(accessFlags)
+}
+
+void UnmodifiedClassDeclaration(int accessFlags) #ClassDeclaration :
+{
+  String[] sa = null;
+}
+{
+  "class" <IDENTIFIER>          { setClassName(token.image);
+                                  jjtThis.setName(className, token.beginLine);
+                                  jjtThis.setAccessFlags(accessFlags);
+                                }
+  [ "extends" superClassName=ClassName(true) { collectConsts(superClassName);
+                                               jjtThis.setSuper(superClassName);
+                                             }
+  ]
+  [ "implements" sa=ClassNameList()          { collectConsts(sa);
+                                               jjtThis.setInterfaces(sa);
+                                             }
+  ]
+  ClassBody()
+}
+
+void ClassBody() #void :
+{
+}
+{
+  "{"
+  ( LOOKAHEAD(2) Initializer()
+  | DefaultCtor()
+  | LOOKAHEAD( [ "public" | "protected" | "private" ] <IDENTIFIER> "(" )
+    ConstructorDeclaration()
+  | LOOKAHEAD( MethodDeclarationLookahead() )
+    MethodDeclaration()
+  | FieldDeclaration()
+/******
+  | LOOKAHEAD( ( "static" | "abstract" | "final" | "public" | "protected" | "private" )* "class" )
+    NestedClassDeclaration()
+  | LOOKAHEAD( ( "static" | "abstract" | "final" | "public" | "protected" | "private" )* "interface" )
+    NestedInterfaceDeclaration()
+******/
+  )*
+  "}"
+}
+
+void DefaultCtor() :
+{
+  int accessFlags = 0;
+}
+{
+  ( "%default_constructor" | "%default_ctor" )
+  [ "<" ( "public"              { accessFlags = Modifier.PUBLIC; }
+        | "protected"           { accessFlags = Modifier.PROTECTED; }
+        | "private"             { accessFlags = Modifier.PRIVATE; }
+    ) ">"                       { jjtThis.setAccessFlags(accessFlags); }
+  ]
+}
+
+void MethodDeclarationLookahead() #void :
+{}
+{
+  ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
+  ResultType() AnyName() "("
+}
+
+void InterfaceDeclaration() #void :
+{
+}
+{
+  ( "abstract" | "public" )* // always the case.
+  UnmodifiedInterfaceDeclaration()
+}
+
+/******
+void NestedClassDeclaration() :
+{
+  int accessFlags = 0;
+}
+{
+  ( "static"       { accessFlags |= STATIC; }
+  | "abstract"     { accessFlags |= ABSTRACT; }
+  | "final"        { accessFlags |= FINAL; }
+  | "public"       { accessFlags |= PUBLIC; }
+  | "protected"    { accessFlags |= PROTECTED; }
+  | "private"      { accessFlags |= PRIVATE; }
+  )*
+  UnmodifiedClassDeclaration(accessFlags)
+}
+
+void NestedInterfaceDeclaration() :
+{
+  int accessFlags = 0;
+}
+{
+  ( "static"       { accessFlags |= STATIC; }
+  | "abstract"     { accessFlags |= ABSTRACT; }
+  | "final"        { accessFlags |= FINAL; }
+  | "public"       { accessFlags |= PUBLIC; }
+  | "protected"    { accessFlags |= PROTECTED; }
+  | "private"      { accessFlags |= PRIVATE; }
+  )*
+  UnmodifiedInterfaceDeclaration(accessFlags)
+}
+******/
+
+void UnmodifiedInterfaceDeclaration() #InterfaceDeclaration :
+{
+  String[] sa = null;
+}
+{
+  "interface" <IDENTIFIER>       { setClassName(token.image); jjtThis.setName(className,token.beginLine); }
+  [ "extends" sa=ClassNameList() { jjtThis.setExtends(sa); collectConsts(sa); } ]
+  "{" ( InterfaceMemberDeclaration() )* "}"
+}
+
+void InterfaceMemberDeclaration() #void :
+{
+}
+{
+  LOOKAHEAD( MethodDeclarationLookahead() )
+  MethodDeclaration()
+| FieldDeclaration()
+/******
+| LOOKAHEAD( ( "static" | "abstract" | "final" | "public" | "protected" | "private" )* "class" )
+  NestedClassDeclaration()
+| LOOKAHEAD( ( "static" | "abstract" | "final" | "public" | "protected" | "private" )* "interface" )
+  NestedInterfaceDeclaration()
+******/
+}
+
+void FieldDeclaration() #void :
+{
+  String t;
+  int accessFlags = 0;
+}
+{
+  ( "public"                    { accessFlags |= Modifier.PUBLIC; }
+  | "protected"                 { accessFlags |= Modifier.PROTECTED; }
+  | "private"                   { accessFlags |= Modifier.PRIVATE; }
+  | "static"                    { accessFlags |= Modifier.STATIC; }
+  | "final"                     { accessFlags |= Modifier.FINAL; }
+  | "transient"                 { accessFlags |= Modifier.TRANSIENT; }
+  | "volatile"                  { accessFlags |= Modifier.VOLATILE; }
+  )*
+  t=Type() VariableDeclarator(t,accessFlags) ( "," VariableDeclarator(t,accessFlags) )* ";"
+}
+
+void VariableDeclarator(String type, int accessFlags) :
+{
+  Object o = null;
+}
+{
+  AnyName()                     { jjtThis.setName(token.image, token.beginLine); }
+  ( "[" "]" {type+="[]";} )*    { jjtThis.setType(type);
+                                  jjtThis.setAccessFlags(accessFlags);
+                                }
+  [ "=" o=Constant(type)        { jjtThis.setValue(o);
+                                  if (Modifier.isStatic(accessFlags) && Modifier.isFinal(accessFlags))
+                                    constants.put(jjtThis.getName(), o);
+                                }
+  ]
+}
+
+void MethodDeclaration() :
+{
+  String s;
+  String[] sa;
+  int accessFlags = 0;
+  boolean checkEnding = true;
+}
+{
+  ( "public"                    { accessFlags |= Modifier.PUBLIC; }
+  | "protected"                 { accessFlags |= Modifier.PROTECTED; }
+  | "private"                   { accessFlags |= Modifier.PRIVATE; }
+  | "static"                    { accessFlags |= Modifier.STATIC; }
+  | "final"                     { accessFlags |= Modifier.FINAL; }
+  | "abstract"                  { accessFlags |= Modifier.ABSTRACT; checkEnding = false; }
+  | "native"                    { accessFlags |= Modifier.NATIVE; }
+  | "synchronized"              { accessFlags |= Modifier.SYNCHRONIZED; }
+  )*
+  s=ResultType() AnyName()      { jjtThis.setName(token.image, token.beginLine);
+                                  if (!s.equals("void")) checkEnding = false;
+                                }
+  FormalParameters()
+  ( "[" "]" {s+="[]";} )*       { jjtThis.setType(s); }
+  [ "throws" sa=ClassNameList() { jjtThis.addExceptions(sa); }
+  ]
+  ( MethodBlock(checkEnding)
+  | ";"                         { accessFlags |= Modifier.ABSTRACT; }
+  )                             { jjtThis.setAccessFlags(accessFlags); }
+}
+
+void FormalParameters():
+{
+}
+{
+  "(" [ FormalParameter() ( "," FormalParameter())* ] ")"
+}
+
+void FormalParameter() #void :
+{
+  String s;
+}
+{
+  [ "final" ] s=Type() VariableDeclarator(s,0)
+}
+
+void ConstructorDeclaration() #MethodDeclaration :
+{
+  String[] sa;
+  int accessFlags = 0;
+  int line = 0;
+}
+{
+  [ "public"                    { accessFlags |= Modifier.PUBLIC; }
+  | "protected"                 { accessFlags |= Modifier.PROTECTED; }
+  | "private"                   { accessFlags |= Modifier.PRIVATE; }
+  ] <IDENTIFIER>                { int idx = className.lastIndexOf('.');
+                                  String x = (idx<0) ? className : className.substring(idx+1);
+                                  if (!token.image.equals(x))
+                                    throw new ParseException("Constructor name must match the class name.");
+                                  line = token.beginLine;
+                                }
+  FormalParameters()
+  [ "throws" sa=ClassNameList() { jjtThis.addExceptions(sa); }
+  ]
+  MethodBlock(true)             { jjtThis.setName("<init>", line); jjtThis.setAccessFlags(accessFlags); }
+}
+
+void Initializer() :
+{
+}
+{
+  [ "static" ] MethodBlock(true)
+}
+
+
+/*
+ * Type, name and expression syntax follows.
+ */
+
+String SimpleType() #void :
+{
+  String s;
+}
+{
+  ( s=PrimitiveType() | s=ClassName(true) {s=handleClassName(s);} )  { return s; }
+}
+
+String Type() #void :
+{
+  String s;
+}
+{
+  s=SimpleType() ( "[" "]" {s+="[]";} )*     { return s; }
+}
+
+String ArrayType() #void :
+{
+  String s;
+}
+{
+  s=SimpleType() ( "[" "]" {s+="[]";} )+     { return s; }
+}
+
+String ClassArrayType() #void :
+{
+  String s;
+}
+{
+  s=ClassName(true) ( "[" "]" {s+="[]";} )+  { return s; }
+}
+
+String PrimitiveType() #void :
+{
+}
+{
+  ( "boolean" | "char" | "byte" | "short" | "int" | "long" | "float" | "double")
+  { return token.image; }
+}
+
+String ResultType() #void :
+{
+  String s;
+}
+{
+  "void"                   { return "void"; }
+| s=Type()                 { return s; }
+}
+
+String ClassName(boolean process) #void :
+{
+  String s;
+}
+{
+  <IDENTIFIER>             { s = token.image; }
+  ( LOOKAHEAD(2)
+    "." AnyName()          { s += "." + token.image; }
+  )*                       { return process ? handleClassName(s) : s; }
+}
+
+
+String[] ClassNameList() #void :
+{
+  String s;
+  ArrayList al = new ArrayList();
+}
+{
+  s=ClassName(true)        { al.add(s); }
+  ( "," s=ClassName(true)  { al.add(s); }
+  )*                       { return toStringArray(al); }
+}
+
+
+void MethodBlock(boolean checkEnding) #void :
+{
+  String s;
+}
+{
+  "{"
+  Block()
+
+  ( ( "catch" [ s=ClassName(true)  { jjtThis.setException(s); } ]
+      "(" <IDENTIFIER>     { jjtThis.setStartLabel(token.image, token.beginLine); }
+      [","] <IDENTIFIER>   { jjtThis.setEndLabel(token.image, token.beginLine); }
+      ")" <IDENTIFIER>     { jjtThis.setActionLabel(token.image, token.beginLine); }
+    ) #CatchClause
+  )*
+  "}"
+}
+
+
+void Block() #void :
+{
+}
+{
+  ( LOOKAHEAD(2) LocalVariableDeclaration()
+  | [ <IDENTIFIER> {jjtThis.setName(token.image,token.beginLine);} #Label ":" ] Code()
+  )*
+}
+
+
+void LocalVariableDeclaration() #void :
+{
+  String t;
+}
+{
+  t=Type() VariableDeclarator(t,0) ( "," VariableDeclarator(t,0) )* ";"
+}
+
+
+/*
+ * Code syntax follows.
+ */
+
+void Code() #void :
+{
+  String s;
+  Object o;
+  int cd;
+  ASTMacroBase begin;
+}
+{
+  ( "nop"              {cd=0;}   //  opcode:0  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:0
+  | "aconst_null"      {cd=1;}   //  opcode:1  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_m1"        {cd=2;}   //  opcode:2  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_0"         {cd=3;}   //  opcode:3  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_1"         {cd=4;}   //  opcode:4  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_2"         {cd=5;}   //  opcode:5  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_3"         {cd=6;}   //  opcode:6  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_4"         {cd=7;}   //  opcode:7  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iconst_5"         {cd=8;}   //  opcode:8  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "lconst_0"         {cd=9;}   //  opcode:9  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "lconst_1"         {cd=10;}  //  opcode:10  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "fconst_0"         {cd=11;}  //  opcode:11  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "fconst_1"         {cd=12;}  //  opcode:12  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "fconst_2"         {cd=13;}  //  opcode:13  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "dconst_0"         {cd=14;}  //  opcode:14  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "dconst_1"         {cd=15;}  //  opcode:15  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "iload_0"          {cd=26;}  //  opcode:26  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iload_1"          {cd=27;}  //  opcode:27  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iload_2"          {cd=28;}  //  opcode:28  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iload_3"          {cd=29;}  //  opcode:29  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "lload_0"          {cd=30;}  //  opcode:30  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "lload_1"          {cd=31;}  //  opcode:31  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "lload_2"          {cd=32;}  //  opcode:32  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "lload_3"          {cd=33;}  //  opcode:33  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "fload_0"          {cd=34;}  //  opcode:34  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "fload_1"          {cd=35;}  //  opcode:35  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "fload_2"          {cd=36;}  //  opcode:36  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "fload_3"          {cd=37;}  //  opcode:37  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "dload_0"          {cd=38;}  //  opcode:38  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "dload_1"          {cd=39;}  //  opcode:39  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "dload_2"          {cd=40;}  //  opcode:40  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "dload_3"          {cd=41;}  //  opcode:41  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:2
+  | "aload_0"          {cd=42;}  //  opcode:42  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "aload_1"          {cd=43;}  //  opcode:43  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "aload_2"          {cd=44;}  //  opcode:44  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "aload_3"          {cd=45;}  //  opcode:45  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:1
+  | "iaload"           {cd=46;}  //  opcode:46  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "laload"           {cd=47;}  //  opcode:47  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "faload"           {cd=48;}  //  opcode:48  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "daload"           {cd=49;}  //  opcode:49  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "aaload"           {cd=50;}  //  opcode:50  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "baload"           {cd=51;}  //  opcode:51  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "caload"           {cd=52;}  //  opcode:52  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "saload"           {cd=53;}  //  opcode:53  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "istore_0"         {cd=59;}  //  opcode:59  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "istore_1"         {cd=60;}  //  opcode:60  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "istore_2"         {cd=61;}  //  opcode:61  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "istore_3"         {cd=62;}  //  opcode:62  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "lstore_0"         {cd=63;}  //  opcode:63  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "lstore_1"         {cd=64;}  //  opcode:64  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "lstore_2"         {cd=65;}  //  opcode:65  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "lstore_3"         {cd=66;}  //  opcode:66  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "fstore_0"         {cd=67;}  //  opcode:67  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "fstore_1"         {cd=68;}  //  opcode:68  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "fstore_2"         {cd=69;}  //  opcode:69  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "fstore_3"         {cd=70;}  //  opcode:70  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "dstore_0"         {cd=71;}  //  opcode:71  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "dstore_1"         {cd=72;}  //  opcode:72  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "dstore_2"         {cd=73;}  //  opcode:73  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "dstore_3"         {cd=74;}  //  opcode:74  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "astore_0"         {cd=75;}  //  opcode:75  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "astore_1"         {cd=76;}  //  opcode:76  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "astore_2"         {cd=77;}  //  opcode:77  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "astore_3"         {cd=78;}  //  opcode:78  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "iastore"          {cd=79;}  //  opcode:79  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "lastore"          {cd=80;}  //  opcode:80  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:0
+  | "fastore"          {cd=81;}  //  opcode:81  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "dastore"          {cd=82;}  //  opcode:82  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:0
+  | "aastore"          {cd=83;}  //  opcode:83  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "bastore"          {cd=84;}  //  opcode:84  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "castore"          {cd=85;}  //  opcode:85  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "sastore"          {cd=86;}  //  opcode:86  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:0
+  | "pop"              {cd=87;}  //  opcode:87  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "pop2"             {cd=88;}  //  opcode:88  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "dup"              {cd=89;}  //  opcode:89  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:2
+  | "dup_x1"           {cd=90;}  //  opcode:90  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:3
+  | "dup_x2"           {cd=91;}  //  opcode:91  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:4
+  | "dup2"             {cd=92;}  //  opcode:92  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:4
+  | "dup2_x1"          {cd=93;}  //  opcode:93  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:5
+  | "dup2_x2"          {cd=94;}  //  opcode:94  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:6
+  | "swap"             {cd=95;}  //  opcode:95  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "iadd"             {cd=96;}  //  opcode:96  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "ladd"             {cd=97;}  //  opcode:97  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "fadd"             {cd=98;}  //  opcode:98  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "dadd"             {cd=99;}  //  opcode:99  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "isub"             {cd=100;} //  opcode:100  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lsub"             {cd=101;} //  opcode:101  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "fsub"             {cd=102;} //  opcode:102  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "dsub"             {cd=103;} //  opcode:103  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "imul"             {cd=104;} //  opcode:104  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lmul"             {cd=105;} //  opcode:105  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "fmul"             {cd=106;} //  opcode:106  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "dmul"             {cd=107;} //  opcode:107  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "idiv"             {cd=108;} //  opcode:108  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "ldiv"             {cd=109;} //  opcode:109  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "fdiv"             {cd=110;} //  opcode:110  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "ddiv"             {cd=111;} //  opcode:111  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "irem"             {cd=112;} //  opcode:112  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lrem"             {cd=113;} //  opcode:113  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "frem"             {cd=114;} //  opcode:114  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "drem"             {cd=115;} //  opcode:115  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "ineg"             {cd=116;} //  opcode:116  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "lneg"             {cd=117;} //  opcode:117  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "fneg"             {cd=118;} //  opcode:118  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "dneg"             {cd=119;} //  opcode:119  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "ishl"             {cd=120;} //  opcode:120  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lshl"             {cd=121;} //  opcode:121  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:2
+  | "ishr"             {cd=122;} //  opcode:122  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lshr"             {cd=123;} //  opcode:123  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:2
+  | "iushr"            {cd=124;} //  opcode:124  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lushr"            {cd=125;} //  opcode:125  op_bytes:0  op_types:NONE  stk_con:3  stk_pro:2
+  | "iand"             {cd=126;} //  opcode:126  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "land"             {cd=127;} //  opcode:127  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "ior"              {cd=128;} //  opcode:128  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lor"              {cd=129;} //  opcode:129  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "ixor"             {cd=130;} //  opcode:130  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "lxor"             {cd=131;} //  opcode:131  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:2
+  | "i2l"              {cd=133;} //  opcode:133  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:2
+  | "i2f"              {cd=134;} //  opcode:134  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "i2d"              {cd=135;} //  opcode:135  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:2
+  | "l2i"              {cd=136;} //  opcode:136  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "l2f"              {cd=137;} //  opcode:137  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "l2d"              {cd=138;} //  opcode:138  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "f2i"              {cd=139;} //  opcode:139  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "f2l"              {cd=140;} //  opcode:140  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:2
+  | "f2d"              {cd=141;} //  opcode:141  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:2
+  | "d2i"              {cd=142;} //  opcode:142  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "d2l"              {cd=143;} //  opcode:143  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:2
+  | "d2f"              {cd=144;} //  opcode:144  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "i2b"              {cd=145;} //  opcode:145  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "i2c"              {cd=146;} //  opcode:146  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "i2s"              {cd=147;} //  opcode:147  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "lcmp"             {cd=148;} //  opcode:148  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:1
+  | "fcmpl"            {cd=149;} //  opcode:149  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "fcmpg"            {cd=150;} //  opcode:150  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:1
+  | "dcmpl"            {cd=151;} //  opcode:151  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:1
+  | "dcmpg"            {cd=152;} //  opcode:152  op_bytes:0  op_types:NONE  stk_con:4  stk_pro:1
+  | "ireturn"          {cd=172;} //  opcode:172  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "lreturn"          {cd=173;} //  opcode:173  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "freturn"          {cd=174;} //  opcode:174  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "dreturn"          {cd=175;} //  opcode:175  op_bytes:0  op_types:NONE  stk_con:2  stk_pro:0
+  | "areturn"          {cd=176;} //  opcode:176  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "return"           {cd=177;} //  opcode:177  op_bytes:0  op_types:NONE  stk_con:0  stk_pro:0
+  | "arraylength"      {cd=190;} //  opcode:190  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "athrow"           {cd=191;} //  opcode:191  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:1
+  | "monitorenter"     {cd=194;} //  opcode:194  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  | "monitorexit"      {cd=195;} //  opcode:195  op_bytes:0  op_types:NONE  stk_con:1  stk_pro:0
+  )                    { jjtThis.setOpcode(cd); }
+  #CodeSimple
+
+| ( ( "ifeq"             {cd=153;} //  opcode:153  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "ifne"             {cd=154;} //  opcode:154  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "iflt"             {cd=155;} //  opcode:155  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "ifge"             {cd=156;} //  opcode:156  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "ifgt"             {cd=157;} //  opcode:157  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "ifle"             {cd=158;} //  opcode:158  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "if_icmpeq"        {cd=159;} //  opcode:159  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_icmpne"        {cd=160;} //  opcode:160  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_icmplt"        {cd=161;} //  opcode:161  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_icmpge"        {cd=162;} //  opcode:162  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_icmpgt"        {cd=163;} //  opcode:163  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_icmple"        {cd=164;} //  opcode:164  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_acmpeq"        {cd=165;} //  opcode:165  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "if_acmpne"        {cd=166;} //  opcode:166  op_bytes:2  op_types:S2  stk_con:2  stk_pro:0
+    | "goto"             {cd=167;} //  opcode:167  op_bytes:2  op_types:S2  stk_con:0  stk_pro:0
+    | "jsr"              {cd=168;} //  opcode:168  op_bytes:2  op_types:S2  stk_con:0  stk_pro:1
+    | "ifnull"           {cd=198;} //  opcode:198  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "ifnonnull"        {cd=199;} //  opcode:199  op_bytes:2  op_types:S2  stk_con:1  stk_pro:0
+    | "goto_w"           {cd=201;} //  opcode:200  op_bytes:4  op_types:S4  stk_con:0  stk_pro:0
+    | "jsr_w"            {cd=201;} //  opcode:201  op_bytes:4  op_types:S4  stk_con:0  stk_pro:1
+    ) <IDENTIFIER>       { jjtThis.setText(token.image, token.beginLine); jjtThis.setOpcode(cd); }
+  ) #CodeWithText
+
+| ( ( "bipush"           {cd=16;}  //  opcode:16  op_bytes:1  op_types:U1  stk_con:0  stk_pro:1
+    | "sipush"           {cd=17;}  //  opcode:17  op_bytes:2  op_types:U2  stk_con:0  stk_pro:1
+    ) o=Constant("int")  { jjtThis.setOpcode(cd);
+                           try { jjtThis.setAmount(object2int(o)); }
+                           catch(Exception e) { throw new ParseException((cd==16?"b":"s")+"ipush must take a number: " + o); }
+                         }
+  ) #CodeWithTextInt
+
+| ( ( "ldc"              {cd=18;}  //  opcode:18  op_bytes:1  op_types:U1  stk_con:0  stk_pro:1
+    | "ldc_w"            {cd=19;}  //  opcode:19  op_bytes:2  op_types:U2  stk_con:0  stk_pro:1
+    | "ldc2_w"           {cd=20;}  //  opcode:20  op_bytes:2  op_types:U2  stk_con:0  stk_pro:2
+    )                    { jjtThis.setOpcode(cd); s = null; }
+    [ "(" s=SimpleType() { jjtThis.setType(s); }
+    ")" ]
+    o=Constant(s)        { jjtThis.setConstant(o); }
+  ) #CodeWithConstant
+
+| ( ( "iload"            {cd=21;}  //  opcode:21  op_bytes:1  op_types:U1  stk_con:0  stk_pro:1
+    | "lload"            {cd=22;}  //  opcode:22  op_bytes:1  op_types:U1  stk_con:0  stk_pro:2
+    | "fload"            {cd=23;}  //  opcode:23  op_bytes:1  op_types:U1  stk_con:0  stk_pro:1
+    | "dload"            {cd=24;}  //  opcode:24  op_bytes:1  op_types:U1  stk_con:0  stk_pro:2
+    | "aload"            {cd=25;}  //  opcode:25  op_bytes:1  op_types:U1  stk_con:0  stk_pro:1
+    | "istore"           {cd=54;}  //  opcode:54  op_bytes:1  op_types:U1  stk_con:1  stk_pro:0
+    | "lstore"           {cd=55;}  //  opcode:55  op_bytes:1  op_types:U1  stk_con:2  stk_pro:0
+    | "fstore"           {cd=56;}  //  opcode:56  op_bytes:1  op_types:U1  stk_con:1  stk_pro:0
+    | "dstore"           {cd=57;}  //  opcode:57  op_bytes:1  op_types:U1  stk_con:2  stk_pro:0
+    | "astore"           {cd=58;}  //  opcode:58  op_bytes:1  op_types:U1  stk_con:1  stk_pro:0
+    | "ret"              {cd=169;} //  opcode:169  op_bytes:1  op_types:U1  stk_con:0  stk_pro:0
+    ) AnyName()          { jjtThis.setText(token.image, token.beginLine); jjtThis.setOpcode(cd); }
+  ) #CodeWithText
+
+| ( "iinc"                         //  opcode:132  op_bytes:2  op_types:U1U1  stk_con:0  stk_pro:0
+    AnyName()            { jjtThis.setText(token.image, token.beginLine); jjtThis.setOpcode(132); }
+    o=Constant(null)     { try { jjtThis.setAmount(object2int(o)); }
+                           catch(Exception e) { throw new ParseException("iinc must take a number for increment: " + o); }
+                         }
+  ) #CodeWithTextInt
+
+| ( ( "getstatic"        {cd=178;} //  opcode:178  op_bytes:2  op_types:U2  stk_con:0  stk_pro:-1
+    | "putstatic"        {cd=179;} //  opcode:179  op_bytes:2  op_types:U2  stk_con:-1  stk_pro:0
+    | "getfield"         {cd=180;} //  opcode:180  op_bytes:2  op_types:U2  stk_con:1  stk_pro:-1
+    | "putfield"         {cd=181;} //  opcode:181  op_bytes:2  op_types:U2  stk_con:-1  stk_pro:0
+    ) s=ClassName(false) { setMemberAccess(s,jjtThis); jjtThis.setOpcode(cd); }
+      s=Type()           { jjtThis.setType(s); }
+  ) #CodeMemberAccess
+
+| ( ( "invokevirtual"    {cd=182;} //  opcode:182  op_bytes:2  op_types:U2  stk_con:-1  stk_pro:-1
+    | "invokestatic"     {cd=184;} //  opcode:184  op_bytes:2  op_types:U2  stk_con:-1  stk_pro:-1
+    | "invokeinterface"  {cd=185;} //  opcode:185  op_bytes:4  op_types:U2U1U1  stk_con:-1  stk_pro:-1
+    ) s=ClassName(false) { setMemberAccess(s,jjtThis); jjtThis.setOpcode(cd); }
+    "(" [ s=Type()       { jjtThis.addParamType(s); }
+          ( "," s=Type() { jjtThis.addParamType(s); }
+          )*
+    ] ")" s=ResultType() { jjtThis.setType(s); }
+  ) #CodeInvoke
+
+| ( "invokespecial"                //  opcode:183  op_bytes:2  op_types:U2  stk_con:-1  stk_pro:-1
+    s=ClassName(false) { o = null; }
+    [ ["."] "<" [<IDENTIFIER>] ">" { o = Boolean.TRUE; } ]
+                         { if (s.equals("this")) s = "<init>";
+                           else if (s.equals("super")) s = superClassName + ".<init>"; 
+                           else if (o != null) s += ".<init>";
+                           setMemberAccess(s,jjtThis); jjtThis.setOpcode(183);
+                         }
+    "(" [ s=Type()       { jjtThis.addParamType(s); }
+          ( "," s=Type() { jjtThis.addParamType(s); }
+          )*
+    ] ")" s=ResultType() { jjtThis.setType(s); }
+  ) #CodeInvoke
+
+| ( ( "new"              {cd=187;} //  opcode:187  op_bytes:2  op_types:U2  stk_con:0  stk_pro:1
+      s=ClassName(true)
+    | "newarray"         {cd=188;} //  opcode:188  op_bytes:1  op_types:U1  stk_con:1  stk_pro:1
+      s=PrimitiveType()
+    | "anewarray"        {cd=189;} //  opcode:189  op_bytes:2  op_types:U2  stk_con:1  stk_pro:1
+      s=ClassName(true)
+    | "checkcast"        {cd=192;} //  opcode:192  op_bytes:2  op_types:U2  stk_con:1  stk_pro:1
+      s=Type()
+    | "instanceof"       {cd=193;} //  opcode:193  op_bytes:2  op_types:U2  stk_con:1  stk_pro:1
+      s=Type()
+    )                    { jjtThis.setText(s, token.beginLine); jjtThis.setOpcode(cd); }
+  ) #CodeWithText
+
+| ( "multianewarray"               //  opcode:197  op_bytes:3  op_types:U2U1  stk_con:-1  stk_pro:1
+    s=ArrayType()        { jjtThis.setText(s, token.beginLine); jjtThis.setOpcode(197); }
+    <INTEGER_LITERAL>    { jjtThis.setAmount(parseInt(token.image)); }
+  ) #CodeWithTextInt
+
+| "wide" /* omitted */             //  opcode:196  op_bytes:-1  op_types:U1  stk_con:0  stk_pro:0
+
+| ( ( "switch" | "tableswitch" )   //  opcode:170  op_bytes:-1  op_types:NONE  stk_con:1  stk_pro:0
+    ( o=Constant("int")  { try { cd = object2int(o); }
+                           catch(Exception e) { throw new ParseException("switch must take a number: " + o); }
+                         }
+      ":" <IDENTIFIER>   { jjtThis.addCase(cd, token.image, token.beginLine); }
+    )*
+    "default"
+    ":" <IDENTIFIER>     { jjtThis.setDefault(token.image, token.beginLine); }
+  ) #CodeSwitch
+
+| ( "lookupswitch"                 //  opcode:171  op_bytes:-1  op_types:NONE  stk_con:1  stk_pro:0 )*
+    o=Constant("int")    { try { cd = object2int(o); }
+                           catch(Exception e) { throw new ParseException("switch must take a number: " + o); }
+                         }
+    ( <IDENTIFIER>       { jjtThis.addCase(cd++, token.image, token.beginLine); }
+    )+
+    "default"
+    ":" <IDENTIFIER>     { jjtThis.setDefault(token.image, token.beginLine); }
+  ) #CodeSwitch
+
+| ( "%set" o=Param(null) "=" { jjtThis.addParam(o); }
+    ( o=Param(null)          { jjtThis.addParam(o); }
+    | AssignableMacro()
+    )
+  ) #MacroSet
+ 
+| ( "%load"                 { jjtThis.addParam(null); s = null; }
+    ( [ s=PrimitiveType() ]
+      o=Param(s)            { jjtThis.addParam(o); }
+    | AssignableMacro()
+    )
+  ) #MacroSet
+
+//  -- NOT IN YET.
+//| ( "%store" o=Param(null)  { jjtThis.addParam(o); }
+//  ) #MacroSet
+
+| ( ( "%print"              { cd = jjtThis.TYPE_print;   }
+    | "%println"            { cd = jjtThis.TYPE_println; }
+    | "%flush"              { cd = jjtThis.TYPE_flush;   }
+    )                       { jjtThis.setType(cd); }
+    [ "<" <IDENTIFIER>      { if (!token.image.equals("out") && !token.image.equals("err"))
+                                throw new ParseException("Invalid print target: " + token.image);
+                              jjtThis.setTarget(token.image);
+                            }
+    ">" ]
+    [ LOOKAHEAD(2) ParamList(jjtThis) ]
+  ) #MacroPrint
+
+| AssignableMacro()
+
+| ( ( "%iterate"
+    | "%array_iterate"      { jjtThis.setIsArray(true); }
+    )                       { jjtThis.setID(getNextBlockID()); }
+    o=Param(null)           { jjtThis.addParam(o); }
+    [ LOOKAHEAD(2)
+      <IDENTIFIER>          { jjtThis.setIterateVar(token.image, token.beginLine); }
+    ]                       { if (jjtThis.isArray() && null == jjtThis.getIterateVar())
+                                throw new ParseException("%array_iterate requires an iterate variable.");
+                              begin = jjtThis;
+                            }
+  ) #MacroIterate
+  Block()
+  ( ( "%end_iterate"
+    | "%end_array_iterate"
+    )                       { jjtThis.setIsEnd((ASTMacroIterate)begin); }
+  ) #MacroIterate
+
+| ( "%if" o=Param(null)     { jjtThis.addParam(o); jjtThis.setID(getNextBlockID()); }
+    [ ( ">" | ">=" | "<" | "<=" | "==" | "!=" ) { jjtThis.setOperator(token.image); }
+      o=Param(null)         { jjtThis.addParam(o); }
+    ]                       { if (jjtThis.getParamCount() < 2) {
+                                jjtThis.setOperator(">");
+                                jjtThis.addParam(new Integer(0));
+                              }
+                              begin = jjtThis;
+                            }
+  ) #MacroIf
+  Block()
+  [ ( "%else"               { jjtThis.setElse((ASTMacroIf)begin); }
+    ) #MacroIf
+    Block()
+  ]
+  ( "%end_if"               { jjtThis.setIsEnd((ASTMacroIf)begin); }
+  ) #MacroIf
+
+}
+
+void AssignableMacro() #void :
+{
+  String s;
+  Object o;
+}
+{
+  ( "%object"
+    s=ClassName(true)       { jjtThis.setType(s); }
+    [ "(" s=Type()          { jjtThis.addParamType(s); }
+          ( "," s=Type()    { jjtThis.addParamType(s); }
+          )*
+      ")"
+      "(" ParamList(jjtThis) ")"
+    ]
+  ) #MacroObject
+
+| ( "%array" s=SimpleType() { jjtThis.setType(s); }
+    ( LOOKAHEAD(2) "[" "]" "{" ParamList(jjtThis) "}"
+    | ( LOOKAHEAD(2) "[" o=Param("int") "]"   { jjtThis.addDim(o); }
+      )+
+      ( "[" "]"             { jjtThis.addDim(null); }
+      )*
+    )
+  ) #MacroArray
+
+| ( "%concat" ParamList(jjtThis) ) #MacroStringConcat
+
+}
+

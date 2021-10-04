@@ -1,0 +1,15 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Runs Java program test.Hello, which writes out a message to
+    stdout and, if a parameter is present, also write to stderr.
+    This program sets JudoScript system output to file "stdout.txt"
+    and system error to "stderr.txt".
+  *]];
+}
+
+setOut "stdout.txt";      // set standard output to this file
+setErr "stderr.txt";      // set standard error to this file
+exec 'java test.Hello';   // to stdout
+exec 'java test.Hello a'; // to stderr

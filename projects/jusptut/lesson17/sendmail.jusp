@@ -1,0 +1,67 @@
+<%
+  if form.size() > 0 {
+%>
+    <%!validate jusp$validEMailAddress 'sender' %>
+    <%!validate jusp$validEMailAddress 'receiver' %>
+    <%!validate jusp$textLength 'msg', 1 %>
+<%
+    var mailSentOK = false;
+
+    if error.length <= 0 { // no validation errors
+      { // try:
+
+        // connect to mail server
+        mail::connect 'your-mail-server', 'username', 'password';
+
+        // send the mail
+        mail::send
+              from: form.sender
+                to: form.receiver
+           subject: form.subject
+              body: form.msg
+        ;
+
+        // Cool! Mail sent.
+        mailSentOK = true;
+
+      catch:
+        error.add($_.message);
+
+      finally:
+        // disconnect from the mail server
+        { mail::disconnect; catch: ; /* ignore */ }
+      }
+    }
+  }
+%>
+<html>
+<head><title>Send Mail</title>
+<body>
+<h2>Send Mail</h2>
+
+<p>View <%!viewsrc 'lesson17/sendmail.jusp', '../' %></p>
+
+<%
+  if error.length > 0 { // validation reported errors
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+
+  if mailSentOK {
+    %><div style="border:1px solid; font-family:arial; color=blue"><%
+    %>Successfully sent mail to <%= form.receiver %>.</div><%
+    form.clear();
+  }
+%>
+
+<form method="POST"><table border=0>
+<tr><td>Sender:</td><td><%!text 'sender' %></td></tr>
+<tr><td>Receiver:</td><td><%!text 'receiver' %></td></tr>
+<tr><td>Subject:</td><td><%!text 'subject', null, 'size=42' %></td></tr>
+<tr><td>Message:</td><td><%!textarea 'msg', null, 'rows=7 cols=30' %></td></tr>
+<tr><td>&nbsp;</td><td><%!submit "Send" %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson17.jusp">lesson 17</a></font>
+</body></html>

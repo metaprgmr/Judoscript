@@ -1,0 +1,15 @@
+// modify this for your base test directory.
+const #base = isWindows() ? 'c:/temp/x/' : '~/temp/x/' ifndef;
+
+// Create a phony file.
+function genFile dir, name {
+  mkdir #base + dir;
+  f = openTextFile(#base + dir + name, 'w');
+  if name.endsWith('.html') {
+    print <f> "<html><body><h1>", name, "</h1></body></html>";
+  } else {
+    print <f> '======= ', name, ' =======';
+  }
+  f.flush();
+  f.close();
+}

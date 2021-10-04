@@ -1,0 +1,48 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Every second, the producer thread checks the inventory; if it reaches 0,
+    a random number of "goods" are produced, and notifies all.
+    The consumer "consumes" all goods whenever awake.
+    The inventory is really just a counter and is serialized by a lock.
+  *]];
+}
+
+inventory = 0; // shared
+
+has_lock = 'has-goods';
+use_lock = 'use-goods';
+
+println 'Production rate: 1-20.';
+
+thread consumer
+{
+  while inventory <= 0 {
+    waitFor has_lock;
+
+    lock use_lock;
+    print inventory:>3, ': ';
+    for x from 1 to inventory { print '* '; }
+    println;
+    inventory = 0;
+    unlock use_lock;
+  }
+}
+
+thread producer
+{
+  while true {
+    sleep 1000;
+    lock use_lock;
+    if inventory == 0 { inventory = random(1,20); }
+    unlock use_lock;
+
+    notifyAll has_lock;
+  }
+}
+
+
+start thread consumer;
+start thread producer;

@@ -1,0 +1,31 @@
+usage {
+  desc = [[*
+    This program obtains an Internet Explorer instance and visits two sites.
+
+    Adapted from <a href="http://www.danadler.com/jacob">JACOB</a>
+    file 'samples/test/IETest.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+ie = new com::InternetExplorer.Application;
+//ie = new com::'{0002DF01-0000-0000-C000-000000000046}';
+ie.Visible = true;
+ie.AddressBar = true;
+ie.StatusText = 'My Status Text';
+println '----- Path: ', ie.Path;
+  
+url = 'http://www.yahoo.com';
+println '----- Visiting ', url;
+ie.Navigate(url);
+sleep(3000);
+
+url = 'http://www.google.com';
+println '----- Visiting ', url;
+ie.Navigate(url);
+sleep(3000);
+
+println '----- close the browser.';
+ie.Quit();
+

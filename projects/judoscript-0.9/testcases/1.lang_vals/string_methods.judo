@@ -1,0 +1,77 @@
+println 'Characters of values 26 to 255:';
+for i from 26 to 255 {
+  print i.chr(), '  ';
+  if i % 16 == 0 { println; }
+}
+println nl;
+
+println 'ch = ', ch = 'B';
+println 'ch.ascii() = ', ch.ascii(); 
+println 'ch.unicode() = ', ch.unicode(), nl; 
+
+println 'str                   = "', str = 'abcdEFEdcba  ', '"';
+println 'str.length()          = ', str.length();
+println 'str = str.trim()      = "', str = str.trim(), '"';
+println 'str.charAt(2)         = ', str.charAt(2);
+println 'str.substr(2)         = ', str.substr(2);
+println 'str[2:]               = ', str[2:];
+println 'str.substr(1,2)       = ', str.substr(1,2);
+println 'str[1:1]              = ', str[1:1];
+println 'str.substr(100)       = ', str.substr(100);
+println 'str[100:]             = ', str[100:];
+println "str.indexOf('c')      = ", str.indexOf('c');
+println "str.lastIndexOf('c')  = ", str.lastIndexOf('c');
+println 'str.toUpper()         = ', str.toUpper();
+println 'str.toLower()         = ', str.toLower();
+println 'str.startsWith("abc") = ', str.startsWith("abc");
+println 'str.startsWith("ABC") = ', str.startsWith("ABC");
+println 'str.endsWith("cba")   = ', str.endsWith("cba");
+println 'str.endsWith("CBA")   = ', str.endsWith("CBA");
+println 'str.replace()         = ', str.replace();
+println 'str.replace("b")      = ', str.replace("b");
+println 'str.replace("c","x")  = ', str.replace("c","x");
+
+println nl, 'Method regionMatches()';
+println 'str = "', str                            = 'abcdEFEdcba  ', '"';
+println "str.regionMatches(2,'bcd',0)             = ", str.regionMatches(2,'bcd',0);
+println "str.regionMatches(2,'bcd',0,2)           = ", str.regionMatches(2,'bcd',0,2);
+println "str.regionMatches(1,'bcd',0)             = ", str.regionMatches(1,'bcd',0);
+println "str.regionMatches(1,'bcd',0,2)           = ", str.regionMatches(1,'bcd',0,2);
+println "str.regionMatchesIgnoreCase(2,'cde',0,3) = ", str.regionMatchesIgnoreCase(2,'cde',0,3);
+println "str.regionMatchesIgnoreCase(3,'cde',0,3) = ", str.regionMatchesIgnoreCase(3,'cde',0,3);
+
+println nl, 'Method csv()';
+println "str = ", str = 'abc,123,defg, 0, xyz  ';
+println 'str.csv():';
+ss = str.csv();
+for x in ss {
+  println '  => |', x, '|';
+}
+println "str = ", str = 'abc.123.defg. 0. xyz  ';
+println 'str.csv():';
+ss = str.csv();
+for x in ss {
+  println '  => |', x, '|';
+}
+println "str.csv('.'):";
+ss = str.csv('.');
+for x in ss {
+  println '  => |', x, '|';
+}
+println "str = ", str = 'abc;123.defg; 0. xyz  ';
+println "str.csv(';.,'):";
+ss = str.csv(';.,');
+for x in ss {
+  println '  => |', x, '|';
+}
+
+println nl, 'Method getFileExt[ension]():';
+println 'filename = ', filename = 'morrobay.jpg';
+println 'pathname = ', pathname = 'http://localhost:8080/pics.jpg/sfbay';
+println 'filename.getFileExt() = ', filename.getFileExt();
+println 'pathname.getFileExt() = ', pathname.getFileExt();
+
+println nl, 'Method urlEncode(), urlDecode():';
+println 'url = ', url = 'info="1 is not 2"&mthd=get';
+println 'encoded_url = url.urlEncode() = |', encoded_url = url.urlEncode(), '|';
+println 'encoded_url.urlDecode() = |', encoded_url.urlDecode(), '|';

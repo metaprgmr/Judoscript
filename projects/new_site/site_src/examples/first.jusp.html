@@ -1,0 +1,25 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/4.adv_jusp/first.jusp:</b></td></tr><tr><td><pre>
+&lt;%
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    A simplest JUSP page.
+    More interesting examples will come.
+  *]];
+}
+
+response.setContentType('text/html');
+
+a = 'The Very First Time!';
+b = 'This is the very first test of JUSP!';
+%>
+&lt;HTML>
+&lt;HEAD> &lt;%= a %> &lt;/HEAD>
+&lt;BODY>
+  &lt;H1>&lt;%= a %>&lt;/H1>
+  &lt;%= b %> &lt;BR>
+  &lt;%= date().fmtDate('yyyy-MM-dd') %>
+&lt;/BODY>&lt;/HTML>
+</pre></td></tr></table></body></html>

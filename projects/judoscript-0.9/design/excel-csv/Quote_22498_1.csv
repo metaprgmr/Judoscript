@@ -1,0 +1,34 @@
+
+
+
+BEA,How Business Becomes E-Business?,,,,,,,,Maintenance Quote #:,22498
+,,,,,,,,,Revision #:,1
+,,,,,,,,,Original Quote Date:,24-Jun-2004
+,,,,,,,,,Last Revised Date:,24-Jun-2004
+Account Name:,"CITIGROUP"
+PS Customer Name:,"Citibank"
+PS Customer ID:,"PS1201100"
+Contact:,"Saurav Das",,,,,,,,Renewal Rep Name:,"Alice Katwan"
+Address:,"One Court Sqr 23rd Fl Zone 1",,,,,,,,Address:,"BEA Systems, Inc., 2315 N. First Street"
+,"Long Island City, NY 11120 USA",,,,,,,,,"San Jose, CA 95131 USA"
+Phone:,"",,,,,,,,Phone:,"408-953-5418"
+Fax:,"",,,,,,,,Fax:,"866-422-8580"
+Email:,"saurav.das@citigroup.com",,,,,,,,Email:,"akatwan@bea.com"
+
+Comments:,
+MAINTENANCE SUPPORT QUOTATION
+ Item Number , Supported License Product Description , Support Level ,  Annual Price , , Qty , Start Date , , End Date , # of Days , Extended Price , , BEA Systems Previous Inv , Customer's Previous P.O. , Comments , Support Level % List ,,Product Unit List 
+ 1,"WL SVR Advan v6.1,56bit,DL",7x24,"$USD","2100.00",2,31-Oct-2004,-,29-Oct-2005,363,"$USD","4176.99",188004,"CHECK 0100181918",,"21.0",,"$USD","10000.0"
+ 2,"WL SVR Advan v6.1,56bit,DL",7x24,"$USD","2100.00",2,01-Nov-2004,-,31-Oct-2005,365,"$USD","4200.00",188004,"CHECK 0100181918",,"21.0",,"$USD","10000.0"
+ 3,"WL SVR Advan v6.1,56bit,DL",7x24,"$USD","2100.00",2,31-Oct-2004,-,29-Oct-2005,363,"$USD","4176.99",188004,"CHECK 0100181918",,"21.0",,"$USD","10000.0"
+ 4,"WLS6.1DevKit w/Port,SP2,56B,DL",7x24,"$USD","523.95",5,10-Jan-2005,-,09-Jan-2006,365,"$USD","2619.75",188004,"CHECK 0100181918",,"21.0",,"$USD","2495.0"
+
+Quote Expiration Date:,23-Jul-2004,,,,,,,,, GRAND TOTAL
+,,,,,,,,,,"$USD","15173.73",
+
+"This quotation is an invitation to offer only and is valid until the expiration date specified above unless modified in writing by BEA prior to BEA's acceptance of customer's contract offer. This quotation is subject to credit approval and is governed under the terms and conditions of the BEA agreement referenced above or in the absence of a BEA agreement, by BEA Software License and Limited Warranty. Any contract resulting by a duly authorized representative of BEA Systems, Inc."
+
+Notes:,A.,All orders are required to meet the minimum purchase amounts specified in the BEA Price List. The minimum purchase amount is based on the Tier for the hardware/OS on which the BEA product is installed. Where Customer is installing the BEA product on a network the total number of users licensed for the applicable BEA product must equal or exceed the sum of the minimum purchase requirements specified for the hardware/os systems in the network upon which the BEA product is installed.
+,B.,The fees above are exclusive of taxes or freight charges. BEA will separately state such charges on its invoice to the customer.
+,C.,"Customer PO must reference the following: BEA QUOTE #22498, NET 30 Terms, CUSTOMER SIGNATURE"
+

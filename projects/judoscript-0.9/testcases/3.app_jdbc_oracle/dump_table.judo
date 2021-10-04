@@ -1,0 +1,6 @@
+!include 'setup/connect.judi'
+
+dumpTable 'EMP';
+println unit($_, 'row');
+
+db::disconnect();

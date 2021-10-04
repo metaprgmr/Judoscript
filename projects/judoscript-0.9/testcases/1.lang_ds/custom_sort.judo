@@ -1,0 +1,17 @@
+a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+
+a.sort( &my_comparator );
+for x in a { println x; }
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  lali = la.lastIndex();
+  rali = ra.lastIndex();
+  for i from 0 to min(lali,rali) {
+    if la[i].int() < ra[i].int() { return -1; }
+    if la[i].int() > ra[i].int() { return 1; }
+  }
+  if lali == rali { return 0; }
+  return lali > rali;
+}

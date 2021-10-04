@@ -1,0 +1,45 @@
+usage {
+  author  = 'James Huang';
+  created = '2005-1-11';
+  desc    = [[*
+    Try out the one-to-one association in Hibernate.
+
+    The Object Model consists of two classes, User and Address.
+    The Address's PK is a FK to the User's PK. The source files are:
+      [hbm]  User.hbm.xml
+      [hbm]  Address.hbm.xml
+      [java] User.java
+      [java] Address.java
+  *]];
+}
+
+//
+// Initialize the Hibernate environment using MySQL.
+//
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update',
+    judoscript.echo               = false
+  )
+
+  // List Java class(es) in the Object Model:
+  User,
+  Address
+;
+println nl, 'Hibernate initialized. Ready to go!', nl;
+
+//
+// 2. Create a new user and save him.
+//
+user = new java::User('William', 'Gates', null);
+addr = new java::Address('1 Microsoft Way', 'Redmond', 'WA', '98052', user);
+user.homeAddress = addr;
+
+println 'Persist the new user...';
+hib::save(user);
+println 'After save: user.id = ', user.id, nl,
+        '            addr.id = ', addr.id;
+
+catch: $_.pist();

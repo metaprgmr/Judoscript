@@ -1,0 +1,35 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Creates a struct of struct's, and does various sorting based
+    on the values' different attributes (or columns).
+  *]];
+}
+
+empl = new struct;
+empl.'0001' = new struct( name = 'Tony Nugyen',  age = 33 );
+empl.'0002' = new struct( name = 'Kathy Murphy', age = 42 );
+empl.'0003' = new struct( name = 'Michael Chu',  age = 29 );
+empl.'0004' = new struct( name = 'Rick Policsi', age = 30 );
+empl.'0005' = new struct( name = 'Sanjay Buch',  age = 23 );
+
+age_comp = lambda lhs, rhs { return compare(lhs.age, rhs.age); };
+age_flt  = lambda elem { return (elem.age >= 30); };
+
+println 'List employees by age in descending order:';
+listThem( empl.keysSortedByValue(age_comp) );
+
+println 'List employees older than 30 years old:';
+listThem( empl.keysFilteredByValue(age_flt) );
+
+println 'List employees older than 30 years old in descending order:';
+listThem( empl.keysFilteredAndSortedByValue(age_flt,age_comp) );
+
+function listThem keys {
+  for x in keys {
+    var emp = empl.(x);
+    println emp.age, ' ', emp.name;
+  }
+}

@@ -1,0 +1,5 @@
+exec 'java test.ToLower | java test.Echo'
+input {
+  println <pipe> 'You should see this message in lower case, not UPPER CASE!';
+  println <pipe> 'Cheers!';
+}

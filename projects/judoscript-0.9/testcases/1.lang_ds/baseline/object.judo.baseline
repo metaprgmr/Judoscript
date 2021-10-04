@@ -1,0 +1,41 @@
+{beta=abc,alfa=1}
+a.getClassName() = Object
+a.size() = 2
+a.clear()
+a.size()  = 0
+
+a."1.10"  = chapter 1 section 10
+a."2.5"   = chapter 2 section 5
+a."3"     = chapter 3
+a."1.2"   = chapter 1 section 2
+a."3.4"   = chapter 3 section 4
+a."1.2.1" = chapter 1 section 2.1
+a.size()  = 6
+a."3.4"   = chapter 3 section 4
+
+a.has("2.5") = true
+a.has("2.6") = false
+
+List by a.keys()
+ 3.4   => chapter 3 section 4
+ 3     => chapter 3
+ 2.5   => chapter 2 section 5
+ 1.10  => chapter 1 section 10
+ 1.2.1 => chapter 1 section 2.1
+ 1.2   => chapter 1 section 2
+
+List by a.keysSorted()
+ 1.10  => chapter 1 section 10
+ 1.2   => chapter 1 section 2
+ 1.2.1 => chapter 1 section 2.1
+ 2.5   => chapter 2 section 5
+ 3     => chapter 3
+ 3.4   => chapter 3 section 4
+
+List by a.keysSorted(&my_comparator)
+ 1.2   => chapter 1 section 2
+ 1.2.1 => chapter 1 section 2.1
+ 1.10  => chapter 1 section 10
+ 2.5   => chapter 2 section 5
+ 3     => chapter 3
+ 3.4   => chapter 3 section 4

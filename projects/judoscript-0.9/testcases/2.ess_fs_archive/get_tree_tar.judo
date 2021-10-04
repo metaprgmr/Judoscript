@@ -1,0 +1,5 @@
+listFiles '*' in 'testdata/awebapp.tar.gz' recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}

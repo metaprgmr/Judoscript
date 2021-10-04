@@ -1,0 +1,36 @@
+<script name="javastatic.judo"
+        output="stdout"
+/>
+
+<script name="alias_javastatic.judo"
+        output="stdout"
+/>
+
+<script name="java_array.judo"
+        output="stdout"
+/>
+
+<script name="hashtable.judo"
+        output="stdout"
+/>
+
+<script name="javalists.judo"
+        output="stdout"
+/>
+
+<script name="extend_itf.judo"
+        output="stdout"
+/>
+
+<script name="extend_class_itf.judo"
+        output="stdout"
+/>
+
+<script name="extend_absclass.judo"
+        output="stdout"
+/>
+
+<script name="extend_class.judo"
+        output="stdout"
+/>
+

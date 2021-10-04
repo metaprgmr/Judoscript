@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/envvar.judo:</b></td></tr><tr><td><pre>
+println 'Case I.   \${CLASSPATH}        --> ', ${CLASSPATH};
+println "Case Ia.  '\${CLASSPATH}'      --> ${CLASSPATH}";
+println "Case Ib.  CLASSPATH           --> ", CLASSPATH;
+
+// set it and see that it is:
+println nl, '... Set in-program variable CLASSPATH to ', CLASSPATH = 'hahaha', nl;
+
+println 'Case II.  \${CLASSPATH}        --> ', ${CLASSPATH};
+println "Case IIa. getenv('CLASSPATH') --> ", getenv('CLASSPATH');
+println "Case IIb. '\${CLASSPATH}'      --> ${CLASSPATH}";
+println 'Case III. CLASSPATH           --> ', CLASSPATH;
+</pre></td></tr></table></body></html>

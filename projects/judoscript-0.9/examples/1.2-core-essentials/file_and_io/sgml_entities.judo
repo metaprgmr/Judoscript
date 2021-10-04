@@ -1,0 +1,14 @@
+usage {
+  desc = 'Prints out a table for SGML entities valued between 20 to 259.';
+}
+
+println '<html><body><pre>';
+println '     0 1 2 3 4 5 6 7 8 9';
+for i from 20 to 250 step 10 {
+  print i:>3, ': ';
+  for j from 0 to 9 {
+    print '&#', i+j, '; ';
+  }
+  println;
+}
+println '</pre></body></html>';

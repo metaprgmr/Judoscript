@@ -1,0 +1,13 @@
+a = [[*
+   This is a line.
+   This is second line.
+   This is one more line.
+*]];
+flush a;
+
+a = [[[*
+   This is a line.
+   This is second line.
+   This is one more line.
+*]];
+flush a;

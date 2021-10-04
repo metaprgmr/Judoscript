@@ -1,0 +1,44 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing labels, with and without images.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+!JavaGuiClass #JFrame, #JPanel, #JLabel, #ImageIcon
+// -- The above line is the same as the following:
+//const #JFrame    = java::javax.swing.JFrame;
+//const #JPanel    = java::javax.swing.JPanel;
+//const #JLabel    = java::javax.swing.JLabel;
+//const #ImageIcon = java::javax.swing.ImageIcon;
+
+demo = new java::#JPanel;
+
+icon = new java::#ImageIcon('images/middle.gif', 'a pretty but meaningless splat');
+demo.setLayout(new java::java.awt.GridLayout(3,1));
+
+//Create labels; set the position of the text, relative to the icon:
+label1 = new java::#JLabel('Image and Text', icon, #JLabel.CENTER);
+label1.setVerticalTextPosition(#JLabel.BOTTOM);
+label1.setHorizontalTextPosition(#JLabel.CENTER);
+label2 = new java::#JLabel('Text-Only Label');
+label3 = new java::#JLabel(icon);
+
+//Add labels to the JBufferedPane. 
+demo.add(label1);
+demo.add(label2);
+demo.add(label3);
+
+frame = new java::#JFrame('LabelDemo');
+frame.setContentPane(demo);
+
+gui::events
+{
+  <frame : Window : windowClosing> :  exit(0);
+}
+
+frame.pack();
+frame.setVisible(true);

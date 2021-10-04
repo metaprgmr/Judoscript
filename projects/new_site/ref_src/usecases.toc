@@ -1,0 +1,187 @@
+<category name=Language location="usecases/language/">
+
+ <category name="Basic Data Type">
+
+  <category name=String>
+  </category>
+
+  <category name=Date>
+  </category>
+
+  <category name=Integer>
+  </category>
+
+  <category name=Float>
+  </category>
+
+  <category name=Array>
+   <usecase date="2002-08-16" id=create_array  name="Create an Empty Array">
+   <usecase date="2002-08-16" id=init_array    name="Initialize an Array">
+   <usecase date="2002-08-16" id=md_array      name="Create a Multi-Dimensional Array">
+   <usecase date="2002-08-16" id=init_md_array name="Initialize a Multi-Dimensional Array">
+  </category>
+
+  <category name=Struct>
+  </category>
+
+  <category name="Ordered Map">
+  </category>
+
+  <category name="Table Data">
+  </category>
+
+ </category>
+
+ <category name=Expression>
+ </category>
+
+ <category name="Flow-Control Statement">
+ </category>
+
+ <category name="Exception">
+ </category>
+
+ <category name=Thread>
+ </category>
+
+ <category name=Function>
+  <usecase id=fxn_var name="Function Variable">
+  <usecase id=lambda  name="Lambda Function Variable">
+ </category>
+
+ <category name=Class>
+ </category>
+
+ <category name=Include>
+ </category>
+
+ <category name="Startup Environment">
+ </category>
+
+ <category name="Dynamic Evaluation">
+ </category>
+
+ <category name=Pragmas>
+ </category>
+
+ <category name=Constant>
+ </category>
+
+ <category name=Variable>
+  <usecase date="2002-00-00" id=local_var name="Local Variables">
+  <usecase date="2002-00-00" id=global_var name="Global Variables">
+ </category>
+
+</category>
+
+
+<category name=Java location="usecases/java/">
+  <usecase date="2002-00-00" id=j_obj name="Use Java Object">
+  <usecase date="2002-00-00" id=j_arr_prim name="Use Java Array of Primitive Types">
+  <usecase date="2002-00-00" id=j_arr_str  name="Use Java Array of Strings">
+  <usecase date="2002-00-00" id=j_arr_obj  name="Use Java Array of Objects">
+  <usecase date="2002-00-00" id=j_static   name="Use Java Static Members">
+  <usecase date="2002-00-00" id=fxn_alias_j_static name="Function Alias for Java Static Method">
+  <usecase date="2002-00-00" id=j_pkg name="Java Package Shortcut">
+  <usecase date="2002-00-00" id=j_embed name="Java Embedded Classes">
+  <usecase date="2002-00-00" id=j_adapter name="Adapter for Java Interface">
+  <usecase date="2002-00-00" id=j_instanceof name="Java Instanceof Test">
+  <usecase date="2002-00-00" id=j_casting name="Java Class Casting">
+  <usecase date="2002-00-00" id=jndi name="Initial Context for JNDI">
+  <usecase date="2002-00-00" id=weblogic name="Initial Context for WebLogic">
+</category>
+
+
+<category name="System Information Retrieving" location="usecases/sys_info/">
+  <usecase date="2002-00-00" id=sys_prop name="Get System Properties">
+  <usecase date="2002-00-00" id=check_os name="Check OS">
+</category>
+
+
+<category name="Print and File I/O" location="usecases/print_file_io/">
+  <usecase date="2002-00-00" id=print name="Print">
+  <usecase date="2002-00-00" id=print_align name="Print Aligned">
+  <usecase date="2002-00-00" id=print_td name="Print Table Data">
+  <usecase date="2002-00-00" id=read_bin_file name="Read Binary File">
+  <usecase date="2002-00-00" id=read_bin_file_arc name="Read Binary File In Archive">
+  <usecase date="2002-00-00" id=write_bin_file name="Write Binary File">
+  <usecase date="2002-00-00" id=read_text_file name="Read Text File">
+  <usecase date="2002-00-00" id=read_text_file_arc name="Read Text File In Archive">
+  <usecase date="2002-00-00" id=read_text_lines name="Read Text File As Lines">
+  <usecase date="2002-00-00" id=read_text_lines_arc name="Read Text File In Archive As Lines">
+  <usecase date="2002-00-00" id=read_file_as_string name="Read the Whole File As a String">
+  <usecase date="2002-00-00" id=read_i18n_text_file name="Read i18n Text File">
+  <usecase date="2002-00-00" id=write_i18n_text_file name="Write i18n Text File">
+</category>
+
+
+<category name="Manipulate Files and Archives" location="usecases/fs_archive/">
+  <usecase date="2002-00-00" id=copy_1_file name="Copy One File Into Another File">
+  <usecase date="2002-00-00" id=copy_files name="Copy Selected Files To Another Location">
+  <usecase date="2002-00-00" id=save_files_to_jar name="Save Selected Files Into A Jar">
+  <usecase date="2002-00-00" id=save_files_to_tar name="Save Selected Files Into A Tar">
+  <usecase date="2002-00-00" id=gzip name="Compress a File">
+  <usecase date="2002-00-00" id=gunzip name="Uncompress a File">
+  <usecase date="2002-00-00" id=copy_files_in_jar name="Copy Files In a Jar File To A Location">
+  <usecase date="2002-00-00" id=copy_files_in_tar_to_jar name="Copy Files In a Tar File Into A Jar Archive">
+  <usecase date="2002-00-00" id=cd name="Current Directory and Change Directory">
+  <usecase date="2002-00-00" id=mk_rm_dir name="Make And Remove Directory">
+  <usecase date="2002-00-00" id=move_files name="Move Files">
+  <usecase date="2002-00-00" id=move_dirs name="Move Directories">
+  <usecase date="2002-00-00" id=list name="List Selected Files In Current Directory">
+  <usecase date="2002-00-00" id=ls name="List And Print Selected Files In Current Directory">
+  <usecase date="2002-00-00" id=list_in_dir name="List Files In A Location">
+  <usecase date="2002-00-00" id=list_in_jar name="List Files In A Jar Archive">
+  <usecase date="2002-00-00" id=list_in_tar name="List Files In A Tar Archive">
+  <usecase date="2002-00-00" id=list_ordered name="List Files Ordered by Name, Size or Date">
+  <usecase date="2002-00-00" id=list_size name="List File Sizes">
+  <usecase date="2002-00-00" id=list_lines name="List Line Numbers In Text Files">
+  <usecase date="2002-00-00" id=list_files_only name="List Files Only">
+  <usecase date="2002-00-00" id=list_dirs_only name="List Directories Only">
+  <usecase date="2002-00-00" id=chmod_own_grp name="Change Files' Mode, Owner and Group -- Unix Only">
+  <usecase date="2002-00-00" id=set_time name="Set Time for Files">
+  <usecase date="2002-00-00" id=set_readonly name="Set Files to be Read-Only">
+  <usecase date="2002-00-00" id=scp name="Secure Copy Files Between Local and Remote Machines">
+</category>
+
+
+<category name="Schedule" location="usecases/schedule/">
+</category>
+
+
+<category name="Run Executables" location="usecases/exec/">
+</category>
+
+
+<category name="Send Mail" location="usecases/mail/">
+</category>
+
+
+<category name="Java GUI" location="usecases/gui/">
+</category>
+
+
+<category name="HTTP Clients and Servers" location="usecases/http/">
+</category>
+
+
+<category name="HTML Scraping and SGML Processing" location="usecases/sgml/">
+</category>
+
+
+<category name="JDBC" location="usecases/jdbc/">
+</category>
+
+
+<category name="XML - SAX" location="usecases/xml/">
+</category>
+
+
+<category name="XML - DOM" location="usecases/dom/">
+</category>
+
+
+<category name="XSLT" location="usecases/xslt/">
+</category>
+
+

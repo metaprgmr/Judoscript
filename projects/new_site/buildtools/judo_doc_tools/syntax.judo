@@ -1,0 +1,239 @@
+!include 'nav.judi'
+
+// BNF
+
+. 'Creating individual syntax rule files, keyword and terminal pages.', nl;
+
+rootNode = new JudoScriptReference;
+
+inSem = false;
+$out = null;
+
+curRule = null;
+usedBy = new Object;
+keywordUsedBy = new Object;
+terminalUsedBy = new Object;
+
+total = 0;
+semanticsTotal = 0;
+
+function addUsedBy nt {
+  x = usedBy.(nt);
+  if x == null            { usedBy.(nt) = [ curRule ]; }
+  elif !x.exists(curRule) { x.add(curRule); }
+}
+
+function addKeywordUsedBy kw {
+  if kw.startsWith('!') {
+    if kw.length() == 1 { return; }
+    if !kw.charAt(1).isAlpha() { return; }
+  } elif !kw.startsWith('') && !kw.charAt(0).isAlpha() { return; }
+
+  x = keywordUsedBy.(kw);
+  if x == null            { keywordUsedBy.(kw) = [ curRule ]; }
+  elif !x.exists(curRule) { x.add(curRule); }
+}
+
+function addTerminalUsedBy t {
+  x = terminalUsedBy.(t);
+  if x == null            { terminalUsedBy.(t) = [ curRule ]; }
+  elif !x.exists(curRule) { x.add(curRule); }
+}
+
+// The engine.
+nts = new array;
+
+do '${new_doc_root}/ref_src/bnf.sgml' as sgml
+{
+<gramma>, </gramma>, <!-->: ;
+
+<rule>:  ++total;
+         curRule = $_.nt;
+         nts.add($_.nt);
+         file = '${docroot}/ref/synn_' + $_.nt + '.html';
+         . 'Generating ', file;
+         $out = openTextFile(file, 'w');
+         . <$out> [[*
+           <html><head><title>JudoScript Semantics - (*$_.nt*)</title>
+           <link href="../share/bnf.css" rel="stylesheet" type="text/css">
+           <script language=JavaScript src=../share/judolib.js></script>
+           <script language=JavaScript src=ntUsedBy.js></script>
+           </head><body>
+           <h3>Semantics : <u>(*$_.nt*)</u></h3>
+           <table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+             <b><font class=nt><a name=(*$_.nt*)>(*$_.nt*)</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+           </td><td>
+         *]];
+</rule>: . <$out> '</body></html>'; $out.close();
+
+<nt>:    print <$out> showNTLink($_.name); if !inSem { addUsedBy($_.name); }
+<Expr>:  print <$out> showNTLink('Expr');  if !inSem { addUsedBy('Expr'); }
+<obj>:   print <$out> showObjLink($_.name); // must be inSem.
+<sfn>:   print <$out> showSFLink($_.name);  // must be inSem.
+<fa>:    print <$out> showFALink($_.id);    // must be inSem.
+<j>:     print <$out> 'JudoScript';
+
+<note>:  print <$out> '<font color=red>';
+</note>: print <$out> '</font>';
+
+<or>:    print <$out> ' | ';
+<lq>:    print <$out> ' ( ';
+<rq>:    print <$out> ' )', $_.multi, ' ';
+<pi>:    print <$out> '<br>';
+<!>:     x = $_.toString().substring(2);
+         if x.startsWith('_') {
+           x = x.substring(1,x.length()-1);
+           if !inSem { addTerminalUsedBy(x); }
+           print <$out> '<font class=t>', x, '</font> ';
+         } else {
+           x = x.substring(0,x.length()-1);
+           if !inSem { addKeywordUsedBy(x); }
+           if !x.charAt(0).isLetter() { x = '<nobr>' @ x @ '</nobr>'; }
+           print <$out> '<font class=kw>', x, '</font> ';
+         }
+
+:TEXT:   print <$out> inSem ? $_ : ' ';
+<>:      if inSem { print <$out> $_; }
+
+<semantics>:  ++semanticsTotal;
+              inSem = true;
+              . <$out> [[*
+                  </td></tr></table><br>
+                  <table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+                  <script language=JavaScript><!--
+                  document.write(getUsedBy('(* curRule *)'));
+                  //--></script>
+                  </td></tr></table><br>
+                *]];
+</semantics>: inSem = false;
+}
+
+for x in nts.sort() { rootNode.addSynNT(x); }
+
+// write the keyword used-by:
+
+file = '${docroot}/ref/synk.html';
+. 'Generating ', file;
+$out = openTextFile(file, 'w');
+. <$out> [[*
+  <html><head><title>JudoScript Syntax - Keywords</title>
+  <link href="../share/bnf.css" rel="stylesheet" type="text/css">
+  <script language=JavaScript src=../share/judolib.js></script>
+  </head><body>
+  <h3>Keywords</h3>
+  <p>The following table lists all the keywords and where they are used.
+  Click on the non-terminals to learn the keywords' meanings and usages.</p>
+  <table bgcolor=#EEEEEE width=100% border=1 style="border-style:solid">
+  <tr><th>Keyword</th><th>Used By</th></tr>
+*]];
+keywordUsedBy.remove(';');
+for x in keywordUsedBy.keys().sort() {
+  arr = keywordUsedBy.(x);
+  if arr.length > 0 {
+    print <$out> '<tr><td valign=top class=kw>', x, '</td><td class=nt>';
+    for y in arr {
+      print <$out> showNTLink(y), ' ';
+    }
+    . <$out> '&nbsp;</td></tr>';
+  }
+}
+. <$out> '</table></body></html>';
+$out.close();
+
+// write the terminal used-by:
+
+file = '${docroot}/ref/synt.html';
+. 'Generating ', file;
+$out = openTextFile(file, 'w');
+. <$out> [[*
+  <html><head><title>JudoScript Syntax - Terminals</title>
+  <link href="../share/bnf.css" rel="stylesheet" type="text/css">
+  <script language=JavaScript src=../share/judolib.js></script>
+  </head><body>
+  <h3>Terminals</h3>
+  <table bgcolor=#EEEEEE width=99% border=1 style="border-style:solid">
+  <tr><th>Terminal</th><th>Description</th><th>Used By</th></tr>
+*]];
+//for x in terminalUsedBy.keys().sort() {
+//  arr = terminalUsedBy[x];
+//  if arr.length > 0 {
+//    print <$out> '<tr><td valign=top class=t><a href=#', x, '>', x, '</a></td><td>',
+//
+//    print <$out> '</td><td class=nt>';
+//    for y in arr {
+//      print <$out> showNTLink(y), ' ';
+//    }
+//    . <$out> '</td></tr>';
+//  }
+//}
+tid = null;
+do '${j09ref}/bnf_t.sgml' as sgml
+{
+<t>:     tid = $_.id;
+         print <$out> '<tr><td valign=top class=t>', tid, '</td><td width=50% valign=top>';
+</t>:    print <$out> '</td><td class=nt valign=top>';
+         for y in terminalUsedBy.(tid) { print <$out> showNTLink(y), ' '; }
+         . <$out> '</td></tr>';
+
+<!>:     x = $_.toString().substring(2);
+         if x.startsWith('_') {
+           print <$out> '<font class=t>', x.substring(1,x.length()-1), '</font> ';
+         } else {
+           print <$out> '<font class=kw>', x = x.substring(0,x.length()-1), '</font> ';
+         }
+:TEXT,<>: print <$out> $_;
+}
+. <$out> '</table></body></html>';
+$out.close();
+
+// write the used-by:
+
+file = '${docroot}/ref/ntUsedBy.js';
+. 'Generating ', file;
+$out = openTextFile(file, 'w');
+. <$out> [[* var ntUsedBy = new Object(); *]];
+
+for x in usedBy {
+  arr = usedBy.(x);
+  if arr.length > 0 {
+    print <$out> 'ntUsedBy["', x, '"]=[';
+    for y from 0 to arr.length-1 {
+      if y > 0 { print <$out> ','; }
+      print <$out> '"', arr[y], '"';
+    }
+    . <$out> '];';
+  }
+}
+
+print <$out> [[*
+  function getUsedBy(id) {
+    var arr = ntUsedBy[id];
+    if (arr == null) return 'none.';
+    var str = '';
+    for (var i=0; i<arr.length; ++i) {
+      var id = arr[i];
+      str += '<a href="javascript:showPanes(\\\'_synn.html#synn_'+id+'\\\',\\\'synn_'+id+'.html\\\')">'
+             +id+'</a> &nbsp; ';
+    }
+    return str;
+  }
+
+  function listUsedBy(id) {
+    id = id.substring(1);
+    var arr = ntUsedBy[id];
+    if (arr == null) return 'none.';
+    var str = '';
+    for (var i=0; i<arr.length; ++i) {
+      str += '<a href=#' + arr[i] + '>' + arr[i] + '</a> &nbsp; ';
+    }
+    return str;
+  }
+  //--></script>
+*]];
+
+$out.close();
+
+. total, '  ', semanticsTotal;
+rootNode.generateNavPages(rootNode.o_syn);
+
+catch: $_.printInternalStackTrace();

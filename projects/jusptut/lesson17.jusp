@@ -1,0 +1,42 @@
+<% var title = 'Lesson 17. E-Mail'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>Judo has a very convenient <code>mail::send</code> statement like this:</p>
+
+<pre>
+mail::send
+    from: 'a@a.com'
+      to: 'x@x.com, y@y.com'
+      cc: 'u@u.com'
+     bcc: 'v@v.com'
+  attach: 'foo.jar, bar.zip'
+ subject: 'Test'
+    body: &#91;[*
+              This is a test.
+              - A
+          &#42;]]
+htmlBody: &#91;[*
+              &lt;p>This is a &lt;b>test&lt;/b>.&lt;/p>
+              &lt;p>- A&lt;/p>
+          &#42;]];
+</pre>
+
+<p>Each piece within <code>mail::send</code> can be an expression.
+The following is a simple send-mail client. To run the example, you
+need a mail server to actually deliver the message; in reality,
+this is probably set in the global <code>juspInit.judo</code> file;
+here, we just hard-code:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson17/sendmail.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson17/sendmail.jusp' %></li>
+</ul>
+
+<p>Like any examples, we mingle the presentation and business logic in
+the same file just to demonstrate the point; in practice you may well
+separate the code using a well thought-out page flow.</p>
+
+<%!include "footer.jusp" %>

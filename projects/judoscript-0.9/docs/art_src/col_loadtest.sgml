@@ -1,0 +1,97 @@
+<doc title="Load Testing with JudoScript" author="James Jianbo Huang"
+ created="March 2002"
+ keywords="load test, web test, Java scripting language, HTTP client, HTTP server, HTTP proxy server, HTML scraping, XML scripting, load test judoscript"
+>
+
+<sectiondefs>
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+Load testing is to collect performance data of a web service under
+stress situations. It is carried out by issuing a large number of
+requests in a short period of time against the target web site, and
+collect statistics such as site response time. <J> supports versatile
+HTTP client and server programming as well as HTML scraping and
+XML scripting. It can be used to launch effective load tests, check
+the server responses and record useful data.
+</abstract>
+</doc>
+
+
+<p>
+<oeL>oad testing reveals site performance under heavy traffic by issuing
+a large number of requests in a short period of time and collecting
+reultant statistics. These data are important for many purposes, such
+as sizing the service base, verifying and fine-tuning architectures,
+and hosting contract fulfilment.
+
+<p>
+Load tests start with a design. The test designer analyzes the site,
+anticipates common usage patterns and their probabilities, and creates
+a user model, that is, a "virtual user" that emulates a person's actions.
+The rest is to launch certain number of virtual users against the site
+and collect data. Take <a href="http://www.amazon.com">amazon.com</a> as
+an example. People do these on the site:
+
+<ul>
+<li> Browse various HTML pages
+<li> Search and view different results
+<li> Put an item into a shopping cart
+<li> Check out the items; may go back shopping afterwards
+<li> Login
+<li> Register
+<li> Write book reviews and feedbacks
+</ul>
+
+Each type of actions has a certain probability of happening. Site
+like <i>amazon.com</i> is operational so you can get percentages from
+the web log. To test a new web site yet to be launched, you will have
+to make some educated guess and assign a probability to each task.
+
+<p>
+Some actions require a user session. For instance, check out requires
+the user be logged in first. To emulate such a use case, it is better
+record a real-person usage and then parametize the involved requests.
+This is one of the major features of any load testing tools.
+
+<p>
+Once the "virtual user" is ready, the question is how to effectively
+launch tens of thousands of them simultaneously against the server.
+Launching all the test requires from a single machine is probably
+unrealistic and inaccurate due to hardware and network limitations.
+Therefore, it is a common practice to enlist a number of machines,
+install agents on them, then have them fire test requests at a
+synchronizing command. This is the second major features of load
+testing tools.
+
+<p>
+Once the tests are done running, the collected data need be
+consolidated from various test stations, and generate reasonable
+reports. This completes a load testing run.
+
+<p>
+It is clear that a load test is none other than executing scripts.
+Test scripts have to be designed and created. Those scripts are
+typically written in proprietary languages, so knowledge about them
+is useless outside the testing environment.
+
+<p>
+<J> has all the facilities to do effective web load testing, and
+this is the topic of this article. We will see how to record
+actions between web browsers and servers (including cookies); how
+to use <J> threads to launch simultaneous requests to servers;
+how to create test agents that run on various test stations to
+synchronously fire test requests, and finally how to collect data
+back to the master station for reporting. The end result is a
+working skeleton that you can customize for your load testing needs.
+
+
+
+<h2>TO BE FINISHED</h2>
+
+
+
+<section name="listings">
+<insert name="codelistings">
+

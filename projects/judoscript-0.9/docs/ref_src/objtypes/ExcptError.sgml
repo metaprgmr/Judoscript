@@ -1,0 +1,22 @@
+<member name="message" alias="msg" write=false desc="The message for this exception.">
+<member name="name" write=false desc="The name for this exception.">
+<member name="type" write=false desc="The type for this exception.">
+<member name="line" write=false desc="The line number where this exception occurred.">
+<member name="file" write=false desc="The file name for the code where this exception occurred.">
+
+<function sig="toString">
+  Returns a string representation of this exception.
+</function>
+
+<function sig="printInternalStackTrace">
+  Prints the internal language engine exception stack trace, for debugging purposes.
+</function>
+
+<function sig="printStackTrace">
+  Does nothing. To keep consistent with <obj id=ExcptJava>.
+</function>
+
+<function sig="getStackTraceAsString">
+  Returns <!null>. To keep consistent with <obj id=ExcptJava>.
+</function>
+

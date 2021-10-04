@@ -1,0 +1,43 @@
+#!/usr/bin/env judo
+#!
+
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    This <em>is</em> is a Unix auto-runnable script.
+    It uses the enhanced here-doc feature to display
+    a message about JudoScript comments.
+  *]];
+}
+
+text = [[*
+
+  Does the first line of this script
+
+    #!/usr/bin/env judo
+
+  look familiar? It does do what you would expect.
+
+  In JudoScript, there are 4 forms of comments:
+
+    /* ....
+       .... multi-line comment
+    */
+
+    /? ....
+       .... multi-line comment
+       -- recommended used rarely, only to disable a block of code.
+    ?/
+
+    // .... single-line comment
+
+    #! .... yet another single-line comment!
+
+  The last form is designed for auto-run scripts on Unix.
+  It is a valid comment except inside SQL statements.
+
+*]];
+
+flush text;

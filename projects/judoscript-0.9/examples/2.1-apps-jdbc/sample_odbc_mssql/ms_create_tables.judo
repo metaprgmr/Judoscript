@@ -1,0 +1,51 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Creates tables with executeSQL{}. Drops the tables first if exist.';
+}
+
+!include 'mssql_connection.judi'
+
+// drop the tables, if exist already
+tables = { #participants, #media, #people };
+for i=0; i < tables.size; ++i {
+  if $$con.tableExists(tables[i]) {
+    executeSQL: drop table (* tables[i] *);
+  }
+}
+
+executeSQL
+{
+  create table people
+  ( personID  int primary key,
+    name      varchar(20) not null,
+    alias     varchar(20),
+    birthDay  datetime,
+    sex       varchar(1),  // 'M', 'F'
+    addTime   datetime
+  );
+
+  create table media
+  ( folderID  varchar(512) not null,
+    fileName  varchar(128) not null,
+    type      varchar(1) not null, // I -- image, M -- movie, A -- audio
+    fileTime  datetime,
+    bytes     int,
+    width     int,
+    height    int,
+    addTime   datetime,
+    constraint pathName primary key clustered ( folderID, fileName)
+  );
+
+  create table participants
+  ( folderID  varchar(512),
+    fileName  varchar(128),
+    personID  int,
+    constraint ref_media  foreign key (folderID,fileName) references media (folderID,fileName),
+    constraint ref_people foreign key (personID) references people (personID)
+  );
+
+} // end of executeSQL.
+
+disconnect();

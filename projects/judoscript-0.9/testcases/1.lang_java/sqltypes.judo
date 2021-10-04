@@ -1,0 +1,14 @@
+import java.sql.Types;
+
+const #Types = java::Types;
+fields = [ 'BIT', 'TINYINT', 'SMALLINT', 'INTEGER', 'BIGINT', 'FLOAT',
+  'REAL', 'DOUBLE', 'NUMERIC', 'DECIMAL', 'CHAR', 'VARCHAR',
+  'LONGVARCHAR', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'VARBINARY',
+  'LONGVARBINARY', 'NULL', 'OTHER', 'JAVA_OBJECT', 'DISTINCT',
+  'STRUCT', 'ARRAY', 'BLOB', 'CLOB', 'REF'
+];
+
+println 'JDBC types in Java ', sysProperty('java.version'), ':';
+for fld in fields {
+  println fld:<13, ': ', #Types.(fld);
+}

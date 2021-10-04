@@ -1,0 +1,5 @@
+a = 9;
+println '    a = ', a;
+println 'A) -a = ', -a;
+println 'B) ~a = ', ~a;
+println 'C) !a = ', !a;

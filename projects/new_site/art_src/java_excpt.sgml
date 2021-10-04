@@ -1,0 +1,563 @@
+<doc title="Java, Exceptions and EJB"
+ author="James Jianbo Huang"
+ created="December 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, Java, java object, java array, adapter, interface adapter, embedded java, embedded java code, enterprise java bean, EJB, alias, cast, instanceof, exception, catch, finally, throw, resume"
+ deprecated="../books/judoscript-0.9/chapters/java.html"
+>
+
+<sectiondefs>
+<sectiondef name="java"     caption="Create and Use Java Classes">
+<sectiondef name="clsdecl" sub="1" caption="Resolving Java Class Names">
+<sectiondef name="arrays"   caption="Create and Use Java Arrays">
+<sectiondef name="excpt"    caption="Exception Handling">
+<sectiondef name="extend"   caption="Extend Java Classes and Interfaces">
+<sectiondef name="ejb"      caption="Enterprise Java Beans">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+Java objects and arrays can be created via <kw>new java::</kw> and used directly
+in <J>. Java classes can be obtained via <kw>java::</kw> operator; static
+members can be accessed and invoked. Calling Java methods is no different from
+calling a regular function or method, except in certain cases data type casting
+is needed to correctly invoke an overloaded method. The Java-like <kw>import</kw>
+can be used to make referencing Java classes easier. Exceptions thrown from Java
+code as well as from the engine itself can be handled. Java classes and interfaces
+can be extended/implemented in <J>, and can be used as genuine Java classes.
+</abstract>
+</doc>
+
+
+<section name=java>
+
+<p>
+Using Java classes in <J> is much like in Java itself, only easier because
+casting is not needed. To create an object, use the <kw>new java::</kw>
+operator (the <kw>new</kw> is for creating <J> objects):
+
+<codelist name="hashtable" caption="hashtable.judo">
+ 1: a = new java::java.util.Hashtable;
+ 2: a.put( 'date',    date(2001,1,1) );
+ 3: a.put( 'integer', 1 );
+ 4: a.put( 'double',  10.01 );
+ 5: a.put( 'string', 'Hello, World!' );
+ 6: a.put( 'Dimension', new java::java.awt.Dimension(10,20) );
+ 7: 
+ 8: for k in a.keys() { // for-in statement handles Enumeration/Iterator
+ 9:   println k:>10, ' = ', a.get(k);
+10: }
+</codelist>
+
+When calling Java methods and constructors, simply pass <J> variables as
+parameters, <J> tries to pick the right method. This is not always possible.
+For instance,
+
+<demo type="java">
+public class Foo
+{
+  public void bar(byte x) { System.out.println("byte"); }
+  public void bar(char x) { System.out.println("char"); }
+  public void bar(Integer x) { System.out.println("Integer"); }
+  public void bar(java.util.Date x) { System.out.println("Date"); }
+}
+
+public class Foo1 extends Foo
+{
+  public void bar(int x) { System.out.println("int");  }
+  public void bar(long x) { System.out.println("long");  }
+  public void bar(String x) { System.out.println("String"); }
+  public void bar(java.sql.Date x) { System.out.println("SQLDate"); }
+}
+</demo>
+
+The following tests show the results in the comments:
+
+<demo>
+sqld = new java::java.sql.Date(1000);
+
+foo = new java::Foo;
+foo.bar('1');        // => char
+foo.bar(1);          // => Integer
+foo.bar(new date);   // => Date
+foo.bar(sqld);       // => Date
+
+foo1 = new java::Foo1;
+foo1.bar('1');       // => String
+foo1.bar(1);         // => int
+foo1.bar(new date);  // => Date
+foo1.bar(sqld);      // => SQLDate
+</demo>
+
+<J> guesses pretty well, but the result still may not be what
+you really want.  To pinpoint a Java method, casting is necessary: 
+
+<demo>
+foo1 = new java::Foo;
+foo1.bar((char)'1'); // => char
+foo1.bar((byte)1);   // => byte
+foo1.bar(sqld.cast('java.util.Date')); // => Date instead of SQLDate
+</demo>
+
+Java primitive type values are cast with a cast operator such as <kw>(char)</kw>,
+whereas Java objects with a <kw>cast()</kw> method. All Java objects in
+<J> have two built-in methods: <kw>cast()</kw> and
+<kw>instanceof()</kw>; this usage is different from Java but serves the same
+purposes. Java object casting may occur more often than you may think.
+One notorious example is, an instance of a private/protected class which
+implements a public interface is returned to a method; that interface's methods
+are called, which are implemented by that private/protected class; the Java
+reflection API does not find the methods because the class is "inaccessible".
+After casting the class to the interface, reflection API behaves.
+
+<p>
+Java class names are usually long with all the package names. In
+<J>, you can declare constants for the class names, and use
+the constant names instead of the class names:
+
+<demo>
+const #Dimension = java::java.awt.Dimension;
+dim = new java::#Dimension(100,200);
+</demo>
+
+The <kw>java::</kw> operator returns a representation of a Java class.
+It is used to create new instances or access static members of the class:
+
+<demo>
+const #System = java::java.lang.System;
+a = #System.currentTimeMillis();
+#System.out.println("Got some stupid number: " @ a);
+</demo>
+
+You can create function aliases for static Java methods, so that they can
+be invoked just like a regular <J> one:
+
+<demo>
+function collectGarbage for java.lang.System::gc();
+collectGarbage();
+</demo>
+
+
+<section name="clsdecl">
+
+<p>
+Defining constants for Java classes can still be tedious, if you use a lot
+of Java classes from various packages in the program (such as GUI applications).
+<J> supports the Java-like <kw>import</kw> statement. The <kw>import</kw> is just
+like Java, but they are not required to appear near the top of the source file.
+And <code>java.lang.*</code>, <code>java.io.*</code> and <code>java.util.*</code>
+packages are imported at the end of the list.
+
+<demo>
+import java.sql.*;
+jcls = java::Types; // indeed java.sql.Types;
+println jcls.getName();
+
+import java.awt.Dimension;
+obj = new java::Dimension(5, 10);
+println obj;
+</demo>
+
+<review>
+<question> What operator creates Java objects and Java arrays?
+<question> What operator creates Java class objects? How to access and invoke
+           Java static members?
+<question> Can you run Java static methods like a regular <J>
+           function? How?
+<question> In constructors and Java method calls, can you pass <J>
+           values and variables? Will this always work as intended? Why?
+<question> How to cast call parameters to the intended Java types for primitive
+           types and objects?
+<question> What is the difference between Java collection classes and <J>
+           data structures?
+</review>
+
+
+
+<section name="arrays">
+
+
+Usse the same <kw>new java::</kw> to create Java arrays of primitive types
+and objects, either by size or by initialization:
+
+<demo>
+a = new java::int[3];
+a[0] = 1;
+a[1] = 2;
+a[2] = 4;
+for x in a { println x; }
+
+a = new java::java.lang.String[] { 'abcd', 'efg', 8, 9 };
+for x in a { println x; }
+</demo>
+
+The <kw>for in</kw> statement is useful for iterating through Java and
+<J> arrays. Java arrays can be passed to Java methods:
+
+<demo>
+!JavaBaseClass #String, #Arrays
+a = new java::#String[] { 'abcd', 'efg', 8, "ab" };
+#Arrays.sort(a);
+for x in a { println x; }
+</demo>
+
+Multi-dimensional arrays are created and used similarly:
+
+<codelist name="java_array" caption="java_array.judo">
+ 1: !JavaBaseClass #Object, #String, #Boolean, #Float
+ 2: 
+ 3: sa = new java::#String[] { "A", "B", "C", "D" };
+ 4: 
+ 5: ia = new java::int[][][] {
+ 6:        { { 1, 2, 3 }, {  4, 5, 6 } },
+ 7:        { { 7, 8, 9 }, { 10 } }
+ 8:      };
+ 9: fa = new java::#Float[][][] {
+10:        { { 1.5, 2.5, 3.5 }, {  4.5, 5.5, 6.5 } },
+11:        { { 7.5, 8.5, 9.5 }, { 10.5 } }
+12:      };
+13: ba = new java::boolean[][][] {
+14:        { { true, false, true }, { false, true, true } },
+15:        { { true, true,  true }, { true, true } }
+16:      };
+17: Ba = new java::#Boolean[][][] {
+18:        { { true, false, true }, { false, true, true } },
+19:        { { true, true,  true }, { true, true } }
+20:      };
+21: ca = new java::char[][][] {
+22:        { { 'A', 'B', 'C' }, { 'D', 'E', 'F' } },
+23:        { { 'G', 'H', 'I' }, { 'J', 'K' } }
+24:      };
+25: oa = new java::#Object[][][] {
+26:        { { 'a', 'b', 'c' }, { 'd', 'e', 'f' } },
+27:        { { 'g', 'h', 'i' }, { 'j', 'k' } }
+28:      };
+29: 
+30: print1d sa;
+31: print3d ia;
+32: print3d fa;
+33: print3d ba;
+34: print3d Ba;
+35: print3d ca;
+36: print3d oa;
+37: 
+38: //////////////////////////////////
+39: // functions
+40: //
+41: 
+42: function print1d a
+43: {
+44:   println '----- print 1D: ', a;
+45:   for i from 0 to a.length-1 {
+46:     println i, ' => ', a[i];
+47:   }
+48: }
+49: 
+50: function print3d a
+51: {
+52:   println '----- print 3D: ', a;
+53:   for i from 0 to a.length-1 {
+54:     for j from 0 to a[i].length-1 {
+55:       for k from 0 to a[i][j].length-1 {
+56:         println i, ' ', j, ' ', k, ' => ', a[i][j][k];
+57:       }
+58:     }
+59:   }
+60: }
+</codelist>
+
+<J> function syntax is straightforward; details are
+discussed in another article.
+
+
+<review>
+<question> What operator creates Java arrays?
+<question> How to initialize a Java array of any dimensions?
+<question> What's the easy way to iterate through a Java array or
+           <J> one?
+</review>
+
+
+
+<section name="excpt">
+
+<p>
+<J> can catch runtime exceptions, either from the language
+engine or from Java. The try-catch-finally syntax is simpler than Java:
+
+<codelist name="excpt_test" caption="excpt_test.judo">
+ 1: {
+ 2:   {
+ 3:     a = new struct;
+ 4:     a.kkkkkk();  // method does not exist
+ 5:     println 'Still happy.';
+ 6:   catch:
+ 7:     println '[', $_.line, '] Inside catch: ', nl, $_;
+ 8:     resume;  // experiment by alternating with throw;
+ 9: //  throw;   // experiment by alternating with resume;
+10:   finally:
+11:     println 'Inside finally.';
+12:   }
+13:
+14:   throw new java::java.lang.Exception("This exception is pure Java.");
+15:
+16: catch:
+17:   println '[', $_.line, '] Outside catch: ', $_.msg;
+18: }
+</codelist>
+
+Experiment by commenting out <kw>resume</kw>, <kw>throw</kw> or both. Make a guess
+of the outcomes. With <kw>resume</kw>, the output is:
+
+<demo>
+Inside catch: error #28 (METHOD_NOT_FOUND):
+Method kkkkkk() in object struct not found.
+Still happy.
+Inside finally.
+Outside catch: This exception is pure Java.
+</demo>
+
+With <kw>throw</kw>, the output is:
+
+<demo>
+Inside catch: error #28 (METHOD_NOT_FOUND):
+Method kkkkkk() in object struct not found.
+Inside finally.
+Outside catch: Method kkkkkk() in object struct not found.
+</demo>
+
+With no <kw>resume</kw> nor <kw>throw</kw>, the output is:
+
+<demo>
+Inside catch: error #28 (METHOD_NOT_FOUND):
+Method kkkkkk() in object struct not found.
+Inside finally.
+Outside catch: This exception is pure Java.  </demo>
+
+In the <kw>catch</kw> segment, the exception, whether from <J> engine
+or Java, is stored in variable <kw>$_</kw>. It has these members: <kw>$_.message</kw>
+or <kw>$_.msg</kw>, <kw>$_.type</kw> (an integer), <kw>$_.name</kw>, <kw>$_.line</kw>
+and <kw>$_.file</kw>. If type is 9, it is a Java exception, and <kw>name</kw> is the
+Java class name of the exception. Refer to <a href=../langspec/spec5.html#excpt>language
+specification</a> for a complete listing of the error names and type values. For Java
+exceptions, you can also use any of its public members.
+
+<p>
+When handling an exception, you can call <kw>resume</kw> to resume execution from
+the exception point, or <kw>throw</kw> with no parameters to re-throw the exception.
+
+<p>
+You can throw a new <J> or Java exception (see line 14 above)
+anywhere from the code:
+
+<demo>
+throw USER_EXCEPTION, "This is my own exception.";
+</demo> 
+
+Notice the exception name is without quotes.
+
+<review>
+<question> What is the try-catch-finally structure in <J>?
+<question> What is the variable that holds the exception object in a <kw>catch</kw> segment?
+<question> How many types of exceptions in <J>?
+<question> How to throw a new exception, or re-throw the current exception in <kw>catch</kw>?
+<question> What does <kw>resume</kw> do?
+</review>
+
+
+<section name="extend">
+
+<p>Starting from version 0.8, <J> can extend Java classes and interfaces; such classes are
+called <em>Java extension classes</em>. They are defined with the presence of the <kw>extendsjava</kw>
+clause.</p>
+
+<codelist name="extend_class" caption="extend_class.judo">
+ 1: class MyHashtable extendsjava java.util.Hashtable
+ 2: {
+ 3:   int hashCode() { return super.hashCode() ^ 1; }
+ 4:   String[] getKeys() {
+ 5:     arr = [];
+ 6:     for x in keys() { arr.append(x); }
+ 7:     return arr.toStringArray();
+ 8:   }
+ 9:   Object[] getValues() {
+10:     arr = [];
+11:     iter = values().iterator();
+12:     while iter.hasNext() { arr.append(iter.next()); }
+13:     return arr.toObjectArray();
+14:   }
+15: }
+16: 
+17: mht = new MyHashtable;
+18: mht.put('adate', date());
+19: mht.put('anumber', 2);
+20: mht.put('astring', 'string');
+21: println '    keys: ', mht.getKeys();
+22: println '  values: ', mht.getValues();
+23: println 'hashCode: ', mht.hashCode();
+</codelist>
+
+<p>This is getting interesting! The methods are declared like Java methods, but the method
+bodies are coded in <J>! No access control is used, since all the methods (as well as user
+data members) are always public. On line 3, we overrode the parent class's
+<code>hashCode()</code> method, which actually invokes the parent's name-sake method. It also
+defines two more methods of its own, <code>getKeys()</code> and <code>getValues()</code>.</p>
+
+<p>Java interfaces can be extended (implemented) exactly the same way. The following
+example defines a Java extension class that implements <code>java.util.Iterator</code>
+without implementing any of the methods! Any unimplemented abstract methods in a Java
+extension class are given empty bodies, so the new class we define is still a concrete
+(Java) class.</p>
+ 
+<codelist name="extend_itf" caption="extend_itf.judo">
+1: class MyIterator extendsjava java.util.Iterator
+2: {
+3: }
+</codelist>
+
+<p>The following program extends a Java class and a Java interface. You can implement any
+number of Java interfaces, separated by comma(s); but you can extend no more than one Java
+class as you would expect.</p>
+
+<codelist name="extend_class_itf" caption="extend_class_itf.judo">
+ 1: class MySetIterator extendsjava java.util.HashSet, java.util.Iterator
+ 2: {
+ 3:   java.util.Iterator iter;
+ 4: 
+ 5:   constructor {
+ 6:     super();
+ 7:     iter = null;
+ 8:   }
+ 9: 
+10:   // Iterator methods
+11:   boolean hasNext() {
+12:     if iter == null {
+13:       iter = iterator(); // of HashSet.
+14:     }
+15:     return iter.hasNext();
+16:   }
+17:   Object next() {
+18:     return (iter==null) ? null : iter.next();
+19:   }
+20: }
+21: 
+22: x = new MySetIterator;
+23: x.add('abc');
+24: x.add(19);
+25: x.add(date());
+26: while x.hasNext() { println x.next(); }
+</codelist>
+
+<p>This time, we declared a data member, <code>iter</code>. Data members in Java extension
+classes are declared like in Java classes, and are always public and never static. They
+can <em>only</em> be initialized in the constructor (line 7).</p>
+
+<p>The constructor declaration in a Java extension class is the only one that is not
+Java-like but <J>-like. You can have only one constructor in a Java extension class,
+and it may take untyped parameters like a regular <J> method. In the body of the
+constructor, the <code>super()</code> call invokes the parent Java class's constructor,
+and it <em>must</em> be invoked once and only once, and it must be invoked before any
+data member initialization can happen or any methods can be invoked.</p>
+
+<p>These are the rules governing Java extension classes:
+<ol>
+<li> A Java extension class is defined with the <kw>extendsjava</kw> clause, which can
+     take zero or one Java class and any number of Java interfaces, all separated by
+     comma. The resultant class is a Java class with that name without any package names.
+<li> Methods are declared with Java return type and Java-typed parameters just like Java
+     methods; fields are declared with Java types like Java. No access control can be
+     specified as they are always public; they can never be static. Methods are never
+     declared with exceptions.
+<li> Method bodies are implemented in <J> code. The parent class's methods, public or
+     protected, can be invoked by the <kw>super</kw> decorator. You can also invoke own
+     methods, and access this and parent's data fields, public or protected.
+<li> When abstract methods from the parent class/interfaces are not explicitly implemented,
+     they are given empty bodies, so the resultant Java class can be instantiated.
+<li> Data fields can be initialized only in the constructor.
+<li> There can be up to one constructor in a Java extension class. This constructor may
+     take untyped, <J> parameters. Within the constructor, there must be one and only one
+     invocation of <code>super()</code>, which is one of the parent class's constructors.
+     This call must precede data member initializations and invocations of any other
+     methods.
+</ol>
+</p>
+
+<review>
+<question> How to extend a Java class and implement Java interfaces? How?
+<question> How to define your own methods in a Java extension class? That is the difference
+           between these and the methods in a regular <J> methods?
+<question> Can you define additional data members? Do they have any access controls?
+           How to initialize them?
+<question> How is the optional constructor of a Java extension class different from a method
+           and Java constructors? Can you pass parameters to a Java extension class constructor?
+<question> When implementing Java interfaces, must all the methods be explicitly implemented?
+<question> In a Java extension class, can you invoke the super class's methods and access
+           their data members? Can super class's protected methods and members be accessed?
+</review>
+
+<section name=ejb>
+
+<p>
+Creating EJB clients in <J> is natural. It is easier to write than in Java
+because the ubiquitous casting is not needed at all. Coupled with <J>'s JDBC
+capabilities, this constitutes a perfect testing platform for EJBs. With the
+built-in scheduling support, practical uses of EJBs are just as easy.
+
+<codelist name="ejb_client" caption="ejb_client.judo">
+1: //ctx = getInitialContext('weblogic.jndi.WLInitialContextFactory', 't3://server');
+2: ctx   = getWeblogicContext('t3://server'); // shortcut for Weblogic.
+3: home  = ctx.lookup(#OrderHome);
+4: key   = new java::#OrderPK('00234');
+5: order = home.findByPrimaryKey(key);
+6: // do something with order.
+</codelist>
+
+<p>
+This is a hypothetical case where an order entity bean is retrieved from the
+server for some operations. Line 1, which is commented out, is the system
+function <kw>getInitialContext()</kw>. <J> has a number of convenience
+functions to get initial contexts for popular J2EE application servers,
+including WebLogic, WebSphere, JBoss, Oracle 9iAS and IONA; see line #2.
+On line 3, #OrderHome holds the unique registered home interface name, which
+is typically the same as its class name. The rest is just using Java classes.
+
+
+<review>
+<question> How to obtain an intial context? A Weblogic initial context?
+<question> Do you think it is easier to use <J> for using EJBs? Why?
+<question> How to test an entity bean and a transaction involving a number of session
+           and entity beans that involve databases as well as internal and external
+           data sources (such as credit card processor, ERP systems, ...)?
+</review>
+
+
+<section name=summary>
+
+<p>
+Java objects and arrays can be create by the <kw>new java::</kw> operator.
+Arrays can be assigned dimensions or initialized. Arrays can be of primitive
+or object types. Operator <kw>java::</kw> declares Java class objects,
+which can be used to create new classes and access and invoke its static
+members. Java static methods can be aliased to look and be used like regular
+<J> functions. Java class constructors and method calls are
+passed <J> values as parameters. Casting may be necessary
+for overloaded methods. Atomic values can be cast to Java primitive types
+the same way as in Java; for Java objects, use the built-in method
+<kw>cast()</kw> to do the casting. Java objects also have <kw>instanceof()</kw>.
+
+<p>
+<J> engine may throw runtime exceptions, so do Java objects.
+Exceptions can be caught in <J>; the exception is stored in
+variable <kw>$_</kw>, which has <kw>$_.message</kw>, <kw>$_.type</kw> and
+<kw>$_.name</kw> members. For Java exceptions, the <kw>$_.name</kw> is the
+class name. In handling the exception, <kw>resume</kw> statements resumes
+the current execution, and <kw>throw</kw> statements re-throws the exception.
+
+<p>
+<J>'s seamless Java support opens the door to scripting anything in Java,
+including EJB, RMI, GUI, and a lot more.
+
+
+<section name=listings>
+
+<insert name="codelistings">

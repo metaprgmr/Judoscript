@@ -1,0 +1,10 @@
+a = { alfa:1, beta:2 };
+println 'a: ', a;
+
+with a {
+  println alfa;
+  beta = 9;
+  println beta;
+}
+
+println 'a: ', a;

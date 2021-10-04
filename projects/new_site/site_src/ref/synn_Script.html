@@ -1,0 +1,29 @@
+<html><head><title>JudoScript Semantics - Script</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Script</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Script>Script</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ImportStatement')">ImportStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('Directives')">Directives</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ConstantDefinition')">ConstantDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ClassDefinition')">ClassDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <br>  |  <font class=nt><a href="javascript:showNT('FunctionDeclaration')">FunctionDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ThreadDeclaration')">ThreadDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('SgmlHandlerDeclaration')">SgmlHandlerDeclaration</a></font> <br>  |  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font> <br>  |  <font class=kw>catch</font>  <font class=kw><nobr>:</nobr></font>  <br>  |  <font class=kw>finally</font>  <font class=kw><nobr>:</nobr></font>  <br>  )*  <br>  (  <font class=kw>EndScript</font>  <font class=t>LOCALDATA</font>   )?  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Script'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>A script, or program, is a series of <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>s and declarations.
+  References (including function invocations) to declarations can appear before
+  declarations.</p>
+
+  <p>In this global scope, <font class=kw>catch</font>  and/or <font class=kw>finally</font>  can be specified. The
+  <font class=kw>finally</font>  clause must appear after <font class=kw>catch</font> , if <font class=kw>catch</font>  is present.</p>
+
+  <p>Text data can be attached to the script, starting from the next line
+  following keyword <font class=kw>EndScript</font> . The free form text, represented as
+  <font class=t>LOCALDATA</font> , can be read via the built-in stream object, <font class=kw><nobr>$$local</nobr></font> .</p>
+ </body></html>

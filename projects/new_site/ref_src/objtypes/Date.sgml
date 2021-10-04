@@ -1,0 +1,52 @@
+<member name=monthName write=false desc="The name of the month.">
+<member name=shortMonthName write=false desc="The short name of the month.">
+<member name=weekDayName write=false desc="The name of the day in the week.">
+<member name=shortWeekDayName write=false desc="The short name of the day in the week.">
+<member name=isAM write=false desc="The boolean value indicating morning.">
+<member name=isPM write=false desc="The boolean value indicating afternoon.">
+<member name=epoch write=true desc="The Epoch.">
+<member name=year write=true desc="The year.">
+<member name=month write=true desc="The month, starting at 1.">
+<member name=day alias=date write=true desc="The day, starting at 1.">
+<member name=hour write=true desc="The hour.">
+<member name=minute write=true desc="The minute.">
+<member name=second write=true desc="The second.">
+<member name=milliSecond write=true desc="The milliSecond.">
+<member name=zoneOffset write=true desc="The time zone offset.">
+<member name=dstOffset write=true desc="The DST offset.">
+<member name=weekOfYear desc="The week of the year, starting at 1.">
+<member name=weekOfYear desc="The week of the year, starting at 1.">
+<member name=weekOfMonth desc="The week of the month, starting at 1.">
+<member name=dayOfMonth desc="The day of the month, starting at 1.">
+<member name=dayOfYear desc="The day of the year, starting at 1.">
+<member name=dayOfWeek desc="The day of the week, starting at 1.">
+<member name=dayOfWeekInMonth desc="The day of week in the month, such as 'the first Tuesday'.">
+
+<function sig="formatDate format, timezone" alias="fmtDate">
+  Returns a string representing this date object in <param>format</param> and
+  <param>timezone</param>, if specified.
+</function>
+
+<function sig="next period">
+  Returns a new date object that is for the next <param>period</param>, which
+  can be 'year', 'month', 'day', 'hour', 'minute' and 'second'.
+</function>
+
+<function sig="before datetime">
+  Returns <!true> if this date object is before <param>datetime</param>.
+  If no <param>datetime</param> specified, compare to the current date.
+</function>
+
+<function sig="after datetime">
+  Returns <!true> if this date object is after <param>datetime</param>.
+  If no <param>datetime</param> specified, compare to the current date.
+</function>
+
+<function sig="getTime">
+  Returns the integer value of this date/time object.
+</function>
+
+<function sig="setTime datetime">
+  Sets the time value to <param>datetime</param>.
+  If no <param>datetime</param> specified, set to current time.
+</function>

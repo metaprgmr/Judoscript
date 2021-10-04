@@ -1,0 +1,107 @@
+<%
+  var title = 'Lesson 4. Form &mdash; HTML Controls and Value Population'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>&lt;%!${tag}%></code><td>${desc}</td></tr>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<h2>Standard HTML Control Tags</h2>
+
+<p>Web applications often populate controls with values for users
+to edit. JuSP makes this very easy and painless. The key is the
+<em>standard HTML control tags</em>. The following sample code:</p>
+
+<pre>&lt;%!text 'name', 'James' %&gt;</pre>
+
+<p>renders such a tag: &lt;input type=text name="name" value="James" &gt;</code>.
+The general syntax for JuSP control tags is:
+<code>&lt;%!<i>tag</i> <i>parameters</i> %&gt;</code>,
+where <i>parameters</i> are comma-separated Judo expressions
+(including constants) &mdash; this is indeed a parameter list for
+a function call.</p>
+
+<h2>Control Value Auto-Population</h2>
+
+<p>As the above example shows, JuSP control tags saves you typing;
+but its greater significance is that <u>it populates itself with
+the name-sake value in the <code>form</code> object</u>.
+See this example:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson4/textautovalue.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson4/textautovalue.jusp' %></li>
+</ul>
+
+<h2>Programmatically Populate Control Values</h2>
+
+<p>Controls such as <code>&lt;%!text %&gt;</code> populates themselves
+with the <code>form</code> object. This <code>form</code> object is an
+instance of <code>java.util.Map</code> populated with all the form
+parameters when the page starts. You can, however, set an arbitrary
+object to it, so that all the standard HTML control tags can use the
+values contained therein. Specifically, you can set to <code>form</code>
+variable a value of these:</p>
+
+<ul type=circle>
+<li>a POJO (plain-old-Java-object) with getter methods, e.g.,
+    a DTO, VO, Java bean, EJB, Hibernate persistent object, etc.</li>
+<li>an instance of <code>java.util.Map</code></li>
+<li>an instanceof Judo <code>Object</code> (or its derivatives).
+</ul>
+
+<p>The following example shows just these three use cases:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson4/textsetvalue.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson4/textsetvalue.jusp' %></li>
+</ul>
+
+<h2>The Standard HTML Control Tags</h2>
+
+<p>The following standard HTML control tags are self-populating with
+values in the <i>form</i> object:</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP HTML Tag</th><th>Resultant HTML tag</th></tr>
+<%!tagRow 'hidden name [, value]', '&lt;input type=hidden> &mdash; If value is null, the control is written with the named <i>form</i> value if it is present.' %>
+<%!tagRow 'checkbox name, value [, extra]', '&lt;input type=checkbox> &mdash; Sets <code>checked</code> flag if <i>form</i> contains the named value.' %>
+<%!tagRow 'radio name, value [, extra]', '&lt;input type=radio> &mdash; Sets <code>checked</code> flag if <i>form</i> contains the named value.' %>
+<%!tagRow 'text name [, value [, extra] ]', '&lt;input type=text> &mdash; The value is either set to <i>value</i> if not null, or the named value in the <i>form</i>.' %>
+<%!tagRow 'textarea name [, value [, extra] ]', '&lt;textarea> &mdash; The content is either set to <i>value</i> if not null, or the named value in the <i>form</i>.' %>
+<%!tagRow 'select name, values, displays<br>  [, extra]', '&lt;select> &mdash; <i>values</i> contains the item values, and <i>displays</i> contains the item display names. The values contained in <i>form</i> are set to "selected".  If <i>values</i> is empty, displays "(None)". If <i>values</i> has only one value and is present in <i>form</i>, that value is directly displayed (without &lt;select>).' %>
+<%!tagRow 'multiSelect name, values, displays<br>  [, extra]', 'Same as &lt;%!select %> but "multiple" is added to the &lt;select> tag.' %>
+</table>
+
+<p>JuSP also provides these convenience display tags:</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP HTML Tag</th><th>Resultant HTML tag</th></tr>
+<%!tagRow 'button name, value [, extra]', '&lt;input type=button>' %>
+<%!tagRow 'submit name, value [, extra]', '&lt;input type=submit>' %>
+<%!tagRow 'password name [, extra]', '&lt;input type=password>' %>
+<%!tagRow 'applet tagContent [, params]', '&lt;applet> &mdash; The <i>params</i> is an Object or <code>java.util.Map</code> of parameters.' %>
+<%!tagRow 'object tagContent [, params]', '&lt;object> &mdash; The <i>params</i> is an Object or <code>java.util.Map</code> of parameters.' %>
+<%!tagRow 'link uri', '&lt;a href="url">uri&lt;/a>' %>
+<%!tagRow 'stylesheet uri', '&lt;link rel=stylesheet>' %>
+<%!tagRow 'doctype type', '&lt;!DOCTYPE>, where <i>type</i> is "html", "html3", "html4", "xhtml" or "wml"' %>
+</table>
+
+
+<p>The following example demonstrates the most common controls:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson4/htmlctls.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson4/htmlctls.jusp' %></li>
+</ul>
+
+<h2>Some Other HTML Tags</h2>
+
+<p>In this Tutorial web app, <code>&lt;%!stylesheet %></code> is used;
+view <%!viewsrc 'header.jusp' %>. The <code>&lt;%!link %></code> tag is
+used in every single lesson.</p>
+
+<%!include "footer.jusp" %>

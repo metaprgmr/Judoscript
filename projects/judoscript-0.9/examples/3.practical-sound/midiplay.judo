@@ -1,0 +1,61 @@
+usage {
+  minArgs = 1;
+  args = 'filename.midi';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Plays a music file of these types: midi, rmf
+    (adapted from Java Sound API sample code.)
+  *]];
+}
+
+!JavaBaseClass #File, #FileInputStream, #BufferedInputStream
+!JavaBaseClass #MetaEventListener, #MidiSystem, #LineListener, #Sequencer
+
+
+midiEOM = false;
+
+file = javanew #File(#args[0]);
+local sound;
+{ sound = #MidiSystem.getSequence(file);
+catch:
+  sound = javanew #BufferedInputStream(javanew #FileInputStream(file), 1024);
+}
+
+sequencer = #MidiSystem.getSequencer();
+if sequencer.instanceof(#Synthesizer) {
+  channels = synthesizer.getChannels();
+} 
+
+sequencer.cast(#Sequencer).addMetaEventListener(
+           adapter for #MetaEventListener {
+             <meta>: if $_.getType() == 47 { // end of track
+                       midiEOM = true;
+                     }
+           });
+
+sequencer.open();
+sequencer.cast(#Sequencer).setSequence(sound);
+
+value = 50.0;
+value = (VALUE + 100.0) / 200.0 * 127.0;
+for x in channels {
+  x.controlChange(10, value);
+}
+
+value = 0.8;
+for x in channels {
+  x.controlChange(7, value*127.0);
+}
+
+sequencer.start();
+while !midiEOM {
+  sleep(599);
+  println 'midiEOM = ', midiEOM.fmtBool();
+}
+sequencer.stop();
+sequencer.close();
+
+exit 0; // necessary to keep dangling threads.
+

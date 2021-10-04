@@ -1,0 +1,24 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-08';
+  desc    = [[*
+    A Java extension class that just implements the interface
+    java.util.Iterator, without any concrete implementation.
+    (The interface's methods are given empty implementations.)
+  *]];
+}
+
+class MyIterator extends java::java.util.Iterator
+{
+}
+
+//
+// Test
+//
+
+x = new MyIterator;
+println x;
+
+while x.hasNext() {
+  println x.next();
+}

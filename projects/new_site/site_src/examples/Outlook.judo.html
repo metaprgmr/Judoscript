@@ -1,0 +1,35 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_COM/Outlook.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This program obtains an Outlook instance and prints out its folder
+    names.
+
+    Adapted from &lt;a href="http://www.danadler.com/jacob">JACOB&lt;/a>
+    file 'samples/test/Outlook.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+outlook = new com::Outlook.Application;
+println 'version:   ', outlook.Version;
+println 'Namespace: ', outlook.Session;
+recurseFolders(0, outlook.Session);
+outlook.Quit();
+
+
+function recurseFolders indent, o {
+  if o == null { return; }
+  folders = o.Folders;
+  if folders == null { return; }
+
+  for f=folders.GetFirst; ; f=folders.GetNext {
+    fname = f.Name;
+    if fname == null { break; }
+    println ' ' {indent}, fname;
+    recurseFolders(indent+4, f);
+  }
+}
+</pre></td></tr></table></body></html>

@@ -1,0 +1,152 @@
+<html><head><title>JudoScript Syntax - Terminals</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body>
+<h3>Terminals</h3>
+<table bgcolor=#EEEEEE width=99% border=1 style="border-style:solid">
+<tr><th>Terminal</th><th>Description</th><th>Used By</th></tr>
+<tr><td valign=top class=t>CONST_NAME</td><td width=50% valign=top>
+  Constant names start with #, followed by one or more identifier characters. 
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('IncludeDirective')">IncludeDirective</a></font> <font class=nt><a href="javascript:showNT('JavaClassShortcuts')">JavaClassShortcuts</a></font> <font class=nt><a href="javascript:showNT('ConstantDefinition')">ConstantDefinition</a></font> <font class=nt><a href="javascript:showNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font> <font class=nt><a href="javascript:showNT('JavaClassAllocator')">JavaClassAllocator</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>FLOAT_LIT</td><td width=50% valign=top>
+  Floating-point number literals are any legitimate Java <code>float</code>
+  or <code>double</code> numbers.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>FUNCTION_NAME</td><td width=50% valign=top>
+  <p>Function names are thread names starts with a letter or an underscore (_)
+  followed by 0 or more of the above plus digits.</p>
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('FunctionDeclaration')">FunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('ThreadDeclaration')">ThreadDeclaration</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font> <font class=nt><a href="javascript:showNT('StartThreadStatement')">StartThreadStatement</a></font> <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>IDENTIFIER</td><td width=50% valign=top>
+  <p>Identifiers are used by variable names, function names and others.</p>
+
+  <p>An identifier can start with a dollar sign ($), an underscore (_) or
+  letter followed by 0 or more of the above plus digits.</p>
+
+  <p>In some situations (such as Java class names) it may be more restrictive,
+  such as no dollar signs.</p>
+
+  <p>Identifiers may include some of the JudoScript reserved words, as long
+  as there is no syntactical conflict.</p>
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font> <font class=nt><a href="javascript:showNT('JavaClassShortcuts')">JavaClassShortcuts</a></font> <font class=nt><a href="javascript:showNT('ClassDefinition')">ClassDefinition</a></font> <font class=nt><a href="javascript:showNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <font class=nt><a href="javascript:showNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font> <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font> <font class=nt><a href="javascript:showNT('ObjectAllocator')">ObjectAllocator</a></font> <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font> <font class=nt><a href="javascript:showNT('StructAllocator')">StructAllocator</a></font> <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('LocalVariableDeclaration')">LocalVariableDeclaration</a></font> <font class=nt><a href="javascript:showNT('ForInStatement')">ForInStatement</a></font> <font class=nt><a href="javascript:showNT('ForFromToStatement')">ForFromToStatement</a></font> <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> <font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font> <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font> <font class=nt><a href="javascript:showNT('SgmlHandlerDeclaration')">SgmlHandlerDeclaration</a></font> <font class=nt><a href="javascript:showNT('SgmlEvent')">SgmlEvent</a></font> <font class=nt><a href="javascript:showNT('ExecStatement')">ExecStatement</a></font> <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font> <font class=nt><a href="javascript:showNT('FSCopyStatement')">FSCopyStatement</a></font> <font class=nt><a href="javascript:showNT('ConnectStatement')">ConnectStatement</a></font> <font class=nt><a href="javascript:showNT('PrepareStatement')">PrepareStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteStatement')">PreparedExecuteStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteQueryStatement')">PreparedExecuteQueryStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteUpdateStatement')">PreparedExecuteUpdateStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteQueryStatement')">ExecuteQueryStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteUpdateStatement')">ExecuteUpdateStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteSqlStatement')">ExecuteSqlStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteAnyStatement')">ExecuteAnyStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteBatchStatement')">ExecuteBatchStatement</a></font> <font class=nt><a href="javascript:showNT('CreateBatchStatement')">CreateBatchStatement</a></font> <font class=nt><a href="javascript:showNT('AddBatchStatement')">AddBatchStatement</a></font> <font class=nt><a href="javascript:showNT('DumpTableStatement')">DumpTableStatement</a></font> <font class=nt><a href="javascript:showNT('XmlInitList')">XmlInitList</a></font> <font class=nt><a href="javascript:showNT('XmlStatement')">XmlStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>INT_LIT</td><td width=50% valign=top>
+  Floating-point number literals are any legitimate Java <code>int</code>
+  or <code>long</code> numbers.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>JAVACLASS_DEFINITION</td><td width=50% valign=top>
+  Java class definition is used for embedded Java classes. The defined
+  Java class or interface must be public and no package name is allowed.
+  Imports can be used. The class can extend other classes, including other
+  embedded ones, and/or implement interfaces. Inner classes are allowed.
+</td><td class=nt valign=top></td></tr>
+
+
+<tr><td valign=top class=t>LABEL_NAME</td><td width=50% valign=top>
+  A label name is exactly the same as a function name.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('WhileStatement')">WhileStatement</a></font> <font class=nt><a href="javascript:showNT('DoWhileStatement')">DoWhileStatement</a></font> <font class=nt><a href="javascript:showNT('ForStatement')">ForStatement</a></font> <font class=nt><a href="javascript:showNT('ForInStatement')">ForInStatement</a></font> <font class=nt><a href="javascript:showNT('ForFromToStatement')">ForFromToStatement</a></font> <font class=nt><a href="javascript:showNT('RepeatStatement')">RepeatStatement</a></font> <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> <font class=nt><a href="javascript:showNT('BreakStatement')">BreakStatement</a></font> <font class=nt><a href="javascript:showNT('ContinueStatement')">ContinueStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>LOCALDATA</td><td width=50% valign=top>
+  The local data, also called in-script data, is any text starting on
+  the next line following <font class=kw>EndScript</font>  to the end of the script. It is
+  represented by the <font class=kw>$$local</font>  built-in input stream.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Script')">Script</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>PLAIN_TEXT</td><td width=50% valign=top>
+  The plain text is any text that does not contain <code>(*</code> and
+  <code>*]]</code>, which is used in the here-doc expression. The two
+  exceptions are the delimiters.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>STRING_LIT</td><td width=50% valign=top>
+  The string literal can be quoted by double-quote (") or single-quote (').
+  If double-quote is used, single quotes can appear as regular characters
+  and vice versa. Java-style escape sequence is supported, including the
+  Unicode escaping.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('IncludeDirective')">IncludeDirective</a></font> <font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('XmlInitList')">XmlInitList</a></font> </td></tr>
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <tr><td valign=top class=t>CONST_NAME</td><td width=50% valign=top>
+  Constant names start with #, followed by one or more identifier characters. 
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('IncludeDirective')">IncludeDirective</a></font> <font class=nt><a href="javascript:showNT('JavaClassShortcuts')">JavaClassShortcuts</a></font> <font class=nt><a href="javascript:showNT('ConstantDefinition')">ConstantDefinition</a></font> <font class=nt><a href="javascript:showNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font> <font class=nt><a href="javascript:showNT('JavaClassAllocator')">JavaClassAllocator</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>FLOAT_LIT</td><td width=50% valign=top>
+  Floating-point number literals are any legitimate Java <code>float</code>
+  or <code>double</code> numbers.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>FUNCTION_NAME</td><td width=50% valign=top>
+  <p>Function names are thread names starts with a letter or an underscore (_)
+  followed by 0 or more of the above plus digits.</p>
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('FunctionDeclaration')">FunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('ThreadDeclaration')">ThreadDeclaration</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font> <font class=nt><a href="javascript:showNT('StartThreadStatement')">StartThreadStatement</a></font> <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>IDENTIFIER</td><td width=50% valign=top>
+  <p>Identifiers are used by variable names, function names and others.</p>
+
+  <p>An identifier can start with a dollar sign ($), an underscore (_) or
+  letter followed by 0 or more of the above plus digits.</p>
+
+  <p>In some situations (such as Java class names) it may be more restrictive,
+  such as no dollar signs.</p>
+
+  <p>Identifiers may include some of the JudoScript reserved words, as long
+  as there is no syntactical conflict.</p>
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('UsageDeclaration')">UsageDeclaration</a></font> <font class=nt><a href="javascript:showNT('JavaClassShortcuts')">JavaClassShortcuts</a></font> <font class=nt><a href="javascript:showNT('ClassDefinition')">ClassDefinition</a></font> <font class=nt><a href="javascript:showNT('JavaExtensionDefinition')">JavaExtensionDefinition</a></font> <font class=nt><a href="javascript:showNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showNT('StaticJavaFunctionDeclaration')">StaticJavaFunctionDeclaration</a></font> <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font> <font class=nt><a href="javascript:showNT('PrimaryExpr')">PrimaryExpr</a></font> <font class=nt><a href="javascript:showNT('ObjectAllocator')">ObjectAllocator</a></font> <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font> <font class=nt><a href="javascript:showNT('StructAllocator')">StructAllocator</a></font> <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('LocalVariableDeclaration')">LocalVariableDeclaration</a></font> <font class=nt><a href="javascript:showNT('ForInStatement')">ForInStatement</a></font> <font class=nt><a href="javascript:showNT('ForFromToStatement')">ForFromToStatement</a></font> <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> <font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font> <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font> <font class=nt><a href="javascript:showNT('SgmlHandlerDeclaration')">SgmlHandlerDeclaration</a></font> <font class=nt><a href="javascript:showNT('SgmlEvent')">SgmlEvent</a></font> <font class=nt><a href="javascript:showNT('ExecStatement')">ExecStatement</a></font> <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font> <font class=nt><a href="javascript:showNT('FSCopyStatement')">FSCopyStatement</a></font> <font class=nt><a href="javascript:showNT('ConnectStatement')">ConnectStatement</a></font> <font class=nt><a href="javascript:showNT('PrepareStatement')">PrepareStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteStatement')">PreparedExecuteStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteQueryStatement')">PreparedExecuteQueryStatement</a></font> <font class=nt><a href="javascript:showNT('PreparedExecuteUpdateStatement')">PreparedExecuteUpdateStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteQueryStatement')">ExecuteQueryStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteUpdateStatement')">ExecuteUpdateStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteSqlStatement')">ExecuteSqlStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteAnyStatement')">ExecuteAnyStatement</a></font> <font class=nt><a href="javascript:showNT('ExecuteBatchStatement')">ExecuteBatchStatement</a></font> <font class=nt><a href="javascript:showNT('CreateBatchStatement')">CreateBatchStatement</a></font> <font class=nt><a href="javascript:showNT('AddBatchStatement')">AddBatchStatement</a></font> <font class=nt><a href="javascript:showNT('DumpTableStatement')">DumpTableStatement</a></font> <font class=nt><a href="javascript:showNT('XmlInitList')">XmlInitList</a></font> <font class=nt><a href="javascript:showNT('XmlStatement')">XmlStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>INT_LIT</td><td width=50% valign=top>
+  Floating-point number literals are any legitimate Java <code>int</code>
+  or <code>long</code> numbers.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('BindVariableList')">BindVariableList</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>JAVACLASS_DEFINITION</td><td width=50% valign=top>
+  Java class definition is used for embedded Java classes. The defined
+  Java class or interface must be public and no package name is allowed.
+  Imports can be used. The class can extend other classes, including other
+  embedded ones, and/or implement interfaces. Inner classes are allowed.
+</td><td class=nt valign=top></td></tr>
+
+
+<tr><td valign=top class=t>LABEL_NAME</td><td width=50% valign=top>
+  A label name is exactly the same as a function name.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('WhileStatement')">WhileStatement</a></font> <font class=nt><a href="javascript:showNT('DoWhileStatement')">DoWhileStatement</a></font> <font class=nt><a href="javascript:showNT('ForStatement')">ForStatement</a></font> <font class=nt><a href="javascript:showNT('ForInStatement')">ForInStatement</a></font> <font class=nt><a href="javascript:showNT('ForFromToStatement')">ForFromToStatement</a></font> <font class=nt><a href="javascript:showNT('RepeatStatement')">RepeatStatement</a></font> <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> <font class=nt><a href="javascript:showNT('BreakStatement')">BreakStatement</a></font> <font class=nt><a href="javascript:showNT('ContinueStatement')">ContinueStatement</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>LOCALDATA</td><td width=50% valign=top>
+  The local data, also called in-script data, is any text starting on
+  the next line following <font class=kw>EndScript</font>  to the end of the script. It is
+  represented by the <font class=kw>$$local</font>  built-in input stream.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Script')">Script</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>PLAIN_TEXT</td><td width=50% valign=top>
+  The plain text is any text that does not contain <code>(*</code> and
+  <code>*]]</code>, which is used in the here-doc expression. The two
+  exceptions are the delimiters.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('Mixture')">Mixture</a></font> </td></tr>
+
+
+<tr><td valign=top class=t>STRING_LIT</td><td width=50% valign=top>
+  The string literal can be quoted by double-quote (") or single-quote (').
+  If double-quote is used, single quotes can appear as regular characters
+  and vice versa. Java-style escape sequence is supported, including the
+  Unicode escaping.
+</td><td class=nt valign=top><font class=nt><a href="javascript:showNT('IncludeDirective')">IncludeDirective</a></font> <font class=nt><a href="javascript:showNT('Literal')">Literal</a></font> <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font> <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> <font class=nt><a href="javascript:showNT('XmlInitList')">XmlInitList</a></font> </td></tr>
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </table></body></html>

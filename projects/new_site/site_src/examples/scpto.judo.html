@@ -1,0 +1,19 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_sshscpftp/scpto.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args    = 'local_file_name';
+  desc    = [[*
+    Send one local file to the remote server in the user's home dir.
+
+    Modify this to use real server name, user name and password
+    before run.
+  *]];
+}
+
+server_name = 'localhost';
+username    = 'justme';
+password    = 'itsonlyme';
+
+scp server_name, username, password from local #args[0];
+</pre></td></tr></table></body></html>

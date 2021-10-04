@@ -1,0 +1,74 @@
+<preamble>
+</preamble>
+
+<leftPane>
+
+<portlet url="sitemap.html">
+<font color=#000000><oeW>elcome to the official for the <b>Judo</b> language, the <b>JuSP</b> web app development platform and the <b>Jamaica</b> language!</font>
+You can find the latest software and news, the most current documentation, sample code and tutorials.
+The documentation, articles and examples can be downloaded for quick reference on your local machine.
+</portlet>
+
+<portlet url="books/judoscript-0.9/toc_details.html">
+<font color=#000000><oeW>hat is <J>?</font>
+<u><J> is a <em>functional scripting language</em></u>.
+It is a normal algorithmic/object-oriented programming and java scripting language, and also has a
+number of built-in domain support. The <J> language specification can be formulated as:<br><br>
+<center><table cellpadding=5 border=0 bgcolor="#dddddd">
+<tr><td valign=top align=right><b><J></b> ::=</td><td><i>Core-Language +<br>
+Object-System Scripting +<br>
+Data-n-Services Scripting</i>
+</td></tr>
+<tr><td valign=top align=right><i>Core-Language</i> ::=</td><td>
+JavaScript x 90% +<br>
+Genuine OOP +<br>
+Powerful data structures +<br>
+Thread programming<br>
+</td></tr>
+<tr><td valign=top align=right><i>Object-Systems</i> ::=</td><td>
+Fully capable Java scripting +<br>
+SOAP web service scripting <sup>New: Nov 27, 2004</sup> +<br>
+Windows ActiveX/COM scripting<br>
+</td></tr>
+<tr><td valign=top align=right><i>Data-n-Services</i> ::=</td><td>
+JDBC scripting +<br>
+Hibernate ORM/HQL scripting <sup>New: Jan 30, 2005</sup> +<br>
+XML and SGML scripting +<br>
+OS shell scripting +<br>
+Internet scripting +<br>
+Ant and Ant task scripting <sup>New: Aug 23, 2004</sup> +<br>
+Java GUI scripting
+</td></tr></table></center>
+<br>Judo is an easy and powerful scripting tool beyond just programming. It can be used widely, such as
+<ul>
+<li>quick ad hoc fixes
+<li>multi-source, multi-format data analysis, reporting or aggregation
+<li>automated tasks such as unit and system testing, batch processing jobs, system monitering, etc.
+<li>software application prototyping at different levels and/or tiers
+<li>developing enterprise applications
+</ul>
+</portlet>
+
+</leftPane>
+
+<rightPane>
+
+<portlet url="books/judoscript-0.9/chapters/jusp.html">
+<font color=#000000><oeL><b>atest development.</b> The latest release includes <b>the new JuSP Platform</b>! JuSP is a very easy and complete web app development platform; the development model of JuSP-Judo-Java is a direct counterpart of ASP-VB-COM. There is an on-line <a href="/jusptut/">JuSP Comprehensive Tutorial</a> that teaches everything of JuSP, and you should be able to design and develop full-blown web apps in JuSP within a day.
+</portlet>
+
+<portlet url="articles/jamaica.html" nonjs="true">
+<font color=#000000><oeJ><b>amaica</b> is a separate project hosted here. <b>Jamaica</b> is a <u>Java Macro Assembler Language</u>.</font> It uses Java syntax for class intrastructural declarations, and use symbolic bytecode instructions and its own macros for executable code.
+</portlet>
+
+<portlet url="articles/jsr223.html" nonjs="true">
+<font color=#000000><oeJ><b>SR 223</b> was announced at JavaOne 2003.</font> When "scripting language" and "PHP" were pronounced together, it caught many people's attention. We have an article that discusses this JSR 223.
+</portlet>
+
+<portlet>
+<font color=#000000><oeI>f this is the <b>first time</b> you encounter <J>, here is a guidance for you.</font>
+<u>For the real impatient</u>, the quickest way to get started is, as usual, the <a href="examples/index.html">example library</a> for all the language features. The <a href=articles/whitepaper.html>white paper</a> explains scripting in the Java era and <J> philosophy, and comprehensively introduces <J>. For <u>Java programmers</u>, <a href="books/judoscript-0.9/chapters/java.html">Java Scripting</a> may be more interesting. It is better to read <a href=newusers.html>For New Users</a> first because it introduces the very basics of <J>.
+</portlet>
+
+</rightPane>
+

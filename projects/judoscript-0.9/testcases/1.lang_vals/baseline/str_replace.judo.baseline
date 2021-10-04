@@ -1,0 +1,7 @@
+abcdefABCDEF
+abc-+-+-+DEF -- replacedIgnoreCase('defABC','-+-+-+')
+abc-+-+-+DEF -- replace('defABC','-+-+-+')
+abc-+-+-+DEF -- replacedIgnoreCase('defabc','-+-+-+')
+abcdefABCDEF -- replace('defabc','-+-+-+')
+-+-defABCDEF -- replace('abc','-+-')
+-+-def-+-DEF -- replaceIgnoreCase('aBc','-+-')

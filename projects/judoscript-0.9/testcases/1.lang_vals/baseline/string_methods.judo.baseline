@@ -1,0 +1,85 @@
+Characters of values 26 to 255:
+               
+!  "  #  $  %  &  '  (  )  *  +  ,  -  .  /  0  
+1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?  @  
+A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  
+Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _  `  
+a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  
+q  r  s  t  u  v  w  x  y  z  {  |  }  ~    ?  
+?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  
+?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?  ?     
+¡  ¢  £  ¤  ¥  ¦  §  ¨  ©  ª  «  ¬  ­  ®  ¯  °  
+±  ²  ³  ´  µ  ¶  ·  ¸  ¹  º  »  ¼  ½  ¾  ¿  À  
+Á  Â  Ã  Ä  Å  Æ  Ç  È  É  Ê  Ë  Ì  Í  Î  Ï  Ð  
+Ñ  Ò  Ó  Ô  Õ  Ö  ×  Ø  Ù  Ú  Û  Ü  Ý  Þ  ß  à  
+á  â  ã  ä  å  æ  ç  è  é  ê  ë  ì  í  î  ï  ð  
+ñ  ò  ó  ô  õ  ö  ÷  ø  ù  ú  û  ü  ý  þ  ÿ  
+
+ch = B
+ch.ascii() = 66
+ch.unicode() = 66
+
+str                   = "abcdEFEdcba  "
+str.length()          = 13
+str = str.trim()      = "abcdEFEdcba"
+str.charAt(2)         = c
+str.substr(2)         = cdEFEdcba
+str[2:]               = cdEFEdcba
+str.substr(1,2)       = b
+str[1:1]              = b
+str.substr(100)       = 
+str[100:]             = 
+str.indexOf('c')      = 2
+str.lastIndexOf('c')  = 8
+str.toUpper()         = ABCDEFEDCBA
+str.toLower()         = abcdefedcba
+str.startsWith("abc") = true
+str.startsWith("ABC") = false
+str.endsWith("cba")   = true
+str.endsWith("CBA")   = false
+str.replace()         = abcdEFEdcba
+str.replace("b")      = acdEFEdca
+str.replace("c","x")  = abxdEFEdxba
+
+Method regionMatches()
+str = "abcdEFEdcba  "
+str.regionMatches(2,'bcd',0)             = false
+str.regionMatches(2,'bcd',0,2)           = false
+str.regionMatches(1,'bcd',0)             = true
+str.regionMatches(1,'bcd',0,2)           = true
+str.regionMatchesIgnoreCase(2,'cde',0,3) = true
+str.regionMatchesIgnoreCase(3,'cde',0,3) = false
+
+Method csv()
+str = abc,123,defg, 0, xyz  
+str.csv():
+  => |abc|
+  => |123|
+  => |defg|
+  => | 0|
+  => | xyz  |
+str = abc.123.defg. 0. xyz  
+str.csv():
+  => |abc.123.defg. 0. xyz  |
+str.csv('.'):
+  => |abc|
+  => |123|
+  => |defg|
+  => | 0|
+  => | xyz  |
+str = abc;123.defg; 0. xyz  
+str.csv(';.,'):
+  => |abc|
+  => |123.defg|
+  => | 0. xyz  |
+
+Method getFileExt[ension]():
+filename = morrobay.jpg
+pathname = http://localhost:8080/pics.jpg/sfbay
+filename.getFileExt() = jpg
+pathname.getFileExt() = 
+
+Method urlEncode(), urlDecode():
+url = info="1 is not 2"&mthd=get
+encoded_url = url.urlEncode() = |info%3D%221+is+not+2%22%26mthd%3Dget|
+encoded_url.urlDecode() = |info="1 is not 2"&mthd=get|

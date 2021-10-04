@@ -1,0 +1,120 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/value_types.judo:</b></td></tr><tr><td><pre>
+println '            Legend:';
+println '              NUL  - isNull()    CLX  - isComplex()  INT  - isInt()    FLT  - isFloat()';
+println '              STR  - isString()  DAT  - isDate()     ARR  - isArray()  SET  - isSet()';
+println '              STT  - isStruct()  STK  - isStack()    QUE  - isQueue()  JAV  - isJava()';
+println '              OBJ  - isObject()  FUN  - isFunction()';
+println;
+println '                                          N C I F N S D A S S S Q J O F';
+println '                                          U L N L U T A R E T T U A B U';
+println 'Expression                                L X T T M R T R T T K E V J N  Type Name';
+println '----------------------------------------- - - - - - - - - - - - - - - -  ---------';
+
+exprs = [
+  [[* a = null; *]],
+  [[* a = true; *]],
+  [[* a = 1; *]],
+  [[* a = 1.0; *]],
+  [[* a = '1'; *]],
+  [[* a = '1.0'; *]],
+  [[* a = '0xabc'; *]],
+  [[* a = '0777'; *]],
+  [[* a = '1e34'; *]],
+  [[* a = 'abc'; *]],
+  [[* a = 'xyz'; *]],
+  [[* a = new java::String('Xyz'); *]],
+  [[* a = new java::Boolean(true); *]],
+  [[* a = new java::Byte(1); *]],
+  [[* a = new java::Character('c'); *]],
+  [[* a = new java::Short(1); *]],
+  [[* a = new java::Float(1.01); *]],
+  [[* a = new java::Double(1.01); *]],
+  [[* a = Date(); *]],
+  [[* a = new java::Date; *]],
+  [[* a = new array; *]],
+  [[* a = []; *]],
+  [[* a = LinkedList[]; *]],
+  [[* a = new java::byte[4]; *]],
+  [[* a = new java::Date[2]; *]],
+  [[* a = new java::Hashtable; *]],
+//  [[* a = createDom().cast('org.w3c.dom.Node'); *]],
+//  [[* a = createDom(); *]],
+  [[* a = new Set; *]],
+  [[* a = Set&lt;Number>[]; *]],
+  [[* a = {}; *]],
+  [[* a = new Object; *]],
+  [[* a = new OrderedMap; *]],
+  [[* a = new SortedMap&lt;String>; *]],
+  [[* a = new TreeNode; *]],
+  [[* a = new Stack; *]],
+  [[* a = new Queue; *]],
+  [[* a = new TableData; *]],
+  [[* a = openFile(#prog); *]],
+  [[* a = openTextFile(#prog); *]],
+  [[*
+      class C {}
+      a = new C;
+  *]],
+  [[*
+      class C extends OrderedMap {}
+      a = new C;
+  *]],
+  [[*
+      class C extends TreeNode {}
+      a = new C;
+  *]],
+  [[*
+      class D extends C {}
+      a = new D;
+  *]],
+  [[* a = function(){}; *]],
+  [[*
+      do ('&lt;a>').getReader() as sgml {
+      &lt;a>: a = \$_;
+      }
+  *]],
+  [[*
+      do ('&lt;/a>').getReader() as sgml {
+      &lt;/a>: a = \$_;
+      }
+  *]],
+  [[*
+      do ('&lt;/a>  ').getReader() as sgml {
+      :TEXT: a = \$_;
+      }
+  *]],
+
+];
+
+for expr in exprs {
+  eval expr; // all of them evaluate to 'a' in the current context.
+
+  firstLine = true;
+  do expr.getReader() as lines {
+    if firstLine {
+      println $_ :&lt;41,
+              a.isNull()    .fmtBool('.','X') :> 2,
+              a.isComplex() .fmtBool('.','X') :> 2,
+              a.isInt()     .fmtBool('.','X') :> 2,
+              a.isFloat()   .fmtBool('.','X') :> 2,
+              a.isNumber()  .fmtBool('.','X') :> 2,
+              a.isString()  .fmtBool('.','X') :> 2,
+              a.isDate()    .fmtBool('.','X') :> 2,
+              a.isArray()   .fmtBool('.','X') :> 2,
+              a.isSet()     .fmtBool('.','X') :> 2,
+              a.isObject()  .fmtBool('.','X') :> 2,
+              a.isStack()   .fmtBool('.','X') :> 2,
+              a.isQueue()   .fmtBool('.','X') :> 2,
+              a.isJava()    .fmtBool('.','X') :> 2,
+              a.isObject()  .fmtBool('.','X') :> 2,
+              a.isFunction().fmtBool('.','X') :> 2,
+              '  ', a.getTypeName();
+      firstLine = false;
+    } else {
+      println $_;
+    }
+  }
+}
+println '----------------------------------------- - - - - - - - - - - - - - - -  ---------';
+</pre></td></tr></table></body></html>

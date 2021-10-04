@@ -1,0 +1,20 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-09-25';
+  desc    = 'Simple test that displays all the parameters passed to a function.';
+}
+
+function foo a {  // or: function foo a, .. {
+  println a;
+  if $$args {
+    println '----- length: ', $$args.length;
+    for x in $$args { . x; }
+  }
+}
+
+foo 'A', '1', 2, 3;
+
+println nl, '----- array expanded as parameters -----';
+params = [ 'a', '0', 1, 2 ];
+foo( {params} );

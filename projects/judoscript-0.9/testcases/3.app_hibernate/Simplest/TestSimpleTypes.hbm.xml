@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+  "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+  <class name="TestSimpleTypes" discriminator-value="N">
+    <id name="id" type="long">
+      <generator class="native"/>
+    </id>
+    <property name="theFloat"   type="float"/>
+    <property name="theByte"    type="byte"/>
+    <property name="theChar"    type="char"/>
+    <property name="theShort"   type="short"/>
+    <property name="theInt"     type="int"/>
+    <property name="theLong"    type="long"/>
+    <property name="theString"  type="java.lang.String"/>
+    <property name="theDate"    type="java.util.Date"/>
+  </class>
+
+</hibernate-mapping>

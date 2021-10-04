@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<article date="02-Dec-2000">
+  <headline>SAX 2.0 Released</headline>
+  <author>F. Bar</author>
+  <body>SAX 2.0 has been released into the public domain with the following
+    features:
+    <!-- use a CDATA section to enumerate the features -->
+    <![CDATA[
+    ->Namespace support
+    ->Fully configurable with the addition of features and properties
+    ->Support for skipped entities
+    ]]></body>
+</article>

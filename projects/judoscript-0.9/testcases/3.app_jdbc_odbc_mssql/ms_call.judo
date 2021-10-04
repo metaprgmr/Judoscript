@@ -1,0 +1,19 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Does a prepared stored procedure call with one
+    input- one output-parameter.
+  *]];
+}
+
+!include 'mssql_connection.judi'
+
+name = 'Sanjay';
+db::call: { call get_person( :name, :id ) } ;
+    with @name:varchar = name,
+                     @id:int       => x;
+println 'id for ', name, ' is: ', x;
+
+db::disconnect();

@@ -1,0 +1,37 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/stack.judo:</b></td></tr><tr><td><pre>
+a = { name : 'A' };
+b = { name : 'B' };
+c = { name : 'C' };
+d = { name : 'D' };
+e = { name : 'E' };
+a.children = [ b, c ];     // ==> a
+b.children = [ a, d ];     //    / \
+c.children = [ a, d, e ];  //   b   c
+d.children = [ b, c ];     //    \ / \
+e.children = [ c ];        //     d   e
+
+flush 'Depth-First Search --  ';
+
+stack = new Stack;
+
+stack.push(a);
+
+while !stack.isEmpty() {
+  var node = stack.pop();
+  if !node.visited {
+    process node;
+    node.visited = true;
+    for x in node.children {
+      if ! x.visited { stack.push(x); }
+    }
+  }
+}
+println;
+
+
+// This function handles the node
+function process x {
+  print x.name, '  ';
+}
+</pre></td></tr></table></body></html>

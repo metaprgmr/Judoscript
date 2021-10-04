@@ -1,0 +1,33 @@
+<html><head><title>JudoScript Semantics - PrimaryExpr</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>PrimaryExpr</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=PrimaryExpr>PrimaryExpr</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=nt><a href="javascript:showNT('ObjectAllocator')">ObjectAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('JavaClassAllocator')">JavaClassAllocator</a></font>  |  <font class=nt><a href="javascript:showNT('LambdaDeclaration')">LambdaDeclaration</a></font>  |  <font class=kw><nobr>${</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>}</nobr></font>   |  <font class=kw><nobr>&</nobr></font>  <font class=t>IDENTIFIER</font>   |  <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('PrimaryExpr'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The primary expression is the smallest unit of any expressions.</p>
+
+  <p>The <font class=nt><a href="javascript:showNT('ObjectAllocator')">ObjectAllocator</a></font>, <font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font>,
+  <font class=nt><a href="javascript:showNT('JavaClassAllocator')">JavaClassAllocator</a></font> and <font class=nt><a href="javascript:showNT('LambdaDeclaration')">LambdaDeclaration</a></font>
+  create various objects that can be assigned to some variable.</p>
+
+  <p> The <font class=kw><nobr>${</nobr></font>  <font class=kw><nobr>}</nobr></font>  expression is an alias for the call to system function
+  <font class=sfn><a href="javascript:showSF('getEnvVar')">getEnvVar()</a></font>. This expression can appear and function the same within
+  string literals as well, including here-docs.</p>
+
+  <p>The <font class=kw><nobr>&</nobr></font>  operator takes a reference for a function to assign to a variable.</p>
+
+  <p>The <font class=nt><a href="javascript:showNT('AtomicExpr')">AtomicExpr</a></font> represents individual variables, object member access,
+  array access, function calls and combinations of all these.</p>
+ </body></html>

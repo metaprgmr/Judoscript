@@ -1,0 +1,22 @@
+usage {
+  args   = 'dir_or_zip';
+  author = 'James Huang';
+  desc   = [[*
+    Prints the sizes of directories in the specified base.
+    If no based is specified, use the current directory.
+    The base can be a zip file as well; both compressed and
+    uncompressed sizes are listed.
+  *]];
+}
+
+repos = #args[0];
+
+list in repos dirOnly;
+for x in $$fs_result {
+  list x in repos recursive compressedSize;
+  compressedSize = $$fs_result;
+  list x in repos recursive size;
+  size = $$fs_result;
+  println compressedSize:>10, size:>10, '  ', x;
+}
+

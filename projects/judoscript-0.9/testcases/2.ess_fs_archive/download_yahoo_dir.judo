@@ -1,0 +1,16 @@
+//arch = createTar('c:/x/yahoo_comp.tar.gz');
+arch = createZip('c:/x/yahoo_comp.zip');
+
+urls = [
+  'http://dir.yahoo.com/Computers_and_Internet/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Software/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Macintosh/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Internet/index.html',
+  'http://dir.yahoo.com/Computers_and_Internet/Internet/WAIS/index.html'
+];
+
+for u in urls {
+  copy u into arch keepDirs;
+}
+
+arch.close();

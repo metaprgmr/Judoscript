@@ -1,0 +1,43 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/emu_build.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Part of the fictitious "flagship" project.
+    "Flagship" is a C/C++ and Java hybrid "project".
+    This script emulates a build process where source files
+    are "compiled" and "linked".
+  *]];
+}
+
+!include 'flagship.judi' // for #base and genFile().
+
+// To create a sub-tree in #base/flagship/:
+//           Directory                                   Files
+//  --------------------------   ---------------------------------------------------
+//  flagship/build/classes/      CommandCenter.class DecisionEngine.class
+//  flagship/build/obj/          fs_jni.dll flagship.exe util.obj engine.obj flagship.obj
+//
+
+mkdir 'flagship/build/classes, flagship/build/obj' in #base;
+. unit($$fs_result, 'directory', 'directories'), ' created.';
+
+// "Build" java classes -- *.java => build/classes/*.class
+list #base @ 'flagship/src/*.java' recursive fileOnly; // use absolute path.
+for x in $$fs_result {
+  genFile( 'flagship/build/classes/', x.getFileName().replace('.java','.class'));
+}
+
+// "Build" native objects: -- *.c/*.cpp => *.obj, and fs_jni.dll and flagship.exe.
+list '*.c, *.cpp' in #base @ 'flagship/src' recursive fileOnly; // use relative path.
+for x in $$fs_result {
+  x = x.getFileName();
+  if x.endsWith('.cpp') { x = x.replace('.cpp', '.obj'); }
+  elif x.endsWith('.c') { x = x.replace('.c', '.obj'); }
+  genFile( 'flagship/build/obj/', x );
+}
+genFile( 'flagship/build/obj/', 'fs_jni.dll' );
+genFile( 'flagship/build/obj/', 'flagship.exe' );
+</pre></td></tr></table></body></html>

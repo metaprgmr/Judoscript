@@ -1,0 +1,16 @@
+usage {
+  author  = 'James Huang';
+  desc    = [[*
+    This script is a practical one. It renames files like 'feb04.lst'
+    into '2002feb04.lst', where 2002 is the year of the file's time.
+  *]];
+}
+
+list '*.lst';
+for f in $$fs_result {
+  fy = f.fileTime().year;
+  fn = f.getFileName();
+  if !fn.startsWith(fy) { // if so, file name is good already.
+    rename fn to fy @ fn;
+  }
+}

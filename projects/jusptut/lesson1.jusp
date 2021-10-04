@@ -1,0 +1,42 @@
+<%
+  var title = 'Lesson 1. JuSP Page Scripting'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>${tag}</code><td>${desc}</td></tr>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>JuSP pages use <code>&lt;% %&gt;</code> to embed scriptlet
+(written in Judo) and <code>&lt;%= %&gt;</code> to embed
+expressions. The embedded expressions are self-evident and need
+no further explanation.</p>
+
+<p>Within the <code>&lt;% %&gt;</code> tag, these objects are
+predefined by the JuSP engine:</p>
+
+<table class=tbl border=0>
+<tr><th>Page Object</th><th>Description</th></tr>
+<%!tagRow 'request', 'Represents the HTTP request.' %>
+<%!tagRow 'response', 'Represents the HTTP response.' %>
+<%!tagRow 'session', 'The session object, essentially a map of name-value pairs.' %>
+<%!tagRow 'form', 'The form object, a map of name-value pairs for all request parameters.<br>The values are typically strings or string arrays.' %>
+<%!tagRow 'root', 'The root URI for this web application.' %>
+<%!tagRow 'writer', 'The text output writer (for textual output only).' %>
+<%!tagRow 'outStream', 'The binary output stream (for binary output only).' %>
+</table>
+
+<p>Let's do an experiment by printing out all these objects:
+
+<ul type=square>
+<li>View <code><%!link 'lesson1/snoop.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson1/snoop.jusp' %></li>
+</ul>
+
+<p>The string <code>root</code> represents the root URI of this web app;
+it is used in "footer.jusp" because this page is included in pages from
+different directories. View <%!viewsrc 'footer.jusp' %>.<p> 
+
+<%!include "footer.jusp" %>

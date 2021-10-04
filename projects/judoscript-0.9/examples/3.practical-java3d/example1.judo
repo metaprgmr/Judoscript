@@ -1,0 +1,123 @@
+usage {
+  desc = 'Ported from JavaWorld's Java3D example1.java.';
+}
+
+!DefineJavaPackages j3d {
+   javax.media.j3d, javax.vecmath,
+   com.sun.j3d.utils.audio, com.sun.j3d.utils.behaviors.interpolators,
+   com.sun.j3d.utils.behaviors.keyboard, com.sun.j3d.utils.behaviors.mouse,
+   com.sun.j3d.utils.behaviors.picking, com.sun.j3d.utils.behaviors.vp,
+   com.sun.j3d.utils.compression, com.sun.j3d.utils.geometry,
+   com.sun.j3d.utils.image, com.sun.j3d.utils.picking,
+   com.sun.j3d.utils.picking.behaviors, com.sun.j3d.utils.universe,
+   com.sun.j3d.loaders, com.sun.j3d.loaders.lw3d,
+   com.sun.j3d.loaders.objectfile, com.sun.j3d.audioengines,
+   com.sun.j3d.audioengines.javasound, com.sun.j3d.utils.applet
+}
+!JavaPackages<j3d>
+   #PhysicalEnvironment, #PhysicalBody, #VirtualUniverse, #SimpleUniverse,
+   #BranchGroup, #TransformGroup, #ViewPlatform, #View, #Locale,
+   #FontExtrusion, #Text3D, #Font3D, #Shape3D, #ColorCube, #BranchGroup,
+   #Transform3D, #TransformGroup, #Vector3f, #Appearance
+
+!JavaGuiClass  #Frame, #Canvas, #Font
+!JavaBaseClass #Math
+
+frame = javanew #Frame("Java 3D Exmaple1");
+frame.setSize(400, 300);
+
+myCanvas3D = javanew javax.media.j3d.Canvas3D(null);
+frame.add("Center", myCanvas3D);
+
+/?
+myView   = constructView(myCanvas3D);
+myLocale = constructViewBranch(myView);
+constructContentBranch(myLocale);
+?/
+
+// Let's build our scene graph. We need to construct
+// both a view branch and a content branch.  Using Sun's
+// SimpleUniverse utility, we can combine the View and
+// view branch construction into one simple step.
+
+myUniverse = javanew #SimpleUniverse(myCanvas3D);
+contentBranchGroup = constructContentBranch();
+myUniverse.addBranchGraph(contentBranchGroup);
+
+frame.setVisible(true);
+
+
+guiEvents {
+  <frame : Window : windowClosing> :
+    frame.dispose();
+    exit 0;
+}
+
+function constructView myCanvas3D {
+  myView = javanew #View;
+  myView.addCanvas3D(myCanvas3D);
+  myView.setPhysicalBody(javanew #PhysicalBody);
+  myView.setPhysicalEnvironment(javanew #PhysicalEnvironment);
+  return myView;
+}
+
+
+function constructViewBranch myView {
+
+  //First, we create the necessary coordinate systems 
+  //(VirtualUniverse, Locale), container nodes
+  //(BranchGroup, TransformGroup), and platform which 
+  //determines our viewing position and direction (ViewPlatform).  
+
+  myUniverse = javanew #VirtualUniverse;
+  myLocale   = javanew #Locale(myUniverse);
+  myBranchGroup    = javanew #BranchGroup;
+  myTransformGroup = javanew #TransformGroup;
+  myViewPlatform   = javanew #ViewPlatform;
+
+  //Next, we insert the platform into the transform group, 
+  //the transform group into the branch group, and the branch
+  //group into the locale's branch graph portion of the 
+  //scene graph.
+
+  myTransformGroup.addChild(myViewPlatform);
+  myBranchGroup.addChild(myTransformGroup);
+  myLocale.addBranchGraph(myBranchGroup);
+
+  //Finally, we attach our view to the view platform and we
+  //return a reference to our new universe.  We are ready to 
+  //render 3D content!
+
+  myView.attachViewPlatform(myViewPlatform);
+  return myLocale;
+}
+
+function constructContentBranch myLocale {
+  myFont = javanew #Font("TimesRoman",#Font.PLAIN,10);
+  myFont3D  = javanew #Font3D(myFont, javanew #FontExtrusion);
+  myText3D  = javanew #Text3D(myFont3D, "JudoScript !!!");
+  myShape3D = javanew #Shape3D(myText3D, javanew #Appearance);
+  myCube = javanew #ColorCube;
+
+  contentBranchGroup = javanew #BranchGroup;
+  myTransform3D = javanew #Transform3D;
+  myTransform3D.setTranslation(javanew #Vector3f(-1.0f,0.0f,-4.0f));
+  myTransform3D.setScale(0.1);
+  tempTransform3D = javanew #Transform3D;
+  tempTransform3D.rotY(#Math.PI/4.0d);
+  myTransform3D.mul(tempTransform3D);
+  contentTransformGroup = javanew #TransformGroup(myTransform3D);
+
+  contentTransformGroup.addChild(myShape3D);
+  contentBranchGroup.addChild(contentTransformGroup);
+
+  myTransform3D.setIdentity();
+  myTransform3D.setTranslation(javanew #Vector3f(-0.5f,-0.5f,-2.3f));
+  myTransform3D.setScale(0.1);
+  cubeTransformGroup = javanew #TransformGroup(myTransform3D);
+
+  cubeTransformGroup.addChild(myCube);
+  contentBranchGroup.addChild(cubeTransformGroup);
+
+  return contentBranchGroup;
+}

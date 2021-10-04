@@ -1,0 +1,238 @@
+<%
+  if #args==null || #args.length<3 {
+    println<err> 'ERROR: article.juspt takes 3 parameters.';
+    return;
+  }
+
+  var srcname = #args[0];
+  var otherVersionURI = #args[1];
+  var isPrinterFriendlyVersion = #args[2];
+
+  var title;
+  var keywords;
+  var subTitle; // = 'Book: <a href="../toc_details.html" class=tinywhite>' + bookInfo.title + '</a>';
+  var base = '../';
+
+  var redirect_msg = '';
+
+  // Collect code listing information
+  var sections = new OrderedMap;
+  var listingInfo = new OrderedMap;
+  var in_codelisting = false;
+  var last;
+  var created;
+  var author;
+  var tabID;
+  var sectionNum = 1;
+
+  do srcname as html {
+  <doc>:
+    keywords = $_.keywords;
+    title = $_.title;
+    last = $_.last;
+    created = $_.created;
+    author = $_.author;
+    subTitle = 'Article: ' + title;
+
+    if $_.class {
+      tabID = $_.class;
+    } else {
+      tabID = 'judo';
+      redirect_msg = [[*
+        <blockquote><font color=red>This article is old and is being consolidated into
+        the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+        Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+        sections are not completed yet, you can use this article.<br>Refer to the
+        examples as they are tested against the latest code.</font></blockquote>
+      *]];
+    }
+
+    if $_.deprecated != null {
+      %><html><head><meta content="<%= ::keywords %>" name=keywords>
+        <meta http-equiv="refresh" content="1;url=<%= $_.deprecated %>">
+        </head><body>Redirecting ...</body></html><%
+      return;
+    }
+  }
+  if isPrinterFriendlyVersion {
+    function jusp$spacer ctxt, width, height {
+      print<ctxt.writer> '<IMG src="', ::base, 'share/spacer.gif" height=${height} width=${width} border=0>';
+    }
+
+    %><html><head><title><%= ::title %></title><meta content="<%= ::keywords %>" name=keywords>
+      <link href="../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3><%
+  } else {
+    %><%!include '../../site_src/include/header.jusp' %><%
+  }
+%>
+
+<%= redirect_msg %><center><table border=0 width=98% class=bodyText><tr><td>
+<%
+  in_codelisting = false;
+  do srcname as html {
+    <sectiondefs>:
+      %><br><%-- tops --%><%
+      %><table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3><%
+      %><tr><td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td><%
+      %><td style="background:url(../share/portlet_tm.gif)"><%!spacer 1, 1 %></td><%
+      %><td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td><%
+      %><%-- left-left --%><%
+      %><tr><td width=9 style="background:url(../share/portlet_l.gif)"><%!spacer 1, 1 %></td><td valign=top><%
+      %><h3>Table Of Content</h3><ol><%
+    </sectiondefs>:
+      %></ol></td><%
+      %><td width=13 style="background:url(../share/portlet_r.gif)"><%!spacer 1, 1 %></td></tr><%
+      %><%-- bottoms --%><%
+      %><tr><td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td><%
+      %><td style="background:url(../share/portlet_bm.gif)"><%!spacer 1, 1 %></td><%
+      %><td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table><%
+    <sectiondef>:
+      var url = null;
+      if ($_.href != null)
+        url = $_.href;
+      else {
+        url = '#' + $_.name;
+        sections.($_.name) = $_;
+      }
+      %><%= $_.sub ? '<br>&#187; ' : '<li>' %> <a href="<%= url %>"><%= $_.caption %></a><%
+    <section>:
+      var sec = sections.($_.name);
+      var name = sec.name;
+      if sec.sub == 1 {
+        %><h3><a name=<%= name %>><%= sec.caption %></a></h3><p><%
+      } else {
+        if sectionNum > 1 {
+          %> <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a> <%
+          if last {
+            %> | &nbsp;<a href=#<%= last %>>This Section</a> <%
+          }
+          %> &#171;&#171;&#171;</center><p>&nbsp;<p><%
+        }
+        %><h2><a name=<%= name %>><%= sectionNum %>. <%= sec.caption %></a></h2><p><%
+        ++sectionNum;
+      }
+
+    <abstract>:
+      %><h2><%= title %></h2><font style="font-size:9px">By</font> <em><%= author %></em></font><%
+      %> &nbsp; &nbsp;<%= created %> &nbsp;<%
+      if last {
+        %><font face="Arial" style="font-size:9px">UPDATED:</font> <%= last %><%
+      }
+      if isPrinterFriendlyVersion {
+        %> &nbsp; &nbsp; <a href="<%= otherVersionURI %>">non-printer version</a><%
+      } else {
+        %> &nbsp; &nbsp; <img src="../share/printer.gif"> <a href="<%= otherVersionURI %>">printer-friendly version</a><%
+      }
+      %><p><b>Abstract</b> &nbsp;<%
+    </abstract>:    %><hr><%
+    </doc>:         %><p>&nbsp;</p><%-- ARTICLE CONTENT --%><%
+                    sectionNum = 1;
+
+    <>, <?>, <!>, :TEXT: %>$_<%
+
+    <insert> :
+      if $_.name == 'codelistings' {
+        %><ol><%
+        for x in listingInfo {
+          %><li> <a href=#<%= x %>><%= listingInfo.(x) %></a><%
+        }
+        %></ol><%
+      }
+
+    <codelist> :
+      if $_.name {
+        // a. collect the info to the dictionary
+        var key = $_.name;
+        var listTitle = $_.caption;
+        if key.startsWith(':') { key = key.substring(1); }
+        if !listTitle { listTitle = key; }
+        var listNum = listingInfo.size() + 1;
+        listingInfo.(key) = listTitle;
+
+        // b. write the tag and beginning of the code listing
+        in_codelisting = true;
+        %><p align=left><table width="100%" class=secondary3><thead>
+          <th><a name="<%= key %>">Listing <%= listNum.int() %></a>. <%= listTitle %></th>
+          </thead><tr><td class=code><pre><%
+      } elif $_.href {
+        var key = $_.href;
+        if key.startsWith(':') { key = key.substring(1); }
+        var x = ($_.first=='true') ? 'L' : 'l';
+        %><a href=#<%= key %>><%= x %>isting <%= (listingInfo.indexOf(key)+1).int() %></a><%
+      }
+
+    </codelist> :
+      if in_codelisting {
+        in_codelisting = false;
+        %></pre></td></tr></table></p><p><%
+      }
+
+    <demo> :    $fontcolor = '';
+                if ($_.type=='java') $fontcolor = ' color=blue';
+                %><blockquote><font class=secondary3<%= $fontcolor %>><pre><%
+    </demo> :   %></pre></font></blockquote><%
+
+    <deflist>:  %><p><table border=1><tbody class=text><tr><td align=center><b><%= $_.column1 %><%
+                %></b></td><td align=center><b><%= $_.column2 %></b></td></tr><%
+                colAlign1 = $_.align1;
+                colAlign2 = $_.align2;
+    <item>:     %><tr><td<%
+                if colAlign1 { %> align=<%= colAlign1 %><% }
+                %>><code><%= $_.name %></code></td><td<%
+                if colAlign2 { %> align=<%= colAlign2 %><% }
+                %>><%= $_.value %></td></tr><%
+    </deflist>: %></table></p><p><%
+
+    <j>:        %><em>JudoScript</em><%
+    <jcc>:      %><a href="JavaClassCreator.html"><code>JavaClassCreator</code></a><%
+    <j_>:       %><em>Judo</em><%
+    <gramma>:   %><blockquote><%
+    </gramma>:  %></blockquote><%
+    <kw>:       %><b><code><%
+    </kw>:      %></code></b><%
+    <nt>:       %><em><%
+    </nt>:      %></em><%
+    <anno>:     %><sub><%
+    </anno>:    %></sub><%
+    <incap>:    %><b><i><%
+    </incap>:   %></i></b> &nbsp;<%
+    <mthd>:     %><code><%
+    </mthd>:    %>()</code><%
+
+    <keywordlist>:  keywordlistColumns = $_.columns ? $_.columns : 1;
+                    $inKeywordlist = true;
+                    %><table width=640 class=secondary3><%
+    </keywordlist>: $inKeywordlist = false;
+                    %></table><%
+
+    <review>:   %><h3><em>Review Questions</em></h3><ul><%
+    <question>: %><li><%
+    </review>:  %></ul><%
+
+    <displayTable>:  captions = $_.captions.csv();
+                     columnNum = (1 + 2 * captions.length).int();
+                     %><table border=1 cellspacing=0 cellpadding=0 width="95%" class=secondary3><%
+                     %><tr><td colspan=<%= columnNum %> height=1><%!spacer 1, 1 %></td></tr><%
+                     %><tr><td width=1><%!spacer 1, 1 %></td><%
+
+                     for x in captions {
+                       %><th><%= x.neverEmpty('&nbsp;') %></th><%= vdiv %><%
+                     }
+                     %></tr><%
+    </displayTable>: %><%= hdiv %></table><%
+    <displayRow>:    %><tr><td><%
+    </displayRow>:   %></td></tr><%
+    <displayNext>:   %></td><%= vdiv %><td><%
+  } // end of html.
+%><%-- /ARTICLE CONTENET --%>
+</td></tr></table>
+<br>
+<%
+  if isPrinterFriendlyVersion {
+    %><P class=tiny align=center><hr width="98%">Copyright c 2001-<%= #year %> JudoScript.COM.<%
+    %> All Rights Reserved.</P> </center></body></html><%
+  } else {
+    %><%!include '../../site_src/include/footer.jusp' %><%
+  }
+%>

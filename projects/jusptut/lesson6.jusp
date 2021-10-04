@@ -1,0 +1,64 @@
+<%
+  var title = 'Lesson 6. Form &mdash; Form Value Validation'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>&lt;%!${tag}%></code><td>${desc}</td></tr>';
+  }
+  function jusp$validator ctxt, name {
+    print <ctxt.writer> '<li><code>${name}</code></li>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>Values entered by end users typically should not be trusted and
+should be validated before they go too far into the application.
+JuSP provides a <em>validation</em> tag to make this easyer.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP Validate Tag</th><th>Description</th></tr>
+<%!tagRow 'validate functionName <br>name, [, params ]', 'Validates the named parameter in the <i>form</i> by calling the validator function, which must be defined. This function does nothing if validation is passed, or it addes an error message to the page-local variable, <i>error</i>, holding an array.' %>
+<%!tagRow 'validateNullOK functionName <br>name, [, params ]', "Same as above, except it doesn't complain if the named value is null. This means that the field is <em>not required</em>." %>
+</table>
+
+<p>Note, the first name following <code>validate</code> or <code>validateNullOK</code> is a function name and should <em>not</em> be followed by a commar. Currently, JuSP provides these predefined validators:</p>
+
+<ul type=circle>
+<%!validator 'jusp$textLength(atext, lower, upper)' %>
+<%!validator 'jusp$numberRange(anumber, lower, upper)' %>
+<%!validator 'jusp$dateRange(adate, lower, upper)' %>
+<%!validator 'jusp$validEMailAddress(addr)' %>
+<%!validator 'jusp$in(val, set_or_list)' %>
+</ul>
+
+<p>The following example demonstrates their uses:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson6/validate.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson6/validate.jusp' %></li>
+</ul>
+
+<h2>Writing Custom Validator Functions</h2>
+
+<p>The validator function takes this format:
+
+<pre>function myValidator required, ctxt, name [, params ]</pre>
+
+The <i>required</i> is a boolean flag indicating if this parameter is required.
+The <i>ctxt</i> holds the <i>form</i> object, which is used to obtain the
+parameter value. The optional <i>params</i> are validator-specific criteria.
+If a validation function applies only to this page, it can be defined in the
+code; if it applies to validation in multiple pages, it should be defined in
+the global <code>juspInit.judo</code> script (see <a href="lesson9.jusp">lesson 9</a>
+for writing the <code>juspInit.judo</code> file.)</p>
+
+<p>The following example makes sure password has at least one digit and
+is more than 5 letter long.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson6/custom_password.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson6/custom_password.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

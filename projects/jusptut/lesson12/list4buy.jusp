@@ -1,0 +1,15 @@
+<%
+  var title='Listing Items for Buyer';
+%>
+<%!include 'header.jusp' %>
+
+<table border=1 cellspacing=1>
+<%!itemCaption%>
+<%
+  for item in getAllItems() {
+    %><%!itemRow item, 'Buy', 'buyerController.jusp?do=to_buy' %><%
+  }
+%>
+</table>
+
+<%!include 'footer.jusp' %>

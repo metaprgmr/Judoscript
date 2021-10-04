@@ -1,0 +1,21 @@
+<%
+  var title = 'Jamaica, the JVM Macro Assembler';
+  var keywords = "jamaica, jvm bytecode, jvm macro assembler, bytecode assembler";
+  var tabID = 'jamaica';
+%>
+<%!include '../site_src/include/header.jusp' %>
+
+<%!leftPane%>
+
+<p><IMG height=91 alt="Jamaica Language" hspace=10 vspace=10 src="share/jamaica_picture.gif" width=111 border=0 align=right>
+<p>Jamaica, the JVM Macro Assembler, is an easy-to-learn and easy-to-use assembly language for JVM bytecode programming. It uses Java syntax to define a JVM class except for the method body that takes bytecode instructions, including Jamaica's built-in macros. In Jamaica, bytecode instructions use mnemonics and symbolic names for all variables, parameters, data fields, constants and labels. <a href="articles/jamaica.html">This article</a> documents and demonstrates how to use the Jamaica language.</p>
+
+<p>Jamaica is a language facade for a Java class creation API, <a href="articles/JavaClassCreator.html">JavaClassCreator</a>. This API closely mimics the Jamaica language, allows users to define a Java class with the same flow, and supports all the Jamaica instruction set and macros.</p>
+
+
+<%!rightPane%>
+&nbsp;
+
+<%!endPanes%>
+
+<%!include '../site_src/include/footer.jusp' %>

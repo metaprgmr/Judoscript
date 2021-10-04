@@ -1,0 +1,21 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+                Demonstrates string's non-regex replace() and
+                replaceIgnoreCase() methods.
+            *]];
+}
+
+println '                              ', s = 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+println "             replace('abcd'): ", s.replace('abcd');
+println "            replace('a','-'): ", s.replace('a', '-');
+println "  replaceIgnoreCase('a','-'): ", s.replaceIgnoreCase('a', '-');
+println "          replace('abc','-'): ", s.replace('abc', '-');
+println "replaceIgnoreCase('abc','-'): ", s.replaceIgnoreCase('abc', '-');
+println "            replace('z','-'): ", s.replace('z', '-');
+println "  replaceIgnoreCase('z','-'): ", s.replaceIgnoreCase('z', '-');
+println "          replace('xyz','-'): ", s.replace('xyz', '-');
+println "replaceIgnoreCase('xyz','-'): ", s.replaceIgnoreCase('xyz', '-');

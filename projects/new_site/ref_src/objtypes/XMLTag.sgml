@@ -1,0 +1,46 @@
+<function sig="getName">
+  Returns the name of this tag. For end tags, the name starts with '/'.
+  For text tags, it is that of the enclosing tag.
+</function>
+
+<function sig="getUri">
+  Returnts the URI of this tag, if any.
+  For text tags, it is that of the enclosing tag.
+</function>
+
+<function sig="getLocal">
+  Returnts the local name of this tag.
+  For text tags, it is that of the enclosing tag.
+</function>
+
+<function sig="getRaw">
+  Returnts the raw tag name of this tag.
+  For text tags, it is that of the enclosing tag.
+</function>
+
+<function sig="isEndTag">
+  Returns <!true> if this is an end tag.
+</function>
+
+<function sig="hasAttrs">
+  Returns <!true> if this tag has attributes. It is always <!false> for end tags.
+  For text tags, it is for its enclosing tag.
+</function>
+
+<function sig="countAttrs">
+  Returns the number of attributes for this tag. It is always 0 for end tags.
+  For text tags, it is for its enclosing tag.
+</function>
+
+<function sig="getAttrName index">
+  Returns the number <param>index</param> attribute name for this tag.
+  For text tags, it is for its enclosing tag.
+  For end tags, it is always <!null>.
+</function>
+
+<function sig="getAttrValue index">
+  Returns the number <param>index</param> attribute value for this tag.
+  For text tags, it is for its enclosing tag.
+  For end tags, it is always <!null>.
+</function>
+

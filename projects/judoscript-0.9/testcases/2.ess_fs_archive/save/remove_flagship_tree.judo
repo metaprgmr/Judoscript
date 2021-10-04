@@ -1,0 +1,14 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Part of the fictitious "flagship" project.
+    Removes the directory tree in #base.
+  *]];
+}
+
+!include 'flagship.judi'
+
+println "deleting '", #base @ 'flagship', "'.";
+rmdir 'flagship' in #base force;

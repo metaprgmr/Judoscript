@@ -1,0 +1,139 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonostrates using Swing menus and named event handlers.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+
+demoFrame = new java::JFrame('MenuDemo');
+guiEvents { <demoFrame : Window : windowClosing> : exit(0); }
+
+//Add regular components to the window, using the default BorderLayout.
+contentPane = demoFrame.getContentPane();
+output = new java::JTextArea(5, 30);
+output.setEditable(false);
+scrollPane = new java::JScrollPane(output);
+contentPane.add(scrollPane, (java::BorderLayout).CENTER);
+
+//Create the menu bar.
+menuBar = new java::JMenuBar;
+demoFrame.setJMenuBar(menuBar);
+
+//Build the first menu.
+menu = new java::JMenu("A Menu");
+menu.setMnemonic((java::KeyEvent).VK_A);
+menu.getAccessibleContext().cast('javax.accessibility.AccessibleContext').setAccessibleDescription(
+                   "The only menu in this program that has menu items");
+menuBar.add(menu);
+
+//a group of JMenuItems
+menuItem = new java::JMenuItem("A text-only menu item", (java::KeyEvent).VK_T);
+menuItem.setAccelerator(
+  (java::KeyStroke).getKeyStroke((java::KeyEvent).VK_1, (java::ActionEvent).ALT_MASK));
+menuItem.getAccessibleContext().cast('javax.accessibility.AccessibleContext').setAccessibleDescription(
+                                     "This doesn't really do anything");
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+
+menuItem = new java::JMenuItem("Both text and icon", new java::ImageIcon("images/middle.gif"));
+menuItem.setMnemonic((java::KeyEvent).VK_B);
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+
+gui::events {
+  < ?ACTION : Action : actionPerformed> :
+    var source = $_.getSource();
+    var s = [[*
+      Action event detected.
+          Event source: (* source.getText() *)
+          (an instance of (* getClassName(source) *))
+    *]];
+    output.append(s);
+
+  < ?ITEM : Item : itemStateChanged> :
+    var source = $_.getSource();
+    var s = [[*
+      Item event detected.
+          Event source: (* source.getText() *)
+          (an instance of (* getClassName(source) *))
+          New state: (* (($_.getStateChange()==(java::ItemEvent).SELECTED) ? '' : 'un')
+                     *)selected
+    *]];
+    output.append(s);
+}
+
+menuItem = new java::JMenuItem(new java::ImageIcon("images/middle.gif"));
+menuItem.setMnemonic((java::KeyEvent).VK_D);
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+
+//a group of radio button menu items
+menu.addSeparator();
+
+group = new java::ButtonGroup;
+rbMenuItem = new java::JRadioButtonMenuItem("A radio button menu item");
+rbMenuItem.setSelected(true);
+rbMenuItem.setMnemonic((java::KeyEvent).VK_R);
+group.add(rbMenuItem);
+setGuiListener(rbMenuItem, 'ACTION');
+menu.add(rbMenuItem);
+
+rbMenuItem = new java::JRadioButtonMenuItem("Another one");
+rbMenuItem.setMnemonic((java::KeyEvent).VK_O);
+group.add(rbMenuItem);
+setGuiListener(rbMenuItem, 'ACTION');
+menu.add(rbMenuItem);
+
+//a group of check box menu items
+menu.addSeparator();
+
+cbMenuItem = new java::JCheckBoxMenuItem("A check box menu item");
+cbMenuItem.setMnemonic((java::KeyEvent).VK_C);
+setGuiListener(cbMenuItem, 'ITEM');
+menu.add(cbMenuItem);
+
+cbMenuItem = new java::JCheckBoxMenuItem("Another one");
+cbMenuItem.setMnemonic((java::KeyEvent).VK_H);
+setGuiListener(cbMenuItem, 'ITEM');
+menu.add(cbMenuItem);
+
+//a submenu
+menu.addSeparator();
+submenu = new java::JMenu("A submenu");
+submenu.setMnemonic((java::KeyEvent).VK_S);
+
+menuItem = new java::JMenuItem("An item in the submenu");
+menuItem.setAccelerator(
+  (java::KeyStroke).getKeyStroke((java::KeyEvent).VK_2, (java::ActionEvent).ALT_MASK));
+setGuiListener(menuItem, 'ACTION');
+submenu.add(menuItem);
+
+menuItem = new java::JMenuItem("Another item");
+setGuiListener(menuItem, 'ACTION');
+submenu.add(menuItem);
+menu.add(submenu);
+
+//Build second menu in the menu bar.
+menu = new java::JMenu("Another Menu");
+menu.setMnemonic((java::KeyEvent).VK_N);
+menu.getAccessibleContext().cast('javax.accessibility.AccessibleContext').setAccessibleDescription(
+                                      "This menu does nothing");
+menuBar.add(menu);
+
+// Returns just the class name -- no package info.
+function getClassName o {
+  classString = o.getClass().getName();
+  dotIndex = classString.lastIndexOf(".");
+  return classString.substring(dotIndex+1);
+}
+
+demoFrame.setSize(450, 260);
+demoFrame.setVisible(true);

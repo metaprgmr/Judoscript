@@ -1,0 +1,38 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/countlines_in_zip1.judo:</b></td></tr><tr><td><pre>
+usage {
+  args = 'zipfile [ inclusion_list [ exclusion_list ] ]';
+  desc = [[*
+    This program use the list command to collect the intended files
+    in the zip file and use file I/O operations to count the lines.
+  *]];
+}
+
+switch #args.length() {
+case 0:
+  println 'Usage: java judo ', #prog, ' &lt;zipfile> [ &lt;include_pattern> [ &lt;exclude_pattern> ] ]';
+  exit(0);
+case 1:  list in #args[0] recursive; break;
+case 2:  list #args[1] in #args[0] recursive; break;
+default: list #args[1] in #args[0] except #args[2] recursive;
+}
+
+$fileCnt = 0;
+$lineCnt = 0;
+$zf = openZip(#args[0]);
+for $x in $$fs_result {
+  if $zf.isFile($x) {
+    $file = $zf.openTextFile($x);
+    ++$fileCnt;
+    while ($line = $file.readLine()) != eof {
+      ++$lineCnt;
+    }
+    $file.close();
+  }
+}
+$zf.close();
+
+println "Total files: ", $fileCnt;
+println "Total lines: ", $lineCnt;
+
+</pre></td></tr></table></body></html>

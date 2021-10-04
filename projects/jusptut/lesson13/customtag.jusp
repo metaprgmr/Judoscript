@@ -1,0 +1,12 @@
+<html>
+<head><title>Custom Tag Test</title>
+<body>
+<h2>Custom Tag Test</h2>
+
+<p>View <%!viewsrc 'lesson13/customtag.jusp', '../' %></p>
+
+<p>Date format I:&nbsp; <u><%!my$fmtdate Date(), false %></u></p>
+<p>Date format II: <u><%!my$fmtdate Date(), true %></u></p>
+
+<hr><font size=-1>Back to <a href="../lesson13.jusp">lesson 13</a></font>
+</body></html>

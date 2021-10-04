@@ -1,0 +1,9 @@
+!include '${JUDOROOT}/projects/common.judi'
+
+println nl, "This only deploys the static files to Tomcat.", nl;
+
+versionId  = 'judoscript-0.9';
+src = '${projects}/${versionId}/src';
+classes = '${webapps}/jusptut/WEB-INF/classes';
+
+copy '*.judo, *.properties' in src to classes recursive Echo;

@@ -1,0 +1,174 @@
+<%
+  var title = 'Lesson 12. MVC Paradigm and Web App Design'; // required by header.jusp.
+
+  function jusp$judoRef ctxt, chptr, display {
+    print <ctxt.writer>
+    '<a href="http://www.judoscript.com/books/judoscript-0.9/chapters/${chptr}.html">${display}</a>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>By now, you have learnt all the basic techniques to build a web app with JuSP.
+In this lesson, we discuss web app design using the MVC paradigm. In the process,
+we hook up many JuSP techniques and build a sample web app.</p>
+
+<p>JuSP is incredibly simple and flat: it only has two components: JuSP pages and
+the global <code>juspInit.judo</code> script; yet it is flexible enough to
+implement highly modular web apps based on the MVC paradigm. Let's examine a MVC
+architecture and its implementation in JuSP.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>Component</th><th>Purpose</th><th>Implementation in JuSP</th></tr>
+<tr><td valign=top><font style="font-size:18px; font-weight:bold">M</font>odel</td>
+<td valign=top>Handles the <i>guts</i> of the system, i.e., the business logic.</td>
+<td valign=top>Typically a hybrid of Java and Judo code. It can be pure Java
+such as session EJBs, SOAP web services, or business logic written in
+Judo or Java on top of an object model (in Hibernate, say).</td>
+</tr>
+<tr><td valign=top><font style="font-size:18px; font-weight:bold">V</font>iew</td>
+<td valign=top>Displays the system states and accepts user requests.</td>
+<td valign=top>JuSP pages</td>
+</tr>
+<tr><td valign=top><font style="font-size:18px; font-weight:bold">C</font>ontrol</td>
+<td valign=top>The logic that takes user requests, act on them and control the
+user experience.</td>
+<td valign=top>One or more JuSP pages serving as <em>controllers</em>,
+processing the requests and forward or redirect to other pages based on
+the results and requirement.</td>
+</tr>
+</table>
+
+<h2>Design the <b>M</b>odel Component</h2>
+
+<p>Enterprise applications typically involve persisting data to relational
+databases, possibly along with other services. Database interaction very
+much dominates system design. The following table lists a number of possible
+backend strategies and corresponding architectures.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>Backend Strategy</th><th>JuSP Web App Architecture</th></tr>
+<tr><td valign=top>Direct SQL (via JDBC)</td>
+<td valign=top>Judo was originally designed for
+<%!judoRef 'jdbc','JDBC scripting' %>. If you have database connection pool
+set up as a JNDI data source, a typical deployment strategy, you can get the
+JNDI handle and store it in global context (global variable) for all pages
+to <code>getConnection()</code> from. If you use individual database
+connection each time, you can keep the JDBC connection information as global
+variables, and each page will use <code>connect</code> command.</td>
+</tr>
+<tr><td valign=top>Object Model</td>
+<td>Object models are developed on top of database models and implemented
+with frameworks like <i>Hibernate</i>, so applications need only deal with
+just Java objects rather than raw SQLs. Judo is fully capable of
+<%!judoRef 'java','Java scripting' %>, and it can be used to implement
+business logic on top of the object model and/or invoke business facades
+written in Java or other means. All these code, including <i>Hibernate</i>
+initialization, reside in the global <code>juspInit.judo</code> script, and
+most of the time the code are organized in separate files and included in
+<code>juspInit.judo</code>.</td>
+</tr>
+<tr><td valign=top>EJB</td>
+<td>Entity EJB is a kind of object model. Design with EJBs tend to mandate
+a multi-tier architecture, where entity EJBs reside on a separate app server;
+there are typically session EJBs as business facades on top of the entity
+beans. Many systems use session beans without entity beans, and they interact
+with databases via direct SQLs or object models other than entity EJBs,
+Judo is not only fully capable of <%!judoRef 'java','Java scripting' %>,
+but also has dedicated EJB invocation support, making it extremely easy to
+implement further business logic. In a multi-tier application, for instance,
+you can obtain the useful JNDI resources (such as EJB home interfaces) and store
+them in global variables for other Judo code and/or JuSP pages to use.</td>
+</tr>
+<tr><td valign=top>SOAP Web Service</td>
+<td>SOAP web service provides a platform/language/vendor-neutral remote call
+interface, so that a system is not only be used by internal components but
+also readily usable to external users. Judo's painless
+<%!judoRef 'wsdl', 'SOAP web service scripting' %> is ideal to use web
+services in JuSP web apps. You can obtain the WSDLs and store them in global
+variables for other Judo business logic and/or JuSP pages to use.</td>
+</tr>
+</table>
+
+<h2>Design the <b>C</b>ontroller</h2>
+
+<p>A JuSP page can dynamically <a href="lesson8.jusp">forward or redirect</a>
+to another page. Following a well-defined pattern, you can leave displays in
+one set of JuSP pages and page flow logic in totally separate pages. Unlike
+some control frameworks that use a single controller, you may have multiple
+controllers, each responsible for a related function group.</p>
+
+<p>In the controller pages, you can use <a href="lesson6.jusp">JuSP validation
+tags</a>, invoke business logic, get back values, and have JuSP pages
+<a href="lesson4.jusp">automatically populate them into the controls</a>.</p>
+
+<p>Let's build an application that sells books. It has two flow controllers:
+one is for sellers to post books, the other is for buyers to purchase.</p>
+
+<ul type=square>
+<li>View <a href='lesson12/login.jusp'><b>the sample app</b></a> in action</li>
+</ul>
+
+<p>In this application, only three JuSP pages handle actions; the rest of
+them are simply for display or take user input. The three action pages and
+the model component Judo file are:</p>
+
+<ul type=square>
+<li>View <%!viewsrc 'lesson12/login.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/buyerController.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/sellerController.jusp' %></li>
+<li>View <%!viewsrc 'WEB-INF/judo/myapp/myApp_Emulated.judo' %>,
+    included in <%!viewsrc 'WEB-INF/judo/juspInit.judo' %></li>
+</ul>
+
+<p>The "login.jusp" handles user authentication; if passed, it forwards to
+one of the controller pages based on the type of user. The controller pages
+take a form parameter named "do" and perform various actions with a
+<code>switch</code> statement. Controller pages typically has little
+content except perhaps for some basic error messages. All other pages are
+views:</p>
+
+<ul type=square>
+<li>View <%!viewsrc 'lesson12/header.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/footer.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/list4buy.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/list4sell.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/add.jusp' %></li>
+<li>View <%!viewsrc 'lesson12/buy.jusp' %></li>
+</ul>
+
+<p>The web app itself is a demo, and you are welcome to improve its usability
+as an exercise.</p>
+
+<h2>Developing Big Web Apps</h2>
+
+<p>Any practically useful system takes a lot of code. You will have many
+utility support for presentation (such as the currency listbox, item row
+display, etc.) and business logic facades (like functions for item
+manipulation, etc.). One way to better organize the code is to practice
+<u>namespacing</u> for global variables, functions and classes. While
+Judo does not have a distinct namespace support in the language for
+performance reasons, it does allow dollar sign <code>$</code> in identifier
+names; using <code>$</code>, you can easily emulate namespacing. For instance,
+all JuSP built-in features use prefix of <code>jusp$</code> in the names.
+You can follow the same practice and partition the namespaces for different
+parts based on any criteria.</p>
+
+<p>Judo is a dynamic language. Dynamic-ness is a double-edged sword.
+On the one hand, it allows very flexible architecture. For instance, you can
+assign any value to the <code>form</code> object, and the pages can populate
+HTML controls automatically. On the other hand, compared to static language,
+you lose the help from compilers to exclude rudimental mistakes. There is an
+argument that the help of compilers can be deceiving, because they don't
+really tell bugs in software. Software quality is proportional to the effort
+of testing at all levels. Judo programs are extremely easy to test, at
+unit level, functional level and system level.</p>
+
+<p>Judo is a cable Java scripting language. When you have large chunks
+of reusable sub-parts in the system, it is totally ok to write them in Java
+(e.g., Java beans, EJBs, Hibernate, ...) and use them from the JuSP web app.
+This can be the preferred architecture that provides the best of both Java
+and JuSP/Judo.</p>
+
+<%!include "footer.jusp" %>

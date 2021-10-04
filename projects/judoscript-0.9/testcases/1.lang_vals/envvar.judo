@@ -1,0 +1,11 @@
+println 'Case I.   \${CLASSPATH}        --> ', ${CLASSPATH};
+println "Case Ia.  '\${CLASSPATH}'      --> ${CLASSPATH}";
+println "Case Ib.  CLASSPATH           --> ", CLASSPATH;
+
+// set it and see that it is:
+println nl, '... Set in-program variable CLASSPATH to ', CLASSPATH = 'hahaha', nl;
+
+println 'Case II.  \${CLASSPATH}        --> ', ${CLASSPATH};
+println "Case IIa. getenv('CLASSPATH') --> ", getenv('CLASSPATH');
+println "Case IIb. '\${CLASSPATH}'      --> ${CLASSPATH}";
+println 'Case III. CLASSPATH           --> ', CLASSPATH;

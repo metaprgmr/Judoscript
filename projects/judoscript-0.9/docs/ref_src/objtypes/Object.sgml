@@ -1,0 +1,75 @@
+<function sig="size" alias="length">
+  Returns the number of data members.
+</function>
+
+<function sig="clear">
+  Removes all the data members.
+</function>
+
+<function sig="keys">
+  Returns an array of all the keys.
+</function>
+
+<function sig="keysSorted comparatorFunction">
+  Returns an array of all the keys, sorted by <param>comparatorFunction</param> function if
+  specified or by natural order.
+</function>
+
+<function sig="keysFiltered filterFunction">
+  Returns an array of the keys filtered by <param>filterFunction</param>.
+</function>
+
+<function sig="values">
+  Returns an array of all the values.
+</function>
+
+<function sig="keysSortedByValue comparatorFunction">
+  Returns the keys that correspond to the values sorted by with 
+  <param>comparatorFunction</param> if specified, or the natural comparator.
+</function>
+
+<function sig="keysFilteredByValue filterFunction">
+  Returns the keys that correspond to the values filtered by the function
+  <param>filterFunction</param>, which must be specified.
+</function>
+
+<function sig="keysFilteredAndSortedByValue filterFunction, comparatorFunction">
+  Returns the keys that correspond to the values filtered by the function
+  <param>filterFunction</param>, which must be specified, and also sorted
+  with <param>comparatorFunction</param> if specified, or the natural comparator.
+</function>
+
+<function sig="has name">
+  Returns <!true> if a member named as <param>name</param> exists.
+</function>
+
+<function sig="assertHas name">
+  Throws an assertion if a member with its key named <param>name</param> does not exist.
+</function>
+
+<function sig="hasMethod name">
+  Returns <!true> if the method named as <param>name</param> exists.
+</function>
+
+<function sig="remove name">
+  Removes the data member with its key named <param>name</param>.
+</function>
+
+<function sig="get name">
+  Returns the value referenced by the key <param>name</param>. This is the same
+  as this operator: <code>astruct.(<param>name</param>)</code>.
+</function>
+
+<function sig="set name, value" alias="add">
+  Set the <param>value</param> to the key <param>name</param>. This is the same
+  as this operator: <code>astruct.(<param>name</param>) = <param>value</param>;</code>.
+</function>
+
+<function sig="transpose className">
+  Transposes this object to type <param>className</param>.
+</function>
+
+<function sig="copy">
+  Returns a copy of this object. All keys and values are cloned.
+</function>
+

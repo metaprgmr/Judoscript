@@ -1,0 +1,190 @@
+#
+# Math methods:
+#
+
+(10.5).sqrt()                                          ==> 3.24037034920393 <==
+(10.5).log()                                           ==> 2.3513752571634776 <==
+(10.5).log10()                                         ==> 1.021189299069938 <==
+(10.5).log2()                                          ==> 3.3923174227787602 <==
+(10.5).exp()                                           ==> 36315.502674246636 <==
+(10.1).floor()                                         ==> 10.0 <==
+(10.5).floor()                                         ==> 10.0 <==
+(10.1).ceil()                                          ==> 11.0 <==
+(10.5).ceil()                                          ==> 11.0 <==
+(10.5).sin()                                           ==> -0.87969575997167 <==
+(10.5).cos()                                           ==> -0.4755369279959925 <==
+(10.5).tan()                                           ==> 1.8498999934219273 <==
+(10.5).asin()                                          ==> NaN <==
+(10.5).acos()                                          ==> NaN <==
+(10.5).atan()                                          ==> 1.4758446204521403 <==
+(10.5).sin_d()                                         ==> 0.18223552549214747 <==
+(10.5).cos_d()                                         ==> 0.9832549075639546 <==
+(10.5).tan_d()                                         ==> 0.18533904493153439 <==
+(10.5).asin_d()                                        ==> NaN <==
+(10.5).acos_d()                                        ==> NaN <==
+(10.5).atan_d()                                        ==> 84.55966796899449 <==
+(10.5).degree()                                        ==> 601.6056848873644 <==
+(10.5).radian()                                        ==> 0.1832595714594046 <==
+(10.5).abs()                                           ==> 10.5 <==
+(-10.5).abs()                                          ==> 10.5 <==
+(10.5).pow()                                           ==> 1 <==
+(10.5).pow(2)                                          ==> 110.25 <==
+(10.123456).round()                                    ==> 10 <==
+(10.123456).round(3)                                   ==> 10.123 <==
+(10.876543).round()                                    ==> 11 <==
+(10.876543).round(3)                                   ==> 10.877 <==
+(5).isOdd()                                            ==> true <==
+(5).isEven()                                           ==> false <==
+
+#
+# String methods:
+#
+
+('  abc  ').trim()                                     ==> abc <==
+(78).chr()                                             ==> N <==
+('  abc  ').size()                                     ==> 7 <==
+('http://a/b?c=d e f&g= h').encodeUrl()                ==> http%3A%2F%2Fa%2Fb%3Fc%3Dd+e+f%26g%3D+h <==
+('http%3A%2F%2Fa%2Fb%3Fc%3Dd+e+f%26g%3D+h').decodeUrl()==> http://a/b?c=d e f&g= h <==
+('http://a/b?c=d e f&g= h').parseUrl()                 ==> {root=http://a,url=http://a/b?c=d e f&g= h,host=a,domain=a,query_string=c=d e f&g= h,path=/b,protocol=http,file_name=b} <==
+(' ').isEmpty()                                        ==> true <==
+(' 	 ').isNotEmpty()                                   ==> false <==
+(' ').neverEmpty('&nbsp;')                             ==> &nbsp; <==
+(null).neverEmpty('&nbsp;')                            ==> &nbsp; <==
+('abc').getReader()                                    ==> java.io.BufferedReader@15859 <==
+('Abc').toLower()                                      ==> abc <==
+('Abc').toUpper()                                      ==> ABC <==
+('Abc').startsWith('A')                                ==> true <==
+('Abc').endsWith('d')                                  ==> false <==
+('Abc').equalsIgnoreCase('abc')                        ==> true <==
+('Abc').unicode()                                      ==> 65 <==
+('Abc').ascii()                                        ==> 65 <==
+('Abc').charAt(1)                                      ==> b <==
+('Abc').substr(2)                                      ==> c <==
+('Abc').substr(0, 2)                                   ==> Ab <==
+('Abc').substr(1, 4)                                   ==> bc <==
+('Abc').truncate(2)                                    ==> A <==
+('Abc').trunc(4)                                       ==>  <==
+('A,b,c,d,e').csv()                                    ==> [A,b,c,d,e] <==
+('A:b:c:d:e').csv(':')                                 ==> [A,b,c,d,e] <==
+('Abc').indexOf('A')                                   ==> 0 <==
+('Abc').indexOf('z')                                   ==> -1 <==
+('Abc').lastIndexOf('A')                               ==> 0 <==
+('Abc').lastIndexOf('z')                               ==> -1 <==
+('Abcde').regionMatches(2, 'xbcde', 0, 2)              ==> false <==
+('Abcde').regionMatchesIgnoreCase(2, 'XBCDE', 2, 2)    ==> true <==
+('Abcde').contains('cde')                              ==> true <==
+('Abc').getBytes()                                     ==> [65,98,99] <==
+('Abc').getChars()                                     ==> ['A','b','c'] <==
+(encode('Abc','base64')).base64Decode()                ==> [65,98,99] <==
+('Abc').unquote()                                      ==> Abc <==
+(''Abc'').unquote()                                    ==> Abc <==
+('(Abc)').unquote()                                    ==> (Abc) <==
+('Abc').left()                                         ==> Abc <==
+('Abc').left(2)                                        ==> Ab <==
+('Abc').left(4)                                        ==> Abc <==
+('Abc').right()                                        ==> Abc <==
+('Abc').right(2)                                       ==> bc <==
+('Abc').right(4)                                       ==> Abc <==
+('Abcdef').leftOf()                                    ==> Abcdef <==
+('Abcdef').leftOf('cd')                                ==> Ab <==
+('Abcdef').leftOf('xyz')                               ==> Abcdef <==
+('Abcdef').rightOf()                                   ==> Abcdef <==
+('Abcdef').rightOf('cd')                               ==> ef <==
+('Abcdef').rightOf('xyz')                              ==> Abcdef <==
+('Abcdef').replace('cd', 'xyz')                        ==> Abxyzef <==
+('Abcdef').replaceIgnoreCase('CD', 'XYZ')              ==> AbXYZef <==
+('Abcdef').stringCompare()                             ==> 1 <==
+('Abcdef').stringCompare('Abc')                        ==> 3 <==
+('Abcdef').stringCompare('Abcdef')                     ==> 0 <==
+('Abcdef').stringCompare('Xyz')                        ==> -23 <==
+('AbcBcdCde').count('c')                               ==> 2 <==
+('100010010010').count('00')                           ==> 3 <==
+('james huang').capitalizeFirstLetter()                ==> James huang <==
+('james huang').capitalizeAllFirstLetters()            ==> James Huang <==
+('Abc?xyz').isAsciiOnly()                              ==> false <==
+('Abc').isAsciiOnly()                                  ==> true <==
+
+#
+# Formatting and Parsing
+#
+
+('a').isAlpha()                                        ==> true <==
+('a').isAlnum()                                        ==> true <==
+('a').isDigit()                                        ==> false <==
+('a').isUpper()                                        ==> false <==
+('a').isLower()                                        ==> true <==
+('a').isWhite()                                        ==> false <==
+(' ').isWhite()                                        ==> true <==
+(12345).groupNumber(3, ',')                            ==> 12,345 <==
+(555).numOfDigits()                                    ==> 3 <==
+(555).numOfOctalDigits()                               ==> 4 <==
+(555).numOfHexDigits()                                 ==> 3 <==
+('89').parseInt()                                      ==> 89 <==
+('0xF0').parseInt()                                    ==> 240 <==
+('012').parseInt()                                     ==> 10 <==
+('DLV').parseIntRoman()                                ==> 555 <==
+('2004-12-30').parseDate('yyyy-MM-dd')                 ==> 12/30/04 12:00 AM <==
+(true).formatBool()                                    ==> true <==
+(false).formatBool()                                   ==> false <==
+(1).formatBool()                                       ==> true <==
+(0).formatBool()                                       ==> false <==
+(555).formatHex()                                      ==> 22B <==
+(555).formatOctal()                                    ==> 1053 <==
+(555).formatRoman()                                    ==> dlv <==
+(555).formatRoman('X')                                 ==> DLV <==
+(555).formatCurrency()                                 ==> $555.00 <==
+(1234567).formatDuration()                             ==> 20:34 <==
+(1234567890).formatDuration()                          ==> 14 days 6:56:07 <==
+(1).unit('room')                                       ==> 1 room <==
+(5).unit('room')                                       ==> 5 rooms <==
+(1).unit('man', 'men')                                 ==> 1 man <==
+(5).unit('woman', 'women')                             ==> 5 women <==
+('Abcdefg').parseFixedPosition(0, 3, 5)                ==> [,Abc,defg] <==
+(' 	\'').escapeJava()                                  ==>  \t\\' <==
+('if(x<b && y>c)').escapeHtml()                        ==> if(x&lt;b &amp;&amp; y&gt;c) <==
+('if(x<b && y>c)').escapeJavascript()                  ==> if(x<b && y>c) <==
+('where col='Abc'').escapeSql()                        ==> where col=''Abc'' <==
+('if(x<b && y>c)').escapeXml()                         ==> if(x&lt;b &amp;&amp; y&gt;c) <==
+('if(x&lt;b &amp;&amp; y&gt;c)').unescapeHtml()        ==> if(x<b && y>c) <==
+(' 	\'').unescapeJava()                                ==>  	' <==
+(' 	\'').unescapeJavascript()                          ==>  	' <==
+('if(x&lt;b &amp;&amp; y&gt;c)').unescapeXml()         ==> if(x<b && y>c) <==
+
+#
+# File system methods
+#
+
+('c:/a/b/c.ddd').getFileName()                         ==> c.ddd <==
+('c:/a/b/c.ddd').getFileExt()                          ==> ddd <==
+('c:/a/b/c.ddd').getFilePath()                         ==> c:/a/b/ <==
+('c:/a/b/c.ddd').toAbsolutePath()                      ==> c:/a/b/c.ddd <==
+('c:/a/b/c.ddd').toOSPath()                            ==> c:\a\b\c.ddd <==
+('simple_all_test.judo').fileExists()                  ==> 0 <==
+('simple_all_test.judo').fileIsWritable()              ==> 0 <==
+('simple_all_test.judo').fileIsReadable()              ==> 0 <==
+('simple_all_test.judo').fileLength()                  ==> 0 <==
+('simple_all_test.judo').fileTime()                    ==> 0 <==
+('simple_all_test.judo').isFile()                      ==> 0 <==
+('simple_all_test.judo').fileIsHidden()                ==> 0 <==
+('simple_all_test.judo').fileIsDirectory()             ==> 0 <==
+#writeToFile
+
+#
+# Java-related
+#
+
+(false).toBoolean()                                    ==> false <==
+(1).toBoolean()                                        ==> true <==
+(80).toByte()                                          ==> 80 <==
+(80).toCharacter()                                     ==> P <==
+('Abc').toCharacter()                                  ==> A <==
+(80).toShort()                                         ==> 80 <==
+(80).toInteger()                                       ==> 80 <==
+(80).toLong()                                          ==> 80 <==
+(80).toFloat()                                         ==> 80.0 <==
+(80).toDouble()                                        ==> 80.0 <==
+
+#
+# Regexp methods
+#
+

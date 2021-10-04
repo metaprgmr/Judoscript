@@ -1,0 +1,6 @@
+<html>
+<body>
+<%
+  call_foo(); // fail!
+%>
+</body></html>

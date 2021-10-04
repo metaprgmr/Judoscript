@@ -1,0 +1,27 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    This program tests various options for mixed text tags
+    using the SAX-style processing.
+    It uses the data enclosed at the end of this script.
+  *]];
+}
+
+do $$local as xml
+{
+TEXT <tag0>:   println '+++ default +++', nl, $_;
+TEXT <tag1> +: println '+++++++++++++++', nl, $_;
+TEXT <tag2> -: println '---------------', nl, $_;
+
+<tag1>:        println '-> <tag1>.';
+</tag2>:       println '-> </tag2>.';
+<>:            println ">> TAG:  ", $_;
+}
+
+EndScript --------------------------------------------
+<tests>
+ <tag0> Begin <HTML><h1>TEST</h1> test </HTML> End </tag0>
+ <tag1> Begin <HTML><h1>TEST</h1> test </HTML> End </tag1>
+ <tag2> Begin <HTML><h1>TEST</h1> test </HTML> End </tag2>
+</tests>

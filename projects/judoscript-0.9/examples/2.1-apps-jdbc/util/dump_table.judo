@@ -1,0 +1,18 @@
+usage {
+  minArgs = 1;
+  args    = 'table_name';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Dump all the rows in a database table into a file whose
+    name is the name of the table with extension '.tdmp'.
+  *]];
+}
+
+!include 'connection.judi'
+
+dumpTable #args[0];
+println unit($_, 'row');
+
+disconnect();

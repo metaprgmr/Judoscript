@@ -1,0 +1,10 @@
+(x, y, z, w) = [ 1, 2, 3 ];
+(a) = [ 1, 2 ];
+var (x, y, z, w) = [ 1, 2, 3 ];
+var (a) = [ 'A', 'B' ];
+
+println 'x=', x;
+println 'y=', y;
+println 'z=', z;
+println 'w=', w;
+println 'a=', a;

@@ -1,0 +1,78 @@
+
+<p>In the context of our discussion, internationalization (short as
+i18n) is more appropriately interpreted as using non-English languages.
+We will call your own language as "native language"; if yours happens
+to be English, well, take that term as "foreign language".</p>
+
+<p>Running on top of the Java platform, <J> programs can easily
+read, write and present textual contents in various human languages.
+You can embed native language texts in the script source file as well.
+This chapter details this usage, including explanations on how to set
+up your environment on popular operation systems. Java coding
+knowledge is not needed, and how to set up the Java environment is
+explained. This is also useful for Java programmers who have never had
+a chance to dealt with such issues.</p>
+
+
+<!--===============================================================-->
+<section1 title="Text Encoding in Judo and Java" status="red">
+
+<!------------------------------------->
+<section2 title="Text Encoding" status="red">
+
+<p>In <J>, all textual contents are stored as Java strings,
+which are double-byte unicode characters in memory, regardless of the
+text encoding of the source such as a file or a web page. The text
+encoding is important only when the text is being read in or written
+out. More specifically, the conversion happens when a text string is
+being transformed into a byte array and vice versa. </p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Read and Write Files in Native Languages" status="red">
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Handle Native Language Contents on the Internet" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Native Language Text in Source Code" status="red">
+
+<!------------------------------------->
+<section2 title="Turn Characters into Unicode Escape Sequences" status="red">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Use Native Characters Directly in Source Code" status="red">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="View and Edit Native Language Content" status="red">
+
+<!------------------------------------->
+<section2 title="A Poor Man's Native Language Viewer" status="red">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="A Poor Man's Native Language Editor" status="red">
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Use Locales" status="red">
+
+</section1><!--=====================================================-->
+

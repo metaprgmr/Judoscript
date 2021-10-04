@@ -1,0 +1,43 @@
+println "global a = ", a = 1;
+{
+  var a = 2;
+  println "var a = ", a;
+  println "::a = ", ::a;
+}
+println 'global a = ', a;
+
+class MyCls
+{
+  function foo {
+    println "in class: a = ", a;
+    var a = 2;
+    println "in class: var a = ", a;
+    println "in class: ::a = ", ::a;
+  }
+}
+x = new MyCls;
+x.foo();
+
+while true {
+  if loopIndex() > 0 { break; }
+  println nl, 'Set abc=9 in while-block.';
+  abc = 9;
+}
+
+println 'Outside the while-block, abc = ', abc;
+
+if true {
+  println nl, 'Set uvw=9 in if-block.';
+  uvw = 9;
+}
+
+println 'Outside the if-block, uvw = ', uvw;
+
+switch x {
+case 0:
+case 1:
+default:
+  println nl, 'Set xyz=9 in switch-block.';
+  xyz = 9;
+}
+println 'Outside the switch-block, xyz = ', xyz;

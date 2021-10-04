@@ -1,0 +1,29 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Customize JudoScript For Your Java Applications</u></h3>
+  <p>With the ability to <font class=fa><a href="javascript:showFA('java_judo')">Embed JudoScript Engine in Java</a></font>, JudoScript can be used in your applications. Here are
+  a few hints for embedding JudoScript.</p>
+
+  <p>The recommended way to build library for JudoScript is actually to write Java, not only for
+  performance but also for reusability across Java and JudoScript code. This does not exclude
+  building JudoScript libraries of functions and classes; in fact, such libraries (JudoScript source
+  files) can be put anywhere in the CLASSPATH.</p>
+
+  <p>JudoScript has a few mechanisms to make using your Java code even easier. One is the
+  <font class=fa><a href="javascript:showFA('java_st')">Using Java Static Members</a></font> to make Java static methods look like regular functions, the other
+  is <syn id="JavaClassShorts"> to make using your Java classes easier (without having to
+  worry about long Java class names.)</p>
+
+  <h4>myjsysfxns.properties and myjavapkgs.properties</h4>
+
+  <p>A large portion of JudoScript system functions are actually implemented by static Java
+  methods; they are listed in <code>com/judoscript/jsysfxns.properties</code>. You can
+  extend this system function list by creating a similar properties file and name it as
+  <code>com/judoscript/myjsysfxns.properties</code>. Since this properties file does not
+  exist in the standard JudoScript distribution, your changes will not be overwritten by JudoScript
+  version upgrades. Another properties file, <code>com/judoscript/javapkgs.properties</code>,
+  holds the predefined Java package shortcuts. You can create your predefined Java package
+  shortcuts in <code>com/judoscript/myjavapkgs.properties</code>.</p>
+</body></html>

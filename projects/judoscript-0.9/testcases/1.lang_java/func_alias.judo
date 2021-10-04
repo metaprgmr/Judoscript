@@ -1,0 +1,7 @@
+function prop for java::System.getProperty();
+function now  for java::System.currentTimeMillis();
+function rt   for java::Runtime.getRuntime();
+
+println now(), nl;
+println prop('os.name'), nl;
+rt().gc();

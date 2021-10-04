@@ -1,0 +1,26 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Demonstrates local and global and forced global variable accesses.';
+}
+
+println "global a = ", a = 1;
+{
+  local a = 2;
+  println "local a = ", a;
+  println "::a = ", ::a;
+}
+println 'global a = ', a;
+
+class MyCls
+{
+  function foo {
+    println "in class: a = ", a;
+    local a = 2;
+    println "in class: local a = ", a;
+    println "in class: ::a = ", ::a;
+  }
+}
+x = new MyCls;
+x.foo();

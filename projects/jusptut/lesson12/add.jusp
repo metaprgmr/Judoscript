@@ -1,0 +1,29 @@
+<%
+  var title = (form.isMod ? 'Update' : 'Add') + ' Item'; %>
+<%!include 'header.jusp' %>
+<%
+  var isMod = form.isMod;
+. '===> form: ', form;
+
+  if error.length > 0 {
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+%>
+<form method=POST action="sellerController.jusp">
+<%!hidden 'do', isMod ? 'mod' : 'add' %>
+<%!hidden 'isMod' %>
+<%!hidden 'id', form.id %>
+<table border=0>
+<tr><td>Item Name:</td><td><%!text 'name', null, 'size=30' %></td></tr>
+<tr><td>Description:</td><td><%!text 'desc', null, 'size=50' %></td></tr>
+<tr><td>Price:</td><td><%!text 'price', null, 'size=10' %>
+<%!select 'currency', ::currencies, ::currencyNames %></td></tr>
+<tr><td>Quantity:</td><td><%!text 'inStock', null, 'size=3' %></td></tr>
+<tr><td>&nbsp;</td><td><%!submit isMod ? 'Update' : 'Add' %></td></tr>
+</table></form>
+
+<p><a href="sellerController.jusp">View items</a></p>
+
+<%!include 'footer.jusp' %>

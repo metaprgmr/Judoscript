@@ -1,0 +1,36 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Dynamically creates a SQL batch that inserts
+    a number of characters into the people table.
+  *]];
+}
+
+!include 'ora_connection.judi'
+
+members = { { 1, 'Little Bear', 'bear',   'M' },
+            { 2, 'Father Bear', 'father', 'M' },
+            { 3, 'Mother Bear', 'mother', 'M' },
+            { 4, 'Emily',       'emily',  'F' },
+            { 5, 'Aunty Hen',   'hen',    'F' },
+            { 6, 'Cat',         'cat',    'M' },
+            { 7, 'Owl',         'owl',    'M' },
+            { 8, 'No Feet',     'snake',  'M' },
+            { 9, 'Duck',        'duck',   'F' }
+          };
+
+createBatch batch;
+
+for x in members {
+  addBatch to batch:
+    insert into people ( personID, name, alias, birthDay, sex, addTime )
+    values ( (* x[0] *), '(* x[1] *)', '(* x[2] *)', null, '(* x[3] *)', sysdate )
+  ;
+}
+
+updateCnt = batch.executeBatch();
+println unit(updateCnt,'row'), ' updated.';
+
+disconnect();

@@ -1,0 +1,4 @@
+{created=2002-11-14, author=James Huang, prog=c:\devenv\envroot\projects\judoscript-0.9\testcases\1.lang_misc\usage.judo, desc=This program displays a text file of any encoding in a simple Java GUI.
+It is easy to use. Simply provide a text file name and optionally an
+encoding name; the default is your current Java default encoding.
+, args=file [encoding], lastMod=2004-06-28, minArgs=1, firstLine=1, lastLine=12}

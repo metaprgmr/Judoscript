@@ -1,0 +1,53 @@
+<html><body>
+<h2>Standard HTML Controls and Tags</h2>
+
+<p>View <%!viewsrc 'lesson4/htmlctls.jusp', '../' %></p>
+
+<p>Render time: <%= Date().fmtDate('yyyy-MM-dd hh:mm:ss') %></p>
+
+Do anything with the following controls, then submit and see they persist:
+
+<form><table border=0>
+<tr><td valign=top>
+
+<%-- Left Pane --%>
+<table border=0>
+<tr><td>Some Text:</td><td><%!text 'txt' %></td></tr>
+<tr><td>Password:</td><td><%!password %></td></tr>
+<tr><td valign=top>Note:</td><td><%!textarea 'note', null, 'rows=5, cols=18' %></td></tr>
+</table>
+
+</td><td>&nbsp;</td><td valign=top>
+
+<%-- Middle Pane --%>
+<%!button 'btn', "I do nothing" %><br>
+<hr>
+<%!checkbox 'langs', 'judo' %> JudoScript<br>
+<%!checkbox 'langs', 'java' %> Java<br>
+<%!checkbox 'langs', 'cpp' %> C++<br>
+<hr>
+<%!radio 'age', 'young' %> Junior<br>
+<%!radio 'age', 'mid-age' %> Middle Age<br>
+<%!radio 'age', 'old' %> Senior<br>
+
+</td><td>&nbsp;</td><td valign=top>
+
+<%-- Right Pane --%>
+<%
+  var colorIDs = [ 'r', 'g', 'b' ];
+  var colors = [ 'red', 'green', 'blue' ];
+%>
+<%!select 'favcolor', colorIDs, colors %><br>&nbsp;<br>
+
+<%
+  var hobbies = [ 'Swimming', 'Reading', 'Cooking' ];
+%>
+<%!multiSelect 'hobbies', hobbies, hobbies, 'size=3' %>
+
+</td></tr>
+<%-- Submit --%>
+<tr><td colspan=5 align=right><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson4.jusp">lesson 4</a></font>
+</body></html>

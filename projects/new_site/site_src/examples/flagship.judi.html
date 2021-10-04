@@ -1,0 +1,18 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/flagship.judi:</b></td></tr><tr><td><pre>
+// modify this for your base test directory.
+const #base = isWindows() ? 'c:/temp/x/' : '~/temp/x/' ifndef;
+
+// Create a phony file.
+function genFile dir, name {
+  mkdir #base + dir;
+  f = openTextFile(#base + dir + name, 'w');
+  if name.endsWith('.html') {
+    print &lt;f> "&lt;html>&lt;body>&lt;h1>", name, "&lt;/h1>&lt;/body>&lt;/html>";
+  } else {
+    print &lt;f> '======= ', name, ' =======';
+  }
+  f.flush();
+  f.close();
+}
+</pre></td></tr></table></body></html>

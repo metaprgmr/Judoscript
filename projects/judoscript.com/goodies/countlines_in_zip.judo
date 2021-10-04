@@ -1,0 +1,26 @@
+switch #args.length() {
+case 0:
+  println 'Usage: java judo ', #prog, ' <zipfile> [ <include_pattern> [ <exclude_pattern> ] ]';
+  exit(0);
+case 1:  list in #args[0] recursive; break;
+case 2:  list #args[1] in #args[0] recursive; break;
+default: list #args[1] in #args[0] except #args[2] in 'a.jar' recursive;
+}
+
+$fileCnt = 0;
+$lineCnt = 0;
+$zf = openZip(#args[0]);
+for $x in $$fs_result { if $zf.isFile($x) {
+    $file = $zf.openTextFile($x);
+    ++$fileCnt;
+    while ($line = $file.readLine()) != eof {
+      ++$lineCnt;
+    }
+    $file.close();
+  }
+}
+$zf.close();
+
+println "Total files: ", $fileCnt;
+println "Total lines: ", $lineCnt;
+

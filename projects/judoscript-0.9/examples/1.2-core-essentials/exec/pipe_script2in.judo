@@ -1,0 +1,14 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Runs two Java programs <code>test.ToLower</code> and <code>test.Echo</code>;
+    this script writes input to the first program, whose output is piped to the second.
+  *]];
+}
+
+exec 'java test.ToLower | java test.Echo'
+input {
+  . <pipe> 'You should see this message in lower case, not UPPER CASE!';
+  . <pipe> 'Cheers!';
+}

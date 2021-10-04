@@ -1,0 +1,49 @@
+<%
+  if form.size() == 0 { // log out.
+    session.user = null;
+  } else { %>
+    <%!validate jusp$textLength 'user', 3 %>
+    <%!validate jusp$textLength 'pass', 5 %> <%
+  }
+
+  // if validation passes, assume it is logged in (for this example).
+  try {
+    auth(form.user, form.type);
+    session.user = form.user;
+    session.type = form.type;
+  } catch {
+    error.add($_.message);
+  }
+
+  if session.user {
+    if form.dest { // bookmarked URL
+      %><%!redirect form.dest %><%
+    } else {
+      %><%!forward (session.type=='seller') ? "sellerController.jusp" : "buyerController.jusp" %><%
+    }
+  }
+%>
+
+<html>
+<head><title>Sample App -- Login Page</title>
+<body>
+<h1>Login Page</h1>
+<%
+  if error.length > 0 { // validation reported errors
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+%>
+<form method=POST><table border=0>
+<tr><td>User Name:</td><td><%!text 'user' %></td></tr>
+<tr><td>Password:</td><td><%!password 'pass' %> (at least 5 letters)</td></tr>
+<tr><td>&nbsp;</td><td><%!radio 'type','seller' %> seller
+<%!radio 'type','buyer','checked' %>buyer</td></tr>
+<tr><td>&nbsp;</td><td><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<p>(Use "jim" as buyer, or "sam" as seller; password is anything longer than 5 letters.)</p>
+
+<hr><font size=-1>Back to <a href="../lesson12.jusp">lesson 12</a></font>
+</body></html>

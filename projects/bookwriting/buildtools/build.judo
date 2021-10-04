@@ -1,0 +1,763 @@
+////////////////////////////////////////////////////////////////////
+// Environment
+/////////////////////////////////////////////////////////////////////
+
+!include '${JUDOROOT}/projects/common.judi'
+
+versionId = 'bookwriting';
+
+myroot     = '${projects}/${versionId}';
+myarchives = '${archives}/${versionId}';
+tmp        = '${docroot}/books';
+
+mkdir myarchives;
+
+copyright = '<center>&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">Copyright &copy; 2001-' +
+            Date().fmtDate('yyyy') + ' James Jianbo Huang</center>';
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+println <err> [[*
+
+  ********************** Project (* versionId *) *********************
+*]];
+
+menuItems = [
+  'Build JudoScript 0.9 Book',  // 1
+  'Build JudoScript 1.0 Book',  // 2
+  'Build JudoScript 1.0 Spec',  // 3
+  'Archive',                    // 4
+];
+
+option = 0;
+if #args.length <= 0 {
+  option = menu(menuItems, false); // no confirm
+} elif #args[0].isInt() {
+  option = #args[0];
+}
+
+switch option {
+  case 1:  buildBook('judoscript-0.9');  break;
+  case 2:  buildBook('judoscript-1.0_book');  break;
+  case 3:  buildBook('judoscript-1.0_spec');  break;
+  case 4:  archive(); break;
+  default: ;
+}
+return;
+
+/////////////////////////////////////////////////////////////////////
+// Target
+/////////////////////////////////////////////////////////////////////
+
+function archive {
+  println <err> nl, '*** Archiving ...', nl;
+
+  zipname = '${myarchives}/${versionId}-' + Date().fmtDate('yyyy-MM-dd') + '.zip';
+  copy '*' except '*/archives/*, */save/*, */alfa*, */beta*, *.class, *~, *.swp'
+       in myroot recursive echo into zipname under versionId;
+
+  copy zipname to '${archives}/${versionId}-latest.zip' echo;
+  archiveCommon();
+}
+
+/////////////////////////////////////////////////////////////////////
+// Book Building Target
+/////////////////////////////////////////////////////////////////////
+
+
+/********************************************************************
+  A book is a collection of chapters; chapters may be organized
+  into parts. The source of a book is encoded in SGML, which are
+  organized like this:
+
+    ${ROOT}/toc.sgml
+    ${ROOT}/chapters/foo.sgml
+    ${ROOT}/chapters/bar.sgml
+
+  All chapters are listed in the toc.sgml file via the <chapter>
+  tag; each <chapter> has an "id" attribute. <chapter>'s may be
+  grouped into <part>'s. For a chapter with ID of "foo", its
+  content is stored in the file of ${ROOT}/chapters/foo.sgml.
+
+  Chapter content can be logically organized in up to two levels.
+  Text are these well-formed blocks:
+
+                 Pre-     Ref-
+    Tag          formated able Description
+    ------------ -------- ---- ---------------------------------------
+    <preface>    no       no   The preface; TOC-only.
+    <section1>   no       yes  First level section; listed in TOC.
+    <section2>   no       yes  Second level section; listed in TOC.
+    <p>          no       no   Normal text.
+    <title3>     no       no   3rd-level title in the text (in <p>).
+    <tip>        no       no   Text for a tip.
+    <codelist>   yes      yes  Code listing. Line numbers optoinal.
+    <grammar>    no       yes  Syntax listing.
+    <rule>       no       no   Syntax rule.
+    <asis>       yes      no   Computer output listing.
+    <note>       no       no   Note.
+    <j1note>     no       no   JudoScript version 1.0 note.
+
+  There are a few structured text:
+
+                          Ref-
+    Tag          HTML     able Description
+    ------------ -------- ---- ---------------------------------------
+    <figure>     no       yes  Figure content.
+    <ul>         yes      no   Unordered list.
+    <ol>         yes      no   Ordered list.
+     <li>        yes      no   List item.
+    <table>      yes      yes  Table content.
+     <ttitle3>   no       no   Table subtitle.
+     <tr>        yes      no   Table row.
+     <th>        yes      no   Table header.
+     <td>        yes      no   Table column.
+    <blockquote> yes      no   A paragraph of quote.
+
+  Within text blocks, these text decorations may be used:
+
+    Tag          HTML     Description
+    ------------ -------- ---------------------------------------
+    <a>          yes      hyperlink
+    <b>          yes      bold font
+    <i>          yes      italics font
+    <u>          yes      underlined
+    <sup>        yes      superscript
+    <sub>        yes      subscript
+    <br>         yes      line-break
+    <code>       yes      code
+    <img>        yes      image. For now, exactly the same as in HTML.
+    <kw>         no       keyword
+    <kwci>       no       case-insensitive keyword
+    <nt>         no       non-terminal
+    <bio>        no       built-in object
+    <ref>        no       reference to another anchor point
+    <linkable>   no       the enclosed text is a URL that can be clicked.
+
+    <todo>:      no
+    <notyet>:    no
+    <test>:      no
+
+  SGML entities can be used. Symbols like '<' and '&' and
+  non-ASCII characters must be escaped with entities.
+
+
+  Referenceability
+  ^^^^^^^^^^^^^^^^
+  All referenceable tags can have an "id" attribute; IDs of all
+  kinds are in the same name space for a same chapter. Each tag
+  has a "published name"; e.g., for the figure #2 in chapter 3, its
+  published name is "2.3". This "2.3" can be a published name for a
+  figure, a table, or a code listing. Published names of <section1>
+  and <section2> tags are their "title" attribute.
+  
+  The <ref> may have a "href" attribute for external reference; but
+  most likely it has a "id", whose format is one of the following:
+  "chapterID:id", "chapterID:" or "id".
+
+ *******************************************************************/
+
+/**
+ * This class is used by buildBook() to pre-obtain chapter information,
+ * and used later on (in writeArticle()) for reference resolution, etc.
+ */
+class ChapterInfo
+{
+  constructor {
+    assert(this.id != null);
+    assert(this.number != null);
+    assert(this.title != null);
+
+    this.pubNames  = {};  // of { ID => published-name }
+    this.section1s = [];  // of Object's: { id, title, section2s[] }
+    this.codelists = [];  // of Object's: { id, name, pubname }
+    this.grammars  = [];  // of Object's: { id, name, pubname }
+    this.figures   = [];  // of Object's: { id, name, pubname }
+    this.tables    = [];  // of Object's: { id, name, pubname }
+  }
+
+  function addSection1 id, title, stat {
+    section1s.add(new Object( id=id, title=title, section2s=[] ));
+    if stat != null { section1s.last().status = stat; }
+    addPubName id, title;
+  }
+
+  function addSection2 id, title {
+    section1s.last().section2s.add(new Object( id=id, title=title ));
+    addPubName id, title;
+  }
+
+  function addCodeList id, title { _add id, title, codelists; }
+  function addGrammar  id, title { _add id, title, grammars; }
+  function addFigure   id, title { _add id, title, figures; }
+  function addTable    id, title { _add id, title, tables; }
+
+  function _add id, title, lst {
+    var pub_name = this.number @ '.' @ (lst.length+1);
+    lst.add(new Object( id=id, name=title, pubname=pub_name ));
+    addPubName id, pub_name;
+  }
+
+  function addPubName id, value {
+//    if pubNames.has(id) {
+//      throw "The public name for '" + id + "' already exists.";
+//    }
+    pubNames.(id) = value;
+  }
+
+  function getPubName id { return pubNames.(id); }
+
+} // end of class ChapterInfo.
+
+
+class BookInfo
+{
+  constructor {
+    assert(this.srcDir != null);
+
+    this.title      = null; // must be set.
+    this.chapters   = [];  // of ChapterInfo's.
+    this.parts      = [];  // of { title, leadChapterIndex (incl), endChapterIndex (excl) }'s
+    this.hasPreface = false;
+
+    var chapterNum = 1;
+    var appendixNum = 1;
+
+    do '${srcDir}/toc.sgml' as sgml {
+    <title>:   this.title = $_.name;
+    <preface>: addPreface();
+    <part>:    startPart($_.title, $_.synopsis);
+    </part>:   endPart();
+    <chapter>,<appendix>:
+      var chptId = $_.id;
+      var isapp = $_.getName()=='appendix';
+      addChapter($_, isapp, isapp ? appendixNum : chapterNum);
+      chptFile = '${srcDir}/chapters/${chptId}.sgml';
+      if chptFile.fileExists() {
+        do chptFile as sgml {
+        <synopsis>: chapters.last().hasSynopsis = true;
+        <section1>: addSection1($_.id, $_.title, $_.status);
+        <section2>: addSection2($_.id, $_.title);
+        <codelist>: addCodeList($_.id, $_.name);
+        <grammar>:  addGrammar($_.id, $_.name);
+        <figure>:   addFigure($_.id, $_.name);
+        <table>:    addTable($_.id, $_.name);
+        }
+      }
+      if (isapp) ++appendixNum;
+      else       ++chapterNum;
+    }
+  }
+
+  function addPreface { this.hasPreface = true; }
+
+  function hasParts { return parts.length > 0; }
+  function startPart title, synopsis {
+    parts.add(new Object( title=title, synopsis=synopsis, leadChapterIndex=chapters.length));
+  }
+  function endPart { parts.last().endChapterIndex = chapters.length; }
+
+  function addChapter tag, isapp, num {
+    ci = new ChapterInfo( id = tag.id, number = num, title = tag.title );
+    if (tag.status)   ci.status = tag.status;
+    if (tag.synopsis) ci.synopsis = tag.synopsis;
+    if (isapp)        ci.isAppendix = true;
+    chapters.add(ci);
+  }
+
+  function getChapter id {
+    for ch in chapters {
+      if (ch.id == id) return ch;
+    }
+    return null;
+  }
+
+  function addSection1 id, title, stat { chapters.last().addSection1(id, title, stat); }
+  function addSection2 id, title { chapters.last().addSection2(id, title); }
+  function addCodeList id, title { chapters.last().addCodeList(id, title); }
+  function addGrammar  id, title { chapters.last().addGrammar(id, title); }
+  function addFigure   id, title { chapters.last().addFigure(id, title); }
+  function addTable    id, title { chapters.last().addTable(id, title); }
+
+} // end of class BookInfo.
+
+
+function buildBook bookDir {
+  targetDir = '${tmp}/${bookDir}';
+  srcDir = '${myroot}/${bookDir}';
+
+  mkdir '${targetDir}/chapters/';
+
+  bookInfo = new BookInfo(srcDir=srcDir);
+
+  // Create "toc_details.html".
+  writeTOC bookInfo, targetDir;
+
+  // Create each chapter
+  needIntro = ('${srcDir}/toc.sgml').fileTime() > ('${targetDir}/toc_details.html').fileTime();
+  for ch in bookInfo.chapters {
+    writeArticle ch, bookInfo, srcDir, targetDir, needIntro;
+  }
+
+catch: $_.pist();
+}
+
+
+//
+// Create "index.html", "toc.html" and "toc_details.html"
+//
+function writeTOC bookInfo, targetDir {
+  var f = openTextFile('${targetDir}/toc_details.html', 'w');
+  print <f> [[*
+    <html><head><link href="../../share/judo_styles.css" rel="stylesheet" type="text/css"></head>
+    <body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+    <table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+    <td style="background:url(../../share/art_1.gif)" width=110 height=53><a
+     href="../../articles/index.html"><img
+     src=../../share/spacer.gif width=110 height=53 border=0></a></td>
+    <td style="background:url(../../share/art_2.gif)" align=center valign=center>
+     <h1>(* bookInfo.title *)</h1></td>
+    <td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+     ><img src=../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+    <img src=../../share/triangle.gif>&nbsp;<a href="../../examples/index.html">examples</a> <br>
+    <img src=../../share/triangle.gif>&nbsp;<a href="../../ref/index.html">references</a></font>
+    </td></tr></table>
+    <center><table border=0 width=98% class=bodyText><tr><td>
+    By <i>James Jianbo Huang</i>&nbsp;&nbsp;&nbsp;Last update: (* Date().fmtDate('yyyy-MM-dd') *)</p>
+  *]];
+
+  print <f> '<table border=0 cellspacing=0 cellpadding=0 width=100%>';
+  if bookInfo.hasParts() {
+    for pt in bookInfo.parts {
+      var x = (loopIndex()+1).fmtRoman(true) + '. ' + pt.title;
+      print <f> '<tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>Part ',
+                x, '</b></td></tr>';
+      for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+        writeTOCChapter1 bookInfo.chapters[i], f;
+      }
+    }
+  } else {
+    for ch in bookInfo.chapters {
+      writeTOCChapter1 ch, f;
+    }
+  }
+  println <f> [[*
+    </table>
+    <blockquote>
+    Click on the chapter/appendix number to go to the expanded Table of Content.<br>
+    Click on the chapter/appendix title to go to the chapter itself.<br>
+    <em>This book is work-in-process.
+    The square icons next to the chapter numbers indicate the progress.</em>
+    </blockquote>
+  *]];
+
+/* */
+  print <f> [[*
+    <hr>
+    <a name="toc"></a><table border=0 cellspacing=0 cellpadding=1 width=100%>
+  *]];
+  if bookInfo.hasPreface {
+    print <f> [[*
+      <tr><td class=text14b nowrap valign=top><a name=preface>0</a>.&nbsp;
+      <a href="chapters/preface.html">Preface</a></td></tr>
+    *]];
+  }
+
+  if bookInfo.hasParts() {
+    for pt in bookInfo.parts {
+      var x = (loopIndex()+1).fmtRoman(true) + '. ' + pt.title;
+      print <f> '<tr><td bgcolor="#DDDDDD"><h2>Part ', x, '</h2></td></tr>';
+      for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+        writeTOCChapter bookInfo.chapters[i], f;
+      }
+    }
+  } else {
+    for ch in bookInfo.chapters {
+      writeTOCChapter ch, f;
+    }
+  }
+/* */
+
+  flush <f> [[*
+      </table>(* copyright *)
+      <!-- /ARTICLE CONTENET -->
+      </td></tr></table>
+      </body></html>
+  *]];
+  f.close();
+
+  . <err> 'Created ', targetDir, '/toc_details.html';
+
+} // end of function writeTOC().
+
+
+function writeTOCChapter ch, f {
+  color = null;
+  switch ch.status {
+  case 'hide':   return;
+  case 'red':
+  case 'orange':
+  case 'yellow':
+  case 'green':  color = '<img src="../../share/status_' + ch.status + '.gif">&nbsp;';
+  }
+
+  var chapterHeader = ch.number;
+  if ch.isAppendix { chapterHeader = chapterHeader.fmtRoman('I'); }
+  print <f> [[*
+    <tr><td class=text14b nowrap valign=top><a name=(* ch.id *)>(* chapterHeader *)</a>.&nbsp;
+    (* color *)<a href="chapters/(* ch.id *).html">(* ch.title *)</a></td></tr>
+  *]];
+
+  for s1 in ch.section1s {
+    switch s1.status {
+    case 'red':
+    case 'orange':
+    case 'yellow':
+    case 'green':  color = '<img src="../../share/status_' + s1.status + '.gif">&nbsp;';
+                   break;
+    default:       color = null;
+    }
+
+    print <f> [[*
+      <tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+      (* color *)<a href="chapters/(* ch.id *).html#(* s1.id *)">(* s1.title *)</a></td></tr>
+    *]];
+    for s2 in s1.section2s {
+      print <f> [[*
+        <tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="chapters/(* ch.id *).html#(* s2.id *)">(* s2.title *)</a></td></tr>
+      *]];
+    }
+  }
+}
+
+
+function writeArticle ch, bookInfo, srcDir, targetDir, needIntro {
+  srcname = '${srcDir}/chapters/' + ch.id + '.sgml';
+  if (!srcname.fileExists()) return;
+  tgtname = '${targetDir}/chapters/' + ch.id + '.html';
+  if ((ch.id != 'intro' || !needIntro) && isNewer(tgtname, srcname)) return;
+
+  line  = '<tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr>';
+  line2 = '<tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr>';
+
+  f = openTextFile(tgtname, 'w');
+  writeChapterHeader f, ch, bookInfo;
+
+  var tblColumns = 0;
+  var isPre = false;
+  var isLinkable = false;
+
+  do srcname as sgml {
+  <synopsis>:  print <f> [[*
+                  <!-- SYNOPSIS PART --><tr><td valign=top>
+                   <table border=0 cellpadding=5><tr><td valign=top><b>Synopsis:</b></td><td valign=top>
+               *]];
+  </synopsis>: print <f> [[*
+                   </td></tr></table>
+                  </td></tr><!-- SYNOPSIS PART -->
+                  </table>
+               *]];
+
+  <section1>:  print <f> '<h2>&nbsp;<br><a name=', $_.id, '> ', $_.title, '</a>';
+               switch $_.status {
+               case 'red':
+                 print <f> '<sub><font color=red>&nbsp; &nbsp;to be done</font></sub>';
+                 break;
+               case 'yellow':
+               case 'orange':
+                 print <f> '<sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub>';
+                 break;
+               }
+               print <f> '</h2>';
+  </section1>: print <f> '<br>';
+  <section2>:  print <f> '<a name=', $_.id, '><h3> ', $_.title, '</h3></a>';
+  </section2>: print <f> '<br>';
+
+  <p>,</p>:    print <f> $_; // may need special processing
+
+  <title3>:    print <f> '<b>';
+  </title3>:   print <f> '</b><br>';
+
+  <tip>,</tip>: ; // TODO
+
+  <codelist> :
+    // a. collect the info to the dictionary
+    var listTitle = $_.caption;
+    if !listTitle { listTitle = $_.name; }
+
+    // b. write the tag and beginning of the code listing
+    print <f> [[*
+      <p align=center><table cellpadding=0 cellspacing=0 width="100%"><thead>
+      <th align=left><a name="(* $_.id *)">Listing (* ch.getPubName($_.id) *)</a> (* listTitle *)</th>
+      </thead>(* line *)<tr><td bgcolor="#DDDDDD"><pre>
+    *]];
+    isPre = true;
+
+  </codelist>:
+    println <f> "</pre></td></tr>", line2, "</table></p><p>";
+    isPre = false;
+
+  <grammar>: print <f> '<a name="', $_.id, '"><table border=0>';
+  </grammar>:print <f> '</table></a>';
+  <rule>:    print <f> '<tr><td valign=top><i>', $_.name,
+                       '</i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top>';
+  </rule>:   print <f> '</td></tr>';
+
+  <asis>:    fontcolor = ' color=black';
+             if $_.type=='java' { fontcolor = ' color=brown'; }
+             print <f> '<font', fontcolor, '><pre>';
+             isPre = true;
+  </asis>:   print <f> '</pre></font>';
+             isPre = false;
+
+  <note>:    print <f> '<font color=blue><i>';
+  </note>:   print <f> '</i></font>';
+
+  <j1note>:  print <f> '<font color=brown><i>In the forth-coming JudoScript version 1.0, ';
+  </j1note>: print <f> '</i></font>';
+
+  <table>:   print <f> '<table border=1><caption align=left><b>Table ',
+                       ch.getPubName($_.id), ' ', $_.name, '</b></caption>';
+             tblColumns = $_.columns;
+  </table>:  print <f> $_; tblColumns = 0;
+  <ttitle3>:  print <f> '<tr><td colspan="', tblColumns, '"><b>';
+  </ttitle3>: print <f> '</b></td>';
+  <tr>, </tr>,
+  <th>, </th>,
+  </td>:       print <f> $_;
+  <td>:        print <f> '<td valign=top>';
+
+  <figure>:  print <f> '<a name="(* $_.id *)"><img src="', $_.src, '" border=0></a>';
+  </figure>: ;
+
+  :TEXT:     x = isPre ? removeFirstEmptyLine($_) : $_;
+             if (isLinkable) {
+               print <f> '<a href="', $_, '">', $_, '</a>';
+               isLinkable = false; // no need for </linkable> handling.
+             } else {
+               print <f> $_;
+             }
+
+  <img>,
+  <br>, </br>,
+  <code>, </code>,
+  <a>, </a>,
+  <b>, </b>,
+  <i>, </i>,
+  <u>, </u>,
+  <sup>, </sup>,
+  <sub>, </sub>,
+  <ul>, </ul>,
+  <ol>, </ol>,
+  <li>, </li>,
+  <blockquote>, </blockquote>:
+          print <f> $_;
+
+  <kw>:   print <f> '<b><code>';
+  </kw>:  print <f> '</code></b>';
+  <kwci>: print <f> '<b><i><code>';
+  </kwci>:print <f> '</code></i></b>';
+  <nt>:   print <f> '<i>';
+  </nt>:  print <f> '</i>';
+  <bio>:  print <f> '<code><i>';
+  </bio>: print <f> '</i></code>';
+  <tag>:  print <f> '<code>&lt;';
+  </tag>: print <f> '&gt;</code>';
+
+  <ref:sysfxn>:  print <f> '<pre>function <b>', $_.name, '</b>';
+  </ref:sysfxn>: print <f> '</pre>';
+
+  <ref>:
+    print <f> '<i><a href="';
+    if $_.href != null {  // external link.
+      print <f> $_.href, '">';
+    } elif $_.id != null {  // in-book cross-link.
+      // Get chptID and refID:
+      chptID = ch.id;
+      refID = null;
+      if $_.id.contains(':') {
+        if $_.id.endsWith(':') {
+          chptID = $_.id.trunc(1);
+        } else {
+          tmp = $_.id.csv(':');
+          chptID = tmp[0];
+          refID = tmp[1];
+        }
+      } else {
+        refID = $_.id;
+      }
+
+      var tmpch = bookInfo.getChapter(chptID);
+      var display = null;
+      if refID == null {  // referencing a chapter
+        print <f> tmpch.id, '.html">';
+        display = tmpch.number + '. ' + tmpch.title;
+      } else {  // referencing a section in a chapter.
+        print <f> tmpch.id, '.html#', refID, '">';
+        display = tmpch.getPubName(refID);
+        if display == null {
+          println <err> '??? REFERENCE TO "', chptID, ':', refID, '" NOT RESOLVED';
+        }
+      }
+      if $_.isClosed() {
+        print <f> display;
+      }
+    }
+
+  </ref>: print <f> '</a></i>';
+
+  <linkable>:  isLinkable = true;
+  </linkable>: ;
+
+  ////////////////////////////////////////////////
+  // Special Tags
+  ////////////////////////////////////////////////
+
+  <!>:      ;
+  <j>:      print <f> 'Judo';
+  <jusp>:   print <f> 'JuSP';
+  <hib>:    print <f> 'Hibernate';
+
+  <>:       println <err> '??? UNKNOWN Tag: ', $_.getName();
+
+  <book_org>: // only in the section of "How This Book is Organized" in intro.sgml.
+    writeBookOrganization bookInfo, f;
+
+  <system_function_listing>: ; // only in the section of "System Functions" in flow.sgml. TODO.
+
+  <todo>:   print <f> '<font color=gray>TODO: <i>', $_.desc, '</i></font>';
+  <notyet>: print <f> '<p class="font-size:16px">Not done yet. For now, please read <a href="',
+                      $_.href, '">this article</a>.</p>';
+  <test>:   print <f> '<font color=red>';
+  </test>:  print <f> '</font>';
+  }
+
+  println <f> [[*
+      <!-- /ARTICLE CONTENET -->
+      </td></tr></table>
+      (* copyright *)
+      </body></html>
+    *]];
+
+  f.close();
+  . <err> 'Created ', targetDir, '/chapters/', ch.id, '.html';
+
+} // end of function writeArticle().
+
+
+function writeChapterHeader f, ch, bookInfo {
+  print <f> [[*
+    <html><head><title>Chapter (* ch.number *). (* ch.title *)</title>
+    <link href="../../../share/judo_styles.css" rel="stylesheet" type="text/css">
+    </head>
+    <body bgcolor="#ffffff" style="margin-top:0; margin-left:0">
+    <table border=0 cellpadding=0 cellspacing=0 width=100%><tr>
+    <td style="background:url(../../../share/art_1.gif)" width=110 height=53><a
+     href="../../../articles/index.html"><img
+     src=../../../share/spacer.gif width=110 height=53 border=0></a></td>
+    <td style="background:url(../../../share/art_2.gif)" align=center valign=center>
+     <h1>Chapter (* ch.number *). (* ch.title *)</h1></td>
+    <td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+     ><img src=../../../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+    <img src=../../../share/triangle.gif>&nbsp;<a href="../../../examples/index.html">examples</a> <br>
+    <img src=../../../share/triangle.gif>&nbsp;<a href="../../../ref/index.html">references</a></font>
+    </td></tr></table>
+    <center><table border=0 width=98% class=bodyText><tr><td>
+
+    <table border=0 width="100%"><tr>
+    <!-- TOC PART --><td valign=top rowspan=2 width="50%">
+    <table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px"><!-- tops -->
+    <tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+    <td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+     width=1 height=1 border=0></td>
+    <td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+    <!-- left-left -->
+    <tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+     width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+  *]];
+
+  for s1 in ch.section1s {
+    print <f> '<li><a href="#', s1.id, '">', s1.title, '</a></li>';
+    for s2 in s1.section2s {
+      print <f> [[* <br>&#187;&nbsp;<a href="#(* s2.id *)">(* s2.title *)</a> *]];
+    }
+  }
+
+  print <f> [[*
+    </ul></td>
+    <td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+     width=1 height=1 border=0></td></tr><!-- bottoms -->
+    <tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+    <td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+     height=1 border=0></td>
+    <td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+    </td>
+    <!-- AUTHOR PART --><td valign=top align=right width="50%">
+     <table border=0 cellpadding=0 cellspacing=0><tr><td align=right>
+     By <i>James Jianbo Huang</i> | <a href="../toc_details.html">Book TOC</a>
+     <hr size=1>
+     </td></tr></table>
+     </td></tr>
+    </td></tr><!-- AUTHOR PART -->
+  *]];
+
+  if (!ch.hasSynopsis) print <f> '</table>';
+}
+
+
+function writeTOCChapter1 ch, f {
+  color = null;
+  switch ch.status {
+  case 'hide':   return;
+  case 'red':
+  case 'orange':
+  case 'yellow':
+  case 'green':  color = '<img src="../../share/status_' + ch.status + '.gif">&nbsp;';
+  }
+
+  var chapterHeader = ch.number;
+  if ch.isAppendix { chapterHeader = chapterHeader.fmtRoman('I'); }
+  print <f> [[*
+    <tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#(* ch.id *)">(* chapterHeader *).</a></b>&nbsp;</td>
+    <td nowrap=1 width="98%">(* color *)<a href="chapters/(* ch.id *).html"><b>(* ch.title *)</b></a></td>
+    </tr>
+  *]];
+}
+
+
+function writeBookOrganization bookInfo, f {
+  if bookInfo.hasParts() {
+    for pt in bookInfo.parts {
+      print <f> '<p><i>Part ', (loopIndex()+1).fmtRoman(true), '</i> ', pt.synopsis, ' ';
+      for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+        writeChapterSynopsis bookInfo.chapters[i], f;
+      }
+      println <f> '</p>';
+    }
+  } else {
+    for ch in bookInfo.chapters {
+      writeChapterSynopsis ch, f;
+    }
+  }
+}
+
+
+function writeChapterSynopsis ch, f {
+  if ch.status == 'hide' { return; }
+  if ch.isAppendix {
+    print <f> '<u>Appendix ', ch.number.fmtRoman(true), '</u> ', ch.synopsis, ' ';
+  } else {
+    print <f> '<u>Chapter ', ch.number, '</u> ', ch.synopsis, ' ';
+  }
+}
+
+
+function removeFirstEmptyLine txt {
+  if txt.startsWith('\n') { txt = txt.substring(1); }
+  if txt.startsWith('\r') { txt = txt.substring(1); }
+  return txt;
+}
+

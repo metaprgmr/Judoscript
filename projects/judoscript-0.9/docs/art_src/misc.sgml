@@ -1,0 +1,714 @@
+<doc title="Miscellaneous Topics"
+ author="James Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, JudoScript comment, unix auto-run, expression, statement, for, for from, from in, while, if, elif, else, do, switch, script local, $$local, system property, system properties, print, println, flush, here-doc, enhanced here-doc"
+ deprecated="../book/judoscript-0.9/chapters/basic.html"
+>
+
+<sectiondefs>
+<sectiondef name="unix"       caption="Comments and Unix Auto-Run">
+<sectiondef name="expr"       caption="Expressions and Statements">
+<sectiondef name="for"        caption="For Loops for Arrays">
+<sectiondef name="heredoc"    caption="Enhanced Here-Docs">
+<sectiondef name="print"      caption="Printing and Formatting">
+<sectiondef name="args"       caption="Program Arguments and Options">
+<sectiondef name="sysprop"    caption="System Properties">
+<sectiondef name="local"      caption="Script-Local Data">
+<sectiondef name="regex"      caption="Regular Expressions">
+<sectiondef name="tableData"  caption="TableData">
+<sectiondef name="printTable" caption="Print Tabular Data">
+<sectiondef name="listings"   caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+This articles discusses expressions, flow-control statements including
+<kw>for in</kw> and <kw>for from</kw> statements, and various topics
+interesting for general programming in <J>. The enhanced here-doc is a
+way to specify string values of chunks of text; expressions can be
+embedded. Printing in <J> supports quite a few formatting capabilities.
+JVM system properties can be obtained and set, and related convenience
+system functions are introduced. Textual data can be attached in the
+script after <kw>EndScript</kw> and accessed as a text input stream
+in <kw>$$local</kw>.
+</abstract>
+</doc>
+
+
+<section name=unix>
+
+In most Unix shells, an executable file that starts with <kw>#!</kw> will be
+run by the program specified on that line. You can put such a line at the
+very beginning of <J> and make it Unix auto-runnable. At the same time, the
+script is still a valid one, because <J> has four (yes, four) forms of comments:
+
+<demo>
+/* ...
+   ... this is a multi-line comment
+*/
+// this is a single line comment
+/? ...
+   ... this is a multi-line comment
+?/
+#! yet another single line comment
+</demo>
+
+The last form is designed for Unix auto-run. Nevertheless, it <em>is</em>
+a valid single-line comment except inside groups of SQL statements. The
+second form is designed to comment out a chunk of code that may have the
+first form comments. As a convention, you should use the first two forms
+as much as possible, and use the last two only in particular situations.
+
+
+<section name="expr">
+
+<p>
+<J> expressions are almost identical to Java's. The string concatenation
+operator can be <kw>+</kw> and <kw>@</kw>.
+
+<p>
+The flow control statements are also similar to Java, with some minor
+twists. The control expressions are not required to be parenthesized
+but the code blocks have to be enclosed by curly braces. The following
+is a demonstration of major flow-control statements:
+
+<demo>
+if a == 0 {
+  // ...
+} elif b == 1 {
+  // ...
+} else {
+  // ...
+}
+
+switch a {
+case 'XYZ':  // ...
+             break;
+case 2:      // ...
+             break;
+default:     // ...
+             break;
+}
+
+while a > 0 {
+  // ...
+  --a;
+}
+
+do {
+  // ...
+  --a;
+} while a > 0;
+
+for a = 0; a < 10; ++a {
+  // ...
+}
+</demo>
+
+<p>
+Labels are only valid for loop statements such as <kw>while</kw> and
+<kw>for</kw>. Within a labeled loop statement, <kw>break</kw> and
+<kw>continue</kw> can be followed by the label so taht control can
+jump out of the inner loops to an outer one, just like Java.
+
+
+<section name="for">
+
+<p>
+The basic form of <kw>for</kw> loop statement is the same as Java. <J>
+defines some new forms of this statement to enumerate arrays. You can
+enumerate arrays in total or in part, forward or backward:
+
+<demo>
+a = [ 'elem1', 'elem2', 'elem3', 'elem4' ];
+for e in a                 { println e; }
+for e in a backward        { println e; }
+for e in a from 1          { println e; }
+for e in a to 1            { println e; }
+for e in a from 1 to 2     { println e; }
+for e in a from 2 downto 1 { println e; }
+for e in a downto 1        { println e; }
+</demo>
+
+The dot command is a shortcut for <kw>println</kw>. Sometimes the
+indices may be indented in addition to the elements, then use the
+<kw>for from to</kw>|<kw>downto step</kw> family statements:
+
+<demo>
+for a to 3                    { println a; }
+for a from 3 to 5             { println a; }
+for a from 3 to 10 step 2     { println a; }
+for a from 10 downto 5 step 2 { println a; }
+</demo>
+
+
+
+<section name="heredoc">
+
+<p>
+In the make utility, there is a feature called here-doc, where a chunk of
+text can be enclosed in two user-defined markers and used verbatim by the
+script. <J> supports the same feature, enhanced by allowing expressions be embedded.
+
+<demo>
+lastname = "Robinson";
+prodname = "Dry Cleaner";
+representative = "Cleo Rubinstein";
+letter = [[*
+  Dear Mr. (* lastname *),
+
+  Thank you very much for your interest in our product, (* prodname *).
+  For more information, please visit our web site at (* url *).
+
+  Sincerely,
+
+  (* representative *)
+*]];
+flush letter;
+</demo>
+
+The markers are <kw>[[*</kw> and <kw>*]]</kw>. Embedded expressions are
+enclosed in between <kw>(*</kw> and <kw>*)</kw>. The lines' indentations
+are removed, so is the first empty new line following the <kw>[[*</kw>
+marker, so the code can appear nice and neat. Use <kw>[[[*</kw> instead
+of <kw>[[*</kw> to turn off automatic indentation stripping.
+
+
+<section name="print">
+
+<p>
+The <kw>println</kw> is probably the most frequently used command in any
+programming languages, especially for beginners. For this reason, it has
+a very short shortcut: a dot.
+
+<p>
+<J> actually has three print commands: <kw>println</kw>, <kw>print</kw>
+and <kw>flush</kw>; <kw>print</kw> does not flush, where the other two
+do. All three have exactly the same syntax: they can take 0 or any
+number of values. Among them, <kw>nl</kw> is a keyword for "newline".
+
+<demo>
+print nl, 'There are over 200 types of cell in the body:', nl,
+      '  nerve cell', nl, '  liver cell', nl, '  sperm cell', nl,
+      '  blood cell', nl, '  muscle cell', nl, '  fat cell', nl,
+      '  bone cell', nl, '  skin cell', nl, 'etc.', nl;
+print 'The nucleus is the cell's control center, housing DNA.', nl,
+      'Outside this is a mixture of dissolved chemicals and floating',
+      ' structures called organelles';
+flush;
+</demo>
+
+Values can be aligned left, right or centered with <kw>&gt;</kw>,
+<kw>&lt;</kw> or <kw>*</kw> and a width. You can force the width by
+following the width with <kw>!</kw>. If a decimal point is used,
+the value is treated as a floating point number and it is always
+aligned along the decimal point. When overflow happens, a <kw>*</kw>
+is appended and/or prepended as an indicator. The following program
+and its result demonstrates how.
+
+<codelist name="align" caption="align.judo">
+ 1: i1 =        10;
+ 2: i2 = 123456789;
+ 3: f1 =      1234.123456789012345;
+ 4: f2 = 123456789.012345;
+ 5: bigtxt = 'Mary had a little lamb, little lamb, little lamb.';
+ 6: smalltxt = 'lamb';
+ 7:
+ 8: println 'small int &gt; 5:    ', i1 : &gt; 5, '|';
+ 9: println 'small int 5.3!:   ', i1 : &gt; 5.3!, '|';
+10: println 'big int &gt; 5:      ', i2 : &gt; 5, '|';
+11: println 'big int &lt; 5!:     ', i2 : &lt; 5!, '|';
+12: println 'big int &gt; 5!:     ', i2 : &gt; 5!, '|';
+13: println 'big int   5.3!:   ', i2 : &gt; 5.3!, '|';
+14: println 'big int * 5!:     ', i2 : * 5!, '|';
+15: println '2.25       5.3!:  ', 2.25 : &gt; 5.3!, '|';
+16: println 'small float &gt; 5:  ', f1 : &gt; 5, '|';
+17: println 'small float &gt; 5!: ', f1 : &gt; 5!, '|';
+18: println 'small float &lt; 5!: ', f1 : &lt; 5!, '|';
+19: println 'small float 5.3:  ', f1 :   5.3, '|';
+20: println 'big float   5.3:  ', f2 :   5.3, '|';
+21: println 'big float   5.3!: ', f2 :   5.3!, '|';
+22: println 'small text &gt; 5:   ', smalltxt: &gt; 5, '|';
+23: println 'big text &gt; 5:     ', bigtxt: &gt; 5, '|';
+24: println 'big text &lt; 5!:    ', bigtxt: &lt; 5!, '|';
+25: println 'big text &gt; 5!:    ', bigtxt: &gt; 5!, '|';
+26: println 'big text * 5!:    ', bigtxt: * 5!, '|';
+</codelist>
+
+<demo>
+small int > 5:       10|
+small int 5.3!:      10    |
+big int > 5:      123456789|
+big int < 5!:     1234*|
+big int > 5!:     *6789|
+big int   5.3!:   *6789    |
+big int * 5!:     *456*|
+2.25       5.3!:      2.25 |
+small float > 5:  1234.1234567890124|
+small float > 5!: *0124|
+small float < 5!: 1234*|
+small float 5.3:   1234.123|
+big float   5.3:  123456789.012|
+big float   5.3!: *6789.012|
+small text > 5:    lamb|
+big text > 5:     Mary had a little lamb, little lamb, little lamb.|
+big text < 5!:    Mary |
+big text > 5!:    lamb.|
+big text * 5!:    , lit|
+</demo>
+
+Values or expressions can be repeated with a <kw>repeat</kw> following
+the expression (and optionally the formatter). It can be shortcutted
+by a pairs curly braces. See lines 2 and 3 of the following program.
+
+<codelist name="ascii" caption="ascii.judo">
+ 1: cnt = 0;
+ 2: println '   ', ' 0' @ (cnt++).fmtHex() repeat 16;
+ 3: println '   ', ' --' {16};
+ 4: for x from 2 to 15 {
+ 5:   local base = x &lt;&lt; 4;
+ 6:   print x.fmtHex(), '0:';
+ 7:   for y from 0 to 0x0f {
+ 8:     local ch = base | y;
+ 9:     print '  ', ch.chr();
+10:   }
+11:   println;
+12: }
+</codelist>
+
+The result for values less than 127 is listed below.
+
+<demo>
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20:     !  "  #  $  %  &  '  (  )  *  +  ,  -  .  /
+30:  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?
+40:  @  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O
+50:  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _
+60:  `  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o
+70:  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~
+</demo>
+
+<kw>print</kw>, <kw>println</kw> and <kw>flush</kw> can write text to
+any Java's <kw>java.io.PrintWriter</kw>. The built-in print targets
+include <kw>out</kw>, <kw>err</kw>, <kw>log</kw> and <kw>pipe</kw>;
+variables of open text files can be used, too. You can print into a
+string, too.
+
+<demo>
+tf = openTextFile("alfa", "w");
+println &lt;tf&gt; 'Hello from printer!";
+tf.close();
+
+s = 'Hello';
+print &lt;s&gt; ' from';
+println &lt;s&gt; ' printer!';
+println s;
+</demo>
+
+Sometimes a message is printed only when a flag is set. You can certainly use
+an if statement to do this; there is a shortcut in print statements for this:
+
+<demo>
+verbose = true;
+println {verbose} 'If you see this, verbose is on.';
+println {verbose} <err> 'If you see this, verbose is on.';
+</demo>
+
+
+<section name="args">
+
+<p>
+Program arguments are stored in the constant array <kw>#args</kw>.
+<J> supports a predefined format for command-line options. If a
+parameter starts with <kw>/</kw> or <kw>-</kw>, then the rest of it
+becomes a name=value option pair; if no <kw>=</kw>, the value is
+defaulted to <kw>true</kw>. When options are present on the command
+line, they are collected and put in a constant struct <kw>#options</kw>.
+The other paremeters are stored in <kw>#args</kw>. <kw>#options</kw>
+may not be defined. In case you don't like this format, the complete
+raw command line parameters are always in a constant array
+<kw>#cmd_args</kw>. The program name itself is in a constant string
+<kw>#prog</kw>. The follow examples can serve as a template:
+
+<demo>
+println 'Program:   ', #prog;
+if #args.length > 0 {
+  print 'Arguments:';
+  for x in #args { print ' ', x; }
+  println;
+}
+if defined #options {
+  println 'Options:';
+  for x in #options.keys() {
+    println x, '=', #options.(x);
+  }
+  println;
+}
+</demo>
+
+
+<section name="sysprop">
+
+<p>
+To get a system property, call
+
+<demo>
+<kw>systemProperty(</kw> <nt>name</nt> [ <kw>,</kw> <nt>default_value</nt> ] <kw>)</kw>
+</demo>
+
+Or get all the system properties via <kw>systemProperties()</kw>, which
+returns a <kw>java.util.Properties</kw>. Any settings to it affects the
+properties for the whole JVM.
+
+<p>
+There are system functions derived from system properties: <kw>osName()</kw>,
+<kw>isMac()</kw>, <kw>isWindows()</kw>, <kw>isHPUX()</kw>, <kw>isLinux()</kw>,
+<kw>isSunOS()</kw>, <kw>javaVendor()</kw>, <kw>userName()</kw>, <kw>homeDir()</kw>
+and <kw>curDir()</kw> or <kw>pwd()</kw>. The last one, current directory,
+starts from the system properties but can be altered via the <kw>cd</kw>
+command.
+
+<codelist name="sysprops" caption="sysprops.judo">
+ 1: cp = systemProperty('java.class.path').csv(pathSep());
+ 2: first = true;
+ 3: for x in cp { // print the class path nicely.
+ 4:   if first { println 'Java class path: ', x; first = false; }
+ 5:   else     { println '                 ', x; }
+ 6: }
+ 7: 
+ 8: println 'OS Name:         ', osName();
+ 9: println 'isMac:           ', isMac().fmtBool();
+10: println 'isWindows:       ', isWindows().fmtBool();
+11: println 'isHPUX:          ', isHPUX().fmtBool();
+12: println 'isLinux:         ', isLinux().fmtBool();
+13: println 'isSunOS:         ', isSunOS().fmtBool();
+14: println 'javaVendor:      ', javaVendor();
+15: println 'userName:        ', userName();
+16: println 'homeDir:         ', homeDir();
+17: println 'curDir:          ', curDir();
+18: println "cd '/'";
+19: cd '/';  // change curDir().
+20: println 'curDir:          ', curDir();
+21: 
+22: println nl, '=======================';
+23: println     ' All system properties';
+24: println     '=======================';
+25: sysprops = systemProperties();
+26: keys = sysprops.keys();
+27: while keys.hasMoreElements() {
+28:   local k = keys.nextElement();
+29:   println k:&gt;25, ' = ', sysprops.get(k);
+30: }
+</codelist>
+
+
+
+<section name="local">
+
+<p>
+Data can be attached to a script. In fact, it would be more appropriate to
+say a script is attached to data, except the script always goes first. The
+script stops at <kw>EndScript</kw>, anything following <kw>EndScript</kw>
+on the same line is ignored, and the rest of the source file is available
+via the internal input stream variable <kw>$$local</kw>. The data are mostly
+likely semi-HTML or XML. The following example more or less shows how this
+articles is prepared; with the code, the structure is somewhat separated
+from the document, and structures can also be used to gather statistics or
+indexing.
+
+<codelist name="body" caption="body.htmx">
+ 1: do $$local as html
+ 2: {
+ 3: BEFORE: $html = openTextFile(#prog.replace(".htmx",".html"),"w");
+ 4: &lt;doc&gt;:  println &lt;$html&gt; [[*
+ 5:           &lt;html&gt;&lt;head&gt;&lt;title&gt;$_.title&lt;/title&gt;&lt;/html&gt;&lt;body&gt;
+ 6:           &lt;center&gt;&lt;table width=650&gt;&lt;tr&gt;&lt;td&gt; &lt;h1&gt;(* $_.title *)&lt;/h1&gt;
+ 7:         *]];
+ 8: AFTER:  println &lt;$html&gt; '&lt;hr&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt; &lt;/center&gt;&lt;/body&gt;&lt;/html&gt;';
+ 9:         $html.close();
+10: TEXT:   print &lt;$html&gt; $_;
+11: &lt;&gt;:     print &lt;$html&gt; $_;
+12: &lt;?&gt;:    print &lt;$html&gt; $_;
+13: &lt;!&gt;:    print &lt;$html&gt; $_;
+14:
+15: &lt;quote&gt;:  print &lt;$html&gt; '&lt;blockquote&gt;&lt;font size=-1&gt;';
+16: &lt;/quote&gt;: print &lt;$html&gt; '&lt;/font&gt;&lt;/blockquote&gt;';
+17: }
+18:
+19: EndScript ------------------------------------------------
+20:
+21: &lt;doc title="Body Systems"&gt;
+22: &lt;p&gt;
+23: The body can be thought of as a number of systems:
+24: &lt;ul&gt;
+25: &lt;li&gt; skeleon
+26: &lt;li&gt; musculature
+27: &lt;li&gt; cardiovascular system
+28: &lt;li&gt; digestive system
+29: &lt;li&gt; excretory system
+30: &lt;li&gt; immune system
+31: &lt;li&gt; respiratory system
+32: &lt;li&gt; reproductive system
+33: &lt;/ul&gt;
+34: &lt;quote&gt;
+35: "The digestive system breaks down food and turns
+36: it into the right chemicals for the body to use."
+37: &lt;/quote&gt;
+</codelist>
+
+On line 3, it opens a file that has the same name but with extension
+".html", and the content is processed into that file. When done,
+line 9 closes it.
+
+
+
+<section name="regex">
+
+<p>
+Regular expression is a familiar topic to many scripting language
+programmers. As a mini language describing various text patterns,
+regular expression renders tremendous power to text processing.
+People have been making great efforts to provide this power to
+Java, and finally, JDK1.4 embraced it as a part of Java standard
+edition. <J> support for regular expression is based on
+that of Java. Since this is available only in JDK1.4 and later,
+any regular expression uses with JDK1.3 will cause runtime errors.
+
+<p>
+Uses of regular expressions in <J> essentially take two
+steps: a) obtain a regular expression pattern, and b) apply the
+pattern against a string for matching, replacing or splitting. A
+regular expression pattern is obtained via the system function
+<code>regex(pattern,flags)</code>. If flags are not used, a
+string itself can serve as a regular expression. flags can
+contain any number of the characters listed below:
+
+<table border=1>
+<tr> <td>Attribute</td><td>java.util.regex.Pattern constant</td><td>Meaning</td> </tr>
+<tr> <td>e</td><td>CANON_EQ</td><td>Enable canonical equivalence.</td> </tr>
+<tr> <td>i</td><td>CASE_INSENTITIVE</td><td>Enables case-insensitive matching.</td> </tr>
+<tr> <td>c</td><td>COMMENTS</td><td>Permits whitespace and comments in pattern.</td> </tr>
+<tr> <td>d</td><td>DOTALL</td><td>Enables dotall mode.</td> </tr>
+<tr> <td>m</td><td>MULTILINE</td><td>Enables multiline mode.</td> </tr>
+<tr> <td>u</td><td>UNICODE_CASE</td><td>Enables Unicode-aware case folding.</td> </tr>
+<tr> <td>l</td><td>UNIX_LINES</td><td>Enables Unix lines mode.</td> </tr>
+</table>
+
+The pattern is a regular expression that, when evaluated by the
+regular expression engine against some text input, its various
+constructs will match certain patterns in the text. A complete
+definition of and tutorial on regular expression gramma is beyond
+the scope of this book. Its syntax is described in detail in the
+Java API documentation for class java.util.regex.Pattern and
+related documents and books.
+
+<p>
+Regular expressions are compiled by its engine before they can be
+used. This process can be expensive if repeated many times, so <J>
+caches all the compiled ones. Note that regular expressions with
+and without flags are different ones and are both cached. Let us
+see some examples.
+
+<demo>
+$input = 'aaabfooaabfooabfoob';
+println $input.replaceAll('a*b','-');     // result: -foo-foo-foo-
+
+$input = 'zzdogzzdigzz';
+println $input.replaceFirst('d.g','cat'); // result: zzcatzzdigzz
+
+$input = 'boo:and:foo';
+println $input.split(':',2);  // result: [boo,and:foo]
+println $input.split(':',5);  // result: [boo,and,foo]
+println $input.split(':',-1); // result: [boo,and,foo]
+println $input.split('o',5);  // result: [b,,:and:f,,]
+println $input.split('o',-2); // result: [b,,:and:f,,]
+println $input.split('o',0);  // result: [b,,:and:f]
+</demo>
+
+
+<section name="tableData">
+
+<p>
+A <kw>tableData</kw> is an m-by-n, two-dimensional data structure.
+It has column titles. Each row is referenced as if an array element,
+but the data in that row can be accessed either via the column index
+(0-based) or via the column name. It has operations to sort, filter
+and get data in a column.
+
+<p>
+TableData is useful in its own right. Data rows can be added, and
+specific cells can be set directly. TableData is particularly useful
+for short database query results, such as the database meta data.
+The query result object has a method, <kw>getTableData()</kw>, that
+saves the returned query data into a tableData; a limit can be
+specified.
+
+<codelist name="tabledata" caption="tabledata.judo">
+  1: a = new tableData('name', 'age');
+  2: a.setTitleCaseSensitive(false);
+  3:
+  4: a[0] = [ 'Young Man',       28 ];
+  5: a[1] = [ 'Young Woman',     24 ];
+  6: a[2] = [ 'Young Daughter',   4 ];
+  7: a[3] = [ 'Younger Daughter', 2 ];
+  8:
+  9: a[8].name = 'Mid-Aged Man';  // age is null.
+ 10:
+ 11: a[9,0] = 'Old Man';
+ 12: a[9,1] = 104;
+ 13:
+ 14: a.add('Old Woman', 101);
+ 15: a.addRow('Old Son', 83);       // synonym to add().
+ 16: a.addRow('Old Daughter', 77);  // synonym to add().
+ 17:
+ 18: println '------ Print the whole table data ------';
+ 19: printTD a;
+ 20:
+ 21: println '------ Print a few rows ----------------';
+ 22: println 'a[3] = ', a[3];
+ 23: println 'a[3].name = ', a[3].name;
+ 24: println 'a[3].age  = ', a[3].age;
+ 25: println 'a[5] = ', a[5];
+ 26: println 'a[5].name = ', a[5].name;
+ 27: println 'a[5].age  = ', a[5].age;
+ 28: b = a[2];
+ 29: for x in b {
+ 30:   print x :<20;
+ 31: }
+ 32: println;
+ 33:
+ 34: println '------ Print a column ------------------';
+ 35: b = a.getColumn(1);
+ 36: println b;
+ 37:
+ 38: println '------ Print column names and indices --';
+ 39: println 'Index for "name" is: ', a.getColumnIndex('name');
+ 40: println 'Index for "age" is:  ', a.getColumnIndex('age');
+ 41: println 'Index for "NAME" is: ', a.getColumnIndex('NAME');
+ 42: println 'Index for "AGE" is:  ', a.getColumnIndex('AGE');
+ 43: println 'Title[0]: ', a.getTitle(0);
+ 44: println 'Title[1]: ', a.getTitle(1);
+ 45:
+ 46: println '------ Filter non-null rows and columns ';
+ 47: b = a.filterNotNull();
+ 48: println 'Not null rows: ';
+ 49: printTD b;
+ 50: b = a.filterByColumnNotNull(1);
+ 51: println 'Column-1 not null: ';
+ 52: printTD b;
+ 53:
+ 54: println '------ Filter for Old and < 100 --------';
+ 55: filter = lambda x {
+ 56:   return x.name.startsWith('Old') && x.age < 100;
+ 57: };
+ 58: printTD a.filter(filter);
+ 59:
+ 60: println '------ Sort on column-1 as number ------';
+ 61: printTD a.sortByColumnAsNumber(1,false); // false: descending
+ 62:
+ 63: println '------ Sort on column-0 ----------------';
+ 64: ladiesFirst = lambda lhs, rhs {
+ 65:   if lhs.indexOf('Woman') >= 0 || lhs.indexOf('Daughter') >= 0 {
+ 66:     return -1;
+ 67:   }
+ 68:   if rhs.indexOf('Woman') >= 0 || rhs.indexOf('Daughter') >= 0 {
+ 69:     return 1;
+ 70:   }
+ 71:   return 0;
+ 72: };
+ 73: printTD a.sortByColumn(0,ladiesFirst);
+ 74:
+ 75: println '------ Sort on rows --------------------';
+ 76: youngLadiesFirst = lambda lhs, rhs {
+ 77:   l = lhs.name.indexOf('Woman') >= 0 ||
+            lhs.name.indexOf('Daughter') >= 0;
+ 78:   r = rhs.name.indexOf('Woman') >= 0 ||
+            rhs.name.indexOf('Daughter') >= 0;
+ 79:   if l && r {
+ 80:     if lhs.age < rhs.age { return -1; }
+ 81:     if lhs.age > rhs.age { return 1; }
+ 82:     return 0;
+ 83:   }
+ 84:   if l { return -1; }
+ 85:   if r { return 1; }
+ 86:   return 0;
+ 87: };
+ 88: printTD a.sort(youngLadiesFirst);
+ 89:
+ 90: //
+ 91: // Print a TableData "conventionally"
+ 92: //
+ 93: function printTD td {
+ 94:   print '    ';
+ 95:   for x in td.getTitles() {
+ 96:     print x :<20!;
+ 97:   }
+ 98:   println;
+ 99:   print '    ';
+100:   for x to td.getTitles().length-1 {
+101:     print '------------------- ';
+102:   }
+103:   println;
+104:   for x to td.size()-1 {
+105:     print x:>3, ' ';
+106:     row = td[x];
+107:     for y in row {
+108:       print y :<20!;
+109:     }
+110:     println;
+111:   }
+112: }
+</codelist>
+
+
+<section name="printTable">
+
+<p>
+Table data and query results can be easily printed in tabular format
+with the <kw>printTable</kw> statement. It does not print the column
+titles, since they are static and can be embelished to your hearts'
+content. The headers should be visually consistent with the data
+formats for. The columns in this print statment can be the table data
+columns or expressions thereof and other expressions used as dividers.
+The following is an example:
+
+<codelist name="printtable" caption="printtable.judo">
+1: a = new tableData('Name', 'Language Type', 'Birthday');
+2: a.add('Java',       'System',    date(1996,5,23))
+3:  .add('JudoScript', 'Scripting', date(2001,11,16));
+4:
+5: println 'Language  | Type      | Birthday';
+6: println '----------+-----------+---------';
+7: printTable a for column(0) :<10!, '| ',
+8:                  column('Language Type') :<10!, '| ',
+9:                  column('Birthday').fmtDate('yyyy-MM');
+</codelist>
+
+As you see, the special expression <kw>column()</kw> represents the
+column data for the current row. It can be part of an expression and
+may have formating directives. The print out is:
+
+<demo>
+Language  | Type      | Birthday
+----------+-----------+---------
+Java      | System    | 1996-05
+JudoScript| Scripting | 2001-11
+</demo>
+
+For query results that may contain tens of thousands or even millions
+of rows, it is impractical to print them all. <code>printTable</code>
+allows you to skip certain number of rows and limit the numbers of
+rows printed:
+
+<demo>
+printTable resultSet skip 1000 limit 250
+  for ......
+;
+</demo>
+
+
+
+<section name=listings>
+
+<insert name="codelistings">
+

@@ -1,0 +1,72 @@
+<script name="treenode.judo"
+        output="stdout"
+/>
+
+<script name="in_meomry_query.judo"
+        output="stdout"
+/>
+
+<script name="struct.judo"
+        output="stdout"
+/>
+
+<script name="tabledata.judo"
+        output="stdout"
+/>
+
+<script name="arrays.judo"
+        output="stdout"
+/>
+
+<script name="md_array.judo"
+        output="stdout"
+/>
+
+<script name="array_convert.judo"
+        output="stdout"
+/>
+
+<script name="orderedmap.judo"
+        output="stdout"
+/>
+
+<script name="custom_sort.judo"
+        output="stdout"
+/>
+
+<script name="value_sort.judo"
+        output="stdout"
+/>
+
+<script name="filter.judo"
+        output="stdout"
+/>
+
+<script name="set.judo"
+        output="stdout"
+/>
+
+<script name="printtable.judo"
+        output="stdout"
+/>
+
+<script name="john_son.judo"
+        output="stdout"
+/>
+
+<script name="linkedlist.judo"
+        output="stdout"
+/>
+
+<script name="stack.judo"
+        output="stdout"
+/>
+
+<script name="queue.judo"
+        output="stdout"
+/>
+
+<script name="dfs_bfs.judo"
+        output="stdout"
+/>
+

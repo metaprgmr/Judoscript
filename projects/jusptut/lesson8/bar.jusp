@@ -1,0 +1,8 @@
+<html>
+<head><title>Bar</title></head>
+<body>
+This is a redirected page. Its HTTP <em>referer</em> is:
+
+<blockquote><%= request.getHeader('Referer') %></blockquote>
+
+</body></html>

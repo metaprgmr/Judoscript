@@ -1,0 +1,41 @@
+usage {
+  author  = 'James Huang';
+  created = '2005-1-30';
+  desc    = [[*
+
+  *]];
+}
+
+//
+// A function to use hib::save() to create persistent instances.
+//
+function createNewFoo firstName, surname {
+  x = new java::Foo;
+  x.setCustom( new java::String[]{ firstName, surname } );
+
+  hib::save(x);
+}
+
+//
+// Initialize the Hibernate environment using MySQL.
+//
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  Foo
+;
+println nl, 'Hibernate initialized. Ready to go!', nl;
+
+//
+// Create new objects and save them.
+//
+createNewFoo 'Tony', 'Polisci';
+createNewFoo 'George', 'Blair';
+createNewFoo 'Dick', 'Kerry';
+createNewFoo 'John', 'Chenny';
+
+hib::close;

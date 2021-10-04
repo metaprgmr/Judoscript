@@ -1,0 +1,1 @@
+ls '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp';

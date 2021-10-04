@@ -1,0 +1,31 @@
+<function sig="openTextFile fileName">
+  Opens a text file in this zip archive and returns the text file object.
+</function>
+
+<function sig="openFile fileName">
+  Opens a binary file in this zip archive and returns the binary file object.
+</function>
+
+<function sig="isDir aName" alias="isDirectory">
+  Returns <!true> if <param>aName</param> represents a folder in this zip archive.
+</function>
+
+<function sig="isFile aName">
+  Returns <!true> if <param>aName</param> represents a file in this zip archive.
+</function>
+
+<function sig="fileTime fileName">
+  Returns the file time for <param>fileName</param> in this zip archive.
+</function>
+
+<function sig="fileSize fileName" alias="fileLength">
+  Returns the file size for <param>fileName</param> in this zip archive.
+</function>
+
+<function sig="fileCompressedSize fileName">
+  Returns the file compressed size for <param>fileName</param> in this zip archive.
+</function>
+
+<function sig="fileExists fileName">
+  Returns <!true> if <param>fileName</param> exists in this zip archive.
+</function>

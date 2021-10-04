@@ -1,0 +1,29 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Two try-catch blocks, one in another, demonstrate
+    handling of JudoScript and Java exceptions.
+    Experiment by turning on and off "resume" and "throw".
+  *]];
+}
+
+
+  {
+    a = new struct;
+    a.kkkkkk();  // method does not exist
+    println 'Still happy.';
+  catch:
+    println '[', $_.line, '] Inside catch: ', $_;
+//  resume;  // experiment by alternating with throw;
+//  throw;   // experiment by alternating with resume;
+  finally:
+    println 'Inside finally.';
+  }
+
+  throw javanew java.lang.Exception("This exception is pure Java.");
+  throw USER_EXCEPTION, "ABCDE";
+
+catch:
+  println '[', $_.line, '] Outside catch: ', $_.msg;

@@ -1,0 +1,21 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc  = 'Sorts an array of book sections with a custom comparator.';
+}
+
+a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+a.sort( &my_comparator );
+for i from 0 to a.lastIndex() { println i, '  ', a[i]; }
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  for i from 0 to la.size() {
+    if la[i].int() < ra[i].int() { return -1; }
+    if la[i].int() > ra[i].int() { return 1; }
+  }
+  if la.size() == ra.size() { return 0; }
+  return la.size() > ra.size();
+}

@@ -1,0 +1,9 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-02-20';
+  desc    = "Applies XPath expression to query 'calls.xml'.";
+}
+
+xslt xpath('/PHONE_RECORDS/CALL[1]/DESTINATION') on 'calls.xml'
+  to #prog.replace('.judo','.xml.out')
+  outputProperties( 'omit-xml-declaration' = 'yes' );

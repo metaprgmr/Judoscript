@@ -1,0 +1,18 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_class/class_field.judo:</b></td></tr><tr><td><pre>
+class MyCls
+{
+  var alfa = 'abcdefg';
+  println "Hahaha!";
+
+  constructor {
+    println "Explicit constructor().";
+    println 'this.alfa = ', this.alfa;
+    alfa = null;
+    alfa = 1;
+    println 'this.alfa = ', this.alfa;
+  }
+}
+
+new MyCls;
+</pre></td></tr></table></body></html>

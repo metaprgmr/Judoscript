@@ -1,0 +1,1 @@
+ls '*' in 'testdata/awebapp.tar.gz' recursive;

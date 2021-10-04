@@ -1,0 +1,28 @@
+usage {
+  minArgs = 6;
+  args    = 'server port username pwd localfile targetfile';
+  desc    = [[*
+    Uploads a file via FTP and other tests.
+    (A user contribution).
+  *]];
+}
+
+// Creating connection and setting connection mode...
+o = ftp( #args[0] , #args[1] );
+o.setConnectMode( 'PASV' );
+
+// Trying to log in...
+o.login( #args[2] , #args[3] );
+
+// Trying to change the local dir
+o.chdir( #args[5].getFilePath() );
+
+// Trying to put file...
+o.put( #args[4] , #args[5].getFileName() );
+
+// Trying to get a listing of all files
+a = o.dir( #args[5].getFilePath() );
+for x in a {
+  println x;
+}
+

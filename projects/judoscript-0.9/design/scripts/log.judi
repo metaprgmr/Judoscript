@@ -1,0 +1,117 @@
+/*****************************
+ * JudoScript Logger - Reusable logging component
+ *
+ *  Version: 0.1
+ *   Author: Nathan Anderson
+ *  Created: 2004-02-18
+ * Modified: 2004-02-18
+ *
+ *  History:
+ *    v0.1 - Early pre-alpha "not acutally in use anywhere yet" release
+ *
+ *  TODO: [In addition to any inline comments]
+ *    - Limit the size of the log file
+ *    - Make lazy instantiation so user settings can take effect before
+ *      the first log entry [i.e. to change timeFormat, or fileName]
+ *  ISSUES: 
+ *    - alertFrom: This default value will fail on systems where the 
+ *      hostname returned is not a FQDN 
+ *  
+ *****************************/
+
+class Log {
+  constructor { 
+    this.time= new Date();
+      // :TODO: make the default format match some standard log format
+    this.timeFormat='yyyy-MM-dd hh:mm:ss.SSS ';
+    this.TYPE= ['     ','FATAL','ERROR',' WARN',' INFO','DEBUG','TRACE']; 
+    this.FATAL= 1;
+    this.ERROR= 2;
+    this.WARN=  3;
+    this.INFO=  4;
+    this.DEBUG= 5;
+    this.TRACE= 6;
+    this.level= 0;
+      // :TODO: fileName is read only, because the file is opened in 
+      //        the constructor.  This is probably bad.
+    this.fileName= #prog @ '.log';
+    this.file = openTextFile(this.fileName, 'a');
+    this.toConsole= false;
+    this.alertLevel= 0;
+    this.alertTo= '';
+    this.alertSubject= 'Alert: ' @ #prog;
+    this.alertFrom= #user @ '@' @ (javaclass java.net.InetAddress).getLocalHost().getHostName(); 
+    this.alertServer= 'localhost';
+    this.alertUser= #user;
+    this.alertPassword= '';
+    this.alertQueueMessages= false;
+    this.alertQueue= '';
+  }
+
+  // Convenince methods for creating log entries
+  function fatal message { this.log(this.FATAL, message); }
+  function error message { this.log(this.ERROR, message); }
+  function warn message  { this.log(this.WARN,  message); } 
+  function info message  { this.log(this.INFO,  message); } 
+  function debug message { this.log(this.DEBUG, message); } 
+  function trace message { this.log(this.TRACE, message); } 
+
+  // Create a log entry &/or alert if the log level is 
+  //    appropriate
+  function log lvl, message { 
+    if (this.level >= lvl) 
+      this.write(this.TYPE[lvl] @ ': ' @ message);
+    if (lvl != 0 && this.alertLevel >= lvl) 
+      this.alert(this.TYPE[lvl] @ ': ' @ message);
+  }
+
+  // Write log entry to file
+  function write message {
+    this.time.setTime();
+    out = this.time.fmtDate(this.timeFormat) @ message;
+    println <this.file> out;
+    if (this.toConsole) println out;
+  }
+  
+  // Add log entry to alertQueue and send alert if appropriate
+  function alert message {
+    this.time.setTime();
+    this.alertQueue @= this.time.fmtDate(this.timeFormat) @
+      message @ nl;
+    if (!this.alertQueueMessages) this.sendAlert();    
+  }
+  
+  // Send alert via email 
+  function sendAlert {
+    if (this.alertQueue != '') {
+      if (this.alertTo == '') this.fatal('Alert failed - log.alertTo == "" [' 
+        @ this.alertQueue @ ']');
+      else {
+        {
+          connectMailServer(this.alertServer, this.alertUser, this.alertPassword);
+          sendMail 
+            from: this.alertFrom
+  	    to:   this.alertTo
+	    subject: this.alertSubject
+	    body: this.alertQueue;
+          disconnectMailServer();
+	  this.log(0,'Alert sent to ' @ this.alertTo);
+	catch:
+	  this.log(0,'Alert failed - ' @ $_.msg);
+        }
+      }
+      this.alertQueue = '';  
+    }
+  }
+
+  // Clean up
+  function close {
+    this.sendAlert();
+    this.log(0, 'Logging Stopped');
+    this.file.close();
+  }
+}
+
+// Create instance of Log for use in script
+log = new Log();
+log.log(0, 'Logging Started');

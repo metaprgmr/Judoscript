@@ -1,0 +1,25 @@
+usage {
+  desc = [[*
+            The loadProperties(file, true) system function resolves embedded
+            tags in the values with keys defined in the same properties files.
+            A sample properties file can be:
+
+              prj=\${~}/judo
+              prj.webinf=\${prj.src}/WEB-INF
+              prj.test=\${prj.src}/test
+              prj.src=\${prj}/src
+
+            Note these predefined tags are supported:
+
+              \${~} -- the user's home directory
+              \${.} -- the current directory
+              \${:} -- the path separator (good as classpath separators)
+              \${/} -- the file separator
+         *]];
+}
+
+props = loadProperties('a.properties', true);
+
+for k in props {
+  . k, ' => ', props.(k);
+}

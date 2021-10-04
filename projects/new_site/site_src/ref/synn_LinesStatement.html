@@ -1,0 +1,25 @@
+<html><head><title>JudoScript Semantics - LinesStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>LinesStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=LinesStatement>LinesStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=t>LABEL_NAME</font>  <font class=kw><nobr>:</nobr></font>   )?  <font class=kw>do</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>&gt;</nobr></font>   )?  <font class=kw>as</font>  <font class=kw>lines</font>   (  <font class=kw>for</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=nt><a href="javascript:showNT('SimpleBlock')">SimpleBlock</a></font> </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('LinesStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This opens an input text stream and read the lines; each line is stored in
+  the built-in variable <font class=kw><nobr>$_</nobr></font>  for program to process. The input stream can be an
+  open file, a file name, a URL or a file in a zip archive. The text encoding can
+  be specified in <font class=kw><nobr>&lt;</nobr></font>  and <font class=kw><nobr>&gt;</nobr></font> . The <font class=kw>for</font>  clause is for filtering the lines.
+  It is a boolean expression typically involving <font class=kw><nobr>$_</nobr></font> , such as
+  <code>$_.isNotEmpty()</code>.</p>
+ </body></html>

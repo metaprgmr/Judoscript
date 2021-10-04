@@ -1,0 +1,21 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+xl = new com::Excel.Application;
+println 'Version: ', xl.Version;
+xl.Visible = true;
+
+workbooks = xl.Workbooks;
+workbook  = workbooks.Add;
+sheet = workbook.ActiveSheet;
+a1 = sheet['Range', 'A1'];
+a2 = sheet['Range', 'A2'];
+a1.Value   = 123.456;
+a2.Formula = '=A1*2';
+println 'a1 from excel: ', a1.Value;
+println 'a2 from excel: ', a2.Value;
+
+workbook.Close();
+xl.Quit();

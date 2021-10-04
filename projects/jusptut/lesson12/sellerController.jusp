@@ -1,0 +1,49 @@
+<%-------  This is a pure control page.  -------%>
+
+<%!include 'header.jusp' %><%-- checks on user authentication, etc. --%>
+<%
+  switch form.do {
+  case 'to_add':
+    form.clear();
+    %><%!forward 'add.jusp' %><%
+
+  case 'to_mod':
+    var id = form.id;
+    form = getItem(id);
+    if form == null {
+      form = { };
+      error.add('Unable to find item (id=${id}); add instead.');
+    } else {
+      form.isMod = 1;
+    }
+    %><%!forward 'add.jusp' %><%
+
+  case 'add':
+  case 'mod':
+    // validation
+    %><%!validate jusp$textLength 'name', 1 %>
+      <%!validate jusp$isNumber 'price' %>
+      <%!validate jusp$isInteger 'inStock' %><%
+    if error.length > 0 {
+      %><%!forward 'add.jusp' %><%
+    } 
+
+    try {
+      var id = form.id;
+      if id != null { // modifying item
+        updateItem form;
+        println <log:info> 'Modified item: ', id;
+      } else {        // adding item
+        id = addItem(session.user, new Item(form));
+        println <log:info> 'Added item: ', id;
+        break;
+      }
+    } catch {
+      error.add( $_.message );  // will be passed on.
+      %><%!forward 'add.jusp' %><% // back to 'add.jusp'
+    }
+
+  } // end of switch.
+%>
+<%!forward 'list4sell.jusp' %><%-- default destination --%>
+

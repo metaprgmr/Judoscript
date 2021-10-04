@@ -1,0 +1,20 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/custom_sort.judo:</b></td></tr><tr><td><pre>
+a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+
+a.sort( &amp;my_comparator );
+for x in a { println x; }
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  lali = la.lastIndex();
+  rali = ra.lastIndex();
+  for i from 0 to min(lali,rali) {
+    if la[i].int() &lt; ra[i].int() { return -1; }
+    if la[i].int() > ra[i].int() { return 1; }
+  }
+  if lali == rali { return 0; }
+  return lali > rali;
+}
+</pre></td></tr></table></body></html>

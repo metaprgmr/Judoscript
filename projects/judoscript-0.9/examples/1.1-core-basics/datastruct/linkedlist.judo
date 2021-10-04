@@ -1,0 +1,16 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Simply create a linked list and use it.';
+}
+
+a = linkedList [ 'a', 'b', 'c' ];
+println a;
+
+b = new linkedList( 1, 2, 3 );
+b.add(4);
+b.add(5);
+b.add(6);
+b.add(7);
+println b;

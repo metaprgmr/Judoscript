@@ -1,0 +1,21 @@
+testList new java::java.util.Vector();
+testList new java::java.util.ArrayList();
+testList new java::java.util.LinkedList();
+
+function testList lst {
+  println nl, '=== ', lst.getClass().getName(), ' ===';
+  lst.add( Date(2001,1,1) );
+  lst.add( 1 );
+  lst.add( 10.01 );
+  lst.add( 'Hello, World!' );
+
+  println '--- size: ', lst.size(), ' ---';
+  println 'lst[0] = ', lst[0];
+  println 'lst[1] = ', lst[1];
+  println 'lst[2] = ', lst[2];
+  println 'lst[3] = ', lst[3];
+  println 'lst[4] = ', lst[4];
+
+  lst[9] = 'XYZ';
+  println 'lst[9] = ', lst[9];
+}

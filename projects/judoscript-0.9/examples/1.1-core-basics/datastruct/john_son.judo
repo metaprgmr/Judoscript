@@ -1,0 +1,25 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Tests class inheritance and constructors.';
+}
+
+class John
+{
+  constructor { println "I love my baseball club."; }
+  function plays { return new array( 'baseball' ); }
+}
+
+class Johnson extends John
+{
+  constructor { println "I always carry my tennis rackets."; }
+
+  function plays {
+    arr = super.plays();
+    arr.add('basketball', 'tennis', 'soccer', 'gymnastics', 'piano' );
+    return arr;
+  }
+}
+
+println (new Johnson).plays();

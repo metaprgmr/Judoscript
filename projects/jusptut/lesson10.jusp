@@ -1,0 +1,87 @@
+<%
+  var title = 'Lesson 10. Exception Handling and Global Clean-Up'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>Dynamic web pages do fail, because the code may throw exceptions.
+User errors should be handled gracefully with well-defined
+<a href="lesson8.jusp">page flows</a>. What we are talking about here
+is the application exceptions and their handling.</p>
+
+<p>There are three ways to handle application exceptions in JuSP pages:</p>
+
+<ol>
+<li>Do nothing. Let the default JuSP error handling page print out
+    some dull exception information,</li>
+<li>Use the <code>&lt;%@ exception %&gt;</code> directive, and</li>
+<li>Create a custom error page and set its URI to the <code>errorPage</code>
+    global variable.</li>
+</ol>
+
+<p>For system problems such as syntax errors, JuSP engine displays a
+simple system error page. This can be also overridden.</p>
+
+
+<h2>In-Page Exception Handling</h2>
+
+<p>The <code>&lt;%@ exception %&gt;</code> directive literally cuts a
+JuSP page in half: the regular page is above it, and the error page is
+below it. In the error page portion, the <code>$_</code> variable holds
+the current exception object. You can do any processing as you wish.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson10/rt_error_caught.jusp' %></code>
+    in action</li>
+<li>View <%!viewsrc 'lesson10/rt_error_caught.jusp' %></li>
+</ul>
+
+
+<h2>Custom Application and System Error Pages</h2>
+
+<p>To replace the default JuSP exception handling with a custom error one,
+create a JuSP or HTML page and set is URI to the <code>errorPage</code>
+global variable in <code>juspInit.judo</code>. The <i>request</i> object
+has a <code>exception</code> attribute that holds the exception just thrown.</p>
+
+<p>Replacing the default system error handling is similar but a little
+different. You also create a page, but set its URI via a call the
+predefined global JuSP context object in <code>juspInit.judo</code>:
+see <code>juspContext.setSystemErrorPageURI(uri);</code>
+in <%!viewsrc 'WEB-INF/judo/juspInit.judo' %>.</p>
+
+<p>Our two error pages are:</p>
+
+<ul type=square>
+<li>View <%!viewsrc 'appErrorPage.jusp' %></li>
+<li>View <%!viewsrc 'sysErrorPage.jusp' %></li>
+</ul>
+
+<p>Try these:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson10/rt_error.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson10/rt_error.jusp' %></li>
+</ul>
+
+<ul type=square>
+<li>View <code><%!link 'lesson10/syntax_error.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson10/syntax_error.jusp' %></li>
+</ul>
+
+<p>(You may experiment by commenting out the lines in <code>juspInit.judo</code>
+that set error page handlers, and try the above links again.)</p>
+
+<h2>Page Post-Rendering Clean-up</h2>
+
+<p>You can specify a global clean-up function to be called by any JuSP pages
+(except for those that have <code>noCleanup</code> flag set). The function
+must be assigned to the global variable <code>juspFinally</code>; it takes a
+<i>context</i> parameter for the calling page, which contains page objects
+like <i>request</i>, <i>response</i>, <i>form</i>, etc. See the
+<code>juspFinally</code> assignment in 
+<%!viewsrc 'WEB-INF/judo/juspInit.judo' %>.</p>
+
+
+<%!include "footer.jusp" %>

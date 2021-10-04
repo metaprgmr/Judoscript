@@ -1,0 +1,7 @@
+copy '*.java, *.properties' in 'c:/temp/classes/' recursive
+     into 'c:/judo.jar' store manifest
+[[*
+  Manifest-Version: 1.0
+  Main-Class: judo
+  Created-By: James Jianbo Huang (c) 2001-(* #year *)
+*]];

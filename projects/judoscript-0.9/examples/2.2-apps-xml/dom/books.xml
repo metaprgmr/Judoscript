@@ -1,0 +1,18 @@
+<booklist>
+ <book>
+  <title> UNIX in a Nutshell </title>
+  <author> Daniel Gilly </author>
+  <publisher> O&apos;Reilly &amp; Associates, Inc. </publisher>
+  <isbn> 1-56592-001-5 </isbn>
+  <date type="first edition"> 1986-12 </date>
+  <date type="second edition"> 1992-06 </date>
+ </book>
+ <book hardcover="true">
+  <title> Advanced Programming in the UNIX Environment </title>
+  <author> Richard Stevens </author>
+  <publisher> Addison-Wesley </publisher>
+  <isbn> 0-201-56317-7 </isbn>
+  <date type="copyright"> 1993 </date>
+  <date type="twelfth printing"> 1996-12 </date>
+ </book>
+</booklist>

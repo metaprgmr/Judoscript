@@ -1,0 +1,17 @@
+o = new java::IterationDemo;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneIterator;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneEnumeration;
+for x in o { println x; }
+println;
+
+o = new java::Hashtable;
+o.aa = 1;
+o.bb = 2;
+o.cc = 3;
+for x in o { println x, ' => ', o.(x); }

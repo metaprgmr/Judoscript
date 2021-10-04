@@ -1,0 +1,7 @@
+<html>
+<body>
+<%
+  x = 9    // syntax error: need ';'
+  y = 10
+%>
+</body></html>

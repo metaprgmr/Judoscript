@@ -1,0 +1,22 @@
+<%
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    A simplest JUSP page.
+    More interesting examples will come.
+  *]];
+}
+
+response.setContentType('text/html');
+
+a = 'The Very First Time!';
+b = 'This is the very first test of JUSP!';
+%>
+<HTML>
+<HEAD> <%= a %> </HEAD>
+<BODY>
+  <H1><%= a %></H1>
+  <%= b %> <BR>
+  <%= date().fmtDate('yyyy-MM-dd') %>
+</BODY></HTML>

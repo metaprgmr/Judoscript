@@ -1,0 +1,42 @@
+<%
+  var fileName = form.file;
+  var filePath = $$annotation.src_path.getFilePath() + fileName;
+%>
+<html><head><title>Source code of "<%= fileName %>"</title></head>
+<body style="font-family: arial">
+<%
+  if fileName.isEmpty() {
+%>
+<p>Please specify a URI to view:
+<form><input type=text name=file size=35>&nbsp;&nbsp;
+<input type=submit value="View Source">
+</form></p>
+<%
+  } else {
+%>
+Source of <a href="<%=fileName%>"><%= fileName %></a> (click when appropriate):
+<div style="border:groove;padding:0px;font-family:console,lucida console,courier new;background=#DDDDDD;color=#111111">
+<%
+    if (fileName.endsWith('.jusp')) {
+      {
+        %><%!juspView filePath, '#0033FF' %><%
+      catch:
+        %><font color=red>Failed to view source code for <u><%= fileName %></u>:<br><%= $_ %></font><%
+      }
+    } else {
+      %><pre><%= getFileAsString(filePath).escapeHtml() %></pre><%
+    }
+    %></div><%
+  }
+%>
+</body></html>
+
+<%@ exception %>
+<html><head><title>Failed to show source code</title></head>
+<body>
+<font color=red>Failed to show source code of "<%= fileName %>".</font>
+<p>Please specify a URI to view:
+<form><input type=text name=file size=35>&nbsp;&nbsp;
+<input type=submit value="View Source">
+</form></p>
+</body></html>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!--
+   Demonstrates passing values between Ant and JudoScript code
+   via system properties.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+<project name="test" default="main" basedir=".">
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  <target name="main" depends="step1,step2,step3" />
+
+  <target name="step1">
+    <property name="user.prop" value="Ant is everywhere." />
+    <echo message=" ${user.prop}" />
+  </target>
+
+  <target name="step2">
+    <judoscript>
+      println ${user.prop}; // gets the system property value
+
+      #sysprops.('user.prop') = 'JudoScript is fun!';
+    </judoscript>
+  </target>
+
+  <target name="step3">
+    <echo message=" ${user.prop}" />
+  </target>
+
+</project>

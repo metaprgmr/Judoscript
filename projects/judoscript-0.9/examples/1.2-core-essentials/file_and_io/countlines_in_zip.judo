@@ -1,0 +1,19 @@
+usage {
+  minArgs = 1;
+  args = ' zipfile [ inclusion_list [ exclusion_list ] ]';
+  desc = [[*
+    This program use the 'list countLines' command
+    to count the lines in a zip file.
+  *]];
+}
+
+switch #args.length() {
+case 1:  list in #args[0] recursive countLines; break;
+case 2:  list #args[1] in #args[0] recursive countLines; break;
+default: list #args[1] in #args[0] except #args[2] recursive countLines;
+}
+
+println "Total:       ", $$fs_result[0];
+println "Total files: ", $$fs_result[1];
+println "Total lines: ", $$fs_result[2];
+

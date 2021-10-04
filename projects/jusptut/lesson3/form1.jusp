@@ -1,0 +1,44 @@
+<html><body>
+<h2>Form Values</h2>
+
+<p>View <%!viewsrc 'lesson3/form1.jusp', '../' %></p>
+
+<table border=1 cellspacing=0><caption align=left>Form parameters:</caption>
+<tr><th>Name</th><th>Value</th><th>Count</th></tr>
+<%
+  for fp in form {
+    var val = form.(fp);
+%>
+<tr>
+<td><%= fp %></td>
+<td><%= val %></td>
+<td align=center><%= val.isArray() ? val.length : 1 %></td>
+</tr>
+<%
+  }
+%>
+</table>
+
+<form><table border=0>
+<tr><td>Name:</td><td><input type=text name=name></td></tr>
+
+<tr><td>City:</td>
+<td><select name=city>
+<option value="San Francisco">San Francisco</option>
+<option value="San Jose">San Jose</option>
+<option value="San Leandro">San Leandro</option>
+</select>
+</td></tr>
+
+<tr><td>Hobbies:</td><td>
+<input type=checkbox name=hobbies value="Reading"> Reading<br>
+<input type=checkbox name=hobbies value="Sleeping"> Sleeping<br>
+<input type=checkbox name=hobbies value="Fishing"> Fishing<br>
+<input type=checkbox name=hobbies value="Running"> Running<br>
+</td></tr>
+
+<tr><td>&nbsp;</td><td><input type=submit value="Submit"></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson3.jusp">lesson 3</a></font>
+</body></html>

@@ -1,0 +1,117 @@
+<notyet href="../../../articles/fxn_cls_etc.html#thrd">
+
+
+<!--===============================================================-->
+<section1 title="Runtime Context" id="rtc" status="red">
+<p>a</p>
+<p>b</p>
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Thread Programming" id="thread" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Execute Dynamic and External Scripts" id="eval" status="yellow">
+
+<p>You can dynamically create <J> code and run. There are a couple of    either in the current runtime context with <kw>eval</kw> command or in a separate context with <kw>evalExternal</kw> and <kw>evalFile</kw>. <kw>evalFile</kw> takes a file name instead of code.</p>
+
+<codelist name="eval.judo" id="eval.judo">
+x = 'aliens';
+eval [[*
+  println 'Hello, you ', x, '!';
+  y = 9;
+*]];
+println 'y was set within eval; now, y = ', y, nl;
+
+evalExternal "println 'Hello, you ', x, '!'; ";
+</codelist>
+
+<asis>
+eval 'println "ABCDEFG"';
+</asis>
+
+<p>When the dynamic code is evaluated with <kw>eval</kw>, the declarations such as functions, classes and constants are taken into the current runtime context. <kw>evalExternal</kw> and <kw>evalFile</kw> do not.</p>
+
+<asis>
+eval [[*
+  const #acon = 'a';
+  function foo() { println 'From foo()'; }
+  class BarCls { constructor { println 'BarCls.ctor()'; } }
+*]];
+
+println '#acon = ', #acon;
+foo();
+new BarCls;
+</asis>
+
+<p>
+<kw>evalExternal</kw> and <kw>evalFile</kw> can take parameters using the
+<kw>with</kw> clause:
+
+<asis>
+code = [[*
+  if #args.length < 0 {
+    println &lt;err&gt; 'Usage: java judo ', #prog, ' x';
+    exit 0;
+  }
+
+  println 'The argument is: ', #args[0];
+*]];
+evalExternal code;
+evalExternal code with 'abcd';
+</asis>
+
+<p>The result is:</p>
+
+<asis>
+Usage: java judo &lt;string&gt; x
+The argument is: abcd
+</asis>
+
+<p>The following is an example. Last July, Rainbow Inc., a retail company, ramped up its e-commerce presence. This July, Mr. Smart is hired to head the marketing department. He devised a sophisticated pricing scheme to promote certain products. Fortunately, the consultants who designed the system used <J>'s dynamic evaluation feature, so Mr. Smart's unforeseeable request is entered into the system without any code rewrite.</p>
+
+<codelist name="new_pricing.judo" id="new_princing.judo">
+ 1: // pre-Mr.Smart pricing -- flat
+ 2: pricing = lambda prod, quantity {
+ 3:              switch prod {
+ 4:              case 'candy': return 1.49 * quantity;
+ 5:              case 'chips': return 2.49 * quantity;
+ 6:              case 'beer':  return 2.99 * quantity;
+ 7:              default:      return 0.99 * quantity;
+ 8:              }
+ 9:            };
+10:
+11: println '10 candies: ', pricing('candy', 10);
+12:
+13: // post-Mr.Smart pricing -- quantity discount
+14: eval [[[*
+15:   pricing = lambda prod, quantity {
+16:                switch prod {
+17:                case 'candy': unitprice = 1.49; break;
+18:                case 'chips': unitprice = 2.49; break;
+19:                case 'beer':  unitprice = 2.99; break;
+20:                default:      unitprice = 0.99; break;
+21:                }
+22:                if quantity &lt;= 5 {
+23:                  return unitprice * quantity;
+24:                } elif quantity &lt;= 10 {
+25:                  return (unitprice * 0.95 * quantity).fractionDigits(2);
+26:                } else {
+27:                  return (unitprice * 0.90 * quantity).fractionDigits(2);
+28:                }
+29:              };
+30: *]];
+31:
+32: println ' 5 candies: ', pricing('candy', 5);
+33: println '10 candies: ', pricing('candy', 10);
+34: println '15 candies: ', pricing('candy', 15);
+</codelist>
+
+<p>What happens is, the software has a admin-tool that allows a human operator to type in the new pricing scheme (lines 15 through 29) and submit to the system, test out and commit the changes.</p>
+
+</section1><!--=====================================================-->

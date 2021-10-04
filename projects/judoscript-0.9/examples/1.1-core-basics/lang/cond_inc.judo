@@ -1,0 +1,11 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-02-15';
+  lastMod = '2002-08-10';
+  desc    = 'Tests conditional include';
+}
+
+const #useHanoi = false; // any non-null value
+
+!include if a == null 'hanoi.judo'
+!include if a != null 'john_son.judo'

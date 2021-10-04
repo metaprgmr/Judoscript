@@ -1,0 +1,50 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_java_gui/textview.judo:</b></td></tr><tr><td><pre>
+usage {
+  args    = 'file [ encoding [font] ]',
+  minArgs = 1;
+  desc    = [[*
+    Encoding is any Java text encoding names, such as UTF8, UTF16, GB2312, ...
+    If not specified, use JVM's default encoding.
+  *]];
+  author  = 'James Huang';
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+// get file name, encoding and font name from cmdline --
+file = #args[0];
+enc = (#args.length > 1) ? #args[1] : null;
+font = (#args.length > 2) ? #args[2] : null;
+
+// if no font specified, non-English default to a Chinese
+// font, which should cover Japanese and Korean.
+// The font must be installed on system.
+if (font == null) &amp;&amp; (enc != null) {
+  font = 'SimSun';
+}
+
+// set up the GUI --
+viewer = new java::JTextArea(80, 80);
+viewer.setEditable(false);
+if font != null {
+  viewer.setFont(new java::Font(font,0,12));
+}
+scrollPane = new java::JScrollPane(viewer);
+frame = new java::JFrame('Viewer - ' + file + ' : ' + enc);
+
+gui::events {
+&lt;frame : Window : windowClosing> : exit(0);
+}
+
+frame.getContentPane().add(scrollPane, (java::BorderLayout).CENTER);
+frame.setSize(750, 600);
+frame.setVisible(true);
+
+// get the file content and display --
+if file.fileExists() {
+  str = getFileAsString(file,-1,enc);
+  viewer.append(str);
+}
+</pre></td></tr></table></body></html>

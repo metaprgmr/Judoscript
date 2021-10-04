@@ -1,0 +1,21 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_oracle/simple_query.judo:</b></td></tr><tr><td><pre>
+!include 'setup/connect.judi'
+
+db::query qry:
+  SELECT emp_no, first_name, last_name, birth_date, salary
+  FROM emp
+;
+
+println 'ID   First-Name  Last-Name    Salary    Birth-Date', nl,
+        '---  ----------  -----------  --------  ----------';
+while qry.next() {
+  println qry[1].int()   :&lt;5,
+          qry.first_name :&lt;12,
+          qry.last_name  :&lt;12,
+          qry.salary     :*7.1, '  ',
+          qry.birth_date.fmtDate('yyyy-MM-dd');
+}
+
+db::disconnect();
+</pre></td></tr></table></body></html>

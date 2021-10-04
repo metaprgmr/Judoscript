@@ -1,0 +1,17 @@
+<html>
+<head><title>Jusp Test</title>
+<body>
+<h2>JUSP Include and Invoke Tests</h2>
+
+<p>View <%!viewsrc 'lesson7/include_call.jusp', '../' %><br>
+View <%!viewsrc 'lesson7/foo.jusp', '../' %><br>
+View <%!viewsrc 'lesson7/bar.html', '../' %></p>
+
+<p><u>Invoked:</u> <%!invoke 'foo.jusp' %></r>
+
+<p><u>Included:</u> <%!include 'foo.jusp' %></r>
+
+<p><u>Include verbatim:</u> <%!include 'bar.html' %></p>
+
+<hr><font size=-1>Back to <a href="../lesson7.jusp">lesson 7</a></font>
+</body></html>

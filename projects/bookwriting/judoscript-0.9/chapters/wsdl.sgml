@@ -1,0 +1,390 @@
+<synopsis>
+<J> supports SOAP web service scripting in a very easy way. Basically, you obtain a WSDL handle, and treat the WSDL handle as a regular object by invoking its operations like calling a method on an object. Various data types can be passed to the operations, and the output parameters are returned in a map if multiple output parameters are returned; if there is only one output parameter, its value is returned instead. This chapter introduces to the basics of SOAP web services, detailed on the issues regarding web service scripting in <J>, and finishes with a case study that presents a program that utilizes the Google search API.
+</synopsis>
+
+<!--===============================================================-->
+<section1 title="Introduction to SOAP Web Services" id="intro2ws" status="red">
+
+<!------------------------------------->
+<section2 title="SOAP Web Services" id="soap">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="WSDL" id="wsdl">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Data Types and Encoding" id="datatypes">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Web Service Clients" id="wsclients">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="SOAP Web Service Scripting" id="soapscripting" status="green">
+
+<!------------------------------------->
+<section2 title="Prerequisite" id="soapscripting_1">
+
+<p>In order to script web services in <J>, you need to download the Apache Axis version 1.1 or up software and put all the Java executable library jar files in the classpath. As a convenience, here is <a href="http://www.judoscript.com/store/axis11all.jar.zip">a single jar file for all the necessary libraries</a> that you can download; it is an agglomeration of all the jar files in the Axis 1.1 distribution.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Start Scripting Web Services" id="soapscripting_2">
+
+<p>In <J>, scripting SOAP web services starts with obtaining the WSDL handle via the <code>wsdl::</code> operator, and simply call the <i>operations</i> of the <i>service</i> in the WSDL file. Here is an example:</p>
+
+<codelist name="wsdltest.judo" id="wsdltest.judo">
+svc = wsdl::'<linkable>http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</linkable>';
+
+println '3 + 2 = ', svc.Add(3, 2);
+println '3 - 2 = ', svc.Subtract(3, 2);
+println '3 * 2 = ', svc.Multiply(3, 2);
+println '3 / 2 = ', svc.Divide(3, 2);
+</codelist>
+
+<p>The WSDL file for this service has a <code>&lt;service&gt;</code> element like this:</p>
+
+<asis>
+&lt;definitions&gt;
+  ......
+  &lt;service name="MathService"&gt;
+    &lt;port name="MathServiceSoap" binding="s0:MathServiceSoap"&gt;
+      &lt;soap:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+    &lt;port name="MathServiceHttpGet" binding="s0:MathServiceHttpGet"&gt;
+      &lt;http:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+    &lt;port name="MathServiceHttpPost" binding="s0:MathServiceHttpPost"&gt;
+      &lt;http:address location="http://coldrooster.com/dhtmldude/mathservice.asmx" /&gt; 
+    &lt;/port&gt;
+  &lt;/service&gt;
+&lt;/definitions&gt;
+</asis>
+
+<p>Each <i>port</i> has a binding of the four arithmetic operations: <code>Add</code>, <code>Subtract</code>, <code>Multiply</code> and <code>Divide</code>. Each operation, in turn, is associated with their paremeters; in this case, they all take two float numbers as input and return a float as result.</p>
+
+<p>Notice that in the above example, we only obtained the WSDL document and then call the operations directly without references to the <i>service</i> name nor the <i>port</i> name. By default, <J> looks for the first <i>serrvice</i> element in the WSDL. You can explicitly specify the service name in the <kw>wsdl::</kw> operator; its complete syntax is:</p>
+
+<grammar id="WSDL">
+<rule name="WSDL"><kw>wsdl::</kw> <nt>WSDL_URL</nt> [ <kw>:</kw> <nt>ServiceName</nt> ]</rule>
+<rule name="WSDL_URL"><nt>Expr</nt></rule>
+<rule name="ServiceName"><nt>Expr</nt></rule>
+</grammar>
+
+<p>where <nt>ServiceName</nt> is an expression that evaluates to a QName (qualified name), which can be a <code>javax.xml.naming.QName</code> instance, or a string of the form <code>{namespace}local_part</code>. The following program does exactly the same as the previous example:</p>
+
+<asis>
+wsdlURL = '<linkable>http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</linkable>';
+svcName = '{http://tempuri.org/}MathService';
+svc = wsdl::wsdlURL : svcName;
+......
+</asis>
+
+<p>Also, within the <i>service</i> element in the WSDL, there are multiple <i>ports</i>. By default, <J> looks for the port with SOAP binding. If you wish to, you can explicitly specify the port names:</p>
+
+<asis>
+wsdlURL = '<linkable>http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL</linkable>';
+svcName = '{http://tempuri.org/}MathService';
+svc = wsdl::wsdlURL : svcName;
+
+println '3 + 2 = ', svc.MathServiceSoap.Add(3, 2);
+println '3 - 2 = ', svc.MathServiceSoap.Subtract(3, 2);
+println '3 * 2 = ', svc.MathServiceSoap.Multiply(3, 2);
+println '3 / 2 = ', svc.MathServiceSoap.Divide(3, 2);
+</asis>
+
+<p>To summarize, scripting SOAP web services in <J> is quite similar to scripting any value systems such as Java scripting and COM/ActiveX scripting. You obtain a handle to a WSDL document, then simply invoke its <i>operations</i> just like calling methods on an object. As we mentioned earlier, web services can take both input and output parameters, and return value and parameters are typed. In the next section, we will detail on parameters and data types.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Parameters and Return Values" id="datatypes" status="green">
+
+<p>Web services are meant for remote procedure calls accross heteorogeneous systems. We use an inter-operation sample web service, <i>echo</i>, from the Apache Axis software to demonstrate using various types of data for parameters and return values.</p>
+
+<!------------------------------------->
+<section2 title="Set Up the Echo Sample Web Service" id="datatypes_3">
+
+<p>All the programs in this section invoke the <i>echo</i> web service, run on the local machine. To start this service, you need to deploy the Axis webapp to a servlet container (such as Tomcat), and register the <i>echo</i> web service with that Axis webapp. The follow are the exact steps to set it up:</p>
+
+<ol>
+<li>Start a Tomcat server, say, on port 8080.</li>
+<li>Download the Apache Axis version 1.1 or 1.2 software and unpack to a directory such as <code>C:\axis1.1\</code>.</li>
+<li>Deploy the Axis webapp by copying the <code>C:\axis1.1\webapps\axis\</code> directory to the Tomcat deployment directory, such as <code>C:\tomcat-4.1.31\webapps\</code>.</li>
+<li>Move to <code>C:\axis1.1\samples\echo\</code> directory, (assuming you have added all the jar files in <code>C:\axis1.1\lib\</code> to your classpath,) and run:
+<asis>
+java org.apache.axis.client.AdminClient deploy.wsdd
+</asis>
+<li>Open the web browser and enter this URL: <code>http://localhost:8080/axis/index.html</code>. Click on the link of "<u>View</u> the list of deployed Web services", and you should see an <i>echo</i> service, whose WSDL document is located at <code>http://localhost:8080/axis/services/echo?wsdl</code>. This is the WSDL we will use throughout this section.</li>
+</ol>
+
+<p>The <i>echo</i> service includes operations that take a parameter and returns it. Sometimes the values returned are of different types. Here is a listing of all its services, grouped in two categories: <i>built-in</i> types:</p>
+
+<ul>
+<li>echoString</li>
+<li>echoNormalizedString</li>
+<li>echoToken</li>
+<li>echoInteger</li>
+<li>echoFloat</li>
+<li>echoUnsignedLong</li>
+<li>echoUnsignedInt</li>
+<li>echoUnsignedShort</li>
+<li>echoUnsignedByte</li>
+<li>echoNonNegativeInteger</li>
+<li>echoPositiveInteger</li>
+<li>echoNonPositiveInteger</li>
+<li>echoNegativeInteger</li>
+<li>echoBase64</li>
+<li>echoHexBinary</li>
+<li>echoDecimal</li>
+<li>echoBoolean</li>
+<li>echoDate</li>
+<li>echoMap</li>
+<li>echoVoid</li>
+</ul>
+
+<p>and <i>custom</i> types:</p>
+
+<ul>
+<li>echoStringArray</li>
+<li>echoIntegerArray</li>
+<li>echoFloatArray</li>
+<li>echoStruct</li>
+<li>echoStructArray</li>
+<li>echoStructAsSimpleTypes</li>
+<li>echoSimpleTypesAsStruct</li>
+<li>echo2DStringArray</li>
+<li>echoNestedStruct</li>
+<li>echoNestedArray</li>
+<li>echoMapArray</li>
+</ul>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Built-In Data Types" id="builtin_types">
+
+<p>The built-in types in SOAP correspond to primitive <J> data types, byte arrays, date/time and <code>Object</code>.
+
+<codelist name="builtin_types.judo" id="builtin_types.judo">
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+byteArray = new byte[]{ 1, 2, 3 };
+map       = { a=1, b=2, c=3 };
+
+println 'echoString:             ', wsdl.echoString( 'string' );
+println 'echoNormalizedString:   ', wsdl.echoNormalizedString( 'normalized string' );
+println 'echoToken:              ', wsdl.echoToken( 'token a' );
+println 'echoInteger:            ', wsdl.echoInteger( 9 );
+println 'echoFloat:              ', wsdl.echoFloat( 9 );
+println 'echoUnsignedLong:       ', wsdl.echoUnsignedLong( 2 );
+println 'echoUnsignedInt:        ', wsdl.echoUnsignedInt( 2 );
+println 'echoUnsignedShort:      ', wsdl.echoUnsignedShort( 2 );
+println 'echoUnsignedByte:       ', wsdl.echoUnsignedByte( 2 );
+println 'echoNonNegativeInteger: ', wsdl.echoNonNegativeInteger( 2 );
+println 'echoPositiveInteger:    ', wsdl.echoPositiveInteger( 2 );
+println 'echoNonPositiveInteger: ', wsdl.echoNonPositiveInteger( -2 );
+println 'echoNegativeInteger:    ', wsdl.echoNegativeInteger( -2 );
+println 'echoDecimal:            ', wsdl.echoDecimal( 123 );
+println 'echoBoolean:            ', wsdl.echoBoolean( true );
+println 'echoDate:               ', wsdl.echoDate( Date(2004,11,19) ).getTime();
+println 'echoBase64:             ', wsdl.echoBase64( byteArray );
+println 'echoHexBinary:          ', wsdl.echoHexBinary( byteArray );
+println 'echoMap:                ', wsdl.echoMap( map );
+println 'echoVoid().',              wsdl.echoVoid();
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+echoString:             string
+echoNormalizedString:   normalized string
+echoToken:              token a
+echoInteger:            9
+echoFloat:              9.0
+echoUnsignedLong:       2
+echoUnsignedInt:        2
+echoUnsignedShort:      2
+echoUnsignedByte:       2
+echoNonNegativeInteger: 2
+echoPositiveInteger:    2
+echoNonPositiveInteger: -2
+echoNegativeInteger:    -2
+echoDecimal:            123
+echoBoolean:            true
+echoDate:               11/19/04 12:00 AM
+echoBase64:             [1,2,3]
+echoHexBinary:          [1,2,3]
+echoMap:                {a=1, c=3, b=2}
+echoVoid().
+</asis>
+
+<p>You should compare the results to the WSDL of <code>http://localhost:8080/axis/services/echo?wsdl</code>, examine each operation's request and response. For instance, the operation <i>echoBase64</i> has such definitions:</p>
+
+<asis>
+&lt;definition&gt;
+  ......
+  &lt;wsdl:message name="echoBase64Response"&gt;
+    &lt;wsdl:part name="return" type="xsd:base64Binary" /&gt; 
+  &lt;/wsdl:message&gt;
+  &lt;wsdl:message name="echoBase64Request"&gt;
+    &lt;wsdl:part name="inputBase64" type="xsd:base64Binary" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:operation name="echoBase64" parameterOrder="inputBase64"&gt;
+    &lt;wsdl:input message="impl:echoBase64Request" name="echoBase64Request" /&gt; 
+    &lt;wsdl:output message="impl:echoBase64Response" name="echoBase64Response" /&gt; 
+  &lt;/wsdl:operation&gt;
+  ......
+&lt;/definition&gt;
+</asis>
+
+<p>The return values are converted back to <J> data types; some of them are actually Java data types such as byte arrays and <code>java.util.Map</code> instances. The <i>echoDate</i> operation takes and returns a <code>xsd:datetime</code> value, which is converted to a <code>java.util.Calendar</code>.
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Custom Data Types" id="custom_types">
+
+<p>Web services can define new data types by defining arrays and structs, whose elements themselves can be built-in types and other custom types. The following program tests a permutation of these cases:</p>
+
+<codelist name="custom_types.judo" id="custom_types.judo">
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+string2d    = [ [ 'a', 'b' ], [ 'A', 'B' ] ];
+mapArray    = [ new Object( alfa=1 ), new Object( beta='xyz' ) ];
+soapStruct  = { varString='xyz', varInt=1, varFloat=1.01 };
+structArray = [ soapStruct, soapStruct ];
+soapStruct1 = { varString='xyz', varInt=1, varFloat=1.01, varStruct=soapStruct };
+soapStruct2 = { varString='xyz', varInt=1, varFloat=1.01, varArray=[ 'x', 'y' ]};
+
+println 'echoStringArray:         ', wsdl.echoStringArray( [ 'o', 'p', 'q' ] );
+println 'echoIntegerArray:        ', wsdl.echoIntegerArray( [ 10, 20, 30 ] );
+println 'echoFloatArray:          ', wsdl.echoFloatArray( [ 1.01, 2.02, 3.03 ] );
+println 'echo2DStringArray:       ', wsdl.echo2DStringArray( string2d );
+println 'echoMapArray:            ', wsdl.echoMapArray( mapArray );
+println 'echoStruct:              ', wsdl.echoStruct( soapStruct );
+println 'echoStructArray:         ', wsdl.echoStructArray( structArray );
+println 'echoNestedStruct:        ', wsdl.echoNestedStruct( soapStruct1 );
+println 'echoNestedArray:         ', wsdl.echoNestedArray( soapStruct2 );
+println 'echoSimpleTypesAsStruct: ', wsdl.echoSimpleTypesAsStruct( 'xyz', 1, 1.01 );
+println 'echoStructAsSimpleTypes: ', wsdl.echoStructAsSimpleTypes( soapStruct );
+</codelist>
+
+<p><J> maps values of various data types to the parameters specified in the WSDL. The <code>soapStruct</code> is an <code>Object</code> of three fields: <code>varString</code>, <code>varInt</code> and <code>varFloat</code>. The <code>structArray</code> is an array of a few <code>soapStruct</code> instances. The <code>soapStruct1</code> has one more field, <code>varStruct</code>, that points to <code>soapStruct</code>. Finally, <code>soapStruct2</code> takes a <code>varArray</code> that points to a string array.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Input/Output Parameters and Return Values" id="return_values">
+
+<p>Operations defined in WSDL can have multiple input, output and input-output parameters. Since parameters are named, when there are multiple output (including input-output) parameters, a map is returned. In the above example, the last call, <code>echoStructAsSimpleTypes</code>, takes a struct but returns three values: <code>outputString</code>, <code>outputInteger</code> and <code>outputFloat</code>. Its definition is like this:</p>
+
+<asis>
+&lt;definition&gt;
+  ......
+  &lt;wsdl:message name="echoStructAsSimpleTypesRequest"&gt;
+    &lt;wsdl:part name="inputStruct" type="tns1:SOAPStruct" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:message name="echoStructAsSimpleTypesResponse"&gt;
+    &lt;wsdl:part name="outputString" type="xsd:string" /&gt; 
+    &lt;wsdl:part name="outputInteger" type="xsd:int" /&gt; 
+    &lt;wsdl:part name="outputFloat" type="xsd:float" /&gt; 
+  &lt;/wsdl:message&gt;
+  ......
+  &lt;wsdl:operation name="echoStructAsSimpleTypes"
+    parameterOrder="inputStruct outputString outputInteger outputFloat"&gt;
+    &lt;wsdl:input message="impl:echoStructAsSimpleTypesRequest" name="echoStructAsSimpleTypesRequest" /&gt; 
+    &lt;wsdl:output message="impl:echoStructAsSimpleTypesResponse" name="echoStructAsSimpleTypesResponse" /&gt; 
+  &lt;/wsdl:operation&gt;
+  ......
+&lt;/definition&gt;
+</asis>
+
+<p>The output of the <code>echoStructAsSimpleTypes</code> is:</p>
+
+<asis>
+echoStructAsSimpleTypes: {outputFloat=1.01, outputInteger=1, outputString=xyz}
+</asis>
+
+<p>If there is only one output parameter, the value is returned without its name.</p>
+
+<p>As for the input and input-output parameters, since <J> doesn't support named parameters (yet?), they have to be specified in the order as defined in the WSDL.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Different Input Types for Maps and Structs" id="diff_in_types">
+
+<p>The difference between SOAP map and struct parameters is that, structs have predefined fields, whereas maps are collections of arbitrary name-value pairs. In <J>, for SOAP structs, you can pass any data structures and objects (including Java objects, COM/ActiveX components, etc.) that have the named properties; for SOAP maps, you can pass <code>Object</code> and user-defined classes as well as <code>java.util.Map</code> instances as SOAP map parameters. The following example demonstrates this:</p>
+
+<codelist name="map_values.judo" id="map_values.judo">
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+judoObj = { varString='xyz', varInt=1, varFloat=1.01 };
+javaMap = new java::HashMap( varString='xyz', varInt=1, varFloat=1.01 );
+javaObj = new java::Object {
+            String varString;
+            int    varInt;
+            float  varFloat;
+
+            constructor {
+              super();
+              varString = 'xyz';
+              varInt = 1;
+              varFloat = 1.01;
+            }
+          };
+
+println 'Object      as Map:        ', wsdl.echoMap( judoObj );
+println 'Java Map    as Map:        ', wsdl.echoMap( javaMap );
+
+println 'Object      as SOAPStruct: ', wsdl.echoStruct( judoObj );
+println 'Java Map    as SOAPStruct: ', wsdl.echoStruct( javaMap );
+println 'Java Object as SOAPStruct: ', wsdl.echoStruct( javaObj );
+</codelist>
+
+<p>First of all, we established values of three different types with the same field values: a <J> <code>Object</code>, a <code>java.util.HashMap</code> and a Java object created as a Java adapter. The <code>Object</code> and <code>HashMap</code> are passed to the <code>echoMap</code> and <code>echoStruct</code> operations, and the Java object was passed to <code>echoStruct</code> only. The result is:</p>
+
+<asis>
+Object      as Map:        {varInt=1, varString=xyz, varFloat=1.01}
+Java Map    as Map:        {varInt=1, varString=xyz, varFloat=1.01}
+Object      as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+Java Map    as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+Java Object as SOAPStruct: {varInt=1,varString=xyz,varFloat=1.0099999904632568}
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Summary of SOAP Web Service Scripting" id="summary" status="yellow">
+
+<p>To summarize, scripting SOAP web services in <J> is very similar to scripting other value systems such as Java scripting and COM/ActiveX scripting. The rules are simple and natural:</p>
+
+<ol>
+<li>You obtain a handle to a WSDL documentation.</li>
+<li>Call its <i>operations</i> just like invoking methods on an object. <J> marshals the values to the intended parameter data types defined in the WSDL.</li>
+<li>Invocation input parameters are passed in to the operation in the order as specified in the WSDL.</li>
+<li>Return values are returned in a <code>java.util.Map</code> object if there are multiple output parameters, or simply the value if there is only one output value.</li>
+<li>For SOAP maps and structs, various types of data structures can be passed in as long as they hold name-value pairs. For SOAP structs, the defined fields must be present in those data structures; custom Java class instances (or Java beans) can also be passed in, which must define properties corresponding to the SOAP struct definition.</li>
+</ol>
+
+<p>With this and the plethora of available web services, including those created by yourselves, you can truly enjoy the next-generation of <i>webified</i> information technologies! We conclude <J> web service scripting with a case study that takes advantage of the Google search web service client.</p>
+
+<p>Google ... <todo> </p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->

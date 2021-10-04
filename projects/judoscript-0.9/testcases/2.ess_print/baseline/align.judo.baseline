@@ -1,0 +1,19 @@
+small int > 5:       10|
+small int 5.3!:      10    |
+big int > 5:      123456789|
+big int < 5!:     1234*|
+big int > 5!:     *6789|
+big int   5.3!:   *6789    |
+big int * 5!:     *456*|
+2.25       5.3!:      2.25 |
+small float > 5:  1234.1234567890124|
+small float > 5!: *0124|
+small float < 5!: 1234*|
+small float 5.3:   1234.123|
+big float   5.3:  123456789.012|
+big float   5.3!: *6789.012|
+small text > 5:    lamb|
+big text > 5:     Mary had a little lamb, little lamb, little lamb.|
+big text < 5!:    Mary |
+big text > 5!:    lamb.|
+big text * 5!:    , lit|

@@ -1,0 +1,28 @@
+<%
+  var title = 'Buy Item';
+%>
+<%!include 'header.jusp' %>
+<%
+  var item = getItem(form.id);
+
+  if error.length > 0 {
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+%>
+<form method=POST action="buyerController.jusp">
+<%!hidden 'do', 'buy' %>
+<%!hidden 'id', item.id %>
+<table border=0>
+<tr><td>Item Name:</td><td><u><%= item.name.neverEmpty('&nbsp;') %></u></td></tr>
+<tr><td>Description:</td><td><u><%= item.desc.neverEmpty('&nbsp;') %></u></td></tr>
+<tr><td>Price:</td><td><u><%= item.getPrice() %></u></td></tr>
+<tr><td>Quantity:</td><td><u><%= item.inStock.int() %></u></td></tr>
+<tr><td>To buy:</td><td><%!text 'qty', null, 'size=3' %></td></tr>
+<tr><td>&nbsp;</td><td><%!submit 'Buy' %></td></tr>
+</table></form>
+
+<p><a href="buyerController.jusp">View items</a></p>
+
+<%!include 'footer.jusp' %>

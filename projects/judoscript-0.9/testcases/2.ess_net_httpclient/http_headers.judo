@@ -1,0 +1,5 @@
+h = httpGet('http://www.yahoo.com');
+
+for x in h.getAllHeaders() {
+  println x, ': ', h.(x);
+}

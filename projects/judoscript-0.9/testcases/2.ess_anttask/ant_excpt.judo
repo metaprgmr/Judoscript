@@ -1,0 +1,4 @@
+anttask::<exec executable="do_not_exist" />
+
+catch:
+  println <err> '---- Ant task deliberately failed:', nl, $_;

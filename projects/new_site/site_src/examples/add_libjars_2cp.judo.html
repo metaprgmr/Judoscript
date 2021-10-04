@@ -1,0 +1,13 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/add_libjars_2cp.judo:</b></td></tr><tr><td><pre>
+/*
+ * To add all the jar/zip files in ${deploy}/lib and ${thirdparty}/lib
+ * into the (user) classpath.
+ */
+arr = [];
+listFiles &lt;arr> '*.jar, *.zip' in '${deploy}/lib';
+listFiles &lt;arr> '*.jar, *.zip' in '${thirdparty}/lib';
+
+#classpath.add(arr);
+
+</pre></td></tr></table></body></html>

@@ -1,0 +1,28 @@
+<%@page isStatic="true" refresh="10" %>
+<html>
+<head><title>A Paramerized Static Page</title>
+<body>
+<h1>A Paramerized Static Page</h1>
+
+<p>View <%!viewsrc 'lesson14/parameterized-static.jusp', '../' %></p>
+
+<p><em>This is a parameterized-static page, cache refreshed every 10 seconds.</em></p>
+
+<form>
+View weblog for <%!date 'adate', 5, 10 %>&nbsp;&nbsp;<%!submit 'View' %>
+</form>
+
+<%
+  var dateText = jusp$readDate(form, 'adate');
+  if (dateText) dateText = ' on <i>' + dateText.fmtDate('dd, MMM, yyyy') + '</i>';
+%>
+
+<div style="border:2px solid; font-family:arial; color=blue">
+<u>Genius</u> blogged<%= dateText %>:
+<blockquote>Blah blah blah blah.</blockquote>
+</div>
+
+<p>Generated at <%= Date().fmtDate('yyyy-MM-dd hh:mm:ss') %></p>
+
+<hr><font size=-1>Back to <a href="../lesson14.jusp">lesson 14</a></font>
+</body></html>

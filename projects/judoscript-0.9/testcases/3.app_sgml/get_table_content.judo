@@ -1,0 +1,31 @@
+// Demonstrates $$parser.skipToTag()/rushToTag()
+// methods with multiple tags.
+//
+// It skips anything before the first <table> tag,
+// and prints out the complete content of that tag.
+
+var sw = createStringWriter();
+var depths = 0; // a stack
+
+do $$local as html {
+:BEFORE:  $$parser.skipToTag("table", "/table");
+<table>:  print<sw> $_;
+          ++depth;
+          print<sw> $$parser.rushToTag("table", "/table");
+</table>: print<sw> $_;
+          if (--depth == 0) break;
+          print<sw> $$parser.rushToTag("table", "/table");
+}
+
+println sw.toString();
+
+EndScript ==================================================
+<html>
+<body>
+aa
+<table>
+<tr><td> bb <table><tr><td> cc </td></tr></table>
+</td></tr>
+</table>
+dd
+</body></html>

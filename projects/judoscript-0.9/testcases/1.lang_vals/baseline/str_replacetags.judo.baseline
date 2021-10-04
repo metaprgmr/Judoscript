@@ -1,0 +1,12 @@
+Original string is:
+-------------------
+alfa is @alfa@,
+beta is @beta@, and
+gamma is @gamma@.
+
+Replaced string is:
+-------------------
+alfa is A,
+beta is B, and
+gamma is C.
+

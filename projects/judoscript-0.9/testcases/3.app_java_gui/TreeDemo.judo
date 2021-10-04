@@ -1,0 +1,139 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing tree and HTML components.
+    Also passing JudoScript objects (BookInfo) to Swing and getting back for use.
+    Displays JudoScript articles as the tree content.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
+import java.net.URL;
+
+
+prefix  = "file:html" + fileSep() + "treeDemo" + fileSep();
+helpURL = new java::URL(prefix + "TreeDemoHelp.html");
+
+playWithLineStyle = false;
+lineStyle = "Angled"; 
+
+//Create the nodes.
+top = new java::DefaultMutableTreeNode("The JudoScript Series");
+createNodes(top);
+
+//Create a tree that allows one selection at a time.
+tree = new java::JTree(top);
+tree.getSelectionModel().setSelectionMode((java::TreeSelectionModel).SINGLE_TREE_SELECTION);
+
+if (playWithLineStyle)
+  tree.putClientProperty("JTree.lineStyle", lineStyle);
+
+//Create the scroll pane and add the tree to it. 
+treeView = new java::JScrollPane(tree);
+
+//Create the HTML viewing pane.
+htmlPane = new java::JEditorPane;
+htmlPane.setEditable(false);
+htmlView = new java::JScrollPane(htmlPane);
+displayURL(helpURL);
+
+//Add the scroll panes to a split pane.
+splitPane = new java::JSplitPane((java::JSplitPane).HORIZONTAL_SPLIT);
+splitPane.setTopComponent(treeView);
+splitPane.setBottomComponent(htmlView);
+
+minimumSize = new java::Dimension(100, 50);
+htmlView.setMinimumSize(minimumSize);
+treeView.setMinimumSize(minimumSize);
+splitPane.setDividerLocation(100); //XXX: ignored in some releases
+                                    //of Swing. bug 4101306
+//workaround for bug 4101306:
+//treeView.setPreferredSize(new java::Dimension(100, 100)); 
+
+splitPane.setPreferredSize(new java::Dimension(500, 300));
+
+demoFrame = new java::JFrame("TreeDemo");
+demoFrame.getContentPane().add(splitPane, (java::BorderLayout).CENTER);
+
+gui::events {
+  <tree : TreeSelection : valueChanged> :
+    var node = tree.getLastSelectedPathComponent();
+
+    if node {
+      var nodeInfo = node.getUserObject();
+      if node.isLeaf() {
+        displayURL(nodeInfo.bookURL);
+      } else {
+        displayURL(helpURL); 
+      }
+    }
+
+  <demoFrame : Window : windowClosing> :
+    exit 0;
+}
+
+demoFrame.pack();
+demoFrame.setVisible(true);
+
+////////////////////////////////////////////////////////////
+//
+// User Classes and Functions
+//
+////////////////////////////////////////////////////////////
+
+class BookInfo
+{
+  constructor {
+    assert(has('fileName'));
+    assert(has('bookName'));
+    this.bookURL = new java::URL(::prefix @ fileName);
+  }
+
+  function toString() { return bookName; }
+}
+
+function displayURL url { htmlPane.setPage(url); }
+
+function createNodes top {
+  books = [ "Introduction to JudoScript",      "_intro.html",
+            "Uses of JudoScript",              "_uses.html",
+            "Embed JudoScript in Java",        "_embed.html"
+          ];
+  addNode(top, "General", books);
+
+  books = [ "Values and Data Structures",      "_value_ds.html",
+            "Function, Class, Thread, Eval",   "_fxn_cls_etc.html",
+            "Java, Exceptions and EJB",        "_java_excpt.html",
+            "Miscellaneous Topics",            "_misc.html",
+            "Files, Direcotires and Archives", "_file_dir.html"
+          ];
+  addNode(top, "Essential Programming", books);
+
+  books = [ "JDBC Scripting",                  "_jdbc.html",
+            "XML Document Processing",         "_xml.html",
+            "Schedule, Executable, E-Mail, SSH, SCP", "_sched_exec_mail.html",
+            "HTTP Fun and HTML Processing",    "_http_html.html",
+            "Build GUI Applications",          "_gui.html"
+          ];
+  addNode(top, "Applications", books);
+
+  books = [ "Java Software Unit Testing",      "_col_qa.html",
+            "Load Testing",                    "_col_loadtest.html"
+          ];
+  addNode(top, "Software Testing", books);
+}
+
+function addNode top, title, books {
+  category = new java::DefaultMutableTreeNode(title);
+  top.add(category);
+  for i from 0 to books.size()-1 step 2 {
+    category.add(
+      new java::DefaultMutableTreeNode(new BookInfo(bookName=books[i],fileName=books[i+1])));
+  }
+}

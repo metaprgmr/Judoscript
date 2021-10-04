@@ -1,0 +1,16 @@
+class MyCls
+{
+  var alfa = 'abcdefg';
+  println "Hahaha!";
+
+  constructor {
+    println "Explicit constructor().";
+    println 'this.alfa = ', this.alfa;
+    alfa = null;
+    alfa = 1;
+    println 'this.alfa = ', this.alfa, nl;
+  }
+}
+
+new MyCls;
+new MyCls;

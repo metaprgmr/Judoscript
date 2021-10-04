@@ -1,0 +1,17 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+                Evaluates dynamic statements.
+
+                The 'eval' evaluates the content in the current context,
+                and 'evalExternal" in a new one.
+            *]];
+}
+
+x = 'aliens';
+
+eval "println 'Hello, you ', x, '!'; ";
+
+evalExternal "println 'Hello, you ', x, '!'; ";

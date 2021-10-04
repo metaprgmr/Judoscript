@@ -1,0 +1,27 @@
+   a = 1
+   b = XYZ
+   c = text
+A) c != 'text' ? a : b = XYZ
+   c == 'text' ? a : b = 1
+B) a1 = 4
+   0 < a1 < 5: true
+   0 < a1 < 3: false
+C) a2 = 3
+   a < a1 > a2: true
+   a > a1 < a2: false
+   a2 = 2
+   b = 2.5
+D) NOT 2 > 2.5
+   b = 10
+E) 2 < '10'
+F) NOT '10' <= 2
+G) NOT '10' > '11'
+H) NOT '10' >= '11'
+I) '10' >= '10'
+J) NOT '10' != '10'
+K) '10' == '10'
+   a1 = 4
+   a2 = 3
+L) a1 | 0x02 = 6
+M) a2 & 0x02 = 2
+N) a2 ^ 0x02 = 1

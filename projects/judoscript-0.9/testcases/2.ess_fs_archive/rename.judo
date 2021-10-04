@@ -1,0 +1,8 @@
+listFiles '*.lst';
+for f in $_ {
+  fy = f.fileTime().year;
+  fn = f.getFileName();
+  if !fn.startsWith(fy) { // if so, file name is good already.
+    rename fn to fy + fn;
+  }
+}

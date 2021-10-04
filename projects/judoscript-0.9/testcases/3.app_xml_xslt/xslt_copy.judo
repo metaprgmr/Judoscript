@@ -1,0 +1,9 @@
+usage {
+  authord = 'James Huang';
+  created = '2002-02-20';
+  desc    = "Outputs 'calls.xml' into another XML file.";
+}
+
+xslt copy 'calls.xml' to #prog.replace('.judo', '.xml.out')
+  outputProperties( 'omit-xml-declaration' = 'yes' );
+

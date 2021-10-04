@@ -1,0 +1,68 @@
+
+public class SwitchTest
+{
+  public static void main(String[] args) {
+    bipush 0   invokestatic switchIt(int)void    
+    bipush 1   invokestatic switchIt(int)void    
+    bipush 2   invokestatic switchIt(int)void    
+    bipush 3   invokestatic switchIt(int)void    
+    bipush 4   invokestatic switchIt(int)void    
+    bipush 5   invokestatic switchIt(int)void    
+
+    bipush 0   invokestatic switchTable(int)void    
+    bipush 1   invokestatic switchTable(int)void    
+    bipush 2   invokestatic switchTable(int)void    
+    bipush 3   invokestatic switchTable(int)void    
+    bipush 4   invokestatic switchTable(int)void    
+    bipush 5   invokestatic switchTable(int)void    
+  }
+
+  static void switchIt(int val) {
+    %print "switchIt(", val, "): "
+    iload val
+    switch
+    0:       label_0
+    2:       label_2
+    9:       label_9
+    default: label_a
+
+  label_0:
+    %println "Got milk!"
+    goto label_x
+  label_2:
+    %println "Got cookie!"
+    goto label_x
+  label_9:
+    %println "Got beef!"
+    goto label_x
+  label_a:
+    %println "Got grass!"
+  label_x:
+    return
+  }
+
+  static void switchTable(int val) {
+    %print "switchTable(", val, "): "
+    iload val
+    lookupswitch
+    0        label_0 label_1 label_2 label_3
+    default: label_a
+
+  label_0:
+    %println "Got milk!"
+    goto label_x
+  label_1:
+    %println "Got cookie!"
+    goto label_x
+  label_2:
+    %println "Got beef!"
+    goto label_x
+  label_3:
+    %println "Got chicken!"
+    goto label_x
+  label_a:
+    %println "Got grass!"
+  label_x:
+    return
+  }
+}

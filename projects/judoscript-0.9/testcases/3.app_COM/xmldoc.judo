@@ -1,0 +1,9 @@
+xmldoc = new com::Microsoft.XMLDOM;
+xmldoc.async = false;
+xmldoc.load('test.xml');
+
+children = xmldoc.documentElement.childNodes;
+for i from 0 to children.length-1 {
+  c = children['item',i];
+  println c, '  ', c.text;
+}

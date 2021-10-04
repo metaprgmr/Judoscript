@@ -1,0 +1,62 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Displays all the date attributes, sets all settable attributes,
+    and tests the next() method.
+  *]];
+}
+
+println d = Date(2001,11,12);
+
+// get
+println 'd.epoch            = ', d.epoch;
+println 'd.year             = ', d.year;
+println 'd.month            = ', d.month;
+println 'd.date             = ', d.date;
+println 'd.hour             = ', d.hour;
+println 'd.minute           = ', d.minute;
+println 'd.second           = ', d.second;
+println 'd.milliSecond      = ', d.milliSecond;
+println 'd.zoneOffset       = ', d.zoneOffset;
+println 'd.dstOffset        = ', d.dstOffset;
+println 'd.weekOfYear       = ', d.weekOfYear;
+println 'd.weekOfMonth      = ', d.weekOfMonth;
+println 'd.dayOfMonth       = ', d.dayOfMonth;
+println 'd.dayOfYear        = ', d.dayOfYear;
+println 'd.dayOfWeek        = ', d.dayOfWeek;
+println 'd.dayOfWeekInMonth = ', d.dayOfWeekInMonth;
+println 'd.isAM             = ', d.isAM.fmtBool();
+println 'd.isPM             = ', d.isPM.fmtBool();
+println 'd.monthName        = ', d.monthName;
+println 'd.monthShortName   = ', d.monthShortName;
+println 'd.weekDayName      = ', d.weekDayName;
+println 'd.weekDayShortName = ', d.weekDayShortName;
+
+// set
+println;
+println 'd.epoch       = ', d.epoch = 1000, '  => ', d;
+println 'd.year        = ', d.year = 1996,  '  => ', d;
+println 'd.month       = ', d.month = 5,    '     => ', d;
+println 'd.date        = ', d.date = 25,    '    => ', d;
+println 'd.hour        = ', d.hour = 8,     '     => ', d;
+println 'd.minute      = ', d.minute = 15,  '    => ', d;
+println 'd.second      = ', d.second = 59,  '    => ', d;
+println 'd.milliSecond = ', d.milliSecond = 430, '   => ', d;
+println 'd.zoneOffset  = ', d.zoneOffset = 360000, ' => ', d;
+println 'd.dstOffset   = ', d.dstOffset = 360000, ' => ', d;
+
+// next() method
+println;
+println d.next(), ' -- next day';
+println d.next('sec',2), ' -- 2 seconds ago';
+println d.next('sec',-2), ' -- 2 seconds later';
+println d.next('minute'), ' -- next minute';
+println d.next('minute',-5), ' -- 5 minutes ago';
+println d.next('day',2), ' -- 2 days later';
+println d.next('day',-7), ' -- 7 days ago';
+println d.next('month',2), ' -- 2 months later';
+println d.next('month',-2), ' -- 2 months ago';
+println d.next('year',2), ' -- 2 years later';
+println d.next('year',-2), ' -- 2 years ago';

@@ -1,0 +1,55 @@
+<%
+  var title = 'Lesson 5. Form &mdash; Extended HTML Controls'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>&lt;%!${tag}%></code><td>${desc}</td></tr>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<h2>Extended HTML Controls</h2>
+
+<p>JuSP provides a number of extended controls,
+listed in the following table:</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP Control Tag</th><th>Description</th></tr>
+<%!tagRow 'date name, yearsBefore, yearsAfter<br> [, extra]', 'Writes 3 &lt;select> controls for month, day and year, respectively. The corresponding values contained in <i>form</i> for the date are set to "selected". (Relatedly, the date values in the <i>form</i> can be read with the jusp$date(form, name) function.)' %>
+<%!tagRow 'countryList name [, extra]', 'Writes a &lt;select> control of all the country names and IDs per ISO 3166.' %>
+<%!tagRow 'US_StateList name [, extra]', 'Writes a &lt;select> control of all the U.S. states and IDs (of two upper-case letters).' %>
+<%!tagRow 'timeZoneList name [, extra]', 'Writes a &lt;select> control of all the timezone names and IDs per ISO 639.' %>
+<%!tagRow 'localeList name<br> [, extra [, dispLocale] ]', 'Writes a &lt;select> control of all the available locales names and IDs. The locale IDs are like "en_US".' %>
+</table>
+
+<h2>The Date Control and Form Date Values</h2>
+
+<p>Date handling in web applications can easily be a pain in the
+chest. JuSP provides a <em>date control</em>, which is really a
+collection of three <code>&lt;select></code> tags, and a corresponding
+date reader function, <code>jusp$readDate(form, controlName)</code>.
+<i>(At this moment, the date control is for English only; it shall be
+extended to support any languages in the future.)</i>
+See the following example for writing,re-populating and reading
+date values.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson5/date.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson5/date.jusp' %></li>
+</ul>
+
+<h2>Other Extended HTML Controls</h2>
+
+<p>Other extended controls are pre-defined commonly-used lists.
+They are currently English only, and shall be extended to support
+other languages. This list of extended controls itself will grow
+as well, and you can <a href="lesson17.jusp">create custom controls
+by yourself</a>.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson5/xctls.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson5/xctls.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

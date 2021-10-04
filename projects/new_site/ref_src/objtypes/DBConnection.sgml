@@ -1,0 +1,92 @@
+<member name=driver write=false desc="The JDBC driver Java class name for this connection.">
+<member name=autoCommit write=true desc="The boolean auto-commit flag.">
+<member name=readOnly write=true desc="The boolean read-only flag.">
+<member name=catalog write=true desc="The catalog.">
+<member name=typeMap write=true desc="The type map.">
+<member name=transactionIsolation write=true desc="The transaction isolation level. Valid values are 'transaction_non', 'transaction_read_uncommitted', 'transaction_read_committed' and 'transaction_serializable'.">
+
+<function sig="disconnect" alias="close">
+  Disconnects the connection to the database.
+</function>
+
+<function sig="commit">
+  Commits the last transaction.
+</function>
+
+<function sig="rollback">
+  Rolls back the last transaction.
+</function>
+
+<function sig="clearWarning">
+  Clears the warning.
+</function>
+
+<function sig="getMetaData">
+  Returns the database meta data (<obj id=DBMetaData>) for this connection.
+</function>
+
+<function sig="nativeSQL sql">
+  Returns the RDBMS's native SQL for <param>sql</param>.
+</function>
+
+<function sig="addTypeMap name, typeClass">
+  Adds the type Java class <param>typeClass</param> for type <param>name</param>
+  for this connection.
+</function>
+
+<function sig="reportWarnings">
+  Returns the boolean value indicating whether warnings are shown.
+</function>
+
+<function sig="executeQuery sql">
+  Executes the query <param>sql</param> and returns the result set.
+</function>
+
+<function sig="executeSQL sql">
+  Executes the SQL <param>sql</param> and returns the result count.
+</function>
+
+<function sig="executeSQLFile sqlFile, ...">
+  Executes the SQL statements in files represented by <param>sqlFile</param>'s and
+  returns the result count. The SQL statements in the file must be separated by <!;> and
+  is runnable by the JDBC driver. Lines starting with <!#> are comments and are ignored.
+</function>
+
+<function sig="executeBatch sqls">
+  The parameter <param>sqls</param> is an array of SQL statements. Executes them
+  in a batch and returns the total result count.
+</function>
+
+<function sig="databaseObjectExists objName" alias="existsDatabaseobject">
+  This is Oracle specific. Returns <!true> if the object <param>objName</param>
+  exists in the schema. (It queries table <code>user_objects</code>.)
+</function>
+
+<function sig="getDatabaseObjectType objName">
+  This is Oracle specific. Returns the type of the object <param>objName</param>
+  if it exists in the schema. (It queries table <code>user_objects</code>.)
+</function>
+
+<function sig="tableExists tablePattern">
+  Returns <!true> if table <param>tablePattern</param> exists.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="procedureExists procPattern" alias="procExists">
+  Returns <!true> if procedure <param>procPattern</param> exists.
+  The <param>procPattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="userTypeExists typePattern" alias="userDefinedTypeExists">
+  Returns <!true> if user-defined type <param>typePattern</param> exists.
+  The <param>typePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="describe tableName" alias="desc">
+  Returns the table information for <param>tableName</param> in a <obj id=TableData> object.
+</function>
+
+<function sig="countRows tableName">
+  Returns the number of rows for table <param>tableName</param> in this database.
+</function>
+

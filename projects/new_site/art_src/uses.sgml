@@ -1,0 +1,663 @@
+<doc title="Uses of JudoScript" TBU=1
+ author="James Jianbo Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, Uses of JudoScript, Uses JudoScript, JudoScript application, data processing, cross-database transfer, data mining, data archiving, backup, prototyping, software prototyping, glue language, quality assurance, software testing, packaging, deploy, install, installation, documentation, system application, calculator, date conversion, system configuration, system monitoring"
+ wideTOC="true"
+>
+
+<sectiondefs>
+<sectiondef name="dataproc" caption="Data Processing Applications">
+<sectiondef name="xdb"   sub="1" caption="Cross-Database Transfer and Processing">
+<sectiondef name="xfmt"  sub="1" caption="Multi-format Data Processing">
+<sectiondef name="arch"  sub="1" caption="Data Archiving and Backups">
+<sectiondef name="dev"   caption="Software Development">
+<sectiondef name="eng"   sub="1" caption="Controller and Glue for Animations and Screenplays">
+<sectiondef name="prot"  sub="1" caption="Prototyping">
+<sectiondef name="qa"    sub="1" caption="Quality Assurance">
+<sectiondef name="pkg"   sub="1" caption="Product Packaging and Installation">
+<sectiondef name="doc"   sub="1" caption="Technical Documentation">
+<sectiondef name="online"   caption="Online System Applications">
+<sectiondef name="job"   sub="1" caption="Background Jobs">
+<sectiondef name="mon"   sub="1" caption="System Configuration and Monitoring">
+<sectiondef name="quick" caption="Quick Uses">
+<sectiondef name="clock" sub="1" caption="Date/Time and Clock">
+<sectiondef name="listcopy" sub="1" caption="Manage Files and Archives">
+<sectiondef name="file"  sub="1" caption="Process Files">
+<sectiondef name="jdbc"  sub="1" caption="Database Quick Fixes">
+<sectiondef name="email" sub="1" caption="Sending E-Mails">
+<sectiondef name="xml"   sub="1" caption="XML Processing">
+<sectiondef name="html"  sub="1" caption="HTML Scraping">
+<sectiondef name="http"  sub="1" caption="HTTP Server and Proxy Server">
+<sectiondef name="calc"  sub="1" caption="Calculator and Converter">
+</sectiondefs>
+
+<abstract>
+<J> is an agglomeration of numerous useful mechanisms on top of a
+general-purpose programming language with seamless Java support. It is
+built to help minute-to-minute, day-to-day and even night-to-night
+computing for individuals and enterprises. We present some of its uses
+just to give you some concrete ideas. Scripting languages are good for
+some tasks and not-so-good for others. We discuss a few scenarios where
+<J> is most appropriate for MIS, software development and business
+services, and some quick tricks that everybody can take advantage of.
+</abstract>
+</doc>
+
+
+<p>
+<J> is a general-purpose programming language, with many built-in
+features and subsystems that can be readily used for tasks big and small.
+Since it is built on and for the Java platform, it is naturally
+cross-platform. Because of its strong support for Java classes, moving
+functionality between scripts and Java code is smooth and flexible. 
+
+<p>
+Scripting languages have their own uses. Developing full-blown software
+is not one of them. If a piece of software is developed mainly in some
+scripting language, chances are, it is still at prototyping stage. <J>
+is ideal for many aspects of business applications and software
+product/service development tasks like prototyping, automated testing,
+background jobs, cross-database transfers, multi-format data aggregation
+and processing, data archiving and backups, on-line system monitoring,
+etc. It also has so many niceties that everyone can take advantage of
+on a regular basis for personal needs, one-time tasks, basic utilities,
+on-the-fly tests, quick database queries and fixes, impromtu reporting
+and formatting, calculators ...
+
+<p>
+In some cases, this article presents source code as examples, assuming
+you are a guru in <J>. If you don't feel that way yet, please refer to
+the respective articles for details.
+
+
+
+<section name=dataproc>
+
+<section name="xdb">
+
+<p>
+<J> is ideal for cross-database data transfer and transformation, data
+mining and reporting, because it is designed to be a JDBC scripting
+language. From JDBC's point of view, all the supported databases are
+equal. <J> is a general-purpose programming language, too, so
+complicated computations and transformations can be done effectively.
+Such tasks can be run as a job with the <kw>schedule</kw> command,
+which is remotely manageable via a HTTP interface.
+
+
+
+<section name="xfmt">
+
+<p>
+<J> is ideal for processing, reporting and exchanging data from
+multiple sources in multiple formats of XML, HTML, text documents
+and databases. Data may be obtained from databases, web sites and
+other data and service providers. Such tasks can be run as scheduled
+jobs or passively initiated.
+
+
+<section name="arch">
+
+<p>
+<J>'s multi-source file compressing and archiving features coupled
+with JDBC scripting makes it great for automated data backup and
+archiving processes. Such tasks can be run as scheduled jobs or
+activated by human operators.
+
+
+<section name=dev>
+
+<section name="eng">
+
+<p>
+Animation and screenplay-like software such as games, educational,
+simulation and electronic arts all have vast number of variations
+occurring around a growing set of predefined graphical or conceptual
+elements. The key is dynamic-ness. <J> is a superb glue language to
+serve as a controlling agent for such systems. Its capabilities of
+seamless Java interaction, thread programming, scheduled events,
+dynamic code execution, networking, database interaction and
+document processing are all important requirements for such systems,
+and they are presented in an easy-to-use fashion, meeting the needs
+of frequent modifications and continued evolution. Performance is
+not an issue because the percentage of CPU time spent on controller
+is very small, where the bulk of CPU time is probably used by
+graphical engines and/or special-purpose inference engines, which
+may be written in Java or native code or even as device drivers.
+
+
+
+<section name="prot">
+
+<p>
+<J> is perfect for Java software idea prototyping, be it a web-, GUI-,
+XML-, database- or network-based appplication or a combination of
+these, because it is not only a modern general-purpose programming
+language natively supporting all these features plus threads, but also
+extremely Java friendly. With <J>, prototypes are fast to develop and
+easy to modify and adapt. Front-end to back-end, online servers to
+background jobs, database creation to data management, test data
+loading to use case emulation, <J> has means to satisfy most if not
+all. As the object-oriented analysis and design process goes round and
+round, more and more subsystems, that is, objects or clusters of
+objects, start to emerge. The prototype may continue to server as a
+test bed, allowing pieces of software components to evolve. Over time,
+some pieces of the prototype may even stay with the production system,
+such as database creation and management scripts, background jobs that
+does asynchronous data processing and/or transaction processing, etc.,
+and other scripts may become the core of the test suite.
+
+
+
+<section name="qa">
+
+<p>
+<J> is ideal for testing software and services, especially
+coordinated and automated tests.
+
+<p>
+<incap>Unit Tests</incap> Java classes, transactions, use cases, 
+enterprise Java beans, work flows, private network protocols, ...
+these can be tested easily with <J>'s Java, JDBC and other
+capabilities.
+
+<p>
+<incap>Load Tests</incap> <J> supports thread and HTTP client and
+server programming. These are invaluable for load testing web sites.
+The HTTP client can save and load cookies. One scenario would be,
+declare a thread that emulates the whole process of a user session
+with random delays and a number of usage paths; for one test instance,
+fire up certain number of such threads at once. This script can be
+run from multiple machines; to synchronize the tests to emulate
+larger number of simultaneous users, create a mini HTTP server in
+each script, and have a "master" script send a start command to
+them around the same time.
+
+<p>
+<incap>Automated Testing</incap> In software development, any changes
+can introduce new features, desired or not. To ensure the software
+behave as wanted, complete test coverage should be done as much as
+possible. The majority of test cases would pass, only the failed few
+should be examined and identified. <J> has <kw>assert()</kw> and
+exception catching capability. You can resume execution after an
+exception. Automated tests are highly feasible and easy to implement.
+With a fully automated test suite, you would expect to either see a
+"success" messsage at the end or a handful of errors, where the
+tester will review and verify.
+
+
+<section name="pkg">
+
+<p>
+<J> has strong support for manipulating files, directories and zip
+archives. It can run executables, too. When a product is ready to
+ship, a <J> can pick the right files and directories, create
+appropriate zip or jar files, generate last-minute information, and
+build a shipping package. Similarly, installation process can be
+automated, so that the package can be installed on any
+<J>/Java enabled machines.
+
+
+<section name="doc">
+
+<p>
+<J> is a data processing language. It processes textual documents
+from XML, HTML to text files, and interacts with database through
+JDBC. This is great for automated document processing and management,
+especially in a team environment of technical development. For
+instance, one can write a Java parser (using tools like JavaCC), and
+turn all the Java source files into a DOM-like tree; once this is
+done, you can use <J> to navigate, query or associate pieces of Java
+classes with any specific documents. Another example is, define a few
+special tags and use them in the HTML documentation, and have a few
+<J> programs process them into real HTML pages (kind of server-side
+stylesheet), and collect all the information to generate catelogs,
+references, code listings, figure listings, table of contents, etc.;
+this is exactly how <J> documents (including this article) were prepared.
+
+
+
+
+<section name=online>
+
+<section name="job">
+
+<p>
+E-commerce and other web-based customer services have a lot going
+on behind the scene. For instance, in order to maintain a good
+response time to users in front of browsers for complicated
+transactions, a commonly used model is to quickly accept user's
+input, process it in the background, and send the result to the
+user via e-mail. <J> is design with this kind of tasks in mind,
+with features like <kw>schedule</kw> statement, sending e-mails,
+database interaction, EJB container interaction, HTTP connection
+and general networking, file system operations, flexible native
+program execution and even password protection. The centerpiece is
+the <kw>schedule</kw> statement. It schedules events at fixed rate
+or at absolute moments, and also has a built-in HTTP server that
+administrators can remotely view the job status and/or control
+various aspects of the job itself.
+
+
+
+<section name="mon">
+
+<p>
+As the cliche goes, a picture is worth a thousand words; this can not
+be more true for monitoring and configuration tasks. In addition to all
+the good things mentioned earlier, <J> is also a Java GUI language,
+easy to implement AWT and Swing GUIs; it is also a HTTP server language,
+equally capable of creating web UIs. (You can create a multi-threaded
+web server with less than 80 characters, seriously.)
+
+
+
+<section name=quick>
+
+<p>
+There are many features in <J> you can take advantage of to make your
+everyday life easy. First let us review how to run <J> programs.
+
+<p>
+<J> programs are usually put in text files typically with extension
+".judo". To run, first make sure <J> and supporting Java class libraries
+(such as JDBC drivers and your own Java class files) are in the
+classpath. JDK1.3 and up is required. Issue a command line like this:
+
+<demo>
+%java judo foo.judo parm1 parm2 /option1=val1 /option2
+</demo>
+
+Command line "java judo -x" will take the first parameter as a program
+(the rest of the parameters become its parameters), like this:
+
+<demo>
+%java judo -x "ls '*.jud*' except '*/alfa*,*/test*' recursive noHidden"
+</demo>
+
+You can do a lot with a short program like this. I create short aliases
+to make using them easier: <kw>j</kw> or <kw>j.bat</kw>, for <u>java
+judo</u>. <kw>jx</kw> or <kw>jx.bat</kw>, for <u>java judo -x</u>.
+
+<demo>
+%jx "copy '*.jud*,*.java' except '*/alfa*,*/test*'
+     recursive noHidden echo to 'arch.zip';"
+%jx ". getFileContent('servlets.properties');"
+</demo>
+
+In the second line, the dot command is a shortcut for <kw>println</kw>.
+You will see a lot of it.
+
+
+
+<section name=clock>
+
+<p>
+Time zone conversion and listing all the time zone IDs:
+
+<demo>
+%jx ". date().fmtDate(null,'Asia/Shanghai');"
+%jx "for x in (javaclass java.util.TimeZone).getAvailableIDs() { . x; }"
+</demo>
+
+Find out the day of week for a date, the date after so many days and
+the number of days between two dates:
+
+<demo>
+%jx ". date(2012,1,1).fmtDate('EEEE');"
+%jx "d=date(2001,10,25); d.date+=10; . d;"
+%jx ". (date(2012,1,1).int() - date(2001,10,25).int())/(24*3600000);"
+</demo>
+
+
+<section name="listcopy">
+
+<p>
+Search for files:
+
+<demo>
+%jx "ls '*.judo,*.java' in 'c:\\temp' except '*/alfa*' recursive;"
+%jx "ls '*.judo,*.java' in 'save.zip' except '*/alfa*' recursive;"
+%jx "list 'save/*' recursive size;  . $$fs_result;"
+%jx "list 'save/*' recursive count; . $$fs_result;"
+</demo>
+
+Find files and do something with them:
+
+<demo>
+list '*.jud*, *.java' in 'dev/' recursive noHidden;
+for $x in $$fs_result {
+  $f = openTextFile($x);
+  . $f.readLine();
+  $f.close();
+}
+</demo>
+
+Copy files to another directory or a zip file:
+
+<demo>
+%jx "copy '*.htm*,*.gif,*.jp*,*.css' in '~/devroot/'
+     recursive noHidden echo to '/sys/docroot/';"
+%jx "copy '*.htm*,*.gif,*.jp*,*.css' in '~/devroot/'
+     recursive noHidden echo to '~/save.zip';"
+</demo>
+
+Remove a directory:
+
+<demo>
+jx "rmdir 'c:/test force;"
+</demo>
+
+Save multiple trees into a single zip file:
+
+<demo>
+$zip = createZip('save.zip');
+copy '*.htm*,*.gif,*.jp*,*.css' in '~/docroot/'
+     recursive noHidden echo to $zip;
+copy '*.jud*,*.java' except '*/alfa*' in '~/devroot/'
+     recursive noHidden echo to $zip;
+$zip.close();
+</demo>
+
+Download a file:
+
+<demo>
+%jx "copyStreams openFile('http://www.xxxx.com/cesoir.mp3'),
+     openFile('cesoir.mp3','w');"
+</demo>
+
+
+<section name="file">
+
+<p>
+Create and write to files:
+
+<demo>
+$file = openTextFile('foo.txt','w'); // create
+println <$file> 'Hello, World!';
+$file.close();
+
+$file = openTextFile('foo.txt','a'); // append
+println <$file> 'Again Hello, World!';
+$file.close();
+
+$file = openGZippedTextFile('foo.txt.gz','w');
+println <$file> 'Hello, New World!';
+$file.close();
+</demo>
+
+<p>
+Read from files and process text:
+
+<demo>
+$file = openGZippedTextFile('data.txt.gz');
+while ($line = $file.readLine()) != eof {
+  $dat = $line.csv(',');
+  . $dat[0]:<10, $dat[1]:5.2, $dat[2]:>10;
+}
+$file.close();
+</demo>
+
+Sort a file:
+
+<demo>
+arr = [];
+file = openTextFile('FountainValley.java');
+while (line = file.readLine()) != eof { arr.append($line); }
+file.close();
+arr.sort();
+for x in arr { . x; }
+</demo>
+
+
+<section name=jdbc>
+
+<p>
+Run some SQL statements against database:
+
+<demo>
+const #url = 'jdbc:oracle:thin:@localhost:1521:crescent';
+const #user = 'dbuser';
+const #pass = secret('*"&#~!&)*');
+connect to #url, #user, #pass;
+
+executeSQL
+{
+  create table people
+  ( personID  int primary key,
+    name      varchar(20) not null,
+    alias     varchar(20),
+    birthDay  date,
+    sex       varchar(1),  // 'M', 'F'
+    addTime   date
+  );
+
+  create table media
+  ( folderID  varchar(512) not null, // relative path
+    fileName  varchar(128) not null, // file name w/o path
+    type      varchar(1) not null,   // I: image, M: movie, A: audio
+    fileTime  date,
+    bytes     int,
+    addTime   date,
+    constraint pathName primary key ( folderID, fileName )
+  );
+
+  create table participants
+  ( folderID  varchar(512),
+    fileName  varchar(128),
+    personID  int,
+    constraint ref_media  foreign key (folderID,fileName)
+                          references media (folderID,fileName),
+    constraint ref_people foreign key (personID)
+                          references people (personID)
+  );
+}
+</demo>
+
+Query database:
+
+<demo>
+connect to #url, #user, #pass;
+
+preparedExecuteQuery $a:
+  select name, alias from people where addTime < ?;
+with @1:date = date(2001,10,1);
+
+while $a.next() {
+  . 'New user: ', $a.name:<22, ', alias: ', $a.alias;
+}
+</demo>
+
+Try out stored procecures:
+
+<demo>
+connect to #url, #user, #pass;
+
+executeAny [[*
+  create or replace
+  procedure test_proc(param_io IN OUT number,
+                      param_i IN varchar,
+                      param_o OUT varchar)
+  as begin
+    param_o := param_i;
+    if param_io is not null then
+      param_io := param_io + 1;
+    else
+      param_io := -1;
+    end if;
+  end;
+*]];
+
+prepareCall: { call test_proc(?,?,?) };
+
+println '$x = ', $x = 1;
+println '$y = ', $y = 'abcd';
+executeSQL with @1:int <=> $x, @2:varchar =  $y, @3:varchar => $z;
+println '$x = ', $x;
+println '$z = ', $z;
+</demo>
+
+Cross-database data transfer:
+
+<demo>
+connect $oracle to #oracle_url, #user, #pass;
+connect $mssql  to 'jdbc:odbc:myDSN', 'dbuser', secret('%$#)(!');
+
+executeQuery $a using $oracle: // query from Oracle
+  select personID, name, alias, birthDay, sex, addTime from people;
+
+while $a.next() {
+  preparedExecuteUpdate using $mssql: // insert into MS-SQL
+    insert into people ( personID, name, alias, birthDay, sex, addTime)
+    values (?,?,?,?,?,?);
+  with @1:int  = $a.personID,
+       @2      = $a.name,
+       @3      = $a.alias,
+       @4:date = $a.birthDay,
+       @5:int  = $a.sex,
+       @6:date = $a.addTime
+  ;
+}
+</demo>
+
+
+
+<section name=email>
+
+<demo>
+sendMail
+     from: 'info@judoscript.com'
+       to: 'smarty@yahoo.cum'
+  subject: 'The software. Thank you!'
+   attach: 'readme.txt, software.zip'
+     body: [[*
+           Dear Ms Smarty,
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           &lt;html&gt;&lt;body&gt;
+           &lt;p&gt;Dear Ms Smarty,
+
+           &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+           Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+           text&lt;/u&gt; file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p&gt;Please visit &lt;a href=www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+           for the latest news and information. Thank you!
+
+           &lt;p&gt;Sincerely,
+           &lt;p&gt;JudoScript
+           &lt;/body&gt;&lt;/html&gt;
+           *]]
+;
+</demo>
+
+
+<section name=xml>
+
+<p>
+(TBD).
+
+
+<section name=html>
+
+<p>
+Print all external links of a HTML page:
+
+<demo>
+do 'http://www.judoscript.com' as html
+{
+BEFORE:   . 'From www.judoscript.com/';
+AFTER:    . '------------------------';
+&lt;a&gt;:      . if $_.href.startsWith('http://') { . $_.href; }
+}
+</demo>
+
+
+<section name=http>
+
+<p>
+Set up a simple HTTP server for others to see or download files:
+
+<demo>
+$ss = startServer(8088);
+while {
+  start thread $c = acceptHttp($ss) { $c.serveFile(); }
+}
+</demo>
+
+Set up a proxy server to monitor headers going between browsers and servers:
+
+<demo>
+$ss = startServer(8088);
+while {
+  relay(acceptHttp($ss)); // single-thread
+}
+
+function relay $c {
+  // Connect to server; browser should send absolute URL.
+  $url = $c.getUrl();
+  $doPost = $c.getMethod().equalsIgnoreCase('post');
+  . '&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ', $url, ' &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;';
+  if $doPost {
+    $s = httpPost($url);
+  } else {
+    $s = httpGet($url);
+  }
+
+  // pass all client headers and content to server
+  for $x in $c.getAllHeaders() {
+    $s.($x) = $c.($x);
+    . $x, ': ', $c.($x);
+  }
+  if $doPost {
+    copyStreams $c.getInputStream(), $s.getOutputStream();
+  }
+
+  // pass all server headers and content to client
+  . '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; ', $url, ' &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;';
+  for $x in $s.getAllHeaders() {
+    $c.($x) = $s.($x);
+    . $x, ': ', $s.($x);
+  }
+  copyStreams $s.getInputStream(), $c.getOutputStream();
+
+catch:
+  . &lt;err&gt; '[', $_.name, '] ', $_.message;
+finally:
+  .; // separate requests.
+}
+</demo>
+
+
+<section name=calc>
+
+<demo>
+%jx ". 365*24*3600;"
+%jx ". (1.05).pow(20).fractionDigits(2);"
+%jx ". (30).sin_d();"
+</demo>
+
+<p>
+The following lines do various conversions.
+
+<demo>
+%jx ". (123456).fmtHex();"
+%jx ". (123456).fmtOctal();"
+%jx ". 0xFF, ' ', 0xCC, ' ', 0x99;"
+%jx ". (0x34).chr();"
+%jx ". 'q'.ascii();"
+</demo>
+
+

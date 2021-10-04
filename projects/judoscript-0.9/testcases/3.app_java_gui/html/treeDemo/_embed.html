@@ -1,0 +1,17 @@
+<html><head><title>Embed JudoScript In Java></title></header>
+<body><h1>Embed JudoScript In Java</h1>
+
+Two ways to embed <em>JudoScript</em> in Java: through its support of Bean Scripting
+Framework and its own, simpler engine interface. <em>JudoScript</em> is designed for
+Java, using Java is intrinsic. The only issue regarding embedding in
+Java is passing Java objects between Java code and the script. IBM's
+Bean Scripting Framework (BSF) is a popular interface for this purpose.
+It also supports event handling of beans by scripts, a feature not needed
+here. BSF support is significant because there are Java applications, such
+as Ant, use this bridge to embed a number of BSF-supporting scripting
+languages. However, if you intend to use just <em>JudoScript</em> for your embedded
+scripting needs, <em>JudoScript</em> has a simpler and lighter-weight interface. You don't
+need any extra packages (BSF, that is). You can also parse a script and
+run in multiple engines in their own Java threads.
+</abstract>
+</body></html>

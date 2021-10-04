@@ -1,0 +1,17 @@
+sum(1,2) = 3
+sum(2) = 2
+a = 5
+b = 4
+a = sum(a,b) = 9
+a = 9
+b = sum() = 
+a = 9
+b = 
+Within foo(): a = 'I am "a" within foo()'
+Within foo(): b = 'I am "b" within foo()'
+a = 9
+b = 
+Within bar(): a = 'Set the global a to this.'
+Within bar(): b = 'Set the global b to this.'
+a = Set the global a to this.
+b = Set the global b to this.

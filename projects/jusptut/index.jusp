@@ -1,0 +1,67 @@
+<%
+  var title = 'JuSP Comprehensive Tutorial'; // required by header.jusp.
+  var isIndex = true;
+  var book = "http://www.judoscript.com/books/judoscript-0.9";
+  var bookch = "${book}/chapters";
+
+  function jusp$lesson ctxt, num, title, tbd {
+    print <ctxt.writer> tbd ? '<li>${title} <sup><font size=-1><b>TBD</b></font></sup></li>'
+                            : '<li><a href="lesson${num}.jusp">${title}</a></i>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<center><h1><font size=+2>JuSP Comprehensive Tutorial</font></h1></center>
+
+<p><b>Congratulations!</b> You have successfully set up the JuSP development
+platform and ready to explore this <em>simple</em> and <em>powerful</em>
+web application development platform.</p>
+
+<p>This <em>JuSP Comprehensive Tutorial</em> web app demonstrates all the
+features of JuSP with live examples. Source code of all the pages in this
+web app are viewable. The whole site is
+<a href="http://www.judoscript.com/download.html">downloadable</a>
+to serve as a starting point for your own projects.</p>
+
+<h1>Lessons</h1>
+
+<table border=0 cellpadding=5 cellspacing=0>
+<tr><td valign=top><i>Core<br>Techniques</i></td>
+<td><ol start=0>
+ <%!lesson 0, 'Introduction to the JuSP Platform' %>
+ <%!lesson 1, 'JuSP Page Scripting' %>
+ <%!lesson 2, 'Session and Cookie' %>
+ <%!lesson 3, 'Form &mdash; Getting Values' %>
+ <%!lesson 4, 'Form &mdash; HTML Controls and Value Population' %>
+ <%!lesson 5, 'Form &mdash; Extended HTML Controls' %>
+ <%!lesson 6, 'Form &mdash; Validation' %>
+ <%!lesson 7, 'Include and Invoke Other Pages' %>
+ <%!lesson 8, 'Forward, Redirect and Page Flow' %>
+ <%!lesson 9, 'Write the Global <code>juspInit.judo</code> Script' %>
+ <%!lesson 10, 'Exception Handling and Global Cleanup' %>
+ <%!lesson 11, 'Debugging JuSP Web Apps' %>
+ <%!lesson 12, 'MVC Paradigm and Web App Design' %>
+</ol></td></tr>
+<tr><td valign=top><i>Further<br>Techniques</i></td>
+<td><ol start=13>
+ <%!lesson 13, 'Create Custom Controls/Tags' %>
+ <%!lesson 14, 'Page Attributes and Page Caching' %>
+ <%!lesson 15, 'Binary Content Rendering' %>
+ <%!lesson 16, 'File Upload' %>
+ <%!lesson 17, 'E-Mail' %>
+</ol></td></tr>
+<tr><td valign=top><i>Summary</i></td>
+<td><ol start=18>
+ <%!lesson 18, 'Review and Summary of JuSP' %>
+ <%!lesson 19, 'Exercise: A Challenge' %>
+</ol></td></tr>
+<tr><td valign=top><i>Application<br>Design</i></td>
+<td><ol start=20>
+ <%!lesson 20, 'JuSP Web App with JDBC', true %>
+ <%!lesson 21, 'JuSP Web App with Hibernate', true %>
+ <%!lesson 22, 'JuSP Web App with EJBs', true %>
+ <%!lesson 23, 'JuSP Web App with SOAP', true %>
+</ol></td></tr>
+</table>
+
+<%!include "footer.jusp" %>

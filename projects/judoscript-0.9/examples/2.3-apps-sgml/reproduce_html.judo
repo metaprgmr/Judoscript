@@ -1,0 +1,22 @@
+usage {
+  minArgs = 1;
+  args    = 'file_or_url';
+  author  = 'James Huang';
+  lastMod = '2003-01-25';
+  desc    = [[*
+    Prints out the original HTML content. Note that
+    the output may be different because the HTML
+    parser is case insensitive.
+
+    By the way, to do case-sensitive parsing, use:
+
+       do ... as sgml case {
+       }
+  *]];
+}
+
+do #args[0] as html // or sgml; same thing.
+{
+<!>, <>, TEXT: print $_;
+AFTER:         flush;
+}

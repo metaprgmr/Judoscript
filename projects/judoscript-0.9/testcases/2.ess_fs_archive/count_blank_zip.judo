@@ -1,0 +1,18 @@
+cnt1 = 0;
+cnt2 = 0;
+
+listFiles 'src/com/judoscript/*.java, src/com/judoscript/*.jj'
+          in 'C:/src.jar' recursive
+{
+  do $_ in $$archive as lines {
+    // now, $_ has become the line just read!
+    if ($_.isEmpty())
+      ++cnt1;
+    else
+      ++cnt2;
+  }
+}
+
+println '    Blank lines: ', cnt1:>7;
+println 'Non-Blank lines: ', cnt2:>7;
+println '    Total Files: ', $_.length:>7;

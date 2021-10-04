@@ -1,0 +1,27 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/4.adv_embedinjava/CallTest.java:</b></td></tr><tr><td><pre>
+import java.awt.Frame;
+import com.judoscript.JudoEngine;
+
+public class CallTest
+{
+  public static void main (String[] args) throws Exception
+  {
+    // 1. Create a JudoScript engine
+    JudoEngine je = new JudoEngine();
+
+    try {
+
+      // 2. Create a JudoScript function
+      je.runCode("function foo a,b { return a+b; }");
+
+      // 3. Call the function
+      Object[] params = new Object[] { new Integer(1), new Double(2) };
+      System.out.println( je.call("foo", params) );
+      params[1] = new Integer(2);
+      System.out.println( je.call("foo", params) );
+
+    } catch(Exception e) { e.printStackTrace(); }
+  }
+}
+</pre></td></tr></table></body></html>

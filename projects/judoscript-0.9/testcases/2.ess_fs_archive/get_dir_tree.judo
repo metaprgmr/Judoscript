@@ -1,0 +1,6 @@
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp'
+  dirOnly recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}

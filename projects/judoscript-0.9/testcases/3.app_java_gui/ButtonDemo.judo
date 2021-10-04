@@ -1,0 +1,59 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates using Swing buttons, with and without images.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+
+
+leftButtonIcon   = new java::ImageIcon("images/right.gif");
+middleButtonIcon = new java::ImageIcon("images/middle.gif");
+rightButtonIcon  = new java::ImageIcon("images/left.gif");
+
+b1 = new java::JButton("Disable middle button", leftButtonIcon);
+b1.setVerticalTextPosition((java::AbstractButton).CENTER);
+b1.setHorizontalTextPosition((java::AbstractButton).LEFT);
+b1.setMnemonic((java::KeyEvent).VK_D);
+b1.setActionCommand("disable");
+
+b2 = new java::JButton("Middle button", middleButtonIcon);
+b2.setVerticalTextPosition((java::AbstractButton).BOTTOM);
+b2.setHorizontalTextPosition((java::AbstractButton).CENTER);
+b2.setMnemonic((java::KeyEvent).VK_M);
+
+b3 = new java::JButton("Enable middle button", rightButtonIcon);
+b3.setMnemonic((java::KeyEvent).VK_E);
+b3.setActionCommand("enable");
+b3.setEnabled(false);
+
+b1.setToolTipText("Click this button to disable the middle button.");
+b2.setToolTipText("This middle button does nothing when you click it.");
+b3.setToolTipText("Click this button to enable the middle button.");
+
+demo = new java::JPanel;
+demo.add(b1);
+demo.add(b2);
+demo.add(b3);
+
+frame = new java::JFrame("ButtonDemo");
+frame.getContentPane().add(demo, (java::BorderLayout).CENTER);
+
+gui::events {
+  <b1,b3: Action : actionPerformed> :
+    var isDisable = ($_.getActionCommand() == 'disable');
+    b1.setEnabled(!isDisable);
+    b2.setEnabled(!isDisable);
+    b3.setEnabled( isDisable);
+
+  <frame : Window : windowClosing> : exit(0);
+}
+
+frame.pack();
+frame.setVisible(true);

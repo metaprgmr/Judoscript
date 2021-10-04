@@ -1,0 +1,11 @@
+<html><body>
+<h2>Auto-Populated Text Control</h2>
+
+<p>View <%!viewsrc 'lesson4/autotext.jusp', '../' %></p>
+
+<form>Type in something: <%!text 'txt' %> <%!submit %></form>
+
+<p>Render time: <%= Date().fmtDate('yyyy-MM-dd hh:mm:ss') %></p>
+
+<hr><font size=-1>Back to <a href="../lesson4.jusp">lesson 4</a></font>
+</body></html>

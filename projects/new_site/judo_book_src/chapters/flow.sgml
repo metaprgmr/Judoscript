@@ -1,0 +1,860 @@
+<synopsis>
+This chapter introduces all the flow control mechanisms of general programming. In addition to the flow control statements such as <kw>if</kw>-<kw>else</kw>, <kw>switch</kw>-<kw>case</kw>-<kw>default</kw>, <kw>while</kw> and <kw>for</kw> loops, function and exception handling are also covered.
+</synopsis>
+
+<!--===============================================================-->
+<section1 title="Basic Flow Control Statements" id="flowctrl" status="green">
+
+<!------------------------------------->
+<section2 title="Types of Judo Statements" id="block">
+
+<p>In <J>, statements include simple statements, block statement, compound statements and event-driven statements.</p>
+
+<p><title3>Simple statements</title3>Simple statements perform specific tasks. For example, the assignment statement assigns a value to a variable or field; a <code>return</code> statement returns from a function or method. Simple statements in <J> can actually be quite complicated, such as the JDBC statements:</p>
+
+<asis>
+executeQuery qry:
+  SELECT * FROM emp WHERE first_name = ?
+; with @1 = 'James';
+</asis>
+
+<p><title3>Block statement</title3>A number of statements can be grouped and surrounded by <kw>{</kw> and <kw>}</kw> and form a block. Blocks have their own variable scope.</p>
+
+<grammar id="stmt_block">
+<rule name="Block"><kw>{</kw> ( <nt>Statement</nt> )* <kw>}</kw></rule>
+</grammar>
+
+<p>Blocks can also be a part of other compound statements that are discussed in this chapter. Blocks can also have <code>catch</code> and <code>finally</code> clauses, discussed in <ref id="excpt"/>.</p>
+
+<p><title3>Compound statements</title3>Compound statements are those that may contain or require other statements for processing based on different conditions and/or in different situations. The enclosed statements are usually organized in block statements. In the general programming area, the flow control statements (such as <i>if-else</i> and loops) are all compound statements. Many functional statements are also compound statements.</p>
+
+<p><title3>Event-driven statements</title3>Some of <J>'s functional statements use an event-driven programming model; those statements are event-driven statements. For instance, the <code>guiEvent</code> statement, the SGML and XML statements. The following is an example of SGML statement:</p>
+
+<asis>
+do 'http://www.yahoo.com' as sgml {
+&lt;a>:   if $_.href != null { println $_.href; }
+&lt;img>: println $_.src;
+}
+</asis>
+
+<p>In this SGML statement, each SGML tag encountered is treated as an "event"; you as a programmer provides an event "handler", which is a series of statements, for each "event".</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="If-Else Statement" id="stmt_if">
+
+<p>The <i>if-else</i> statement has this syntax:</p>
+
+<grammar id="stmt_if">
+<rule name="IfElse"><kw>if</kw> <nt>Expr</nt> <nt>Block</nt> ( ( <kw>else</kw> <kw>if</kw> | <kw>elif</kw> ) <nt>Expr</nt> <nt>Block</nt> )* [ <kw>else</kw> <nt>Block</nt> ]</rule>
+</grammar>
+
+<p>The <nt>Expr</nt>'s are evaluated to boolean values; if <code>true</code>, the chunk of code that follows will be executed. If-else statement is straightforward and is one of the most frequently used statement. There is only one catch: the blocks following <code>if</code>, <code>elif</code> and <code>else</code> expressions do not define new scopes. If you declare local variables in these blocks, the scope for these variable is actually the scope that contains the if-statement. To avoid confusion, do not declare local variables in any of these blocks. For instance,</p>
+
+<asis>
+if foo() {
+  var tmp = 5;
+  println 'foo() returns true.';
+} else {
+  println 'foo() returns false.';
+}
+println tmp;
+</asis>
+
+<p>In the last line, <code>tmp</code> may or may not be defined, depending on the boolean result of the <code>foo()</code> call. A better way is to move the <code>var tmp</code> declaration out.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Switch Statement" id="stmt_switch">
+
+<p>The syntax for the switch statement is:</p>
+
+<grammar id="stmt_switch">
+<rule name="Switch"><kw>switch</kw> <nt>Expr</nt> <kw>{</kw> ( <nt>CaseClaus</nt> )* <kw>}</kw></rule>
+<rule name="CaseClause">( <kw>case</kw> <nt>Expr</nt> | <kw>default</kw> ) <kw>:</kw> ( <nt>Statement</nt> )*</rule>
+</grammar>
+
+<p>No more than one <code>default</code> clause is allowed. The <nt>Expr</nt> following <kw>switch</kw> is evaluated and checked against values specified in each <code>case</code> clause; if a match is found, the chunk of code is executed; if no match is found and the <code>default</code> clause is present, execute the chunk of code for <code>default</code>; otherwise, simply finish the statement.</p>
+
+<p>The values in the <code>case</code> clauses are usually constant values but actually can be any expressions; the value types can be anything, such as primitive types like integer, number, string, date/time, and Java objects. The match between the <code>switch</code> value and <code>case</code> values tries the comparisons with different types and is carried out in this order: Java object, number and date/time, and string. The following example demonstrates this:</p>
+
+<codelist id="stmt_switch.judo" name="stmt_switch.judo">
+values = [ 9,
+           Date(2001,11,20),
+           new java::HashMap,
+           'uvw',
+           'XYZ',
+           '{}'
+         ];
+
+for a in values {
+  switch a {
+  case 9:                 println 'CASE OF number: ', a; break;
+  case 'uvw':             println 'CASE OF string: ', a; break;
+  case Date(2001,11,20):  println 'CASE OF Date:   ', a; break;
+  case new java::HashMap: println 'CASE OF Java:   ', a; break;
+  default:                println 'DEFAULT:        ', a; break;
+  }
+}
+</codelist>
+
+<p>The <code>values</code> is an array of values of different types; each value is run against the switch statement. The result is:</p>
+
+<asis>
+CASE OF number: 9
+CASE OF Date:   11/20/01 12:00 AM
+CASE OF Java:   {}
+CASE OF string: uvw
+DEFAULT:        XYZ
+CASE OF Java:   {}
+</asis>
+
+<p>What happened to the value of <code>'{}'</code>? It is a string and happens to match <code>new java::HashMap</code> because they both share the same stringn representation, <code>{}</code>. In most situations, the <code>case</code> values are numbers or strings.</p>
+
+<p>Statements for each <code>case</code> and <code>default</code> normally ends with a <code>break</code> statement. If no <code>break</code> statement is present at the end, the program continues on to the statements in the next <code>case</code> or <code>default</code>; you can have no statements for certain <code>case</code> and/or <code>default</code> clauses to share a same chunk of code. For instance,</p>
+
+<asis>
+switch x {
+case 1:
+case 2:
+case 3:  println 'In [1,3]';          break;
+case 4:
+case 5:
+case 6:  println 'In [4,6]';          break;
+default: println 'Outside of [1,6];'; break;
+}
+</asis>
+
+<p>Note that the <code>case</code> values do not have to be constants; they can be any expression. This may be used for dynamic matching. The following example uses the <i>switch</i> statement in a function (which will be discussed shortly in this chapter); it is not a practical function for the purpose of its name.</p>
+
+<codelist id="stmt_switch2.judo" name="stmt_switch2.judo">
+for i from 0 to 100 {
+  isPowerOf i, 3;
+}
+
+function isPowerOf x, base {
+  base2 = base  * base;
+  base3 = base2 * base;
+  base4 = base3 * base;
+  base5 = base4 * base;
+  base6 = base5 * base;
+
+  switch x {
+  case 0:
+  case base:
+  case base2:
+  case base3:
+  case base4:
+  case base5:
+  case base6: println x, ' is a power of ', base; break;
+  }
+}
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+0 is a power of 3
+3 is a power of 3
+9 is a power of 3
+27 is a power of 3
+81 is a power of 3
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="While and Do-While Loops" id="stmt_while">
+
+<p>The <i>while</i> and <i>do-while</i> statements have the following syntax:</p>
+
+<grammar id="While_Do">
+<rule name="While"><kw>while</kw> <nt>Expr</nt> <nt>Block</nt></rule>
+<rule name="DoWhile"><kw>do</kw> <nt>Block</nt> <kw>while</kw> <nt>Expr</nt> <kw>;</kw></rule>
+</grammar>
+
+<p>The meaning of these two statements are self-evident. The following example tests both:</p>
+
+<codelist id="stmt_while.judo" name="stmt_while.judo">
+println 'while() {}';
+a = 3;
+while a >= 0 {
+  println a;
+  --a;
+}
+
+println;
+println 'do {} while.';
+do {
+  println a;
+  a++;
+} while a < 2;
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+while() {}
+3
+2
+1
+0
+
+do {} while.
+-1
+0
+1
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="For and Repeat Loops" id="stmt_for">
+
+<p><J> has three <i>for</i> loop statements.</p>
+
+<p><title3>The generic <i>for</i> loop</title3></p>
+
+<p>The syntax for the generic <i>for</i> loop is:</p>
+
+<grammar id="ForLoop">
+<rule name="ForLoop"><kw>for</kw> [ <kw>(</kw> ] [ <nt>ExprList</nt> ] <kw>;</kw> [ <nt>Expr</nt> ] <kw>;</kw> [ <nt>ExprList</nt> ] [ <kw>)</kw> ] <nt>Block</nt></rule>
+<rule name="ExprList"><nt>Expr</nt> ( <kw>,</kw> <nt>Expr</nt> )*
+</grammar>
+
+<p>This form of <i>for</i> loop is the same as the <i>for</i> statement in Java or C/C++. It runs the first list of expressions sort of like initialization, then check on the boolean expression in the second place; if <code>true</code>, the block is executed, and at the end the expression list in the third place is executed. So, for the following pseudocode:</p>
+
+<asis>
+for init(); cond(); postproc() {
+  do_work();
+}
+</asis>
+
+<p>it is equivalent to:</p>
+
+<asis>
+init();
+while cond() {
+  do_work();
+  postproc();
+}
+</asis>
+
+<p>This is an example:</p>
+
+<codelist id="forloop.judo" name="forloop.judo">
+for a=0; a<3; ++a {
+  println a;
+}
+</codelist>
+
+<p><title3>The <i>for-from-to</i> loop</title3></p>
+
+<p>This statement is to loop through a series of numbers as specified. The syntax is:</p>
+
+<grammar id="ForFromTo">
+<rule name="ForFromTo"><kw>for</kw> [ <kw>(</kw> ] <nt>INDENTIFIER</nt> [ <kw>from</kw> <nt>Expr</nt> ] ( <kw>do</kw> | <kw>downto</kw> ) <nt>Expr</nt> [ <kw>step</kw> <nt>Expr</nt> ] [ <kw>)</kw> ] <nt>Block</nt></rule>
+</grammar>
+
+<p>The loop number can be ascending (with the <code>to</code> clause) or down (with the <code>downto</code> clause). If the <code>from</code> clause is missing, by default it starts with <code>0</code>. If the <code>step</code> is not specified, the step is defaulted to <code>1</code>. Step can never be negative; if negative value is specified, its absolute value is used instead. The following program demonstrates varios usages:</p>
+
+<codelist id="for_fromto.judo" name="for_fromto.judo">
+print 'for [from 0] to 3:           ';
+for a to 3 { print a, ' '; }
+println;
+
+print 'for from 3 to 5:             ';
+for a from 3 to 5 { print a, ' '; }
+println;
+
+print 'for from 3 to 10 step 2:     ';
+for a from 3 to 10 step 2 { print a, ' '; }
+println;
+
+print 'for from 10 downto 5 step 2: ';
+for a from 10 downto 5 step 2 { print a, ' '; }
+println;
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+for [from 0] to 3:           0 1 2 3
+for from 3 to 5:             3 4 5
+for from 3 to 10 step 2:     3 5 7 9
+for from 10 downto 5 step 2: 10 8 6
+</asis>
+
+<p><title3>The <i>for-in</i> loop</title3></p>
+
+<p>The <i>for-in</i> statement is to iterate through collection data structures. Collections include built-in data structures such as <code>Array</code>, <code>LinkedList</code>, <code>Set</code> and <code>Object</code>. Java arrays and instances of <code>java.util.Iterator</code>, <code>java.util.Enumeration</code>, <code>java.util.Collection</code>, <code>java.util.List</code> and <code>java.util.Map</code> can also be iterated with <i>for-in</i> statement. In the case of <J> <code>Object</code> and Java <code>java.util.Map</code> subjects, their keys are iterated. The syntax of <i>for-in</i> statement is:</p>
+
+<grammar id="ForIn">
+<rule name="ForIn"><kw>for</kw> [ <kw>(</kw> ] <nt>INDENTIFIER</nt> <kw>in</kw> <nt>Expr</nt> [ <kw>backward</kw> ] [ <kw>from</kw> <nt>Expr</nt> ] ( <kw>do</kw> | <kw>downto</kw> ) <nt>ExprList</nt> [ <kw>step</kw> <nt>Expr</nt> ] [ <kw>)</kw> ] <nt>Block</nt></rule>
+</grammar>
+
+<p>The <code>backward</code> and <code>from</code>/<code>to</code> apply only to fixed-length collections such as <code>Array</code>, Java arrays and <code>java.util.List</code> instances. The following example shows some of the usages:</p>
+
+<codelist id="for_in.judo" id="for_in.judo">
+println 'Iterating Array:';
+a = [ 1, 2, 3 ];
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating Java array:';
+a = new java::int[]{ 10, 20, 30 };
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating java.util.ArrayList:';
+a = new java::ArrayList;
+a.add(100);
+a.add(200);
+a.add(300);
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating with range:';
+a = [ 1, 2, 3, 4 ];
+
+print "--- for in                 ";
+for e in a { print e, ' '; }
+
+print nl, "--- for in backward        ";
+for e in a backward { print e, ' '; }
+
+print nl, "--- for in from 1          ";
+for e in a from 1 { print e, ' '; }
+
+print nl, "--- for in to 1            ";
+for e in a to 1 { print e, ' '; }
+
+print nl, "--- for in from 1 to 2     ";
+for e in a from 1 to 2 { print e, ' '; }
+
+print nl, "--- for in from 2 downto 1 ";
+for e in a from 2 downto 1 { print e, ' '; }
+
+print nl, "--- for in downto 1        ";
+for e in a downto 1        { print e, ' '; }
+println;
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+Iterating Array:
+0: 1
+1: 2
+2: 3
+
+Iterating Java array:
+0: 10
+1: 20
+2: 30
+
+Iterating java.util.ArrayList:
+0: 100
+1: 200
+2: 300
+
+Iterating with range:
+--- for in                 1 2 3 4
+--- for in backward        4 3 2 1
+--- for in from 1          2 3 4
+--- for in to 1            1 2
+--- for in from 1 to 2     2 3
+--- for in from 2 downto 1 3 2
+--- for in downto 1        4 3 2
+</asis>
+
+<p><title3>The <i>repeat</i> statement</title3>If you simply want to repeat certain operations for a number times, the <i>repeat</i> statement is an easy one.</p>
+
+<grammar id="Repeat">
+<rule name="Repeat"><kw>repeat</kw> <nt>Expr</nt> [ <kw>times</kw> ] <nt>Block</nt></rule>
+</grammar>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!------------------------------------->
+<section2 title="Break, Continue and Loop Index" id="breakcont">
+
+<p><title3>The <i>break</i> and <i>continue</i> statements</title3>In loops, you can use the <i>break</i> statement to break the loop, or <i>continue</i> statement to skip the rest of the statement in the current iteration and go to the start of next iteration. The syntax for these statements is:</p>
+
+<grammar id="BreakContinue">
+<rule name="BreakContinue">( <kw>break</kw> | <kw>continue</kw> ) [ <nt>IDENTIFIER</nt> ] <kw>;</kw></rule>
+</grammar>
+
+<p>The optional <nt>IDENTIFIER</nt> is a label name for a loop to break or continue from within a nested loop. The following is an example:</p>
+
+<codelist id="breakcont.judo" name="breakcont.judo">
+aloop:
+  for i from 0 to 5 {
+    for j from 1 to 5 {
+      if i+j &lt; 5 {
+        continue aloop;
+      } else if i+j >= 10 {
+        break aloop;
+      }
+      println i, '-', j;
+    }
+  }
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+4-1
+4-2
+4-3
+4-4
+4-5
+5-1
+5-2
+5-3
+5-4
+</asis>
+
+<p><title3>Loop index</title3>All loop statements, including the general programming flow control and special-purpose statements to be discussed later in the book, have a <i>loop index</i>. The loop index starts at <code>0</code> for the first iteration and increments thereafter. This loop index is accessible via the system function, <code>loopIndex()</code>. It can take a negative integer number to return the loop index of the enclosing loop statement in case of nested loops.</p>
+
+<codelist id="loopidx.judo" name="loopidx.judo">
+for i from 1 to 3 {
+  for j from 2 to 5 {
+    println ' outer loop: ', loopIndex(-1),
+            ' inner loop: ', loopIndex();
+  }
+}
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+  outer loop: 0  inner loop: 0
+  outer loop: 0  inner loop: 1
+  outer loop: 0  inner loop: 2
+  outer loop: 0  inner loop: 3
+  outer loop: 1  inner loop: 0
+  outer loop: 1  inner loop: 1
+  outer loop: 1  inner loop: 2
+  outer loop: 1  inner loop: 3
+  outer loop: 2  inner loop: 0
+  outer loop: 2  inner loop: 1
+  outer loop: 2  inner loop: 2
+  outer loop: 2  inner loop: 3
+</asis>
+
+<p>This <code>loopIndex()</code> function can be quite useful in loops that do not have an explicit loop indicator; without it, sometimes you would need to use an explicit counter variable. For instance, the following program prints out lines starting at line number 5 in a file:</p>
+
+<asis>
+do file_name as lines {
+  if loopIndex() < 5 { continue; }
+  println $_;
+}
+</asis>
+
+<p>The <i>do .. as lines</i> statement is covered later.</p>
+
+</section2><!--------------------------->
+
+<!--===============================================================-->
+<section1 title="Functions and Function Variables" id="fxn" status="green">
+
+<p><J> functions organize code into reusable units. A function can take 0 or more parameters, and return a value. They can be built-in system functions or user-defined functions. The syntax for user-defined function declaration is:</p>
+
+<grammar name="Function">
+<rule name="Function"><kw>function</kw> <nt>IDENTIFIER</nt> [ <kw>(</kw> ] <nt>params</nt> [ <kw>)</kw> ]  <kw>{</kw> ( <nt>Statement</nt> )* <kw>}</kw></rule>
+<rule name="params"><nt>param</nt> ( <kw>,</kw> <nt>param</nt> )* [ <kw>,</kw> <kw>..</kw> ] | <kw>..</kw> | <kw>&lt;</kw> <nt>Expr</nt> <kw>&gt;</kw></rule>
+<rule name="param"><nt>IDENTIFIER</nt> [ <kw>=</kw> <nt>Expr</nt> ]</rule>
+</grammar>
+
+<p>The same syntax is used for methods within user-defined classes; there are some fundamental differences between functions and class methods, which will be discussed in chapter <ref id="oop:"/>.</p>
+
+<p>The parentheses around parameters are not required; if parentheses are used, the right parenthesis must match the left one. Functions always return a value; the <code>return</code> statement can return a value and exit the function. If no <code>return</code> statements are called, the function code will fall out of scope and exit, returning <code>undefined</code>. Functions, like any declarations in <J>, can appear anywhere, that is, you can call a function before it is declared. The following is the famous Hanoi Tower problem followed by the result of a test run.</p>
+
+<codelist id="hanoi.judo" name="hanoi.judo">
+cnt = 0;
+hanoiTower(4, 'A', 'B', 'C');
+
+function hanoiTower N, src, aux, dst {
+  if N == 0 { return; }
+  hanoiTower(N-1, src, dst, aux);
+  println 'step ', ++cnt :&gt;2, ':  ', src, ' =&gt; ', dst;
+  hanoiTower(N-1, aux, src, dst);
+}
+</codelist>
+
+<p>The Tower of Hanoi puzzle was invented by the French mathematician Edouard Lucas in 1883. There are three pegs; initially a number of disks of different sizes are stacked on one peg; the objective is to transfer the entire tower to another peg, moving only one disk at a time and never a larger one on top of a smaller. This is a well-known recursive algorithm. In <code>hanoi.judo</code>, we used a global variable, <code>cnt</code>, to track the history of the transfers. The following is the result of moving an initial tower of 4 disks.</p>
+
+<asis>
+step  1:  A =&gt; B
+step  2:  A =&gt; C
+step  3:  B =&gt; C
+step  4:  A =&gt; B
+step  5:  C =&gt; A
+step  6:  C =&gt; B
+step  7:  A =&gt; B
+step  8:  A =&gt; C
+step  9:  B =&gt; C
+step 10:  B =&gt; A
+step 11:  C =&gt; A
+step 12:  B =&gt; C
+step 13:  A =&gt; B
+step 14:  A =&gt; C
+step 15:  B =&gt; C
+</asis>
+
+<!------------------------------------->
+<section2 title="Function Parameters" id="params">
+
+<p>Function parameter names are the same as variable names. Parameters may have default values. Function calls can take any number of parameter values. If the number of passed values is less than the number of declared parameters, the missing parameters take the default values in the function declaration; if no default values specified, <code>null</code> is used. If the number of passed values is more than the number of declared parameters, the extra parameters are stored in an array in the predefined local variable, <code>$$args</code>.</p>
+
+<p>To explicitly declare that a function takes variable number of parameters, you may end the parameter list with two dots (<code>..</code>); this has no further meaning.</p>
+
+<p>During function calls, parameters are pass-by-value for primitive <J> data types (including integer, number, date and time and string), and pass-by-reference for other object types.</p>
+
+<codelist id="var_params.judo" name="var_params.judo">
+function inc x, delta=1, .. {
+  ret = x + delta;
+  if $$args != null {
+    for x in $$args { ret += x; }
+  }
+  return ret;
+}
+println inc(2);
+println inc(2,2);
+println inc(2,2,2);
+
+function sum .. {
+  ret = 0;
+  for x in $$args { ret += x; }
+  return ret;
+}
+println sum(1,2,3,4,5,6,7,8,9);
+
+function oneparam a {
+  println '---', nl, 'The parameter: ', a;
+  if $$args != null {
+    println unit($$args.length, 'useless parameter');
+  }
+}
+oneparam('abc');
+oneparam('abc', x, y, z);
+</codelist>
+
+<p>The result is:</p>
+
+<asis>
+3
+4
+6
+45
+----
+The parameter: abc
+----
+The parameter: abc
+3 useless parameters
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Dynamic Function Parameters" id="dynparams">
+
+<p><J> allows you to dynamically create a parameter list in an array, and use that array as function call parameters through the <code>{{ }}</code> syntax.</p>
+
+<codelist name="dyn_params.judo" id="dyn_params.judo">
+function sentence subj, verb, obj, .. {
+  print subj, ' ', verb, ' ', obj;
+  for x in $$args { print ' ', x; }
+  println '.';
+}
+
+params = [ 'James', 'wrote', 'Judo' ];
+sentence( {{params}} );
+
+params = [ 'He', 'uses', 'Judo', 'day-in', 'and', 'day-out' ];
+sentence( {{params}} );
+</codelist>
+
+<p>In the example, the function<code>sentence()</code> prints out all its parameters separated by spaces. The first three parameters are named, and it handles variable number of parameters. When called with dynamic parameters in an array, the elements of array are taken as individual parameters and the result of execution is:</p>
+
+<asis>
+James wrote Judo.
+He uses Judo day-in and day-out.
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Function Variables" id="fxnvar">
+
+<p>A function variable is a variable that references a function. A function reference is obtained by the <code>&amp;</code> operator. They can be assigned to variables or passed as paramter values to other functions.</p>
+
+<p>To call a function reference stored in a variable, you can simply invoke the function with the variable name. If the function reference is stored in an array element, use that array element. If the function reference is stored as a value for a key in an <code>Object</code>, use the key name to invoke the function. The following example demonstrates all these situations.</p>
+
+<codelist name="fxn_var" caption="fxn_var.judo">
+function foo1 a, b { return a + b; }
+function foo2 a, b { return a * b; }
+function whichFoo f, a, b { return f(a,b); }
+
+println 'whichFoo(&foo1, 2, 3) = ', whichFoo(&foo1, 2, 3);
+println 'whichFoo(&foo2, 2, 3) = ', whichFoo(&foo2, 2, 3);
+
+x = [ &foo1, &foo2 ];
+println 'x = ', x;
+println 'x[0](2, 3) = ', x[0](2, 3);
+println 'x[1](2, 3) = ', x[1](2, 3);
+
+y = { fxn1 = &foo1, fxn2 = &foo2 };
+println 'y = ', y;
+println 'y.fxn1(4, 6) = ', y.fxn1(4, 6);
+println 'y.fxn2(4, 6) = ', y.fxn2(4, 6);
+</codelist>
+
+<p>The only ambiguous situation is that, if there is a function defined with the same name as a variable that holds a function reference, the defined function will be accessed. To remedy this situation, <J> uses the <code>-&gt;</code> operator to explicitly invoke a function referenced in a variable as follows:</p>
+
+<asis>
+function foo1 a, b { return a + b; }
+function foo2 a, b { return a * b; }
+function whichFoo f, a, b { return f(a,b); }
+
+println 'whichFoo-&gt;(&foo1, 2, 3) = ', whichFoo-&gt;(&foo1, 2, 3);
+println 'whichFoo-&gt;(&foo2, 2, 3) = ', whichFoo-&gt;(&foo2, 2, 3);
+</asis>
+
+<p>Function variables are important in <J>. Many data structures have methods that take particular function variables to do tasks such as sorting, filtering and transformation. For instance, <code>Array</code>'s <code>sort()</code> method can take a function reference which takes two parameters and return <code>1</code>, <code>0</code> or <code>-1</code> as the result of comparison; its <code>filter()</code> method can take a function reference which takes one parameter and returns <code>true</code> or <code>false</code>. The following example shows how to do a custom sorting on array elements.</p>
+
+<codelist name="custom_sort" id="custom_sort.judo">
+a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+a.sort( &amp;my_comparator );
+for x in al { println x; }
+
+function my_comparator(lhs, rhs) {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  for i from 0 to la.size() {
+    if la[i].int() &lt; ra[i].int() { return -1; }
+    if la[i].int() &gt; ra[i].int() { return 1; }
+  }
+  if la.size() == ra.size() { return 0; }
+  return la.size() &gt; ra.size();
+}
+</codelist>
+
+<p>This program prints the array list as book section numbers. The result is:</p>
+
+<asis>
+1.2
+1.2.1
+1.10
+2.3
+3
+3
+3.9
+</asis>
+
+<p>Another good example is the <code>toCsv()</code> of the <code>Array</code> object. The following code converts an array of values into comma-separated, quoted strings, which can be used in SQL's <i>where</i> clause as the values for the <i>in</i> expression:</p>
+
+<asis>
+last_names = [ 'Olajuwon', 'Yao' ];
+in_expr = last_names.toCsv(',', function(x){ return "'"+x+"'"; });
+exeucteQuery qry:
+  SELECT * FROM emp WHERE last_name IN ( (* in_expr *) )
+;
+</asis>
+
+<p>The resultant SQL statement is:</p>
+
+<asis>
+SELECT * FROM emp WHERE last_name IN ( 'Olajuwon', 'Yao' )
+</asis>
+
+<p>The SQL scripting is introduced in chapter <ref id="jdbc:"/>.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Anonymous Functions" id="anonfxn">
+
+<p>With function variables, functions do not always need names. Anonymous functions can be declared without names; in this case, parentheses around parameters are required, and it must be assigned to a location.</p>
+
+<codelist name="filter.judo" id="filter.judo">
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+f = function(elem){ return elem.length() &gt;= 5; };
+a.filter(f,true);
+println a;
+</codelist>
+
+<p>In the <code>filter()</code> call, the first parameter is a filter function. The second parameter of <code>true</code> indicates the filtering is done locally; if <code>false</code>, a new array is returned with the filtered elements. The filtering is for strings over 5-character long. The result is:</p>
+
+<asis>
+[abcde,abcdef,abcdefg]
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Function Alias for Java Static Methods" id="javafxn">
+
+<p>Another way to make new functions is to alias Java class static methods. Aliasing Java static methods is also discussed in <ref id="java:alias"/>. The syntax is:</p>
+
+<grammar id="_FunctionAlias">
+<nt>FunctionAlias</nt> ::= <kw>function</kw> <nt>IDENTIFIER</nt> <kw>for</kw> <kw>java::</kw><nt>JavaClassName</nt> [ <kw>(</kw><kw>)</kw> ] <kw>;</kw>
+</grammar>
+
+<p>Once a Java static method is aliased to be a function, that function can be used almost like a native <J> function:</p>
+
+<asis>
+function now for java::System.currentTimeMillis();
+function loadLibrary for java::System.loadLibrary();
+
+millis = now();
+loadLibrary("native.dll");
+</asis>
+
+<p>Because the function aliases are indeed Java methods, the method parameters are fixed and strongly typed. You have to pass exactly the same number of parameters, and the parameter values should be compatible with the declared parameter types, and sometimes explicit casting may be needed. See <ref id="java:alias"/> for more details.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="System Functions" id="sysfxn" status="green">
+
+<p><J> has a number of system functions for various purposes. They are actually the methods of an internal <code>$$sys</code> object but <code>$$sys</code> is not required to use them. This is called method shortcut. In addition to <code>$$sys</code>, shortcut methods also exists for internal object <code>$$con</code> (the default database connection). In <J>, values and objects all have methods. The mathematical functions, for instance, are methods of numeric values. System functions are those that do not belong to any objects but useful system-wide.</p>
+
+<p>The system functions fall into the following categories: values and numbers, system properties and related, system controls, system standard input-output, file input-output and generic. Refer to appendix <ref id="a_sf:"/> for a complete listing.</p>
+
+<system_function_listing>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Exception Handling" id="excpt" status="green">
+
+<p><J> can catch runtime exceptions, either from the language engine or from Java. The try-catch-finally syntax has two equivalent forms:</p>
+
+<grammar id="block_catchfinally">
+<rule name="BlockCatchFinally"><kw>{</kw> ( <nt>Statement</nt> )+ [ <kw>catch</kw> [ <nt>IDENTIFIER</nt> ] <kw>:</kw> ( <nt>Statement</nt> )+ ] [ <kw>finally</kw> <kw>:</kw> ( <nt>Statement</nt> )+ ] <kw>}</kw></rule>
+</grammar>
+
+<grammar id="try_catchfinally">
+<rule name="TryCatchFinally"><kw>try</kw> <nt>Block</nt> [ <kw>catch</kw> [ <nt>IDENTIFIER</nt> ] <nt>Block</nt> ] [ <kw>finally</kw> <nt>Block</nt> ]</rule>
+</grammar>
+
+<p>In the second form, at least one of <code>catch</code> and <code>finally</code> clauses must appear. The following is an example:</p>
+
+<asis>
+try {
+  xxxxx(); // doesn't exist and will fail.
+} catch ex {
+  println 'Catch: ', ex;
+} finally {
+  println 'Finally.';
+}
+</asis>
+
+<p>The first form is compact and easy; the second form is more Java-like and elegant but verbose. The choice is totally up to your style. The block form can also be applied to bodies of functions and compound statements. Note that <i>if-else</i> and <i>switch</i> statements' blocks can not have <code>catch</code> and <code>finally</code> clauses, as these blocks are just syntactic blocks and not block statements.</p>
+
+<p>The <code>catch</code> clause can take a variable name to hold the exception object; if not specified, <code>$_</code> is used, as is the case in the following example:</p>
+
+<asis>
+{
+  xxxxx(); // doesn't exist and will fail.
+catch:
+  println 'Catch: ', $_;
+finally:
+  println 'Finally.';
+}
+</asis>
+
+<p>In the global scope, you can have one <code>catch</code> and one <code>finally</code> clauses:</p>
+
+<asis>
+xxxxx(); // doesn't exist and will fail.
+
+catch:   println 'Catch: ', $_;
+finally: cleanup();
+</asis>
+
+<!------------------------------------->
+<section2 title="The Exception Object" id="exobj">
+
+<p>The exception object in the <code>catch</code> clause is a built-in object. For Java exceptions, the exception object wraps the Java exception, and all the Java exception methods can be accessed. The <J> exception object has these properties:</p>
+
+<table id="obj_Exception" name="Exception Object Property">
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td><code>line</code></td><td>the line number in the script where the exception happened.</td></tr>
+<tr><td><code>file</code></td><td>the file name of the script in which the exception happened.</td></tr>
+<tr><td><code>message</code></td><td>the message for the exception.</td></tr>
+<tr><td><code>name</code></td><td>the internal name of the exception.</td></tr>
+<tr><td><code>type</code></td><td>the internal type of the exception.</td></tr>
+</table>
+
+<p>The most frequently used properties are <code>line</code> and <code>message</code>.
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="The Throw and Resume Statements" id="throw_resume">
+
+<p>The <i>throw</i> and <i>resume</i> statements are two exception-related statements in <J>. The <i>throw</i> statement throws an exception that transfers the control to the immediate <i>catch</i> clause, or it aborts the program. Its syntax is:</p>
+
+<grammar id="Throw">
+<rule name="Throw"><kw>throw</kw> [ <nt>Expr</nt> ] <kw>;</kw></rule>
+</grammar>
+
+<p>The <nt>Expr</nt> should be evaluated to be either an exception object (including Java exception object) or a string. If a string or no value is specified, a <code>USER_EXCEPTION</code> is thrown.</p>
+
+<p>The <code>resume</code> statement is used only during handling exception in the <code>catch</code> clause. It resumes the execution after where the exception has happened. If it has no effect if it appears in non-<code>catch</code> code. It takes no parameters:</p>
+
+<grammar id="Resume">
+<rule name="Resume"><kw>resume</kw> <kw>;</kw></rule>
+</grammar>
+
+<p>The following test demonstrates most of the exeption handling topics, including the exception object properties, <i>throw</i> and <i>resume</i> statements, and <code>catch</code> and <code>finally</code> in local and global scopes.</p>
+
+<codelist name="excpt_test" caption="excpt_test.judo">
+{
+  xxxxx();  // method does not exist
+  println 'Not reached.';
+catch:
+  println '[Line ', $_.line, '] INSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  throw $_;
+finally:
+  println 'INSIDE FINALLY.';
+}
+
+throw;
+throw new java::Exception("This exception is pure Java.");
+throw "ABCDE";
+
+catch:
+  println '[Line ', $_.line, '] OUTSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  resume;
+</codelist>
+
+<p>The output is:</p>
+
+<asis>
+[Line 2] INSIDE CATCH: &lt;METHOD_NOT_FOUND> Function xxxxx() not found.
+INSIDE FINALLY.
+[Line 2] OUTSIDE CATCH: &lt;METHOD_NOT_FOUND> Function xxxxx() not found.
+[Line 12] OUTSIDE CATCH: &lt;USER_EXCEPTION>
+[Line 13] OUTSIDE CATCH: &lt;JAVA_EXCEPTION> This exception is pure Java.
+[Line 14] OUTSIDE CATCH: &lt;USER_EXCEPTION> ABCDE
+</asis>
+
+<p>The <code>catch</code> and <code>finally</code> clauses do not create new scopes; that is, they are all in the same scope as the whole block. In the format of <code>try { .. } catch { .. } finally { .. }</code>, this may not be obvious.</p>
+
+</section1><!--=====================================================-->
+

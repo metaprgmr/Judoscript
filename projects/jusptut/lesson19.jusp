@@ -1,0 +1,53 @@
+<% var title = 'Lesson 19. Excercise: A Challenge'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>By now, you have learned everything about developing web apps with
+the JuSP platform. It is a good time to put this knowledge into practice.
+Here is a challenge:</p>
+
+<blockquote>
+Create a web app using the JuSP platform to create a <em>customer
+support entry system</em>. The business requirements are:</p>
+
+<ol>
+<li>User must login</li>
+<li>A custom entry form to take various kinds of information</li>
+<li>User may attach files</li>
+<li>Validation on user input</li>
+<li>The form will be mailed to an e-mail address.</li>
+</ol>
+
+<p>The technical requirements/hints are:</p>
+
+<ol>
+<li>Use <code>&lt;%!forward%></code> and/or <code>&lt;%!redirect%></code>
+    to implement a clean page-flow architecture (see lessons
+    <%!link 'lesson8.jusp', 8 %>, <%!link 'lesson9.jusp', 9 %> and
+    <%!link 'lesson12.jusp', 12 %>)</li>
+<li>Use <code>&lt;%!include %></code> to control the headers and footers
+    of all pages (see <%!link 'lesson7.jusp', 'lesson 7' %>)</li>
+<li>In the included header page, check on the user authentication;
+    if not, forward/redirect to a login page (see
+    <%!link 'lesson12.jusp', 'lesson 12' %>)</li>
+<li>Create a custom support form with entries of various types (see lessons
+    <%!link 'lesson4.jusp', 4 %> and <%!link 'lesson5.jusp', 5 %>)</li>
+<li>The form does various validations (see
+    <%!link 'lesson6.jusp', 'lesson 6' %>)</li>
+<li>The form allows uploading file attachments (see
+    <%!link 'lesson16.jusp', 'lesson 16' %>)</li>
+<li>The form result is mailed to a configurable e-mail address (see
+    <%!link 'lesson17.jusp', 'lesson 17' %>)</li>
+<li>Optionally, you can save the user input into a relational database
+    or as a file of some sort.</li>
+</ol>
+</blockquote>
+
+<p>This should be quite doable and fun, and will cover over 80% of the
+daily development in web app projects.</p>
+
+<p>Happy developing!</p>
+
+<%!include "footer.jusp" %>

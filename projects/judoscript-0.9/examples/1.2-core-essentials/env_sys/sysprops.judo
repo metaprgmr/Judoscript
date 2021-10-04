@@ -1,0 +1,42 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    a) Displays java class path nicely.
+    b) Displays all the property-related method output;
+       uses 'cd' command to change curDir() value.
+    c) Prints out all the system properties.
+  *]];
+}
+
+cp = systemProperty('java.class.path').csv(pathSep());
+first = true;
+for x in cp { // print class path nicely.
+  if first { println 'Java class path: ', x; first = false; }
+  else     { println '                 ', x; }
+}
+
+println 'OS Name:    ', osName();
+println 'isMac:      ', isMac().fmtBool();
+println 'isWindows:  ', isWindows().fmtBool();
+println 'isHP:       ', isHP().fmtBool();
+println 'isLinux:    ', isLinux().fmtBool();
+println 'isSunOS:    ', isSunOS().fmtBool();
+println 'javaVendor: ', javaVendor();
+println 'userName:   ', userName();
+println 'homeDir:    ', homeDir();
+println 'curDir:     ', curDir();
+println "cd '/'";
+cd '/';   // change curDir().
+println 'curDir:     ', curDir();
+
+println nl, '=======================';
+println     ' All system properties';
+println     '=======================';
+sysprops = systemProperties();
+keys = sysprops.keys();
+while keys.hasMoreElements() {
+  local k = keys.nextElement();
+  println k:>25, ' = ', sysprops.get(k);
+}

@@ -1,0 +1,67 @@
+            Legend:
+              NUL  - isNull()    CLX  - isComplex()  INT  - isInt()    FLT  - isFloat()
+              STR  - isString()  DAT  - isDate()     ARR  - isArray()  SET  - isSet()
+              STT  - isStruct()  STK  - isStack()    QUE  - isQueue()  JAV  - isJava()
+              OBJ  - isObject()  FUN  - isFunction()
+
+                                          N C I F N S D A S S S Q J O F
+                                          U L N L U T A R E T T U A B U
+Expression                                L X T T M R T R T T K E V J N  Type Name
+----------------------------------------- - - - - - - - - - - - - - - -  ---------
+a = null;                                 X . X X X X . . . . . . . . .  null
+a = true;                                 . . X X X . . . . . . . . . .  Integer
+a = 1;                                    . . X X X . . . . . . . . . .  Integer
+a = 1.0;                                  . . . X X . . . . . . . . . .  Float
+a = '1';                                  . . X X X X . . . . . . . . .  String
+a = '1.0';                                . . . X X X . . . . . . . . .  String
+a = '0xabc';                              . . X X X X . . . . . . . . .  String
+a = '0777';                               . . X X X X . . . . . . . . .  String
+a = '1e34';                               . . . X X X . . . . . . . . .  String
+a = 'abc';                                . . . . . X . . . . . . . . .  String
+a = 'xyz';                                . . . . . X . . . . . . . . .  String
+a = new java::String('Xyz');              . . . . . X . . . X . . X X .  java.lang.String
+a = new java::Boolean(true);              . . X X X . . . . X . . X X .  java.lang.Boolean
+a = new java::Byte(1);                    . . X X X . . . . X . . X X .  java.lang.Byte
+a = new java::Character('c');             . . X X X . . . . X . . X X .  java.lang.Character
+a = new java::Short(1);                   . . X X X . . . . X . . X X .  java.lang.Short
+a = new java::Float(1.01);                . . . X X . . . . X . . X X .  java.lang.Float
+a = new java::Double(1.01);               . . . X X . . . . X . . X X .  java.lang.Double
+a = Date();                               . . X X X . X . . X . . . X .  Date
+a = new java::Date;                       . . X X X . X . . X . . X X .  java.util.Date
+a = new array;                            . . . . . . . X . X . . . X .  Array
+a = [];                                   . . . . . . . X . X . . . X .  Array
+a = LinkedList[];                         . . . . . . . X . X . . . X .  Array
+a = new java::byte[4];                    . . . . . . . X . X . . X X .  byte[]
+a = new java::Date[2];                    . . . . . . . X . X . . X X .  java.util.Date[]
+a = new java::Hashtable;                  . . . . . . . . . X . . X X .  java.util.Hashtable
+a = new Set;                              . . . . . . . . X X . . . X .  Set
+a = Set<Number>[];                        . . . . . . . . X X . . . X .  Set
+a = {};                                   . . . . . . . . . X . . . X .  Object
+a = new Object;                           . . . . . . . . . X . . . X .  Object
+a = new OrderedMap;                       . . . . . . . . . X . . . X .  OrderedMap
+a = new SortedMap<String>;                . . . . . . . . . X . . . X .  SortedMap
+a = new TreeNode;                         . . . . . . . . . X . . . X .  TreeNode
+a = new Stack;                            . . . . . . . X . X X . X X .  com.judoscript.util._Stack
+a = new Queue;                            . . . . . . . X . X . X X X .  com.judoscript.util.Queue
+a = new TableData;                        . . . . . . . . . X . . X X .  TableData
+a = openFile(#prog);                      . . . . . . . . . X . . X X .  com.judoscript.util.MyInputStream
+a = openTextFile(#prog);                  . . . . . . . . . X . . X X .  java.io.BufferedReader
+class C {}                                . . . . . . . . . X . . . X .  C
+a = new C;
+class C extends OrderedMap {}             . . . . . . . . . X . . . X .  C
+a = new C;
+class C extends TreeNode {}               . . . . . . . . . X . . . X .  C
+a = new C;
+class D extends C {}                      . . . . . . . . . X . . . X .  D
+a = new D;
+a = function(){};                         . . . . . . . . . . . . . . X  function_ref
+do ('<a>').getReader() as sgml {          . . . . . . . . . X . . . X .  SGMLTag
+<a>: a = $_;
+}
+do ('</a>').getReader() as sgml {         . . . . . . . . . X . . . X .  SGMLTag
+</a>: a = $_;
+}
+do ('</a>  ').getReader() as sgml {       . . X . . X . . . . . . . . .  String
+:TEXT: a = $_;
+}
+----------------------------------------- - - - - - - - - - - - - - - -  ---------

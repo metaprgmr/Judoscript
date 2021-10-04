@@ -1,0 +1,126 @@
+<function sig="addRow anArray" alias="add">
+  Adds elements in <param>anArray</param> as a row. The <param>anArray</param>
+  can also be a Java array.
+</function>
+
+<function sig="sort comparatorFunction">
+  Sort the rows with the required <param>comparatorFunction</param>.
+  Returns self.
+</function>
+
+<function sig="sortByColumn column, comparatorFunction">
+  Sort by <param>column</param>. If no <param>column</param> specified, default
+  to 0. The <param>comparatorFunction</param> is optional.
+</function>
+
+<function sig="sortByColumnAsString column, ascending">
+  Sort by <param>column</param> as strings. If no <param>column</param> specified,
+  default to 0. If <param>asending</param> is not specified, by default it is ascending.
+</function>
+
+<function sig="sortByColumnAsNumber ascending">
+  Sort by <param>column</param> as numbers. If no <param>column</param> specified,
+  default to 0. If <param>asending</param> is not specified, by default it is ascending.
+</function>
+
+<function sig="sortByColumnAsDate ascending">
+  Sort by <param>column</param> as dates. If no <param>column</param> specified,
+  default to 0. If <param>asending</param> is not specified, by default it is ascending.
+</function>
+
+<function sig="filter filterFunction">
+  Returns a new table data with certain rows filtered out by the required
+  <param>filterFunction</param>.
+</function>
+
+<function sig="filterNotNull">
+  Returns a new table data with null rows filtered out.
+</function>
+
+<function sig="filterByColumn column, filterFunction">
+  Returns a new table data with certain rows filtered out on column <param>column</param>
+  by the required <param>filterFunction</param>.
+</function>
+
+<function sig="filterByColumnNotNull column">
+  Returns a new table data with certain rows filtered out on null columns.
+</function>
+
+<function sig="getTitles">
+  Returns a string array of the column titles.
+</function>
+
+<function sig="getTitle index">
+  Returns the title of column <param>index</param>, which is 0-based.
+</function>
+
+<function sig="setTitleCaseSensitive set">
+  Sets the flag indicating the title is case-sensitive or not.
+</function>
+
+<function sig="setTitles titles">
+  Sets the titles for the columns.
+</function>
+
+<function sig="setTitleAt index, name">
+  Sets the title for column <param>index</param>, which is 0-based.
+</function>
+
+<function sig="size">
+  Returns the size (number of rows) of this table-data.
+</function>
+
+<function sig="lastIndex">
+  Returns the index of the last row, which is size - 1.
+</function>
+
+<function sig="clear">
+  Clears all the data in this table-data.
+</function>
+
+<function sig="getData">
+  Returns the table data in a 2-dimensional array.
+</function>
+
+<function sig="getColumnMaxWidths()">
+  Returns an array of each column's maximum string length.
+</function>
+
+<function sig="getRow row">
+  Returns a row data at <param>row</param>.
+</function>
+
+<function sig="getColumnCount">
+  Returns the number of columns.
+</function>
+
+<function sig="getColumnIndex name">
+  Returns the index for the column <param>name</param>, or -1 if not found.
+</function>
+
+<function sig="getColumn index">
+  Returns a Java array <code>java.lang.Object[]</code> for column <param>index</param>.
+</function>
+
+<function sig="getAt row, column">
+  Returns the value at (<param>row</param>, <param>column</param>), or <!null> if
+  it is out of range.
+</function>
+
+<function sig="setAt row, column, value">
+  Sets the value to (<param>row</param>, <param>column</param>), where <param>column</param>
+  can be an index or a column name.
+</function>
+
+<function sig="setRow row, rowData">
+  Sets the array <param>rowData</param> at <param>row</param>.
+</function>
+
+<function sig="filterNotNullRows">
+  Returns a new table-data that have null rows removed.
+</function>
+
+<function sig="filterByColumnNotNull index">
+  Returns a new table-data that have rows with null column at <param>index</param> removed.
+</function>
+

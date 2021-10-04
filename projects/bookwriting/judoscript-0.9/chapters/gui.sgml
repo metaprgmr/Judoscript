@@ -1,0 +1,13 @@
+<synopsis>
+One of the uses of <J>'s Java scripting is to build Java GUI programs, either AWT, Swing or SWT based. In addition to the Java-only way to build Java GUIs, <J> provides a special GUI event handling statement, <kw>guiEvent</kw>, that is an event-driven statement. An event from a GUI component is denoted as a colon-separated tuple, and you as a programmer supply the handling code. The event object is stored in the <code>$_</code> variable, which is of different type depending on the event.
+</synopsis>
+
+<notyet href="../../../articles/gui.html">
+
+<section1 title="Create AWT and Swing GUIs" status="red">
+</section1>
+<section1 title="Handle GUI Events" status="red">
+</section1>
+<section1 title="Handle GUI Events for Multiple Controls" status="red">
+</section1>
+

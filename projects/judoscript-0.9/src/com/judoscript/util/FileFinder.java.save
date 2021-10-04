@@ -1,0 +1,340 @@
+/* JudoScript, The Scripting Solution for the Java Platform
+ * Copyright (C) 2001-2004 James Jianbo Huang, http://www.judoscript.com
+ *
+ * This is free software; you can embed, modify and redistribute
+ * it under the terms of the GNU Lesser General Public License
+ * version 2.1 or up as published by the Free Software Foundation,
+ * which you should have received a copy along with this software.
+ * In case you did not, please download it from the internet at
+ * http://www.gnu.org/copyleft/lesser.html
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ *************************** CHANGE LOG ***************************
+ *
+ * Authors: JH  = James Jianbo Huang, judoscript@hotmail.com
+ *
+ * 03-17-2002  JH   Initial open source release.
+ *
+ **********  No tabs. Indent 2 spaces. Follow the style. **********/
+
+
+package com.judoscript.util;
+
+import java.io.*;
+import java.util.*;
+import java.util.zip.ZipFile;
+
+
+public class FileFinder implements FileFilter
+{
+  public static final int LIST_NONE            = 0;
+  public static final int LIST_FILE_ONLY       = 1;
+  public static final int LIST_DIR_ONLY        = 2;
+
+  public static final int FST_UNKNOWN = 0;
+  public static final int FST_LOCALFS = 1;
+  public static final int FST_ZIPFILE = 2;
+  public static final int FST_TARFILE = 3;
+
+  Vector  fileOrDirs;
+  Object  base;
+  WildcardMatcher excludes;
+  HashMap patterns;
+  boolean expandDirs = true;
+  boolean recursive;
+  boolean noHidden; boolean caseSens;
+  int fsType;
+  HashSet processed = null;
+
+  protected FileFinder() {}
+
+  public FileFinder(String base, String incls, String excls, boolean recursive, boolean noHidden)
+                   throws IllegalArgumentException
+  {
+    this(base,incls,excls,recursive,noHidden,!Lib.isWindows());
+  }
+
+  public FileFinder(String base, String incls, String excls, boolean recursive, boolean noHidden,
+                    boolean caseSens) throws IllegalArgumentException
+  {
+    this.fsType = FST_LOCALFS;
+    this.recursive = recursive;
+    this.noHidden  = noHidden;
+    this.caseSens  = caseSens;
+
+    // handle base:
+    if (Lib.isEmpty(base))
+      throw new IllegalArgumentException("Base directory is not specified.");
+    base = base.replace('\\','/');
+    if (!base.endsWith("/")) base += "/";
+    this.base = base;
+    init(incls,excls);
+  }
+
+  public FileFinder(ZipFile base, String incls, String excls, boolean recursive, boolean noHidden)
+  {
+    this.fsType = FST_ZIPFILE;
+    this.recursive = recursive;
+    this.noHidden  = noHidden;
+    this.caseSens  = true;
+    this.base = new ZipFS(base);
+
+    init(incls,excls);
+  }
+
+  public FileFinder(TarFS base, String incls, String excls, boolean recursive, boolean noHidden)
+  {
+    this.fsType = FST_TARFILE;
+    this.recursive = recursive;
+    this.noHidden  = noHidden;
+    this.caseSens  = true;
+    this.base = base;
+
+    init(incls,excls);
+  }
+
+  public String getBaseDir() { return fsType==FST_LOCALFS ? (String)base : ""; }
+  public void setExpandDirs(boolean set) { expandDirs = set; }
+  public boolean isLocal() { return fsType == FST_LOCALFS; }
+  public boolean isZipFile() { return fsType == FST_ZIPFILE; }
+  public boolean isTarFile() { return fsType == FST_TARFILE; }
+  public String getTarFileName() {
+    try { return ((TarFS)base).getTarFileName(); } catch(Exception e) {}
+    return null;
+  }
+
+  void init(String incls, String excls) {
+    fileOrDirs = null;
+
+    StringTokenizer st;
+    String s;
+
+    // handle excludes: turn commas into vertical-bars,
+    // make each pattern an absolute path, then concatenate them with '|'
+    // and finally parse it into a WildcardMatcher.
+    if (Lib.isEmpty(excls)) {
+      excludes = null;
+    } else {
+      st = new StringTokenizer(excls.replace('\\','/'), ",");
+      StringBuffer sb = new StringBuffer();
+      boolean start = true;
+      while (st.hasMoreTokens()) {
+        s = st.nextToken().trim();
+        if (!Lib.isAbsolutePath(s)) { // always make excludes all absolute
+          if (fsType==FST_LOCALFS)
+            s = ((String)base) + s;
+        }
+        if (start)
+          start = false;
+        else
+          sb.append('|');
+        sb.append(s);
+      }
+      excludes = new WildcardMatcher(sb.toString(),caseSens);
+    }
+
+    // handle patterns: collect the longest paths as keys into 'patterns';
+    //                  if relative, prepend 'base'.
+    patterns = new HashMap();
+    if (Lib.isEmpty(incls))
+      incls = "*";
+    st = new StringTokenizer(incls.replace('\\','/'), ",");
+    while (st.hasMoreTokens()) {
+      s = st.nextToken().trim();
+      if (!Lib.isAbsolutePath(s)) { // always make it absolute.
+        if (fsType==FST_LOCALFS) s = ((String)base) + s;
+      }
+      if ((s.indexOf('*') < 0) && (s.indexOf('?') < 0)) {
+        // if not a pattern, add to fileOrDirs as absolute path.
+        if (fileOrDirs == null)
+          fileOrDirs = new Vector();
+        fileOrDirs.addElement(s);
+      } else {
+        // collect the longest root paths of each pattern for
+        // listing and associate all patterns with that root path;
+        // This association is not used yet but in the future may
+        // for performance enhancement.
+        WildcardMatcher wm = new WildcardMatcher(s,caseSens);
+        int idx1 = s.indexOf("*");
+        int idx2 = s.indexOf("?");
+        if ((idx1>idx2) && (idx2>=0)) idx1 = idx2;
+        idx2 = (idx1<0) ? s.lastIndexOf("/") : s.lastIndexOf("/",idx1);
+        if (idx2 >= 0) {
+          s = s.substring(0,idx2+1);
+          if (!patterns.containsKey(s))
+            patterns.put(s,wm);
+          else
+            ((WildcardMatcher)patterns.get(s)).append(wm);
+        } else {
+          // in local fs, base always prepended so it never comes here.
+          patterns.put(ZipFS.ROOT_NAME, wm);
+        }
+      }
+    }
+  }
+
+  // FileFilter method
+  public final boolean accept(File file) { return accept((Object)file); }
+
+  public final boolean accept(Object file) {
+    String path = getPath(file);
+    if (processed.contains(path))
+      return false;
+    processed.add(path);
+    if (noHidden && isHidden(file))
+      return false;
+    if ((excludes != null) && excludes.match(path))
+      return false;
+    if (recursive && isFolder(file))
+      return true;
+    Iterator values = patterns.keySet().iterator();
+    if (!values.hasNext())
+      return true;
+    while (values.hasNext()) {
+      if ( ((WildcardMatcher)values.next()).match(path) )
+        return true;
+    }
+    return false;
+  }
+
+  private ListReceiver listReceiver = null;
+  private int listOption = 0;
+  private int proc_count = 0;
+
+  public int list(ListReceiver lr, int listOption) throws IOException {
+    try {
+      listReceiver = lr;
+      this.listOption = listOption;
+
+      Object file;
+      Enumeration enum;
+      proc_count = 0;
+      HashSet set = new HashSet();
+      Stack stack = new Stack();
+      processed = new HashSet();
+
+      // for specified files and/or directories:
+      if (fileOrDirs != null) {
+        for (int vi = fileOrDirs.size()-1; vi >= 0; --vi) {
+          file = getFile((String)fileOrDirs.elementAt(vi));
+          if (file==null)
+            continue;
+          if (!isFolder(file) || !expandDirs) {
+            stack.push(file);
+          } else {
+            Object[] fa = listChildren(file,this);
+            for (int i=0; i<fa.length; stack.push(fa[i++]));
+          }
+        }
+        processStack(stack,set);
+      }
+
+      // for patterns
+      Iterator bases = patterns.keySet().iterator();
+      while (bases.hasNext()) {
+        file = getFile((String)bases.next());
+        if (file==null)
+          continue;
+        if (!isFolder(file)) {
+          stack.push(file);
+        } else {
+          Object[] fa = listChildren(file,this);
+          for (int i=0; i<fa.length; stack.push(fa[i++]));
+        }
+      }
+      processStack(stack,set);
+    } finally {
+      processed.clear();
+      processed = null;
+      if (listReceiver != null) {
+        listReceiver.finish();
+        listReceiver = null;
+      }
+    }
+
+    return proc_count;
+  }
+
+  private void processStack(Stack stack, HashSet set) throws IOException {
+    while (!stack.empty()) {
+      Object file = (Object)stack.pop();
+      if (exists(file)) {
+        process(file);
+        String abspath = getPath(file);
+        if (set.contains(abspath))
+          continue;
+        set.add(abspath);
+        if (recursive && isFolder(file)) {
+          Object[] fa = listChildren(file,this);
+          for (int i=0; i<fa.length; stack.push(fa[i++]));
+        }
+      }
+    }
+  }
+
+  protected void process(Object src) throws IOException {
+    if (isFolder(src)) {
+      if (listOption==LIST_FILE_ONLY)
+        return;
+    } else if (listOption==LIST_DIR_ONLY)
+      return;
+    if (listReceiver != null) {
+      listReceiver.receive(src);
+      ++proc_count;
+    }
+  }
+
+  protected boolean isFolder(Object file) {
+    try { return ((File)file).isDirectory(); } catch(Exception e) {}
+    return false;
+  }
+
+  protected String getPath(Object file) {
+    try { return ((File)file).getCanonicalPath().replace('\\','/'); } catch(IOException e) {}
+    return null;
+  }
+
+  protected boolean exists(Object file) {
+    try { return ((File)file).exists(); } catch(Exception e) {}
+    return false;
+  }
+
+  protected boolean isHidden(Object file) {
+    try { return ((File)file).isHidden(); } catch(Exception e) {}
+    return false;
+  }
+
+  protected Object[] listChildren(Object file, FileFinder filter) {
+    Object[] fa = null;
+    try {
+      fa = (Object[])((File)file).listFiles((FileFilter)filter);
+    } catch(Exception e) {}
+    return (fa==null) ? new Object[0] : fa;
+  }
+
+  public File getFile(String path) throws FileNotFoundException {
+    switch (fsType) {
+    case FST_ZIPFILE: return ((ZipFS)base).getFile(path);
+    case FST_TARFILE: return ((TarFS)base).getFile(path);
+    default:          return new File(path);
+    }
+  }
+
+/***
+  public static void main(String[] args) {
+    try {
+       ZipFile zf = new ZipFile(args[0]);
+       FileFinder ff = new FileFinder(zf, "L*.java", null, false, false);
+       ff.list(new ListPrinter(new java.io.PrintWriter(System.out)), 0);
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+***/
+
+} // end of class FileFinder.
+

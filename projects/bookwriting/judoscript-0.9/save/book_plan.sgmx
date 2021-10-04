@@ -1,0 +1,470 @@
+!include ifexists '../../env.judi'
+const #bookTitle = 'The JudoScript Language And Platform';
+const #bookTargetDir = './' ifndef; // if not set, set to here.
+
+f1 = openTextFile(#bookTargetDir @ 'book_plan.html', 'w');
+. <f1> [[*
+    <html><head><title>Java Platform Scripting With JudoScript</title></head>
+    <frameset cols="50%,*">
+    <frame name=nav     src=book_plan_nav.html></frame>
+    <frame name=details src=book_plan_details.html></frame>
+    </frameset></html>
+  *]];
+f1.close();
+
+f1 = openTextFile(#bookTargetDir @ 'book_plan_nav.html', 'w');
+f2 = openTextFile(#bookTargetDir @ 'book_plan_details.html', 'w');
+. <f1> [[*
+       <html><head><link href="share/judo_styles.css" rel="stylesheet" type="text/css"></head>
+       <body bgcolor=white style="margin-left:10px"><table border=0 cellspacing=0 cellpadding=0 bgcolor=#DDDDDD width=100%>
+       <h1>(* #bookTitle *)</h1> <h2><a href=book_plan_details.html target=details>Table of Content</a></h2>
+       *]];
+. <f2> [[*
+       <html><head><link href="share/judo_styles.css" rel="stylesheet" type="text/css"></head>
+       <body style="margin-left:10px"><p><b>(* #bookTitle *)</b><br>
+       By <i>James Huang</i> Last update: (* Date().fmtDate('yyyy-MM-dd') *).<br>
+       <i>This is work-in-progress and subject to changes without notice.</i>
+       </p>
+       <table border=0 cellspacing=0 cellpadding=0 width=100%>
+       *]];
+
+partNum = 0;
+chptNum = 0;
+sctnLevel = 0;
+apdxNum = 0;
+needSummary = false;
+do $$local as sgml {
+<part>:
+  ++partNum;
+  ahref = '<a href=book_plan_details.html#pt' @ partNum @ ' target=details>';
+  . <f1> [[* <tr bgcolor=white><td colspan=3>&nbsp;</td></tr>
+             <tr><td nowrap valign=top>&nbsp;<b>(* ahref *)Part (* partNum.fmtRoman(true) *).</a></b></td>
+             <td colspan=2 valign=top><b>(* ahref *)(* $_.title*)</a></b></td></tr>
+             <tr bgcolor=white><td colspan=3>&nbsp;</td></tr>
+         *]];
+  . <f2> [[*
+         <tr><td colspan=3>&nbsp;<td></tr>
+         <tr><td colspan=3><h2><a name=pt(* partNum *)>Part (* partNum.fmtRoman(true) *).</a> (* $_.title*)</h2></td></tr>
+         *]];
+<chapter>:
+  ++chptNum;
+  sctnLevel = 0;
+  needSummary = $_.summary;
+  ahref = '<a href=book_plan_details.html#ch' @ chptNum @ ' target=details>';
+  . <f1> [[* <tr bgcolor=white><td>&nbsp;</td><td valign=top nowrap><b>(* ahref *)Chapter (* chptNum *)</a>.</b></td>
+             <td> (* ahref *)<b>(* $_.title *)</b></a></td></tr>
+         *]];
+  . <f2> [[*
+         <tr><td>&nbsp;<td></tr>
+         <tr><td style="font-size:14px" nowrap valign=top><a name=ch(* chptNum *)><b>Chapter (* chptNum *).</a>&nbsp;
+         (* $_.title *)</b></td></tr>
+         *]];
+</chapter>:
+  if needSummary {
+    . <f2> [[* <tr><td nowrap align=right valign=top></td><td>&nbsp;&nbsp;</td><td>Summary</td></tr> *]];
+  }
+<appendix>:
+  num = ('A').ascii() + apdxNum;
+  ++apdxNum;
+  . <f1> [[* <tr bgcolor=white><td>&nbsp;</td><td><b><a href=book_plan_details.html#ap(* num *)
+             target=details>Appendix (* num.chr() *)</a>.</b></td><td> <b>(* $_.title *)</b></td></tr>
+         *]];
+  . <f2> [[*
+         <tr><td style="font-size:14px" nowrap valign=top><a name=ap(* num *)><b>Appendix (* num.chr() *).</a>&nbsp;
+         (* $_.title *)</b></td></tr>
+         *]];
+<section>:
+  ++sctnLevel;
+  color = $_.ready == 'yes' ? ' bgcolor=#ccffcc' : ' bgcolor=#ffcccc';
+  . <f2> '<tr><td nowrap valign=top (*color*)>', '&nbsp;&nbsp; '{sctnLevel}, $_.title, '</td></tr>';
+</section>:
+  --sctnLevel;
+}
+
+. <f1> '</table></body></html>';
+. <f2> '</table></body></html>';
+f1.close();
+f2.close();
+
+. <err> 'Created ', #bookTargetDir, 'book_plan.html';
+. <err> 'Created ', #bookTargetDir, 'book_plan_nav.html';
+. <err> 'Created ', #bookTargetDir, 'book_plan_details.html';
+
+EndScript ===========================================================================
+
+
+<chapter title="Introduction to JudoScript Language" id="intro">
+  <section title="Philosophy of JudoScript" ready="no">
+  </section>
+  <section title="Components of JudoScript Language" ready="no">
+  </section>
+  <section title="Uses of JudoScript" ready="no">
+  </section>
+  <section title="JudoScript, ECMAScript and Standards">
+  </section>
+  <section title="How This Book is Organized">
+  </section>
+</chapter>
+
+<chapter title="Introduction to JudoScript Programming" id="introprog">
+  <section title="Samples of JudoScript Programs" ready="no">
+  </section>
+</chapter>
+
+
+<part title="Core Language and ECMAScript Programming">
+
+
+<chapter title="Basic Program Structure" summary="yes" id="basic">
+  <section title="Lexical Entities" ready="no">
+  </section>
+  <section title="Variables and Constants" ready="no">
+  </section>
+  <section title="Include Other Scripts" ready="no">
+  </section>
+  <section title="Start-Up Environment and Predefined Constants" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Simple Data Types and Expressions" summary="yes" id="simple">
+  <section title="Simple Data Types" ready="no">
+  </section>
+  <section title="Numeric Operations and Expressions" ready="no">
+  </section>
+  <section title="String Operations and Expressions" ready="no">
+  </section>
+  <section title="Regular Expressions" ready="no">
+  </section>
+  <section title="Formatting and Conversion" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Built-In Data Structures" summary="yes" id="datastr">
+  <section title="Arrays and Linked Lists" ready="no">
+  </section>
+  <section title="Maps and Ordered Maps" ready="no">
+  </section>
+  <section title="Sets and Ordered Sets" ready="no">
+  </section>
+  <section title="Stacks and Queues" ready="no">
+  </section>
+  <section title="Trees" ready="no">
+  </section>
+  <section title="Table Data" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Flow Control and Variable Scoping" summary="yes" id="flow">
+  <section title="Basic Flow Control Statements" ready="no">
+  </section>
+  <section title="Functions and Function Variables" ready="no">
+  </section>
+  <section title="Variable Scopes" ready="no">
+  </section>
+  <section title="Exception Handling" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Thread Programming and Dynamic Evaluation" summary="yes" id="rtc">
+  <section title="Thread Programming" ready="no">
+  </section>
+  <section title="Dynamic Evaluation" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Object-Oriented Programming" summary="yes" id="oop">
+  <section title="Define A New Class" ready="no">
+  </section>
+  <section title="Constructor and Initialization" ready="no">
+  </section>
+  <section title="Derive A New Class From Others" ready="no">
+  </section>
+  <section title="Transpose Class Instances" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Aspect-Oriented Programming" summary="yes" id="aop">
+</chapter>
+
+<chapter title="Namespace and Package" summary="yes" id="nspkg">
+  <section title="Namespace">
+  </section>
+  <section title="Package">
+  </section>
+</chapter>
+
+
+</part>
+<part title="Essential Services">
+
+
+<chapter title="Java Scripting" summary="yes" id="javascripting">
+  <section title="Introduction to Java Scripting" ready="no">
+  </section>
+  <section title="Use Java Objects and Arrays" ready="no">
+  </section>
+  <section title="Create and Use Java Package Shortcuts" ready="no">
+  </section>
+  <section title="Use Java Static Methods and Members" ready="no">
+  </section>
+  <section title="Extend Java Classes and Interfaces" ready="no">
+  </section>
+  <section title="Java Types and Casting" ready="no">
+  </section>
+  <section title="JNDI, RMI and EJB" ready="no">
+  </section>
+  <section title="Thread and Other Considerations" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Print, File I/O and In-Script Data" summary="yes" id="io">
+  <section title="Print and Format" ready="no">
+  </section>
+  <section title="Read and Write Files" ready="no">
+  </section>
+  <section title="Read and Write Files Within Zip Files" ready="no">
+  </section>
+  <section title="Process Text Files" ready="no">
+  </section>
+  <section title="Print Into Variables" ready="no">
+  </section>
+  <section title="In-Script Data" ready="no">
+  </section>
+</chapter>
+
+<chapter title="File System and Archiving Commands" summary="yes" id="fs">
+  <section title="The All-Purpose and All-Mighty Copy Command" ready="no">
+  </section>
+  <section title="List, Search and Move Files" ready="no">
+  </section>
+  <section title="Manipulate File Attributes" ready="no">
+  </section>
+  <section title="Encrypt, Compress and Chop Files" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Run Executables" summary="yes" id="exec">
+  <section title="Supported Command-Line" ready="no">
+  </section>
+  <section title="Run Executables With Input And/Or Output" ready="no">
+  </section>
+  <section title="Return Values and Executable Synchronization" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Scheduled Jobs" summary="yes" id="schedule">
+  <section title="Different Modes of Scheduling" ready="no">
+  </section>
+  <section title="HTTP Console Interface for Schedules" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Internet Scripting" summary="yes" id="net">
+  <section title="HTTP Client Features" ready="no">
+  </section>
+  <section title="HTTP Server Features" ready="no">
+  </section>
+  <section title="Create A HTTP Proxy Server" ready="no">
+  </section>
+  <section title="UDP and Broadcasting" ready="no">
+  </section>
+  <section title="Send Mail" ready="no">
+  </section>
+  <section title="SSH and SCP" ready="no">
+  </section>
+  <section title="FTP" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Java GUI Scripting" summary="yes" id="gui">
+  <section title="Create AWT and Swing GUIs" ready="no">
+  </section>
+  <section title="Handle GUI Events" ready="no">
+  </section>
+  <section title="Handle GUI Events for Multiple Controls" ready="no">
+  </section>
+</chapter>
+
+
+</part>
+<part title="Data Scripting">
+
+
+<chapter title="JDBC Scriting - Part I" summary="yes" id="jdbc">
+  <section title="Introduction to JDBC Scripting" ready="no">
+  </section>
+  <section title="Connections and Drivers" ready="no">
+  </section>
+  <section title="Direct and Batch Execution of SQL" ready="no">
+  </section>
+  <section title="Prepared Execution of SQL" ready="no">
+  </section>
+  <section title="Processing Query Results" ready="no">
+  </section>
+  <section title="Call Stored Procedures" ready="no">
+  </section>
+  <section title="Database Meta-Information and Utilities" ready="no">
+  </section>
+</chapter>
+
+<chapter title="JDBC Scriting - Part II" id="db">
+  <section title="Use Oracle" ready="no">
+  </section>
+  <section title="Use IBM DB2" ready="no">
+  </section>
+  <section title="Use Microsoft SQL Server" ready="no">
+  </section>
+  <section title="Use MySQL" ready="no">
+  </section>
+</chapter>
+
+<chapter title="XML Scriting - Part I" summary="yes" id="xml">
+  <section title="Introduction to XML Document Processing" ready="no">
+  </section>
+  <section title="SAX-Style XML scripting" ready="no">
+  </section>
+  <section title="DOM Programming" ready="no">
+  </section>
+  <section title="XSLT Scripting" ready="no">
+  </section>
+</chapter>
+
+<chapter title="XML Scriting - Part II" summary="yes" id="xml2">
+  <section title="Native XML Scripting">
+  </section>
+</chapter>
+
+<chapter title="SGML Scraping" summary="yes" id="sgml">
+  <section title="SGML/HTML Scraping Made Easy" ready="no">
+  </section>
+  <section title="SGML Scripting Versus XML Scripting" ready="no">
+  </section>
+  <section title="Develop Your Own Tag System for Information Organization" ready="no">
+  </section>
+</chapter>
+
+
+</part>
+<part title="Windows Platform Scripting">
+
+<chapter title="ActiveX Control Scripting" summary="yes" id="activex">
+  <section title="Microsoft COM Background" ready="no">
+    <section title="Interfaces" ready="no"/>
+    <section title="IDispatch" ready="no"/>
+    <section title="IEnumVARIANT" ready="no"/>
+    <section title="Type Library" ready="no"/>
+  </section>
+  <section title="ActiveX Control Background" ready="no"/>
+    <section title="Data Types" ready="no"/>
+    <section title="Methods and Properites" ready="no"/>
+    <section title="Events" ready="no"/>
+  </section>
+  <section title="Get Ready to Script for Windows and COM" ready="no">
+  </section>
+  <section title="Get and Use COM Components" ready="no">
+  </section>
+  <section title="Use the IEnumVARIANT Interface" ready="no">
+  </section>
+  <section title="Examples for Microsoft Office Products" ready="no">
+  </section>
+  <section title="Scripting for Other Windows Services" ready="no">
+  </section>
+</chapter>
+
+
+</part>
+<part title="Beyond Basics">
+
+<chapter title="Server-Side Scripting in JudoScript" summary="yes" id="net">
+  <section title="JUSP: JudoScript Server Page Technology" ready="no">
+  </section>
+  <section title="Use JudoScript in JSPs with JSTL-BSF Tags">
+  </section>
+  <section title="Use JudoScript With JSR223-Enabled Containers">
+  </section>
+</chapter>
+
+<chapter title="JudoScript Shell" summary="yes" id="shell">
+</chapter>
+
+<chapter title="JudoScript Tools and Special Usages" id="tools">
+  <section title="JudoScript Precompiler" ready="no">
+  </section>
+  <section title="JudoScript-Java Translator" ready="no">
+  </section>
+  <section title="JUSP Preprocessor" ready="no">
+  </section>
+  <section title="White-Box Java Unit Testing" ready="no">
+  </section>
+  <section title="Protect Passwords In The Scripts" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Remote JudoScript Enghine" id="remote">
+  <section title="Run JudoScript Within Another Java Virtual Machine" ready="no">
+  </section>
+  <section title="Run JudoScript Within Weblogic Server" ready="no">
+  </section>
+  <!--section title="Run JudoScript Within JBoss Server" ready="no"-->
+</chapter>
+
+<chapter title="Embed JudoScript in Java Software" summary="yes" id="embedjava">
+  <section title="The Easy Way to Embed JudoScript in Java Software" ready="no">
+  </section>
+  <section title="Introduction to Bean Scripting Framework (BSF)" ready="no">
+  </section>
+  <section title="BSF Support for JudoScript" ready="no">
+  </section>
+  <section title="Use JudoScript Inside Ant Through BSF" ready="no">
+  </section>
+</chapter>
+
+<chapter title="Extend JudoScript and JudoScript Internals" summary="yes" id="extend">
+  <section title="Establish Your Own System Functions" ready="no">
+  </section>
+  <section title="Build Libraries for Java and JudoScript" ready="no">
+  </section>
+  <section title="Introduction to JudoScript Internals" ready="no">
+  </section>
+  <section title="JudoScript Debug Interface (JUDI)" ready="no">
+  </section>
+  <section title="JudoScript Profile Interface (JUPI)" ready="no">
+  </section>
+</chapter>
+
+
+</part>
+<part title="Case Studies">
+
+
+<chapter title="An SGML-Based Documentation System" id="case_sgml">
+  <section title="Planning for SGML-Based Documentation">
+  </section>
+  <section title="Develop An SGML-Based Documentation System">
+  </section>
+</chapter>
+
+<chapter title="J2EE Application Clients and Batch Jobs" id="case_j2ee">
+</chapter>
+
+<chapter title="Web Application Testing Systems" id="case_webtest">
+  <section title="Web Application Functional Testing With JudoScript">
+  </section>
+  <section title="Web Application Load Testing With JudoScript">
+  </section>
+</chapter>
+
+<chapter title="A Web Calendar in JUSP on Tomcat" id="case_calendar">
+</chapter>
+
+
+</part>
+<part title="References">
+
+<appendix title="System Function Reference" id="sysfuns">
+<appendix title="Built-In Object Type Reference" id="objtypes">
+<appendix title="Built-In JDBC Drivers" id="jdbcdrivers">
+<appendix title="JudoScript Grammar I - Core Language" id="bnfcore">
+<appendix title="JudoScript Grammar II - Domain Support" id="bnfdomain">
+
+</part>

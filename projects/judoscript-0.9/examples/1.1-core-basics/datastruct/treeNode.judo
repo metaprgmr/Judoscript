@@ -1,0 +1,7 @@
+root = new TreeNode( name='Root' );
+
+root.addChild(new TreeNode(name='A'));
+root.addChild(new TreeNode(name='B'));
+
+println root;
+println root.getChildren();

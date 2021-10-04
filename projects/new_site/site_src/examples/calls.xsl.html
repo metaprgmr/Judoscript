@@ -1,0 +1,31 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_xslt/calls.xsl:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+
+&lt;xsl:template match="PHONE_RECORDS">
+  &lt;html>&lt;head>&lt;title>Phone Listing&lt;/title>&lt;/head>
+  &lt;body>&lt;h1>Phone Call Records&lt;/h1>
+  &lt;table border="1">
+    &lt;th>Item&lt;/th>
+    &lt;th>Source Number&lt;/th>
+    &lt;th>Destination Number&lt;/th>
+    &lt;th>Date (MM/DD/YY)&lt;/th>
+
+  &lt;xsl:apply-templates/>
+
+  &lt;/table>
+  &lt;/body>&lt;/html>
+&lt;/xsl:template>
+
+&lt;xsl:template match="CALL">
+  &lt;tr>
+  &lt;td>&lt;xsl:number/>&lt;/td>
+  &lt;td>&lt;xsl:value-of select="FROM"/>&lt;/td>
+  &lt;td>&lt;xsl:value-of select="DESTINATION"/>&lt;/td>
+  &lt;td>&lt;xsl:value-of select="DATE"/>&lt;/td>
+  &lt;/tr>
+&lt;/xsl:template>
+
+&lt;/xsl:stylesheet>
+</pre></td></tr></table></body></html>

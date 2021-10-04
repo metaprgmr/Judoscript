@@ -1,0 +1,2 @@
+
+exec 'java test.Echo < out_err.judo > alfa';

@@ -1,0 +1,55 @@
+<% var title = 'Lesson 16. File Upload'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, method, ret, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>${method}</code></td>',
+                        '<td valign=top><code>${ret}</code></td><td valign=top>${desc}</td></tr>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>It's well known that, to upload files, you use HTML like this in the client:</p>
+
+<pre>
+&lt;form method="POST" enctype="multipart/form-data" action="upload.jusp">
+&lt;input type="file" name="filename">
+&lt;input type="submit" value="Upload">
+&lt;/form>
+</pre>
+
+<p>This form will send a multi-part message to the server, which must be parsed
+into individual pieces. JuSP engine does this under the hood, and returns a list
+of <em>uploaded file handles</em> via the <code>request.getUploads()</code> call.
+The uploaded file handle object has these methods:</p>
+
+<table class=tbl cellpadding="5px">
+<caption align=left>Uploaded File Handle methods</caption>
+<tr><th>Method</th><th>Description</th></tr>
+<%!tagRow 'delete()', 'void', 'Deletes the uploaded (temporary) file.' %>
+<%!tagRow 'get()', 'byte[]', 'Returns the uploaded bytes.' %>
+<%!tagRow 'getContentType()', 'String', 'Returns the content-type.' %>
+<%!tagRow 'getFieldName()', 'String', 'Returns the form field name.' %>
+<%!tagRow 'getInputStream()', 'InputStream', 'Returns the InputStream.' %>
+<%!tagRow 'getFileName()', 'String', 'Returns the file name from the client.' %>
+<%!tagRow 'getAsString()', 'String', 'Returns the uploaded content as String using the default encoding.' %>
+<%!tagRow 'getAsString(encoding)', 'String', 'Returns the uploaded content as String.' %>
+<%!tagRow 'write(file)', 'void', 'Writes the content into the file in the file system.' %>
+</table>
+
+<p>The following is an example:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson16/upload.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson16/upload.jusp' %></li>
+</ul>
+
+<p>The following example sets upload limits and you can try upload files
+of different sizes:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson16/test_limits.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson16/test_limits.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

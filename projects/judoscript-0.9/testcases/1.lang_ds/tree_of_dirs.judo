@@ -1,0 +1,7 @@
+listFiles '*' except '*~' in getScriptPath().getFilePath() as tree;
+
+println '$$fs_result is a TreeNode; BFS traverse:';
+for f in $$fs_result.bfsAllNodes() {
+  println f.path;
+}
+

@@ -1,0 +1,54 @@
+/* JudoScript, The Scripting Solution for the Java Platform
+ * Copyright (C) 2001-2004 James Jianbo Huang, http://www.judoscript.com
+ *
+ * This is free software; you can embed, modify and redistribute
+ * it under the terms of the GNU Lesser General Public License
+ * version 2.1 or up as published by the Free Software Foundation,
+ * which you should have received a copy along with this software.
+ * In case you did not, please download it from the internet at
+ * http://www.gnu.org/copyleft/lesser.html
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ *************************** CHANGE LOG ***************************
+ *
+ * Authors: JH  = James Jianbo Huang, judoscript@hotmail.com
+ *
+ * 03-17-2002  JH   Initial open source release.
+ *
+ **********  No tabs. Indent 2 spaces. Follow the style. **********/
+
+
+package com.judoscript.ext;
+
+import de.mud.telnet.TelnetWrapper;
+
+public final class TelnetFactory extends FactoryUtil
+{
+  public static Object getTelnet(String host) throws Exception {
+    return getTelnet(host,23);
+  }
+
+  public static Object getTelnet(String host, int port) throws Exception {
+    checkClass(mainClass,hint);
+    return private_getTelnet(host,port);
+  }
+
+  private static Object private_getTelnet(String host, int port) throws Exception {
+    TelnetWrapper telnet = new TelnetWrapper();
+    telnet.connect(host,port);
+    return telnet;
+  }
+
+  static final String mainClass = "de.mud.telnet.TelnetWrapper";
+  static final String hint =
+  "\nJudoScript's telnet feature is optional and requires third-party software --\n\n" +
+  "     Software: The Java Telnet Application/Applet\n" +
+  "        Class: " + mainClass + '\n' +
+  "        Where: http://www.mud.de/se/jta/ \n" +
+  "   Search For: 'jta java telnet' \n" +
+  "     Download: jta20.jar or whatever current, and put that in classpath.";
+}

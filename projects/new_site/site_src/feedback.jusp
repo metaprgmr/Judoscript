@@ -1,0 +1,73 @@
+<%
+  if form.size() > 0 {
+%>
+    <%!validate jusp$validEMailAddress 'email' %>
+    <%!validate jusp$textLength 'name', 1 %>
+    <%!validate jusp$textLength 'subject', 1 %>
+    <%!validate jusp$textLength 'msg', 1 %>
+<%
+    var title = 'Feedback';
+
+    var mailSentOK = false;
+
+    if error.length <= 0 { // no validation errors
+      { // try:
+
+        // connect to mail server
+        mail::connect 'judoscript.com', 'judo', 'lecygne';
+
+        // send the mail
+        mail::send
+              from: form.email
+                to: 'metaprgmr@yahoo.com'
+           subject: '[[FEEDBACK]] ' + form.subject
+              body: [[*
+                      [FEEDBACK]
+                      From:  (* form.name *)
+                      Email: (* form.email *)
+                      Time:  (* Date() *)
+                      [/FEEDBACK]
+
+                      (* form.msg *)
+                    *]];
+        ;
+
+        // Cool! Mail sent.
+        mailSentOK = true;
+
+      catch:
+        error.add($_.message);
+
+      finally:
+        // disconnect from the mail server
+        { mail::disconnect; catch: ; /* ignore */ }
+      }
+    }
+  }
+%>
+<%!include 'include/header.jusp' %>
+<h2>Feedback</h2>
+
+<%
+  if error.length > 0 { // validation reported errors
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Error:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+
+  if mailSentOK {
+    %><div style="border:1px solid; font-family:arial; color=blue"><%
+    %>&nbsp; Hi, <b><%= form.name %></b>, your feedback has been received. Thank you very much!</div><br><%
+    form.clear();
+  }
+%>
+
+<form method="POST"><table border=0 class=secondary3 style="font-weight:bold">
+<tr><td valign=top>Name:</td><td><%!text 'name', null, 'size=40' %></td></tr>
+<tr><td valign=top>E-Mail:</td><td><%!text 'email', null, 'size=40' %></td></tr>
+<tr><td valign=top>Subject:</td><td><%!text 'subject', null, 'size=71' %></td></tr>
+<tr><td valign=top>Message:</td><td><%!textarea 'msg', null, 'rows=12 cols=50' %></td></tr>
+<tr><td valign=top>&nbsp;</td><td><%!submit "Send" %> &nbsp; &nbsp; (All fields are required!)</td></tr>
+</table></form>
+
+<%!include 'include/footer.jusp' %>

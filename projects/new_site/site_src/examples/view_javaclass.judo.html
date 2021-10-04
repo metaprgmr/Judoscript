@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/view_javaclass.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args    = 'class_file';
+  desc    = [[*
+    Uses JudoScript's internal class to print out a HTML page
+    for a Java class. The input parameter must be a file name,
+    and the output is that name appended with '.html'.
+  *]];
+}
+
+import com.judoscript.util.classfile.ClassFileReader;
+
+(new java::ClassFileReader(#args[0])).printHtml( #args[0] + '.html' );
+
+</pre></td></tr></table></body></html>

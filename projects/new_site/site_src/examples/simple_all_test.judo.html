@@ -1,0 +1,242 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/simple_all_test.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2004-12-28';
+  desc    = [[*
+    This program tests all the methods of the "simple" type.
+    Each method is called at least once.
+
+    This program lists all test cases as lines of this format:
+
+      value,method,parameter,...
+
+    The test "driver" reads each line and constructs a print
+    statement to show the calls and their values.
+  *]];
+}
+
+
+do $$local as lines {
+  if $_.isEmpty() || $_.startsWith('#') {
+    println $_;
+    continue;
+  }
+
+  a = $_.csv('|');
+  if a.length &lt;= 1 {
+    println '!!!!!!!!  Invalid line: ', $_;
+    continue;
+  }
+
+  expr = '(' + a[0] + ').' + a[1] + '(';
+  for i from 2 upto a.length {
+    if (loopIndex() > 0)
+      expr += ', ';
+    expr += a[i];
+  }
+  expr += ')';
+
+  eval 'println "${expr}":&lt;55, "==> ", ${expr}, " &lt;==";';
+}
+EndScript =====================================
+
+#
+# Math methods:
+#
+
+10.5|sqrt
+10.5|log
+10.5|log10
+10.5|log2
+10.5|exp
+10.1|floor
+10.5|floor
+10.1|ceil
+10.5|ceil
+10.5|sin
+10.5|cos
+10.5|tan
+10.5|asin
+10.5|acos
+10.5|atan
+10.5|sin_d
+10.5|cos_d
+10.5|tan_d
+10.5|asin_d
+10.5|acos_d
+10.5|atan_d
+10.5|degree
+10.5|radian
+10.5|abs
+-10.5|abs
+10.5|pow
+10.5|pow|2
+10.123456|round
+10.123456|round|3
+10.876543|round
+10.876543|round|3
+5|isOdd
+5|isEven
+
+#
+# String methods:
+#
+
+'  abc  '|trim
+78|chr
+'  abc  '|size
+'http://a/b?c=d e f&amp;g= h'|encodeUrl
+'http%3A%2F%2Fa%2Fb%3Fc%3Dd+e+f%26g%3D+h'|decodeUrl
+'http://a/b?c=d e f&amp;g= h'|parseUrl
+' '|isEmpty
+' \t '|isNotEmpty
+' '|neverEmpty|'&amp;nbsp;'
+null|neverEmpty|'&amp;nbsp;'
+'abc'|getReader
+'Abc'|toLower
+'Abc'|toUpper
+'Abc'|startsWith|'A'
+'Abc'|endsWith|'d'
+'Abc'|equalsIgnoreCase|'abc'
+'Abc'|unicode
+'Abc'|ascii
+'Abc'|charAt|1
+'Abc'|substr|2
+'Abc'|substr|0|2
+'Abc'|substr|1|4
+'Abc'|truncate|2
+'Abc'|trunc|4
+'A,b,c,d,e'|csv
+'A:b:c:d:e'|csv|':'
+'Abc'|indexOf|'A'
+'Abc'|indexOf|'z'
+'Abc'|lastIndexOf|'A'
+'Abc'|lastIndexOf|'z'
+'Abcde'|regionMatches|2|'xbcde'|0|2
+'Abcde'|regionMatchesIgnoreCase|2|'XBCDE'|2|2
+'Abcde'|contains|'cde'
+'Abc'|getBytes
+'Abc'|getChars
+encode('Abc','base64')|base64Decode
+'Abc'|unquote
+'\'Abc\''|unquote
+'(Abc)'|unquote
+'Abc'|left
+'Abc'|left|2
+'Abc'|left|4
+'Abc'|right
+'Abc'|right|2
+'Abc'|right|4
+'Abcdef'|leftOf
+'Abcdef'|leftOf|'cd'
+'Abcdef'|leftOf|'xyz'
+'Abcdef'|rightOf
+'Abcdef'|rightOf|'cd'
+'Abcdef'|rightOf|'xyz'
+'Abcdef'|replace|'cd'|'xyz'
+'Abcdef'|replaceIgnoreCase|'CD'|'XYZ'
+'Abcdef'|stringCompare
+'Abcdef'|stringCompare|'Abc'
+'Abcdef'|stringCompare|'Abcdef'
+'Abcdef'|stringCompare|'Xyz'
+'AbcBcdCde'|count|'c'
+'100010010010'|count|'00'
+'james huang'|capitalizeFirstLetter
+'james huang'|capitalizeAllFirstLetters
+'Abc\u4546xyz'|isAsciiOnly
+'Abc'|isAsciiOnly
+
+#
+# Formatting and Parsing
+#
+
+'a'|isAlpha
+'a'|isAlnum
+'a'|isDigit
+'a'|isUpper
+'a'|isLower
+'a'|isWhite
+' '|isWhite
+12345|groupNumber|3|','
+555|numOfDigits
+555|numOfOctalDigits
+555|numOfHexDigits
+'89'|parseInt
+'0xF0'|parseInt
+'012'|parseInt
+'DLV'|parseIntRoman
+'2004-12-30'|parseDate|'yyyy-MM-dd'
+true|formatBool
+false|formatBool
+1|formatBool
+0|formatBool
+555|formatHex
+555|formatOctal
+555|formatRoman
+555|formatRoman|'X'
+555|formatCurrency
+1234567|formatDuration
+1234567890|formatDuration
+1|unit|'room'
+5|unit|'room'
+1|unit|'man'|'men'
+5|unit|'woman'|'women'
+'Abcdefg'|parseFixedPosition|0|3|5
+' \t\\\''|escapeJava
+'if(x&lt;b &amp;&amp; y>c)'|escapeHtml
+'if(x&lt;b &amp;&amp; y>c)'|escapeJavascript
+'where col=\'Abc\''|escapeSql
+'if(x&lt;b &amp;&amp; y>c)'|escapeXml
+'if(x&amp;lt;b &amp;amp;&amp;amp; y&amp;gt;c)'|unescapeHtml
+' \t\\\''|unescapeJava
+' \t\\\''|unescapeJavascript
+'if(x&amp;lt;b &amp;amp;&amp;amp; y&amp;gt;c)'|unescapeXml
+
+#
+# File system methods
+#
+
+'c:/a/b/c.ddd'|getFileName
+'c:/a/b/c.ddd'|getFileExt
+'c:/a/b/c.ddd'|getFilePath
+'c:/a/b/c.ddd'|toAbsolutePath
+'c:/a/b/c.ddd'|toOSPath
+'simple_all_test.judo'|fileExists
+'simple_all_test.judo'|fileIsWritable
+'simple_all_test.judo'|fileIsReadable
+'simple_all_test.judo'|fileLength
+'simple_all_test.judo'|fileTime
+'simple_all_test.judo'|isFile
+'simple_all_test.judo'|fileIsHidden
+'simple_all_test.judo'|fileIsDirectory
+#writeToFile
+
+#
+# Java-related
+#
+
+false|toBoolean
+1|toBoolean
+80|toByte
+80|toCharacter
+'Abc'|toCharacter
+80|toShort
+80|toInteger
+80|toLong
+80|toFloat
+80|toDouble
+
+#
+# Regexp methods
+#
+
+'To be or not to be'|matcher|'be'
+'To be or not to be'|matches|'.*be.*'
+'To be or not to be'|matchesStart|'To be'
+'To be or not to be'|replaceAll|'be'|'pee'
+'To be or not to be'|replaceFirst|'be'|'pee'
+'To be or not to be'|split|'be'
+'To be or not to be'|splitWithMatches|'be'
+'To be or not to be'|splitWithMatchesOnly|'be'
+</pre></td></tr></table></body></html>

@@ -1,0 +1,5 @@
+<function sig="isNewer file1, file2">
+  Compares the two files based on their time stamps. Also handles the cases where
+  one of the files does not exist. Returns <!true> if file <param>file1</param>
+  is newer than file <param>file2</param>.
+</function>

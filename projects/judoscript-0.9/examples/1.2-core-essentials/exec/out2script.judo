@@ -1,0 +1,16 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Runs a Java program <code>test.ToLower</code> which takes system input;
+    for each line typed in, this script reads the output and add a line number.
+  *]];
+}
+
+exec 'java test.ToLower' needSystemIn
+output {
+  for cnt=1; (line = readPipe()) != eof; ++cnt {
+    println 'Line #', cnt, ': ', line;
+  }
+}

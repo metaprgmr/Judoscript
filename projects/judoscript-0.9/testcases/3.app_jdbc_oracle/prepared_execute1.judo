@@ -1,0 +1,24 @@
+!include 'setup/connect.judi'
+
+db::sql: DELETE FROM emp WHERE emp_no IN (108, 109);
+
+rows = [
+  [ 'Richard', 'Brown', Date(1985,5,23), 60150.0 ],
+  [ 'Smith',   'Green', Date(1977,9,7),  45600.0 ],
+];
+id = 108; // start value.
+
+db::prepare ins:
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES (?,?,?,?,?)
+;
+
+for row in rows {
+  db::sql ins with @1:Integer = id++,
+                   @2         = row[0],
+                   @3         = row[1],
+                   @4:Date    = row[2],
+                   @5:Number  = row[3];
+}
+
+db::disconnect();

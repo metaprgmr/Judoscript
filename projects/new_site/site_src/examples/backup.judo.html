@@ -1,0 +1,18 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/backup.judo:</b></td></tr><tr><td><pre>
+zf = createZip('~/archives/work-' + Date().fmtDate('yyyyMMdd') + '.zip');
+
+copy '*' in 'c:/src/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'src/';
+
+copy '*' in 'c:/docs/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'docs/';
+
+copy '*' in 'c:/examples/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'examples/';
+
+zf.close();
+</pre></td></tr></table></body></html>

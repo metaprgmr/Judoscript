@@ -1,0 +1,6 @@
+<%@ page contentType='image/jpeg' isBinary='true' %>
+<%
+  var fileName = ::juspContext.getContextBasePath() + 'images/rainbow.jpg';
+  outStream.write( getFileAsBytes(fileName) );
+  outStream.flush();
+%>

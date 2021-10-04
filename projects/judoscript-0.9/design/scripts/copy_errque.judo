@@ -1,0 +1,119 @@
+
+connect to 'jdbc:oracle:thin:@cib-db1:1521:cibprd', 'wli_own', 'wl10wn';
+
+connect con1 to 'jdbc:oracle:thin:@172.24.5.85:1521:cibqaint', 'cib_own', 'cib_own';
+
+/*
+create table errque (
+  process_err_que_id number,
+  instance_id        integer,
+  process_name       varchar2(150),
+  err_key            varchar2(100),
+  order_num          varchar2(20),   -- from xml_event_data
+  source             varchar2(20),   -- from xml_event_data
+  event              varchar2(100),  -- from xml_event_data
+  license_id         varchar2(100),  -- from xml_event_data
+  exception_summary  varchar2(1000), -- from exception_data
+  status             integer,
+  notes              varchar2(200),
+  create_ts          date,
+  last_upd_ts        date,
+  last_upd_userid    varchar2(200)
+);
+*/
+
+prepare upd use con1:
+  INSERT INTO errque(
+    process_err_que_id,
+    instance_id,
+    process_name,
+    err_key,
+    order_num,
+    source,
+    event,
+    license_id,
+    exception_summary,
+    status,
+    notes,
+    create_ts,
+    last_upd_ts,
+    last_upd_userid
+  ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+;
+
+executeQuery qry:
+  SELECT
+    process_err_que_id,
+    instance_id,
+    process_name,
+    err_key,
+    xml_event_data,
+    exception_data,
+    status,
+    notes,
+    create_ts,
+    last_upd_ts,
+    last_upd_userid
+  FROM
+    cib_process_err_que
+  WHERE
+    create_ts >= to_date('2004/3/26', 'yyyy/mm/dd')
+;
+
+while qry.next() {
+  bytes = qry.getBytes('exception_data');
+  exceptionData = javanew java.lang.String(bytes);
+
+  exceptionSummary = null;
+  if exceptionSummary.indexOf('Exception') < 0 {
+    exceptionSummary = exceptionData;
+    idx = exceptionSummary.indexOf('+');
+    if idx < 0 {
+      idx = exceptionSummary.indexOf('\n');
+      if idx < 0 {
+        idx = exceptionSummary.indexOf('\r');
+      }
+    }
+    if idx > 0 {
+      exceptionSummary = exceptionSummary.substring(0,idx).trim();
+    }
+  } else {
+    idx = min(exceptionSummary.length(), 1000);
+    exceptionSummary = exceptionSummary.substring(0,idx);
+  }
+
+  source = null;
+  event = null;
+  licenseID = null;
+  orderNum = null;
+  { do qry.xml_event_data.getReader() as xml {
+    TEXT<source>:    source = $_;
+    TEXT<event>:     event = $_;
+    TEXT<ordernum>:  orderNum = $_;
+    TEXT<licenseid>: licenseID = $_;
+    }
+  catch: ;
+  }
+
+  . loopIndex():<6, 'Proc err que id: ', qry.process_err_que_id;
+  executeUpdate upd with
+    @1:Number     = qry.process_err_que_id,
+    @2:int        = qry.instance_id,
+    @3            = qry.process_name,
+    @4            = qry.err_key,
+    @5            = orderNum,
+    @6            = source,
+    @7            = event,
+    @8            = licenseID,
+    @9            = exceptionSummary,
+    @10:int       = qry.status,
+    @11           = qry.notes,
+    @12:timestamp = qry.create_ts,
+    @13:timestamp = qry.last_upd_ts,
+    @14           = qry.last_upd_userid
+  ;
+}
+
+catch: $_.pist();
+finally: disconnect(); con1.disconnect();
+

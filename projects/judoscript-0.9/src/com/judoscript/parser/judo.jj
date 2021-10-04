@@ -1,0 +1,4421 @@
+/*
+ * See copyright.txt for copyright notice.
+ *
+ *************************** CHANGE LOG ***************************
+ *
+ * Authors: JH  = James Jianbo Huang, judoscript@hotmail.com
+ *
+ * 03-17-2002  JH   Initial open source release.
+ * 06-23-2002  JH   Added <!--> for "do..as html" statement.
+ * 07-06-2002  JH   Fixed the error message for unfinished heredoc/sql.
+ *                  Added "EOF" in addition to "eof".
+ * 08-08-2002  JH   Added changes for support of namespace. Postponed.
+ * 08-13-2002  JH   Added "do ... as lines" statement.
+ * 08-29-2002  JH   Added named SGML/HTML handler and extends.
+ * 08-30-2002  JH   Added multiple tags sharing a single SGML handler.
+ * 11-13-2002  JH   Added ${XYZ} support in string and expressions.
+ * 11-23-2002  JH   Completed extendsjava syntax.
+ * 12-06-2002  JH   Modified usage syntax.
+ * 01-15-2003  JH   Disallow assignment as condition expression.
+ *                  Allow input/output simultaneously for exec.
+ * 01-19-2003  JH   Optimized parser by removing many keywords.
+ * 06-25-2003  JH   Change array, struct and set literal syntax to
+ *                  support ECMAScript compatibility.
+ * 06-26-2003  JH   Add regex literal.
+ *                  added function(x,y){} as an alias for lambda x,y {}
+ * 06-27-2003  JH   Add "delete" and "void" for ECMAScript compatibility.
+ *                  Allow individual statements to follow if/while/...
+ * 07-12-2003  JH   Allow for/while/if() to accept individual statements
+ *                  but the condition but be quoted in ().
+ * 04-11-2004  JH   Added and use import for java packages.
+ * 08-20-2004  JH   Added closure-like anonymous function declaration.
+ * 03-27-2005  JH   Added [var] ( x, y, ...) = array syntax.
+ *                  Allow 'string'.method() calls.
+ *
+ **********  No tabs. Indent 2 spaces. Follow the style. **********/
+
+//
+// The language part contains the syntax for basic language constructs;
+// The application parts contain application specific syntaxes such as
+// JDBC, XML, HTML, HTTP, scheduling, FS, e-mail, ...
+//
+
+//
+// Regarding namespace.
+//
+// First of all, included files are read in and become part of the
+// current text with no further assumptions.
+//
+// All functions, function aliases, threads, classes, global variables
+// and contants belong to a namespace. Default is the global namespace.
+//
+// When using these global entities, the search order is:
+//
+//   1. If explicitly scoped, use just that.
+//   2. If in a "use namespace" scope, search that.
+//   3. Search current namespace.
+//   4. Search global namespace.
+//
+// BUT WAIT! NAMESPACE SIGNIFICANTLY COMPLICATES THE RUNTIME
+// ENVIRONMENT AND THUS PERFORMANCE. UNLESS IT IS JUSTIFIED,
+// THIS FEATURE IS POSTPONED. SOME SYNTACTIC CONSTRUCTS AND
+// CHANGES IN RUNTIMECONTEXTS WILL REMAIN; THEY DO NOT MATTER.
+// THOSE IN THIS PARSER ARE COMMENTED OUT, AS THEY WILL IMPACT
+// PARSING SPEED.
+//
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  COMMON_TOKEN_ACTION = true;
+  USER_CHAR_STREAM = true;
+  STATIC = false;
+//DEBUG_PARSER = true;
+}
+
+PARSER_BEGIN(JudoParser)
+
+package com.judoscript.parser;
+
+import java.util.*;
+import java.io.*;
+import java.sql.Types;
+import org.apache.commons.lang.StringUtils;
+import com.judoscript.*;
+import com.judoscript.bio.*;
+import com.judoscript.db.*;
+import com.judoscript.xml.*;
+import com.judoscript.util.*;
+import com.judoscript.parser.helper.*;
+
+
+public final class JudoParser extends ParserHelper
+{
+  void upgradeMsg(String newOne) {
+    RT.logger.warn(
+      "Warning: line "+token.beginLine+" uses the deprecated keyword '"+token.image+"';\n"+
+      "         Update and use '"+newOne+"'; THE OLD ONE WILL BE REMOVED IN VERSION 1.1!");
+  }
+
+  //////////////////////////////////////////////
+  // data members
+
+  boolean needDbgDirs = false;
+  Stack labelStack = new Stack();
+
+  static { Lib.indentText = "."; }
+
+  String setCurrentLabel() throws ParseException {
+    if (labelStack.contains(token.image))
+      throwParseException("Label name '" + token.image + "' is already used in an outer loop.");
+    labelStack.push(token.image);
+    return token.image;
+  }
+
+  public HashMap getUsage(String name, String path) {
+    try {
+      script.setProgramName(name);
+      script.setScriptPath(path);
+      CompilationUnit(true);
+      close();
+      return script.getUsage();
+    } catch(Exception e) {}
+    return null;
+  }
+
+  void setFSAction(StmtFSList fs, String name, int action) throws ParseException {
+    try {
+      fs.setAction(name, action);
+    } catch(Exception e) {
+      throwParseException(e.getMessage());
+    }
+  }
+
+  void handleFSOption(StmtFSList fs, String option) throws ParseException {
+    boolean error = false;
+    if (option.equals("recursive"))             fs.recursive = true;
+    else if (option.equals("noHidden"))         fs.noHidden = true;
+    else if (option.equals("remove"))           setFSAction(fs, "remove", FS_REMOVE);
+    else if (fs instanceof StmtFSCopy) {
+      StmtFSCopy fscopy = (StmtFSCopy)fs;
+      if (option.equals("Echo"))                { fs.doEcho = true; fscopy.verbose = true; }
+      else if (option.equals("echo"))           fscopy.doEcho = true;
+      else if (token.image.equals("compress"))  fscopy.compress = true;
+      else if (token.image.equals("store"))     fscopy.compress = false;
+      else if (token.image.equals("force"))     fscopy.force=true;
+      else if (token.image.equals("keepDirs"))  fscopy.keepDirs = true;
+      else if (token.image.equalsIgnoreCase("dupOk")) fscopy.dupOk = true;
+      else                                      error = true;
+    } else {
+      if (option.equals("fileOnly"))            fs.option = FileFinder.LIST_FILE_ONLY;
+      else if (option.equals("showDir"))        fs.option = FileFinder.LIST_EVERYTHING;
+      else if (option.equals("dirOnly"))        fs.option = FileFinder.LIST_DIR_ONLY;
+      else if (option.equals("perFile"))        fs.infoOption = FS_LIST_PER_FILE;
+      else if (option.equals("size"))           fs.setAction("size", FS_LIST_SIZE);
+      else if (option.equals("count"))          fs.setAction("count", FS_LIST_COUNT);
+      else if (option.equals("lines"))          fs.setAction("lines", FS_LIST_COUNTLINES);
+      else if (option.equals("words"))          fs.setAction("words", FS_LIST_COUNTWORDS);
+      else if (option.equals("compressedSize")) fs.setAction("compressedSize", FS_LIST_COMPRESSED_SIZE);
+      else if (option.equalsIgnoreCase("addToClasspath"))
+        fs.setAction("addToClasspath", FS_ADD_TO_CLASSPATH);
+      else
+        error = true;
+    }
+    if (error)
+      throwParseException("Invalid file operation option: " + option);
+  }
+
+  public Script CompilationUnit(String name, String path, long lastMod, boolean needDebugDir)
+                               throws ParseException
+  {
+    this.needDbgDirs = needDebugDir;
+    script.setProgramName(name);
+    script.setScriptPath(path);
+
+    token_source.judoParser = this;
+
+    // try the init file.
+    try { token_source.switchToNewFileStream(".judoscript", null); } catch(Exception e) {}
+
+    CompilationUnit(false);
+
+    script.setLastModified(lastMod);
+    close();
+    return script;
+  }
+
+  public void optionNotApplyTo(String option, String target) throws ParseException {
+    throwParseException("Option '" + option + "' does not apply to '" + target + "'.");
+  }
+
+  public void throwParseException(String message, String hint) throws ParseException {
+    StringBuffer sb = new StringBuffer();
+    if (message != null) sb.append(message);
+    else sb.append("Parsing failed");
+    sb.append(" at line ");
+    sb.append(token.beginLine);
+    sb.append(", column ");
+    sb.append(token.beginColumn);
+    sb.append(".");
+    sb.append(eol);
+    if (hint != null) {
+      sb.append(hint);
+      sb.append(eol);
+    }
+    throw new ParseException(sb.toString());
+  } 
+
+  void handleSimpleCall(String name) {
+    Object[] oa = new Object[]{ name, stack.pop() };
+    stack.push( reduce(new ExprPrimary(oa)) );
+  }
+
+  void shouldBe(String text) throws ParseException {
+    if (token.image.equals(text)) return;
+    throwParseException("Expecting \"" + text + "\".");
+  }
+
+  static ConstInt toConstInt(Token t) { return ConstInt.getInt(toLong(t)); }
+
+  static long toLong(Token t) {
+    long ret = 0;
+    try {
+      String s = t.image;
+      if (s.charAt(0) != '0') {  // non-0 decimal
+        ret = Long.parseLong(s);
+      } else if (s.length() == 1) {
+        ret = 0; // "0"
+      } else if ((s.charAt(1) == 'x') || (s.charAt(1) == 'X')) {  // hexadecimal
+        s = s.substring(2);
+        ret = Long.parseLong(s,16);
+      } else {   // octal
+        ret = Long.parseLong(s.substring(1),8);
+      }
+    } catch(Exception e) {}
+    if (ret==0)  return 0;
+    if (ret==1)  return 1;
+    if (ret==-1) return -1;
+    return ret;
+  }
+
+  static double toDouble(Token t) {
+    try {
+      String s = t.image;
+      char ch = s.charAt(s.length()-1);
+      if (ch=='f' || ch=='F' || ch=='d' || ch=='D')
+        s = s.substring(0,s.length()-1);
+      return Double.parseDouble(s);
+    } catch(Exception e) { return 0.0; }
+  }
+
+  static void showClass(Object o) {
+    System.out.println("==> class: " + o.getClass().getName());
+  }
+
+  int lineNum() { return token.endLine; }
+
+  void switchTo(int state) { token_source.SwitchTo(state); }
+
+  int fxnDeclStack = 0;
+
+  // Trick: use a 2nd parser to parse a string for Mixture (only).
+  private JudoParser subParser = null;
+}
+PARSER_END(JudoParser)
+
+
+TOKEN_MGR_DECLS:
+{
+  // lexical state director --
+  boolean inHereDoc = false;
+
+  // Returns the input_stream for use by MixtureList().
+//used to be:  public ASCII_UCodeESC_CharStream getInputStream() { return input_stream; }
+  public CharStream getInputStream() { return input_stream; }
+
+  // Include support -- How does include work?
+  //
+  //  It is obvious that a stack is needed. Methods switchToNewFileStream()
+  //  and restorePreviousFileStream() are self-explanatory, too.
+  //  What's interesting is how the file info is kept with the parsed structure.
+  //
+  // ArrayList JudoParser.super.fileNames keeps all the file names.
+  // Each statement object has a line number and a file name index.
+  // During parsing, JudoParser.super.curFileIndex keeps the current
+  // file name index, updated (by the token manager) when a file
+  // stream is pushed or popped.
+  //
+  // The parser invokes JudoParserTokenManager.switchToNewFileStream()
+  // when a new include appears and the file name is recorded into
+  // JudoParser.fileNames; when JudoParserTokenManager sees EOF, if the
+  // stack is not empty, it invokes its own restorePreviousFileStream().
+  // In both cases, the JudoParser.curFileIndex is updated to the size
+  // of the stack.
+
+  JudoParser judoParser = null; // set by JudoParser asap.
+  Stack fileStreamStack = new Stack();
+
+  int currentFileStreamIndex() { return fileStreamStack.size(); }
+
+  boolean isMain() { return fileStreamStack.size() == 1; }
+
+  void switchToNewFileStream(String incFile, String enc) throws ParseException {
+//    judoParser.addFile(incFile);
+
+    fileStreamStack.push(input_stream);
+    try {
+      Reader r;
+      if (Lib.isAbsolutePath(incFile))
+        r = JudoUtil.findFile(null, incFile, enc);
+      else
+        r = JudoUtil.findFile(judoParser.getScriptBasePath(), incFile, enc);
+      CharStream new_stream = new JudoCharStream(r);
+      ReInit(new_stream);
+      judoParser.curFileIndex = fileStreamStack.size();
+    } catch(IOException ioe) {
+      throw new ParseException(Lib.getExceptionMsg("Failed to open included file",ioe));
+    }
+  }
+
+  void restorePreviousFileStream() {
+    ReInit( (CharStream)fileStreamStack.pop() );
+    judoParser.curFileIndex = fileStreamStack.size();
+  }
+
+  void CommonTokenAction(Token t) {
+    if (t.kind == EOF && !fileStreamStack.isEmpty()) {
+      restorePreviousFileStream();
+
+      Token new_t = getNextToken();
+      t.kind = new_t.kind;
+      t.beginLine = new_t.beginLine;
+      t.beginColumn = new_t.beginColumn;
+      t.endLine = new_t.endLine;
+      t.endColumn = new_t.endColumn;
+      t.image = new_t.image;
+      t.next = new_t.next;
+      t.specialToken = new_t.specialToken;
+    }
+  }
+
+} // of TOKEN_MGR_DECLS.
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+
+<DEFAULT,MIXTURE>
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+<DEFAULT>
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT:  "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <SHELL_SCRIPT_COMMENT: "#!" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <FORMAL_COMMENT:       "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT:   "/*"  (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT1:  "/?"  (~["?"])* "?" ("?" | (~["?","/"] (~["?"])* "?"))* "/">
+}
+
+// Also, special comment <* *> for Java code generation!  TODO
+
+/*[judo]
+  javaAllowedNames = [];
+  labelNames = [];
+  anyNames = [];
+
+  do 'judo.jj' as lines {
+    line = $_.trim();
+    if line.endsWith(' #') {
+      idx1 = line.indexOf('"');
+      idx2 = line.lastIndexOf('"');
+      name = line.substring(idx1+1, idx2);
+
+      if line.endsWith('//# L #') {
+        labelNames.add(name);
+      } elif line.endsWith('//# J #') {
+        javaAllowedNames.add(name);
+      } elif line.endsWith('//#   #') {
+        anyNames.add(name);
+      }
+    } elif line == 'TOKEN : /* LITERALS *\/' {
+      break;
+    }
+  }
+
+  printDecl 'LabelName', '<IDENTIFIER>', labelNames;
+  printDecl 'JavaAllowedName', 'LabelName()', javaAllowedNames;
+  printDecl 'AnyName', 'JavaAllowedName()', anyNames;
+
+  function printDecl declName, leadItem, names {
+    println 'void ', declName, '() : {}', nl, '{', nl, '  ', leadItem;
+    for x in names {
+      println '| "', x, '"';
+    }
+    println '}', nl;
+  }
+[judo]*/
+
+TOKEN : /* RESERVED WORDS AND LITERALS - SYNTACTICAL CONSTRUCTS */
+{
+  < _USAGE: "usage" >                            //# J #
+| < ANTTASK__: "anttask::" >                     //#   #
+| < JAVA__: "java::" >                           //#   #
+| < COM__: "com::" >                             //#   #
+| < XML__: "xml::" >                             //#   #
+| < ENDSCRIPT: "EndScript" >                     //# J #
+| < _EOF: "eof" >                                //# J #
+| < __EOF: "EOF" >                               //# J #
+| < AS: "as" >                                   //# L #
+| < BREAK: "break" >                             //#   #
+| < CASE: "case" >                               //#   #
+| < CATCH: "catch" >                             //#   #
+| < CONST: "const" >                             //#   #
+| < CONTINUE: "continue" >                       //#   #
+| < CONSTRUCTOR: "constructor" >                 //#   #
+| < CTOR: "ctor" >                               //#   #
+| < _DEFAULT: "default" >                        //#   #
+| < CLASS: "class" >                             //#   #
+| < DEFINED: "defined" >                         //# J #
+| < DELETE: "delete" >                           //# J #
+| < DO: "do" >                                   //#   #
+| < ELIF: "elif" >                               //# L #
+| < ELSE: "else" >                               //#   #
+| < EXEC: "exec" >                               //# J #
+| < EXTENDS: "extends" >                         //#   #
+| < EXTENDSJAVA: "extendsjava" >                 //# L #
+| < FALSE: "false" >                             //#   #
+| < FINALLY: "finally" >                         //#   #
+| < FOR: "for" >                                 //#   #
+| < FROM: "from" >                               //# J #
+| < FUNCTION: "function" >                       //# J #
+| < LAMBDA: "lambda" >                           //# J #
+| < THREAD: "thread" >                           //#   #
+| < JAVACLASS: "javaclass" >                     //# J #
+| < IF: "if" >                                   //#   #
+| < IFDEF: "ifdef" >                             //# L #
+| < IFNDEF: "ifndef" >                           //# L #
+| < IFEXISTS: "ifexists" >                       //# L #
+| < IMPORT: "import" >                           //# A #
+| < IN: "in" >                                   //# L #
+| < INFINITY: "infinity" >                       //# J #
+| < INTO: "into" >                               //# L #
+| < INCLUDE: "!include" >
+| < LOCAL: "local" >                             //# J #
+| < NEW: "new" >                                 //#   #
+| < JAVANEW: "javanew" >
+| < MAX_NUMBER: "max_number" >                   //# J #
+| < MIN_NUMBER: "min_number" >                   //# J #
+| < NULL: "null" >                               //#   #
+| < PRAGMA: "!pragma" >                          //# J #
+| < JAVAGUICLASS: "!JavaGuiClass" >
+| < JAVABASECLASS: "!JavaBaseClass" >
+| < JAVAENTERPRISECLASS: "!JavaEnterpriseClass" >
+| < JAVACORBACLASS: "!JavaCorbaClass" >
+| < JCOMCLASS: "!JComClass" >
+| < JAVAPACKAGES: "!JavaPackages" >
+| < DEFINEJAVAPACKAGES: "!DefineJavaPackages" >
+| < LIMIT: "limit" >                             //# L #
+| < NAMESPACE: "namespace" >                     //# L #
+| < _SKIP: "skip" >                              //# L #
+| < RESUME: "resume" >                           //# J #
+| < RETURN: "return" >                           //#   #
+| < STRIP: "strip" >                             //# J #
+| < SUPER: "super" >                             //#   #
+| < SWITCH: "switch" >                           //#   #
+| < THIS: "this" >                               //#   #
+| < THROW: "throw" >                             //#   #
+| < TO: "to" >                                   //# J #
+| < UPTO: "upto" >                               //# J #
+| < TYPEOF: "typeof" >                           //# J #
+| < ATTRIBUTESOF: "attributesof" >               //# J #
+| < ON: "on" >                                   //# J #
+| < DOWNTO: "downto" >                           //# J #
+| < TRUE: "true" >                               //#   #
+| < TRY: "try" >                                 //#   #
+| < UNDER: "under" >                             //# J #
+| < UNDEFINED: "undefined" >                     //# J #
+| < USING: "using" > // TODO: deprecate.         //# J #
+| < USE: "use" >                                 //# J #
+| < VAR: "var" >                                 //# J #
+| < WHERE: "where" >                             //# J #
+| < WHILE: "while" >                             //#   #
+| < WITH: "with" >                               //# J #
+}
+
+//TOKEN : /* RESERVED WORDS AND LITERALS - DEBUGGER DIRECTIVES */
+//{
+//  < ARGS: "args" >                                //
+//| < BP: "bp" >                                    //
+//| < CLEARDISPLAY: "clearDisplay" >                //
+//| < IGNOREUSERSTREAMS: "ignoreUserStreams" >      //
+//| < SHOWOUT: "showOut" >                          //
+//| < SHOWERR: "showErr" >                          //
+//| < SHOWLOG: "showLog" >                          //
+//| < STATUS: "status" >                            //
+//| < UNWATCH: "unwatch" >                          //
+//| < WATCH: "watch" >                              //
+//}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - JAVA PRIMITIVE TYPES */
+{
+  < BOOLEAN: "boolean" > /* JDBC, too */         //#   #
+| < BYTE: "byte" >       /* JDBC, too */         //#   #
+| < CHAR: "char" >                               //#   #
+| < SHORT: "short" >     /* JDBC, too */         //#   #
+| < INT: "int" >         /* JDBC, too */         //#   #
+| < LONG: "long" >       /* JDBC, too */         //#   #
+| < FLOAT: "float" >     /* JDBC, too */         //#   #
+| < DOUBLE: "double" >   /* JDBC, too */         //#   #
+| < STRING: "String" >                           //# J #
+| < STRING_: "string" >                          //# J #
+| < VOID: "void" >                               //#   #
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - MAIL */
+{
+  < MAIL__SEND: "mail::send" >
+| < MAIL__CONNECT: "mail::connect" >
+| < MAIL__DISCONNECT: "mail::disconnect" >
+| < SENDMAIL: "sendMail" >                       //#   #
+| < CC: "cc">                                    //# L #
+| < BCC: "bcc">                                  //# L #
+| < ATTACH: "attach">                            //# L #
+| < SUBJECT: "subject">                          //# L #
+| < BODY: "body">                                //# L #
+| < HTMLBODY: "htmlBody">                        //# L #
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - JDBC TYPES */
+{
+  < LINKEDLIST_: "linkedList" >                  //# J #
+| < LINKEDLIST: "LinkedList" >                   //# J #
+| < SET_: "set" >                                //# J #
+| < SET: "Set" >                                 //# J #
+| < SORTEDMAP_: "sortedMap" >                    //# J #
+| < SORTEDMAP: "SortedMap" >                     //# J #
+| < DATE_: "date" >                              //# J #
+| < DATE: "Date" >                               //# J #
+| < NUMBER_: "number" >                          //# J #
+| < NUMBER: "Number" >                           //# L #
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - LANGUAGE SYMBOLS */
+{
+  < COLUMN: "column">                            //# L #
+| < ERR: "err" >                                 //# L #
+| < LOG: "log" >                                 //# L #
+| < NL: "nl" >                                   //
+| < OUT: "out" >                                 //# L #
+| < PIPE: "pipe" >                               //# L #
+| < INPUT: "input" >                             //# L #
+| < OUTPUT: "output" >                           //# L #
+| < NEEDSYSTEMIN: "needSystemIn" >               //# L #
+| < FLUSH: "flush" >                             //# J #
+| < PRINT: "print" >                             //# J #
+| < PRINTLN: "println" >                         //# J #
+| < PRINTTABLE: "printTable" >                   //# J #
+| < PRINTTABLEDATA: "printTableData" >           //# J #
+| < SCP: "scp" >                                 //# J #
+| < COPY: "copy" >                               //# J #
+| < MANIFEST: "manifest" >                       //# L #
+| < LIST: "listFiles" >                          //# J #
+| < LS: "ls" >                                   //# J #
+| < ORDERED: "ordered" >                         //# J #
+| < BY: "by" >                                   //# J #
+| < RMDIR: "rmdir" >                             //# J #
+| < EXCEPT: "except" >                           //# L #
+| < SETFILETIME: "setFileTime" >                 //# L #
+| < SETREADONLY: "setReadOnly" >                 //# L #
+| < SETREADWRITE: "setReadWrite" >               //# L #
+| < TARGET: "target" >                           //# L #
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - JDBC SYMBOLS */
+{
+  < ADDBATCH: "addBatch" >                       //#   #  // deprecate
+| < CONNECT: "connect" >                         //#   #  // deprecate
+| < EXECUTEBATCH: "executeBatch" >               //#   #  // deprecate
+| < EXECUTEQUERY: "executeQuery" >               //#   #  // deprecate
+| < EXECUTEQUERYCALL: "executeQueryCall" >       //#   #  // deprecate
+| < EXECUTEANY: "executeAny" >                   //#   #  // deprecate
+| < EXECUTESQL: "executeSQL" >                   //#   #  // deprecate
+| < EXECUTEUPDATE: "executeUpdate" >             //#   #  // deprecate
+| < EXECUTEUPDATECALL: "executeUpdateCall" >     //#   #  // deprecate
+| < ONSUCCESS: "onSuccess" >                     //#   #  // deprecate
+| < PREPARE: "prepare" >                         //#   #  // deprecate
+| < PREPARECALL: "prepareCall" >                 //#   #  // deprecate
+| < PREPAREDEXECUTE: "preparedExecute" >         //#   #  // deprecate
+| < PREPAREDEXECUTECALL: "preparedExecuteCall" >             //#   #  // deprecate
+| < PREPAREDEXECUTEQUERY: "preparedExecuteQuery" >           //#   #  // deprecate
+| < PREPAREDEXECUTECALLQUERY: "preparedExecuteQueryCall" >   //#   #  // deprecate
+| < PREPAREDEXECUTEUPDATE: "preparedExecuteUpdate" >         //#   #  // deprecate
+| < PREPAREDEXECUTECALLUPDATE: "preparedExecuteUpdateCall" > //#   #  // deprecate
+
+| < DB__DUMPTABLE: "db::dumpTable" >
+| < DB__ADDBATCH: "db::addBatch" >
+| < DB__CONNECT: "db::connect" >
+| < DB__DISCONNECT: "db::disconnect" >
+| < DB__BATCH: "db::batch" >
+| < DB__QUERY: "db::query" >
+| < DB__QUERYCALL: "db::queryCall" >
+| < DB__ANY: "db::any" >
+| < DB__SQL: "db::sql" >
+| < DB__CALL: "db::call" >
+| < DB__UPDATE: "db::update" >
+| < DB__UPDATECALL: "db::updateCall" >
+| < DB__PREPARE: "db::prepare" >
+| < DB__PREPARECALL: "db::prepareCall" >
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - HIBERNATE AND EJB SYMBOLS */
+{
+  < EJBQL: "ejbql" >                             //# J #
+| < HIB__SETUP: "hib::setup" >
+| < HIB__ADDCLASS: "hib::addClass" >
+| < HIB__ADDRESOURCE: "hib::addResource" >
+| < HIB__CLOSE: "hib::close" >
+| < HIB__TXBEGIN: "hib::txBegin" >
+| < HIB__TXEND: "hib::txEnd" >
+| < HIB__TXABORT: "hib::txAbort" >
+| < HIB__LOCK: "hib::lock" >
+| < HIB__QUERY: "hib::query" >
+| < HIB__ITERATE: "hib::iterate" >
+| < HIB__DELETE: "hib::delete" >
+| < HIB__GET: "hib::get" >
+| < HIB__SAVE: "hib::save" >
+| < HIB__SAVEORUPDATECOPY: "hib::saveOrUpdateCopy" >
+| < HIB__UNLOCK: "hib::unlock" >
+| < HIB__UPDATE: "hib::update" >
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - WSDL SYMBOLS */
+{
+  < WSDL__: "wsdl::" >
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - SCHEDULE SYMBOLS */
+{
+  < AFTER: "after" >                             //# L #
+| < REPEAT: "repeat" >                           //# J #
+| < SCHEDULE: "schedule" >                       //# J #
+| < STARTING: "starting" >                       //# L #
+}
+
+TOKEN : /* RESERVED WORDS AND LITERALS - XML/HTML/HTTP/GUI SYMBOLS */
+{
+  < XML: "xml" >                                 //# L #
+| < XSLT: "xslt" >                               //# J #
+| < XPATH: "xpath" >                             //# J #
+| < SYSTEMID: "systemID" >                       //# L #
+| < OUTPUTPROPERTIES: "outputProperties" >       //# L #
+| < PARAMETERS: "parameters" >                   //# L #
+| < DOM: "dom" >                                 //# J #
+| < XMLNS: "xmlns" >                             //# L #
+| < HTML: "html" >                               //# J #
+| < JSP: "jsp" >                                 //# J #
+| < SGML: "sgml" >                               //# J #
+| < GUIEVENTS: "guiEvents" >                     //#   #
+| < GUI__EVENTS: "gui::events" >
+//| < COM__EVENTS: "com::events" >
+| < SGML_COMMENT: "<!--" >
+| < LTBAN: "<!" >
+| < LTQUES: "<?" >
+| < LTPERCAMP: "<%@" >
+| < LTPERCBAN: "<%!" >
+| < LTPERCEQ: "<%=" >
+| < LTPERCDASHDASH: "<%--" >
+| < LTPERC: "<%" >
+}
+
+<MIXTURE,DEFAULT>
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL: <DECIMAL_LITERAL> | <HEX_LITERAL> | <OCTAL_LITERAL> >
+| < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+| < #HEX_DIGIT: ["0"-"9","a"-"f","A"-"F"] >
+| < #HEX_LITERAL: "0" ["x","X"] (<HEX_DIGIT>)+ >
+| < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+| < FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+| < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+| < #ESCAPED:
+    ( "\\" ( ( ["$","\\","'","\""]
+             | ["a"-"z"]
+             | ["A"-"Z"]
+             | ["0"-"7"] ( ["0"-"7"] )?
+             | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+             )
+           | "u" <HEX_DIGIT><HEX_DIGIT><HEX_DIGIT><HEX_DIGIT>
+           )
+    )
+  >
+| < STRING_LITERAL:
+      ( "\"" ( (~["\"","\\","\n","\r"]) | <ESCAPED> )* "\"" )
+    | ( "'"  ( (~["'","\\","\n","\r"])  | <ESCAPED> )* "'" )
+  >
+| < EXEC_RESULT_LITERAL:
+    ( "`"  ( (~["`","\\","\n","\r"])  | <ESCAPED> )* "`" )
+  >
+| < EXEC_RESULTLINES_LITERAL:
+    ( "``"  ( (~["`","\\","\n","\r"])  | <ESCAPED> )* "``" )
+  >
+//| < REGEX_LITERAL: ( "/" ( (~["/","\\","\n","\r"]) | <ESCAPED> )* "/" ) >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER: ( <LETTER> | <DOLLAR> | <UNDERSCORE> )
+                ( <LETTER> | <DOLLAR> | <UNDERSCORE> | <POUND> | <DIGIT> )*
+  >
+| < CONST_NAME: <POUND> <IDENTIFIER> >
+//| < SPECIAL_NAME: ( <LETTER> | <DIGIT> | <UNDERSCORE> | <DOLLAR> | <POUND> )+ >
+| < #UNDERSCORE: "\u005f" >
+| < #POUND:  "\u0023" >
+| < #DOLLAR: "\u0024" >
+| < #LETTER:
+      [
+       "\u0041"-"\u005a",
+       "\u0061"-"\u007a",
+       "\u00c0"-"\u00d6",
+       "\u00d8"-"\u00f6",
+       "\u00f8"-"\u00ff",
+       "\u0100"-"\u1fff",
+       "\u3040"-"\u318f",
+       "\u3300"-"\u337f",
+       "\u3400"-"\u3d2d",
+       "\u4e00"-"\u9fff",
+       "\uf900"-"\ufaff"
+      ]
+  >
+| < #DIGIT:
+      [
+       "\u0030"-"\u0039",
+       "\u0660"-"\u0669",
+       "\u06f0"-"\u06f9",
+       "\u0966"-"\u096f",
+       "\u09e6"-"\u09ef",
+       "\u0a66"-"\u0a6f",
+       "\u0ae6"-"\u0aef",
+       "\u0b66"-"\u0b6f",
+       "\u0be7"-"\u0bef",
+       "\u0c66"-"\u0c6f",
+       "\u0ce6"-"\u0cef",
+       "\u0d66"-"\u0d6f",
+       "\u0e50"-"\u0e59",
+       "\u0ed0"-"\u0ed9",
+       "\u1040"-"\u1049"
+      ]
+  >
+}
+
+TOKEN : /* OPERATORS */
+{
+  < SINGLE_ARROW: "->" >
+| < ARROW: "=>" >
+| < TWOWAYARROW: "<=>" >
+| < ASSIGN: "=" >
+| < _COPY: ":=" >
+| < GT: ">" >
+| < LT: "<" >
+| < LTSLASH: "</" >
+| < BANG: "!" >
+| < BBANG: "!!" >
+| < ATSIGN: "@" >
+| < TILDE: "~" >
+| < HEREDOC_BEGIN: "[[*" >
+| < HEREDOC_BEGIN_: "[[[*" >
+| < HOOK: "?" >
+| < COLON: ":" >
+| < COLONCOLON: "::" >
+| < EQ: "==" >
+| < EQ_: "===" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < NE_: "!==" >
+| < SC_OR: "||" >
+| < SC_AND: "&&" >
+| < INCR: "++" >
+| < DECR: "--" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < STARSTAR: "**" >
+| < BIT_AND: "&" >
+| < BIT_OR: "|" >
+| < XOR: "^" >
+| < REM: "%" >
+| < LSHIFT: "<<" >
+| < RSIGNEDSHIFT: ">>" >
+| < RUNSIGNEDSHIFT: ">>>" >
+| < ATASSIGN: "@=" >
+| < PLUSASSIGN: "+=" >
+| < MINUSASSIGN: "-=" >
+| < STARASSIGN: "*=" >
+| < SLASHASSIGN: "/=" >
+| < ANDASSIGN: "&=" >
+| < ANDANDASSIGN: "&&=" >
+| < ORASSIGN: "|=" >
+| < ORORASSIGN: "||=" >
+| < XORASSIGN: "^=" >
+| < REMASSIGN: "%=" >
+| < LSHIFTASSIGN: "<<=" >
+| < RSIGNEDSHIFTASSIGN: ">>=" >
+| < RUNSIGNEDSHIFTASSIGN: ">>>=" >
+| < DOLLARLBRACE: "${" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LLBRACE: "{{" >
+| < RRBRACE: "}}" >
+| < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < COMMA: "," >
+| < DOT: "." >
+| < DOTDOT: ".." >
+| < INEXPR_START: "(*" >
+| < INEXPR_END: "*)" >  { SwitchTo(inHereDoc ? HEREDOC : MIXTURE); }
+}
+
+
+<MIXTURE>
+TOKEN :
+{
+  < MIXTURE_PART: ( (~["(",";"])* | "(" ( ~["*",";"] | "*" ")" ) | <STRING_LITERAL> )* > : DEFAULT
+}
+
+<MIXTURE,DEFAULT>
+TOKEN :
+{
+  < SEMICOLON: ";" > : DEFAULT
+}
+
+<HEREDOC>
+TOKEN :
+{
+  < HEREDOC_END: "*]]" > : DEFAULT
+| < HEREDOC_PART: ( (~["*","("])* | "(" ~["*"] | "*" ("]")? ~["]"] )* > : DEFAULT
+}
+
+/**************************
+ * HALF-LEXER-HALF-PARSER *
+ **************************/
+
+// These upgradeTo???() NTs are to print out warning messages for to-be-deprecated keywords.
+void upgradeToVar()        : {} { ( "var"        | "local"      { upgradeMsg("var"); } ) }
+void upgradeToLinkedList() : {} { ( "LinkedList" | "linkedList" { upgradeMsg("LinkedList"); } ) }
+void upgradeToSet()        : {} { ( "Set"        | "set"        { upgradeMsg("Set"); } ) }
+void upgradeToSortedMap()  : {} { ( "SortedMap"  | "sortedMap"  { upgradeMsg("SortedMap"); } ) }
+void upgradeToDate()       : {} { ( "Date"       | "date"       { upgradeMsg("Date"); } ) }
+void upgradeToString()     : {} { ( "String"     | "string"     { upgradeMsg("String"); } ) }
+void upgradeToNumber()     : {} { ( "Number"     | "number"     { upgradeMsg("Number"); } ) }
+void upgradeToUse()        : {} { ( "use" | "using" )
+  { RT.logger.warn(
+      "Warning: line "+token.beginLine+" uses the deprecated SQL scripting keyword '"+token.image+"';\n"+
+      "         Update and use the <connection> syntax; THE OLD SYNTAX WILL BE REMOVED IN VERSION 1.1!");
+  }
+}
+
+// This is a performance-aware keyword substitute.
+void id(String s) : {}
+{
+  <IDENTIFIER> { if (!token.image.equals(s))
+                   throwParseException("Expecting '" + s + "' but get '" + token.image + "'.");
+               }
+}
+
+/*******************************************
+ * THE JUDO LANGUAGE GRAMMAR STARTS HERE   *
+ *******************************************/
+
+/*
+ * Program structuring syntax follows.
+ */
+
+void CompilationUnit(boolean usageOnly) :
+{
+  int lastMark = markStack();
+  boolean hasCatch = false;
+  boolean hasFinally = false;
+  int firstLine = 0;
+  String catchName = null;
+  if (!usageOnly) RT.pushContext( pc = new ParsingContext(script) );
+}
+{
+try {
+
+  ( "usage"                     { firstLine = lineNum(); }
+    "{" ( MemberInitializer() ( ";" | "," ) )+ "}"
+    { if (token_source.isMain()) {
+        // Only take the one for the main script. Just one usage is allowed;
+        // if multiple ones specified, for now the first one is taken;
+        // the following ones are silently ignored.
+        AssociateList inits = handleNamedExprs(lastMark);
+        int len = inits.size();
+        if (len <= 0) return;
+        HashMap u = new HashMap();
+        u.put("firstLine", new Integer(firstLine));
+        try {
+          for (int i=0; i<len; ++i) {
+            String k = JudoUtil.toParameterNameString(inits.getKeyAt(i));
+            Object v;
+            Variable vs = ((Expr)inits.getValueAt(i)).eval();
+            if (vs instanceof _Array) {
+              _Array ar = (_Array)vs;
+              int _len = ar.size();
+              String[] sa = new String[_len];
+              for (int j=0; j<_len; ++j) {
+                sa[j] = ar.resolve(j).getStringValue();
+              }
+              v = sa;
+            } else {
+              v = vs.getStringValue();
+            }
+            if ("minArgs".equals(k)) {
+              try { u.put(k, new Integer(Integer.parseInt(v.toString()))); }
+              catch(NumberFormatException nfe) {
+                throwParseException("The usage's minArgs value must be an integer: "+v+".");
+              }
+            } else {
+              u.put(k,v);
+            }
+          }
+          u.put("lastLine", new Integer(lineNum()));
+          script.setUsage(u);
+        } catch(Throwable e) {
+          e.printStackTrace();
+        }
+      }
+      if (usageOnly) return;
+      lastMark = markStack();
+    }
+  | ClassDefinition()
+  | LOOKAHEAD(3) ConstantDefinition()
+  | FunctionDecl()    { addFunction(script, (Function)stack.pop()); }
+  | ThreadDecl()
+  | SgmlHandlerDecl()
+//| XmlHandlerDecl()
+  | Statement()
+  | "catch" [ <IDENTIFIER> { catchName = token.image; } ] ":"
+                  { if (hasCatch)
+                      throwParseException("No multiple catch clauses allowed.");
+                    if (hasFinally)
+                      throwParseException("Finally clause can not appear before catch clause.");
+                    hasCatch = true;
+                    stack.push("catch");
+                  }
+  | "finally" ":" { if (hasFinally)
+                      throwParseException("No multiple finally clauses allowed.");
+                    hasFinally = true;
+                    stack.push("finally");
+                  }
+  )*
+  ( <EOF>
+  | "EndScript" LocalData()
+  )
+
+  { BlockSimple blk = handleBlock(lastMark, catchName, -1);
+    if (blk != BlockSimple.EMPTY) script.setStmts(blk);
+  }
+
+} finally {
+  try { cleanup(); } catch(Exception e) {}
+  if (!usageOnly) RT.popContext();
+}
+}
+
+
+/*
+ * Declaration syntax follows.
+ */
+
+String JavaClassName() :
+{
+  StringBuffer sb = null;
+}
+{
+  <CONST_NAME>                 { try { return script.resolveConst(token.image).getStringValue(); }
+                                 catch(Throwable e) { throwParseException(e.getMessage()); }
+                               }
+| JavaAllowedName()            { sb = new StringBuffer(token.image); }
+  ( LOOKAHEAD(2) "." AnyName() { sb.append('.'); sb.append(token.image); }
+  )*                           { return sb.toString(); }
+}
+
+String JavaTypeName(boolean forVM) :
+{
+  String name = null;
+}
+{
+( LOOKAHEAD(2) ( "string" | "String")  { name = forVM ? "Ljava/lang/String;" : "java.lang.String"; }
+| name=JavaClassName()  { if (forVM) name = "L"+pc.handleSysClassName(name).replace('.','/')+';'; }
+| name=JavaPrimitiveTypeNames(forVM)
+) { return name; }
+}
+
+String JavaPrimitiveTypeNames(boolean forVM) :
+{
+}
+{
+  ( "boolean"    { if (forVM) return "Z"; }
+  | "byte"       { if (forVM) return "B"; }
+  | "char"       { if (forVM) return "C"; }
+  | "short"      { if (forVM) return "S"; }
+  | "int"        { if (forVM) return "I"; }
+  | "long"       { if (forVM) return "J"; }
+  | "float"      { if (forVM) return "F"; }
+  | "double"     { if (forVM) return "D"; }
+  )              { return token.image; }
+}
+
+void ConstantDefinition() :
+{
+  String name;
+  boolean doSet = true;
+}
+{
+  "const" <CONST_NAME>   { name = token.image; }
+  "=" ReturnableExpression()
+  [ "ifndef"             { doSet = !script.hasConst(name); }
+  | "if" Expression()    { doSet = evalConstToBool(nonAssignExpr(stack.pop()), true); }
+  ]
+  ";"
+
+  { if (!doSet) return;
+    try { script.setConst(name, reduceIt().eval()); }
+    catch(ParseException e) { throwParseException("Redefinition of constant '" + name + "'."); }
+    catch(Throwable e) { throwParseException(e.getMessage()); }
+  }
+}
+
+void ClassDefinition() :
+{
+  String className = null;
+  String parentTypes = null;
+  UserDefined.UserType ot = null;
+  Function f;
+  Object cptr = null;
+  inClassDef = true;
+  String cls = null;
+  FunctionUser ctor = null;
+  int lastMark = markStack();
+  int lineNo;
+  boolean isCopy = false;
+}
+{
+  "class" AnyName()               { className = token.image; lineNo = lineNum(); }
+  ( LOOKAHEAD(2) ( "extends" "java::" | "extendsjava" { upgradeMsg("extends java::"); } )
+    JavaxDefinition(className)
+  | [ "extends"
+      ( LOOKAHEAD(2) upgradeToSortedMap() cptr=ComparatorDecl()
+      | AnyName()                 { parentTypes = token.image; }
+      )
+    ]
+    "{"                           { ot = new UserDefined.Type(className,parentTypes,cptr); }
+    ( ctor=ConstructorDecl(false) { if (ot.hasConstructor())
+                                      throwParseException("Constructor already defined for class "+className);
+                                    ot.setConstructor(ctor);
+                                  }
+    | LOOKAHEAD(2) FunctionDecl() { addFunction(ot, (Function)stack.pop()); }
+    | Statement()
+    )*
+    "}"  { addClassToScript(ot); inClassDef = false;
+           handleStmts(lastMark);
+           if (ctor != null)
+             ctor.prependStmts(stmts);
+           else { // create a default constructor.
+             ctor = new FunctionUser(lineNo,lineNum(),"ctor",true,null,null, new BlockSimple(stmts,null));
+             ot.setConstructor(ctor);
+           }
+         }
+  )
+}
+
+// Returns the className.
+String JavaxDefinition(String className) :
+{
+  JavaExtensionHelper javax = new JavaExtensionHelper(className);
+  inClassDef = true;
+  String cls;
+  FunctionUser ctor = null;
+  int lineStart = 0;
+  inJavax = true;
+}
+{
+  cls=JavaClassName()                    { javax.addParent(pc.handleSysClassName(cls)); }
+  ( "," [ "java::" ] cls=JavaClassName() { javax.addParent(pc.handleSysClassName(cls)); }
+  )*
+  "{"
+  ( ctor=ConstructorDecl(true) { if (javax.hasConstructor())
+                                   throwParseException("Constructor already defined for class "+className);
+                                 javax.setConstructor(ctor);
+                               }
+  | LOOKAHEAD(VMType() AnyName() ";")
+    VMType() AnyName()         { javax.addField(token.image,(String)stack.pop()); }
+    ";"
+  | VMType() AnyName()         { stack.push(token.image); lineStart = lineNum(); }
+    JavaMethodDecl() Block()   { javax.defineMethod(stack, lineStart, lineNum()); /*4*/ }
+  )*
+  "}"
+
+  { try { addClassToScript(javax.getUserType(superCalls,javaxCalls)); }
+    catch(Exception e) { throwParseException(e.getMessage()); }
+    finally { superCalls.clear(); javaxCalls.clear(); inJavax = false; }
+    return className;
+  }
+}
+
+void VMType() :
+{
+  String ret = null;
+}
+{
+  ret=JavaTypeName(true) ( "[" "]" { ret="["+ret; } )*  { stack.push(ret); }
+| "void"                                                { stack.push("V"); }
+}
+
+void JavaMethodDecl() :
+{
+  ArrayList v = new ArrayList();
+}
+{
+  ( "("
+    ( VMType()        { v.add(stack.pop()); }
+      AnyName()       { v.add(token.image); }
+      ( "," VMType()  { v.add(stack.pop()); }
+            AnyName() { v.add(token.image); }
+      )*
+    )?
+    ")"
+  )?                  { stack.push(v); }
+}
+
+FunctionUser ConstructorDecl(boolean isJava) :
+{
+  Expr[] defvals = null;
+  int lastMark = markStack();
+  String[] params = null;
+  inFxnThrd = true;
+  inJavaCtor = isJava;
+  int begin;
+}
+{
+  ("constructor" | "ctor" )  { begin = lineNum(); }
+  defvals=FormalParameters() { params = handleStrings(lastMark); }
+  Block()                    { inFxnThrd = false;
+                               inJavaCtor = false;
+                               return new FunctionUser(begin,lineNum(),"ctor",true,params,
+                                                       defvals,(BlockSimple)stack.pop());
+                             }
+}
+
+void FunctionDecl() :
+{
+  String name = null;
+  String fxnName;
+  String[] params;
+  HashMap annotations = null; // (String => Variable)*
+  Expr[] defvals;
+  int begin;
+  int lastMark = markStack();
+  inFxnThrd = true;
+  boolean useJavaClass = false;
+  String clsName = null;
+  String methodName = null;
+  ++fxnDeclStack;
+}
+{
+  "function"     { begin = lineNum(); }
+  [ "<" { annotations = new HashMap(); }
+    Annotation(annotations) ( "," Annotation(annotations) )*
+    ">" ]
+  LabelName()    { fxnName = token.image;
+                   if (fxnDeclStack > 1) { name = fxnName; fxnName = genTempVarName("_inner_fxn_"); }
+                 }
+  ( defvals=FormalParameters() { params = handleStrings(lastMark); }
+    Block()      { stack.push(new FunctionUser(begin, lineNum(), fxnName, inClassDef, params,
+                                               defvals, (BlockSimple)stack.pop(), annotations));
+                   inFxnThrd = false;
+                 }
+  | "for"
+    [ "java::" ] clsName=JavaClassName() [ "::" AnyName() { methodName = token.image; } ] [ "(" ")" ] ";"
+    { if (inClassDef)
+        throwParseException("Function alias not allowed for user-defined class methods.");
+
+      if (methodName == null) {
+        int idx = clsName.lastIndexOf('.');
+        if (idx <= 0)
+          throwParseException("No Java method is specified for function alias.");
+        methodName = clsName.substring(idx+1);
+//        clsName = script.handleClassName(clsName.substring(0, idx));
+        clsName = clsName.substring(0, idx);
+      }
+     
+      stack.push(new FunctionStaticJava(begin, fxnName, clsName, false, methodName, annotations));
+    }
+  )
+
+  { if (fxnDeclStack > 1) {
+      addFunction(script, (Function)stack.pop());
+      stack.push( ExprAssign.createLocalVar(begin, name, new AccessFunction(fxnName)) );
+    }
+    --fxnDeclStack;
+  }
+}
+
+void Annotation(HashMap map) :
+{
+  String name, x;
+  Object val;
+}
+{
+  name=JavaClassName() ( "=" | ":" )
+  ( LOOKAHEAD(2) Literal() { val = stack.pop(); }
+  | x=JavaClassName()      { val = JudoUtil.toVariable(x); }
+  )                        { map.put(name, val); }
+}
+
+void AnonFunctionDecl() :
+{
+  String[] params = null;
+  Expr[] defvals = null;
+  int begin;
+  int lastMark = markStack();
+  inFxnThrd = true;
+}
+{
+  ( "function" | "lambda" { upgradeMsg("function"); } ) { begin = token.beginLine; }
+  [ defvals=FormalParameters1() { params = handleStrings(lastMark); } ]
+  Block()
+
+  { String name = LAMBDA_PREFIX + Lib.createID();
+    addFunction(script,
+      new FunctionUser(begin,lineNum(),name,inClassDef,params,defvals,(BlockSimple)stack.pop()));
+    stack.push(new AccessFunction(name));
+    inFxnThrd = false;
+  }
+}
+
+void AnonFunctionDecl1() :
+{
+  String[] params = null;
+  int begin;
+  String s = null;
+  inFxnThrd = true;
+  int lastMark = markStack();
+}
+{
+  "{"                       { begin = token.beginLine; }
+  FormalParametersNoInit()  { params = handleStrings(lastMark); }
+  "|"                       { lastMark = markStack(); }
+  ( Statement() )*
+  [ LOOKAHEAD(2) "catch" [ <IDENTIFIER> { s=token.image; } ] ":" { stack.push("catch"); } ( Statement() )+ ]
+  [ "finally" ":" { stack.push("finally"); } ( Statement() )+ ]
+  "}"
+
+  { BlockSimple blk = handleBlock(lastMark, s, begin);
+    String name = LAMBDA_PREFIX + Lib.createID();
+    addFunction(script, new FunctionUser(begin, lineNum(), name, inClassDef, params, null, blk));
+    stack.push(new AccessFunction(name));
+    inFxnThrd = false;
+  }
+}
+
+void ThreadDecl() :
+{
+  int begin;
+  int lastMark;
+  String name;
+  String[] params;
+  Expr[] defvals;
+  inFxnThrd = true;
+}
+{
+  "thread"       { begin = token.beginLine; }
+  LabelName()    { name = THREAD_PREFIX + token.image; lastMark = markStack(); }
+  defvals=FormalParameters() { params = handleStrings(lastMark); }
+  Block()        { script.addThread(new _Thread(begin, lineNum(), name, inClassDef, params,
+                                    defvals, (BlockSimple)stack.pop()));
+                   inFxnThrd = false;
+                 }
+}
+
+Expr[] FormalParameters() :
+{
+  int parenthDepth = 0;
+  Expr[] ret = null;
+}
+{
+  [ "(" { ++parenthDepth; } ] ret=FormalParameterList() [ ")" { --parenthDepth; } ]
+  { if (parenthDepth != 0) throwParseException("Unmatched parentheses.");
+    return ret;
+  }
+}
+
+Expr[] FormalParameters1() :
+{
+  Expr[] ret = null;
+}
+{
+  "(" ret=FormalParameterList() ")" { return ret; }
+}
+
+Expr[] FormalParameterList() :
+{
+  ArrayList defvals = null;
+  int paramIdx = 0;
+}
+{
+  ( ".."                   { stack.push(".."); }
+  | [ <IDENTIFIER>         { stack.push(token.image); }
+      [ "=" ReturnableExpression()
+                           { if (defvals == null) defvals = new ArrayList();
+                             Lib.ensureSize(defvals, paramIdx+1);
+                             defvals.set(paramIdx, reduceIt());
+                           }
+      ]                    { ++paramIdx; }
+      ( LOOKAHEAD(2)
+        "," <IDENTIFIER>   { stack.push(token.image); }
+        [ "=" ReturnableExpression()
+                           { if (defvals == null) defvals = new ArrayList();
+                             Lib.ensureSize(defvals, paramIdx+1);
+                             defvals.set(paramIdx, reduceIt());
+                           }
+        ]                  { ++paramIdx; }
+      )*
+      [ "," ".." { stack.push(".."); } ]
+    ]                      { ++paramIdx; }
+  )
+  {
+    if (defvals == null) return null;
+    Expr[] ret = new Expr[defvals.size()];
+    for (int i=0; i<ret.length; ++i)
+      ret[i] = (Expr)defvals.get(i);
+    return ret;
+  }
+}
+
+void FormalParametersNoInit() :
+{
+}
+{
+  ( ".."                   { stack.push(".."); }
+  | [ <IDENTIFIER>         { stack.push(token.image); }
+      ( LOOKAHEAD(2)
+        "," <IDENTIFIER>   { stack.push(token.image); }
+      )*
+      [ "," ".." { stack.push(".."); } ]
+    ]
+  )
+}
+
+/*
+ * Expression syntax follows.
+ */
+
+void Expression() :
+{
+  int lastMark = markStack();
+}
+{
+  "defined" Expression() { stack.push( new ExprDefined(reduceIt()) ); }
+| "typeof" Expression()  { stack.pop(); } // TODO
+| "attributesof" Expression()  { stack.pop(); } // TODO
+| <EXEC_RESULT_LITERAL>        { stack.push(new ExprExecResult(unquote(token.image), false)); }
+| <EXEC_RESULTLINES_LITERAL>   { stack.push(new ExprExecResult(unquote(token.image, 2), true)); }
+| LOOKAHEAD( PrimaryExpression(true) AssignmentOperator() ) Assignment()
+| ConditionalExpression() ( "@" ConditionalExpression() )*
+  { if (handleMultiBase1(lastMark)) stack.push( new ExprConcat(first,rest) ); }
+}
+
+void MultiAssignment() :
+{
+  StmtMultiAssign sma;
+}
+{
+  "("                      { sma = new StmtMultiAssign(lineNum(), false); }
+  <IDENTIFIER>             { sma.addName(token.image); }
+  ( "," <IDENTIFIER>       { sma.addName(token.image); }
+  )* ")" "=" ReturnableExpression() { sma.setValue(reduceIt()); stack.push(sma); }
+  ";"
+}
+
+void Assignment() :
+{
+  int op = 0;
+  Integer jtype = null;
+}
+{
+  PrimaryExpression(true)
+  op = AssignmentOperator()
+  [ LOOKAHEAD(3) "(" jtype=JavaPrimitiveTypes() { op |= (jtype.intValue() << 8); } ")" ]
+  ReturnableExpression()
+
+  { Expr rhs = (Expr)stack.pop();
+    Expr lhs = (Expr)stack.pop();
+    stack.push( new ExprAssign(lineNum(), lhs, op, rhs) );
+  }
+}
+
+void LocalVariableDecl() :
+{
+  StmtMultiAssign sma = null;
+}
+{
+  upgradeToVar()
+  ( LocalVariableDeclaration() ( LOOKAHEAD(2) "," LocalVariableDeclaration() )*
+  | "("                    { sma = new StmtMultiAssign(lineNum(), true); }
+     <IDENTIFIER>          { sma.addName(token.image); }
+     ( "," <IDENTIFIER>    { sma.addName(token.image); }
+     )*
+    ")" "=" ReturnableExpression() { sma.setValue(reduceIt()); stack.push(sma); }
+  ) ";"
+}
+
+void LocalVariableDeclaration() :
+{
+  String name = null;
+  int lineNo;
+  int lastMark = markStack();
+}
+{
+  <IDENTIFIER>  { name = token.image; lineNo = lineNum(); } [ "=" ReturnableExpression() ]
+
+  { Expr rhs = handleSingleExpr(lastMark);
+    if (rhs == null) rhs = ValueSpecial.UNDEFINED;
+    stack.push(inClassDef && !inFxnThrd
+               ? ExprAssign.createField(lineNo, name, rhs)
+               : ExprAssign.createLocalVar(lineNo, name, rhs, true));
+  }
+}
+
+void ObjectAllocator() :
+{
+  String name = null;
+  Object inits = null;
+  Object cptr = null;
+  int[] javaTypes = null;
+  int lastMark = markStack();
+  int lineNo;
+
+  int mdim = 0;
+  Expr clsName;
+  Arguments args = null;
+}
+{
+  "new"                         { lineNo = lineNum(); }
+  ( ( LOOKAHEAD(2) upgradeToSortedMap() cptr = ComparatorDecl()
+                                { name = "SortedMap";
+                                  inits = new Doublet(cptr, handleExprs(lastMark));
+                                }
+    | AnyName()                 { name = token.image;
+                                  if ("struct".equalsIgnoreCase(name)) { upgradeMsg("Object"); name = null; }
+                                  else if ("Object".equals(name)) name = null;
+                                }
+    )
+    [ LOOKAHEAD( "(" ( JavaClassName() | <STRING_LITERAL> ) ("="|":") )
+      MemberInitList()          { inits = handleNamedExprs(lastMark); }
+    | Arguments(null,0)         { args = (Arguments)stack.pop();
+                                  inits = args.getParams();
+                                  javaTypes = args.getTypes();
+                                }
+    ]                           { NewObject no = new NewObject(name, inits, javaTypes);
+                                  no.setLineNumber(lineNo);
+                                  stack.push(no);
+                                }
+  | // for now, this is only for creating Java; 1.0 will allow this for JudoScript classes as well.
+    ( <CONST_NAME>              { try {
+                                    name = script.resolveConst(token.image).getStringValue();
+//                                    name = script.handleClassName(name);
+                                    clsName = new ConstString(name);
+                                  } catch(Throwable e) {
+                                    throwParseException(e.getMessage());
+                                    clsName = null;
+                                  }
+                                }
+    | ":" AnyName()             { clsName = new AccessVar(token.image); }
+    )
+    ( LOOKAHEAD("[" "]")
+      ( "[" "]"                 { ++mdim; }
+      )+ MultiDimArrayInit()    { stack.push(new JavaMDArray(lineNo, this, clsName,mdim,stack.pop())); }
+    | ( "[" Expression() "]" )+ { stack.push(new NewJavaArray(clsName, handleExprs(lastMark))); }
+    | [ Arguments(null,0)       { args = (Arguments)stack.pop(); }
+      ]                         { stack.push(newJava(clsName, args, lineNo)); } // why newJava? 9/20/04
+    )
+  )
+}
+
+void JavaAllocator() :
+{
+  String x = null;
+  Expr clsName = null;
+  Object args = null; // Arguments or AssociateList
+  int mdim = 0;
+  int lastMark = markStack();
+  int lineNo = 0;
+}
+{
+  LOOKAHEAD(2)
+  ( "new" "java::" | "javanew" { upgradeMsg("new java::"); } ) { lineNo = lineNum(); }
+  ( LOOKAHEAD( JavaClassName() ( "," JavaClassName() )* "{" )
+    x=JavaxDefinition(JudoUtil.genTempVarName("_jadapter_"))
+                                    { stack.push(new NewObject(x, null)); }
+  | ( x=JavaTypeName(false)         { clsName = new ConstString(x); }
+    | ":" AnyName()                 { clsName = new AccessVar(token.image); }
+    )
+    ( LOOKAHEAD("[" "]")
+      ( "[" "]"                     { ++mdim; }
+      )+ MultiDimArrayInit()        { stack.push(new JavaMDArray(lineNo, this, clsName, mdim, stack.pop())); }
+    | ( "[" Expression() "]" )+     { stack.push(new NewJavaArray(clsName, handleExprs(lastMark))); }
+    | LOOKAHEAD( "(" ( JavaClassName() | <STRING_LITERAL> ) ("="|":") )
+      MemberInitList()              { stack.push(newJava(clsName, handleNamedExprs(lastMark), lineNo)); }
+    | [ Arguments(null,0)           { args = (Arguments)stack.pop(); }
+      ]                             { stack.push(newJava(clsName, args, lineNo)); }
+    )
+  )
+| "new"                             { lineNo = lineNum(); }
+  x=JavaPrimitiveTypeNames(false)   { clsName = new ConstString(x); }
+  ( LOOKAHEAD("[" "]")
+    ( "[" "]"                       { ++mdim; }
+    )+ MultiDimArrayInit()          { stack.push(new JavaMDArray(lineNo, this, clsName, mdim, stack.pop())); }
+  | ( "[" Expression() "]" )+       { stack.push(new NewJavaArray(clsName, handleExprs(lastMark))); }
+  | LOOKAHEAD( "(" ( JavaClassName() | <STRING_LITERAL> ) ("="|":") )
+    MemberInitList()                { stack.push(newJava(clsName, handleNamedExprs(lastMark), lineNo)); }
+  | [ Arguments(null,0)             { args = (Arguments)stack.pop(); }
+    ]                               { stack.push(newJava(clsName, args, lineNo)); }
+  )
+}
+
+void ComAllocator() :
+{
+  String x;
+  Expr clsName[] = new Expr[1];
+  int lineNo;
+}
+{
+  "new" "com::"                     { lineNo = lineNum(); }
+  ( x=JavaClassName()               { clsName[0] = new ConstString(x); }
+  | <STRING_LITERAL>                { clsName[0] = new ConstString(unquote(token.image)); }
+  | ":" AnyName()                   { clsName[0] = new AccessVar(token.image); }
+  )
+
+  { stack.push( newCall((String)null, "createCOMObject", clsName, null) ); }
+}
+
+void MultiDimArrayInit() :
+{
+  ArrayList ret = new ArrayList();
+}
+{
+  "{" [ MDArrayInitializer()        { ret.add(stack.pop()); }
+      ( "," MDArrayInitializer()    { ret.add(stack.pop()); }
+      )*
+      ]
+  "}"                               { stack.push(ret); }
+}
+
+void MDArrayInitializer() : {} { MultiDimArrayInit() | Expression() }
+
+void MemberInitList() : {} { "(" MemberInitList1() ")" }
+
+void MemberInitList1() : {} { [ MemberInitializer() ( "," MemberInitializer() )* ] }
+
+void MemberInitializer() :
+{
+  String x;
+}
+{
+  ( <STRING_LITERAL>      { stack.push(unquote(token.image)); } 
+  | x=JavaClassName()     { stack.push(x); }
+  | "@" PrimarySimpleExpression(false)
+  )
+  ( "=" | ":" ) ReturnableExpression()
+}
+
+int AssignmentOperator() :
+{
+}
+{
+    "="     { return OP_ASSIGN; }
+  | ":="    { return OP_COPY; }
+  | "@="    { return OP_CONCAT_ASSIGN; }
+  | "*="    { return OP_MUL_ASSIGN; }
+  | "/="    { return OP_DIV_ASSIGN; }
+  | "%="    { return OP_MOD_ASSIGN; }
+  | "+="    { return OP_PLUS_ASSIGN; }
+  | "-="    { return OP_MINUS_ASSIGN; }
+  | "<<="   { return OP_LSHIFT_ASSIGN; }
+  | ">>="   { return OP_RSHIFT_ASSIGN; }
+  | ">>>="  { return OP_RUSHIFT_ASSIGN; }
+  | "&="    { return OP_AND_ASSIGN; }
+  | "^="    { return OP_XOR_ASSIGN; }
+  | "|="    { return OP_OR_ASSIGN; }
+  | "&&="   { return OP_LOGIC_AND_ASSIGN; }
+  | "||="   { return OP_LOGIC_OR_ASSIGN; }
+}
+
+void ConditionalExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  ConditionalOrExpression() [ "?" ( HereDoc() | Expression() ) ":" ConditionalExpression() ]
+
+  { if (countOnStack(lastMark) < 3) return;
+    Expr rhs = (Expr)stack.pop();
+    Expr lhs = (Expr)stack.pop();
+    stack.push( new ExprConditional((Expr)stack.pop(), lhs, rhs) );
+  }
+}
+
+void ConditionalOrExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  ConditionalAndExpression() ( "||" ConditionalAndExpression() )*
+
+  { if (handleMultiBase1(lastMark)) stack.push(new ExprConditionalAndOr(OP_OR,first,rest)); }
+}
+
+void ConditionalAndExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  InclusiveOrExpression() ( "&&" InclusiveOrExpression() )*
+
+  { if (handleMultiBase1(lastMark)) stack.push(new ExprConditionalAndOr(OP_AND,first,rest)); }
+}
+
+void InclusiveOrExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  ExclusiveOrExpression() ( "|" ExclusiveOrExpression() )*
+
+  { if (handleMultiBase1(lastMark)) stack.push(new ExprAndOrXor(OP_OR,first,rest)); }
+}
+
+void ExclusiveOrExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  AndExpression() ( "^" AndExpression() )*
+
+  { if (handleMultiBase1(lastMark)) stack.push(new ExprAndOrXor(OP_XOR,first,rest)); }
+}
+
+void AndExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  EqualityExpression() ( "&" EqualityExpression() )*
+
+  { if (handleMultiBase1(lastMark)) stack.push(new ExprAndOrXor(OP_AND,first,rest) ); }
+}
+
+void EqualityExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  RelationalExpression()
+  ( ( ( "==" | "===" )     { stack.push(new Integer(OP_EQ)); }
+    | ( "!=" | "!==" )     { stack.push(new Integer(OP_NE)); }
+    ) RelationalExpression()
+  )*
+
+  { if (handleMultiBase(lastMark)) stack.push(new ExprRelational(first,ops,rest)); }
+}
+
+void RelationalExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  ShiftExpression()
+  ( LOOKAHEAD(2)
+    ( "<"      { stack.push(new Integer(OP_LT)); }
+    | ">"      { stack.push(new Integer(OP_GT)); }
+    | "<="     { stack.push(new Integer(OP_LE)); }
+    | ">="     { stack.push(new Integer(OP_GE)); }
+    ) ShiftExpression() )*
+
+  { if (handleMultiBase(lastMark)) stack.push(new ExprRelational(first,ops,rest)); }
+}
+
+void ShiftExpression() :
+{
+  int op = 0;
+  int lastMark = markStack();
+}
+{
+  AdditiveExpression()
+  [ ( "<<"     { op = OP_LSHIFT; }
+    | ">>"     { op = OP_RSHIFT; }
+    | ">>>"    { op = OP_RUSHIFT; }
+    ) AdditiveExpression()
+  ]
+
+  { if (countOnStack(lastMark) == 2) {
+      Expr rhs = (Expr)stack.pop();
+      stack.push(new ExprShift((Expr)stack.pop(),op,rhs));
+    }
+  }
+}
+
+void AdditiveExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  MultiplicativeExpression()
+  ( ( "+"      { stack.push(new Integer(OP_PLUS)); }
+    | "-"      { stack.push(new Integer(OP_MINUS)); }
+    ) MultiplicativeExpression() )*
+
+  { if (handleMultiBase(lastMark)) stack.push( new ExprAddMinus(first, ops, rest) ); }
+}
+
+void MultiplicativeExpression() :
+{
+  int lastMark = markStack();
+}
+{
+  PowerExpression()
+  ( ( "*"      { stack.push(new Integer(OP_MUL)); }
+    | "/"      { stack.push(new Integer(OP_DIV)); }
+    | "%"      { stack.push(new Integer(OP_MOD)); }
+    ) PowerExpression()
+  )*
+
+  { if (handleMultiBase(lastMark)) stack.push(new ExprMulDivMod(first, ops, rest)); }
+}
+
+void PowerExpression() :
+{
+}
+{
+  UnaryExpression()
+  [ "**" UnaryExpression()  { Expr x=reduceIt(); stack.push(new ExprPower(reduceIt(), x)); }
+  ]
+}
+
+void UnaryExpression() :
+{
+  int op = OP_PLUS;
+}
+{
+  ( "+" | "-" { op=OP_MINUS; } ) UnaryExpression()
+  { if (op==OP_MINUS) stack.push(new ExprNegate((Expr)stack.pop())); }
+| PrefixExpression()
+| UnaryExpressionNotPlusMinus()
+}
+
+void PrefixExpression() :
+{
+  int op = OP_PLUS_ASSIGN;
+}
+{
+  ( "++" | "--" { op=OP_MINUS_ASSIGN; } ) PrimaryExpression(false)
+  { stack.push( new ExprAssign(lineNum(), (ExprPrimary)stack.pop(), op, ConstInt.ONE) ); }
+}
+
+void UnaryExpressionNotPlusMinus() :
+{
+  boolean isNot = false;
+}
+{
+  ( "~" | "!" { isNot = true; } ) UnaryExpression()
+  { Expr e = reduceIt();
+    stack.push(isNot ? (Expr)new ExprNot(e) : new ExprComplement(e) );
+  }
+| LOOKAHEAD(2) PostfixExpression()
+| Literal()
+}
+
+void PostfixExpression() :
+{
+  int op = 0;
+}
+{
+  PrimaryExpression(false) [ "++" { op=OP_PLUS_ASSIGN; } | "--" { op=OP_MINUS_ASSIGN; } ]
+
+  { if (op == 0)
+      stack.push(reduceIt());
+    else
+      stack.push( new ExprPostInc(lineNum(), (ExprPrimary)stack.pop(), op) );
+  }
+}
+
+void PrimaryExpression(boolean left) :
+{
+  String x;
+}
+{
+  "&" AnyName()      { stack.push( new AccessFunction(token.image) ); }
+| LOOKAHEAD(2) JavaAllocator()
+| LOOKAHEAD(2) ObjectAllocator()
+| ComAllocator()
+| ( "java::" | "javaclass" { upgradeMsg("java::"); } )
+  ( x=JavaClassName()      { stack.push( newJava(new ConstString(x), lineNum()) ); }
+  | ":" AnyName()          { stack.push( newJava(new AccessVar(token.image), lineNum()) ); }
+  )
+| PrimarySimpleExpression(left)
+}
+
+void PrimarySimpleExpression(boolean left) :
+{
+  int lastMark = markStack();
+  boolean isJavaRef = false;
+  boolean b;
+  String x;
+}
+{
+  PrimaryPrefix() ( b=PrimarySuffix(left) { isJavaRef|=b; } )*
+  { Object[] oa = handleAny(lastMark);
+    //checkMemberAccess(oa);
+    if (isJavaRef) {
+      StringBuffer sb = new StringBuffer();
+      int i=0; 
+      for (; i<oa.length; i++) {
+        if (oa[i].equals("::")) break; // guaranteed
+        if (!(oa[i] instanceof String) || oa[i].toString().startsWith("#"))
+          throwParseException("Invalid Java class name is used to reference a Java static member.");
+        if (i>0) sb.append('.');
+        sb.append(oa[i]);
+      }
+      Object[] oa1 = new Object[oa.length - i];
+//      oa1[0] = newJava(toVariable(script.handleClassName(sb.toString())), lineNum());
+      oa1[0] = newJava(toVariable(sb.toString()), lineNum());
+      System.arraycopy(oa, i+1, oa1, 1, oa1.length-1);
+      oa = oa1;
+    }
+    if (oa.length==1 && (oa[0] instanceof Expr)) {
+      stack.push(oa[0]);
+      return;
+    } else if (oa.length==1 && (oa[0] instanceof String) && left) {
+      x = (String)oa[0];
+      if (x.startsWith("$$"))
+        throwParseException(x + " can not be assigned.");
+    }
+    stack.push(new ExprPrimary(oa));
+  }
+}
+
+void PrimaryPrefix() :
+{
+  String x = "";
+  boolean global = false;
+}
+{
+  LOOKAHEAD(2) "column" "(" // for printTable only.
+  ( <STRING_LITERAL>          { stack.push( new ExprColumn(unquote(token.image)) ); }
+  | <INTEGER_LITERAL>         { stack.push( new ExprColumn((int)toLong(token)) ); }
+  ) ")"
+| <CONST_NAME>                { stack.push(token.image); }
+| upgradeToDate()             { stack.push("Date"); }
+| "super" "." AnyName()       { if (!inClassDef) throwParseException("'super' can not be used here.");
+                                stack.push(".." + token.image);
+                                if (inJavax) superCalls.add(token.image);
+                              }
+| "this"                      { if (!inClassDef) throwParseException("'this' can not be used here.");
+                                stack.push(new AccessThis());
+                              }
+| "(" Expression() ")"
+| "${"
+  ( [ "::" { global = true; } ]
+    AnyName()                 { x = token.image; }
+    ("." AnyName()            { x += "." + token.image; }
+    )*
+  | ( "~" | "." | ":" | "/" ) { x = token.image; }
+  )   { stack.push(new AccessVar(x, global ? AccessVar.ACCESS_GLOBAL : AccessVar.ACCESS_VAR_ENV)); }
+  "}"
+| ( "boolean"|"byte"|"char"|"short"|"int"|"long"|"float"|"double" ) { stack.push(token.image); }
+  "(" Expression() ")"        { Object[] ea = new Object[] { stack.pop(), JavaObject.JAVA_ANY_I };
+                                stack.push(new Arguments(this, ea, false));
+                              }
+| LOOKAHEAD( LabelName() ( "." AnyName() )* "::" )
+  LabelName()                 { x = token.image; }
+  ( "." AnyName()             { x += "." + token.image; }
+  )* "::" AnyName()           { stack.push(x + "::" + token.image); }
+| [ "::"                      { x = "::"; }
+  ] PotentialFunctionName()   { x += token.image;
+                                stack.push(x);
+                                if (!x.startsWith("::") && inJavax) javaxCalls.add(x);
+                              }
+| <STRING_LITERAL>            { stack.push(JudoUtil.parseString(unquote(token.image))); }
+}
+
+boolean PrimarySuffix(boolean left) :
+{
+  String s = null;
+  boolean ret = false;
+  int lastMark = markStack();
+  Expr expr = null;
+}
+{
+  ( "["
+    ( ":" Expression()       { if (left)
+                                 throwParseException("Range operator is not applicable on the left.");
+                               stack.push(new Expr[]{ ConstInt.ZERO, reduceIt() });
+                             }
+    | Expression()
+      ( ":" [ Expression() { expr = reduceIt(); } ]
+                             { if (left)
+                                 throwParseException("Range operator is not applicable on the left.");
+                               if (expr == null)
+                                 expr = ConstInt.MAX;
+                               stack.push(new Expr[]{ reduceIt(), expr });
+                             }
+      | ( "," Expression() )*
+      )
+    ) "]"
+  | ( "."
+    | "::"                   { stack.push("::"); ret = true; }
+    )
+//    ( LOOKAHEAD(2) AnyName() { s = token.image; }
+//               ":" AnyName() { stack.push(s + ":" + token.image); }
+    ( AnyName()              { stack.push(token.image);
+                               if (inJavax) javaxCalls.add(token.image);
+                             }
+    | <STRING_LITERAL>       { stack.push(unquote(token.image)); }
+    | "(" Expression() ")"   { stack.push(new ExprPrimary.AccessExpr(reduceIt())); }
+    | "<" AnyName()          { s = token.image; }
+      [ ":" AnyName()        { s = token.image + "+" + s; }
+      ] ">"                  { stack.push(NODE_PREFIX + s); }
+    )
+  | LOOKAHEAD( "(" ( JavaClassName() | <STRING_LITERAL> ) ("="|":") )
+    MemberInitList()         { stack.push(handleNamedExprs(lastMark)); }
+  | [ "->"                   { stack.push("->"); }
+    ] Arguments(null,0)
+  )                          { return ret; }
+}
+
+void Literal() :
+{
+}
+{
+  <INTEGER_LITERAL>          { stack.push( toConstInt(token)); }
+| <FLOATING_POINT_LITERAL>   { stack.push( new ConstDouble(toDouble(token)) ); }
+| <STRING_LITERAL>           { stack.push( JudoUtil.parseString(unquote(token.image)) ); }
+| BooleanLiteral()
+| "null"                     { stack.push(ValueSpecial.NIL); }
+| "undefined"                { stack.push(ValueSpecial.UNDEFINED); }
+| "max_number"               { stack.push(ValueSpecial.MAX_NUMBER); }
+| "min_number"               { stack.push(ValueSpecial.MIN_NUMBER); }
+| "infinity"                 { stack.push(ValueSpecial.POSITIVE_INFINITY); }
+| ( "eof" | "EOF" )          { stack.push(ConstString.EOF); }
+| "nl"                       { stack.push(ConstString.NL); }
+}
+
+void BooleanLiteral() :
+{
+}
+{
+  ( "true" | "false" )       { stack.push( token.image.charAt(0)=='t' ? ConstInt.TRUE : ConstInt.FALSE ); }
+}
+
+void Arguments(Expr firstParam, int type) :
+{
+  boolean paramsExpand = false;
+}
+{
+  "(" [ "{{" { paramsExpand=true; } ] ArgumentList(firstParam,type,paramsExpand) [ "}}" ] ")"
+}
+
+void ArgumentList(Expr firstParam, int type, boolean paramsExpand) :
+{
+  int lastMark = markStack();
+  if (firstParam != null) {
+    stack.push(firstParam);
+    stack.push(new Integer(type));
+  }
+}
+{
+  [ Parameter() ( "," Parameter() )* ] { stack.push(new Arguments(this, handleAny(lastMark),paramsExpand)); }
+}
+
+void Parameter() :
+{
+  Integer jType = JavaObject.JAVA_ANY_I;
+}
+{
+  [ LOOKAHEAD(3) "(" jType=JavaPrimitiveTypes() ")" ] ReturnableExpression() { stack.push(jType); }
+}
+
+Integer JavaPrimitiveTypes() :
+{
+}
+{
+  "boolean"         { return JAVA_BOOLEAN_I; }
+| "byte"            { return JAVA_BYTE_I; }
+| "char"            { return JAVA_CHAR_I; }
+| "short"           { return JAVA_SHORT_I; }
+| "int"             { return JAVA_INT_I; }
+| "long"            { return JAVA_LONG_I; }
+| "float"           { return JAVA_FLOAT_I; }
+| "double"          { return JAVA_DOUBLE_I; }
+| upgradeToString() { return JAVA_STRING_I; }
+| id("currency")    { return JAVA_CURRENCY_I; }
+}
+
+/*
+ * Statement syntax follows.
+ */
+
+void Statement() :
+{
+  int lastMark = markStack();
+  String s = null;
+  int line;
+}
+{
+  LOOKAHEAD(2) Block()
+| IndividualStatement()
+| "try"                    { line = lineNum(); }
+  SimpleBlock(null,true)
+  [ LOOKAHEAD(2) "catch" [ <IDENTIFIER> {s=token.image;} ] { stack.push("catch"); } SimpleBlock(null,true) ]
+  [ LOOKAHEAD(2) "finally" { stack.push("finally"); } SimpleBlock(null,true) ]
+  { stack.push(handleBlock(lastMark, s, line)); }
+}
+
+void IndividualStatement() :
+{
+  String name = null;
+  String label = null;
+  Expr first = null;
+  int lastMark = markStack();
+  int lineNo = -1;
+}
+{
+  LOOKAHEAD(3) StartThreadStatement()
+| LOOKAHEAD(LabelName() "::" ) Expression() ";"
+  { Expr ex = reduceIt();
+    if (ex instanceof Stmt) {
+      ((Stmt)ex).setLineNumber(lineNum());
+      stack.push(ex);
+    } else {
+      stack.push(new StmtExpr(lineNum(),ex));
+    }
+  }
+| LOOKAHEAD(PotentialFunctionName() ("[[*"|"[[[*") ) // the next form's lookahead will mess up tokenizer.
+  PotentialFunctionName()       { name = token.image; }
+  ArgumentList(null,0,false)    { handleSimpleCall(name); }
+  ";"
+| LOOKAHEAD(PotentialFunctionName() ArgumentList(null,0,false) ";" )
+  PotentialFunctionName()       { name = token.image; }
+  ArgumentList(first,0,false)   { handleSimpleCall(name); }
+  ";"
+| LOOKAHEAD(PotentialFunctionName() Arguments(null,0) ";" )
+  PotentialFunctionName()       { name = token.image; }
+  Arguments(first,0)            { handleSimpleCall(name); }
+  ";"
+| LOOKAHEAD(2) "super" Arguments(null,0)
+  { if (!inJavaCtor) throwParseException("'super' can not be used here.");
+    stack.push(reduce(new ExprPrimary( new Object[]{"super",stack.pop()} )));
+  }
+| LOOKAHEAD(("var"|"local") [ "(" ] <IDENTIFIER> ) LocalVariableDecl()
+| LOOKAHEAD( "(" <IDENTIFIER> ( "," <IDENTIFIER> )* ")" "=" ) MultiAssignment()
+| LOOKAHEAD(2) Expression() ";"
+  { Expr ex = reduceIt();
+    int line = lineNum();
+    if (ex instanceof Stmt) {
+      ((Stmt)ex).setLineNumber(line);
+      stack.push(ex);
+    } else {
+      stack.push(new StmtExpr(line, ex));
+    }
+  }
+| ";"            { stack.push(Stmt.NoOp); } // may be useful for if-else body, etc.
+| "break"        { lineNo = lineNum(); }
+  [ LabelName()  { label = token.image; }
+  | "schedule"   { label = LABEL_SCHEDULE; }
+  ]              { stack.push(new StmtBreakContinueResume(lineNo,label,ExceptionControl.CTL_BREAK)); }
+  ";"
+| "continue"     { lineNo = lineNum(); }
+  [ LabelName()  { label = token.image; }
+  | "schedule"   { label = LABEL_SCHEDULE; }
+  ]              { stack.push(new StmtBreakContinueResume(lineNo,label,ExceptionControl.CTL_CONTINUE)); }
+  ";"
+| "return"       { lineNo = lineNum(); }
+  [ ReturnableExpression() ]
+  ";"            { stack.push( new StmtReturn(lineNo, reduce(handleSingleExpr(lastMark))) ); }
+| "resume"       { lineNo = lineNum(); }
+  ";"            { stack.push(new StmtBreakContinueResume(lineNo,null,ExceptionControl.CTL_RESUME)); }
+| "delete"       { lineNo = lineNum(); }
+  PrimaryExpression(false) ";" { stack.push( new ExprAssign(lineNum(),(Expr)stack.pop(),ValueSpecial.UNDEFINED) ); }
+| "with"         { lineNo = lineNum(); }
+  Expression()
+  Block()        { stack.push(new StmtWith(lineNo,(BlockSimple)stack.pop(),reduceIt())); }
+| LOOKAHEAD( "do" Expression() ["in" Expression()] [Encoding()] ["systemID" Expression()] "as" "xml" )
+  XmlStatement()
+| LOOKAHEAD( [LabelName() ":"] "do" Expression() ["in" Expression()] [Encoding()] "as" <IDENTIFIER> )
+  LinesStatement()
+| LOOKAHEAD( [LabelName() ":"] "while" )  WhileStatement()
+| LOOKAHEAD( [LabelName() ":"] "for" )    ForStatement()
+| LOOKAHEAD( [LabelName() ":"] "do" "{" ) DoWhileStatement()
+| LOOKAHEAD( [LabelName() ":"] "repeat" ) RepeatStatement()
+| IfStatement()
+| SwitchStatement()
+| ThrowStatement()
+| RunStatement()
+| PrintStatement()
+| PrintTableStatement()
+| MailStatement()
+| JdbcStatements()
+| HqlStatements()
+| ScheduleStatement()
+| SgmlStatement()
+| XsltStatement()
+| GuiEventsStatement()
+//| COMEventsStatement()
+| SCPStatement()
+| FileSystemStatements()
+| "use" "namespace" LabelName() ";" // { stack.push(new StmtSetDefaultNS(lineNum(),token.image)); }
+| Directives()
+| "anttask::"               { lineNo = lineNum(); }
+  label=XMLLiteral()        { if (checkAntTask(label))
+                                throwParseException("Unsupported anttask: " + label);
+                              Markup mu = (Markup)stack.pop();
+                              stack.push( new StmtAntTask(lineNo, mu) );
+                            }
+}
+
+void SimpleBlock(Stmt[] preStmts, boolean leaveOnStack) :
+{
+  int lastMark = markStack();
+  if (preStmts != null) {
+    for (int i=0; i<preStmts.length; ++i)
+      stack.push(preStmts[i]);
+  }
+  ++fxnDeclStack;
+}
+{
+  "{" ( Statement() | FunctionDecl() )* "}"
+
+  { --fxnDeclStack;
+    if (leaveOnStack) return;
+    BlockSimple b = new BlockSimple();
+    if (handleStmts(lastMark)) b.setStmts(stmts,labels);
+    stack.push(b);
+  }
+}
+
+void Block() :
+{
+  int lastMark = markStack();
+  String s = null;
+  int lineNo;
+  ++fxnDeclStack;
+}
+{
+  "{"   { lineNo = lineNum(); }
+  ( Statement() | FunctionDecl() )*
+  [ LOOKAHEAD(2) "catch" [ <IDENTIFIER> { s=token.image; } ] ":" { stack.push("catch"); } ( Statement() )+ ]
+  [ "finally" ":" { stack.push("finally"); } ( Statement() )+ ]
+  "}"
+  { --fxnDeclStack; stack.push(handleBlock(lastMark, s, lineNo)); }
+}
+
+void SwitchStatement() :
+{
+  StmtSwitch ss = null;
+  ArrayList v = new ArrayList();
+}
+{
+  "switch"
+  Expression()              { ss = new StmtSwitch(lineNum(),reduceIt()); }
+  "{"
+  ( ( "case" Expression()   { ss.addCase(reduceIt(), v.size()); }
+      ( "," Expression()    { ss.addCase(reduceIt(), v.size()); }
+      )*
+    | "default"             { ss.setDefaultIndex(v.size()); }
+    ) ":"
+    ( Statement()           { v.add(stack.pop()); }
+    )*
+  )* "}"                    { ss.setStmts(v); stack.push(ss); }
+}
+
+void IfStatement() :
+/* The disambiguating algorithm of JavaCC automatically binds dangling
+ * else's to the innermost if statement.  The LOOKAHEAD specification
+ * is to tell JavaCC that we know what we are doing.
+ */
+{
+  int lastMark = markStack();
+}
+{
+  "if" ( LOOKAHEAD(Expression() "{") Expression() SimpleBlock(null,false)
+       | "(" Expression() ")" IndividualStatement()
+       )
+  ( LOOKAHEAD(2) ( "elif" | "else" "if" )
+       ( LOOKAHEAD(Expression() "{") Expression() SimpleBlock(null,false)
+       | "(" Expression() ")" Statement()
+       )
+  )*
+  [ LOOKAHEAD(2) "else" Statement() ]
+
+  { int cnt = countOnStack(lastMark);
+    // if cnt is odd, last one is "else"
+    Stmt elsePart = ((cnt & 1) == 1) ? (Stmt)stack.pop() : null;
+    if (elsePart != null) {
+      if (elsePart instanceof BlockSimple)
+        elsePart = reduceBlock((BlockSimple)elsePart);
+    }
+    cnt /= 2;
+    Expr[] conds = new Expr[cnt];
+    Stmt[] ifParts = new Stmt[cnt];
+    Stmt stmt;
+    for (int i=cnt-1; i>=0; i--) {
+      stmt = (Stmt)stack.pop();
+      if (stmt instanceof BlockSimple) stmt = reduceBlock((BlockSimple)stmt);
+      ifParts[i] = stmt;
+      conds[i] = nonAssignExpr(stack.pop());
+    }
+    stack.push( new StmtIf(lineNum(), conds, ifParts, elsePart) );
+  }
+}
+
+void WhileStatement() :
+{
+  String label = null;
+  Expr cond = ConstInt.TRUE;
+  int lineNo;
+}
+{
+  [ LabelName()        { label = setCurrentLabel(); }
+    ":" ]
+  "while"              { lineNo = token.endLine; }
+  ( LOOKAHEAD( [ Expression() ] "{" )
+    [ Expression()     { cond = nonAssignExpr(stack.pop()); }
+    ] SimpleBlock(null,false)
+  | "(" Expression()   { cond = nonAssignExpr(stack.pop()); }
+    ")" IndividualStatement()
+  )
+
+  { stack.push( new StmtWhile(lineNo,label,(Stmt)stack.pop(),cond,false) );
+    if (label != null) labelStack.pop();
+  }
+}
+
+void DoWhileStatement() :
+{
+  String label = null;
+  int lineNo;
+}
+{
+  [ LabelName()    { label = setCurrentLabel(); }
+    ":" ]
+  "do"             { lineNo = token.endLine; }
+  SimpleBlock(null,false) "while" Expression() ";"
+
+  { Expr cond = nonAssignExpr(stack.pop());
+    stack.push( new StmtWhile(lineNo,label,(BlockSimple)stack.pop(),cond,true) );
+    if (label != null) labelStack.pop();
+  }
+}
+
+void RepeatStatement() :
+{
+  int     lineNo;
+  Expr    count = null;
+  String  label = null;
+  BlockSimple stmt = null; // StmtFor or StmtForIn or StmtForFrom.
+}
+{
+  [ LabelName()           { label = setCurrentLabel(); }
+    ":" ]                 { lineNo = token.endLine; }
+  "repeat" Expression()   { stmt = new StmtForFrom(lineNo,label,JudoUtil.genTempVarName("_?rEpEaT_"),
+                                                   ConstInt.ONE,reduceIt(),ConstInt.ONE,false); }
+  [ id("times") ]
+  SimpleBlock(null,false) { stmt.setStmts((BlockSimple)stack.pop());
+                            stack.push(stmt);
+                            if (label != null) labelStack.pop();
+                          }
+}
+
+void ForStatement() :
+{
+  String  label = null;
+  int     lineNo;
+  BlockSimple stmt; // StmtFor, StmtForFrom or StmtIn.
+}
+{
+  [ LabelName()           { label = setCurrentLabel(); }
+    ":" ]
+  "for"                   { lineNo = token.endLine; }
+  ( LOOKAHEAD( <IDENTIFIER> "in" )
+    stmt=_ForInClause(lineNo,label)
+    SimpleBlock(null,false)     { stmt.setStmts((BlockSimple)stack.pop()); }
+  | LOOKAHEAD( "(" <IDENTIFIER> "in" )
+    "(" stmt=_ForInClause(lineNo,label) ")"
+    Statement() { stmt.setStmts((Stmt)stack.pop()); }
+
+  | LOOKAHEAD( <IDENTIFIER> ( "from" | "to" | "upto" | "downto" ) )
+    stmt=_ForFromToClause(lineNo,label)
+    SimpleBlock(null,false)     { stmt.setStmts((BlockSimple)stack.pop()); }
+  | LOOKAHEAD( "(" <IDENTIFIER> ( "from" | "to" | "upto" | "downto" ) )
+    "(" stmt=_ForFromToClause(lineNo,label) ")"
+    Statement() { stmt.setStmts((Stmt)stack.pop()); }
+
+  | LOOKAHEAD( "(" [ ExpressionList() ] ";" )
+    "(" stmt=_ForClause(lineNo,label) ")"
+    Statement() { stmt.setStmts((Stmt)stack.pop()); }
+  | stmt=_ForClause(lineNo,label)
+    SimpleBlock(null,false)     { stmt.setStmts((BlockSimple)stack.pop()); }
+  )
+
+  { stack.push(stmt);
+    if (label != null) labelStack.pop();
+  }
+}
+
+StmtFor _ForClause(int lineNo, String label) :
+{
+  Expr[]  forInit  = null;
+  Expr[]  forNext  = null;
+  Expr    forCond  = null;
+  int     lastMark = markStack();
+}
+{
+  [ ExpressionList() ] ";" { forInit = handleExprs(lastMark);
+                             lastMark = markStack();
+                           }
+  [ Expression() ] ";"     { forCond = reduce(handleSingleExpr(lastMark));
+                             lastMark = markStack();
+                           }
+  [ ExpressionList() ]     { forNext = handleExprs(lastMark);
+                             return new StmtFor(lineNo,label,forInit,forCond,forNext,null);
+                           }
+}
+
+StmtForFrom _ForFromToClause(int lineNo, String label) :
+{
+  String varName = null;
+  Expr from = null;
+  Expr to   = null;
+  Expr step = null;
+  boolean backward = false;
+  boolean upto = false;
+}
+{
+  <IDENTIFIER>              { varName = token.image; }
+  [ "from" Expression()     { from = reduceIt(); }
+  ]
+  ( "to"
+  | "upto"                  { upto = true; }
+  | "downto"                { backward = true; }
+  ) Expression()            { to = reduceIt(); }
+  [ id("step") Expression() { step = reduceIt(); }
+  ]                         { return new StmtForFrom(lineNo,label,varName,from,to,step,upto,backward); }
+}
+
+StmtForIn _ForInClause(int lineNo, String label) :
+{
+  String varName = null;
+  Expr col = null;
+  Expr from = null;
+  Expr to   = null;
+  Expr step = null;
+  boolean backward = false;
+  boolean upto = false;
+}
+{
+  <IDENTIFIER>                  { varName = token.image; }
+  "in" ReturnableExpression()   { col = reduceIt(); }
+  [ LOOKAHEAD(2) id("backward") { backward = true; }
+  ]
+  [ "from" Expression()     { from = reduceIt();
+                              if (backward)
+                                throwParseException(
+                                  "'from' can not be used after 'backward', line "+lineNum());
+                            }
+  ]
+  [ ( "to"
+    | "upto"                { upto = true; }
+    | "downto"              { if (backward)
+                                throwParseException(
+                                  "'to'/'downto' can not be used after 'backward', line "+lineNum());
+                              backward = true;
+                            }
+    ) Expression()          { to = reduceIt(); }
+  ]
+  [ id("step") Expression() { step = reduceIt(); }
+  ]                         { return new StmtForIn(lineNo,label,varName,col,from,to,step,upto,backward); }
+}
+
+void ExpressionList() :
+{
+}
+{
+  Expression()       { stack.push(reduceIt()); }
+  ( "," Expression() { stack.push(reduceIt()); }
+  )*
+}
+
+void ReturnableExpression() :
+{
+  // Handle set:
+  int lastMark = markStack();
+  Object cptr = null;
+  int lineNo;
+}
+{
+  LOOKAHEAD( [("linkedList"|"LinkedList")] "[" ) ArrayAllocator()
+| LOOKAHEAD( "{" FormalParametersNoInit() "|" ) AnonFunctionDecl1()
+| AnonFunctionDecl()
+| Expression()
+| upgradeToSet() cptr = ComparatorDecl() "[" [ Expression() ( LOOKAHEAD(2) "," Expression() )* ] [ "," ] "]"
+  { stack.push( new NewObject("Set", new Doublet(cptr,handleExprs(lastMark))) ); }
+| HereDoc()
+| Dom()
+| WSDLAllocator()
+| "{" { lineNo=lineNum(); } MemberInitList1() "}"
+  { NewObject no = new NewObject(null, handleNamedExprs(lastMark));
+    no.setLineNumber(lineNo);
+    stack.push(no);
+  }
+| "void" Expression()  { stack.pop(); stack.push(ValueSpecial.UNDEFINED); }
+| "xml::" XMLLiteral() { stack.push( JudoUtil.toVariable(stack.pop()) ); }
+}
+
+void WSDLAllocator() :
+{
+  ExprWSDL expr;
+}
+{
+  "wsdl::" Expression()            { expr = new ExprWSDL(reduceIt()); }
+  [ LOOKAHEAD(2) ":" Expression()  { expr.setServiceName(reduceIt()); }
+  ]                                { stack.push(expr); }
+}
+
+void ArrayAllocator() :
+{
+  int lastMark = markStack();
+  boolean isList = false;
+}
+{
+  [ upgradeToLinkedList()  { isList=true; } ] "["
+  ( LOOKAHEAD(Expression() "..")
+    Expression() ".." Expression()
+    { stack.push( new NewRangeArray(reduceIt(), reduceIt()) ); }
+  | [ ( ArrayAllocator() | Expression() | HereDoc() | Dom() )
+      ( LOOKAHEAD(2) "," ( ArrayAllocator() | Expression() | HereDoc() | Dom() ) )*
+    ]
+    { stack.push( new NewObject(isList?"LinkedList":"Array", handleExprs(lastMark)) ); }
+  )
+  [ "," ] "]"
+}
+
+Object ComparatorDecl() :
+{
+  int sortType = 0;  // 1: natural
+                     // 2: number
+                     // 3: string
+                     // 4: date
+                     // 5: comparator
+}
+{
+  [ LOOKAHEAD(2) "<" { sortType = 1; }
+    [ LOOKAHEAD(2)
+      ( upgradeToNumber()    { sortType = 2; }
+      | upgradeToString()    { sortType = 3; }
+      | upgradeToDate()      { sortType = 4; }
+      )
+      [ "-"          { sortType = -sortType; }
+      | "+"
+      ]
+    | Expression()   { return stack.pop(); }
+    ]
+    ">"
+  ]
+  { switch(sortType) {
+    case 1:  return UserDefinedComparator.theNaturalComparator; break;
+    case 2:  return UserDefinedComparator.theNumberComparator; break;
+    case 3:  return UserDefinedComparator.theStringComparator; break;
+    case 4:  return UserDefinedComparator.theDateComparator; break;
+    case -2: return UserDefinedComparator.theDescendingNumberComparator; break;
+    case -3: return UserDefinedComparator.theDescendingStringComparator; break;
+    case -4: return UserDefinedComparator.theDescendingDateComparator; break;
+    default: return null;
+    }
+  }
+}
+
+/*******************************************
+ * GENERAL APPLICATION SYNTAX STARTS HERE  *
+ *******************************************/
+
+void PrintStatement() :
+{
+  int target = PRINT_OUT;
+  boolean isFlush = false;
+  boolean printLn = false;
+  int lastMark = markStack();
+  Expr printer = null;
+  Expr cond = null;
+  String logLevel = null;
+  Expr logExcpt = null;
+}
+{
+  ( "flush"                { isFlush = true; }
+  | "print"
+  | "println"              { printLn = true; }
+  | "."                    { printLn = true; }
+  )
+  [ "{" Expression()       { cond = reduceIt(); lastMark = markStack(); }
+    "}" ]
+  [ "<"
+    ( LOOKAHEAD(2) "out"   { target = PRINT_OUT; }
+    | LOOKAHEAD(2) "err"   { target = PRINT_ERR; }
+    | LOOKAHEAD(2) "log"   { target = PRINT_LOG; }
+      [ ":" <IDENTIFIER>   { logLevel = token.image.toLowerCase(); }
+        [ "(" Expression() { logExcpt = reduceIt(); }
+          ")" ]
+      ]
+    | LOOKAHEAD(2) "pipe"  { target = PRINT_PIPE; }
+    | PrimaryExpression(false) { target = PRINT_USER;
+                                 printer = reduceIt();
+                                 lastMark = markStack();
+                               }
+    )
+    ">"
+  ]
+  [ PrintArgumentList() ] ";"
+
+  { Expr[] params = reduce(handleExprs(lastMark));
+    if (!isFlush && !printLn && (params==null)) return; // ignore empty print;
+    stack.push(new StmtPrint(lineNum(), printLn, isFlush, target, logLevel, logExcpt, printer, params, cond));
+  }
+}
+
+void PrintArgumentList() :
+{
+}
+{
+  PrintArgument() ( "," PrintArgument() )*
+}
+
+void PrintArgument() :
+{
+  boolean force = false;
+  Expr subj = null;
+  int  align = 1;
+  Expr width = null;
+  Expr repeating = null;
+}
+{
+  ( HereDoc() | Expression() ) { subj = reduceIt(); }
+  [ ":" [ "<"             { align = 1; }
+        | ">"             { align = 2; }
+        | "*"             { align = 3; }
+        ] Expression()    { width = reduceIt(); }
+        [ "!" { force=true; } ]
+  ]
+  [ "{" Expression() "}"  { repeating = reduceIt(); }
+  | "repeat" Expression() { repeating = reduceIt(); }
+  ]
+  { if ((width!=null) || (repeating!=null))
+      subj = new StmtPrint.Align(subj, align, width, repeating, force);
+    stack.push(subj);
+  }
+}
+
+void PrintTableStatement() :
+{
+  int target = PRINT_OUT;
+  int lastMark = 0;
+  Expr printer = null;
+  Expr table = null;
+  Expr skip = null;
+  Expr limit = null;
+  int lineNo = 0;
+}
+{
+  ( "printTable" | "printTableData" ) { lineNo = lineNum();  }
+  [ "<"
+    ( LOOKAHEAD(2) "out"   { target = PRINT_OUT;  }
+    | LOOKAHEAD(2) "err"   { target = PRINT_ERR;  }
+    | LOOKAHEAD(2) "log"   { target = PRINT_LOG;  }
+    | LOOKAHEAD(2) "pipe"  { target = PRINT_PIPE; }
+    | PrimaryExpression(false) { target = PRINT_USER; printer = reduceIt(); }
+    )
+    ">"
+  ]
+  Expression()             { table = reduceIt(); }
+  [ "skip" Expression()    { skip = reduceIt(); }
+  ]
+  [ "limit" Expression()   { limit = reduceIt(); }
+  ]
+  "for"                    { lastMark = markStack(); }
+  PrintArgumentList() ";"
+
+  { Expr[] params = reduce(handleExprs(lastMark));
+    stack.push( new StmtPrintTable(lineNo, target, printer, table, params, skip, limit) );
+  }
+}
+
+void ThrowStatement() :
+{
+  int lineNo;
+  Expr excpt = null;
+}
+{
+  "throw"                        { lineNo = lineNum(); }
+  [ ( HereDoc() | Expression() ) { excpt = reduceIt(); }
+  ]
+  ";"                            { stack.push( new StmtThrow(lineNo,excpt) ); }
+}
+
+/****************************************
+ * MAIL APPLICATION SYNTAX STARTS HERE  *
+ ****************************************/
+
+void MailStatement() :
+{
+  String clause;
+  StmtSendMail ssm;
+  int fld;
+  Expr gcharset = null;
+  Expr charset = null;
+  int lastMark;
+}
+{
+  ( "mail::send" | "sendMail" { upgradeMsg("mail::send"); } ) { ssm = new StmtSendMail(lineNum()); }
+  [ LOOKAHEAD(2) Expression() { gcharset = reduceIt(); }
+  ]
+  [ "{"                    { lastMark = markStack(); }
+    MemberInitList()       { ssm.setHeaders(handleNamedExprs(lastMark)); }
+    "}"
+  ]
+  ( ( "to"                 { fld = StmtSendMail.FLD_TO;       charset = gcharset; }
+    | "from"               { fld = StmtSendMail.FLD_FROM;     charset = gcharset; }
+    | "cc"                 { fld = StmtSendMail.FLD_CC;       charset = gcharset; }
+    | "bcc"                { fld = StmtSendMail.FLD_BCC;      charset = gcharset; }
+    | "subject"            { fld = StmtSendMail.FLD_SUBJECT;  charset = gcharset; }
+    | "attach"             { fld = StmtSendMail.FLD_ATTACH;   charset = gcharset; }
+    | "body"               { fld = StmtSendMail.FLD_BODY;     charset = gcharset; }
+    | "htmlBody"           { fld = StmtSendMail.FLD_HTMLBODY; charset = gcharset; }
+    ) [ Expression()       { charset = reduceIt(); }
+      ] ":" ( Expression() | HereDoc() )
+                           { try { ssm.setExpr(fld,reduceIt(),charset); }
+                             catch(Throwable e) { throwParseException(e.getMessage()); }
+                             charset = null;
+                           }
+  )+ ";"                   { stack.push(ssm); }
+}
+
+/****************************************
+ * JDBC APPLICATION SYNTAX STARTS HERE  *
+ ****************************************/
+
+void JdbcStatements() :
+{
+}
+{
+  ConnectStatement()
+| PrepareStatement()
+| ExecuteQueryStatement()
+| ExecuteUpdateStatement()
+| ExecuteSqlStatement()
+| ExecuteBatchStatement()
+| ExecuteAnyStatement()
+| AddBatchStatement()
+| DumpTableStatement()
+}
+
+void ConnectStatement() :
+{
+  String connName = DBConnect.DEFAULT_CONNECTION_NAME;
+  AssociateList inits = null;
+  int lastMark = markStack();
+}
+{
+  ( "db::connect" | "connect" { upgradeMsg("db::connect"); } )
+  [ LOOKAHEAD(2)
+    ( MemberInitList()  { inits = handleNamedExprs(lastMark); }
+    | LabelName()       { connName = token.image; }
+    | "<" LabelName()   { connName = token.image; }
+      ">"
+    )*
+    "to"
+  ]                     { if (inits == null) inits = new AssociateList(); }
+  Expression()          { inits.add(DBConnect.OPTION_JDBC_URL, reduceIt()); }
+  [ "," Expression()    { inits.add(DBConnect.OPTION_JDBC_USERNAME, reduceIt()); }
+   [ "," Expression()   { inits.add(DBConnect.OPTION_JDBC_PASSWORD, reduceIt()); }
+   ]
+  ]
+  ";"
+
+  { stack.push( ExprAssign.createRootVar(lineNum(), connName, new NewObject("db_connect", inits)) ); }
+}
+
+void PrepareStatement() :
+{
+  boolean isCall = false;
+}
+{
+  ( "db::prepare"
+  | "db::prepareCall"   { isCall = true; }
+  | "prepare"           { upgradeMsg("db::prepare"); }
+  | "prepareCall"       { upgradeMsg("db::prepareCall"); isCall = true; }
+  )
+  PrepareClause(isCall)
+}
+
+void _onSuccessClause(String handleName) :
+{
+  int lineNo;
+}
+{
+  "onSuccess"           { lineNo = lineNum(); }
+  Statement()           { // construct this:  if (handleName.next()) { ... }
+                          Object[] oa = new Object[]{handleName,"next",new Arguments(this, null, false) };
+                          Expr[] conds = new Expr[] { reduce(new ExprPrimary(oa)) };
+                          stack.push( new StmtIf(lineNo, conds, new Stmt[]{(Stmt)stack.pop()}, null) );
+                        }
+  [ LOOKAHEAD(2)
+    "else" Statement()  { Stmt elsePart = (Stmt)stack.pop(); ((StmtIf)stack.peek()).setElsePart(elsePart); }
+  ]
+}
+
+String PrepareClause(boolean isCall) :
+{
+  String s;
+  int line;
+  String hndlName = Consts.THIS_NAME;
+  Expr[] inits = new Expr[]{ DBConnect.DEFAULT_CONNECTION_ACCESS, null,
+                             ConstInt.getBool(isCall), null, null, null};
+}
+{
+  [ "<" PrimaryExpression(false) { inits[0] = reduceIt(); } ">" ] // deprecates "use"
+  [ LabelName() { hndlName = token.image; } ]
+  [ "(" QueryOption(inits) ( "," QueryOption(inits) )* ")" ]
+  [ upgradeToUse() AnyName()  { inits[0] = new AccessVar(token.image); } ]
+  ":" Mixture(token.beginLine, token.beginColumn) ";"
+
+  { inits[1] = reduceIt();
+    stack.push(ExprAssign.createLocalVar(lineNum(), hndlName, new NewObject("db_handle", inits), true));
+    return hndlName;
+  }
+}
+
+void QueryOption(Expr[] inits) :
+{
+  int idx = -1;
+}
+{
+  <IDENTIFIER> { int line = lineNum();
+                 String s = token.image;
+                 if (s.equalsIgnoreCase("type"))   idx = 3;
+                 if (s.equalsIgnoreCase("fetch"))  idx = 4;
+                 if (s.equalsIgnoreCase("concur")) idx = 5;
+                 else throwParseException("Unknown result set attribute at line " + line + ": " + s);
+               }
+  "=" ReturnableExpression() { inits[idx] = reduceIt(); }
+}
+
+void AddBatchStatement() :
+{
+  String batchName = null;
+}
+{
+  ( "db::addBatch" | "addBatch" { upgradeMsg("db::addBatch"); } )
+  [ "to" ] LabelName() { batchName = token.image; }
+  ":" Mixture(token.beginLine,token.beginColumn) ";"
+
+  { stack.push( newCall(batchName, "add", new Expr[]{ reduce(handleSingleExpr()) }, null) ); }
+}
+
+void DumpTableStatement() :
+{
+  Expr using = null;
+  Expr into  = null;
+  Expr limit = null;
+  StmtDumpTable stmt = null;
+}
+{
+  "db::dumpTable"
+  [ "<" PrimaryExpression(false) { stmt.setConnection(reduceIt()); } ">" ] // deprecates "use"
+  Expression()                  { stmt = new StmtDumpTable(lineNum(), reduceIt()); }
+  ( upgradeToUse() AnyName()    { stmt.setConnection(new AccessVar(token.image)); }
+  | "into"   Expression()       { stmt.setInto(reduceIt()); }
+  | "limit"  Expression()       { stmt.setLimit(reduceIt()); }
+  | id("prompt") Expression()   { stmt.setPrompt(reduceIt()); }
+  )*
+  ( ";"
+  | "where" Mixture(token.beginLine,token.beginColumn) ";" { stmt.setWhere(reduce(handleSingleExpr())); }
+  )                             { stack.push(stmt); }
+}
+
+void ExecuteQueryStatement() :
+{
+  String hndlName = Consts.THIS_NAME;
+  boolean isCall = false;
+  boolean hasExt = false;
+  boolean hasOnSucc = false;
+  Expr[] ea = JudoUtil.emptyExprs;
+}
+{
+  ( "db::query"
+  | "db::queryCall"                             { isCall = true; }
+  | "executeQuery"                              { upgradeMsg("db::query"); }
+  | "executeQueryCall"                          { upgradeMsg("db::queryCall"); }
+  | "preparedExecuteQuery"                      { upgradeMsg("db::query"); }
+  | "preparedExecuteQueryCall"                  { upgradeMsg("db::queryCall"); }
+  )                                             { isCall = token.image.endsWith("Call"); }
+  ( LOOKAHEAD( LabelName() ( "with" | ";" ) )
+    [ LabelName()                               { hndlName = token.image; } ]
+    [ ea=BindVariableList(false) ]              { stack.push( newCall(hndlName, "executeQuery", ea, null) ); }
+    ( ";" | _onSuccessClause(hndlName) )
+  | hndlName=PrepareClause(isCall)              { hasExt = false; }
+    [ LOOKAHEAD(3) ( ea=BindVariableList(false) { stack.push(newCall(hndlName, "executeQuery", ea, null));
+                                                  hasExt = true;
+                                                }
+        ( ";" | _onSuccessClause(hndlName) )
+      | _onSuccessClause(hndlName)   { hasOnSucc = true; }
+      )
+    ]
+
+    { if (!hasExt) { // need to exec it!
+        Object tmp = newCall(hndlName, "executeQuery", JudoUtil.emptyExprs, null);
+        if (hasOnSucc) {          // if we have onSuccess clause, swap it.
+          Object o = stack.pop(); // The StmtIf from _onSuccessClause().
+          stack.push(tmp);
+          stack.push(o);
+        } else {
+          stack.push(tmp);
+        }
+      }
+    }
+  )
+}
+
+void ExecuteUpdateStatement() :
+{
+  Expr conn = DBConnect.DEFAULT_CONNECTION_ACCESS;
+  String hndlName = Consts.THIS_NAME;
+  boolean isCall = false;
+  Expr[] ea = JudoUtil.emptyExprs;
+}
+{
+  ( "db::update"
+  | "db::updateCall"
+  | "executeUpdate"             { upgradeMsg("db::update"); }
+  | "executeUpdateCall"         { upgradeMsg("db::updateCall"); }
+  | "preparedExecuteUpdate"     { upgradeMsg("db::update"); }
+  | "preparedExecuteUpdateCall" { upgradeMsg("db::updateCall"); }
+  )                             { isCall = token.image.endsWith("Call"); }
+  ( LOOKAHEAD( [ LabelName() ] ( "with" | ";" ) )
+    [ LabelName() { hndlName=token.image; } ] [ ea=BindVariableList(false) ] ";"
+  | hndlName=PrepareClause(isCall) [ LOOKAHEAD(3) ea=BindVariableList(false) ";" ]
+  )
+
+  { stack.push(newCall(hndlName, "executeUpdate", ea, null)); }
+}
+
+void ExecuteSqlStatement() :
+{
+  Expr conn = DBConnect.DEFAULT_CONNECTION_ACCESS;
+  String hndlName = Consts.THIS_NAME;
+  Expr[] ea = JudoUtil.emptyExprs;
+  int lastMark = markStack();
+  Expr result = null;
+  int lineNo = 0;
+  boolean isCall = false;
+}
+{
+  ( "db::sql"
+  | "db::call"                   { isCall = true; }
+  | "executeSQL"                 { upgradeMsg("db::sql"); }
+  | "preparedExecute"            { upgradeMsg("db::sql"); }
+  | "preparedExecuteCall"        { upgradeMsg("db::call"); isCall = true; }
+  )                              { lineNo = lineNum(); }
+  ( [ upgradeToUse() AnyName()   { conn = new AccessVar(token.image); }
+    | "<" PrimaryExpression(false) { conn = reduceIt(); } ">"  // deprecates "use"
+    ]
+    ( ea=RawSqlList()            { stack.push(newCall(conn, "executeSQL", ea, null)); }
+    | ":" Mixture(token.beginLine, token.beginColumn) ";"
+                                 { result = handleMixture(handleAny(lastMark)); }
+      [ LOOKAHEAD(3) ea=BindVariableList(false) ";" ]
+      { if (ea == JudoUtil.emptyExprs) { // not prepared.
+          stack.push(newCall(conn, "executeSQL", new Expr[]{ result }, null));
+        } else { // prepared.
+          Expr[] inits = new Expr[]{ conn, result, ConstInt.getBool(isCall), null, null, null };
+          stack.push(ExprAssign.createLocalVar(lineNo, hndlName, new NewObject("db_handle", inits), true));
+        }
+        return;
+      }
+    )
+  | [ LabelName() { hndlName = token.image; } ] [ ea=BindVariableList(false) ] ";" // deprecated.
+      { stack.push(newCall(hndlName, "executeSQL", ea, null)); }
+  )
+}
+
+void ExecuteAnyStatement() :
+{
+  Expr conn = DBConnect.DEFAULT_CONNECTION_ACCESS;
+}
+{ ( "db::any" | "executeAny" { upgradeMsg("db::any"); } )
+  [ upgradeToUse() AnyName() { conn = new AccessVar(token.image); }
+  | "<" PrimaryExpression(false) { conn = reduceIt(); } ">"  // deprecates "use"
+  ]
+  ( Expression() | HereDoc() ) ";"
+  { stack.push( newCall(conn, "executeSQL", new Expr[]{(Expr)stack.pop()}, null) ); }
+}
+
+void ExecuteBatchStatement() :
+{
+  Expr conn = DBConnect.DEFAULT_CONNECTION_ACCESS;
+  Expr[] ea = JudoUtil.emptyExprs;
+}
+{
+  ( "db::batch" | "executeBatch" { upgradeMsg("db::batch"); } )
+  ( <IDENTIFIER> { stack.push( newCall(token.image, "executeBatch", ea, null) ); }
+  | [ upgradeToUse() AnyName() { conn = new AccessVar(token.image); }
+    | "<" PrimaryExpression(false) { conn = reduceIt(); } ">"  // deprecates "use"
+    ]
+    ea=RawSqlList()
+    { stack.push( ExprAssign.createLocalVar(lineNum(), Consts.THIS_NAME,
+                                            newCall(conn, "executeBatch", ea, null), true) );
+    }
+  )
+}
+
+Expr[] BindVariableList(boolean forHib):
+{
+  int lastMark = markStack();
+}
+{
+  "with" BindVariable(forHib) ( "," BindVariable(forHib) )*  { return reduce(handleExprs(lastMark)); }
+}
+
+void BindVariable(boolean forHib):
+{
+  String name = null;
+  int idx = -1;
+  int type = 0;
+  String typeName = null;
+  Integer jtype = null;
+  String mthdName = null;
+  Variable Idx = null;
+  Boolean op = null;
+  Expr typeObj = null;
+}
+{
+  ( "@" ( <INTEGER_LITERAL> { idx = parseInt(token.image);
+                              if (forHib)
+                                throwParseException("hib:query/iterate doesn't take indexed bind variables.");
+                            }
+        | AnyName()         { name = token.image; } // backward compatible
+        )
+  | AnyName()               { name = token.image; }
+  )
+  [ "." AnyName()           { mthdName = token.image; Idx = ConstInt.getInt(idx); }
+    Arguments(Idx,JAVA_INT) { Arguments args = (Arguments)stack.pop();
+                              stack.push(newBindVar(idx, name, PREPARED_STMT_CALL, null,
+                                newCall(null, mthdName, args.getParams(), args.getTypes(), args.doExpand())));
+                            }
+  | [ ":" ( ( "boolean" | "byte" | "char" | "short" | "int" | "long" | "float"
+            | "double" | "Date" | "date" | "Number" | "number" | "string" | "String"
+            )                       { typeName = token.image; }
+          | <IDENTIFIER>            { typeName = token.image; }
+            [ "(" Expression() ")"  { typeObj  = reduceIt(); }
+            ]
+          )
+    ]
+    ( "=" ( Expression() | HereDoc() )
+    | ( "=>"  PrimaryExpression(false)   { op = Boolean.FALSE; }
+      | "<=>" PrimaryExpression(false)   { op = Boolean.TRUE; }
+      )   { if (forHib) throwParseException("HQL doesn't take out-bound variables."); }
+    )
+          { Expr val = reduceIt();
+
+            if (forHib) {
+              if (typeName == null)
+                throwParseException("The HQL bind variable '" + name + "' must have type specified.");
+              if (typeName.equals("string")) typeName = "String";
+              try { val = StmtHQL.getBindVar(name, typeName, typeObj, val); }
+              catch(Exception e) { throwParseException("Invalid Hibernate type '" + typeName + '\''); }
+            } else {
+              if (typeName == null) {
+                type = Types.VARCHAR;
+              } else {
+                typeName = typeName.toLowerCase();
+                if      (typeName.equals("boolean"))       type = 16; /* Types.BOOLEAN - JDK1.4 */
+                else if (typeName.equals("byte"))          type = Types.TINYINT;
+                else if (typeName.equals("date"))          type = Types.DATE;
+                else if (typeName.equals("double"))        type = Types.DOUBLE;
+                else if (typeName.equals("float"))         type = Types.FLOAT;
+                else if (typeName.equals("int"))           type = Types.INTEGER;
+                else if (typeName.equals("long"))          type = Types.BIGINT;
+                else if (typeName.equals("number"))        type = Types.NUMERIC;
+                else if (typeName.equals("short"))         type = Types.SMALLINT;
+                else if (typeName.equals("string"))        type = Types.VARCHAR;
+                else if (typeName.equals("char"))          type = Types.VARCHAR;
+                else if (typeName.equals("varchar"))       type = Types.VARCHAR;
+                else if (typeName.equals("struct"))        type = Types.STRUCT;
+                else if (typeName.equals("array"))         type = Types.ARRAY;
+                else if (typeName.equals("bytes"))         type = Types.VARBINARY;
+                else if (typeName.equals("bigDecimal"))    type = Types.BIGINT;
+                else if (typeName.equals("blob"))          type = Types.BLOB;
+                else if (typeName.equals("clob"))          type = Types.CLOB;
+                else if (typeName.equals("time"))          type = Types.TIME;
+                else if (typeName.equals("timestamp"))     type = Types.TIMESTAMP;
+                else if (typeName.equals("numeric"))       type = Types.NUMERIC;
+                else if (typeName.equals("ref"))           type = Types.REF;
+                else if (typeName.equals("bit"))           type = Types.BIT;
+                else if (typeName.equals("longvarchar"))   type = Types.LONGVARCHAR;
+                else if (typeName.equals("other"))         type = Types.OTHER;
+                else if (typeName.equals("java_object"))   type = Types.JAVA_OBJECT;
+                else if (typeName.equals("oracle_rowid"))  type = ORACLE_ROWID;
+                else if (typeName.equals("oracle_cursor")) type = ORACLE_CURSOR;
+                else if (typeName.equals("oracle_bfile"))  type = ORACLE_BFILE;
+                else throwParseException("Unsupported SQL type: " + token.image);
+              }
+      
+              val = (op==null) ? (Expr)newBindVar(idx, name, type, typeName, val)
+                               : newOutBoundVar(idx, name, type, val, op.booleanValue());
+            }
+            stack.push(val);
+          }
+  ]
+}
+
+/****************************************
+ * HQL APPLICATION SYNTAX STARTS HERE   *
+ ****************************************/
+
+void HqlStatements() :
+{
+}
+{
+  HibSetupStatement()
+| HibQueryStatement()
+}
+
+void HibSetupStatement() :
+{
+  int lastMark = markStack();
+  StmtHQL.Setup stmt;
+  String x = null;
+}
+{
+  "hib::setup"               { stmt = new StmtHQL.Setup(lineNum()); stack.push(stmt); }
+  [ "<" AnyName() { x=token.image; } ">" ]
+  [ MemberInitList()         { stmt.init = handleNamedExprs(lastMark); }
+  ]                          { if (x != null) stmt.setName(x); }
+  [ ( <STRING_LITERAL>                     { stmt.addResource(Lib.unquote(token.image)); }
+    | [ "java::" ] x=JavaClassName()       { stmt.addClass(x); }
+    )
+    ( "," ( <STRING_LITERAL>               { stmt.addResource(Lib.unquote(token.image)); }
+          | [ "java::" ] x=JavaClassName() { stmt.addClass(x); }
+          )
+    )*
+  ]
+  ";"
+}
+
+void HibQueryStatement() :
+{
+  StmtHQL stmt = new StmtHQL();
+  stack.push(stmt);
+  Object[] oa;
+  boolean isColl;
+}
+{
+  ( LOOKAHEAD( "hib::delete" ArgumentList(null,0,false) ";" )
+    "hib::delete"            { oa = new Object[]{ "hib::delete", null }; }
+    [ "<" AnyName() { stmt.envName = token.image; } ">" ]
+    ArgumentList(null,0,false) { oa[1] = stack.pop(); stack.push( reduce(new ExprPrimary(oa)) ); }
+    ";"
+  | ( "hib::query"
+    | "hib::iterate"         { stmt.action = stmt.ACTION_ITERATE; }
+    | "hib::delete"          { stmt.action = stmt.ACTION_DELETE; }
+    )                        { stmt.setLineNumber(lineNum()); }
+    [ "<" AnyName() { stmt.envName = token.image; } ">" ]
+    [ <IDENTIFIER>           { stmt.returnName=token.image; }
+    ]
+    ( ( "from" Expression()    { stmt.from = reduceIt(); isColl = false; }
+      | "limit" Expression()   { stmt.limit = reduceIt(); isColl = false; }
+      | "in" Expression()      { stmt.collection = reduceIt(); isColl = true; }
+      )
+      { if (stmt.action == stmt.ACTION_DELETE)
+          throwParseException(isColl ? "hib::delete in a collection is not supported."
+                                     : "hib::delete doesn't take pagination options.");
+      }
+    )*
+    ":" Mixture(token.beginLine,token.beginColumn) { stmt.hql = reduce(handleSingleExpr()); }
+    ";" [ LOOKAHEAD(2) stmt.bindVars=BindVariableList(true) ";"
+          { try { stmt.checkBindVars(); } catch(Exception e) { throwParseException(e.getMessage()); } }
+        ]
+  )
+}
+
+/*******************************************
+ * Here-Doc, Mixture and RawSqlList Syntax *
+ *******************************************/
+
+void HereDoc() :
+{
+  int lastMark = markStack();
+  int row = 0;
+  int column = 0;
+}
+{
+  ( "[[*" | "[[[*" ) { row=token.beginLine; column=token.beginColumn+token.image.length(); }
+  HereDocProcContent(token.image.length()==3, row, column) "*]]"
+  { stack.push( handleMixture(row, token.endLine, handleAny(lastMark)) ); }
+}
+
+void HereDocContent() :  // used by subParser only.
+{
+  token_source.inHereDoc = true;
+  switchTo(HEREDOC);
+}
+{
+  ( <HEREDOC_PART>  { stack.push(JudoUtil.parseString(unicodify(token.image))); }
+  | "(*" Expression() "*)"
+  )+                { token_source.inHereDoc = false; }
+}
+
+void Mixture(int row, int column) :
+{
+  Object o;
+}
+{
+  o=MixtureList(false, row, column) { stack.push(o); }
+}
+
+Expr SingleMixture() :  // used by subParser only.
+{
+  int lastMark = markStack();
+  int beginLine = -1;
+  int endLine = -1;
+  switchTo(MIXTURE);
+}
+{
+  ( <MIXTURE_PART> { stack.push(token.image);
+                     if (beginLine < 0) beginLine = token.beginLine;
+                     if (token.endLine > endLine) endLine = token.endLine;
+                   }
+  | "(*"           { if (beginLine < 0) beginLine = token.beginLine; }
+    Expression()
+    "*)"           { if (token.endLine > endLine) endLine = token.endLine; }
+  )+
+
+  { return handleMixture(beginLine, endLine, handleAny(lastMark)); }
+}
+
+Expr[] MultiMixture() :  // used by subParser only.
+{
+  Object o;
+  int lastMark = markStack();
+}
+{
+  ( o=SingleMixture() ";" { stack.push(o); switchTo(MIXTURE); } )+
+
+  { return handleExprs(lastMark); }
+}
+
+Expr[] RawSqlList() :
+{
+  Object o;
+  int row = 0;
+  int column = 0;
+}
+{
+  "{" { row = token.beginLine; column = token.beginColumn; }
+  o=MixtureList(true, row, column)
+  "}"  { return (Expr[])o; }
+}
+
+JAVACODE
+Object MixtureList(boolean multi, int row, int column) { // returns multi ? Expr[] : Expr.
+  try {
+    CharStream instrm = token_source.getInputStream();
+    StringReader sr = new StringReader(unicodify(mixtureParser.parse(instrm, multi).trim()));
+    if (subParser != null)
+      subParser.ReInit(new JudoCharStream(sr));
+    else
+      subParser = new JudoParser(new JudoCharStream(sr));
+
+    ((JavaCharStream)subParser.token_source.getInputStream()).ReInit(sr, row, column);
+
+    subParser.switchTo(MIXTURE);
+    try {
+      subParser.stack.clear();
+      return multi ? (Object)subParser.MultiMixture() : subParser.SingleMixture();
+    } finally {
+      subParser.ReInit((JudoCharStream)null);  // to avoid memory leak
+    }
+  } catch(IOException ioe) {
+    throwParseException("Unfinished SQL statement list.");
+  }
+  return null;
+}
+
+JAVACODE
+void HereDocProcContent(boolean doProc, int beginLine, int beginColumn) {
+  char ch;
+  StringBuffer sb = new StringBuffer();
+  CharStream instrm = token_source.getInputStream();
+
+  try {
+    // Step 1. collect all char's up to "*]]" into sb.
+    while (true) {
+      ch = instrm.readChar();
+      if (ch != '*') {
+        if (ch == EOF) break; // failure.
+        sb.append(ch);
+      } else {
+        ch = instrm.readChar();
+        if (ch != ']') {
+          sb.append('*');
+          sb.append(ch);
+        } else {
+          ch = instrm.readChar();
+          if (ch != ']') { // got the end.
+            sb.append("*]");
+            sb.append(ch);
+          } else {
+            instrm.backup(3);
+            break;
+          }
+        }
+      }
+    }
+
+    // Step 2. Process the indentation
+    //         We use a StringReader and read lines.
+    //         For the first up to 3 non-empty lines, get the leading white spaces;
+    //         the shortest of them is chosen as indentation.
+    //         all the lines starting with that indentation are stripped.
+    int i=0;
+    if (doProc) {
+      BufferedReader br = new BufferedReader(new StringReader(sb.toString()));
+      sb.setLength(0);
+      ArrayList lines = new ArrayList();
+      String indent = null;
+      String line = br.readLine();
+      if (StringUtils.isBlank(line)) // skip the first empty line.
+        line = br.readLine();
+      // now, for the first 3 non-empty lines, find the indent:
+lp:   while (true) {
+        if (line == null) break;
+        lines.add(line);
+        if (StringUtils.isBlank(line)) {
+          lines.add("");
+        } else {  // for the first line only; it's ok.
+          int j=0;
+          while (Character.isWhitespace(line.charAt(j))) ++j;
+          if ( (j>0) && ( (indent==null) || (j<indent.length()) ) )
+            indent = line.substring(0, j);
+        }
+        if (++i >= 3) break lp;
+        while (true) {
+          line = br.readLine();
+          if (line == null) break lp;
+          if (StringUtils.isNotBlank(line)) break;
+          lines.add(line);
+        }
+      }
+      // process the first lines contributed to the finding of indent:
+      for (i=0; i<lines.size(); i++) {
+        line = (String)lines.get(i);
+        if ((indent==null) || !line.startsWith(indent))
+          sb.append(line);
+        else
+          sb.append(line.substring(indent.length()));
+        sb.append(ConstString.newline);
+      }
+      lines = null;
+      // process the rest of lines:
+      while(true) {
+        line = br.readLine();
+        if (line == null) break;
+        if ((indent==null) || !line.startsWith(indent))
+          sb.append(line);
+        else
+          sb.append(line.substring(indent.length()));
+        sb.append(ConstString.newline);
+      }
+      // remove the last newline:
+      if (sb.length() >= ConstString.newline.length()) {
+        sb.setLength(sb.length() - ConstString.newline.length());
+        // remove the trailing whitespaces
+        for (i=sb.length()-1; i>=0; --i) {
+          ch = sb.charAt(i);
+          if (Character.isWhitespace(ch)) {
+            if ((ch=='\n') || (ch=='\r'))
+              break;
+          } else
+            break;
+        }
+        sb.setLength(i+1);
+      }
+    }
+
+    // Step 3. Do the parsing with subParser.
+    StringReader sr = new StringReader(unicodify(sb.toString()));
+    if (subParser != null)
+      subParser.ReInit(new JudoCharStream(sr));
+    else
+      subParser = new JudoParser(new JudoCharStream(sr));
+    try {
+      subParser.stack.clear();
+      // do the parsing
+      ((JavaCharStream)subParser.token_source.getInputStream()).ReInit(sr, beginLine, beginColumn);
+      subParser.switchTo(HEREDOC);
+      subParser.HereDocContent();
+      // move what is found here.
+      for (i=0; i<subParser.stack.size(); ++i)
+        stack.push(subParser.stack.get(i));
+    } finally {
+      subParser.stack.clear();
+      subParser.ReInit((JudoCharStream)null);  // to avoid memory leak
+    }
+
+  } catch(IOException ioe) {
+    throwParseException("Unfinished HereDoc list.");
+  }
+}
+
+void LinesStatement() :
+{
+  int lastMark = 0;
+  ExprLines col = new ExprLines();
+  String label = null;
+  int lineNo = 0;
+}
+{
+  [ LabelName()        { label = setCurrentLabel(); lineNo = lineNum(); }
+    ":" ]
+  "do" Expression()    { col.src = reduceIt(); }
+  [ "in" Expression()  { col.root = reduceIt(); }
+  ]
+  [ Encoding()         { col.encoding = reduceIt(); }
+  ]
+  "as" id("lines")     { lastMark = markStack(); }
+  [ ( "for"
+    | "except"         { col.filterNegative = true; }
+    ) Expression()     { col.filter = reduceIt(); }
+  ]
+  "{" ( Statement() )+ { handleStmts(lastMark);
+                         StmtForIn stmt = new StmtForIn(lineNo, label, "$_", col, ConstInt.ZERO,
+                                                        ConstInt.ZERO, ConstInt.ONE, false);
+                         stmt.setStmts(stmts,labels);
+                         stack.push(stmt);
+                         if (label != null) labelStack.pop();
+                       }
+  "}"
+}
+
+/**********************************************
+ * SCHEDULING APPLICATION SYNTAX STARTS HERE  *
+ **********************************************/
+
+void ScheduleStatement() :
+{
+  boolean isAbs = false;
+  boolean isStart = false;
+  Expr start_after = null;
+  Expr period = null;
+  StmtSchedule ss;
+}
+{
+  "schedule"          { ss = new StmtSchedule(lineNum()); }
+  [ id("absolute")    { ss.isAbsolute = true; }
+  ]
+  [ ( "starting"      { ss.isStart = true; }
+    | "after"         { ss.isStart = false; }
+    )
+    Expression()      { ss.start_delay = reduceIt(); }
+  ]
+  [ "repeat"
+    Expression()      { ss.period = reduceIt(); }
+  ]
+  SimpleBlock(null,false)   { ss.block = (BlockSimple)stack.pop(); }
+  [ LOOKAHEAD(2) id("listen") "on"
+    Expression()      { ss.port = reduceIt(); }
+    [ <IDENTIFIER>    { shouldBe("title"); }
+      Expression()    { ss.title = reduceIt(); }
+    ]
+    SimpleBlock(null,false) { ss.listener = (BlockSimple)stack.pop(); }
+  ]                   { stack.push(ss); }
+}
+
+/***************************************
+ * XML APPLICATION SYNTAX STARTS HERE  *
+ ***************************************/
+
+void Dom() :
+{
+  Expr src = null;
+  Expr sysid = null;
+  AssociateList inits = null;
+  XmlProperty xp = new XmlProperty();
+}
+{
+  "do" Expression()          { src = reduceIt(); }
+  [ "systemID" Expression()  { sysid = reduceIt(); }
+  ]
+  "as" "dom" [ LOOKAHEAD(2) XmlInitList(xp) ]
+  { stack.push(new ExprDom(src,sysid,xp.xmlns,xp.namespace,xp.validate,
+                           xp.schema,xp.ignoreWhitespace,xp.ignoreComment));
+  }
+}
+
+void XmlStatement() :
+{
+  XmlHandler hndr = null;
+  int lineNo = 0;
+  int lastMark = 0;
+  XmlProperty xp = new XmlProperty();
+  String type = null;
+}
+{
+  "do"                      { lineNo = lineNum(); }
+  Expression()              { hndr = new XmlHandler(lineNo,reduceIt(),null); }
+  [ "in" Expression()       { hndr.setRoot(reduceIt()); }
+  ]
+  [ Encoding()              { hndr.setEncoding(reduceIt()); }
+  ]
+  [ "systemID" Expression() { hndr.systemID = reduceIt(); }
+  ]
+  "as" "xml"
+  [ XmlInitList(xp) ] "{"   { hndr.doNamespace = xp.namespace;
+                              hndr.doValidate = xp.validate;
+                              hndr.doSchema = xp.schema;
+                              hndr.xmlns = xp.xmlns;
+                            }
+  ( LOOKAHEAD(2) XmlTagHandler(hndr)
+  | LOOKAHEAD( ( "<" ">" | ":" | <IDENTIFIER> ) ":" )
+    ( "<" ">"          { type = ANY_TAG_SYMBOL; }
+    | ":" <IDENTIFIER> { String x = token.image.toUpperCase();
+                         if (x.equals("TEXT"))
+                           type = ANY_TEXT_SYMBOL;
+                         else if (x.equals("WARNING")         ||
+                                  x.equals("ERROR")           ||
+                                  x.equals("START_DOC")       ||
+                                  x.equals("END_DOC")         ||
+                                  x.equals("START_NS_MAP")    ||
+                                  x.equals("END_NS_MAP")      ||
+                                  x.equals("PI")              ||
+                                  x.equals("WHITESPACE")      ||
+                                  x.equals("COMMENT")         ||
+                                  x.equals("START_CDATA")     ||
+                                  x.equals("END_CDATA")       ||
+                                  x.equals("START_DTD")       ||
+                                  x.equals("END_DTD")         ||
+                                  x.equals("START_ENTITY")    ||
+                                  x.equals("END_ENTITY")      ||
+                                  x.equals("ELEMENT_DECL")    ||
+                                  x.equals("ATTR_DECL")       ||
+                                  x.equals("ENTITY_DECL")     ||
+                                  x.equals("EXT_ENTITY_DECL") ||
+                                  x.equals("SKIPPED_ENTITY")
+                                 )
+                           type = XML_EVENT_PREFIX + x;
+                         else if (x.equals("BEFORE") || x.equals("AFTER"))
+                           type = x;
+                         else
+                           throwParseException("Unknown XML event: " + token.image);
+                       }
+    ) ":"              { lastMark = markStack(); lineNo = lineNum(); }
+    ( LOOKAHEAD(2) Statement() )+
+                       { handleStmts(lastMark);
+                         if (type.equals("BEFORE"))     hndr.setInit(stmts);
+                         else if (type.equals("AFTER")) hndr.setFinish(stmts);
+                         else                           hndr.addHandler(lineNo, type, stmts);
+                       }
+    ":" ( LOOKAHEAD(2) Statement() )+
+  )+
+  "}"                  { stack.push(hndr); }
+}
+
+void XmlInitList(XmlProperty xp) :
+{
+}
+{
+  "with" XmlInitializer(xp) ( LOOKAHEAD(2) "," XmlInitializer(xp) )*
+}
+
+void XmlInitializer(XmlProperty xp) :
+{
+  String s = null;
+  boolean val = true;
+}
+{
+  LOOKAHEAD(2) "xmlns"   { s = DEFAULT_NS_SYMBOL; }
+  [ ":" AnyName()        { s = token.image; }
+  ]
+  "=" <STRING_LITERAL>   { xp.addXmlNS(s, unquote(token.image)); }
+| AnyName()              { s = token.image; }
+  [ "=" BooleanLiteral() { val = token.image.equalsIgnoreCase("true"); }
+  ]                      { if (s.equals("namespace"))            xp.namespace = val;
+                           else if (s.startsWith("validat"))     xp.validate = val;
+                           else if (s.equals("schema"))          xp.schema = val;
+                           else if (s.startsWith("ignoreWhite")) xp.ignoreWhitespace = val;
+                           else if (s.startsWith("ignoreComm"))  xp.ignoreComment = val;
+                           else throwParseException("Unsupported XML option: " + s);
+                         }
+}
+
+void XsltStatement() :
+{
+  StmtXslt stmt = null;
+  int lastMark = 0;
+}
+{
+  "xslt"                      { stmt = new StmtXslt(lineNum()); }
+  ( "copy"                    { stmt.mode = StmtXslt.MODE_COPY; }
+  | [ "xpath"                 { stmt.mode = StmtXslt.MODE_XPATH; }
+      "("
+    ]
+    Expression()              { stmt.transform = reduceIt(); lastMark = markStack(); }
+    [ LOOKAHEAD(2) "systemID"
+      Expression()            { stmt.xslSysID = reduceIt(); }
+    ]
+    [ ")" ] "on"
+  )
+  Expression()                { stmt.src = reduceIt(); }
+  [ "systemID" Expression()   { stmt.inSysID = reduceIt(); }
+  ]
+  ( "as" "dom"
+  | ( "to" | "into" ) Expression()  { stmt.dest = reduceIt(); }
+    [ "systemID" Expression() { stmt.outSysID = reduceIt(); }
+    ]
+  )
+  ( "outputProperties" MemberInitList() { stmt.addOutputProperties(handleNamedExprs(lastMark)); }
+  | "parameters" MemberInitList()       { stmt.addParameters(handleNamedExprs(lastMark)); }
+  )*                          { stack.push(stmt); }
+  ";"
+}
+
+void XmlTagHandler(XmlHandler hndr) :
+{
+  String[] tagName = null;
+  int embeddedOption = XmlHandler.COPY_EMBEDDED_TAG;
+  int lineNo = 0;
+  int lastMark = markStack();
+  boolean isText = false;
+  boolean endTag = false;
+}
+{
+  ( "<" | "</" { endTag=true; } ) tagName=XmlTagName() ">"
+  [ <IDENTIFIER>          { lineNo = lineNum();
+                            if (!token.image.equalsIgnoreCase("text"))
+                              throwParseException("Only 'text' is allowed to follow an XML tag event.");
+                            isText = true;
+                          }
+    [ "+"                 { embeddedOption = XmlHandler.COPY_EMBEDDED_TAG; }
+    | "-"                 { embeddedOption = XmlHandler.IGNORE_EMBEDDED_TAG; }
+    ]
+  ]
+  ":" ( LOOKAHEAD(2) Statement() )+
+                          { handleStmts(lastMark);
+                            if (isText) hndr.addTextHandler(lineNo,embeddedOption,tagName,stmts);
+                            else        hndr.addTagHandler(lineNo,endTag,tagName,stmts);
+                          }
+}
+
+String[] XmlTagName() :
+{
+  String[] ret = new String[]{ null, null, null }; // uri, local, raw
+  String s;
+}
+{
+  s=TagName()        { ret[1] = s; ret[2] = ret[1]; }
+  [ ":" s=TagName()  { ret[0] = ret[1]; ret[1] = s; ret[2] = ret[0]+":"+ret[1]; }
+  ]                  { return ret; }
+}
+
+/****************************************
+ * HTML APPLICATION SYNTAX STARTS HERE  *
+ ****************************************/
+
+void SgmlStatement() :
+{
+  Expr src = null;
+  StmtHtml hndr = null;
+  boolean caseSens = false;
+  String enc;
+}
+{
+  "do" Expression()          { hndr = new StmtHtml(lineNum(),reduceIt()); }
+  [ "in" Expression()        { hndr.setRoot(reduceIt()); }
+  ]
+  [ Encoding()               { hndr.setEncoding(reduceIt()); }
+  ]
+  "as" ( "sgml" [ "case"     { hndr.setCaseSensitive(true); }
+                ]
+       | "html"
+       | "jsp"               { hndr.setIsJSP(); }
+       )
+  ( "with" <IDENTIFIER>      { hndr.setHandler(token.image); stack.push(hndr); }
+    ";"
+  | [ "extends" <IDENTIFIER> { hndr.setExtends(token.image); }
+    ] "{" ( SgmlEventHandler(hndr) )* "}" { stack.push(hndr); }
+  )
+}
+
+void Encoding() :
+{
+}
+{
+  "{" Expression() "}"
+}
+
+void SgmlHandlerDecl() :
+{
+  Expr src = null;
+  StmtHtml hndr = null;
+  String name = null;
+  int lastMark = 0;
+  boolean caseSens = false;
+}
+{
+  ( "sgml" [ "case" { caseSens = true; } ] | "html" )
+                             { hndr = new StmtHtml(lineNum(), caseSens); }
+  <IDENTIFIER>               { name = token.image;
+                               if (script.existsSgmlHandler(name))
+                                 throwParseException("SGML Handler '"+name+"' already defined.");
+                             }
+  [ "extends" <IDENTIFIER>   { hndr.setExtends(token.image); }
+  ] "{" ( SgmlEventHandler(hndr) )* "}" { script.addSgmlHandler(name,hndr); }
+}
+
+void SgmlEventHandler(StmtHtml hndr) :
+{
+  ArrayList v = new ArrayList();
+  SgmlEvent evt = null;
+  int lastMark = markStack();
+}
+{
+  evt = SgmlEvent(hndr)        { v.add(evt); }
+  ( "," evt = SgmlEvent(hndr)  { v.add(evt); }
+  )* ":" ( LOOKAHEAD(2) Statement() )+
+
+  { handleStmts(lastMark);
+    for (int i=0; i<v.size(); ++i) {
+      evt = (SgmlEvent)v.get(i);
+      addSgmlHandler(evt, hndr);
+    }
+  }
+}
+
+SgmlEvent SgmlEvent(StmtHtml hndr) :
+{
+  SgmlEvent evt = new SgmlEvent();
+  String s;
+}
+{
+  ( "</"               { evt.isEnd = true; evt.type = SGML_TAG; }
+    s=TagName()        { evt.name = hndr.caseSens ? s : s.toLowerCase(); }
+    [ ":" s=TagName()  { evt.name += ':' + s; }
+    ]
+    ">"
+  | "<"                { evt.type = SGML_DEFAULT_TAG; }
+    ( s=TagName()      { evt.name = hndr.caseSens ? s : s.toLowerCase();
+                       evt.type = SGML_TAG;
+                       }
+    [ ":" s=TagName()  { evt.name += ':' + s; }
+    ]
+    )? ">"
+  | ":" <IDENTIFIER> { String x = token.image.toLowerCase();
+                       if (x.equals("text"))        evt.type = SGML_TEXT;
+                       else if (x.equals("before")) evt.type = SGML_BEFORE;
+                       else if (x.equals("after"))  evt.type = SGML_AFTER;
+                       else throwParseException("Unknown SGML event: " + token.image);
+                     }
+  | ( "<!--" ">"     { evt.name = TYPE3_SYMBOL; }
+    | "<!" ">"       { evt.name = TYPE1_SYMBOL; }
+    | "<?" ">"       { evt.name = TYPE2_SYMBOL; }
+    )                { evt.type = SGML_SPECIAL; }
+  // JSP tags:
+  | ( "<%@"          { evt.name = "<%@"; }
+      [ s=TagName()  { evt.name += s; }
+      ] ">"
+    | "<%!" ">"      { evt.name = "<%!"; }
+    | "<%=" ">"      { evt.name = "<%="; }
+    | "<%--" ">"     { evt.name = "<%--"; }
+    | "<%" ">"       { evt.name = "<%"; }
+    )                { evt.type = SGML_SPECIAL; }
+  )                  { evt.lineNum=lineNum(); return evt; }
+}
+
+/***************************************
+ * GUI APPLICATION SYNTAX STARTS HERE  *
+ ***************************************/
+
+void GuiEventsStatement() :
+{
+  StmtGuiEvents guistmt = null;
+}
+{
+  ( "gui::events" | "guiEvents" { upgradeMsg("gui::events"); } )
+  "{"                        { guistmt = new StmtGuiEvents(lineNum()); }
+  ( GuiListener(guistmt) )*
+  "}"                        { stack.push(guistmt); }
+}
+
+void GuiListener(StmtGuiEvents guistmt) :
+{
+  int lastMark = markStack();
+  int lineNo = 0;
+  Object[] msgs = null;
+}
+{
+  "<" GuiEventList()     { msgs = handleAny(lastMark); }
+  ">" ":"                { lastMark = markStack(); lineNo = lineNum(); }
+  ( Statement() )+
+
+  { handleStmts(lastMark);
+    StmtListStmt sls = new StmtListStmt(stmts);
+    for (int i=0; i<msgs.length; i++) {
+      Triplet tri = (Triplet)msgs[i];
+      if (tri.o1 instanceof String) { // named handler
+        try { script.addGuiNamedHandler(lineNo, tri, sls); }
+        catch(Exception e) { throwParseException(e.getMessage()); }
+      } else {
+        guistmt.addHandler(lineNo, tri, sls);
+      }
+    }
+  }
+}
+
+void GuiEventList() :
+{
+}
+{
+  GuiEvent() ( "," GuiEvent() )*
+}
+
+void GuiEvent() :
+{
+  ArrayList compNames = new ArrayList();
+  ArrayList msgNames  = new ArrayList();
+  String eventName;
+}
+{
+  ( "?" AnyName()             { compNames.add(token.image); }
+  | PrimaryExpression(false)       { compNames.add(reduceIt()); }
+    ( "," PrimaryExpression(false) { compNames.add(reduceIt()); }
+    )*
+  )
+  ":" AnyName()               { eventName = token.image; }
+  ":" AnyName()               { msgNames.add(token.image); }
+  ( LOOKAHEAD(2)
+    "," AnyName()             { msgNames.add(token.image); }
+  )*
+
+  { int len1 = compNames.size();
+    for (int i=0; i<len1; i++) {
+      Object o = compNames.get(i);
+      if (msgNames.size() == 1)
+        stack.push( new Triplet(o,eventName,msgNames.get(0)) );
+      else
+        stack.push( new Triplet(o,eventName,msgNames) );
+    }
+  }
+}
+
+/***************************************
+ * COM APPLICATION SYNTAX STARTS HERE  *
+ ***************************************/
+
+/*
+void COMEventsStatement() :
+{
+  JacobEventHandler eh = null;
+  int lastMark = 0;
+  String name = null;
+  String handlerName = null;
+}
+{
+  "comEvents"                  { eh = new JacobEventHandler(lineNum()); }
+  ( [ "as" ] AnyName()     { handlerName = token.image; }
+  | "(" Expression()           { eh.setSource(reduceIt()); }
+    [ "," <STRING_LITERAL>     { eh.setProgID(unquote(token.image)); }
+    ] ")"
+  )
+  "{"
+  ( "<" AnyName()              { name = token.image; lastMark = markStack(); }
+    ">" ":" ( Statement() )+   { handleStmts(lastMark); eh.addHandler(name, stmts, labels); }
+  )+
+  "}"                          { if (handlerName == null) stack.push(eh);
+                                 else eh.putAsNamedHandler(handlerName);
+                               }
+}
+*/
+
+/*****************************************
+ * DYNAMIC STATEMENT SYNTAX STARTS HERE  *
+ *****************************************/
+
+void RunStatement() :
+{
+  StmtExec exec;
+  BlockSimple outputPart = null;
+  BlockSimple intputPart = null;
+  int lastMark;
+}
+{
+  "exec"                       { exec = new StmtExec(lineNum()); }
+  ( "/" <IDENTIFIER>           { String x = token.image.toLowerCase();
+                                 if (x.equals("needsystemin"))
+                                   exec.setNeedSystemIn();
+                                 else if (x.equals("bg") || x.equals("background"))
+                                   exec.setReturnVariable(null);
+                                 else if (x.equals("asis"))
+                                   exec.setAsIs(true);
+                                 else
+                                   RT.logger.warn("Unknown exec option: " + token.image);
+                               }
+  )*
+  [ "<" [ <IDENTIFIER> { exec.setReturnVariable(token.image); } ] ">"
+  | "&&"                       { exec.setReturnVariable(null); }
+  ]
+  ( Expression() | HereDoc() ) { exec.setCmdLine(reduceIt()); }
+  [ "from" Expression() { exec.setWorkingDir(reduceIt()); } ]
+  [ "with"                     { lastMark = markStack(); }
+    ( LOOKAHEAD("<" "new" ">" ( "input" | "output" | "needSystemIn" | ";" ) )
+      "<" "new" ">" { exec.setNoInherit(); }
+    | [ "<" "new" ">" { exec.setNoInherit(); } ]
+      ( LOOKAHEAD(2)
+        ( AnyName()            { stack.push(token.image); }
+          "=" Expression()
+        )
+        ( "," AnyName()        { stack.push(token.image); }
+          "=" Expression()
+        )*                     { exec.setEnv(handleNamedExprs(lastMark)); }
+      | Expression()           { exec.setEnv(reduceIt()); }
+      )
+    )
+  ]
+  ( "input" Block()            { exec.setPipeInPart((BlockSimple)stack.pop()); }
+    [ LOOKAHEAD( "output" "{" )
+      "output" Block()         { exec.setPipeOutPart((BlockSimple)stack.pop()); }
+    ]
+  | [ "needSystemIn"           { exec.setNeedSystemIn(); upgradeMsg("/needSystemIn option"); }
+    ]
+    ( ";"
+    | "output" Block()         { exec.setPipeOutPart((BlockSimple)stack.pop()); }
+    )
+  )
+
+  { stack.push(exec); }
+}
+
+/**********************************
+ * DIRECTIVES SYNTAX STARTS HERE  *
+ **********************************/
+
+void Directives() :
+{
+  String pkgName = null;
+  String x = null;
+  int lineNo;
+  boolean doInc    = true;
+  boolean ifexists = false;
+  String parentRef = null;
+}
+{
+  "import" importElement() ( "," importElement() )* ";"
+| "!include"
+  [ "ifndef" <CONST_NAME>   { doInc = !script.hasConst(token.image); }
+  | "ifdef"  <CONST_NAME>   { doInc = script.hasConst(token.image); }
+  | "if" Expression()       { doInc = evalConstToBool(nonAssignExpr(stack.pop()), true); }
+  | "ifexists"              { doInc = false; ifexists = true; }
+  ]
+  [ "<" <STRING_LITERAL>    { parentRef = unquote(token.image); } // because of JUSP include.
+    ">" ]
+  <STRING_LITERAL>          { x = script.getScriptPath();
+                              String path = JudoUtil.fixIncludeFilePath(unquote(token.image), x);
+                              if (doInc || (ifexists && new File(path).isFile()))
+                                token_source.switchToNewFileStream(path, encoding);
+                            }
+| "!pragma" x=JavaClassName() [ "=" ]
+  Literal()                 { handlePragma(lineNum(), x, (Variable)stack.pop()); }
+| ( "!JavaGuiClass"         { pkgName = "gui"; }
+  | "!JavaBaseClass"        { pkgName = "base"; }
+  | "!JavaEnterpriseClass"  { pkgName = "enterprise"; }
+  | "!JavaCorbaClass"       { pkgName = "corba"; }
+  | "!JComClass"            { pkgName = "jcom"; }
+  | "!JavaPackages" "<" AnyName() { pkgName = token.image; } ">"
+  )
+  <CONST_NAME>              { handleJavaPackages(lineNum(), pkgName, token.image); }
+  ( "," <CONST_NAME>        { handleJavaPackages(lineNum(), pkgName, token.image); }
+  )*
+| "!DefineJavaPackages" ["<"] AnyName() { pkgName = token.image; } [">"]
+  "{" x=JavaClassName()     { defineJavaPackages(pkgName, x); }
+  ( "," x=JavaClassName()   { defineJavaPackages(pkgName, x); }
+  )* "}"
+}
+
+void importElement() :
+{
+  String x;
+}
+{
+  x=JavaClassName()  [ "." "*" {x+='.';} ]
+
+  { stack.push(new StmtImport(x)); // add to the runtime import list.
+
+    // Add to the parser's import list for class resolutions during compiling.
+    // In these situations, classes are resolved at compile-time:
+    //  1. Java extension classes.
+    //  2. Java adapters.
+    //  3. const's for Java classes.
+    // Compile-time class resolution is done by ParsingContext (RT uses that, too.)
+    if (pc != null) pc.addImport(x);
+  }
+}
+
+void SCPStatement() :
+{
+  StmtSCP stmt = null;
+  boolean set = false;
+}
+{
+  "scp" Expression()        { stmt = new StmtSCP(lineNum(), reduceIt()); }
+    "," Expression()        { stmt.username = reduceIt(); }
+    "," Expression()        { stmt.password = reduceIt(); }
+  [ "," Expression()        { stmt.cipher   = reduceIt(); }
+  ]
+  "from" ( id("remote")     { stmt.toRemote = false; }
+         | "local"          { stmt.toRemote = true;  }
+         )
+  Expression()              { stmt.src  = reduceIt(); }
+  [ "to" Expression()       { stmt.dest = reduceIt(); }
+  ]
+  ( <IDENTIFIER>            { if (token.image.equals("recursive")) stmt.recursive = true;
+                              else if (token.image.equalsIgnoreCase("Echo")) stmt.verbose = true;
+                              throwParseException("Invalid SCP option: " + token.image);
+                            }
+  )*
+  ";"                       { stack.push(stmt); }
+}
+
+void FileSystemStatements() :
+{
+}
+{
+  FSListStatements()
+| FSCopyStatement()
+| FSRemoveDirStatements()
+}
+
+void FSListStatements() :
+{
+  StmtFSList fs = new StmtFSList();
+  stack.push(fs);
+  Expr to_store = null;
+  Expr to_dest = null;
+  String name = null;
+  int lineNo;
+}
+{
+  ( "listFiles"                    { name="listFiles"; }
+    [ "<" PrimaryExpression(false) { fs.mergeResult = reduceIt(); }
+      ">" ]
+  | "ls"                           { name="ls"; fs.doEcho = true; }
+  )                                { fs.setLineNumber(lineNum()); }
+  [ LOOKAHEAD( Expression() )
+    Expression()  { Expr ex = reduceIt(); 
+                    String x = null;
+                    if (ex instanceof AccessVar) {
+                      x = ((AccessVar)ex).getName();
+                      if (x.equals("in") || x.equals("except") || x.equals("ordered") ||
+                          x.equals("as") || x.equals("limit") || x.equalsIgnoreCase("addToClasspath"))
+                        throwParseException("You must specify an inclusive list (such as '*') to use the " +
+                                            x + " clause in the " + name + " command");
+                    }
+                    try { // in case it is an IDENTIFIER, check for options first
+                      if (x != null) {
+                        handleFSOption(fs, x);
+                        ex = null;
+                      }
+                    } catch(Exception e) {}
+                    if (ex != null) fs.incls = ex;
+                  }
+  ]
+  ( "except" Expression()   { fs.excls = reduceIt(); }
+  | "in"     Expression()   { fs.base = reduceIt(); }
+  | "ordered"               { fs.listOption = FS_LIST_BY_NAME; }
+    [ "by" ( "date"         { fs.listOption = FS_LIST_BY_DATE; }
+           | <IDENTIFIER>   { if (token.image.equals("size"))           fs.listOption = FS_LIST_BY_SIZE;
+                              else if (token.image.equals("extention")) fs.listOption = FS_LIST_BY_EXT;
+                              else if (token.image.equals("name"))      ;
+                              else optionNotApplyTo(token.image, "ordered by " + name);
+                            }
+           )
+    ]
+  | "limit" Expression()    { fs.limit = reduceIt(); }
+  | "as" id("tree")         { fs.asTree = true; }
+  | <IDENTIFIER>            { handleFSOption(fs, token.image); }
+  )*
+  ( [ "setFileTime"         { setFSAction(fs, "setFileTime", FS_SETFILETIME); }
+      [ Expression() { fs.value = reduceIt(); } ]
+    | "setReadOnly"         { setFSAction(fs, "setReadOnly", FS_SETREADONLY); }
+      [ Expression() { fs.value = reduceIt(); } ]
+    | "exec" Expression()   { setFSAction(fs, "exec", FS_DO); fs.value = reduceIt(); }
+    ] ";"
+  | Block()                 { fs.setCustomAction((BlockSimple)stack.pop()); }
+  )
+}
+
+void FSCopyStatement() :
+{
+  StmtFSCopy fs = new StmtFSCopy();
+  stack.push(fs);
+  String[] params=null;
+  int begin = 0;
+}
+{
+  "copy"                    { fs.setAction(token.image, FS_COPY); fs.setLineNumber(lineNum()); }
+  Expression()              { fs.incls = reduceIt(); }
+  ( "except" Expression()   { fs.excls = reduceIt(); }
+  | "in" Expression()       { fs.base  = reduceIt(); }
+  | "strip" Expression()    { fs.strip = reduceIt(); }
+  | "under" Expression()    { fs.under = reduceIt(); } // for "into" only.
+  | "as" Expression()       { fs.as    = reduceIt(); } // for "into" only.
+  | ( "to" | "into" )       { fs.archive = token.image.equals("into"); }
+    Expression()            { fs.value = reduceIt(); }
+  | <IDENTIFIER>            { handleFSOption(fs, token.image); }
+  | "manifest" ( HereDoc() | Expression() ) { fs.manifest = reduceIt(); }
+  )* ";"
+
+  { if (!fs.archive) {
+      String name = null;
+      if (fs.as != null)            name = "as";
+      else if (fs.under != null)    name = "under";
+      else if (fs.manifest != null) name = "manifest";
+
+      if (name != null)
+        throwParseException("Option \"" + name + "\" is not applicable to file system copying.");
+    }
+  }
+}
+
+void FSRemoveDirStatements() :
+{
+  Variable force = ConstInt.FALSE;
+}
+{
+  "rmdir" Expression() [ id("force") { force = ConstInt.TRUE; } ] ";"
+
+  { stack.push(new ExprCall(null, "rmdir", new Expr[]{reduceIt(), force}, null)); }
+}
+
+void StartThreadStatement() :
+{
+  String name = null;
+  int begin;
+  boolean daemon = false;
+  Arguments args = null;
+  ArrayList paramNames = null;
+  ArrayList paramValues = null;
+  int paramIdx = 0;
+  String[] params = null;
+  Expr[] ea = JudoUtil.emptyExprs;
+  int lastMark = markStack();
+}
+{
+  id("start") { begin=lineNum(); } [ id("daemon") { daemon=true; } ] "thread"
+  ( LOOKAHEAD(2) LabelName() { name = THREAD_PREFIX + token.image; }
+    [ Arguments(null,0)      { args = (Arguments)stack.pop(); }
+    ] ";"                    { stack.push(new ExprCall(daemon,name,(args==null)?null:args.getParams())); }
+  | ea=FormalParameters()    { params = handleStrings(lastMark); }
+    Block()                  { name = THREAD_PREFIX + Lib.createID();
+                               script.addThread( new _Thread(begin,lineNum(),name,inClassDef,params,
+                                                             null,(BlockSimple)stack.pop()) );
+                               int len1 = (params==null) ? 0 : params.length;
+                               int len2 = (ea==null) ? 0 : ea.length;
+                               Expr[] defvals = null;
+                               if (len1 > 0) {
+                                 defvals = new Expr[len1];
+                                 for (int i=0; i<len1; ++i) {
+                                   if ((i<len2) && (ea[i]!=null))
+                                     defvals[i] = ea[i];
+                                   else
+                                     defvals[i] = new AccessVar(params[i]);
+                                 }
+                               }
+                               stack.push(new ExprCall(daemon,name,defvals));
+                             }
+  )
+}
+
+/***
+void DebuggerDirectives() :
+{
+  boolean dispFlg = true;
+}
+{
+"!!"
+( "args" <STRING_LITERAL>  // only as the very first statement! TODO
+| "bp"                  { if(needDbgDirs) stack.push(StmtDebugger.BP); }
+| "clearDisplay"        { if(needDbgDirs) stack.push(StmtDebugger.CLEAR_DISPLAY); }
+| "watch" <IDENTIFIER>    { if(needDbgDirs) stack.push(new StmtDebugger.Watch(true,token.image)); }
+| "unwatch" <IDENTIFIER>  { if(needDbgDirs) stack.push(new StmtDebugger.Watch(false,token.image)); }
+| "status" Expression()
+        { if(needDbgDirs) stack.push(new StmtDebugger.Status(reduceIt())); }
+| "ignoreUserStreams"
+  [ BooleanLiteral()    { dispFlg = stack.pop().equals(ConstInt.TRUE); }
+  ]     { if(needDbgDirs) stack.push(new StmtDebugger.IgnoreUserStreams(dispFlg)); }
+| "showOut"
+  [ BooleanLiteral()    { dispFlg = stack.pop().equals(ConstInt.TRUE); }
+  ]     { if(needDbgDirs) stack.push(new StmtDebugger.Show(RuntimeContext.PRINT_OUT,dispFlg)); }
+| "showErr"
+  [ BooleanLiteral()    { dispFlg = stack.pop().equals(ConstInt.TRUE); }
+  ]     { if(needDbgDirs) stack.push(new StmtDebugger.Show(RuntimeContext.PRINT_ERR,dispFlg)); }
+| "showLog"
+  [ BooleanLiteral()    { dispFlg = stack.pop().equals(ConstInt.TRUE); }
+  ]     { if(needDbgDirs) stack.push(new StmtDebugger.Show(RuntimeContext.PRINT_LOG,dispFlg)); }
+)
+}
+***/
+
+/********************
+ * XML DATA LITERAL *
+ ********************/
+
+JAVACODE
+String XMLLiteral() {
+  // returns the tag name of the root.
+  try {
+    Markup mu = MarkupParser.parseXMLTree(token_source.getInputStream());
+    String rootName = mu.getName();
+    JudoUtil.processMarkup(mu);
+    stack.push(mu);
+    return rootName;
+  } catch(Exception e) {
+    e.printStackTrace();
+    throwParseException(e.getMessage());
+    return null; // not reachable.
+  }
+}
+
+/*********************
+ * LOCAL DATA SOURCE *
+ *********************/
+
+JAVACODE
+void LocalData() {
+  StringBuffer sb = new StringBuffer();
+  CharStream instrm = token_source.getInputStream();
+  try {
+    // ignore the rest of the line of EndScript:
+    boolean started = false;
+    while (true) {
+      char ch = instrm.readChar();
+      if (ch <= 0) break;
+      if (!started) {
+        if (ch == '\n' || ch == '\r')
+          started = true;
+      } else {
+        sb.append(ch);
+      }
+    }
+  } catch(Exception e) {}
+
+  /*
+   * Filter out the leading empty lines.
+   */
+  String text;
+  int i=0;
+  for (; i<sb.length(); ++i) {
+    if (!Character.isWhitespace(sb.charAt(i)))
+      break;
+  }
+  if (i >= sb.length())
+    text = "";
+  else {
+    // now, go back to the first \n or \r
+    for (--i; i>=0; --i) {
+      char c = sb.charAt(i);
+      if ((c == '\r') || (c == '\n')) {
+        ++i;
+        break;
+      }
+    }
+    text = (i<=0) ? sb.toString() : sb.substring(i);
+  }
+
+  if (StringUtils.isNotBlank(text))
+    script.setLocalDataSource(text);
+}
+
+/***
+// code sample
+JAVACODE
+void skip_to_matching_brace() {
+  Token tok;
+  int nesting = 1;
+  while (true) {
+    tok = getToken(1);
+    if (tok.kind == LBRACE) nesting++;
+    if (tok.kind == RBRACE) {
+      nesting--;
+      if (nesting == 0) break;
+    }
+    tok = getNextToken();
+  }
+}
+***/
+
+
+
+void LabelName() :
+{
+}
+{
+  <IDENTIFIER>
+| "as"
+| "elif"
+| "extendsjava"
+| "ifdef"
+| "ifndef"
+| "ifexists"
+| "in"
+| "into"
+| "limit"
+| "namespace"
+| "skip"
+| "Number"
+| "column"
+| "err"
+| "log"
+| "out"
+| "pipe"
+| "input"
+| "output"
+| "needSystemIn"
+| "except"
+| "setFileTime"
+| "setReadOnly"
+| "setReadWrite"
+| "target"
+| "after"
+| "starting"
+| "xml"
+| "systemID"
+| "outputProperties"
+| "parameters"
+| "xmlns"
+| "cc"
+| "bcc"
+| "body"
+| "htmlBody"
+| "attach"
+| "subject"
+| "manifest"
+}
+
+void JavaAllowedName() :
+{
+}
+{
+  LabelName()
+| "usage"
+| "EndScript"
+| "eof"
+| "EOF"
+| "defined"
+| "delete"
+| "exec"
+| "function"
+| "lambda"
+| "infinity"
+| "javaclass"
+| "local"
+| "resume"
+| "strip"
+| "typeof"
+| "attributesof"
+| "under"
+| "undefined"
+| "using"
+| "use"
+| "var"
+| "where"
+| "with"
+| "String"
+| "string"
+| "linkedList"
+| "LinkedList"
+| "set"
+| "Set"
+| "sortedMap"
+| "SortedMap"
+| "date"
+| "Date"
+| "number"
+| "flush"
+| "print"
+| "println"
+| "printTable"
+| "printTableData"
+| "scp"
+| "copy"
+| "listFiles"
+| "ls"
+| "ordered"
+| "by"
+| "rmdir"
+| "ejbql"
+| "repeat"
+| "schedule"
+| "xslt"
+| "xpath"
+| "dom"
+| "jsp"
+| "html"
+| "sgml"
+}
+
+void AnyName() :
+{
+}
+{
+  JavaAllowedName()
+| "import"
+| "break"
+| "case"
+| "catch"
+| "class"
+| "const"
+| "continue"
+| "constructor"
+| "ctor"
+| "default"
+| "do"
+| "else"
+| "extends"
+| "false"
+| "finally"
+| "for"
+| "thread"
+| "if"
+| "new"
+| "null"
+| "return"
+| "super"
+| "switch"
+| "this"
+| "throw"
+| "true"
+| "try"
+| "while"
+| "boolean"
+| "byte"
+| "char"
+| "short"
+| "int"
+| "long"
+| "float"
+| "double"
+| "void"
+| "from"
+| "to"
+| "upto"
+| "downto"
+| "on"
+| "max_number"
+| "min_number"
+}
+
+String TagName() :
+{
+  String ret;
+}
+{
+  AnyName()               { ret = token.image; }
+  ( ("-"|"@"|"!"|"%"|".") { ret += token.image; }
+    AnyName()             { ret += token.image; }
+  )*                      { return ret; }
+}
+
+void PotentialFunctionName() :
+{
+}
+{
+  LabelName()
+| "db::disconnect"
+| "hib::addClass"
+| "hib::addResource"
+| "hib::close"
+| "hib::delete"
+| "hib::lock"
+| "hib::save"
+| "hib::saveOrUpdateCopy"
+| "hib::txAbort"
+| "hib::txBegin"
+| "hib::txEnd"
+| "hib::unlock"
+| "hib::update"
+| "hib::get"
+| "mail::connect"
+| "mail::disconnect"
+}
+

@@ -1,0 +1,46 @@
+11/12/01 12:00 AM
+d.epoch            = 1005552000000
+d.year             = 2001
+d.month            = 11
+d.date             = 12
+d.hour             = 0
+d.minute           = 0
+d.second           = 0
+d.milliSecond      = 0
+d.zoneOffset       = -28800000
+d.dstOffset        = 0
+d.weekOfYear       = 46
+d.weekOfMonth      = 3
+d.dayOfMonth       = 13
+d.dayOfYear        = 316
+d.dayOfWeek        = 2
+d.dayOfWeekInMonth = 2
+d.isAM             = true
+d.isPM             = false
+d.monthName        = November
+d.monthShortName   = Nov
+d.weekDayName      = Monday
+d.weekDayShortName = Mon
+
+d.epoch       = 12/31/69 4:00 PM  => 12/31/69 4:00 PM
+d.year        = 1996  => 12/31/96 4:00 PM
+d.month       = 5     => 5/31/96 4:00 PM
+d.date        = 25    => 5/25/96 4:00 PM
+d.hour        = 8     => 5/25/96 8:00 AM
+d.minute      = 15    => 5/25/96 8:15 AM
+d.second      = 59    => 5/25/96 8:15 AM
+d.milliSecond = 430   => 5/25/96 8:15 AM
+d.zoneOffset  = -28800000 => 5/25/96 12:09 AM
+d.dstOffset   = 3600000 => 5/25/96 12:09 AM
+
+5/26/96 12:09 AM -- next day
+5/25/96 12:10 AM -- 2 seconds ago
+5/25/96 12:09 AM -- 2 seconds later
+5/25/96 12:10 AM -- next minute
+5/25/96 12:04 AM -- 5 minutes ago
+5/27/96 12:09 AM -- 2 days later
+5/18/96 12:09 AM -- 7 days ago
+7/25/96 12:09 AM -- 2 months later
+3/25/96 12:09 AM -- 2 months ago
+5/25/98 12:09 AM -- 2 years later
+5/25/94 12:09 AM -- 2 years ago

@@ -1,0 +1,40 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_ant/build.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+
+&lt;project name="test" default="target1" basedir="."
+   description="Illustrates both ways of using the &lt;judoscript> tag."
+>
+  &lt;taskdef name="judoscript" classname="com.judoscript.ant.AntJudoScriptTask"/>
+
+  &lt;target name="target1" description="Run a JudoScript script (in the same JVM).">
+    &lt;judoscript params="abc -x:1 def ghi -y:something" run="build.judo" />
+  &lt;/target>
+
+  &lt;target name="target2" description="Run JudoScript code specified herein.">
+    &lt;judoscript params="abc -x:1 def ghi -y:something">
+      // This is the code of build.judo copied verbatim.
+
+      println '#cmd_args: ', #cmd_args;
+      for x in #cmd_args {
+        println '  #cmd_args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#args: ', #args;
+      for x in #args {
+        println '  #args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#options: ', #options;
+      for x in #options {
+        println '  #options[', x, '] = ', #options.(x);
+      }
+
+      println nl, 'Original os.name = ${os.name}';
+      #systemProperties.('os.name') = 'XXXXXXXXXXXXXX';
+      println     'Now,     os.name = ${os.name}';
+    &lt;/judoscript>
+  &lt;/target>
+
+&lt;/project>
+</pre></td></tr></table></body></html>

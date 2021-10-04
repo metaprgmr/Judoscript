@@ -1,0 +1,11 @@
+<html><body>
+<%
+  call_foo(); // fail!
+%>
+</body></html>
+
+<%@ exception %>
+<html><body>
+<h2>Failed:</h2>
+<p>Error out: <%= $_.message %></p>
+</body></html>

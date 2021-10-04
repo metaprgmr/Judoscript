@@ -1,0 +1,12 @@
+date1 = new java::java.sql.Date(1000);
+
+if date1.instanceof('java.util.Date') {
+  println 'Yes, this is an instanceof of java.util.Date.';
+} else {
+  println 'No, this is NOT an instanceof of java.util.Date.';
+}
+if date1.instanceof(java::java.sql.Date) {
+  println 'Yes, this is an instanceof of java.sql.Date.';
+} else {
+  println 'No, this is NOT an instanceof of java.sql.Date.';
+}

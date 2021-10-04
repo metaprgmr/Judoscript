@@ -1,0 +1,62 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing table component and mouse events.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+
+data = new java::Object[][]{
+  { "Mary",   "Campione", "Snowboarding",         new java::Integer(5),  (java::Boolean).FALSE },
+  { "Alison", "Huml",     "Rowing",               new java::Integer(3),  (java::Boolean).TRUE  },
+  { "Kathy",  "Walrath",  "Chasing toddlers",     new java::Integer(2),  (java::Boolean).FALSE },
+  { "Mark",   "Andrews",  "Speed reading",        new java::Integer(20), (java::Boolean).TRUE  },
+  { "Angela", "Lih",      "Teaching high school", new java::Integer(4),  (java::Boolean).FALSE }
+};
+
+columnNames = new java::String[]{"First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
+
+table = new java::JTable(data, columnNames);
+table.setPreferredScrollableViewportSize(new java::Dimension(500, 70));
+
+//Create the scroll pane and add the table to it. 
+scrollPane = new java::JScrollPane(table);
+
+demoFrame = new java::JFrame("SimpleTableDemo");
+demoFrame.getContentPane().add(scrollPane, (java::BorderLayout).CENTER);
+
+gui::events
+{
+  <table : Mouse : mouseClicked> :
+    var numRows = table.getRowCount();
+    var numCols = table.getColumnCount();
+    var model   = table.getModel();
+    println "--------------------------";
+    for i from 0 to numRows-1 {
+      flush "    row ", i, ":  ";
+      for j from 0 to numCols-1 {
+        var x = model.getValueAt(i,j);
+        switch j {
+        case 0: width = 7;  break;
+        case 1: width = 9;  break;
+        case 2: width = 21; break;
+        case 3: width = 5;  break;
+        case 4: width = 5;  break;
+        }
+        if j < numCols-1 { print x : width; }
+        else { println x.fmtBool(); }
+      }
+    }
+
+  <demoFrame : Window : windowClosing> :
+    exit(0);
+}
+
+demoFrame.pack();
+demoFrame.setVisible(true);

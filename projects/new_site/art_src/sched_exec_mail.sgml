@@ -1,0 +1,399 @@
+<doc title="Schedule, Execute, E-Mail, SSH, SCP"
+ author="James Jianbo Huang"
+ created="October 2001" last="Jan 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, schedule, absolute, after, starting, repeat, control panel, htmlOut, $$timer, run executable, execute, mail, e-mail, ssh, scp"
+>
+
+<sectiondefs>
+<sectiondef name="sched"    caption="Scheduled Activities">
+<sectiondef name="control"  sub="1" caption="Monitor and Control">
+<sectiondef href="../books/judoscript-0.9/chapters/exec.html" caption="Run Native Executables">
+<sectiondef name="email"    caption="Sending E-Mails">
+<sectiondef name="sshscp"   caption="SSH and SCP">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+The <kw>schedule</kw> statement schedules one-time or repetitive jobs to run
+at intervals or at specific moments for any kind of actions. The job also has
+a built-in HTTP server as a HTML-based control panel, activated when a port
+number is specified. The code in the job can take and interpret commands from
+the control panel and/or generate custom information for display. Executables
+are run with the <kw>exec</kw> command with all kinds of input/output and
+piping options, including taking input from the script itself or sending
+output back to the script for processing; working directory and environment
+variables can be set. The <kw>mail::send</kw> statement sends messages in text,
+HTML or both with or without attachment to multiple "to", "cc" and "bcc"
+recipients. The texts can be in different character sets. SCP and SSH are
+used to securely transfer files between remote hosts as well as issue commands
+on the remote machines. All these applications can be highly useful for
+scheduled jobs to automate tasks.
+</abstract>
+</doc>
+
+
+<section name=sched>
+
+<p>
+The <kw>schedule</kw> statement schedules jobs to run in the future.
+Any actions can be specified, such as database operations, run Java or
+native executables, sending e-mails, etc. It has a number of modes:
+one-time or repetitive, absolute or non-absolute, and starting at a
+specific time or after a delay. A HTTP interface is integrated and
+started when a port number is provided, so that the job can be
+monitored or controlled via a browser or any HTTP client program.
+
+<gramma>
+<kw>schedule</kw> [ <kw>absolute</kw> ]
+[ ( <kw>starting</kw> | <kw>after</kw> ) <nt>time_or_delay</nt>
+[ <kw>repeating</kw> <nt>period</nt> ] <nt>block</nt> <br>
+[ <kw>listen on</kw> [ <kw>title</kw> <nt>html_title</nt> ] <nt>control_block</nt> ]
+</gramma>
+
+<p>
+Schedules can not be embedded. A program can have one schedule running at
+a time. Each schedule is run by a timer called <kw>$$timer</kw>. It can be
+accessed in the scheduler code, which has these members: <kw>time</kw> for
+the current event being handled, <kw>period</kw> for the current period,
+<kw>htmlOut</kw> is the HTML output stream and <kw>cmd</kw> is the command
+sent by the control panel client (most likely a brower) -- the last two are
+valid only in the control block.
+
+<p>
+To abort a schedule job, run <kw>break schedule;</kw>.
+
+<p>
+The following program emulates a count-down process, where 4 one-time events
+are run one second apart.
+
+<codelist name="countdown" caption="countdown.judo -- <em>one-time event</em>">
+1: time = date(2001,10,12,19,4,57);
+2: schedule starting time { println $$timer.time, ": Three!"; }
+3: ++time.second;
+4: schedule starting time { println $$timer.time, ": Two!"; }
+5: ++time.second;
+6: schedule starting time { println $$timer.time, ": One!"; }
+7: ++time.second;
+8: schedule starting time { println $$timer.time, ": LAUNCH!"; }
+</codelist>
+
+This is a simple repetitive motion:
+
+<codelist name="heart_beat" caption="heart_beat.judo -- <em>not-so-accurate repetitive events</em>">
+1: beats_per_minute = 80;
+2:
+3: schedule repeat 60000 / beats_per_minute
+4: {
+5:   println 'puh ... at ', $$timer.time;
+6: }
+</codelist>
+
+Next, we emulate a coocoo clock that every hour it plays so many "Cukoo"
+sound. Lines 1 through 4 gets the time for the next hour. Line 7 gets
+the time for this event, and its hour attribute is used for the number
+of "Cucoo" sound.
+
+<codelist name="coocoo_clock" caption="coocoo_clock.judo -- <em>accurate repetitive events</em>">
+ 1: $start = date();
+ 2: ++$start.hour;
+ 3: $start.minute = 0;
+ 4: $start.second = 0;
+ 5: schedule absolute starting $start repeat 3600000
+ 6: {
+ 7:   local time = $$timer.time;
+ 8:   for $i from 1 to time.hour { print 'Cukoo...'; }
+ 9:   println;
+10: }
+</codelist>
+
+Scheduled jobs should run quickly, that is, they should not run longer
+than the scheduled periods. If they do sometimes and mess up the
+operation, practical synchronization mechanism should be put in place.
+For instance, suppose every 5 minutes the job checks the database for
+unprocessed order data. If it founds some, process them. Sometimes
+e-commerce site may take so many orders in a short period of time,
+that within that 5-minute period they can not be all processed. What
+you can do is, for instance, use a temporary database table; when
+start processing, set a flag there, and reset it when done; if this
+flag is set, other jobs will simply bypass. The crux of this solution
+is, use an operation that is always short than the period to enforce
+the synchronization.
+
+
+
+<section name="control">
+
+<p>
+By issuing a <kw>listen on</kw> clause with a port number, you have the
+scheduled job start a single-thread HTTP server. A title can be specified
+for the HTML output. If not, the default title is "JudoScript Scheduler
+Control Panel".
+
+<codelist name="changing_time" caption="changing_time.judo">
+ 1: history = linkedList{};
+ 2:
+ 3: schedule repeat 2000
+ 4: {
+ 5:   history.add($$timer.time);
+ 6:   if $history.length() &gt; 10 { history.remove(0); }
+ 7: }
+ 8: listen on 3333 title '&lt;h1&gt;Changing Time&lt;/h1&gt;'
+ 9: {
+10:   println &lt;$$timer.htmlOut&gt; '&lt;h3&gt;Latest Events&lt;/h3&gt;';
+11:   for x in history backward { println &lt;$$timer.htmlOut&gt; x, '&lt;br&gt;'; }
+12: }
+</codelist>
+
+<p>
+<img src=changing_time.gif align=right>
+
+The job itself does nothing but keeping the execution time in a list for the
+last 10 events (line 6). Its control panel server listens on port 3333. The
+control panel is typically run from a browser. The title, "Changing Time", is
+issued on line 8. The screen is standard above the horizontal line. If and
+only if both boxes are checked will the job be stopped and closed. Anything
+user type in to the edit box is sent to the server and becomes the content of
+<kw>$$timer.cmd</kw>. What it means is totally up to your interpretation, such
+as a mini command system. In the control panel code, we used <kw>$$timer.htmlOut</kw>
+to write out custom content that shows below the horizontal line (lines 10 and 11).
+
+<review>
+<question> How to schedule a one-time event? How about repetitive events?
+<question> How to schedule events that happen precisely (up to JVM precision)
+           every 5 minutes?
+<question> How to obtain the time for the current event and the period
+           for this job?
+<question> Specified a <kw>listen on 4444</kw> for a scheduled job with an
+           empty control block. When connected to it via a browser, what
+           will you see?
+<question> Think of a scheduled job with the control panel, and devise an
+           interactive mechanism that takes the command from the control
+           panel in the brower and acts upon it.
+</review>
+
+
+
+<section name="email">
+
+<p>
+You can send e-mails directly from <J>. To use the e-mail feature, you
+need to have the <kw>javax.mail</kw> packages in the class path. It can
+be obtained from various places, such as the "j2ee.jar" file in the J2EE
+installation. Before sending any messages, you must first connect to a
+mail server by calling the system function:
+
+<demo>
+mail::connect( server [ , username [ , password ] ] );
+mail::disconnect();
+</demo>
+
+The server may include a port number, separated by a colon. Once
+connected, you can easily send one, two, fitfy or a million e-mails from
+a simple <J> script; spamming is never easier. Well, if one does want to
+spam, there are zillions of ways anyway.
+
+<p>
+The syntax for sending mail is:
+
+<gramma>
+<kw>mail::send</kw> [ <nt>charset</nt> ] <br>
+( ( <kw>from</kw> | <kw>to</kw> | <kw>cc</kw> | <kw>bcc</kw>
+    | <kw>attach</kw> | <kw>subject</kw> | <kw>body</kw> | <kw>htmlBody</kw> ) <kw>:</kw>
+  <nt>content</nt>
+)+ 
+</gramma>
+
+As you see, text and/or HTML messages can be sent at the same time.
+You can specify character sets for addresses, subject and bodies.
+If <nt>charset</nt> is set to <kw>mail::send</kw>, both the text and HTML bodies will use it.
+A <nt>charset</nt> can have "charest=". The following two examples are equivalent:
+
+<demo>
+  mail::send 'iso-2022-jp' ...
+  mail::send 'charset=iso-2022-jp' ...
+</demo>
+
+Alternatively, you can call the system function <kw>setCharset()</kw> to set
+the language character set for the whole language environment. The
+<kw>mail::send</kw> command uses that if no <nt>charset</nt> is explicitly
+specified in itself. This global character set may affect text encoding used
+in other places.
+
+<p>
+Files can be attached; messages can be sent to a list of "to", "cc" and/or
+"bcc" recipients; within each list, recipients are separated by commas. Each
+clause can appear at most once. For the message bodies, the here-doc is a big
+convenience. Here is an example:
+
+<demo>
+mail::send
+   from: 'syang@exotic.nat'
+     to: 'foodback@judoscript.com, syang56@yahoo.cum'
+subject: 'bug report'
+   body: [[*
+         Hi there,
+
+         JudoScript is cool. I'm doing a lot and will do a lot more
+         with it.
+
+         I think I've found a bug. I have a program, 'tvcontrol.judo';
+         there is a function like this:
+
+           function switchTV $on {
+             if $on { turnOnTV(); } else { turnOffTV(); }
+           }
+
+         however, when it is called with $on=3, it turns off my VCR!
+         I believe this is a bug in JudoScript that, when the value
+         is not 0 or 1, it emits erroneous radio shock waves that
+         affect other appliances than the intended one. Please take
+         a look. Thank you!
+
+         Best regards,
+         -- Steve Young
+         *]];
+</demo>
+
+The following example sends out trial software to newly registered users,
+whose information is stored in a database. For each user with status
+"NEW", a zip file and a "readme.txt" file are sent, and his/her status
+is changed to "TRIAL VERSION" in the database. This program is likely
+executed by a scheduled job that runs at midnight or later.
+
+<demo>
+db::connect 'jdbc:oracle:thin:@localhost:1521:userdb', 'onlyme', 'uggess';
+
+db::query u:
+  select email, lastname, solute from usertbl where status='NEW';
+
+db::prepare: update userdb set status='TRIAL VERSION' where email=?;
+while u.next() {
+  sendSoftware(u.email, u.lastname, u.solute);
+  executeUpdate with @1 = u.email;
+}
+
+db::disconnect;
+
+function sendSoftware email, lname, solute
+{
+  mail::send
+     from: 'info@judoscript.com'
+       to: email
+  subject: 'The software. Thank you!'
+   attach: 'readme.txt, software.zip'
+     body: [[*
+           Dear (* solute *) (* lname *),
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           &lt;html&gt;&lt;body&gt;
+           &lt;p&gt;Dear (* solute *) (* lname *),
+
+           &lt;p&gt;Thank you very much for your interest in &lt;i&gt;this software&lt;/i&gt;.
+           Attached is a &lt;u&gt;zip file&lt;/u&gt; for the software and a &lt;u&gt;readme
+           text&lt;/u&gt; file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           &lt;p&gt;Please visit &lt;a href=www.judoscript.com&gt;www.judoscript.com&lt;/a&gt;
+           for the latest news and information. Thank you!
+
+           &lt;p&gt;Sincerely,
+           &lt;p&gt;JudoScript
+           &lt;/body&gt;&lt;/html&gt;
+           *]]
+  ;
+}
+</demo>
+
+
+<review>
+<question> How to connect to a mail server?
+<question> Can you send an e-mail message in both text and HTML?
+<question> Can you have multiple "to" clauses? How to specify multiple recipients?
+<question> How to attach 3 files to a message?
+</review>
+
+
+<section name=sshscp>
+
+<p>
+The SSH and SCP features uses ISNetworks' distribution of MindTerm package,
+a GPL'ed open-source pure Java SSH/SCP bundle. It is a GUI program that
+you can use daily; its SCP screen looks like a FTP GUI client. Very handy!
+Download it from <a href="http://www.isnetworks.com/ssh">ISNetworks</a>.
+Make sure the version is "version 1.2.1 SCP release 3" or up. Unpack and put
+the class jar file into your classpath, and run
+
+<demo>
+%java mindbright.application.MindTerm
+</demo>
+
+If it is the first time use, it prompts you for host, user and password,
+and generates necessary keys automatically. You should run it to establish
+such environment before using <J>'s SSH/SCP features. By the way, the nice
+SCP screen is available on its "File" menu, not so obvious to the first-time
+users.
+
+<p>
+Once the jar file is in the classpath and you have set up the environment,
+please refer to the <a href="../langspec/spec7.html">language spec</a> for
+how to use. It is rather straightforward.
+
+
+<section name=summary>
+
+<p>
+Running scheduled jobs is an important application of scripting languages.
+The <kw>schedule</kw> command allows to schedule one-time jobs or repetitive
+ones, running at intervals or at specific moments. The actions for the job
+can be any valid <J> statements and commands except for another schedule,
+that is, no embedded schedules. The internal variable, <kw>$$timer</kw>, has
+members like <kw>time</kw> and <kw>period</kw> for code to access. A <J>
+scheduled job has a built-in HTTP server for control panel. All you have to
+do is specify the <kw>listen on</kw> with a port number, and use a browser
+to see the current status. The control panel allows administrators to stop
+the job, or send a command string to it, which becomes <kw>$$timer.cmd</kw>
+in the script that you can respond to. With <kw>$$timer.htmlOut</kw>, you
+can generate more information to the control panel.
+
+<p>
+Scheduled jobs typically check database or some files for changes and
+respond by processing the data, running other applications, handling files
+and archives and sending results either via remote calls to systems or
+e-mails to humans. <J> has flexible JDBC scripting, running executables,
+invoking Java programs and sending e-mails. So practically you rarelly
+have to leave <J>.
+
+<p>
+The <kw>exec</kw> command can run executables as flexible as any shells or
+Windows consoles with input/output redirections, merging program output
+and error, and piping output to other executables; what is more, the
+command line can even take input from the script, or pipe the output back
+to the script for processing. A command line can be indicated to take from
+the system input; if it is not indicated and the program reads system input,
+an EOF is sent immediately so it does not hang the script.
+
+<p>
+E-mails can be sent directly via the <kw>mail::send</kw> command; the message
+can be in text, HTML or both. File attachment is supported, so are multiple
+recipients for "to", "cc" and "bcc". Prior to sending e-mails, a mail
+server must be connected via <kw>mail::connect()</kw> system call. The
+Java extension packages of <kw>javax.mail</kw> must be present.
+
+
+
+<section name=listings>
+
+<insert name="codelistings">
+

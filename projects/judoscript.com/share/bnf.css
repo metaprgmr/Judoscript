@@ -1,0 +1,29 @@
+body, table, td, th, li { font-family:arial; font-size:12px; color:#555555; }
+.t    { font-family:courier new; color:#990000; }
+.t  a:link      { color:#009900; text-decoration:none; vertical-align:top}
+.t  a:visited   { color:#009900; text-decoration:none; }
+.t  a:hover     { color:#666666; text-decoration:none; }
+.t  a:active    { color:#009900; text-decoration:none; }
+.op   { font-family:arial;       color:#0000FF; }
+.kw   { font-family:courier new; font-weight:bold; color:#990000; }
+.obj  { font-family:arial; color:#990000; }
+.obj a:link    { font-family:arial; color:#990000; }
+.obj a:visited { font-family:arial; color:#990000; }
+.obj a:hover   { font-family:arial; color:#990000; text-decoration:underline; }
+.obj a:active  { font-family:arial; color:#990000; }
+.nt   { font-family:arial; color:#000000; }
+.nt a:link      { color:#009900; text-decoration:none; vertical-align:top}
+.nt a:visited   { color:#009900; text-decoration:none; }
+.nt a:hover     { color:#666666; text-decoration:none; text-decoration:underline; }
+.nt a:active    { color:#009900; text-decoration:none; }
+.anno { font-family:arial;       color:#AAAAAA; }
+.anno a:link    { color:#AAAAAA; text-decoration:none; }
+.anno a:visited { color:#AAAAAA; text-decoration:none; }
+.anno a:hover   { color:#6666FF; text-decoration:underline; }
+.anno a:active  { color:#AAAAAA; text-decoration:none; }
+.used { font-family:arial;       color:#6666FF; }
+.used a:link    { color:#6666FF; text-decoration:none; }
+.used a:visited { color:#6666FF; text-decoration:none; }
+.used a:hover   { color:#0000FF; text-decoration:underline; }
+.used a:active  { color:#6666FF; text-decoration:none; }
+blockquote { margin-left:15px; }

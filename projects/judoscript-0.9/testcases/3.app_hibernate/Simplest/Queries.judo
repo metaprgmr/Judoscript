@@ -1,0 +1,44 @@
+usage {
+  author  = 'James Huang';
+  created = '2005-1-28';
+  desc    = [[*
+    Runs HQL statements to find objects and values.
+  *]];
+}
+
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  TestSimpleTypes
+;
+
+//
+// Query for objects:
+//
+hib::query qry:  // or hib::iterate.
+  from TestSimpleTypes o
+  where o.id > 9 and o.id < 15
+;
+// now, qry is a List of TestSimpleTypes's --
+for o in qry {
+  println o;
+}
+
+//
+// Report query:
+//
+hib::query qry:
+  select o.id, o.theFloat, o.theString from TestSimpleTypes o
+  where o.id > :startIdx and o.id < :endIdx
+; with startIdx:Long = 9, endIdx:Long = 15;
+
+// now, qry is a List of Object[] --
+for o in qry {
+  println o;
+}
+
+hib::close;

@@ -1,0 +1,25 @@
+<html><head><title>JudoScript Semantics - Block</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Block</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Block>Block</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw><nobr>{</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )*   (  <font class=kw>catch</font>  <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )+   )?   (  <font class=kw>finally</font>  <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Statement')">Statement</a></font>  )+   )?  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Block'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>A block is a series of statements quoted in <font class=kw><nobr>{</nobr></font>  and <font class=kw><nobr>}</nobr></font> , and may have
+  <font class=kw>catch</font> /<font class=kw>finally</font>  clauses. If the <font class=kw>finally</font>  clause is present, the code therein
+  is always executed before control exists the block. If the <font class=kw>catch</font>  clause is
+  present, any exception will be caught (in the built-in variable <font class=kw><nobr>$_</nobr></font> ) and control
+  is transfered here. Can call <font class=nt><a href="javascript:showNT('ResumeStatement')">ResumeStatement</a></font> to resume program from
+  where the exception was thrown.</p>
+ </body></html>

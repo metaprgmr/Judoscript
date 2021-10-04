@@ -1,0 +1,31 @@
+src = 'C:/src/';
+src_len = src.length();
+target = 'C:/temp/new_src/';
+mkdir target;
+
+listFiles '*.java, *.jj' in src fileOnly recursive
+{
+  // Construct the path for the new file:
+  var path = $_.getFilePath();
+  var file = $_.getFileName();
+  var newPath = target + path.substring(src_len);
+  mkdir newPath; // make sure the dir is there; ok if exists.
+
+  var newfile = openTextFile(newPath + file, 'w');
+
+  // Process the lines in the source file:
+  var updated = false;
+  do $_ as lines {
+    // now, $_ holds the line just read.
+    if (!updated && $_.startsWith(' * Copyright (C) 2001-')) {
+      println <newfile> ' * Copyright (C) 2001-', #year,
+                        ' James Huang http://www.judoscript.com';
+      updated = true;
+    } else {
+      println <newfile> $_;
+    }
+  }
+  // Done.
+  newfile.close();
+  println 'Updated ', path.substring(src_len), file;
+}

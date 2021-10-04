@@ -1,0 +1,8 @@
+REM The DeployerRuntime class is in package weblogic.management.deploy.  The interface DeployerRuntimeMBean has a method called deploy(java.lang.String source, java.lang.String name, java.lang.String stagingMode, DeploymentData info, java.lang.String id) 
+REM stuck: (1) how to specify null (2) how to construct a Java object?
+
+java weblogic.Admin -adminurl localhost:7001 -username system -password weblogic INVOKE -mbean "JavaOneDomain:Location=admin,Name=DeployerRuntime,ServerRuntime=admin,Type=DeployerRuntime" -method deploy "c:/studentWLSA11/labs/lab10/applications/timeoff.war" "timeoff" "stage" null null
+
+
+
+

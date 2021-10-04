@@ -1,0 +1,18 @@
+<html>
+<head><title>Jusp Redirect Test</title>
+<body>
+<%
+  x = 'abcd';
+%>
+<h1>JUSP Redirect Test</h1>
+
+<%= x %>
+<br>
+You really shouldn't see all these!
+<hr>
+<br>
+<%!redirect 'bar.jusp' %>
+<hr>
+After the redirect. You shouldn't see this either.
+
+</body></html>

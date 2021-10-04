@@ -1,0 +1,46 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/var_scope.judo:</b></td></tr><tr><td><pre>
+println "global a = ", a = 1;
+{
+  var a = 2;
+  println "var a = ", a;
+  println "::a = ", ::a;
+}
+println 'global a = ', a;
+
+class MyCls
+{
+  function foo {
+    println "in class: a = ", a;
+    var a = 2;
+    println "in class: var a = ", a;
+    println "in class: ::a = ", ::a;
+  }
+}
+x = new MyCls;
+x.foo();
+
+while true {
+  if loopIndex() > 0 { break; }
+  println nl, 'Set abc=9 in while-block.';
+  abc = 9;
+}
+
+println 'Outside the while-block, abc = ', abc;
+
+if true {
+  println nl, 'Set uvw=9 in if-block.';
+  uvw = 9;
+}
+
+println 'Outside the if-block, uvw = ', uvw;
+
+switch x {
+case 0:
+case 1:
+default:
+  println nl, 'Set xyz=9 in switch-block.';
+  xyz = 9;
+}
+println 'Outside the switch-block, xyz = ', xyz;
+</pre></td></tr></table></body></html>

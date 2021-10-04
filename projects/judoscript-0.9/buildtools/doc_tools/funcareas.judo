@@ -1,0 +1,113 @@
+!include 'nav.judi'
+
+rootNode = new JudoScriptReference;
+curNode = rootNode.o_fa;
+outf = null;
+seeObj = null;
+seeSysFun = null;
+seeSyn = null;
+seeFA = null;
+
+do '${j09ref}/funcareas.sgml' as sgml
+{
+<area>:  o = new TOCItem( id='fa_'+$_.id, name=$_.name );
+         curNode.addChild(o);
+         curNode = o;
+</area>: curNode = curNode.getParent();
+<topic>: curNode.addChild( new TOCItem( id='fa_'+$_.id, name=$_.name, isLeaf=true ) );
+
+<content>:  tgt = '${docroot}/ref/fa_' + $_.id + '.html';
+            . 'Creating ', tgt;
+            outf = null;
+            if $_.external == null {
+              outf = openTextFile(tgt, 'w');
+              url = null;
+              name = null;
+              if $_.useSyn != null {
+                name = $_.useSyn;
+                url = 'synn_${name}.html';
+              } elif $_.useObj != null {
+                name = $_.useObj;
+                url = 'obj_${name}.html';
+              }
+              meta = (url == null) ? '' : ('<meta http-equiv="Refresh" content="1;URL=${url}">');
+              print <outf> [[*
+                <html><head><title>(*$_.name*)</title>(* meta *)
+                <link href="../share/bnf.css" rel="stylesheet" type="text/css">
+                <script language=JavaScript src=../share/judolib.js></script>
+                </head><body><h3>Functional Area
+              *]];
+              o = rootNode.findByKey('fa_' + $_.id);
+              if o != null {
+                p = o.getPath();
+                for i=0; i<p.size(); i++ {
+                  if p.id.startsWith('fa_') {
+                    print <outf> ' : ', p[i].name;
+                  }
+                }
+              }
+              print <outf> ' : <u>', o.name, '</u></h3>';
+              if url != null {
+                print <outf> [[*
+                  Switching to <a href="(* url *)">(* name *)</a>.</body></html>
+                *]];
+                outf.close();
+                outf = null;
+              } else {
+                seeObj = $_.seeObj;
+                seeSysFun = $_.seeSysFun;
+                seeSyn = $_.seeSyn;
+                seeFA = $_.seeFA;
+              }
+            }
+</content>: if outf != null {
+              if seeFA != null {
+                print <outf> '<h4>Related Functional Areas</h4><ul>';
+                for x in seeFA.csv(',') { print <outf> '<li>', showFALink(x); }
+                print <outf> '</ul>';
+              }
+              if seeSyn != null {
+                print <outf> '<h4>Related Syntax</h4><ul>';
+                for x in seeSyn.csv(',') { print <outf> '<li>', showNTLink(x); }
+                print <outf> '</ul>';
+              }
+              if seeSysFun != null {
+                print <outf> '<h4>Related System Functions</h4><ul>';
+                for x in seeSysFun.csv(',') { print <outf> '<li>', showSFLink(x); }
+                print <outf> '</ul>';
+              }
+              if seeObj != null {
+                print <outf> '<h4>Related Object Types</h4><ul>';
+                for x in seeObj.csv(',') { print <outf> '<li>', showObjLink(x); }
+                print <outf> '</ul>';
+              }
+              print <outf> '</body></html>';
+              outf.close();
+              outf = null;
+            }
+:TEXT,<>:   if outf != null { print <outf> $_; }
+<j>:        if outf != null { print <outf> 'JudoScript'; }
+<!>:        if outf != null {
+              x = $_.toString().substring(2);
+              if x.startsWith('_') {
+                x = x.substring(1,x.length()-1);
+                print <outf> '<font class=t>', x, '</font> ';
+              } else {
+                x = x.substring(0,x.length()-1);
+                if !x.charAt(0).isLetter() { x = '<nobr>${x}</nobr>'; }
+                print <outf> '<font class=kw>', x, '</font> ';
+             }
+           }
+<nt>:      if outf != null { print <outf> showNTLink($_.name); }
+<sfn>:     if outf != null { print <outf> showSFLink($_.name); }
+<obj>:     if outf != null { print <outf> showObjLink($_.id); }
+<fa>:      if outf != null { print <outf> showFALink($_.id); }
+}
+
+// Generate nagivation pages:
+leaves = rootNode.generateNavPages(rootNode.o_fa);
+for leaf in leaves {
+  src = '${::ref}/_' + leaf.getParent().id + '.html';
+  tgt = '${::ref}/_' + leaf.id + '.html';
+  copy src to tgt echo;
+}

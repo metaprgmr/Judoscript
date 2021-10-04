@@ -1,0 +1,6 @@
+props = new java::Properties(
+          a.b.c.d.e.f.g = 'a thru g',
+          h.i.j.k.l.m.n = 'h thru n'
+        );
+
+println props;

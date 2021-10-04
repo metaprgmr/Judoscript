@@ -1,0 +1,29 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    The scheduled job's HTTP agent is starte on port 3333
+    that shows the history of events.
+  *]];
+}
+
+history = LinkedList[];
+port = 3333;
+
+println 'Open your browser and view http://localhost:', port;
+
+schedule repeat 2000
+{
+  history.add($$timer.time);
+  if history.length() > 10 { history.remove(0); }
+}
+listen on port title '<h1>Changing Time</h1>'
+{
+  println <$$timer.htmlOut> '<u>', $$timer.cmd, '</u><hr>';
+  println <$$timer.htmlOut> '<h3>Latest events</h3>';
+  for x in history backward {
+    println <$$timer.htmlOut> x.fmtDate('hh-mm-ss'), '<br>';
+    flush <$$timer.htmlOut>;
+  }
+}

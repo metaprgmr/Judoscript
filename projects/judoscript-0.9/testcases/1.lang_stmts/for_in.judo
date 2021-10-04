@@ -1,0 +1,45 @@
+println 'Iterating Array:';
+a = [ 1, 2, 3 ];
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating Java array:';
+a = new java::int[]{ 10, 20, 30 };
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating java.util.ArrayList:';
+a = new java::ArrayList;
+a.add(100);
+a.add(200);
+a.add(300);
+for x in a {
+  println loopIndex(), ': ', x;
+}
+
+println nl, 'Iterating with range:';
+a = [ 1, 2, 3, 4 ];
+
+print "--- for in                 ";
+for e in a { print e, ' '; }
+
+print nl, "--- for in backward        ";
+for e in a backward { print e, ' '; }
+
+print nl, "--- for in from 1          ";
+for e in a from 1 { print e, ' '; }
+
+print nl, "--- for in to 1            ";
+for e in a to 1 { print e, ' '; }
+
+print nl, "--- for in from 1 to 2     ";
+for e in a from 1 to 2 { print e, ' '; }
+
+print nl, "--- for in from 2 downto 1 ";
+for e in a from 2 downto 1 { print e, ' '; }
+
+print nl, "--- for in downto 1        ";
+for e in a downto 1        { print e, ' '; }
+println;

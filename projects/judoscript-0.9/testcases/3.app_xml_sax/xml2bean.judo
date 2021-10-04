@@ -1,0 +1,91 @@
+usage {
+  author  = 'James Huang';
+  created = '2004-11-9';
+  args    = 'input.xml, output.java';
+  minArgs = 2;
+  desc    = [[*
+    This program generates a Java source class from a bean
+    definition XML document using the SAX-style processing.
+    The bean definition has only properties.
+
+    For demo purposes, a sample XML document is attached.
+    Cut-n-paste it into a file named Test.java and run this
+    script.
+  *]];
+}
+
+xml2bean(#args[0], #args[1]);
+
+function xml2bean(infile, outfile) {
+  result = openTextFile(outfile, 'w');
+
+  var clsName = null;
+  var superName = null;
+  var impls = null;
+
+  do infile as xml {
+  <javabean>:
+    clsName = $_.name;
+    if ($_.comments) {
+      println <result> '/**';
+      do $_.comments.getReader() as lines {
+        println <result> ' * ', $_;
+      }
+      println <result> ' */';
+    }
+
+  <package>TEXT:
+    println <result> 'package ', $_, ';', nl;
+
+  <import>TEXT:
+    println <result> 'import ', $_, ';';
+
+  <superclass>:
+    superName = $_.name;
+    if (superName == 'Object')
+    superName = null;
+
+  <implements>:
+    impls = $_.name.csv();
+
+  <properties>: // begin a class:
+    print <result> nl, 'public class ', clsName;
+    if (superName != null)
+      print <result> ' extends ', superName;
+    if (impls != null && impls.length > 0)
+      print <result> ' implements ', impls.toCsv();
+    println <result> nl, '{';
+
+  <property>:
+    if ($_.comments)
+      println <result> '  // ', $_.comments;
+    name = $_.name;
+    Name = name.capFirst();
+    type = $_.type;
+    println <result> '  private ', type, ' ', name, ';', nl,
+                      '  public ', type, ' get', Name, '() { return ', name, '; }', nl,
+                      '  public void set', Name, '(', type, ' v) { ', name, '=v; }', nl;
+
+  </javabean>: // finish a class:
+  println <result> '} // end of class ', clsName, '.';
+  }
+
+  result.close();
+}
+
+EndScript ==============================================
+<?xml version="1.0" encoding="UTF-8"?>
+<javabean name="TestView" comments="Test form showing all possible types.">
+  <package>com.judoscript.something.interesting.views</package>
+  <imports>
+    <import>com.judoscript.something.interesting.ActionView</import>
+  </imports>
+  <superclass name="Object"/>
+  <implements name="ActionView"/>
+  <properties>
+    <property name="stringValue" type="String" comments="a string value"/>
+    <property name="intValue" type="int" comments="an integer value"/>
+    <property name="booleanValue" type="boolean" comments="a boolean value"/>
+    <property name="collectionValue" type="java.util.Collection" comments="a collection"/>
+  </properties>
+</javabean>

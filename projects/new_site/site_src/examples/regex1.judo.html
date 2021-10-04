@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_regex/regex1.judo:</b></td></tr><tr><td><pre>
+input = 'aAabFOOAABFooABfOOb';
+println input.replaceAll(['a*b','i'], '-'); // result: -FOO-Foo-fOO-
+
+input = 'zzdogzzdigzz';
+println input.replaceFirst('d.g','cat');    // result: zzcatzzdigzz
+
+input = 'boo:and:foo';
+println input.split(':',2);  // result: [boo,and:foo]
+println input.split(':',5);  // result: [boo,and,foo]
+println input.split(':',-1); // result: [boo,and,foo]
+println input.split('o',5);  // result: [b,,:and:f,,]
+println input.split('o',-1); // result: [b,,:and:f,,]
+println input.split('o',0);  // result: [b,,:and:f]
+println input.split('o');    // result: [b,,:and:f]
+</pre></td></tr></table></body></html>

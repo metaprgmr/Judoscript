@@ -1,0 +1,3 @@
+exec <a> 'java test.Hello';
+
+println 'Return status code: ', a;

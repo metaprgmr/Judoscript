@@ -1,0 +1,1 @@
+db::connect to 'jdbc:oracle:thin:@localhost:1521:aura', 'judo', 'judo';

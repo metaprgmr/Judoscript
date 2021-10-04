@@ -1,0 +1,13 @@
+<synopsis>
+<p><jusp> stands for <u>Ju</u>do <u>S</u>erver <u>P</u>age; it is an easy and complete web application development technology dubbed as <i>The <jusp> Platform</i>, or simply <jusp>. A <jusp> web app comprises of only two components: a global script in <J> for system resources and configurations, and a set of <jusp> pages (along with other static content such as images, css files, etc.) The trio of <jusp>-<j>-Java is a very appropriate counterpart to ASP-VB-COM in the Java world.</p>
+<p>A <jusp> page supports these simple, familiar constructs: the <code>&lt;% %></code> scriptlet, the <code>&lt;%= %></code> embedded expression, the <code>&lt;%@page %></code> and <code>&lt;%@exception %></code> directive, the <code>&lt;%!include %></code>, <code>&lt;%!invoke %></code>, <code>&lt;%!forward %></code> and <code>&lt;%!redirect %></code> tags, the <code>&lt;%!validate %></code> validation tags and <code>&lt;%!<i>xyz</i> %></code> standard and custom tags, where the standard HTML tags handles value auto-population.</p>
+<p>Albeit simple, <jusp> gracefully addresses all the popular web app development use cases and design patterns such as MVC. For instance, you can architect a web app in such a way that a number of <jusp> pages serve as controllers while other <jusp> pages are purely as user interfaces. The benefit of the <jusp> Platform is, it is such a flat architecture, web app developers and system deployers need only worry about very few components and focus on the business issues and providing robust business solutions.</p>
+</synopsis>
+
+<!--===============================================================-->
+<section1 title="The JuSP Platform">
+
+<p>Currently the best source for <jusp> is this on-line <a href="http://www.judoscript.com/jusptut/index.jusp">JuSP Comprehensive Tutorial</a>. Check it out!</p>
+
+</section1><!--=====================================================-->
+

@@ -1,0 +1,7 @@
+REM remove == activate
+java weblogic.Deployer -adminurl http://localhost:7001 -username system -password weblogic -name timeoff -targets managed -source c:/studentWLSA11/labs/lab10/applications/timeoff.war -activate
+
+java weblogic.Deployer -adminurl http://localhost:7001 -username system -password weblogic -name timeoff -redeploy
+
+REM undeploy == remove
+java weblogic.Deployer -adminurl http://localhost:7001 -username system -password weblogic -name timeoff -remove

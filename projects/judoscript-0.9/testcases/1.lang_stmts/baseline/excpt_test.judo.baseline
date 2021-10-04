@@ -1,0 +1,6 @@
+[Line 2] INSIDE CATCH: <METHOD_NOT_FOUND> Function xxxxx() not found.
+INSIDE FINALLY.
+[Line 2] OUTSIDE CATCH: <METHOD_NOT_FOUND> Function xxxxx() not found.
+[Line 12] OUTSIDE CATCH: <USER_EXCEPTION> 
+[Line 13] OUTSIDE CATCH: <JAVA_EXCEPTION> This exception is pure Java.
+[Line 14] OUTSIDE CATCH: <USER_EXCEPTION> ABCDE

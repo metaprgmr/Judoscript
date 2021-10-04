@@ -1,0 +1,5 @@
+filename = '/usr/bin/judo';
+
+anttask::<basename property="base.name" file="${filename}"/>
+
+println 'Base name: ', ${base.name};

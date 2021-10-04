@@ -1,0 +1,11 @@
+setAssertion true; // by default it is off.
+
+a = 'abc';
+
+assert a == 'abc';
+assert a == 'abcd'; // use default message.
+assert a == 'abcd', 'a is not "abcd". Too bad.';
+
+catch:
+  println $_;
+  resume;

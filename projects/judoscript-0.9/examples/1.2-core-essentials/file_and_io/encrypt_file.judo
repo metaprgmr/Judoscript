@@ -1,0 +1,19 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-02-16';
+  lastMod = '2002-08-10';
+  desc    = 'Tests file encryption using JCE.';
+}
+
+infile   = #prog;
+tempfile = 'alfa.enc';
+outfile  = 'alfa.dec';
+
+encryptFile 'password', infile, tempfile;
+decryptFile 'password', tempfile, outfile;
+
+if infile.fileSize() == outfile.fileSize() {
+  println 'Encryptiong/decryption succeeded!';
+} else {
+  println 'Encryptiong/decryption failed!';
+}

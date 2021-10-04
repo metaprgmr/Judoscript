@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping SYSTEM
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+
+  <class name="Foo" table="`foos`" batch-size="4">
+
+    <id name="key" type="string" column="fooidcolumnname123">
+      <column name="`foo_id`" length="36"/>
+      <generator class="uuid.hex">
+        <param name="seperator">:</param>
+      </generator>
+    </id>
+
+    <property name="custom" type="DoubleStringType" access="field">
+      <column name="first_name" length="66"/>
+      <column name="surname" length="66"/>
+    </property>
+
+  </class>
+
+</hibernate-mapping>

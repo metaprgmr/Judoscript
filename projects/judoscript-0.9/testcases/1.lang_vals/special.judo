@@ -1,0 +1,127 @@
+function printDivider { println '-'{31}, '  ', '-'{31}, '  ', '-'{31}; }
+
+function evalExprs expr1, expr2, expr3 {
+  expr = [[* println '(* expr1 *)' :<19, '= ', ( (* expr1 *) ):<12 *]];
+  if expr2 != null { expr += [[* , '(* expr2 *)' :<19, '= ', ( (* expr2 *) ):<12 *]]; }
+  if expr3 != null { expr += [[* , '(* expr3 *)' :<19, '= ', ( (* expr3 *) ):<12 *]]; }
+  expr += ';';
+
+  eval expr;
+}
+
+function printDivider1 { println '-'{39}, '  ', '-'{39}; }
+
+function evalExpr1 expr1, expr2 {
+  expr = [[* println '(* expr1 *)' :<27, '= ', ( (* expr1 *) ):<12 *]];
+  if expr2 != null { expr += [[* , '(* expr2 *)' :<27, '= ', ( (* expr2 *) ):<12 *]]; }
+  expr += ';';
+
+  eval expr;
+}
+
+
+printDivider();
+evalExprs 'infinity',   '~infinity',      'infinity * 0';
+evalExprs '-infinity',  '~(-infinity)',   '-infinity * 0';
+evalExprs 'max_number', '~max_number',    'max_number * 0';
+evalExprs 'min_number', '~min_number',    'min_number * 0';
+evalExprs 'undefined',  '10 / undefined', '10 / 0';
+evalExprs 'null',       '10 / null',      '-10 / 0';
+
+printDivider();
+evalExprs '10 + infinity',   'infinity + 10',   '-10 + infinity';
+evalExprs '10 - infinity',   'infinity - 10',   '-10 - infinity';
+evalExprs '10 * infinity',   'infinity * 10',   '-10 * infinity';
+evalExprs '10 / infinity',   'infinity / 10',   '-10 / infinity';
+evalExprs '10 & infinity',   'infinity & 10',   '-10 & infinity';
+evalExprs '10 | infinity',   'infinity | 10',   '-10 | infinity';
+evalExprs '10 ^ infinity',   'infinity ^ 10',   '-10 ^ infinity';
+evalExprs '10 << infinity',  'infinity << 10',  '-10 << infinity';
+evalExprs '10 >> infinity',  'infinity >> 10',  '-10 >> infinity';
+evalExprs '10 >>> infinity', 'infinity >>> 10', '-10 >>> infinity';
+
+printDivider();
+evalExprs '10 + (-infinity)',   '(-infinity) + 10',   '-10 + (-infinity)';
+evalExprs '10 - (-infinity)',   '(-infinity) - 10',   '-10 - (-infinity)';
+evalExprs '10 * (-infinity)',   '(-infinity) * 10',   '-10 * (-infinity)';
+evalExprs '10 / (-infinity)',   '(-infinity) / 10',   '-10 / (-infinity)';
+evalExprs '10 & (-infinity)',   '(-infinity) & 10',   '-10 & (-infinity)';
+evalExprs '10 | (-infinity)',   '(-infinity) | 10',   '-10 | (-infinity)';
+evalExprs '10 ^ (-infinity)',   '(-infinity) ^ 10',   '-10 ^ (-infinity)';
+evalExprs '10 << (-infinity)',  '(-infinity) << 10',  '-10 << (-infinity)';
+evalExprs '10 >> (-infinity)',  '(-infinity) >> 10',  '-10 >> (-infinity)';
+evalExprs '10 >>> (-infinity)', '(-infinity) >>> 10', '-10 >>> (-infinity)';
+
+printDivider();
+evalExprs '10 + max_number',   'max_number + 10',   '-10 + max_number';
+evalExprs '10 - max_number',   'max_number - 10',   '-10 - max_number';
+evalExprs '10 * max_number',   'max_number * 10',   '-10 * max_number';
+evalExprs '10 / max_number',   'max_number / 10',   '-10 / max_number';
+evalExprs '10 & max_number',   'max_number & 10',   '-10 & max_number';
+evalExprs '10 | max_number',   'max_number | 10',   '-10 | max_number';
+evalExprs '10 ^ max_number',   'max_number ^ 10',   '-10 ^ max_number';
+evalExprs '10 << max_number',  'max_number << 10',  '-10 << max_number';
+evalExprs '10 >> max_number',  'max_number >> 10',  '-10 >> max_number';
+evalExprs '10 >>> max_number', 'max_number >>> 10', '-10 >>> max_number';
+
+printDivider();
+evalExprs '10 + min_number',   'min_number + 10',   '-10 + min_number';
+evalExprs '10 - min_number',   'min_number - 10',   '-10 - min_number';
+evalExprs '10 * min_number',   'min_number * 10',   '-10 * min_number';
+evalExprs '10 / min_number',   'min_number / 10',   '-10 / min_number';
+evalExprs '10 & min_number',   'min_number & 10',   '-10 & min_number';
+evalExprs '10 | min_number',   'min_number | 10',   '-10 | min_number';
+evalExprs '10 ^ min_number',   'min_number ^ 10',   '-10 ^ min_number';
+evalExprs '10 << min_number',  'min_number << 10',  '-10 << min_number';
+evalExprs '10 >> min_number',  'min_number >> 10',  '-10 >> min_number';
+evalExprs '10 >>> min_number', 'min_number >>> 10', '-10 >>> min_number';
+
+printDivider1();
+evalExpr1 'max_number + infinity',   'max_number + (-infinity)';
+evalExpr1 'max_number - infinity',   'max_number - (-infinity)';
+evalExpr1 'max_number * infinity',   'max_number * (-infinity)';
+evalExpr1 'max_number / infinity',   'max_number / (-infinity)';
+evalExpr1 'max_number & infinity',   'max_number & (-infinity)';
+evalExpr1 'max_number | infinity',   'max_number | (-infinity)';
+evalExpr1 'max_number ^ infinity',   'max_number ^ (-infinity)';
+evalExpr1 'max_number << infinity',  'max_number << (-infinity)';
+evalExpr1 'max_number >> infinity',  'max_number >> (-infinity)';
+evalExpr1 'max_number >>> infinity', 'max_number >>> (-infinity)';
+
+printDivider1();
+evalExpr1 'min_number + infinity',   'min_number + (-infinity)';
+evalExpr1 'min_number - infinity',   'min_number - (-infinity)';
+evalExpr1 'min_number * infinity',   'min_number * (-infinity)';
+evalExpr1 'min_number / infinity',   'min_number / (-infinity)';
+evalExpr1 'min_number & infinity',   'min_number & (-infinity)';
+evalExpr1 'min_number | infinity',   'min_number | (-infinity)';
+evalExpr1 'min_number ^ infinity',   'min_number ^ (-infinity)';
+evalExpr1 'min_number << infinity',  'min_number << (-infinity)';
+evalExpr1 'min_number >> infinity',  'min_number >> (-infinity)';
+evalExpr1 'min_number >>> infinity', 'min_number >>> (-infinity)';
+
+printDivider1();
+evalExpr1 'infinity + max_number',   '(-infinity) + max_number';
+evalExpr1 'infinity - max_number',   '(-infinity) - max_number';
+evalExpr1 'infinity * max_number',   '(-infinity) * max_number';
+evalExpr1 'infinity / max_number',   '(-infinity) / max_number';
+evalExpr1 'infinity & max_number',   '(-infinity) & max_number';
+evalExpr1 'infinity | max_number',   '(-infinity) | max_number';
+evalExpr1 'infinity ^ max_number',   '(-infinity) ^ max_number';
+evalExpr1 'infinity << max_number',  '(-infinity) << max_number';
+evalExpr1 'infinity >> max_number',  '(-infinity) >> max_number';
+evalExpr1 'infinity >>> max_number', '(-infinity) >>> max_number';
+
+printDivider1();
+evalExpr1 'infinity + min_number',   '(-infinity) + min_number';
+evalExpr1 'infinity - min_number',   '(-infinity) - min_number';
+evalExpr1 'infinity * min_number',   '(-infinity) * min_number';
+evalExpr1 'infinity / min_number',   '(-infinity) / min_number';
+evalExpr1 'infinity & min_number',   '(-infinity) & min_number';
+evalExpr1 'infinity | min_number',   '(-infinity) | min_number';
+evalExpr1 'infinity ^ min_number',   '(-infinity) ^ min_number';
+evalExpr1 'infinity << min_number',  '(-infinity) << min_number';
+evalExpr1 'infinity >> min_number',  '(-infinity) >> min_number';
+evalExpr1 'infinity >>> min_number', '(-infinity) >>> min_number';
+
+printDivider1();

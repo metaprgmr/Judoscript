@@ -1,0 +1,844 @@
+<synopsis>
+<J> is a top-of-the-line Java scripting language. You can script any Java publically accessible objects and arrays, that is, you can create Java objects and arrays, access their data members and invoke their methods. <J> also allows you to implement Java interfaces and extend Java classes with <J> code, and provide anonymous interface adapters similarly. There are preferential treatment for instances of <code>java.util.List</code>, <code>java.util.List</code>, <code>java.util.Iterator</code>, <code>java.util.Enumeration</code> and Java arrays, allowing them to use native <J> operators. Such potent Java scripting capability makes <J> a great tool to write J2EE client programs, such as clients for JMX, JMS, EJB, web services and other distributed services. Java scripting naturally opens the door to all the Java resources available; in fact, many <J> language featres are internally implemented via Java scripting. Java scripting, along with features like <ref id="jdbc:"/>, <ref id="xml:"/> and <ref id="ant:"/>, makes <J> a powerful tools' platform to automate most J2EE development, testing and deployment tasks.
+</synopsis>
+
+<!--===============================================================-->
+<section1 title="Introduction to Java and Object Scripting" id="intro" status="green">
+
+<p>What exactly is Java scripting? Java scripting means to use Java objects, arrays and classes from languages other than Java. Generally speaking, it is a special case of object scripting. There are many other cases of object scripting. In the latest web browsers, for instance, objects of various sizes and importance are "exposed" to embedded scripting language engines like JavaScript or VBScript; you can write JavaScript code in a HTML page to manipulate the page content through these objects, and can even handle events from various objects. On Windows platforms, the Component Object Model (COM) architecture exposes many Windows executable code in the form of readily-available objects that can be accessed by any capable scripting tools, such as Visual Basic, C#, <J> or C/C++.</p>
+
+<p><title3>Some Object-Orientation Terminologies</title3>A class represents one kind of objects. An object of that class is called an instance of the class, or simply, instance. Objects have <i>methods</i> and <i>properties</i>, collectively called <i>members</i>. Any software using an object is a client; they can be called the objects methods and access its properties. In Java classes, there are <i>methods</i> and <i>fields</i>; fields are naturally properties. A Java class may follow a design pattern and support a property by providing a getter and a setter method. For instance, the following class implements a property called "name":</p>
+
+<asis type="java">public class Person {
+  private String _name;
+
+  public String getName() { return _name; }
+  public void setName(String name) { _name = name; }
+}
+</asis>
+
+<p>When scripting object, how does one know about the objects and their members? You need to find the objects' documentation. For Java, as Java developers well know, classes are documented via the <i>javadoc</i> mechanism, which are HTML pages generated out of special comments within the source code (put in by the class designer.) For objects on other platforms such as Windows ActiveX controls, you need to locate their documentation somehow. They may be under different names. For example, the Microsoft Word ActiveX control is documented by the Word Object Model, and is available in books describing Microsoft Word macros and VBA.</p>
+
+<p><title3>Java and object scripting</title3>Java is a dynamic platform perfect for object scripting. Objects on other platforms, say, Windows COM, need to expose their interfaces through a specification, that is, a contract between objects and users; this can be commonly defined in some kind of interface definition languages (IDLs). For Java, the IDL is Java itself, as Java virtual machine (JVM) objects are indeed Java objects; they are complete with RTTI (Run-Time Type Information), so a scripting agent can correctly direct users' requests, as long as appropriate information is present. One important aspect of object-orientation is inheritance. JVMs allow dynamically construct classes and objects at runtime; this opens doors to capable Java scripting languages to dynamically extend Java classes. But JVMs are not without limitations for scripting agents. For security reasons, Java has <i>public</i>, <i>protected</i>, <i>private</i> and <i>default</i> access control. Generally only <i>public</i> classes and members can be accessed by an agent. Thanks to the possibility of dynamic inheritance, some of the limitations are alleviated.<p>
+
+<p><title3>What can potent Java scripting languages do</title3>Different Java scripting languages may choose to support different levels of sophistication for Java scripting. At a minimum, Java scripting languages should be able to <i>a)</i> create Java objects, <i>b)</i> use the public members of Java objects, <i>c)</i> create Java arrays, <i>d)</i> use Java arrays, and <i>e)</i> use public classes' public static members. More sophisticated Java scripting languages would be able to extend Java classes and implement Java interfaces, and even create new Java classes (written in the scripting language.</p>
+
+<p><title3><J> is a fully capable Java scripting language</title3><J> supports all the above. Java scripting is an integral part of the <J> language. All Java-related activities are in a special namespace called "java"; otherwise they are very close to native <J> operations. <J> natively treats Java arrays and <code>java.util</code> classes. Java's getter/setter methods can be treated as properties in <J>. Java class names are resolved much the same way in Java with the <code>import</code> directive. <J>'s built-in data structures are, in theory, totally separated from any Java classes; when calling Java methods, they may need be converted to Java arrays or objects. These <J> data structures have built-in methods for this purpose. This chapter covers all the details, and has a few case studies in the end.</p>
+
+<p>This chapter assumes you are experienced with Java and Java programming.</p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Use Java Objects and Classes" id="jobjcls" status="green">
+
+<!------------------------------------->
+<section2 title="Create and Use Java Objects" id="jobj">
+
+<p>Java objects are created the same way as objects in <J>, from a special namspace called "java".</p>
+
+<codelist name="hashtable.judo" id="hashtable.judo">
+a = new java::java.util.Hashtable;
+a.put('date',      Date(2001,1,1));
+a.put('integer',   1);
+a.put('double',    10.01);
+a.put('string',    'Hello, World!');
+a.put('Dimension', new java::java.awt.Dimension(10,20));
+
+for k in a.keys() { // for-in statement handles Enumeration/Iterator
+  println k:>10, ' = ', a.get(k);
+}
+</codelist>
+
+<p>When calling Java methods and constructors, generally just pass <J> variables as parameters, <J> tries to pick the right method. This should work most of the time, but is not always possible when there are overloaded methods with different numbers of parameters. (Overloaded methods are those in a same class with the same name but different parameters.)</p>
+
+<p><title3>Casting values and instanceof test</title3>Let's see two Java classes, <code>Foo</code> and <code>Foo1</code>; both have methods with the same name, <code>bar()</code>, and one parameter of various types.</p>
+
+<codelist name="Foo.java" id="Foo.java">
+public class Foo
+{
+  public String bar(byte x)           { return "byte"; }
+  public String bar(char x)           { return "char"; }
+  public String bar(Integer x)        { return "Integer"; }
+  public String bar(java.util.Date x) { return "Date"; }
+}
+</codelist>
+
+<codelist name="Foo1.java" id="Foo1.java">
+public class Foo1 extends Foo
+{
+  public String bar(int x)            { return "int";  }
+  public String bar(long x)           { return "long";  }
+  public String bar(double x)         { return "double";  }
+  public String bar(String x)         { return "String"; }
+  public String bar(java.sql.Date x)  { return "SQLDate"; }
+}
+</codelist>
+
+<p>The following <J> program conducts three sets of tests: calling <code>Foo</code>, calling <code>Foo1</code> and calling <code>Foo1</code> with precise Java types.</p>
+
+<codelist name="casting.judo" id="casting.judo">
+foo = new java::Foo;
+foo1 = new java::Foo1;
+
+sqldate  = new java::java.sql.Date(1000);
+sqldate_ = sqld.cast(java::java.util.Date);
+
+println foo.bar('a')       ; // char
+println foo.bar('abc')     ; // char
+println foo.bar(1)         ; // Integer
+println foo.bar(1.01)      ; // Integer
+println foo.bar(Date())    ; // Date
+println foo.bar(sqldate)   ; // Date
+
+println foo1.bar('a')      ; // String
+println foo1.bar('abc')    ; // String
+println foo1.bar(1)        ; // long
+println foo1.bar(1.01)     ; // double
+println foo1.bar(Date())   ; // Date
+println foo1.bar(sqldate)  ; // SQLDate
+println foo1.bar(sqldate_) ; // Date
+
+println foo1.bar(char('1')); // char
+println foo1.bar(byte(1))  ; // byte
+println foo1.bar(char(1))  ; // char
+println foo1.bar(short(1)) ; // int
+println foo1.bar(int(1))   ; // int
+println foo1.bar(long(1))  ; // long
+println foo1.bar(float(1)) ; // double
+println foo1.bar(double(1)); // double
+</codelist>
+
+<p>Look closely at the output of all test cases and refer to each Java method invoked. As you see, <J> guesses reasonably well even in confusing situations. By casting <J> primitive values to specific Java types, you can invoke a particular method. The casting operators for Java primitive types look like functions, such as <code>char(1)</code>; this syntax is consistent with JavaScript's. Java objects are cast with the <code>cast()</code> method.</p>
+
+<p>All Java objects in <J> have two built-in methods: <code>cast()</code> and <code>instanceof()</code>; this usage is different from Java but serves the same purposes. Generally object casting is not needed in method calls, since the object type is precise and there is no ambiguity. Java object casting is needed to use public members of an instance of a non-public class that implements public interfaces or extends other classes with public methods. To access the publicly accessible methods and fields, you would have to cast that object to the Java interface or parent class which are public. You will see this in examples of EJBs (Enterprise Java Beans).</p>
+
+<p>The <code>instanceof()</code> is used to check the class of an Java object. It can take a string representing the fully qualified Java class name or a Java class object, which is discussed later.</p>
+
+<codelist name="instof.judo" id="instof.judo">
+date1 = new java::java.sql.Date(1000);
+if date1.instanceof('java.util.Date') {
+  println 'Yes, this is a java.util.Date.';
+} else {
+  println 'No, this is NOT a java.util.Date.';
+}
+if date1.instanceof(java::java.sql.Date) {
+  println 'Yes, this is a java.sql.Date.';
+} else {
+  println 'No, this is NOT a java.sql.Date.';
+}
+</codelist>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Resolving Java Class Names" id="clsnames">
+
+<p>Fully qualified Java class names include a number of package names and the class name itself, separated by dots; they are usually quite long. <J> uses the same Java <code>import</code> directive to allow programs use class names without package prefixes. In Java, the <code>import</code> directives must appear at the beginning in the source code; in <J>, however, <code>import</code> directives can appear anywhere a statement is allowed, and they only affect Java class resolutions thereafter.</p>
+
+<p><title3>Pre-imported standard Java packages</title3>Following explicit import directives, these three Java packages are pre-imported: <code>java.lang.*</code>, <code>java.io.*</code> and <code>java.util.*</code>. Thus, you can directly use classes like <code>System</code>, <code>HashMap</code>, <code>InputStream</code>, etc.</p>
+
+<codelist name="import.judo" id="import.judo">
+x = new java::Date;
+println x.getClass().getName(); // java.util.Date
+
+import java.awt.*;
+import java.sql.Date;
+
+x = new java::Dimension(100,200);
+println x.getClass().getName(); // java.awt.Dimension
+
+x = new java::Date(10000);
+println x.getClass().getName(); // java.sql.Date
+</codelist>
+
+<p>In the above example, the first <code>x</code> is <code>java.util.Date</code> because of the rule of pre-imported <code>java.util.*</code> package. The second <code>x</code> is resolved by matching a class in the imported <code>java.awt.*</code> package, and the latest <code>x</code> is an exact match for the imported <code>java.sql.Date</code> class, not <code>java.util.Date</code>.
+
+<p><title3>Inner class names</title3>Java classes can contain other class definitions; the contained classes are called <i>inner classes</i>. The inner class name is separated from its containing class with a dollar sign ($).</p>
+
+<codelist name="Foo2.java" id="Foo2.java">
+public class Foo2
+{
+  public static class Bar
+  {
+  }
+}
+</codelist>
+
+<codelist name="innercls.judo" id="innercls.judo">
+x = new java::Foo2$Bar;
+
+println x.getClass().getName(); // prints: Foo2$Bar
+</codelist>
+
+<p>In Java, using inner classes is more of a style than necessity. Only <code>public static</code> inner classes can be created in <J>; the name of the enclosing class serves the role of a namespace in this case. This topic of inner class itself is beyond the scope of <J>.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Pass Judo Values To Java Methods" id="jcallvals">
+
+<p><J> primitive values can be passed directly into Java methods like we have seen earlier. This includes integers, floats, strings and <code>Date</code>s. Other native <J> data structures including arrays generally can not be passed into Java methods. <J> array objects have a number of built-in methods that return various Java arrays for the values in the array.</p>
+
+<asis>
+Array.toBooleanArray()       // boolean[]
+Array.toBooleanObjectArray() // Boolean[]
+Array.toByteArray()          // byte[]
+Array.toByteObjectArray()    // Byte[]
+Array.toCharArray()          // char[]
+Array.toCharObjectArray()    // Character[]
+Array.toShortArray()         // short[]
+Array.toShortObjectArray()   // Short[]
+Array.toIntArray()           // int[]
+Array.toIntObjectArray()     // Integer[]
+Array.toLongArray()          // long[]
+Array.toLongObjectArray()    // Long[]
+Array.toFloatArray()         // float[]
+Array.toFloatObjectArray()   // Float[]
+Array.toDoubleArray()        // double[]
+Array.toDoubleObjectArray()  // Double[]
+Array.toObjectArray()        // Object[]
+Array.toStringArray()        // String[]
+</asis>
+
+<p>Otherwise, you need to explicitly convert the <J> data structure into a particular Java class instance.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Use Java Classes and Class Static Members" id="jcls">
+
+<p>Java classes are special objects within JVMs. In <J>, the <code>java::</code> operator returns Java class objects. They can be stored in variables or assigned to constants, and the variables and constants can be used to instantiate classes or arrays.</p>
+
+<codelist name="javacls.judo" id="javacls.judo">
+const #Dimension = java::java.awt.Dimension;
+CDim = java::java.awt.Dimension;
+
+println new #Dimension(100,200);
+println new :CDim(100,200);
+</codelist>
+
+<p>Once the class object is in a constant or variable, you can use the <code>new</code> without "java" namespace prefix, because the information about the class object is already there. In the <code>new</code> operator, the variable name must be prefixed with <code>:</code>; otherwise, <J> would take the variable name as a (native) class name and try to instantiate an object of that name.</p>
+
+<p>One of the main reasons to use Java class objects is to use Java class static members. Java classes' static methods and fields are class-wide members and can be accessed without creating individual instances. In <J>, you need to use the Java class objects to use their static members:</p>
+
+<asis>
+println (java::System).currentTimeMillis();
+</asis>
+
+<p>This works, but the syntax is a little cumbersome. In fact, <J> treats Java class names as namespaces, so that Java class static members can be accessed directly like this:
+
+<asis>
+println System::currentTimeMillis();
+
+System::out.println('abc');
+
+mode = java.awt.Frame::MAXIMIZED_BOTH;
+</asis>
+
+<p>The following example prints out the values of <code>java.sql.Types</code>'s static fields.</p>
+
+<codelist name="sqltypes.judo" id="sqltypes.judo">
+const #Types = java::java.sql.Types;
+fields = [ 'BIT', 'TINYINT', 'SMALLINT', 'INTEGER', 'BIGINT',
+  'FLOAT', 'REAL', 'DOUBLE', 'NUMERIC', 'DECIMAL', 'CHAR',
+  'VARCHAR', 'LONGVARCHAR', 'DATE', 'TIME', 'TIMESTAMP',
+  'BINARY', 'VARBINARY', 'LONGVARBINARY', 'NULL', 'OTHER',
+  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'BLOB', 'CLOB',
+  'REF'
+];
+
+println 'JDBC types in Java ', sysProperty('java.version'), ':';
+for fld in fields {
+  println fld:<13, ': ', #Types.(fld);
+}
+</codelist>
+
+<p>In the loop, we used the <code>.()</code> to access the static fields. The result is:</code>
+
+<asis>
+JDBC types in Java 1.4.1_01:
+BIT          : -7
+TINYINT      : -6
+SMALLINT     : 5
+INTEGER      : 4
+BIGINT       : -5
+FLOAT        : 6
+REAL         : 7
+DOUBLE       : 8
+NUMERIC      : 2
+DECIMAL      : 3
+CHAR         : 1
+VARCHAR      : 12
+LONGVARCHAR  : -1
+DATE         : 91
+TIME         : 92
+TIMESTAMP    : 93
+BINARY       : -2
+VARBINARY    : -3
+LONGVARBINARY: -4
+NULL         : 0
+OTHER        : 1111
+JAVA_OBJECT  : 2000
+DISTINCT     : 2001
+STRUCT       : 2002
+ARRAY        : 2003
+BLOB         : 2004
+CLOB         : 2005
+REF          : 2006
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Alias Java Static Methods as Functions" id="alias">
+
+<p>You can create function aliases for static Java methods; these function aliases behave like regular <J> functions. This is a great way to build <J>/Java libraries: you can choose to implement a function as a Java static method and alias it. In fact, many of <J>'s own system functions are implemented this way. The syntax is:</p>
+
+<grammar id="FunctionAlias">
+<nt>FunctionAlias</nt> ::= <kw>function</kw> <nt>IDENTIFIER</nt> <kw>for</kw> <kw>java::</kw><nt>JavaClassName</nt> [ <kw>(</kw><kw>)</kw> ] <kw>;</kw>
+</grammar>
+
+<codelist name="func_alias.judo" id="func_alias.judo">
+function prop for java::System.getProperty();
+function now  for java::System.currentTimeMillis();
+function rt   for java::Runtime.getRuntime();
+
+println now(), nl;
+println prop('java.class.path'), nl;
+rt().gc();
+</codelist>
+
+<p>Note that function aliases don't care about the parameters of the Java static method. If a function alias is to take variable number of parameters, the Java class must have the name-sake static methods with parameters of all permutations. For instance, the <J> system function <code>initialContext()</code> is an alias to get the initial JNDI context:</p>
+
+<asis>
+function initialContext for java::com.judoscript.bio.SysFunLib.initCtxt;
+</asis>
+
+<p>That function may take no parameters, or a factory name and optionally <i>url</i>, <i>user</i>, <i>password</i> and <i>auth</i> as parameters. Hence, the class <code>com.judoscript.bio.SysFunLib</code> has these methods for that function alias:</p>
+
+<asis>
+public class SysFunLib
+{
+  static InitialContext initCtxt();
+  static InitialContext initCtxt(String factory);
+  static InitialContext initCtxt(String factory, String url);
+  static InitialContext initCtxt(String factory, String url, String user);
+  static InitialContext initCtxt(String factory, String url, String user, String pwd);
+  static InitialContext initCtxt(String factory, String url, String user, String pwd, String auth);
+}
+</asis>
+
+<p>Another system function, <code>startServer()</code>, is also an alias. Among methods of various parameter combinations, two of them take two parameters but of different types. That equates to two static methods as well.</code>
+
+<asis>
+public class SysFunLib
+{
+  public static ServerSocket startServer(int port, String addr) throws IOException { ... }
+  public static ServerSocket startServer(int port, InetAddress addr) throws IOException { ... }
+}
+</asis>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Create and Use Java Arrays" id="jarr" status="green">
+
+<p>Like in Java, in <J> you can create Java arrays of primitive types and objects, either by size or by initialization:</p>
+
+<asis>
+// Create array by size
+a = new java::int[3];
+a[0] = 1;
+a[1] = 2;
+a[2] = 4;
+for x in a { println x; }
+
+// Create array by initialization
+a = new java::String[] { 'abcd', 'efg', 8, 9 };
+for x in a { println x; }
+</asis>
+
+<p>The <code>for in</code> statement is useful for iterating through Java and <J> arrays. Java arrays can be passed to Java methods:</p>
+
+<asis>
+a = new java::String[] { 'abcd', 'efg', 8, "ab" };
+Arrays::sort(a);
+for x in a { println x; }
+</asis>
+
+<p>Multi-dimensional arrays are created and used similarly:</p>
+
+<codelist name="java_array.judo" id="java_array.judo">
+ia = new java::int[][][] {
+       { { 1, 2, 3 }, {  4, 5, 6 } },
+       { { 7, 8, 9 }, { 10 } }
+     };
+Fa = new java::Float[][][] {
+       { { 1.5, 2.5, 3.5 }, {  4.5, 5.5, 6.5 } },
+       { { 7.5, 8.5, 9.5 }, { 10.5 } }
+     };
+ba = new java::boolean[][][] {
+       { { true, false, true }, { false, true, true } },
+       { { true, true,  true }, { true, true } }
+     };
+Ba = new java::Boolean[][][] {
+       { { true, false, true }, { false, true, true } },
+       { { true, true,  true }, { true, true } }
+     };
+ca = new java::char[][][] {
+       { { 'A', 'B', 'C' }, { 'D', 'E', 'F' } },
+       { { 'G', 'H', 'I' }, { 'J', 'K' } }
+     };
+Oa = new java::Object[][][] {
+       { { 'a', 'b', 'c' }, { 'd', 'e', 'f' } },
+       { { 'g', 'h', 'i' }, { 'j', 'k' } }
+     };
+
+print3d ia;
+print3d Fa;
+print3d ba;
+print3d Ba;
+print3d ca;
+print3d Oa;
+
+function print3d a {
+  println '----- print 3D: ', a;
+  for i from 0 to a.length-1 {
+    for j from 0 to a[i].length-1 {
+      for k from 0 to a[i][j].length-1 {
+        println i, ' ', j, ' ', k, ' => ', a[i][j][k];
+      }
+    }
+  }
+}
+</codelist>
+
+<p>When a value is assigned to an array element, <J> tries to convert it to the array element type.</p>
+
+<p><J> has special treatment of common Java data structures including arrays, some of which we have already seen. This is the topic of the next section.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Native Judo Operations for Java Data Structures" id="jds" status="green">
+
+<p>Java data structures are treated almost identical to their <J> counterparts.</p>
+
+<!------------------------------------->
+<section2 title="Initialize and Access java.util.Map Values" id="map">
+
+<p>The <code>java.util.Map</code> interface is treated almost the same as <J>'s own <code>Object</code>. That is, <code>java.util.Map</code> instance can be initialized with name-value pairs, and the member-access operator, <code>.()</code> can be used to get and set values instead of <code>Map</code>'s <code>get()</code> and <code>put()</code> methods. In addition, if the key value is a string, you can access its value by directly using that string as an "attribute" name, seen in the following example.</p>
+
+<asis>
+ht = new java::Hashtable; // is a Map.
+ht.Hello       = 'Hello, World!';
+ht.'Hi, World' = 'Hello, World!';
+
+println ht.Hello;       // prints: Hello, World!
+println ht.'Hi, World'; // prints: Hello, World!
+println ht.DontExist;   // prints nothing.
+</asis>
+
+<p>The most commonly used classes that implement the <code>Map</code> interfaces are <code>HashMap</code>, <code>Hashtable</code> and <code>Properties</code>. The following example creates a <code>Properties</code> instance with initial values:</p>
+
+<codelist name="props.judo" id="props.judo">
+props = new java::Properties(
+          a.b.c.d.e.f.g = 'a thru g',
+          h.i.j.k.l.m.n = 'h thru n'
+        );
+
+println props;
+</codelist>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Iterate Java Data Structures and Objects" id="iter">
+
+<p>Earlier, we have seen that the <code>for in</code> statement can be used to iterate through Java arrays. In fact, <code>for in</code> can be used to iterate these Java data structures:</p>
+
+<ol>
+<li>Java arrays</li>
+<li><code>java.util.Iterator</code> instances</li>
+<li><code>java.util.Enumeration</code> instances</li>
+<li><code>java.util.List</code> instances</li>
+<li><code>java.util.Collection</code> instances</li>
+<li><code>java.util.Map</code> instances (through their keys)</li>
+<li>Any Java objects that have an <code>iterator()</code> method that returns a <code>java.util.Iterator</code></li>
+<li>Any Java objects that have only one method that takes no parameters and returns a <code>java.util.Iterator</code> or <code>java.util.Enumeration</code></li>
+</ol>
+
+<p>The rules should be obvious, except perhaps the last two. The following Java source file contains three classes; they are all ordinary classes but have those "signature" methods.</p>
+
+<codelist name="IterationDemo.java" id="IterationDemo.java">
+import java.util.*;
+
+// A class with one iterator() method
+public class IterationDemo
+{
+  int i = 0;
+  public Iterator iterator() {
+    i = 0;
+    return new Iterator() {
+      public boolean hasNext() { return i++<3; }
+      public Object next() { return "iterator()-" + i; }
+      public void remove() {}
+    };
+  }
+
+  // A class with one method that returns
+  // an Iterator and takes no parameters
+  public static class WithOneIterator {
+    int i = 0;
+    public Iterator foo() {
+      i = 0;
+      return new Iterator() {
+        public boolean hasNext() { return i++<3; }
+        public Object next() { return "foo()-" + i; }
+        public void remove() {}
+      };
+    }
+  }
+
+  // A class with one method that returns
+  // an Enumeration and takes no parameters
+  public static class WithOneEnumeration {
+    int i = 0;
+    public Enumeration bar() {
+      i = 0;
+      return new Enumeration() {
+        public boolean hasMoreElements() { return i++<3; }
+        public Object nextElement() { return "bar()-" + i; }
+      };
+    }
+  }
+}
+</codelist>
+
+<p>The following <J> program uses the <code>for in</code> statement to iterate through each of them.</p>
+
+<codelist name="for_in_iter.judo" id="for_in_iter.judo">
+o = new java::IterationDemo;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneIterator;
+for x in o { println x; }
+println;
+
+o = new java::IterationDemo$WithOneEnumeration;
+for x in o { println x; }
+</codelist>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Access elements in java.util.List" id="jlist">
+
+<p>Objects of <code>java.util.List</code> are treated very much like <J> arrays. For instance, they can be iterated forward and backward, and elements can be accessed via the array element access operator <code>[]</code>, as shown the following example.</p>
+
+<codelist name="javalists.judo" id="javalists.judo">
+testList new java::java.util.Vector();
+testList new java::java.util.ArrayList();
+testList new java::java.util.LinkedList();
+
+function testList lst {
+  println nl, '=== ', lst.getClass().getName(), ' ===';
+  lst.add( Date(2001,1,1) );
+  lst.add( 1 );
+  lst.add( 10.01 );
+  lst.add( 'Hello, World!' );
+
+  println 'lst[0] = ', lst[0];
+  println 'lst[1] = ', lst[1];
+  println 'lst[2] = ', lst[2];
+  println 'lst[3] = ', lst[3];
+  println 'lst[4] = ', lst[4];
+
+  lst[9] = 'XYZ';
+  println 'lst[9] = ', lst[9];
+}
+</codelist>
+
+<p>For the first <code>testList()</code> call, for instance, the output is:</code>
+
+<asis>
+=== java.util.Vector ===
+--- size: 4 ---
+lst[0] = 1/1/01 12:00 AM
+lst[1] = 1
+lst[2] = 10.01
+lst[3] = Hello, World!
+lst[4] =
+lst[9] = XYZ
+</asis>
+
+<p>So far we have covered all the basic Java scripting topics in <J>. Other than the special "java" namespace prefix, the operations are natural to both <J> and Java. Next, we are going to look at extending Java classes, including implementing Java interfaces.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Extend Java Classes and Implement Java Interfaces" id="xjava" status="green">
+
+<p>The capability for a Java scripting language to extend Java classes and implement Java interfaces is important, because sometimes Java methods expect parameters of interfaces and require the client program to provide implementation classes. A classical use case is event handling. For instance, in a GUI program, you construct the GUI by assembling various components; based on user interaction, GUI components fire events by calling the controller object. This requires that the controller class implement certain interfaces, so the components "know" how to communicate with it. Such a call-back mechanism is not unique to GUI programs. A Java scripting language incapable of extending Java classes and implementing interfaces has serious limitations in terms of full-scale Java scripting.</p>
+
+<p><J> itself is an object-oriented language, and can extend/implement Java classes and interfaces; such classes are called <i>Java extension classes</i> in <J>. They are defined with the presence of the <code>extends java::</code> clause. These are the rules governing Java extension classes:</p>
+
+<ol>
+<li> A Java extension class is defined as a <J> class that <code>extends</code> zero or one Java classes and zero or more interfaces, separated by comma. The resultant class is a Java class with that class name without any package names. This user-defined class are created like a normal <J> class via the <code>new</code> operator without "java" namespace prefix.
+<li> Methods are declared with Java return type and Java-typed parameters just like Java methods; fields are declared with Java types like Java. No access control can be specified as they are always public; they can never be static. Methods are never declared with exceptions.
+<li> <i>Method bodies are implemented in <J> code.</i> The parent class's methods, public or protected, can be invoked by the <code>super</code> decorator. You can also invoke own methods, and access this and parent's data fields, public or protected.
+<li> When abstract methods from the parent class/interfaces are not explicitly implemented, they are given empty bodies, so the resultant Java class can be instantiated.
+<li> Data fields can be initialized only in the constructor.
+<li> There can be up to one constructor in a Java extension class. This constructor may take untyped <J> parameters. Within the constructor, there must be one and only one invocation of <code>super()</code>, which is one of the parent class's constructors. This call must precede data member initializations and invocations of any other methods.
+</ol>
+
+<p>The most important things to remember are, the class itself is defined very much like a Java class, except the method bodies are written in <J>; everything is public; and constructor is a special issue. Let's look at examples now.</p>
+
+<codelist name="extend_class.judo" id="extend_class.judo">
+class MyHashtable extends java::Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in this { arr.add(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    for x in values() { arr.add(x); }
+    return arr.toObjectArray();
+  }
+}
+
+mht = new MyHashtable;
+mht.put('adate', Date(2004, 6, 6));
+mht.put('anumber', 2);
+mht.put('astring', 'string');
+
+println '    keys: ', mht.getKeys();
+println '  values: ', mht.getValues();
+println 'hashCode: ', mht.hashCode();
+</codelist>
+
+<p>The <code>hashCode()</code> method overrides the existing method in the parent class, and it invokes the parent's name-sake method. The two new methods, <code>getKeys()</code> and <code>getValues()</code>, use <J> arrays to collect keys and values, and eventually return them as <code>Object[]</code>'s.</p>
+
+<p>Java interfaces can be extended (implemented) exactly the same way. The following example defines a Java extension class that implements <code>java.util.Iterator</code> without implementing any of the methods, because any unimplemented abstract methods in a Java extension class are given empty bodies, so the new class we define is still a concrete (Java) class.</p>
+ 
+<codelist name="extend_itf.judo" id="extend_itf.judo">
+class MyIterator extends java::Iterator
+{
+}
+
+println o = new MyIterator;
+for x in o { println x; }
+</codelist>
+
+<p>The following program extends a Java class and a Java interface. You can implement any number of Java interfaces, separated by comma(s); but you can extend no more than one Java class as you would expect.</p>
+
+<codelist name="extend_class_itf.judo" id="extend_class_itf.judo">
+class MySetIterator extends java::HashSet, Iterator
+{
+  Iterator iter;
+
+  constructor a, b, c {
+    super();
+    iter = null;
+    if c != null { add(c); }
+    if b != null { add(b); }
+    if a != null { add(a); }
+  }
+
+  // Iterator methods
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+  Object next() {
+    return (iter==null) ? null : iter.next();
+  }
+}
+
+o = new MySetIterator('Hi!', 9);
+o.add('abc');
+o.add(Date(2003,7,4));
+
+for x in o { println x; }
+</codelist>
+
+<p>All these examples are to demonstrate <J>'s Java extension classes; they may not make much practical sense. This time, we declared a data member, <code>iter</code>. They can <i>only</i> be initialized in the constructor. The constructor takes <i>up to</i> three parameters; in the testing, we passed two parameters. The program's output is:</p>
+
+<asis>
+Hi!
+9
+abc
+7/4/03 12:00 AM
+</asis>
+
+<p>So, we have covered all the topics of Java scripting in <J>, from the very basics to advanced topics and everything in between. Java scripting is used extensively in building Java GUIs of AWT or Swing, as you will find out a lot in chapter <ref id="gui:"/>. Next, we present some practical J2EE topics as further examples of Java scripting applications.
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Java Interface Adapters" id="adapter" status="green">
+
+<p><i>Java interface adapters</i> are nothing but anonymous Java objects that implement some Java interfaces. Java interface adapters happen most frequently in event handling, notably in Java GUI programs:</p>
+
+<asis type="java">
+import java.awt.Frame;
+import java.awt.event.*;
+
+Frame f = new Frame();
+f.addWindowListener(
+  new WindowListener() {
+    public void windowClosing(WindowEvent e) { System.exit(0); }
+    public void windowClosed(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {}
+  }
+);
+f.setVisible(true);
+</asis>
+
+<p>In <J>, this is done via the Java extension class mechanism like this:</p>
+
+<codelist name="adapter.judo" id="adapter.judo">
+import java.awt.Frame;
+import java.awt.event.*;
+
+f = new java::Frame;
+f.addWindowListener(
+  new java::WindowListener {
+    void windowClosing(WindowEvent e) { exit 0; }
+  }
+);
+f.setVisible(true);
+</codelist>
+
+<p>As discussed earlier, the unimplemented methods in the interface are given default (empty) implementations.</p>
+
+<p>In Java, an interface adapter can implement just one interface; in <J>, you can implement as many interfaces as you want. In fact, you can even extend a class that has a default constructor. The following example demonstrates:</p>
+
+<codelist name="fromPaMa.judo" id="fromPaMa.judo">
+a = new java::Papa, Mama, Foo {
+  void playBall() {
+    println 'Make a few dents!';
+  }
+  void singSong() {
+    println 'Utter some sound.';
+  }
+};
+
+a.playBall();
+a.singSong();
+
+println "Height: " + a.height();
+</codelist>
+
+<p>In this example, <code>Papa</code> and <code>Mama</code> are two interfaces, and <code>Foo</code> is a class with a default constructor:</p>
+
+<asis type="java">
+public interface Papa
+{
+  void playBall();
+  int height();
+}
+
+public interface Mama
+{
+  void singSong();
+  int height();
+}
+
+public class Foo
+{
+}
+</asis>
+
+<p>Both <code>Papa</code> and <code>Mama</code> have a <code>height()</code> method. What if they have same parameter types but different return types? The result may be unpredictable; it's the user's responsibility to prevent this from happening. The output of the example is:</p>
+
+<asis>
+Make a few dents!
+Utter some sound.
+Height: 0
+</asis>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Making Clients for JNDI, RMI and EJB" id="rmiejb" status="red">
+
+<!------------------------------------->
+<section2 title="Obtain JNDI Initial Context" id="jndi" status="red">
+
+<p>Creating EJB clients in <J> is natural. It is easier to write than in Java because the ubiquitous casting is not needed at all. Coupled with <J>'s JDBC capabilities, this constitutes a perfect testing platform for EJBs. With the built-in scheduling support, practical uses of EJBs are just as easy.</p>
+
+<codelist name="ejb_client" id="ejb_client.judo">
+1: //ctx = getInitialContext('weblogic.jndi.WLInitialContextFactory', 't3://server');
+2: ctx   = getWeblogicContext('t3://server'); // shortcut for Weblogic.
+3: home  = ctx.lookup(OrderHome);
+4: key   = new java::OrderPK('00234');
+5: order = home.findByPrimaryKey(key);
+6: // do something with order.
+</codelist>
+
+<p>This is a hypothetical case where an order entity bean is retrieved from the server for some operations. Line 1, which is commented out, is the system function <code>getInitialContext()</code>. <J> has a number of convenience functions to get initial contexts for popular J2EE application servers, including WebLogic, WebSphere, JBoss, Oracle 9iAS and IONA; see line 2. On line 3, OrderHome holds the unique registered home interface name, which is typically the same as its class name. The rest is just using Java classes.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="RMI" id="rmi" status="red">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Java Software Testing and JUnit" id="testing" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Java Software Prototyping" id="prototyping" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Thread and Other Considerations" id="threads" status="red">
+
+<p><J> internal classes, i.e., classes in packages <code>com.judoscript.*</code>, etc., are prohibited from being used. Classes in <code>com.judoscript.util.*</code>, however, are allowed, because these classes have nothing to do with the <J> language engine.</p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Summary" id="summary" status="red">
+
+<!--
+<p>Java objects and arrays can be create by the <code>javanew</code> operator. Arrays can be assigned dimensions or initialized. Arrays can be of primitive or object types. Operator <code>java::</code> declares Java class objects, which can be used to create new classes and access and invoke its static members. Java static methods can be aliased to look and be used like regular <J> functions. Java class constructors and method calls are passed <J> values as parameters. Casting may be necessary for overloaded methods. Atomic values can be cast to Java primitive types the same way as in Java; for Java objects, use the built-in method <code>cast()</code> to do the casting. Java objects also have <code>instanceof()</code>.</p>
+
+<p><J> engine may throw runtime exceptions, so do Java objects. Exceptions can be caught in <J>; the exception is stored in variable <code>$_</code>, which has <code>$_.message</code>, <code>$_.type</code> and <code>$_.name</code> members. For Java exceptions, the <code>$_.name</code> is the class name. In handling the exception, <code>resume</code> statements resumes the current execution, and <code>throw</code> statements re-throws the exception.</p>
+
+<p><J>'s seamless Java support opens the door to scripting anything in Java, including EJB, RMI, GUI, and a lot more.</p>
+-->
+
+</section1><!--=====================================================-->

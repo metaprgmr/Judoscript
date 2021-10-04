@@ -1,0 +1,33 @@
+<%
+  var title = 'Lesson 7. Include and Invoke Other Pages'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>&lt;%!${tag} <i>uri</i> %></code><td>${desc}</td></tr>';
+  }
+  function jusp$validator ctxt, name {
+    print <ctxt.writer> '<li><code>${name}</code></li>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>Embedding sub-pages in "real" pages is a common technique for
+building dynamic web pages. This allows for more modular system and
+also leads to better maintenance. JuSP provides two mechanisms to
+embed sub-pages, <em>include</em> and <em>invoke</em> directives.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP Tag</th><th>Description</th></tr>
+<%!tagRow 'include', 'The sub-page source is enclosed in this page at compile time. Variables and functions defined in this page are visible in sub-pages and vice versa.' %>
+<%!tagRow 'invoke', 'The sub-page is invoke at runtime, whose output is inserted in this page. Variables and functions defined in this page are <em>not</em> accessible in the sub-pages and vice versa. The JuSP page objects such as <i>request</i>, <i>response</i>, <i>form</i>, <i>session</i>, <i>writer</i>, etc., are passed on to the sub-page.' %>
+</table>
+
+<p>To summarize, <i>include</i> is extremely flexible, but will make all the enclosing pages bigger, and cross-file variable and function references may raise maintenance concerns. On the other hand, <i>invoke</i> is not as flexible, but the pages are self-contained, and calling pages are not as bloated. The following sample page shows both uses:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson7/include_call.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson7/include_call.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

@@ -1,0 +1,14 @@
+println checksum(getScriptPath());
+
+function checksum fname {
+  f = openFile(fname);
+  buf = new java::byte[2048];
+  chksum = 0;
+  while (cnt = f.read(buf)) > 0 {
+    for i=0; i<cnt; ++i {
+      chksum += buf[i];
+    }
+  }
+  f.close();
+  return chksum;
+}

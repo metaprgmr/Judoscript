@@ -1,0 +1,19 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-02-20';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Applies XSLT of 'calls.xsl' upon 'calls.xml',
+    using DOM as XSL, input and output, respectively.
+  *]];
+
+doc = do 'calls.xml' as dom;
+xslt 'calls.xsl' on doc to #prog.replace('.judo','1.html.out');
+
+doc = do 'calls.xsl' as dom;
+xslt doc on 'calls.xml' to #prog.replace('.judo','2.html.out');
+
+//doc = do 'calls.xsl' as dom;
+xslt doc on 'calls.xml' as dom;
+xslt copy $_ to #prog.replace('.judo','3.html.out');
+

@@ -1,0 +1,33 @@
+do $$local as html
+{
+<doc>:  print [[*
+          <html><head><title>(* $_.title *)</title></html><body>
+          <center><table width=650><tr><td> <h1>(* $_.title *)</h1>
+        *]];
+</doc>: println '<hr></td></tr></table> </center></body></html>';
+<quote>:  print '<blockquote><font size=-1>';
+</quote>: print '</font></blockquote>';
+
+:TEXT,<>,<?>,<!>: print $_;
+}
+
+EndScript ------------------------------------------------
+
+<doc title="Body Systems">
+<p>
+The body can be thought of as a number of systems:
+<ul>
+<li> skeleon
+<li> musculature
+<li> cardiovascular system
+<li> digestive system
+<li> excretory system
+<li> immune system
+<li> respiratory system
+<li> reproductive system
+</ul>
+<quote>
+"The digestive system breaks down food and turns
+it into the right chemicals for the body to use."
+</quote>
+</doc>

@@ -1,0 +1,17 @@
+usage {
+  minArgs = 1;
+  args    = 'db_dump';
+  desc    = 'Displays the column information for the database table dump.';
+}
+
+$dump_file = openTableDump(#args[0]);
+$ca = $dump_file.getColumnAttrs();
+
+println 'Column         Type            Precision   Scale Nullable';
+println '-------------- ------------ ------------ ------- ----------';
+printTable $ca for
+  column('name') :<15!,
+  column('type') :<13!,
+  column('precision')   :>12,
+  column('scale')       :>8, ' ',
+  column('nullable');

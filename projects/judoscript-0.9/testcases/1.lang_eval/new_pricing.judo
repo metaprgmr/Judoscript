@@ -1,0 +1,49 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    A function variable keeps the pricing algorithm.
+    It is later replaced by a dynamic eval statement.
+  *]];
+}
+
+// pre-Mr.Smart pricing -- flat
+pricing = function (prod, quantity) {
+            switch prod {
+            case 'candy': return 1 * quantity;
+            case 'chips': return 2 * quantity;
+            case 'beer':  return 3 * quantity;
+            default:      return 1 * quantity;
+            }
+          };
+
+println 'Old pricing:';
+println ' 5 candies: ', pricing('candy', 5).fmtCurrency();
+println '10 candies: ', pricing('candy', 10).fmtCurrency();
+println '15 candies: ', pricing('candy', 15).fmtCurrency();
+
+// post-Mr.Smart pricing -- quantity discount
+eval [[[*
+  pricing = function (prod, quantity) {
+               switch prod {
+               case 'candy': unitprice = 1; break;
+               case 'chips': unitprice = 2; break;
+               case 'beer':  unitprice = 3; break;
+               default:      unitprice = 1; break;
+               }
+               if quantity <= 5 {
+                 return unitprice * quantity;
+               } elif quantity <= 10 {
+                 return (unitprice * 0.95 * quantity).fractionDigits(2);
+               } else {
+                 return (unitprice * 0.90 * quantity).fractionDigits(2);
+               }
+             };
+*]];
+
+println 'New pricing:';
+println ' 5 candies: ', pricing('candy', 5).fmtCurrency();
+println '10 candies: ', pricing('candy', 10).fmtCurrency();
+println '15 candies: ', pricing('candy', 15).fmtCurrency();
+

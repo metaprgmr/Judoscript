@@ -1,0 +1,21 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_class/john_son.judo:</b></td></tr><tr><td><pre>
+class John
+{
+  constructor { println "I love my baseball club."; }
+  function plays { return new array( 'baseball' ); }
+}
+
+class Johnson extends John
+{
+  constructor { println "I always carry my tennis rackets."; }
+
+  function plays {
+    arr = super.plays();
+    arr.add('basketball', 'tennis', 'soccer', 'gymnastics', 'piano' );
+    return arr;
+  }
+}
+
+println (new Johnson).plays();
+</pre></td></tr></table></body></html>

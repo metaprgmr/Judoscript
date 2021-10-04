@@ -1,0 +1,543 @@
+usage
+{
+  minArgs = 4;
+  args    = 'uri src_path fxn_name ctx_vpath [dest_path ]';
+  desc    = [[*
+    The parameters are:
+      uri       - the request URI
+      src_path  - the absolute path for the source JUSP page
+      fxn_name  - the function name representing the uri
+      ctx_vpath - the context virtual path (for resolving included pages)
+      dest_path - the directory to hold preprocessed files. Default "./"
+  *]];
+  author  = 'James Jianbo Huang';
+  created = '2005-02-04'; // started reworking on JUSP.
+  lastMod = '2005-03-03';
+
+  //
+  // Internal documentation
+  //
+
+  _preprocessor_spec = [[*
+    Converts a JUSP page into a JudoScript source file that contains a
+    function with this signature:
+
+      function < uri={uri}, src_path={src_path}, name={fxn_name}, generated={timestamp} >
+      fxn_name (request,response,root,session,form,error,isCall);
+
+    The converted JudoScript code uses these methods, functions and variables:
+
+      ::juspContext.invoke(page, request, response, session);
+      ::juspContext.forward(page, request, response, session);
+      ::juspContext.redirect(page, response);
+      ::juspContext.error(request, response, exception);
+      ::errorPage
+      ::juspFinally->(request, response);
+
+    The <%@page %> directive calls these methods:
+
+      writer.setBufferSize(size : int);
+      response.setIsErrorPage();
+      response.setIsBinary();
+      response.setContentType(type : string);
+      response.setPageEncoding(type : string);
+      response.setStatus(type : int);
+  *]];
+
+  _JUSP_spec = [[*
+
+    JUSP Page and Programming Specification
+    =======================================
+
+    --------------------------------------------------------------------
+    Table of Contents:
+      0. JUSP Syntax
+      1. Scriptlet
+      2. Embedded Expression
+      3. The <%@page %> Directive
+      4. The <%@exception %> Directive
+      5. The <%@end %> Directive
+      6. The <%!include %> and <%!invoke %> Tags
+      7. The <%!forward %> and <%!redirect %> Tags
+      8. The <%!validate %> and <%!validateNullOK %> Tags
+      9. The <%!xyz %> HTML Control and Extended Control Tags
+     10. Create Custom <%!xyz %> tags
+    --------------------------------------------------------------------
+
+    0. JUSP Syntax. JUSP pages are text files with predefined embedded
+       tags. The tags are:
+
+         <% %>                scriptlet
+         <%= %>               embedded expression
+
+         <%-- --%>            comment
+
+         <%@page %>           page directive
+         <%@exception %>      exception directive
+         <%@end %>            end directive
+
+         <%!include %>        include tag
+         <%!invoke %>         invoke tag
+         <%!forward %>        forward tag
+         <%!redirect %>       redirect tag
+
+         <%!validateNullOK %>
+         <%!validate %>       validation tags
+
+         <%!xyz %>            HTML, extended and custom controls/tags
+
+    1. Scriptlet. Text enclosed between <% and %> is treated as
+       JudoScript code. These are the predefined variables:
+
+         request
+         response
+         form      - name-value pairs; values can be strings and arrays.
+         session
+         writer    - valid only when page is not set to isBinary.
+         outStream - set when page is set to isBinary.
+         root      - the context root
+         error     - an array of error messages.
+
+    2. Embedded Expression. Text enclosed between <%= and %> is treated
+       as a JudoScript expression. It is evaluated to a string and
+       printed out.
+
+    3. The <%@page %> Directive. Has these attributes:
+
+         import       = comma-separated Java class/package names.
+         contentType  = "<mimeType> [ ; charset=<characterSet> ]"
+                        -- default: "text/html: charset=ISO-8859-1"
+         isBinary     = true|false -- default: false
+
+         autoFlush    = true|false -- default: true
+         buffer       = "none|8kb|<size>kb" -- default: 8kb
+         status       = int -- the HTTP response status
+         pageEncoding = "<characterSet>" -- default: "ISO-8859-1" -- TODO
+
+         isErrorPage  = true|false -- default: false -- TODO
+         isStatic     = true|false -- default: false -- TODO
+         refresh      = int of seconds, if isStatic==true -- TODO
+         skipEmpty    = true|false -- default: true
+         noCleanup    = true|false -- default: false
+
+    4. The <%@ exception %> Directive. This directive indicates an
+       in-page catch clause for exception handling. Anything following
+       this directive is in the catch clause.
+
+    5. The <%@ end %> Directive. Equivalent to Judo's EndScript.
+
+    6. The <%!include %> and <%!invoke %> Tags.
+
+       <%!include %> loads the referenced page into the current page.
+
+       <%!invoke %> calls the referenced page and embeds its out into
+       the current output.
+
+    7. The <%!forward %> and <%!redirect %> Tags.
+
+       <%!forward %> discards the current page and use the referenced
+       page output instead.
+
+       <%!redirect %> uses client redirect to reference another page
+       (with a different URL).
+
+    8. <%!validate name, validatorFunctionName [, extra ] %> and
+       <%!validateNullOK name, validatorFunctionName [, extra ] %> Tags.
+       Calls the validator function; if it returns null, the validation
+       is passed; otherwise, it's assumed error message, and is appended
+       to the page-wide array in variable <i>error</i>.
+
+
+    9. The <%!xyz %> Control Tags and Standard Controls. These tags
+       take JudoScript function call parameters.
+
+       The JUSP engine comes with a set of standard HTML controls and
+       a number of extended controls. They all populate themselves with
+       corresponding form parameters if present.
+
+       *** Standard HTML controls are:
+
+       <%!stylesheet uri %>
+         -- Writes a <link rel=stylesheet> tag.
+
+       <%!button name, value [, extra] %>
+         -- Writes a <input type=button> control.
+
+       <%!submit name, value [, extra] %>
+         -- Writes a <input type=submit> control.
+
+       <%!password name [, extra] %>
+         -- Writes a <input type=password> control.
+
+       <%!hidden name [, value] %>
+         -- Writes a <input type=hidden> control: if value is null,
+            the control is written with the named <i>form</i> value.
+
+       <%!checkbox name, value [, extra] %>
+         -- Writes a <input type=checkbox> control.
+            Sets <code>checked</code> flag if
+            <i>form</i> contains the named value.
+
+       <%!radio name, value [, extra]
+         -- Writes a <input type=radio> control.
+            Sets <code>checked</code> flag if
+            <i>form</i> contains the named value.
+
+       <%!text name [, value [, extra] ] %>
+         -- Writes a <input type=text> control.
+            The value is either set to <i>value</i> if not null,
+            or the named value in the <i>form</i>.
+
+       <%!textarea name [, value [, extra] ] %>
+         -- Writes a <textarea> control.
+            The content is either set to <i>value</i> if not null,
+            or the named value in the <i>form</i>.
+
+       <%!select name, values, displays [, extra] %>
+         -- Writes a <select> control. <i>values</i> contains the
+            item values, and <i>displays</i> contains the item
+            display names.
+            The values contained in <i>form</i> are set to "selected".
+            If <i>values</i> is empty, displays "<i>(None)</i>".
+            If <i>values</i> has only one value and is present in
+            <i>form</i>, that value is directly displayed (without
+            <select>).
+
+       <%!multiSelect name, values, displays [, extra] %>
+         -- Same as <%!select %> except "multiple" is added to
+            the <select> tag.
+
+       <%!file name [, extra ] %>
+         -- Writes a <input type=file> control.
+
+       <%!applet tagContent [, params] %>
+         -- Writes an <applet> control. The <i>params</i> is an
+            Object or java.util.Map of parameters.
+
+       <%!object tagContent [, params] %>
+         -- Writes an <object> control. The <i>params</i> is an
+            Object or java.util.Map of parameters.
+
+       *** JUSP extended HTML controls are:
+
+       <%!date name, yearsBefore, yearsAfter [, extra] %>
+         -- Writes 3 <select> controls for month, day and year,
+            respectively. The corresponding values contained in
+            <i>form</i> for the date are set to "selected".
+            (Relatedly, the date values in the <i>form</i> can be
+            read with the jusp$date(form, name) function.)
+
+       <%!countryList name [, extra] %>
+         -- Writes a <select> control of all the country names and
+            IDs per ISO 3166.
+
+       <%!US_StateList name [, extra] %>
+         -- Writes a <select> control of all the U.S. states and
+            IDs (of two upper-case letters).
+
+       <%!timeZoneList name [, extra] %>
+         -- Writes a <select> control of all the timezone names
+            and IDs per ISO 639.
+
+       <%!localeList name [, extra [, dispLocale] ] %>
+         -- Writes a <select> control of all the available locales
+            names and IDs. The locale IDs are like "en_US".
+
+   10. Create Custom HTML tags. Internally, it is converted into a
+       function call for generating individual HTML controls (or
+       any custome content). A tag like <%!xyz name, any %> is
+       preprocessed into a function call like this:
+
+       <added>jusp$</added>xyz <added>ctxt,</added> name, any;
+
+       To create a custom tag, simply define a function like this
+       in the start-up script, "juspInit.judo".
+
+       The <i>ctxt</i> is the current page context that contains all
+       the JUSP page objects: <i>request</i>, <i>response</i>,
+       <i>writer</i>, <i>outStream</i>, <i>root</i>, <i>form</i>,
+       and <i>session</i>.
+
+       E.g., to create a <%!gizmo %> tag, provide this function:
+
+       function jusp$gizmo ctxt, value1, value2, value3, extra
+       {
+         print <ctxt.writer>
+           '<table border=1 ', extra, '>',
+           '<tr><th>&nbsp;</th><th>spec</th></tr>',
+           '<tr><td>Value1</td><td>', value1, '</td></tr>',
+           '<tr><td>Value2</td><td>', value2, '</td></tr>',
+           '<tr><td>Value3</td><td>', value3, '</td></tr>',
+           '</table>';
+       }
+  *]];
+
+  _memo = [[*
+     java judo jusp_prep.judo test.jusp test.jusp test$jusp .
+  *]];
+
+} // usage.
+
+//
+// Functions:
+//
+
+var jusp$prep$firstLine = // usually
+  ' request,response,root,session,form,error,isCall { import javax.servlet.http.*;' +
+  ' if(!error)error=[]; var writer=response.getWriter(); if(!form)form=request.getForm(); ';
+
+function preprocess uri, src_path, fxn_name, ctx_path, dest_path, dest_file, isInclude
+{
+  if false && isNewer(dest_file, src_path) && dest_file.fileSize() > 0 {
+    println <log:debug> 'Processing JUSP [${uri}]: ${src_path} skipped.';
+    return;
+  }
+
+  dst = openTextFile(dest_file, 'w');
+
+  println <log:debug> 'Processing JUSP [${uri}]: ${src_path} => ${dest_file}.';
+
+  src_path = src_path.replace('\\','/');
+  if (!isInclude)
+    print <dst> 'function < uri="${uri}", src_path="${src_path}", name="${fxn_name}", generated=',
+                Date().int(), ' > ', fxn_name, jusp$prep$firstLine;
+
+  var inText = false;
+  var isEnd = false;
+  var needFlush = true;
+  var skipEmpty = true;
+  var isStatic = false;
+  var pageInfo = new java::com.judoscript.user.JuspPageInfo;
+  var hasCatch  = false;
+  var needCleanup = true;
+
+  do src_path as jsp
+  {
+    // scriptlet
+    <%>:
+      if inText { print <dst> '*]];'; inText = false; }
+      print <dst> $_.getText();
+
+    // expression
+    <%=>:
+      if (inText) print <dst> '(*', $_.getText(), '*)';
+      else        print <dst> 'print<writer>', $_.getText(), ';';
+
+    // JUSP/JSP comment
+    <%-->:  // preserved for line number accuracy
+      if inText {
+        print <dst> '*]];/*', $_.getText(), '*/';
+        inText = false;
+      } else {
+        print <dst> '/*', $_.getText(), '*/';
+      }
+
+    // tags
+    <%!>:
+      if inText { print <dst> '*]];'; inText = false; }
+      var s = $_.getText().trim();
+      var name = s.leftOfFirstWhite();
+      var params = s.rightOfFirstWhite().trim();
+
+      switch name {
+      case 'include':
+        if (!params.startsWith('"') && !params.startsWith("'"))
+          throw new java::Exception("<%!include %> tag must take a string literal!");
+
+        params = params.unquote();
+        uri_src_fxn = processRef(params, uri, src_path, dest_path, ctx_path, true);
+        _fxn = uri_src_fxn[2];
+        print <dst> ' !include "${_fxn}" ';
+        break;
+
+      case 'invoke':
+        print <dst>
+        ' ::juspContext.invoke(${params},"${uri}","${src_path}",request,response,session,form,error); ';
+        break;
+
+      case 'forward':
+        print <dst>
+        ' ::juspContext.forward(${params},"${uri}","${src_path}",request,response,session,form,error);',
+        ' return;';
+        break;
+
+      case 'redirect':
+        print <dst> ' ::juspContext.redirect(${params},response); return;';
+        break;
+
+      case 'validate':
+      case 'validateNullOK':  // validation tags
+        s = params.rightOfFirstWhite();
+        if s.isEmpty() {
+          print <log:warn> 'Name is required for validation: ', $_;
+        } else {
+          s = ', ' + s.trim();
+          name = (name=='validate') ? 'true' : 'false';
+          print <dst> 'jusp$validate $$context, ',
+                      params.leftOfFirstWhite(), '(', name, ', $$context', s, ');';
+        }
+        break;
+
+      default:
+        if (params.isNotEmpty()) params = ', ' + params;
+        print <dst> 'jusp$', name, ' $$context', params, ';';
+      }
+
+    // directives
+    <%@>:
+      if inText { print <dst> '*]];'; inText = false; }
+      switch ($_.getText()) {
+      case 'page':
+        if ($_.autoFlush == 'false') needFlush = false;
+        if ($_.noCleanup == 'false') needCleanup = false;
+        if ($_.skipEmpty == 'false') skipEmpty = false;
+
+        attr = $_.import;
+        if(attr.isNotEmpty())
+          print <dst> 'import ', attr.trim(), ';';
+
+        // buffer
+        attr = $_.buffer;
+        if attr != null {
+          if (attr == 'none')
+            attr = 0;
+          elif (attr.endsWith('kb'))
+            attr = attr.trunc(2) + '*1024';
+          print <dst> 'writer.setBufferSize(${attr});';
+        }
+
+        attr = $_.isErrorPage;
+        if(attr.isNotEmpty())
+          pageInfo.isErrorPage = attr;
+
+        attr = $_.contentType;
+        if(attr.isNotEmpty())
+          pageInfo.contentType = attr;
+
+        attr = $_.pageEncoding;
+        if(attr.isNotEmpty()) {
+          print <dst> 'response.setPageEncoding("${attr}");';
+          pageInfo.pageEncoding = attr;
+        }
+
+        attr = $_.status;
+        if(attr.isNotEmpty()) {
+          print <dst> 'response.setStatus("${attr}");';
+          pageInfo.status = attr;
+        }
+
+        attr = $_.isStatic;
+        if(attr=='true') {
+          isStatic = true;
+          pageInfo.isStatic_refresh = 0;
+        }
+
+        attr = $_.refresh;
+        if(isStatic && attr.isNotEmpty())
+          pageInfo.isStatic_refresh = attr;
+
+        attr = $_.isBinary;
+        if(attr.isNotEmpty()) {
+          print <dst> 'response.setIsBinary();outStream=response.getOutputStream();';
+          pageInfo.isBinary = true;
+        }
+
+        attr = $_.isIncludeOnly;
+        if(attr=='true') {
+          pageInfo.isIncludeOnly = true;
+        }
+
+        break;
+
+      case 'exception':
+        if (needFlush) print <dst> 'flush<writer>;';
+        print <dst> 'catch:{writer.clearBuffer();catch:;}';
+        hasCatch = true;
+        break;
+
+      case 'end':
+        if (isInclude) {
+          println <log:warn> '<%@end %> is ignored in included file.';
+        } else {
+          if inText { print<dst> '*]];'; inText = false; }
+          print<dst> [[*
+            flush<writer>;
+            catch: ::juspContext.error(request,response,session,\$_);
+            finally: if(::juspFinally!=null && !isCall) ::juspFinally->($$context);
+            EndScript';
+          *]];
+          isEnd = true;
+        }
+        break;
+
+      default: print <log:warn> 'Unknown directive: ', $_.getText();
+      }
+
+    // text
+    :TEXT:
+      if !isEnd && !inText && ($_.isNotEmpty() || !skipEmpty) {
+        print <dst> 'print<writer>[[[*';
+        inText = true;
+      }
+      print <dst> $_;
+
+  } // do as jsp.
+
+  if (inText) print <dst> '*]];';
+  if (!isEnd) {
+    if !isInclude && !hasCatch {
+      if (needFlush) print <dst> 'flush<writer>;';
+      print <dst> 'catch: ::juspContext.error(request,response,session,\$_);';
+    }
+    if (hasCatch) print <dst> 'flush<writer>;';
+    if (!isInclude && needCleanup)
+      print <dst> 'finally: if(::juspFinally!=null && !isCall) ::juspFinally->($$context);';
+    if (isInclude) flush <dst>;
+    else flush <dst> '}';
+  }
+  dst.close();
+
+  return pageInfo;
+
+  catch:
+    println <log:error ($_) > [[*
+      Failed to process JUSP: (* $_ *)
+             =>           uri: ${uri}
+             =>   source path: ${src_path}
+             => function name: ${fxn_name}
+             =>     dest path: ${dest_path}
+             =>     dest file: ${dest_file}
+   *]];
+   throw $_;
+
+} // preprocess().
+
+
+function processRef uri, refUri, refPath, destPath, ctxPath, isInclude
+{
+  uri_src_fxn = com.judoscript.user.JuspUtil::uriToFilePath(uri, refUri, refPath, ctxPath, destPath);
+
+  if (isInclude) uri_src_fxn[2] += '_included';
+
+  uri     = uri_src_fxn[0];
+  srcPath = uri_src_fxn[1];
+  fxnName = uri_src_fxn[2];
+
+  preprocess uri, srcPath, fxnName, ctxPath, destPath, destPath+fxnName, isInclude;
+
+  return uri_src_fxn;
+}
+
+
+//
+// Action:
+//
+
+uri = #args[0];
+src_path = #args[1];
+fxn_name = #args[2];
+ctx_path = #args[3];
+dest_path = (#args.length > 4) ? #args[4] : '';
+dest_file = dest_path + fxn_name;
+
+return preprocess(uri, src_path, fxn_name, ctx_path, dest_path, dest_file);

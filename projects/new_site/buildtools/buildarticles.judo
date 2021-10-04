@@ -1,0 +1,29 @@
+!include 'com/judoscript/jusp/juspt.judo'
+!include '${JUDOROOT}/projects/common.judi'
+//!include '${JUDOROOT}/projects/doc_helpers.judi'
+
+var buildtools = '${JUDOROOT}/projects/new_site/buildtools';
+var srcDir = '${JUDOROOT}/projects/new_site/art_src';
+var targetDir = '${docroot}/articles/';
+mkdir targetDir;
+
+// The assumption is: a listing appears before any references.
+
+println<err> nl, '::: Process All Articles ...', nl;
+ 
+pageInfo = juspt$transform('', '${buildtools}/templates/article.juspt', '/');
+
+listFiles '${srcDir}/*.sgml'
+{
+  var srcname = $_;
+  var filename = srcname.getFileName().replace('.sgml', '.html');
+  var filename_p = srcname.getFileName().replace('.sgml', '_p.html');
+
+  var tgtname = targetDir + filename;
+  juspt$runPage pageInfo, tgtname, srcname, filename_p, false;
+  println<err> 'Created ', tgtname;
+
+  tgtname = targetDir + filename_p;
+  juspt$runPage pageInfo, tgtname, srcname, filename, true;
+  println<err> 'Created ', tgtname;
+}

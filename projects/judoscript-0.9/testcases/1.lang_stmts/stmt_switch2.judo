@@ -1,0 +1,21 @@
+for i from 0 to 100 {
+  isPowerOf(i, 3);
+}
+
+function isPowerOf x, base {
+  base2 = base  * base;
+  base3 = base2 * base;
+  base4 = base3 * base;
+  base5 = base4 * base;
+  base6 = base5 * base;
+
+  switch x {
+  case 0:
+  case base:
+  case base2:
+  case base3:
+  case base4:
+  case base5:
+  case base6: println x, ' is a power of ', base; break;
+  }
+}

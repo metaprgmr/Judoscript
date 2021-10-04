@@ -1,0 +1,15 @@
+usage {
+  minArgs = 1;
+  args    = 'url';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Connects to a URL you specified on the command line, and
+    displays all the cookies being set.
+  *]];
+}
+
+h = httpGet(#args[0]);
+for x in h.getCookies() {
+  println x;
+}

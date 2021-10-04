@@ -1,0 +1,5 @@
+listFiles '*' in 'testdata/awebapp.zip' fileOnly recursive as tree;
+
+for x in $_.dfsAllNodes() {
+  println x;
+}

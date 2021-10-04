@@ -1,0 +1,52 @@
+<html><head><title>JudoScript Object - XMLTag</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>XMLTag</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=XMLTag_countAttrs></a>countAttrs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the number of attributes for this tag. It is always 0 for end tags.
+  For text tags, it is for its enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getAttrName></a>getAttrName<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns the number <font class=param>index</font> attribute name for this tag.
+  For text tags, it is for its enclosing tag.
+  For end tags, it is always <font class=kw>null</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getAttrValue></a>getAttrValue<br></font></td><td valign=top><font class=param>index</font><br></td><td valign=top>
+  Returns the number <font class=param>index</font> attribute value for this tag.
+  For text tags, it is for its enclosing tag.
+  For end tags, it is always <font class=kw>null</font> .
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getLocal></a>getLocal<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnts the local name of this tag.
+  For text tags, it is that of the enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getName></a>getName<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the name of this tag. For end tags, the name starts with '/'.
+  For text tags, it is that of the enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getRaw></a>getRaw<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnts the raw tag name of this tag.
+  For text tags, it is that of the enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_getUri></a>getUri<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returnts the URI of this tag, if any.
+  For text tags, it is that of the enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_hasAttrs></a>hasAttrs<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this tag has attributes. It is always <font class=kw>false</font>  for end tags.
+  For text tags, it is for its enclosing tag.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=XMLTag_isEndTag></a>isEndTag<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns <font class=kw>true</font>  if this is an end tag.
+</td></tr>
+</table>
+</body></html>

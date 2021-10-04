@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_httpserver/http_server.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2003-01-14';
+  desc    = [[*
+    A multi-threaded HTTP server that serves files from a directory.
+  *]];
+}
+
+const #docroot = ${TMPROOT}; 
+const #port = 8088;
+println 'Server running at port ', #port;
+println 'serving files from ', ${TMPROOT};
+
+ss = startServer(#port); 
+while { 
+   start thread httpHandler(acceptHttp(ss)); 
+} 
+
+thread httpHandler(a) { a.serveFile(#docroot); } 
+</pre></td></tr></table></body></html>

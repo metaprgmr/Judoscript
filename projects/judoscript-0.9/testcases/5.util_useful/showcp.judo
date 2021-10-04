@@ -1,0 +1,3 @@
+for x in systemProperty('java.class.path').csv('${:}') {
+  println x;
+}

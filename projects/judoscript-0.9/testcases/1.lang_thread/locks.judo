@@ -1,0 +1,16 @@
+const #fmt = 'mm:ss.SSS';
+
+thread t name, dur=2000 {
+  while true {
+    sleep(dur);
+    lock 'house';
+    println name, ' have it!  ', Date().fmtDate(#fmt);
+    sleep(dur);
+    println name, ' give up.  ', Date().fmtDate(#fmt);
+    unlock 'house';
+  }
+}
+
+start thread t('Kitty', 1000);
+sleep(1300);
+start thread t('Doggy');

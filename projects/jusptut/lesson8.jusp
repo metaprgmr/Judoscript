@@ -1,0 +1,61 @@
+<%
+  var title = 'Lesson 8. Forward, Redirect and Page Flow'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, tag, desc {
+    print <ctxt.writer> '<tr><td valign=top nowrap><code>&lt;%!${tag} <i>uri</i> %></code><td>${desc}</td></tr>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>In sophisticated web page flows, a request may actually be delivered
+with different contents depending on the situations. JuSP provides two
+mechanisms to switch to a different page, <em>include</em> and <em>invoke</em>
+directives.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>JuSP Tag</th><th>Description</th></tr>
+<%!tagRow 'forward', 'The content of the current page is discarded (if possible); the control and page rendering is passed on to the destination page. All page object (e.g., <i>request</i>, <i>response</i>, <i>session</i>, etc.) are passed to the destination; it is common to set more attributes in <i>request</i> and/or <i>session</i> objects before forwarding.' %>
+<%!tagRow 'redirect', 'This does a client-side redirect; the current page content is discarded (if possible), and a redirect response is sent to the client. You may construct a redirect URI based on the current values.' %>
+</table>
+
+<p>To summarize, <i>forward</i> maintains the same URI but the page is rendered by the forwarded page; all attributes in <i>request</i> set in the originating page are passed on. <i>redirect</i> is the client-side (HTTP) redirect, so the URI becomes the redirect one; it's a new request, and the <i>session</i> object is still valid, of course.</p>
+
+<p>This is an example for forwarding:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson8/fwd.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson8/fwd.jusp' %></li>
+<li>View <%!viewsrc 'lesson8/foo.jusp' %></li>
+</ul>
+
+<p>This is an example for redirecting:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson8/redir.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson8/redir.jusp' %></li>
+<li>View <%!viewsrc 'lesson8/bar.jusp' %></li>
+</ul>
+
+<h2>Web App Page Flow</h2>
+
+<p>The <i>forward</i> and <i>redirect</i> directives constitute the foundation
+for page flows in web apps. For a more robust discussion of web ap design, see
+<a href="lesson11.jusp">lesson 11</a>. Here we discuss the page flow mechanisms.</p>
+
+<p>Suppose we have a web app with these business requirements: <i>a) All users must
+log in; and b) User can bookmark a URL.</i> Our design is, if the user is not logged
+in, we keep the bookmarked URL in the session attribute called "dest", forward to
+the login page; when user successfully logs in, redirect to the URL.</p>
+
+<ul type=square>
+<li>View <a href="lesson8/accounts.jusp">bookmarked page</a> in action</li>
+<li>View <a href="lesson8/login.jusp">login page</a> in action</li>
+<li>View <%!viewsrc 'lesson8/accounts.jusp' %></li>
+<li>View <%!viewsrc 'lesson8/home.jusp' %></li>
+<li>View <%!viewsrc 'lesson8/login.jusp' %></li>
+<li>View <%!viewsrc 'lesson8/header.jusp' %> (included)</li>
+</ul>
+
+<%!include "footer.jusp" %>

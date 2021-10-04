@@ -1,0 +1,73 @@
+#connects to the server
+connect localhost:7001 system weblogic
+
+#this names can be modified as needed
+pool=myPool
+server=managed
+
+#alias for the saveDomain operation
+savedom=weblogic:/Repository/Default/saveDomain
+
+#list of defined variables
+set
+
+#creates the pool
+md /JDBCConnectionPool/$pool
+cd /JDBCConnectionPool/$pool
+set DriverName "com.pointbase.jdbc.jdbcUniversalDriver"
+set URL "jdbc:pointbase:server://localhost/demo"
+set Properties (java.util.Properties) "user=PBPUBLIC"
+set Password "PBPUBLIC"  #the password will be saved in encoded format
+set MaxCapacity 5
+
+#after running the following command, see the console for messages
+invoke addTarget /Server/$server
+
+#save encoded password and all the attributes to config.xml
+invoke $savedom $DOMAIN
+
+get -v Targets
+
+#after adding the target, the pool should also appear
+#under the Runtime directory
+#I have to connect to managed, then reconnect to admin
+cd /JDBCConnectionPoolRuntime
+dir
+
+#the new pool is also visible with the Explorer
+#start the Explorer
+explore
+
+#is the pool enabled?
+get /JDBCConnectionPoolRuntime/$pool/PoolState
+
+#let's monitor some runtime attributes
+#first define some variables for convenience
+name=/JDBCConnectionPoolRuntime/$pool/Name
+maxcap=/JDBCConnectionPoolRuntime/$pool/MaxCapacity
+conncc=/JDBCConnectionPoolRuntime/$pool/ActiveConnectionsCurrentCount
+connhc=/JDBCConnectionPoolRuntime/$pool/ActiveConnectionsHighCount
+waitse=/JDBCConnectionPoolRuntime/$pool/WaitSecondsHighCount
+waitcc=/JDBCConnectionPoolRuntime/$pool/WaitingForConnectionCurrentCount
+waithc=/JDBCConnectionPoolRuntime/$pool/WaitingForConnectionHighCount
+
+#get the attributes
+get $name $maxcap $conncc $connhc $waitse $waitcc $waithc
+
+#get the attributes repeatedly every 1 second
+#press Enter to finish
+get -r $name $maxcap $conncc $connhc $waitse $waitcc $waithc
+
+cd /
+
+#list of available commands
+help
+
+#remove pool
+cd /JDBCConnectionPool/$pool
+invoke removeTarget /Server/$server
+get -v Targets
+cd ..
+rd $pool
+
+invoke $savedom $DOMAIN

@@ -1,0 +1,11 @@
+!pragma logger = 'warn'
+        // Try any of the valid logger level values:
+        // "all", "off", "trace", "debug", "info", "warn", "error", "fatal"
+
+println <log>       'Hello, world!';
+println <log:trace> 'Hello, this is a trace.';
+println <log:debug> 'Hello, this is not a bug.';
+println <log:info>  'Hello, this is some info.';
+println <log:warn>  'Hello, this is a warning.';
+println <log:error> 'Hello, this is an error.';
+println <log:fatal> 'Hello, this is lethal!';

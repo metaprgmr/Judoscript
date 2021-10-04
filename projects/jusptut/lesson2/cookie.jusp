@@ -1,0 +1,23 @@
+<%
+  // Set a cookie with the current time:
+  var cookie = new java::Cookie('jusp_cookie', Date().int());
+  response.addCookie(cookie);
+%>
+<html><body>
+<h2>Cookies</h2>
+
+<p>View <%!viewsrc 'lesson2/cookie.jusp', '../' %></p>
+
+<table border=1><caption align=left>Cookies</caption>
+<tr><th>Cookie Name</th><th>Value</th></tr>
+<%
+  for c in request.getCookies() {
+    %><tr><td><%= c.getName() %></td><td><%= c.getValue() %></td></tr><%
+  }
+%>
+</table>
+
+<p><a href="cookie.jusp">Set our test cookie</a></p>
+
+<hr><font size=-1>Back to <a href="../lesson2.jusp">lesson 2</a></font>
+</body></html>

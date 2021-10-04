@@ -1,0 +1,21 @@
+$$fs_result is a TreeNode; BFS traverse:
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/baseline
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/array_convert.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/arrays.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/custom_sort.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/dfs_bfs.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/filter.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/in_memory_query.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/linkedlist.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/md_array.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/object.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/orderedmap.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/printtable.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/queue.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/set.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/stack.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/tabledata.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/tree_of_dirs.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/treenode.judo
+E:/devenv/envroot/projects/judoscript-0.9/testcases/1.lang_ds/value_sort.judo

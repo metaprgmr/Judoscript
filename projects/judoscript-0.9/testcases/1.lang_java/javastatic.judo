@@ -1,0 +1,5 @@
+!JavaBaseClass #Runtime
+
+java.lang.System::out.println('Hello, World!');
+println java.lang.Runtime::getRuntime();
+println #Runtime.getRuntime();

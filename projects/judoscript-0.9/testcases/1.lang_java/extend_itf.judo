@@ -1,0 +1,8 @@
+class MyIterator extends java::Iterator
+{
+}
+
+o = new MyIterator;
+println o;
+
+for x in o { println x; }

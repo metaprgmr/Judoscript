@@ -1,0 +1,114 @@
+Java class path: c:\devenv\tmproot/judoscript-0.9/classes
+                 c:\devenv\envroot/lib/commons-lang-2.0.jar
+                 c:\devenv\envroot/lib/ant.jar
+                 c:\devenv\envroot/projects/judoscript-0.9/testcases/2.ess_env_sys
+OS Name:    Windows 2000
+isMac:      false
+isWindows:  true
+isHP:       false
+isLinux:    false
+isSunOS:    false
+javaVendor: Sun Microsystems Inc.
+
+fileSep:    \
+pathSep:    ;
+homeDir:    C:/Documents and Settings/jhuang
+curDir:     c:/devenv/envroot/projects/judoscript-0.9/buildtools
+cd '/'
+curDir:     C:/
+userName:   jhuang
+
+=======================
+ All system properties
+=======================
+         java.runtime.name = Java(TM) 2 Runtime Environment, Standard Edition
+     sun.boot.library.path = c:\devenv\envroot\bin\j2se1.3\jre\bin
+           java.vm.version = 1.3.0-C
+            java.vm.vendor = Sun Microsystems Inc.
+           java.vendor.url = http://java.sun.com/
+            path.separator = ;
+              java.vm.name = Java HotSpot(TM) Client VM
+         file.encoding.pkg = sun.io
+java.vm.specification.name = Java Virtual Machine Specification
+                  user.dir = c:\devenv\envroot\projects\judoscript-0.9\buildtools
+      java.runtime.version = 1.3.0-C
+      java.awt.graphicsenv = sun.awt.Win32GraphicsEnvironment
+                   os.arch = x86
+            java.io.tmpdir = c:\temp\
+            line.separator = 
+
+java.vm.specification.vendor = Sun Microsystems Inc.
+            java.awt.fonts = 
+                   os.name = Windows 2000
+         java.library.path = c:\devenv\envroot\bin\j2se1.3\bin;.;C:\WINNT\system32;C:\WINNT;c:\devenv\envroot/bin/j2se1.3/bin
+   java.specification.name = Java Platform API Specification
+        java.class.version = 47.0
+                os.version = 5.0
+                 user.home = C:\Documents and Settings\jhuang
+             user.timezone = America/Los_Angeles
+       java.awt.printerjob = sun.awt.windows.WPrinterJob
+             file.encoding = Cp1252
+java.specification.version = 1.3
+           java.class.path = c:\devenv\tmproot/judoscript-0.9/classes;c:\devenv\envroot/lib/commons-lang-2.0.jar;c:\devenv\envroot/lib/ant.jar;c:\devenv\envroot/projects/judoscript-0.9/testcases/2.ess_env_sys
+                 user.name = jhuang
+java.vm.specification.version = 1.0
+                 java.home = c:\devenv\envroot\bin\j2se1.3\jre
+             user.language = en
+ java.specification.vendor = Sun Microsystems Inc.
+               awt.toolkit = sun.awt.windows.WToolkit
+              java.vm.info = mixed mode
+              java.version = 1.3.0
+             java.ext.dirs = c:\devenv\envroot\bin\j2se1.3\jre\lib\ext
+       sun.boot.class.path = c:\devenv\envroot\bin\j2se1.3\jre\lib\rt.jar;c:\devenv\envroot\bin\j2se1.3\jre\lib\i18n.jar;c:\devenv\envroot\bin\j2se1.3\jre\lib\sunrsasign.jar;c:\devenv\envroot\bin\j2se1.3\jre\classes
+               java.vendor = Sun Microsystems Inc.
+            file.separator = \
+       java.vendor.url.bug = http://java.sun.com/cgi-bin/bugreport.cgi
+   sun.io.unicode.encoding = UnicodeLittle
+            sun.cpu.endian = little
+               user.region = US
+           sun.cpu.isalist = pentium i486 i386
+
+==========================
+ All environment variables
+==========================
+    PROCESSOR_ARCHITECTURE = x86
+                      PATH = c:\devenv\envroot/bin/j2se1.3/bin
+                   VIEWDIR = c:\viewstore
+                SYSTEMROOT = C:\WINNT
+                       TMP = c:\temp
+                     VROOT = c:/viewstore/jhuang_BEAit11975_view
+   CLEARCASE_PRIMARY_GROUP = staff
+              COMPUTERNAME = JHUANG1
+                        OS = Windows_NT
+                    PROMPT = $P$G
+                    WINDIR = C:\WINNT
+               SYSTEMDRIVE = C:
+                   COMSPEC = C:\WINNT\system32\cmd.exe
+                   DOCROOT = c:\devenv\tomcat-4.1.27\webapps
+                 HOMEDRIVE = C:
+               LOGONSERVER = \\JHUANG1
+      PROCESSOR_IDENTIFIER = x86 Family 6 Model 9 Stepping 5, GenuineIntel
+        COMMONPROGRAMFILES = C:\Program Files\Common Files
+                    TOMCAT = c:\devenv\tomcat-4.1.27
+              PROGRAMFILES = C:\Program Files
+      NUMBER_OF_PROCESSORS = 1
+                      TEMP = c:\temp
+                USERDOMAIN = JHUANG1
+                      HOME = c:\cygwin\home\jhuang
+                OS2LIBPATH = C:\WINNT\system32\os2\dll;
+           PROCESSOR_LEVEL = 6
+                  JUDOPATH = c:\devenv\envroot\projects\judoscript-0.9\buildtools
+            WV_GATEWAY_CFG = C:\oracle\ora81\Apache\modplsql\cfg\wdbsvr.app
+                  USERNAME = jhuang
+                   PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH
+                   ENVROOT = c:\devenv\envroot
+        PROCESSOR_REVISION = 0905
+               USERPROFILE = C:\Documents and Settings\jhuang
+                   APPDATA = C:\Documents and Settings\jhuang\Application Data
+                  HOMEPATH = \Documents and Settings\jhuang
+                   TMPROOT = c:\devenv\tmproot
+                 ATRIAHOME = d:\Program Files\Rational\ClearCase
+                 JAVA_HOME = c:\devenv\envroot/bin/j2se1.3
+                 CLASSPATH = c:\devenv\tmproot/judoscript-0.9/classes;c:\devenv\envroot/lib/commons-lang-2.0.jar;c:\devenv\envroot/lib/ant.jar;c:\devenv\envroot/projects/judoscript-0.9/testcases/2.ess_env_sys
+           ALLUSERSPROFILE = C:\Documents and Settings\All Users
+               TASK_BUGNUM = 0

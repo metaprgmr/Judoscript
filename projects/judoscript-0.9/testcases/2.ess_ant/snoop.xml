@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!--
+   Demonstrates two ways of using the <judoscript> tag:
+   running external script, and embed code therein.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+<project name="test" default="target1" basedir=".">
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  <target name="target1">
+    <judoscript src="snoop.judo" params="abc -x:1 def ghi -y:something" />
+  </target>
+
+  <target name="target2">
+    <judoscript params="abc -x:1 def ghi -y:something">
+      // This is the code of snoop.judo copied verbatim.
+
+      println '#cmd_args: ', #cmd_args;
+      for x in #cmd_args {
+        println '  #cmd_args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#args: ', #args;
+      for x in #args {
+        println '  #args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#options: ', #options;
+      for x in #options {
+        println '  #options[', x, '] = ', #options.(x);
+      }
+
+      println nl, 'Original os.name = ${os.name}';
+      #sysprops.('os.name') = 'XXXXXXXXXXXXXX';
+      println     'Now,     os.name = ${os.name}';
+    </judoscript>
+  </target>
+
+</project>

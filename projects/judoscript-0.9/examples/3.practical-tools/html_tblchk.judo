@@ -1,0 +1,32 @@
+usage {
+  minArgs = 1;
+  args    = 'file_or_url';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Prints out all the HTML table tags, including <table>,
+    <tbody>, <tr>, <td> and <th>, with indentation.
+  *]];
+}
+
+$spaces = '  ';
+
+do #args[0] as html
+{
+BEFORE:   $indent = 0;
+AFTER:    flush;
+<table>:  println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</table>: --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<tbody>:  println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<tr>:     println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</tr>:    --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+<td>:     println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+</td>:    --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+}

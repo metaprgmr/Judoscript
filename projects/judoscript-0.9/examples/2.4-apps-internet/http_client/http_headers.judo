@@ -1,0 +1,16 @@
+usage {
+  minArgs = 1;
+  args    = 'url';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Connects to a URL you specified on the command line, and
+    displays all the HTTP headers received from the server.
+  *]];
+}
+
+h = httpGet(#args[0]);
+for x in h.getAllHeaders() {
+  println x, ': ', h.(x);
+}

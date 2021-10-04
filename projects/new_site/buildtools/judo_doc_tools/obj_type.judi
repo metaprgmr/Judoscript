@@ -1,0 +1,37 @@
+const #anongroup = 'anon_group';
+
+class ObjectType
+{
+  ctor {
+    this.desc = '';
+    this.funcgroups = new OrderedMap;
+    this.funcgroups.(anongroup) = [];
+  }  
+
+  function reInit { 
+    this.desc = '';
+    this.funcgroup.clear();
+    if this.members != null { this.members.clear(); }
+    if this.methods != null { this.methods.clear(); }
+  }
+
+  function setDesc descr { this.desc = descr; }
+  function getDesc { return this.desc; }
+
+  function addMember name, desc {
+    if this.members == null { this.members = new OrderedMap; }
+    this.members.(name) = desc;
+  }
+  function getMemberDesc name { return this.members.(name); }
+  function getMemberNames { return this.members.keys(); }
+
+  function addMethod name, sig, desc, groupid {
+    if groupid == null { groupid = #anongroup; }
+    arr = this.funcgroups.(groupid);
+    if arr == null { arr = []; this.funcgroups.(groupid) = arr; }
+    m = [ name, sig, desc ];
+    arr.append(m);
+  }
+
+} // end of class ObjType.
+

@@ -1,0 +1,21 @@
+
+%const MAX_COUNT = 10000
+%const MONTH_FLD = java.text.DateFormat.MONTH_FIELD
+
+public class ConstantTest extends java.sql.Types
+{
+  static final double MY_MAX_COUNT = { MAX_COUNT };
+  static final int    MY_MAX_COUNT1 = 200;
+
+  public static void main(String[] args) {
+    long   var  = { MAX_COUNT };
+    double dvar = { MY_MAX_COUNT1 };
+
+    %println "var = ", var
+    %println "dvar = ", dvar
+    %println "java.text.DateFormat.YEAR_FIELD = ",  { java.text.DateFormat.YEAR_FIELD }
+    %println "java.text.DateFormat.MONTH_FIELD = ", { MONTH_FLD }
+    %println "java.sql.Types.ARRAY = ",             { ARRAY }
+  }
+
+}

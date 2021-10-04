@@ -1,0 +1,20 @@
+usage {
+  minArgs = 1;
+  args    = 'docRoot';
+  author  = 'James Huang';
+  desc    = [[*
+    A simple multi-threaded web server on port 8088 that
+    serves any files from the supplied docRoot directory.
+  *]];
+}
+
+docRoot = #args[0];
+port = 8088;
+println <err> 'Port:    ', port;
+println <err> 'docRoot: ', docRoot;
+
+ss = startServer(port);
+while {
+  start thread a=acceptHttp(ss) { a.serveFile(docRoot); }
+}
+

@@ -1,0 +1,29 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_xslt/calls.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+&lt;!DOCTYPE PHONE_RECORDS SYSTEM "calls.dtd">
+
+&lt;PHONE_RECORDS>
+
+  &lt;!-- Call Record 1 -->
+  &lt;CALL>
+    &lt;FROM>703-433-5678&lt;/FROM>
+    &lt;DATE>5/5/2000&lt;/DATE>
+    &lt;TIME HOUR="19" MINUTE="32"/>
+    &lt;DESTINATION STATE="California" CITY="Sunnyvale"
+     COUNTRY="US">510-798-8390&lt;/DESTINATION>
+    &lt;DURATION HOURS="1" MINUTES="15"/>
+  &lt;/CALL>
+
+  &lt;!-- Call Record 2 -->
+  &lt;CALL>
+    &lt;FROM>703-373-2318&lt;/FROM>
+    &lt;DATE>5/15/2000&lt;/DATE>
+    &lt;TIME HOUR="20" MINUTE="12"/>
+    &lt;DESTINATION CITY="Birmingham"
+     COUNTRY="UK">44-121-738-4294&lt;/DESTINATION>
+    &lt;DURATION HOURS="0" MINUTES="34"/>
+  &lt;/CALL>
+
+&lt;/PHONE_RECORDS>
+</pre></td></tr></table></body></html>

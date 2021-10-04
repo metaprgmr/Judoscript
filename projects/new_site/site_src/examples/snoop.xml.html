@@ -1,0 +1,44 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_ant/snoop.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+
+&lt;!--
+   Demonstrates two ways of using the &lt;judoscript> tag:
+   running external script, and embed code therein.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+&lt;project name="test" default="target1" basedir=".">
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  &lt;target name="target1">
+    &lt;judoscript src="snoop.judo" params="abc -x:1 def ghi -y:something" />
+  &lt;/target>
+
+  &lt;target name="target2">
+    &lt;judoscript params="abc -x:1 def ghi -y:something">
+      // This is the code of snoop.judo copied verbatim.
+
+      println '#cmd_args: ', #cmd_args;
+      for x in #cmd_args {
+        println '  #cmd_args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#args: ', #args;
+      for x in #args {
+        println '  #args[', loopIndex(), '] = ', x;
+      }
+
+      println nl, '#options: ', #options;
+      for x in #options {
+        println '  #options[', x, '] = ', #options.(x);
+      }
+
+      println nl, 'Original os.name = ${os.name}';
+      #sysprops.('os.name') = 'XXXXXXXXXXXXXX';
+      println     'Now,     os.name = ${os.name}';
+    &lt;/judoscript>
+  &lt;/target>
+
+&lt;/project>
+</pre></td></tr></table></body></html>

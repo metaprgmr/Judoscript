@@ -1,0 +1,5 @@
+println '    #PI = ', #PI : 2.7;
+println '5 * #PI = ', 5 * #PI : 2.7;
+
+const #PI = 3.1415926536 ifndef;
+println '    #PI = ', #PI : 2.7;

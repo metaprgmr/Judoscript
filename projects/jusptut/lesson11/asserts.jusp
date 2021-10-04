@@ -1,0 +1,17 @@
+<html><body>
+<p>View <%!viewsrc 'lesson11/asserts.jusp', '../' %></p>
+
+<p>(If user name or password is not set, assertion will fail, which
+is typically a log message at "warn" level. Watch the system log.</p>
+<%
+  assert form.username, 'User name is not entered';
+  assert form.password, 'Password is not entered';
+%>
+<form><table border=0>
+<tr><td>User Name:</td><td><%!text 'username' %></td></tr>
+<tr><td>Password:</td><td><%!password 'password' %></td></tr>
+<tr><td>&nbsp;</td><td><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson11.jusp">lesson 11</a></font>
+</body></html>

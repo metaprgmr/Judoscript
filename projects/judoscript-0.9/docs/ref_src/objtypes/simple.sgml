@@ -1,0 +1,608 @@
+<function sig="isOdd" type=math>
+  Returns <!true> if the current integer value is odd.
+</function>
+
+<function sig="isEven" type=math>
+  Returns <!true> if the current integer value is even.
+</function>
+
+<function sig="int" type=convert>
+  Returns the integer value for this object. It may throw exception if no integer
+  value is available, such as a string with invalid integer format.
+</function>
+
+<function sig="float" alias="double" type=convert>
+  Returns the floating-point number value for this object. It may throw exception if no integer
+  value is available, such as a string with invalid integer format.
+</function>
+
+<function sig="date" type=convert>
+  Returns the date/time value; if this is a date object, returns that; otherwise,
+  the integer value is used to create a date. See <code>parseDate()</code> for parsing
+  the string value to a date object.
+</function>
+
+<function sig="sqrt" type=math>
+  Returns the square-root of the current float value.
+</function>
+
+<function sig="log" type=math>
+  Returns the natural logorithm (base <i>e</i>) of the current float value.
+</function>
+
+<function sig="log10" type=math>
+  Returns the base 10 logorithm of the current float value.
+</function>
+
+<function sig="log2" type=math>
+  Returns the base 2 logorithm of the current float value.
+</function>
+
+<function sig="exp" type=math>
+  Returns the exponential number e (i.e., 2.718...) raised to the power of the
+  current float value.
+</function>
+
+<function sig="floor" type=math>
+  Returns the largest (closest to positive infinity) double value that is not
+  greater than the current float value and is equal to a mathematical integer.
+</function>
+
+<function sig="ceil" type=math>
+  Returns the smallest (closest to negative infinity) double value that is not
+  less than the current float value and is equal to a mathematical integer.
+</function>
+
+<function sig="round" type=math>
+  Returns the closest long to the current float value.
+</function>
+
+<function sig="sin" type=math>
+  Returns the trigonometric sine of the current float value in radiant.
+</function>
+
+<function sig="cos" type=math>
+  Returns the trigonometric cosine of the current float value in radians.
+</function>
+
+<function sig="tan" type=math>
+  Returns the trigonometric tagent of the current float value in radiant.
+</function>
+
+<function sig="asin" type=math>
+  Returns the arc sine of the current float value in radians, in the range of -pi/2 through pi/2.
+</function>
+
+<function sig="acos" type=math>
+  Returns the arc cosine of the current float value in radians, in the range of 0 through pi.
+</function>
+
+<function sig="atan" type=math>
+  Returns the arc tagent of the current float value in radians, in the range of -pi/2 through pi/2.
+</function>
+
+<function sig="sin_d" type=math>
+  Returns the trigonometric sine of the current float value in degrees.
+</function>
+
+<function sig="cos_d" type=math>
+  Returns the trigonometric cosine of the current float value in degrees.
+</function>
+
+<function sig="tan_d" type=math>
+  Returns the trigonometric tagent of the current float value in degrees.
+</function>
+
+<function sig="asin_d" type=math>
+  Returns the arc sine of the current float value in degrees, in the range of -90 through 90.
+</function>
+
+<function sig="acos_d" type=math>
+  Returns the arc cosine of the current float value in degrees, in the range of 0 through 180.
+</function>
+
+<function sig="atan_d" type=math>
+  Returns the arc tangent of the current float value in degrees, in the range of -90 through 90.
+</function>
+
+<function sig="degree" type=math>
+  Returns the degrees of the current radian value.
+</function>
+
+<function sig="radian" type=math>
+  Returns the radians of the current degree value.
+</function>
+
+<function sig="abs" type=math>
+  Returns the absolute value of the current float or integer value.
+</function>
+
+<function sig="pow power" type=math>
+  Returns of value of the current float value raised to the <param>power</param>.
+  If no parameters specified, returns 1.
+</function>
+
+<function sig="char" alias="chr" type=convert>
+  Returns a character for the current integer value as its Unicode.
+</function>
+
+<function sig="trim pattern" type=string>
+  If <param>pattern</param> is missing, returns a string value that is the current
+  string value with whitespace characters trimmed from both ends. If <param>pattern</param>
+  is specified, trims all its occurrances at the head and tail.
+</function>
+
+<function sig="length" alias="size" type=string>
+  Returns the length of the current string value.
+</function>
+
+<function sig="isEmpty" type=string>
+  Returns <!true> if this is <!null> or this object is a string with only whitespaces.
+</function>
+
+<function sig="isNotEmpty" type=string>
+  Returns <!true> if this is not <!null> and <code>trim()</code> returns non-0.
+</function>
+
+<function sig="toString" type=convert>
+  Returns a string object for this value. If this is string, the self is returned.
+</function>
+
+<function sig="toLower" alias="toLowerCase" type=string>
+  Returns the lower case of the current string value.
+</function>
+
+<function sig="toUpper" alias="toUpperCase" type=string>
+  Returns the upper case of the current string value.
+</function>
+
+<function sig="startsWith str, ..." type=string>
+  Returns <!true> if the current string starts with any one of the parameters.
+</function>
+
+<function sig="endsWith str, ..." type=string>
+  Returns <!true> if the current string ends with any one of the parameters.
+</function>
+
+<function sig="equalsIgnoreCase str" type=string>
+  Returns <!true> if the current string is case-insenstively the same as the parameter.
+</function>
+
+<function sig="unicode" type=convert>
+  Returns the Unicode value for the <em>first character</em>, or 0 if the string is empty.
+</function>
+
+<function sig="ascii" type=convert>
+  Returns the ASCII value (8-bit) for the <em>first character</em>, or 0 if the string is empty.
+</function>
+
+<function sig="getAt index" type=string>
+  Returns the character (length-1 string) at <param>index</param> of the current string.
+</function>
+
+<function sig="substr start, end" alias="substring" type=string>
+  Returns the sub-string starting at <param>start</param> inclusive to <param>end</param> exclusive.
+  If <param>end</param> is not specified, it is up to the end of the current string.
+</function>
+
+<function sig="truncate numChars" alias="trunc" type=string>
+  Returns the sub-string that is <param>numChars</param> shorter.
+  If parameter is invalid, returns the original string.
+</function>
+
+<function sig="csv separator, trim, minLen, defaultString" type=string>
+  Returns an array of sub-strings, separated by <param>separator</param>, of the current string.
+  If no parameter specified, the separator is defaulted to be comma ",". Parameter <param>minLen</param>,
+  if specified, dictates the minimum length of the returned array. If the string does not
+  contain enough elements, <param>defaultString</param> or <!null> is used to fill in.
+  If <param>trim</param>, each substring's whitespaces are trimed; by default, <param>trim</param>
+  is <!false>.
+</function>
+
+<function sig="indexOf str, startIndex" type=string>
+  Returns the index of the <param>str</param> in the current string value. The search starts
+  from <param>startIndex</param>, if specified. If the substring is not found, returns -1.
+</function>
+
+<function sig="lastIndexOf str, startIndex" type=string>
+  Returns the index of the <param>str</param> in the current string value, starting from the
+  back. The search starts from <param>startIndex</param>, if specified. If the substring is
+  not found, returns -1.
+</function>
+
+<function sig="regionMatches offset, other, other_offset, length" type=string>
+  Returns true if a regional match is found for <param>other</param> in the current string.
+  The search starts at <param>offset</param> in the current string and <param>other_offset</param>
+  in <param>other</param> for the specified <param>length</param>. If <param>length</param> is
+  not specified, it is the length for the <param>other</param> minus <param>other_offset</param>.
+</function>
+
+<function sig="regionMatchesIgnoreCase offset, other, other_offset, length" type=string>
+  Returns true if a case-insensitive regional match is found for <param>other</param> in the
+  current string. The search starts at <param>offset</param> in the current string and
+  <param>other_offset</param> in <param>other> for the specified <param>length</param>.
+  If <param>length</param> is not specified, it is the length for the <param>other</param>
+  minus <param>other_offset</param>.
+</function>
+
+<function sig="contains pattern, ..." type=string>
+  If any <param>pattern</param> is found in the current string value, it returns <!true>.
+  The <param>pattern</param> can be a string or a <obj id=RegExp>.
+</function>
+
+<function sig="base64Decode" type=string>
+  Returns a base-64 decoded byte array of the current string value.
+</function>
+
+<function sig="unquote leftQuote, rightQuote" type=string>
+  Returns a substring of the current string value with quotes trimmed off.
+  If no <param>leftQuote</param> and <param>rightQuote</param> specified, the single-quote
+  or double-quote character is assumed. If only <param>leftQuote</param> is specified, and
+  the <param>leftQuote</param> is a single character, then for '(', '<', '{' and '[', the
+  right quote is ')', '>', '}' and ']', respectively; otherwiser, the right quote is the
+  same as <param>leftQuote</param>.
+</function>
+
+<function sig="left index" type=string>
+  Returns the sub-string starting from 0 up to <param>index</param> exclusive.
+  If <param>index</param> <= 0, returns the original string.
+</function>
+
+<function sig="right count" type=string>
+  Returns the sub-string starting from <param>count</param> characters from the end.
+  If <param>count</param> <= 0, returns the original string.
+</function>
+
+<function sig="leftOf subString" type=string>
+  Returns the sub-string starting from 0 up to <param>subString</param>.
+</function>
+
+<function sig="rightOf subString" type=string>
+  Returns the sub-string starting from <param>subString</param> to the end.
+</function>
+
+<function sig="replace old, new" type=string>
+  Does a non-regular-expression replacing of all the <param>old</param> sub-string to
+  <param>new</param> for the current string value.
+</function>
+
+<function sig="replaceIgnoreCase" type=string>
+  Case-insensitively replaces the <param>old</param> sub-string to <param>new</param> for
+  the current string value,
+</function>
+
+<function sig="count pattern" type=string>
+  Returns the number of occurrances of the <param>pattern</param> in the current string value.
+</function>
+
+<function sig="stringCompare other" type=string>
+  Compares this string value to <param>other</param>, and returns 1 if this one is "greater",
+  -1 if <param>other</param> is greater, or 0 if they are the same.
+</function>
+
+<function sig="neverEmpty defaultValue" type=string>
+  If the current string value is not empty, returns itself. Otherwise, returns the
+  <param>defaultValue</param> if specified, or a space otherwise.
+</function>
+
+<function sig="isAlpha" type=string>
+  Checks the first character and returns <!true> if it is a letter.
+</function>
+
+<function sig="isAlnum" type=string>
+  Checks the first character and returns <!true> if it is a letter or a digit.
+</function>
+
+<function sig="isDigit" type=string>
+  Checks the first character and returns <!true> if it is a digit.
+</function>
+
+<function sig="isUpper" type=string>
+  Checks the first character and returns <!true> if it is a upper-case character.
+</function>
+
+<function sig="isLower" type=string>
+  Checks the first character and returns <!true> if it is a lower-case character.
+</function>
+
+<function sig="isWhitespace" alias="isWhite" type=string>
+  Checks the first character and returns <!true> if it is a white-space character.
+</function>
+
+<function sig="getBytes encoding" type=string>
+  Returns a byte array of the current string value for the <param>encoding</param>.
+  If no parameters specified, use the JVM's default character encoding.
+</function>
+
+<function sig="getChars" type=string>
+  Returns the character array of the current string value.
+</function>
+
+<function sig="unit singularName, pluralName" type=format>
+  Returns an English representation for the number of the entities. If the
+  current value is one, returns "1 " and the <param>singularName</param>;
+  otherwise, returns the number and the plural name, which is <param>pluralName</param>
+  if it is specified, or <param>singularName</param> ended with 's'.
+</function>
+
+<function sig="capitalizeFirstLetter" alias="capFirst" type=format>
+  Returns a string that has the first letter capitalized.
+</function>
+
+<function sig="capitalizeAllFirstLetters" alias="capAllFirst" type=format>
+  Returns a string that has the all first letter capitalized.
+</function>
+
+<function sig="groupNumber distance, divider" type=format>
+  Returns a string representation for the current integer value that divides
+  <param>distance</param> consecutive characters with <param>divider</param> if
+  specified (default is ',').
+</function>
+
+<function sig="fractionDigits digits" type=format>
+  Returns a double number that rounds to so many <param>digits</param> after decimal point.
+</function>
+
+<function sig="parseInt" type=format>
+  Returns an integer of the current string value either in the decimal, octal or hexadecimal format.
+</function>
+
+<function sig="parseIntRoman" type=format>
+  Returns an integer of the current string value as Roman format.
+</function>
+
+<function sig="parseDate format" type=format>
+  Returns a date value of the current string value based on <param>format</param>.
+  If no parameters specified, use the default date format at the time.
+</function>
+
+<function sig="formatBool falseName, trueName" alias="fmtBool" type=format>
+  Returns the string representation of the current boolean number, which is
+  an integer that 0 means <!false> and non-0 <!true>. If both parameters are
+  specified, use them. Otherwise, it is "false" or "true".
+</function>
+
+<function sig="formatHex format" alias="fmtHex" type=format>
+  Returns the hexadecimal representation of the current integer number.
+  The <param>format</param> is a number followed by 'A' or 'a', where
+  number is the width (0 left-packed), and 'A' or 'a' indicate the case for
+  A through F.
+</function>
+
+<function sig="formatOctal" alias="fmtOctal" type=format>
+  Returns the octal representation of the current integer number.
+</function>
+
+<function sig="formatRoman upperCase" alias="fmtRoman" type=format>
+  Returns the Roman representation of the current integer number, in upper case if
+  <param>upperCase</param> is <!true> or lower case otherwise. Default is lower case.
+</function>
+
+<function sig="formatCurrency language, country" alias="fmtCurrency" type=format>
+  Returns the string representation of currency the currentn integer number. 
+  If <param>language</param> and/or <param>country</param> are provided, it uses
+  that locale; otherwise, use the default locale.
+</function>
+
+<function sig="formatDuration" alias="fmtDuration" type=format>
+  Returns an English phrase for the currentn integer number as duration in seconds.
+</function>
+
+<function sig="encodeUrl" type=format>
+  Returns a string that is URL-encoded of the current string value.
+</function>
+
+<function sig="decodeUrl" type=format>
+  Returns a string that is URL-decoded of the current string value.
+</function>
+
+<function sig="parseUrl" type=format>
+  Parses the current string value as a URL and returns a <obj id=struct> that
+  possibly holds these values:
+  <table border=1>
+  <tr><th>Field</th><th>Meaning</th></tr>
+  <tr><td>url</td><td>the original value.</td></tr>
+  <tr><td>protocol</td><td>the protocol (before "://")</td></tr>
+  <tr><td>domain</td><td>the domain of this URL.</td></tr>
+  <tr><td>host</td><td>the host part of the domain.</td></tr>
+  <tr><td>port</td><td>the port part of the domain.</td></tr>
+  <tr><td>root</td><td>from the beginning up to the host part of the URL.</td></tr>
+  <tr><td>path</td><td>the virtual path part of the URL.</td></tr>
+  <tr><td>file_name</td><td>the file name of the URL.</td></tr>
+  <tr><td>query_string</td><td>the query string of the URL following "?" before "#".</td></tr>
+  <tr><td>ref</td><td>the reference part of the URL following "#".</td></tr>
+  </table>
+</function>
+
+<function sig="getReader" type=convert>
+  For the current string, returns a reader object to read the content of the string.
+</function>
+
+<function sig="getFileName" type=fs>
+  Returns the file name in the path as represented by the current string value.
+</function>
+
+<function sig="getFileExt" alias="getFileExtension" type=fs>
+  Returns the file extension of the path as represented by the current string value.
+</function>
+
+<function sig="getFilePath" type=fs>
+  Returns the path (excluding the file name) as represented by the current string value.
+</function>
+
+<function sig="fileExists" alias="existsFile" type=fs>
+  Returns <!true> if the file represented by the current string value exists in
+  the file system.
+</function>
+
+<function sig="fileWritable" alias="fileCanWrite" type=fs>
+  Returns <!true> if the file represented by the current string value is writable.
+</function>
+
+<function sig="fileSize" alias="fileLength" type=fs>
+  Returns the size for the file represented by the current string value.
+</function>
+
+<function sig="fileTime" type=fs>
+  Returns the last modified time for the file represented by the current string
+  value.
+</function>
+
+<function sig="isFile" type=fs>
+  Returns <!true> if the current string value represents a valid file in the
+  file system.
+</function>
+
+<function sig="isFileHidden" type=fs>
+  Returns <!true> if the current string value represents a valid hidden file in
+  the file system.
+</function>
+
+<function sig="isDir" alias="isDirectory" type=fs>
+  Returns <!true> if the current string value represents a valid directory in the
+  file system.
+</function>
+
+<function sig="toOSPath" type=fs>
+  If this is Windows, replace '/' with '\'. Otherwise, return self.
+  This can be useful in <!exec> commands and other Windows-specific usages.
+</function>
+
+<function sig="toBoolean" type=java>
+  Returns a <code>java.lang.Boolean</code> object for the current boolean value.
+</function>
+
+<function sig="toByte" type=java>
+  Returns a <code>java.lang.Byte</code> object for the current integer value.
+</function>
+
+<function sig="toCharacter" type=java>
+  Returns a <code>java.lang.Character</code> object for the first character of
+  the current string value. If it is empty, a space is returned.
+</function>
+
+<function sig="toShort" type=java>
+  Returns a <code>java.lang.Short</code> object for the current integer value.
+</function>
+
+<function sig="toInteger" type=java>
+  Returns a <code>java.lang.Integer</code> object for the current integer value.
+</function>
+
+<function sig="toLong" type=java>
+  Returns a <code>java.lang.Long</code> object for the current integer value.
+</function>
+
+<function sig="toFloat" type=java>
+  Returns a <code>java.lang.Float</code> object for the current float value.
+</function>
+
+<function sig="toDouble" type=java>
+  Returns a <code>java.lang.Double</code> object for the current float value.
+</function>
+
+<function sig="matches regex" type=regex>
+  Returns <!true> if the <param>regex</param> regular expression matches this string value.
+</function>
+
+<function sig="replaceAll regex, newValue" type=regex>
+  Returns a new string with all the <param>regex</param> regular expression matches
+  replaced by <param>regex</param>. <param>newValue</param> can be <!null>.
+</function>
+
+<function sig="replaceFirst regex, newValue" type=regex>
+  Returns a new string with the first <param>regex</param> regular expression matches
+  replaced by <param>regex</param>. <param>newValue</param> can be <!null>.
+</function>
+
+<function sig="split regex, limit" type=regex>
+  Returns an array of sub-strings of the current string value splitted by the
+  <param>regex</param> regular expression. The array is no longer than <param>limit</param>
+  if it is specified.
+</function>
+
+<function sig="splitWithMatches regex" type=regex>
+  Returns an array of sub-strings of the current string value splitted by the
+  <param>regex</param> regular expression, including the matched patterns.
+</function>
+
+<function sig="splitWithMatchesOnly regex" type=regex>
+  Returns an array of matched patterns of the current string value matched by
+  the <param>regex</param> regular expression.
+</function>
+
+<function sig="toAbsolutePath">
+  Returns the absolute path for a file represented by this string value.
+</function>
+
+<function sig="numOfDigits">
+  Returns the number of digits for the decimal format of this integer value.
+</function>
+
+<function sig="numOfHexDigits">
+  Returns the number of digits for the hexadecimal format of this integer value.
+</function>
+
+<function sig="numOfOctalDigits">
+  Returns the number of digits for the octal format of this integer value.
+</function>
+
+<function sig="parseFixedPosition len, ...">
+  Returns a string array of substring with the specified lengths, that is, each substring
+  is at the fixed position in this variable as a string.
+</function>
+
+<function sig="writeToFile filename, encoding">
+  Writes this value (as string) into the file denoted by <param>filename</param>. If
+  <param>encoding</param> is specified, use it; otherwise, use the JVM's default encoding.
+</function>
+
+<function sig="isAsciiOnly">
+  Returnes <!true> if all the characters in this string are ASCII.
+</function>
+
+<function sig="escapeHtml">
+  Escapes this string value for HTML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeJava onlyNonASCII">
+  Escapes this string value for Java source code; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+  If <param>onlyNonASCII</param> is <!true>, only non-ASCII characters
+  are escaped; all the whitespace characters are preserved. By default
+  this flag is <!false>.
+</function>
+
+<function sig="escapeJavaScript">
+  Escapes this string value for JavaScript; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeSql">
+  Escapes this string value for SQL; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeXml">
+  Escapes this string value for XML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeHtml">
+  Unescapes this string value for HTML; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeJava">
+  Unescapes this string value for Java source code; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeJavaScript">
+  Unescapes this string value for JavaScript; uses the rules set in
+  <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeXml">
+</function>

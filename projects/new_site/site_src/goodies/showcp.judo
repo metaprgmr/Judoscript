@@ -1,0 +1,7 @@
+//
+// Prints the classpath nicely.
+//
+
+for $x in systemProperty('java.class.path').csv(pathSep()) {
+  . $x;
+}

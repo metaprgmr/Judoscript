@@ -1,0 +1,271 @@
+/*
+ * See copyright.txt for copyright notice.
+ *
+ *************************** CHANGE LOG ***************************
+ *
+ * Authors: JH  = James Jianbo Huang, judoscript@hotmail.com
+ *
+ * 03-17-2002  JH   Initial open source release.
+ *
+ **********  No tabs. Indent 2 spaces. Follow the style. **********/
+
+
+
+// Reference: How to Read Music, ISBN 0-517-88438-0
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  STATIC = false;
+}
+
+PARSER_BEGIN(JmdlParser)
+package com.judoscript.jdml.reader;
+
+public class JmdlParser {
+  public static void main(String args[]) {
+    if (args.length == 0) { System.out.println("Need an input file name."); System.exit(0); }
+    try {
+      JmdlParser parser = new JmdlParser(new java.io.FileInputStream(args[0]));
+      parser.CompilationUnit();
+      System.out.println("Music score parsed successfully.");
+    } catch (Exception e) { e.printStackTrace(); }
+  }
+}
+PARSER_END(JmdlParser)
+
+
+SKIP : /* WHITE SPACE */
+{
+  " " | "\t" | "\n" | "\r" | "\f"
+}
+
+TOKEN : /* LITERALS */
+{
+  < NUMBER: ["1"-"9"] (["0"-"9"])* >
+| < CLEF_NAME: "$" <LETTER> (<LETTER>|<DIGIT>)* >
+| < #LETTER:
+      [ /*  "\u0024", -- "$" is a part of number? */
+        "\u0041"-"\u005a", "\u005f",          "\u0061"-"\u007a", "\u00c0"-"\u00d6",
+        "\u00d8"-"\u00f6", "\u00f8"-"\u00ff", "\u0100"-"\u1fff", "\u3040"-"\u318f",
+        "\u3300"-"\u337f", "\u3400"-"\u3d2d", "\u4e00"-"\u9fff", "\uf900"-"\ufaff"
+      ]
+  >
+| < #DIGIT:
+      [ "\u0030"-"\u0039", "\u0660"-"\u0669", "\u06f0"-"\u06f9", "\u0966"-"\u096f",
+        "\u09e6"-"\u09ef", "\u0a66"-"\u0a6f", "\u0ae6"-"\u0aef", "\u0b66"-"\u0b6f",
+        "\u0be7"-"\u0bef", "\u0c66"-"\u0c6f", "\u0ce6"-"\u0cef", "\u0d66"-"\u0d6f",
+        "\u0e50"-"\u0e59", "\u0ed0"-"\u0ed9", "\u1040"-"\u1049"
+      ]
+  >
+}
+
+<TEXT>
+TOKEN:
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+}
+
+TOKEN : /* SYMBOLES */
+{
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" > : TEXT
+| < RBRACE: "}" > : DEFAULT
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
+| < ASSIGN: "=" >
+| < GT: ">" >
+| < LT: "<" >
+| < BANG: "!" >
+| < TILDE: "~" >
+| < HOOK: "?" >
+| < COLON: ":" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < AMPERSND: "&" >
+| < XOR: "^" >
+| < REM: "%" >
+| < POUND: "#" >
+| < VBAR: "|" >
+| < VVBAR: "||" >
+| < BSVBAR: "\\|" >
+| < VBARBS: "|\\" >
+| < VBARCOLON: "|:" >
+| < COLONVBAR: ":|" >
+| < VVBARCOLON: "||:" >
+| < COLONVVBAR: ":||" >
+| < BSVBARCOLON: "\\|:" >
+| < COLONVBARBS: ":|\\" >
+| < CRES_COLON: "cres:" >
+| < CRES_DOT: "cres." >
+| < DIM_COLON: "dim:" >
+| < DIM_DOT: "dim." >
+| < ACCEL: "accel" >
+| < PP: "pp" >
+| < PPP: "ppp" >
+| < MP: "mp" >
+| < MF: "mf" >
+| < FF: "ff" >
+| < FFF: "fff" >
+| < PF: "pf" >
+| < FP: "fp" >
+| < CODA: "coda" >
+| < DC: "DC" >
+| < S: "S" >
+| < DS: "DS" >
+| < DSalCoda: "DSalCoda" >
+}
+
+/*****************************************
+ * THE JMDL LANGUAGE GRAMMAR STARTS HERE *
+ *****************************************/
+
+/*
+ * Program structuring syntax follows.
+ */
+
+void CompilationUnit() :
+{}
+{
+  ( Staff() )* <EOF>
+}
+
+void Staff() :
+{}
+{
+  <CLEF_NAME> Line()
+}
+
+void Line() :
+{}
+{
+  ( Measure() )*
+}
+
+void Measure() :
+{}
+{
+  ( LOOKAHEAD(2) Expr() | Indicator() )+
+  ( "|"
+  | "||"
+  | "\\|"
+  | "|\\"
+  | ":|"
+  | ":||"
+  | ":|\\"
+  | "|:"
+  | "||:"
+  | "\\|:"
+  )
+}
+
+void Expr() :
+{}
+{
+  Chord()
+| "(" ( Expr() )+ ")"
+  ( "/" | "-" )*
+  [ <NUMBER> "/" <NUMBER> ] // tuplets
+| "~" Expr()                // grace note. p77
+}
+
+void Chord() :
+{}
+{
+  ( Note()
+  | Rest()
+  )
+  [ ( "&" [ <NUMBER> ]      // optional channel number for the following note.
+      Note()
+    )+
+    [ "&*"                  // arpeggio. p89
+    ]
+  ]
+}
+
+void Rest() :
+{}
+{
+  "R"                       // rest
+  ( "/"                     // one eighth note (for one "/"). p87
+  | "-"                     // one half note (for one "-")
+  | "="                     // whole note
+  | "=="                    // breve
+  )*
+  [ "."                     // half the preceding note. p88
+  ]
+}
+
+void Note() :
+{}
+{
+  [ "[" [ <NUMBER> ]        // start of slur/tie; optional channel number
+  ]
+  ( "C" | "D" | "E" | "F" | "G" | "A" | "B" )
+  [ "#"                     // sharp. p89
+  | "x"                     // double sharp
+  | "b"                     // flat
+  | "bb"                    // double flat
+  | "@"                     // natural
+  | "@#"                    // natural sharp
+  | "@b"                    // natural flat
+  ]
+  [ <NUMBER>                // staff number; 4 is for middle C.
+                            // If missing, carries over from the previous note or one in a chord.
+  ]
+  ( "/"                     // one eighth note (for one "/"). p87
+  | "-"                     // one half note (for one "-")
+  | "="                     // whole note
+  )*
+  [ "."                     // half the preceding note. p88
+  ]
+  [ "?"                     // hold. p90
+  | "!"                     // staccato. p77
+  | ">"                     // strong accent
+  | "_"                     // firm
+  | "'"                     // short and sharp
+  | "~~"                    // trill. p78
+  | "~="                    // turn
+  | "~-="                   // inverted turn
+  | "~+"                    // mordent. p79
+  | "~-"                    // lower mordent
+  ]
+  [ "]" [ <NUMBER> ]        // end of slur/tie; optional channel number
+  ]
+}
+
+void Indicator() :
+{}
+{
+  "R" <NUMBER>              // long rest, of this many bars. p80
+| "(/)"                     // repeat one chord or group of notes. p86
+| "(./.)"                   // repeat previous bar
+| "(.//.)"                  // repeat previous two bars
+| "cres:"                   // start of crescendo. p91
+| "cres."                   // end of crescendo
+| "dim:"                    // start of diminuendo
+| "dim."                    // end of decrescendo
+| "accel"                   // accelerando
+| "p"                       // piano
+| "pp"                      // pianissimo
+| "ppp"                     // pianississimo
+| "mp"                      // mezzo-piano
+| "m"                       // mezzo
+| "mf"                      // mezzo-forte
+| "f"                       // forte
+| "ff"                      // fortissimo
+| "fff"                     // fortississimo
+| "pf"                      // piu forte
+| "fp"                      // fortepiano
+| "coda"                    // Coda sign. p91
+| "DC"                      // Da Capo
+| "S"                       // Sign
+| "DS"                      // Da Segno
+| "DSalCoda"                // Da Segno al Coda
+}
+

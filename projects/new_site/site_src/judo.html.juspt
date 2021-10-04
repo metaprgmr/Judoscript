@@ -1,0 +1,82 @@
+<%
+  function jusp$bookChapter ctxt, bookID, name {
+    print<ctxt.writer> '<a href="books/judoscript-0.9/chapters/${bookID}.html">${name}</a>';
+  }
+
+  var title = 'Judo Language, a natural and intuitive language';
+  var keywords = "judo, judoscript, jusp, juspt, jamaica, java scripting, jdbc scripting, hibernate scripting, xml scripting, html scraping, os shell scripting, shell scripting, soap scripting, web app, jusp platform, juspt transform, jvm bytecode, jvm macro assembler, bytecode assembler";
+  var tabID = 'judo';
+%>
+<%!include '../site_src/include/header.jusp' %>
+
+<%!leftPane%>
+
+<p><IMG height=91 alt="Judo Language" hspace=10 vspace=10 src="share/judo_picture.gif" width=111 border=0 align=right>
+<p><b>Welcome</b> to the official site of the <b>Judo</b> language! The Judo language is the key technology hosted herein. You can find the latest software, news, the most current documentation, sample code and tutorials.</p>
+
+<p><em>This site has been rebuilt in March, 2005. Some of the content are transplanted legacy, and we are working hard to updating the language documentation.</em></p>
+
+<h3>Latest development</h3>
+<p>The latest release includes improved support for <a href="jusp.html">the JuSP Platform and the JuSPT content management kit</a>.</p>
+
+<h3>First-time visitors</h3>
+<p>If this is the <em>first time</em> you encounter Judo, here is a number of options for you:</p>
+<ul type=square>
+<li>For the <em>real impatient</em>, the quickest way to get started is the <a href="examples/index.html">example library</a> which cover almost all the language features.</li>
+<li>The <a href="articles/whitepaper.html">white paper</a> explains scripting in the Java era and Judo philosophy, and comprehensively introduces Judo. The <a href="faq.html">FAQ</a> may answer some of your key questions.</li>
+<li>For <em>Java programmers</em>, the fully capable <a href="books/judoscript-0.9/chapters/java.html">Java Scripting</a> may be more interesting.</li>
+<li>It is better to read <a href="newusers.html">For New Users</a> first for the very basics of Judo.</li>
+<li>For <em>enterprise developers</em> are likely interested in one of more of these topics: <%!bookChapter 'jdbc', 'JDBC Scripting' %>, <%!bookChapter 'hib', 'Hibernate Scripting' %>, <%!bookChapter 'wsdl', 'WSDL Scripting' %>, <a href="articles/http_html.html">HTML/SGML/JSP Scraping</a>, <%!bookChapter 'ant', 'Ant Task Scripting' %>, <a href="articles/gui.html">Java GUI Scripting</a>.</li>
+<li>For <em>any power computer users</em>, these facilities can be very interesting: <%!bookChapter 'fs', 'File System Scripting' %>, <%!bookChapter 'exec', 'OS Scripting' %> and <a href="articles/http_html.html">Internet scripting</a>.</li>
+</ul>
+
+<h3>Getting help</h3>
+<p>You have a number of ways to get responsive help. One is to submit questions and suggestions to our <a href="/feedback.jusp">feedback</a>. The other is to use <a href="wiki_weblog.html">forums, mailing lists, wiki and/or weblog</a>.</p>
+
+<%!rightPane%>
+
+<h3>What is Judo?</h3>
+<u>Judo is a <em>practical, functional scripting language</em></u>.
+It is designed to cover the use cases of not only algorithmic/object-oriented/multi-threaded programming and Java scripting but also a number of major application domain tasks, such as scripting for JDBC, WSDL, ActiveX, OS, multiple file/data formats, etc. Despite its rich functionality, the base language is extremely simple, and domain support syntax is totally intuitive to domain experts, so that even though you have never programmed in Judo, you would have little trouble figuring out what the code does. See for yourself by looking at any of the <a href="examples/index.html">examples</a>.</p>
+
+<p>The Judo language specification can be formulated in pseudo-BNF as:<br><br>
+<center><table cellpadding=5 border=0 bgcolor="#dddddd">
+<tr><td valign=top align=right class=secondary3><b>Judo</b></td><td valign=top class=secondary3>::=</td><td class=secondary3><i>Core-Language +<br>
+Object-System Scripting +<br>
+Data-and-Services Scripting</i>
+</td></tr>
+<tr><td valign=top align=right class=secondary3><i>Core<br>Language</i></td><td valign=top class=secondary3>::=</td><td class=secondary3>
+JavaScript x 90% +<br>
+Genuine OOP +<br>
+Powerful data structures +<br>
+Thread programming<br>
+</td></tr>
+<tr><td valign=top align=right class=secondary3><i>Object<br>Systems</i></td><td valign=top class=secondary3>::=</td><td class=secondary3>
+Fully capable Java scripting +<br>
+SOAP web service scripting <%!new "books/judoscript-0.9/chapters/wsdl.html", "Nov 27, 2004" %> +<br>
+Windows ActiveX/COM scripting<br>
+</td></tr>
+<tr><td valign=top align=right class=secondary3><i>Data<br>and<br>Services</i></td><td valign=top class=secondary3>::=</td><td class=secondary3>
+JDBC scripting +<br>
+Hibernate ORM/HQL scripting <%!new "books/judoscript-0.9/chapters/hib.html", "Jan 30, 2005" %> +<br>
+XML, SGML and JSP scripting +<br>
+OS shell scripting +<br>
+Internet scripting +<br>
+Ant and Ant task scripting <%!new "books/judoscript-0.9/chapters/ant.html", "Aug 23, 2004" %> +<br>
+Java GUI scripting
+</td></tr></table></center>
+
+<h3>What's Judo good for?</h3>
+<p><u>The key benefits of progamming in Judo are <em>productivity</em> and <em>maintainability</em></u>, thanks to its <em>rich, built-in functionality</em> and the unprecedented emphasis on code <em>conciseness</em> and <em>intuitiveness</em>. Judo itself is a general-purpose language, and is strong for tasks like:</p>
+<ul>
+<li>multi-source, multi-format data analysis, reporting or aggregation
+<li>automated tasks such as unit and system testing, batch processing jobs, system monitering, etc.
+<li>software application prototyping at different levels and tiers
+<li>developing enterprise applications
+<li>quick <i>ad hoc</i> fixes
+<li>etc., etc.
+</ul>
+
+<%!endPanes%>
+
+<%!include '../site_src/include/footer.jusp' %>

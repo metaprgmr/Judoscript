@@ -1,0 +1,2120 @@
+<gramma name=JudoScript version="v0.7">
+
+<rule nt=Script>
+  <lq> <nt name=UsageDeclaration> <pi>
+  <or> <nt name=ImportStatement> <pi>
+  <or> <nt name=Directives> <pi>
+  <or> <nt name=ConstantDefinition> <pi>
+  <or> <nt name=ClassDefinition> <pi>
+  <or> <nt name=JavaExtensionDefinition> <pi>
+  <or> <nt name=FunctionDeclaration> <pi>
+  <or> <nt name=ThreadDeclaration> <pi>
+  <or> <nt name=StaticJavaFunctionDeclaration> <pi>
+  <or> <nt name=SgmlHandlerDeclaration> <pi>
+  <or> <nt name=Statement> <pi>
+  <or> <!catch> <!:> <pi>
+  <or> <!finally> <!:> <pi>
+  <rq multi="*"> <pi>
+  <lq> <!EndScript> <!_LOCALDATA> <rq multi="?">
+
+<semantics>
+  <p>A script, or program, is a series of <nt name=Statement>s and declarations.
+  References (including function invocations) to declarations can appear before
+  declarations.</p>
+
+  <p>In this global scope, <!catch> and/or <!finally> can be specified. The
+  <!finally> clause must appear after <!catch>, if <!catch> is present.</p>
+
+  <p>Text data can be attached to the script, starting from the next line
+  following keyword <!EndScript>. The free form text, represented as
+  <!_LOCALDATA>, can be read via the built-in stream object, <!$$local>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=UsageDeclaration>
+  <!usage> <!{> <!_IDENTIFIER> <!=> <Expr> <!;> <rq multi="+"> <!}>
+
+<semantics>
+  <p>The usage declaration helps to document the usage of the script. It serves two purposes:
+  <ol>
+  <li> If <code>-?</code> or <code>--help</code> is specified, or if the number of arguments
+       is less than the required number, the <J> engine displays the usage information.
+  <li> For a <J> companion tool extracts usage information from scripts for indexing and
+       documentation purposes.
+  </ol>
+  </p>
+
+  <p>The usage information, if specified, is stored in a predefined constants, <!#usage>, as
+  a hashtable. Its content is a list of comma-separated name=value pairs. The names can be
+  anything, but there are a number of predefined attributes:
+
+  <table border=1>
+  <tr><th>Name</th><th>Source</th><th>Description</th></tr>
+  <tr>
+    <td>minArgs</td> <td>user</td>
+    <td>The minimum number of arguments (excluding options). If not specified, assumed 0.
+        If specified and greater than 0, and the actual argument number is less than that,
+        <J> prints out the usage help message and exits.
+    </td>
+  </tr>
+  <tr>
+    <td>args</td> <td>user</td>
+    <td>The command-line arguments. Can use any format but do not include the program name.</td>
+  </tr>
+  <tr>
+    <td>desc</td> <td>user</td>
+    <td>The description of this script. Can be anything.</td>
+  </tr>
+  <tr>
+    <td>author</td> <td>user</td>
+    <td>The author(s). Use comma to separate multiple names.</td>
+  </tr>
+  <tr>
+    <td>created</td> <td>user</td>
+    <td>The created date, in the format of 2002-08-18.</td>
+  </tr>
+  <tr>
+    <td>lastMod</td> <td>user</td>
+    <td>The last modified date, in the format of 2002-08-18.</td>
+  </tr>
+  <tr>
+    <td>prog</td> <td>parser</td>
+    <td>The script name. The same as the predefined constant <!#prog>.</td>
+  </tr>
+  <tr>
+    <td>firstLine</td> <td>parser</td>
+    <td>The first line number for the <!usage> block.</td>
+  </tr>
+  <tr>
+    <td>lastLine</td> <td>parser</td>
+    <td>The last line number for the <!usage> block.</td>
+  </tr>
+  </table>
+
+  <p>Every script can have one usage block, but only the main one is stored; the usage
+  blocks of included scripts are ignored. The usage block should appear at the beginning
+  of a script, although it can appear anywhere.</p>
+
+  <p>The system function <sfn name=obtainUsage> retrieves the usage information for the
+  specified script.</p>
+</semantics>
+</rule>
+
+<rule nt=ImportStatement>
+  <!import> <!_JAVA_CLASS_NAME_COLLECTION> <!;>
+
+<semantics>
+  <p>This statement serves exactly the same purpose as the <code>import</code> in Java.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Directives>
+  <nt name=IncludeDirective> <or> <nt name=Pragma> <or> <nt name=JavaClassShortcuts>
+
+<semantics>
+  <p>Directives are instructions to the compiler that controls compile-time or runtime
+  environments.</p>
+</semantics>
+</rule>
+
+
+<rule nt=IncludeDirective>
+  <!!include>
+  <lq> <!if> <Expr> <or> <!ifexists> <or>
+       <lq> <!ifdef> <or> <!ifndef> <rq> <!_CONST_NAME>
+  <rq multi="?">
+  <!_STRING_LIT>
+
+<semantics>
+  <p>A script can include other scripts. Files are simply copied into the enclosing file,
+  and included files can include others.</p>
+  <p>Conditional include is supported either based on an <em>boolean</em> <Expr>ession, on
+  the existence or non-existence of a constant, or simply if the included file exists or not.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Pragma>
+  <!!pragma> <nt name=PragmaType> <nt name=Literal>
+
+<semantics>
+  <p>Pragmas are instructions to the compiler. Specific pragmas
+  will be specified.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaClassShortcuts>
+  <!!JavaPackages> <!&lt;> <!_IDENTIFIER> <!&gt;> <lq> <!_CONST_NAME> <rq multi=",+">
+  <pi> <or>
+  <!!DefineJavaPackages> <lq> <!&lt;> <rq multi="?"> <!_IDENTIFIER> <lq> <!&gt;> <rq multi="?">
+  <!{> <lq> <nt name=JavaClassName> <rq multi=",+"> <!}>
+  <pi> <or>
+  <!!JavaBaseClass> <lq> <!_CONST_NAME> <rq multi=",+">
+  <pi> <or>
+  <!!JavaGuiClass> <lq> <!_CONST_NAME> <rq multi=",+">
+  <pi> <or>
+  <!!JavaEnterpriseClass> <lq> <!_CONST_NAME> <rq multi=",+">
+  <pi> <or>
+  <!!JavaCorbaClass> <lq> <!_CONST_NAME> <rq multi=",+">
+
+<semantics>
+  <p>The Java class shortcut is a convenience to assign a constant name to a matching
+  Java class name in one or more Java packages.</p>
+
+  <p>A number of Java packages can be assigned to a name via the <!!DefineJavaPackages>
+  directive. Once such a name is established, use <!!JavaPackages> directive for a number
+  of constants.</p>
+
+  <p>As yet a further convenience, there are a number of predefined Java package
+  collections, and constants can be defined by <!!JavaBaseClass>, <!!JavaEnterpriseClass>,
+  <!!JavaGuiClass>, <!!JavaCorbaClass>.The following table lists all the packages for
+  each directive; note that some packages are included in multiple directives.</p>
+
+  <table border=1><tr><th>Directive</th><th>Java Packages</th></tr>
+  <tr><td valign=top nowap><!!JavaBaseClass></td><td><code>
+  java.lang, java.util, java.io, java.net, java.text, java.sql,
+  java.applet, java.math, java.util.zip, java.util.jar, java.beans,
+  java.beans.beancontext, javax.sound.midi, javax.sound.sampled,
+  java.awt, java.awt.event, java.awt.color, java.awt.dnd, java.awt.font,
+  java.awt.geom, java.awt.im, java.awt.image, java.awt.image.renderable,
+  java.rmi, java.rmi.server, java.lang.ref, java.lang.reflect,
+  java.security, java.security.acl, java.security.cert,
+  java.security.interfaces, java.security.spec, javax.naming,
+  javax.crypto, javax.crypto.interfaces, javax.crypto.spec,
+  javax.xml.parsers, javax.xml.transform, javax.xml.transform.dom,
+  javax.xml.transform.sax, javax.xml.transform.stream,
+  org.xml.sax, org.xml.sax.ext, org.xml.sax.helpers, org.w3c.dom,
+  org.w3c.dom.html, org.w3c.dom.range, org.w3c.dom.traversal
+  </code></td></tr>
+  <tr><td valign=top nowap><!!JavaEnterpriseClass></td><td><code>
+  javax.ejb, java.rmi, java.rmi.activation, java.rmi.dgc, javax.rmi.CORBA,
+  java.rmi.server, javax.rmi, java.rmi.registry, javax.xml.parsers,
+  javax.xml.transform, javax.xml.transform.dom, javax.xml.transform.sax,
+  javax.xml.transform.stream,
+  org.xml.sax, org.xml.sax.ext, org.xml.sax.helpers, org.w3c.dom,
+  org.w3c.dom.html, org.w3c.dom.range, org.w3c.dom.traversal,
+  javax.sql, javax.jms, javax.mail, javax.mail.event, javax.mail.internet,
+  javax.mail.search, javax.servlet, javax.servlet.http, javax.naming.directory,
+  javax.naming.event, javax.naming, javax.naming.ldap, javax.transaction,
+  javax.transaction.xa, javax.activation, javax.resource, javax.resource.cc,
+  javax.security.auth, javax.security.auth.callback, javax.security.auth.login,
+  javax.crypto, javax.crypto.interfaces, javax.crypto.spec
+  </code></td></tr>
+  <tr><td valign=top nowap><!!JavaGuiClass></td><td><code>
+  java.awt, java.awt.event, javax.swing, javax.swing.event,
+  javax.swing.border, javax.swing.colorchooser, javax.swing.plaf.multi,
+  javax.swing.table, javax.swing.text, javax.swing.text.html,
+  javax.swing.text.html.parser, javax.swing.text.rtf, javax.swing.tree,
+  javax.swing.undo, java.awt.color, java.awt.dnd, java.awt.font,
+  java.awt.geom, java.awt.im, java.awt.image, java.awt.image.renderable,
+  java.awt.print, java.awt.datatransfer, javax.swing.filechooser,
+  javax.swing.plaf, javax.swing.plaf.basic, javax.swing.plaf.metal
+  </code></td></tr>
+  <tr><td valign=top nowap><!!JavaCorbaClass></td><td><code>
+  javax.rmi.CORBA,
+  org.omg.CORBA, org.omg.CORBA_2_3, org.omg.CORBA_2_3.portable,
+  org.omg.CORBA.DynAnyPackage, org.omg.CORBA.ORBPackage, org.omg.CORBA.portable,
+  org.omg.CORBA.TypeCodePackage, org.omg.CosNaming,
+  org.omg.CosNaming.NamingContextPackage, org.omg.SendingContext,
+  org.omg.stub.java.rmi
+  </code></td></tr>
+  </table>
+</semantics>
+</rule>
+
+
+<rule nt=ConstantDefinition>
+  <lq> <!const> <rq multi="?"> <!_CONST_NAME> <!=>
+  <lq> <Expr>
+  <or> <nt name=HereDoc>
+  <or> <nt name=ArrayAllocator>
+  <or> <nt name=StructAllocator>
+  <or> <nt name=SetAllocator>
+  <rq>
+  <lq> <!ifndef> <or> <!if> <Expr> <rq multi="?">
+  <!;>
+
+<semantics>
+  <p>A constant is defined, or evaluated, before a script is run, no matter where it
+  is defined. The value expression should be constant as well.</p>
+
+  <p>Conditional definition is supported, either to check on itself or a boolean
+  <Expr>ession.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ClassDefinition>
+  <!class> <!_IDENTIFIER>
+  <lq> <!extends> <lq> <!_IDENTIFIER>
+                  <or> <!OrderedMap>
+                  <or> <!SortedMap> <nt name=ComparatorDecl>
+                  <or> <!TreeNode>
+                  <rq>
+  <rq multi="?"> <pi>
+  <!{> <lq> <nt name=ConstructorDeclaration> <rq multi="?">
+  <lq> <nt name=FunctionDeclaration> <rq multi="*"> <!}>
+
+<semantics>
+  <p>User defined classes may have methods, or member functions, and a constructor.
+  A class by default extends <!Struct>, or otherwise extends <!OrderedMap>,
+  <!treeNode> or other user-defined classes. Java classes can <em>not</em> be extended.</p>
+
+  <p>Data members are just regular <!Struct> data members. To enforce the existence of
+  certain data members during creation, can use <!Struct>'s <code>assertHas()</code> method.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaExtensionDefinition>
+  <!class> <!_IDENTIFIER> <!extends> <!java> <!::> <lq> <nt name=JavaClassName> <or> <!_CONST_NAME> <rq multi=",+"> <pi>
+  <!{> <pi>
+  <lq> <nt name=ConstructorDeclaration> <pi>
+  <or> <nt name=JavaType> <lq> <!_IDENTIFIER> <rq multi=",+"> <!;> <pi>
+  <or> <nt name=JavaType> <!_IDENTIFIER> <!(> <lq> <nt name=JavaType> <!_IDENTIFIER> <rq multi=",+"> <!)>
+       <nt name=Block> <pi>
+  <rq multi="*"> <pi>
+  <!}>
+
+<semantics>
+  <p>The Java extension mechanism allows Java classes to be extended and/or interfaces implemented in
+  <J>. The <!extends> <!java> <!::> clause can have one Java class (must be the first) and any number
+  of Java interfaces.</p>
+
+  <p>The content of a Java extension class is not the same as regular <J> classes. These are the points:
+  <ol>
+  <li> A Java extension class is defined with the <kw>extends> <!java> <!::> </kw> clause,
+       which can take zero or one Java class and any number of Java interfaces, all separated
+       by comma. The resultant class is a Java class with that name without any package names.
+  <li> Methods are declared with Java return type and Java-typed parameters just like Java
+       methods; fields are declared with Java types like Java. No access control can be
+       specified as they are always public; they can never be static. Methods are never
+       declared with exceptions.
+  <li> Method bodies are implemented in <J> code. The parent class's methods, public or
+       protected, can be invoked by the <kw>super</kw> decorator. You can also invoke own
+       methods, and access this and parent's data fields, public or protected.
+  <li> When abstract methods from the parent class/interfaces are not explicitly implemented,
+       they are given empty bodies, so the resultant Java class can be instantiated.
+  <li> Data fields can be initialized only in the constructor.
+  <li> There can be up to one constructor in a Java extension class. This constructor may
+       take untyped, <J> parameters. Within the constructor, there must be one and only one
+       invocation of <code>super()</code>, which is one of the parent class's constructors.
+       This call must precede data member initializations and invocations of any other
+       methods.
+  </ol>
+</semantics>
+</rule>
+
+
+<rule nt=JavaType>
+  <lq> <nt name=JavaClassName> <or> <!CONST_NAME> <or> <nt name=JavaPrimitiveTypes> <rq>
+  <lq> <![> <!]> <rq multi="*">
+</rule>
+
+
+<rule nt=ConstructorDeclaration>
+  <lq> <!constructor> <or> <!ctor> <rq> <lq> <nt name=FormalParameters> <rq multi="?"> <nt name=Block>
+
+<semantics>
+  <p>A constructor is a special method of a class. It is invoked after the class is
+  initialized. One and only one is allowed per class. It does not take any parameters.</p>
+
+  <p>The optional <nt name=FormalParameters> is only used for for Java extensions.
+  See <nt name=JavaExtensionDefinition>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FunctionDeclaration>
+  <!function> <!_FUNCTION_NAME> <nt name=FormalParameters> <nt name=Block>
+
+<semantics>
+  <p>A function is a named collection of statements with parameters, and can be invoked
+  by code repeatedly. A function defined inside a class is called a method.</p>
+
+  <p>Functions can return values via the <!return> statement. If not, by default they
+  return a <!null>.</p>
+
+  <p>See <nt name=FormalParametes> for how parameters are handled.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FormalParameters>
+  <lq> <!(> <rq multi="?">
+       <lq> <!..>
+       <or> <lq> <!_IDENTIFIER> <lq> <!=> <Expr> <rq multi="?"> <rq multi=",+">
+            <lq> <!,> <!..> <rq multi="?"> <rq multi="?">
+  <lq> <!)> <rq multi="?">
+
+<semantics>
+  <p>Parameter definition is used in function and thread declaration. Parameters are
+  variable names separated by commas. Variables may have initializers, which can be
+  constant values or expressions (such as <code>date()</code>).</p>
+
+  <p>Functions and threads can be invoked/started with different number of parameters
+  than declared. If fewer, the uninitialized parameters are <!null>'s. If more, the
+  extra parameters beyond the declared ones are accessed via the predefined array
+  variable, <!!!args>.</p>
+
+  <p>To emphasize the fact that a function or thread takes variable number of
+  parameters, end the parameter list with <!..>. It does not do anything other than
+  serving as an indicator.</p>
+</semantics>
+</rule>
+
+
+<rule nt=LambdaDeclaration>
+  <!function> <nt name=FormalParameters> <nt name=Block>
+
+<semantics>
+  <p>A lambda is an anonymous function and is typically assigned to a
+  variable or passed to a function/method call.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ThreadDeclaration>
+  <!thread> <!_FUNCTION_NAME> <nt name=FormalParameters> <nt name=Block>
+
+<semantics>
+  <p>A thread is defined much the same way as a <nt name=function> and started via
+  the <!start> keyword. Threads run in a different "context" and only global
+  varibles and constants are shared across threads.</p>
+
+  <p>See <nt name=StartThreadStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=StaticJavaFunctionDeclaration>
+  <!function> <!_FUNCTION_NAME> <pi> <!for>
+  <lq> <nt name=JavaClassName> <or> <!_CONST_NAME> <rq>
+  <!::> <!_IDENTIFIER> <lq> <!(> <!)> <rq multi="?"> <!;>
+
+<semantics>
+  <p>A function alias can be created for Java static methods, so that these Java
+  static methods can work like a regular function. Note that overridden Java static
+  methods share a same function alias, and the right one is picked at runtime based
+  on the number and types of the parameters.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaClassName>
+  <!_IDENTIFIER> <lq> <!.> <!_IDENTIFIER> <rq multi="*">
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=Literal>
+       <!_INT_LIT>
+  <or> <!_FLOAT_LIT>
+  <or> <!_STRING_LIT>
+  <or> <!true>
+  <or> <!false>
+  <or> <!null>
+  <or> <!nl>
+  <or> <!eof>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=Expr>
+  <!defined> <!_CONST_NAME> <or> <nt name=Assignment>
+  <pi> <or> <nt name=ConditionalExpr> <lq> <!@> <nt name=ConditionalExpr> <rq multi="*">
+
+<semantics>
+  <p>The <!defined> expression tells if a constant is defined.</p>
+  <p>The <!@> is the operator for string concatenation.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ConditionalExpr>
+  <nt name=ConditionalOrExpr>
+  <lq> <!?> <Expr> <!:> <nt name=ConditionalExpr> <rq multi="?">
+
+<semantics>
+  <p>This <code>x ? y : z</code> expression is the same as in C or Java, that is, the
+  value of this expression is <code>y</code> if <code>x</code> is true, or
+  <code>z</code> otherwise.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ConditionalOrExpr>
+  <nt name=ConditionalAndExpr> <lq> <!||> <nt name=ConditionalAndExpr> <rq multi="*">
+
+<semantics>
+  <p>A boolean expression evaluated to be true if any of the sub-expression is true.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ConditionalAndExpr>
+  <nt name=InclusiveOrExpr> <lq> <!&&> <nt name=InclusiveOrExpr> <rq multi="*">
+
+<semantics>
+  <p>A boolean expression evaluated to be true if all of the sub-expressions are true.</p>
+</semantics>
+</rule>
+
+
+<rule nt=InclusiveOrExpr>
+  <nt name=ExclusiveOrExpr> <lq> <!|> <nt name=ExclusiveOrExpr> <rq multi="*">
+
+<semantics>
+  <p>An integral expression that is the bit-wise OR of all the sub-expressions.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExclusiveOrExpr>
+  <nt name=AndExpr> <lq> <!^> <nt name=AndExpr> <rq multi="*">
+
+<semantics>
+  <p>An integral expression that is the bit-wise exclusive OR of all the sub-expressions.</p>
+</semantics>
+</rule>
+
+
+<rule nt=AndExpr>
+  <nt name=EqualityExpr> <lq> <!&> <nt name=EqualityExpr> <rq multi="*">
+
+<semantics>
+  <p>An integral expression that is the bit-wise AND of all the sub-expressions.</p>
+</semantics>
+</rule>
+
+
+<rule nt=EqualityExpr>
+  <nt name=RelationalExpr> <lq> <lq> <!==> <or> <!!=> <rq> <nt name=RelationalExpr> <rq multi="*">
+
+<semantics>
+  <p>A boolean expression that is true if all the (non-)equality expressions are true.</p>
+</semantics>
+</rule>
+
+
+<rule nt=RelationalExpr>
+  <nt name=ShiftExpr> <lq> <lq> <&lt;> <or> <!&gt;> <or> <!&lt;=> <or> <!&gt;=> <rq> <nt name=ShiftExpr> <rq multi="?">
+
+<semantics>
+  <p>A boolean expression that is true if all the comparison expressions are true.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ShiftExpr>
+  <nt name=AdditiveExpr> <lq> <lq> <!&lt;&lt;> <or> <!&gt;&gt;> <or> <!&gt;&gt;&gt;> <rq> <nt name=AdditiveExpr> <rq multi="*">
+
+<semantics>
+  <p>An integral expression that is the result of shifting operations.</p>
+</semantics>
+</rule>
+
+
+<rule nt=AdditiveExpr>
+  <nt name=MultiplicativeExpr> <lq> <lq> <!+> <or> <!-> <rq> <nt name=MultiplicativeExpr> <rq multi="*">
+
+<semantics>
+  <p>A numeric expression that is the result of the additive operations.</p>
+</semantics>
+</rule>
+
+
+<rule nt=MultiplicativeExpr>
+  <nt name=UnaryExpr> <lq> <lq> <!*> <or> <!/> <or> <!%> <rq> <nt name=UnaryExpr> <rq multi="*">
+
+<semantics>
+  <p>A numeric expression that is the result of the multiplicative operations.</p>
+</semantics>
+</rule>
+
+
+<rule nt=UnaryExpr>
+  <lq> <!+> <or> <!-> <rq> <nt name=UnaryExpr> <or> <nt name=PrefixExpr> <or> <nt name=UnaryExprNotPlusMinus>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=PrefixExpr>
+  <lq> <!++> <or> <!-&#45;> <rq> <nt name=PrimaryExpr>
+
+<semantics>
+  <p>An integral expression that is value after the sub-expression is incremented/decremented.</p>
+</semantics>
+</rule>
+
+
+<rule nt=UnaryExprNotPlusMinus>
+  <lq> <!~> <or> <!!> <rq> <nt name=UnaryExpr> <or> <nt name=PostfixExpr> <or> <nt name=Literal>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=PostfixExpr>
+  <nt name=PrimaryExpr> <lq> <!++> <or> <!-&#45;> <rq multi="?">
+
+<semantics>
+  <p>An integral expression that is value before the sub-expression is incremented/decremented.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PrimaryExpr>
+       <nt name=ObjectAllocator>
+  <or> <nt name=JavaAllocator>
+  <or> <nt name=JavaClassAllocator>
+  <or> <nt name=LambdaDeclaration>
+  <or> <!${> <!_IDENTIFIER> <!}>
+  <or> <!&> <!_IDENTIFIER>
+  <or> <nt name=AtomicExpr>
+
+<semantics>
+  <p>The primary expression is the smallest unit of any expressions.</p>
+
+  <p>The <nt name=ObjectAllocator>, <nt name=JavaAllocator>,
+  <nt name=JavaClassAllocator> and <nt name=LambdaDeclaration>
+  create various objects that can be assigned to some variable.</p>
+
+  <p> The <!${> <!}> expression is an alias for the call to system function
+  <sfn name=getEnvVar>. This expression can appear and function the same within
+  string literals as well, including here-docs.</p>
+
+  <p>The <!&> operator takes a reference for a function to assign to a variable.</p>
+
+  <p>The <nt name=AtomicExpr> represents individual variables, object member access,
+  array access, function calls and combinations of all these.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ObjectAllocator>
+  <!new>
+  <lq> <!_IDENTIFIER> <or> <!SortedMap> <nt name=ComparatorDecl> <rq>
+  <lq> <nt name=MemberInitList> <or> <nt name=AnonMemberInitList> <rq multi="?">
+
+<semantics>
+  <p>Creates a new object. An object can be built-in object types such as <!Struct>,
+  <!OrderedMap>, <!SortedMap>, <!TreeNode>, <!Array>, <!LinkedList>, <!TableData> ... or
+  user defined classes, or even any types that can be preregistered with the system. The
+  initializers can be named (that is, a series of name-value pairs, in most cases) or
+  unnamed (a sequence of values, as in the case of arrays).</p>
+
+  <p>For sorted maps, a comparator can be specified.</p>
+
+  <p>For Java objects and arrays, see <nt name=JavaAllocator>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=MemberInitList>
+  <!(> <lq> <lq> <!_IDENTIFIER> <or> <!_STRING_LIT> <rq> <!=> <Expr> <rq multi=",+"> <!)>
+
+<semantics>
+  <p>This is the named initializers used in various situations, such as object creation.
+  The name can be a single word or a quoted string in case there are special characters.
+  The value can be anything.</p>
+</semantics>
+</rule>
+
+
+<rule nt=AnonMemberInitList>
+  <!(> <lq> <Expr> <rq multi=",+"> <!)>
+
+<semantics>
+  <p>The unnamed initializers are a sequence of values, where
+  their order typically matters, such as in an array.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ArrayAllocator>
+ <lq> <!LinkedList> <rq multi="?">
+ <![> <Expr> <!..> <Expr> <or>
+      <lq> <nt name=ArrayAllocator> <or> <Expr> <or> <nt name=HereDoc> <or> <nt name=Dom> <rq multi=",*">
+      <lq> <!,> <rq multi="?">
+ <!]>
+
+<semantics>
+  <p>In addition to the "formal" array creation by <!new> operator, this is
+  the more commonly used array initialization. Initializers can be embedded
+  in other initializers to create multi-dimensional array.</p>
+
+  <p>The <!..> operator populates an array with values between the two
+  integral values.  The left can be greater or less than right.</p>
+
+  <p>A <!LinkedList> can be initialized the same way by preceding with its keyword.</p>
+</semantics>
+</rule>
+
+
+<rule nt=StructAllocator>
+ <!{> <lq>
+      <!_IDENTIFIER> <lq> <!:> <or> <!=> <rq> <lq> <Expr> <or> <nt name=HereDoc> <or> <nt name=Dom> <rq>
+      <rq multi=",*">
+      <lq> <!,> <rq multi="?">
+ <!}>
+
+<semantics>
+  <p>In addition to the "formal" Struct/Object creation by <!new> operator, this is
+  the more commonly used initialization.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SetAllocator>
+  <!Set> <nt name=ComparatorDecl>
+  <lq> <![> <lq> <Expr> <rq multi=",*"> <!]> <rq multi="?">
+
+<semantics>
+  <p>In addition to the "formal" set creation by <!new> operator, this is the way
+  to create a set with initial elements. This is also the only way to created a
+  sorted set by specifying a comparator, if <nt name=CompartorDecl> clause is
+  present, whether it is predefined or user-defined.</p>
+
+  <p>If no <!&lt;> <!&gt;> clause is specified, an unordered set is created, which
+  is initialized with 0 or more elements in <!{> and <!}>.</p>
+
+</semantics>
+</rule>
+
+
+<rule nt=ComparatorDecl>
+  <lq> <!&lt;>
+   <lq> <lq> <!Number> <or> <!String> <or> <!Date> <rq> <lq> <!-> <or> <!+> <rq multi="?">
+   <or> <Expr>
+   <rq multi="?">
+  <!&gt;> <rq multi="?">
+
+<semantics>
+  <p>If an <Expr> is enclosed, it must be a user-defined comparator function. Or,
+  it can use the predefined comparators for number, string and date/time. If no
+  comparator is explicitly specified, it uses a natural comparator, which compares
+  the Java object values or string values if that object is not comparable.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaAllocator>
+  <!new> <!java> <!::> <pi>
+  <lq> <nt name=JavaPrimitiveTypes>
+  <or> <nt name=JavaClassName> <or> <!_CONST_NAME> <or> <!:> <!_IDENTIFIER>
+  <rq> <pi>
+  <li> <lq> <nt name=Arguments> <rq multi="?">
+  <or> <lq> <![> <!]> <rq multi="+"> <nt name=JavaArrayAllocator>
+  <or> <lq> <![> <Expr> <!]> <rq multi="+">
+  <rq>
+
+<semantics>
+  <p>Creates a new Java object or Java array. The Java class name can be specified as-is, 
+  or in a constant or a variable. Since the variable name may be confused to be the class
+  name itself, a <!:> must precede a variable name. If creating a Java object with its
+  default constructor, no <!(> <!)> pair is needed. For others, just pass the parameters
+  as any function calls.</p>
+
+  <p>Java arrays can be created with <![> <!]> and initializers. Arrays must be
+  initialized for dimensions and sizes.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaArrayAllocator>
+ <!{> <lq> <nt name=JavaArrayAllocator> <or> <Expr> <or> <nt name=HereDoc> <or> <nt name=Dom> <rq multi=",*">
+      <lq> <!,> <rq multi="?">
+ <!}>
+
+<semantics>
+  <p>Used to initialize Java arrays.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JavaPrimitiveTypes>
+  <!boolean> <or> <!byte> <or> <!char> <or> <!short> <or> <!int>
+  <or> <!long> <or> <!float> <or> <!double> <or> <!String>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=JavaClassAllocator>
+  <!java> <!::> <lq> <nt name=JavaClassName> <or> <!_CONST_NAME> <rq>
+
+<semantics>
+  <p>Returns the Java class object for the class name. This class object can be
+  used to use static members, or to create new instances or arrays.</p>
+</semantics>
+</rule>
+
+
+<rule nt=AtomicExpr>
+  <lq> <pi>
+  <lq> <!::> <rq multi="?"> <!_IDENTIFIER> <or> <!_CONST_NAME> <or> <!_FUNCTION_NAME>
+  <or> <nt name=JavaClassName> <!::> <!_IDENTIFIER> <pi>
+  <or> <!super> <!.> <!_IDENTIFIER> <or> <!this> <pi>
+  <or> <!(> <Expr> <!)> <pi>
+  <or> <!#args> <or> <!#options> <or> <!#cmd_args> <or> <!#prog> <pi>
+  <or> <!$_> <or> <!$__> <or> <!$$> <or> <!$$con>
+  <or> <!$$timer> <or> <!$$args> <or> <!$$fs_result> <or> <!$$local> <or> <!$$bsf> <pi>
+  <or> <!column> <lq> <!(> <!_STRING_LIT> <or> <!_INT_LIT> <!)> <rq> <pi>
+  <rq> <pi>
+  <lq> <pi>
+       <![> <Expr> <lq> <!,> <Expr> <rq multi="*"> <!]> <pi>
+       <or> <!.>
+            <lq> <!_IDENTIFIER>
+            <or> <!_STRING_LIT>
+            <or> <!(> <Expr> <!)>
+            <rq> <pi>
+       <or> <!&lt;> <!_IDENTIFIER> <lq> <!:> <!_IDENTIFIER> <rq multi="?"> <!&gt;> <pi>
+       <or> <lq> <!-&gt;> <rq multi="?"> <nt name=Arguments>
+       <rq> <pi>
+  <rq multi="*">
+
+<semantics>
+  <p>This represents individual variables, object member access, array access,
+  function calls and combinations of all these.</p>
+
+  <p>The leading <!::> decorator is to access global scope variables and/or functions.
+  If <!::> appears in between two names, the name(s) on the left is a Java class name
+  and the one on the right is a static member or method.</p>
+
+  <p>A name followed by <!(> ... <!)> is a function/method call. A name followed by
+  <!-&gt;> <!(> ... <!)> is an indirect function/method call, meaning calling the
+  function reference that is held in that entity. If <!(> <!)> follows other
+  parentheses or brackets, it is automatically a function reference call.</p>
+
+  <p>An expression enclosed in parentheses <!(> and <!)> is an atomic expression. This
+  is the way to invoke methods on literals such as a number or a string. Since the
+  expression can be evaluated into anything, including a function reference, an array
+  or a Java object, function call operators and array access operators can follow.</p>
+
+  <p>The <!this> variable is used to reference the current object. It is valid only
+  within class methods.</p>
+
+  <p>The <!super> decorator is used only to invoke methods in the parent class. It is
+  valid only within class methods.</p>
+
+  <p>The <!#args>, <!#options>, <!#cmd_args> and <!#prog> built-in constants are for
+  command-line options. <!#prog> holds the program's name, the path name for the script.
+  <J> supports command-line parameters, that any parameter starting with '-' or
+  '/' is deemed as an option; it can be a name-value pair, or simply a name whose value
+  is defaulted to <!true>. These options, if present, are parsed and stored in <!#options>
+  which is a <!Struct>. All other parameters are collected into the array <!#args>.
+  The row command-line elements are saved in <!#cmd_args>, so that custom command-line
+  formats can be implemented.</p>
+
+  <p>The <!$_> built-in variable is used in many occations to represent the "current"
+  state. These include in <!catch> clause for the exception object (see <nt name=Block>),
+  in SGML/HTML (see <nt name=SgmlStatement>) and XML (see <nt name=XmlStatement>)
+  statements for the current tag, in GUI event handlers (see <nt name=GuiEventsStatement>)
+  for the event object, and in the lines statement (see <nt name=LinesStatement>) for
+  the current line.</p>
+
+  <p>The <!$__> built-in variable is used in the XML handler for embedded text tags. It
+  references the parent (enclosing) tag of the current text tag.</p>
+
+  <p>The <!$$> built-in variable is for the default database handle (see
+  <nt name=JdbcStatements>). The <!$$con> built-in variable is for the default database
+  connection (see <nt=ConnectStatement>).</p>
+
+  <p>The <!$$timer> built-in variable is the timer object in the schedule statement (see
+  <nt name=ScheduleStatement>).</p>
+
+  <p>The <!$$args> array represents the function call parameters that follow the named
+  formal parameters in function calls and thread startups. See <nt name=FormalParameters>.</p>
+
+  <p>The <!$$fs_result> built-in variable holds the result for file-system listing commands.
+  </p>
+
+  <p>The <!$$local> built-in variable is an input text reader for the in-script data that
+  follows the line of <!EndScript>. See <nt name=Script>.
+
+  <p>The <!$$bsf> built-in variable is the one and only BSF object, for embedding <J>
+  in other Java software via BSF.</p>
+
+  <p>The <!column> expression is used only in <nt name=PrintTableDataStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Arguments>
+  <!(>  <lq> <!{{> <rq multi="?">
+  <lq> <lq> <nt name=JavaPrimitiveTypes> <rq multi="?"> <Expr> <rq multi=",*">
+  <lq> <!}}> <rq multi="?"> <!)>
+
+<semantics>
+  <p>Arguments are used in function calls or thread startups.</p>
+
+  <p>In Java method calls, you can optionally cast a value to a Java primitive type,
+  including String. For other objects, you can call the Java object's <code>cast()</code>
+  method, although most of the time this is not needed.</p>
+
+  <p>Since functions and threads can take any number of parameters, it is possible to
+  dynamically construct a paramter list in an arry. The <!(> <!{> and <!}> <!)> does
+  just that. Any arrays (including linked-lists) passed in are expanded so that each
+  element is a parameter; non-array parameters are taken as regular parameters; Java
+  arrays are not expanded. This method does not apply to Java method calls.</p>
+</semantics>
+</rule>
+
+
+<rule nt=HereDoc>
+  <lq> <![[*> <or> <![[[*> <rq> <nt name=Mixture> <!*]]>
+
+<semantics>
+  <p>This is a convenience mechanism for specifying a chunk of text. Expressions can be enclosed
+  in <!(*> and <!*)>. Any characters can be enclosed except for these rarely-appearing patterns:
+  <!*]]>, <!(*> and <!*)>, which are used by this here-doc itself.</p>
+
+  <p>See <nt name=Mixture>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Mixture>
+  <lq> <!_PLAIN_TEXT> <or> <!(*> <Expr> <!*)> <rq multi="*">
+
+<semantics>
+  <p>This is a chunk of text that may include newlines and virtually anything except for <!*]]>,
+  <!(*> and <!*)>, which are used in here-doc. In addition to here-docs, this is also used by
+  SQL statements in JDBC scripting and send-mail statement.</p>
+
+  <p>See <nt name=HereDoc>, <nt name=JdbcStatements> and <nt name=MailStatement>).</p>
+</semantics>
+</rule>
+
+
+<rule nt=Assignment>
+  <nt name=PrimaryExpr> <pi>
+  <lq>
+    <!=> <or>
+    <!@=> <or>
+    <!*=> <or>
+    <!/=> <or>
+    <!%=> <or>
+    <!+=> <or>
+    <!-=> <or>
+    <!&lt;&lt;=> <or>
+    <!&gt;&gt;=> <or>
+    <!&gt;&gt;&gt;=> <or>
+    <!&=> <or>
+    <!^=> <or>
+    <!|=>
+  <rq> <pi>
+  <lq> <Expr>
+  <or> <nt name=HereDoc>
+  <or> <nt name=ArrayAllocator>
+  <or> <nt name=StructAllocator>
+  <or> <nt name=SetAllocator>
+  <or> <nt name=Dom>
+  <rq>
+
+<semantics>
+  <p>Assignment statements bind values to variables or data members in container data strucutures
+  such as objects and arrays.</p>
+
+  <p>The self-operators work in the same as Java or C.</p>
+</semantics>
+</rule>
+
+
+<rule nt=LocalVariableDeclaration>
+  <!local> <!_IDENTIFIER> <lq> <!=>
+  <lq> <Expr>
+  <or> <nt name=HereDoc>
+  <or> <nt name=ArrayAllocator>
+  <or> <nt name=StructAllocator>
+  <or> <nt name=SetAllocator>
+  <or> <nt name=Dom>
+  <rq> <rq multi="?">
+
+<semantics>
+  <p>This creates a local variable whole life span is only in the inner-most block in the code.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Statement>
+     <nt name=Block> <pi>
+<or> <nt name=LocalVariableDeclaration> <pi>
+<or> <!_FUNCTION_NAME> <nt name=ArgumentList> <!;> <pi>
+<or> <lq> <Expr> <rq multi="?"> <!;> <pi>
+<or> <nt name=IfStatement> <pi>
+<or> <nt name=SwitchStatement> <pi>
+<or> <nt name=WhileStatement> <pi>
+<or> <nt name=DoWHileStatement> <pi>
+<or> <nt name=ForStatements> <pi>
+<or> <nt name=LinesStatement> <pi>
+<or> <nt name=BreakStatement> <!;> <pi>
+<or> <nt name=ContinueStatement> <!;> <pi>
+<or> <nt name=ResumeStatement> <!;> <pi>
+<or> <nt name=ReturnStatement> <!;> <pi>
+<or> <nt name=ThrowStatement> <!;> <pi>
+<or> <nt name=StartThreadStatement> <pi>
+<or> <nt name=DynamicStatements> <pi>
+<or> <nt name=PrintStatement> <!;> <pi>
+<or> <nt name=PrintTableDataStatement> <!;> <pi>
+<or> <nt name=EchoStatement> <!;> <pi>
+<or> <nt name=DeleteStatement> <!;> <pi>
+<or> <nt name=JdbcStatements> <pi>
+<or> <nt name=FileSystemStatements> <!;> <pi>
+<or> <nt name=XmlStatement> <pi>
+<or> <nt name=XsltStatement> <pi>
+<or> <nt name=SgmlStatement> <pi>
+<or> <nt name=ScheduleStatement> <pi>
+<or> <nt name=ExecStatement> <pi>
+<or> <nt name=SCPStatement> <!;> <pi>
+<or> <nt name=MailStatement> <!;> <pi>
+<or> <nt name=GuiEventsStatement>
+
+<semantics>
+  <p>Statement is the fundamental part of a programming language. <J> statements
+  fall into two general categories: basic langauge statements and application statements.</p>
+
+  <p>Most of the basic language statements are similar to C, Java or other scripting
+  languages. Some of the <nt name=ForStatements> provide convenience for array iteration.
+  The <nt name=ResumeStatement> has not counterpart in Java programs. The
+  <nt name=LinesStatement> is a convenience to process lines in files or input streams.</p>
+
+  <p>The application statements is a rich part of <J> language! They provide
+  convenience to many commonly used operations in modern computing. (Note the statements
+  do not cover all the application features in <J>; others are covered by the system
+  functions.) As listed here, these are the application statements: <nt name=PrintStatement>,
+  <nt name=PrintTableDataStatement>, <nt name=EchoStatement>, <nt name=JdbcStatements>,
+  <nt name=FileSystemStatements>, <nt name=XmlStatement>, <nt name=XsltStatement>,
+  <nt name=SgmlStatement>, <nt name=ScheduleStatement>, <nt name=ExecStatement>,
+  <nt name=SCPStatement>, <nt name=MailStatement> and <nt name=GuiEventsStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Block>
+  <!{> <lq> <nt name=Statement> <rq multi="*">
+  <lq> <!catch> <!:> <lq> <nt name=Statement> <rq multi="+"> <rq multi="?">
+  <lq> <!finally> <!:> <lq> <nt name=Statement> <rq multi="+"> <rq multi="?"> <!}>
+
+<semantics>
+  <p>A block is a series of statements quoted in <!{> and <!}>, and may have
+  <!catch>/<!finally> clauses. If the <!finally> clause is present, the code therein
+  is always executed before control exists the block. If the <!catch> clause is
+  present, any exception will be caught (in the built-in variable <!$_>) and control
+  is transfered here. Can call <nt name=ResumeStatement> to resume program from
+  where the exception was thrown.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SimpleBlock>
+  <!{> <lq> <nt name=Statement> <rq multi="*"> <!}>
+
+<semantics>
+  <p>A simple block is a series of statements quoted in <!{> and <!}> without
+  <!catch>/<!finally> clauses. See <nt name=Block>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=IfStatement>
+  <!if> <lq> <!(> <rq multi="?"> <Expr> <lq> <!)> <rq multi="?"> <nt name=Statement> <pi>
+  <lq> <lq> <!elif> <or> <!else> <!if> <rq> <lq> <!(> <rq multi="?"> <Expr> <lq> <!)> <rq multi="?"> <nt name=Statement>
+  <rq multi="*"> <pi>
+  <lq> <!else> <nt name=Statement> <rq multi="?">
+
+<semantics>
+  <p>This <!if>-<!elif>-<!else> statement is a basic flow-control statement that should be
+  familiar to any programmers. The parentheses for the condition expression are optional.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SwitchStatement>
+  <!switch> <Expr> <!{>
+  <lq> <lq> <!case> <Expr>
+  <or> <!default> <rq> <!:> <lq> <nt name=Statement> <rq multi="*"> <rq multi="*">
+  <!}>
+
+<semantics>
+  <p>This <!switch>-<!case>-<!default> statement is a basic flow-control statement that
+  should be familiar to any programmers. For <!case> clauses, the value label can be
+  any constants, such as strings.</p>
+
+  <p>The <!break> statement can be used to jump out of a case; otherwise, control
+  continues on the next statement in another case. The parentheses for the value
+  expression are optional.</p>
+</semantics>
+</rule>
+
+
+<rule nt=WhileStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?"> <!while> <lq> <!(> <rq multi="?"> <Expr> <lq> <!)> <rq multi="?"> <nt name=Statement>
+
+<semantics>
+  <p>This <!while> statement is a basic flow-control statement that should be familiar
+  to any programmers. The parentheses for the condition expression are optional.</p>
+
+  <p>The <!break> and <!continue> statements may take a label and work the same way as
+  in Java.</p>
+</semantics>
+</rule>
+
+
+<rule nt=DoWhileStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?"> <!do> <nt name=SimpleBlock> <!while> <Expr> <!;>
+
+<semantics>
+  <p>This <!do>-<!while> statement is a basic flow-control statement that should be familiar
+  to any programmers. The parentheses for the condition expression are optional.</p>
+
+  <p>The <!break> and <!continue> statements may take a label and work the same way as
+  in Java.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ForStatements>
+  <lq> <nt name=ForStatement> <or> <nt name=ForInStatement> <or>
+       <nt name=ForFromToStatement> <or> <nt name=RepeatStatement> <rq>
+
+<semantics>
+  <p>The <!for> and <!repeat> statements include a Java-style statement and a few variations
+  particularly designed for array iterations.</p>
+
+  <p>The <!break> and <!continue> statements may take a label and work the same way as
+  in Java.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ForStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?">
+  <!for> <lq> <!(> <rq multi="?"> <lq> <Expr> <rq multi=",*"> <!;> <Expr> <!;>
+  <lq> <Expr> <rq multi=",*"> <lq> <!)> <rq multi="?"> <nt name=Statement>
+
+<semantics>
+  <p>This is the C/Java-style for statement, except that the parentheses are optional.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ForInStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?">
+  <!for> <lq> <!(> <rq multi="?"> <!_IDENTIFIER> <!in> <Expr> <pi>
+  <lq> <!backward> <or> <lq> <!from> <Expr> <rq multi="?">
+  <lq> <lq> <!to> <or> <!downto> <rq> <Expr> <rq>
+  <lq> <!step> <Expr> <rq multi="?"> <rq multi="?"> <lq> <!)> <rq multi="?"> <pi>
+  <nt name=Statement>
+
+<semantics>
+  <p>This for statement iterates through all or part of an array or set.
+  The variable in the <!for> clause is a local one if not already defined.
+  The <!in> clause takes an array. There are a number of options for iterations,
+  such as direction (<!backword>) and scope (<!from>, <!to>, <!downto> and <!step>).</p>
+</semantics>
+</rule>
+
+
+<rule nt=ForFromToStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?">
+  <!for> <lq> <!(> <rq multi="?"> <!_IDENTIFIER> <lq> <!from> <Expr> <rq multi="?"> <lq> <!to> <or> <!downto> <rq>
+  <Expr> <lq> <!step> <Expr> <rq multi="?"> <lq> <!)> <rq multi="?"> <pi>
+  <nt name=Statement>
+
+<semantics>
+  <p>This for statement iterates through a series of integer values. The variable in the
+  <!for> clause is a local one if not already defined. The scope of the integers are
+  specified by <!from>, <!to>, <!downto> and <!step>. If <!from> is missing, default
+  from 0.</p>
+</semantics>
+</rule>
+
+
+<rule nt=RepeatStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?"> <!repeat> <Expr> <lq> <!times> <rq multi="?"> <pi>
+  <nt name=SimpleBlock>
+
+<semantics>
+  <p>This statement repeatedly execute the block for certain number of times.</p>
+</semantics>
+</rule>
+
+
+<rule nt=LinesStatement>
+  <lq> <!_LABEL_NAME> <!:> <rq multi="?">
+  <!do> <Expr> <lq> <!in> <Expr> <rq multi="?"> <lq> <!&lt;> <!_IDENTIFIER> <!&gt;> <rq multi="?">
+  <!as> <!lines> <lq> <!for> <Expr> <rq multi="?">
+  <lq> <Expr> <rq multi="?"> <nt name=SimpleBlock>
+
+<semantics>
+  <p>This opens an input text stream and read the lines; each line is stored in
+  the built-in variable <!$_> for program to process. The input stream can be an
+  open file, a file name, a URL or a file in a zip archive. The text encoding can
+  be specified in <!&lt;> and <!&gt;>. The <!for> clause is for filtering the lines.
+  It is a boolean expression typically involving <!$_>, such as
+  <code>$_.isNotEmpty()</code>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=BreakStatement>
+  <!break> <lq> <!_LABEL_NAME> <or> <!schedule> <rq>
+
+<semantics>
+  <p>These statements break the normal flow, usually in loops.</p>
+
+  <p>The <!break> statement, with or without a label, works the same way as in Java.</p>
+
+  <p>The <!break> <!schedule> statement is used in a <nt name=ScheduleStatement> to
+  stop the timer and quit the scheduled job.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ContinueStatement>
+  <!continue> <lq> <!_LABEL_NAME> <or> <!schedule> <rq>
+
+<semantics>
+  <p>The <!continue> statement, with or without a label, works the same way as in Java.</p>
+
+  <p>THe <!continue> <!schedule> statement skips the following statements in a schedule
+  handler (see <nt name=ScheduleStatement>) to force the scheduled job to wait for the
+  next timed event.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ResumeStatement>
+  <!resume>
+
+<semantics>
+  <p>This <!resume> statement has no Java counterpart. It is only used in exception handling
+  and extended SGML processing.</p>
+
+  <p>In exception handling, that is, the statements following a <!catch> <!:> (see <nt name=Block>),
+  <!resume> will send the control back to where the exception is thrown.</p>
+
+  <p>In an extended SGML handler (see <nt name=SgmlStatement>), that is, a SGML statement
+  extending another, this <!resume> statement can appear at the end of a handler to invoke
+  the parent statement's handler.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ReturnStatement>
+  <!return>
+  <lq> <Expr>
+  <or> <nt name=HereDoc>
+  <or> <nt name=ArrayAllocator>
+  <or> <nt name=StructAllocator>
+  <or> <nt name=SetAllocator>
+  <or> <nt name=Dom>
+  <rq multi="?">
+
+<semantics>
+  <p>The <!return> statement works the same way as in Java.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ThrowStatement>
+  <!throw> <pi>
+  <lq> <!new> <lq> <!java> <!::> <nt name=JavaClassName>
+                  <or> <!_CONST_NAME>
+                  <or> <!:> <!_IDENTIFIER>
+                  <rq> <lq> <nt name=Arguments> <rq multi="?"> <pi>
+  <or> <!_IDENTIFIER> <lq> <!,> <Expr> <rq multi="?"> <pi>
+  <rq multi="?">
+
+<semantics>
+  <p>The <!throw> statement can throw a Java exception or a <J> runtime error object.
+  When throwing a runtime error, it takes an runtime name and optionally with a message.
+  The runtime errors that can be thrown are <code>ASSERTION_FAILURE</code> and
+  <code>USER_EXCEPTION</code>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=StartThreadStatement>
+  <!start> <lq> <!daemon> <rq multi="?"> <!thread> <lq> <Expr> <rq multi="?"> <pi>
+  <lq> <!_FUNCTION_NAME> <lq> <nt name=Arguments> <rq multi="?"> <!;> <rq>
+  <or> <nt name=FormalParameters> <nt name=Block>
+  <rq>
+
+<semantics>
+  <p>This statement starts a thread. The thread can be already defined or anonymously
+  defined on the fly. The thread can be started as a daemon thread (see Java
+  documentation on this.)</p>
+
+  <p>A thread runs in its own context. It only shares the global data with other
+  threads, including its creator. There are system functions such as <code>lock()</code>,
+  <code>unlock()</code>, <code>wait()</code>, <code>notify()</code> and <code>notifyAll()</code>
+  for thread synchronization and critical section implementation.</p>
+</semantics>
+</rule>
+
+
+<rule nt=DynamicStatements>
+  <lq> <!eval> <or> <!evalExternal> <or> <!evalFile> <rq>
+  <lq> <Expr> <or> <nt name=HereDoc> <rq> <pi>
+  <lq> <!with> <nt name=ArgumentList> <rq multi="?"> <!;>
+
+<semantics>
+  <p>These statements evaluates text content as a subprogram.</p>
+
+  <p>The <!eval> statement evaluates the subprogram in the current content. This means
+  that any function, thread or class declarations are taken in the current content as
+  well.</p>
+
+  <p>The <!evalExternal> does in a separate context; declarations are thrown away once
+  evaluation is done. Command-line options can be specified via the <!with> clause.
+  They are always expanded, that is, arrays are expanded as individual parameters.</p>
+
+  <p>The <!evalFile> evaluates the content of a file as the subprogram externally.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PrintStatement>
+  <lq> <!print> <or> <!println> <or> <!flush> <or> <!.> <rq>
+  <lq> <!{> <Expr> <!}> <rq multi="?"> <pi>
+  <lq> <!&lt;> <lq> <!out> <or> <!err> <or> <!log> <or> <!pipe>
+       <or> <nt name=PrimaryExpr> <rq> <!&gt;> <rq multi="?"> <pi>
+  <lq> <nt name=PrintArgument> <rq multi=",*">
+
+<semantics>
+  <p>This statement prints text content to output streams, files or pipes.
+  The <!print> statement does not automatically do flushing, whereas <!println>
+  does. <!flush> works the same as <!print> but flushes when printing is done.
+  The <!.> is a shortcut for <!println>, since the latter is used frequently.</p>
+
+  <p>These print statements supports flexible formatting, as shown in
+  <nt name=PrintArgument>.</p>
+
+  <p>The print target by default is <!out>, which is the standard system output
+  stream. Other system output streams are <!err> (for error) and <!log> (for
+  logging).  Or it can be a file, opened by <code>openTextFile(file_name,'w')</code>
+  system function call, where 'w' means writing. A <!pipe> is the input stream
+  for a command-line; this allows programs to write input to any command-lines.
+  See <nt name=ExecStatement> on this. The target can also be a simple variable,
+  in which case the statement will print into a string stored in that variable.</p>
+
+  <p>If the print target is not a text output stream, it prints into a new string
+  and assigns to the variable.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PrintArgument>
+  <lq> <nt name=HereDoc> <or> <Expr> <rq>
+  <lq> <!:> <lq> <!&lt;> <or> <!&gt;> <or> <!*> <rq multi="?">
+  <Expr> <lq> <!!> <rq multi="?"> <rq multi="?">
+  <lq> <!{> <Expr> <!}> <or> <!repeat> <Expr> <rq multi="?">
+
+<semantics>
+  <p>This is a value to be printed, optionally with text alignment formatting
+  and repeating. The repeating is specified by <!{> <!}> or <!repeat> clause,
+  which are the same.</p>
+  <p>The <!:&lt;>, <!:&gt;> and <!:*> decorators are for left-, right- and
+  center-alignment, with the following value as the width. If the value is
+  followed by a <!!>, the width is forced with possible truncations. If the
+  value of width has a decimal point, then the part on either side is the
+  width for the respective part of a floating-point number.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PrintTableDataStatement>
+  <!printTable>
+  <lq> <!&lt;> <lq> <!out> <or> <!err> <or> <!log> <or> <!pipe>
+       <or> <nt name=PrimaryExpr> <rq> <!&gt;>
+  <rq multi="?"> <pi>
+  <Expr> <lq> <!skip> <Expr> <rq multi="?">
+  <lq> <!limit> <Expr> <rq multi="?"> <pi>
+  <!for> <lq> <nt name=PrintArgument> <rq multi=",*">
+
+<semantics>
+  <p>This statement prints a <!TableData>. <!TableData>'s column titles are not printed.
+  In the <nt name=PrintArgument>s, the special <!column> expression is used to select
+  columns in the table data for printing. The values can have the same formating as in
+  <nt name=PrintStatement>.</p>
+
+  <p>By default it prints all rows. This can be changed by <!skip> so many rows,
+  and/or <!limit> the number of rows to print.</p>
+</semantics>
+</rule>
+
+
+<rule nt=EchoStatement>
+  <!echo> <lq> <!on> <or> <!off> <or> <Expr> <rq>
+
+<semantics>
+  <p>This statement turns JDBC echoing on/off, or optionally assigns the echo
+  target (as a file).</p>
+</semantics>
+</rule>
+
+
+<rule nt=DeleteStatement>
+  <!delete> <Expr>
+
+<semantics>
+  <p>This is for ECMAScript compatibility. It sets the operand to <!null>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=VoidStatement>
+  <!void> <Expr>
+
+<semantics>
+  <p>This is for ECMAScript compatibility. It always returns <!null>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SgmlStatement>
+  <!do> <Expr> <lq> <!in> <Expr> <rq multi="?"> <lq> <!&lt;> <!_IDENTIFIER> <!&gt;> <rq multi="?">
+  <!as> <lq> <!sgml> <lq> <!case> <rq multi="?"> <or> <!html> <rq> <pi>
+  <lq> <!with> <!_IDENTIFIER> <!;> <pi>
+  <or> <lq> <!extends> <!_IDENTIFIER> <rq multi="?">
+       <!{> <lq> <nt name=SgmlEvent> <!:> <lq> <nt name=Statement> <rq multi="+"> <rq multi="+"> <!}> <pi>
+  <rq>
+
+<semantics>
+  <p>This statement is for SGML/HTML scraping and processing, which takes a file name or URL as
+  the source, and allow handler code for each tag including text. The source can also be a file
+  within a zip archive. The text encoding can be specified in <!&lt;> and <!&gt;>. The keywords
+  <!sgml> and <!html> here are synonyms.</p>
+
+  <p>Tags and text pieces in a SGML document are parsed and become "events", allowing code to
+  process. There are also special events such as <!BEFORE> and <!AFTER>. See <nt name=SgmlEvent>.</p>
+
+  <p>In the tag handler code, <!$_> is the built-in variable for the current tag. If it is not
+  an end tag or text, the associated attributes are accessed as data members of <!$_>.
+  See <obj name=SgmlTag>, <obj name=SgmlTextTag> or <obj name=SgmlSpecialTag>  for its properties
+  and methods. Tag names and attribute names are case insenstitive for HTML and SGML by default;
+  for SGML, the <!case> decorator forces case sensitivity. Multiple tags can share a same handler.
+  Handler code ends before the next tag. The code runs in its own context (or scope) of the block.</p>
+
+  <p>SGML handler statement can also be declared first. See <nt name=SgmlHandlerDeclaration>.
+  A declared SGML handler can be invoked via the <!with> clause. It also allows other SGML
+  handler statement to inherit its handlers via the <!extends> clause.</p>
+
+  <p>Here are the rules for inherited SGML handler statements. The <!BEFORE> and <!AFTER>
+  handlers are never inherited. For a tag, if no specific handler is provided in the current
+  handler, the processing goes to the parent; if none of the processors have a specific handler
+  for it, it tries the <em>any</em> tag handler (<!&lt;> <!&gt;>) in the same way. In a handler,
+  the <!resume> statement can be used at the end to continue processing with the parent's
+  handler.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SgmlHandlerDeclaration>
+  <lq> <!sgml> <lq> <!case> <rq multi="?"> <or> <!html> <rq> <!_IDENTIFIER>
+  <lq> <!extends> <!_IDENTIFIER> <rq multi="?"> <pi>
+  <!{> <lq> <nt name=SgmlEvent> <!:> <lq> <nt name=Statement> <rq multi="+"> <rq multi="+"> <!}>
+
+<semantics>
+  <p>This declares a SGML handler statement that can be later invoked via a <nt name=SgmlStatement>,
+  or to be inherited by other SGML handler statements. See <nt name=SgmlStatement> for details.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SgmlEvent>
+       <!BEFORE>
+  <or> <!AFTER>
+  <or> <!&lt;> <!&gt;>
+  <or> <lq> <!&lt;> <or> <!&lt;/> <rq> <!_IDENTIFIER> <!&gt;>
+  <or> <!TEXT>
+  <or> <!&lt;!--> <!&gt;>
+  <or> <!&lt;!> <!&gt;>
+  <or> <!&lt;?> <!&gt;>
+
+<semantics>
+  <p>These are the SGML events that can be generated by a SGML parser. All events except for
+  <!BEFORE> and <!AFTER> are for tags. A regular tag is <!&lt;><em>name</em><!&gt;> or
+  <!&lt;/><em>name</em><!&gt;>. <!TEXT> is for a piece of text between two tags. Any unhandled
+  tags are represented by <!&lt;> <!&gt;>; this do not include special tags, which start with
+  <!&lt;?>, <!&lt;!> and <!&lt;!-->. See <obj name=SGMLMarkup> for details for each situation.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ScheduleStatement>
+  <!schedule> <lq> <!absolute> <rq multi="?">
+  <lq> <lq> <!starting> <or> <!after> <rq> <Expr> <rq multi="?">
+  <lq> <!repeat> <Expr> <rq multi="?"> <pi>
+  <nt name=SimpleBlock> <pi>
+  <lq> <!listen> <!on> <Expr>
+       <lq> <!title> <Expr> <rq multi="?"> <nt name=SimpleBlock>
+  <rq multi="?">
+
+<semantics>
+  <p>This statement schedules one-time or repetitive (with the <!repeat> keyword) actions;
+  the actions can be anything. The action can be scheduled to start at a specific moment via
+  the <!starting> clause, or wait for a period by the <!after> clause. The <!absolute>
+  decorater signifies that the time need be absolute or not; see javadoc for the
+  <code>java.util.Timer</code> class.</p>
+
+  <p>For repetitive scheduled actions, this statement supports a built-in HTTP interface
+  to interact with the job if the whole <!listen> <!on> <em>port</em> section is present.
+  The scheduled job, including user input via the browser, is represented by the built-in
+  singleton variable <!$$timer>. See <obj name=SchedulerTimer> for details on how to program.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecStatement>
+  <!exec> <lq> <!&lt;> <!_IDENTIFIER> <!&gt;> <rq multi="?"> <Expr>
+  <lq> <!from> <Expr> <rq multi="?"> <pi>
+  <lq> <!with> <lq> <Expr> <or> <lq> <!_IDENTIFIER> <!=> <Expr> <rq multi=",+"> <rq> <pi>
+  <lq> <lq> <!needSystemIn> <rq multi="?"> <lq> <!;> <or> <!output> <nt name=SimpleBlock> <rq> <pi>
+  <or> <!input> <nt name=SimpleBlock> <lq> <!output> <nt name=SimpleBlock> <rq multi="?"> <pi>
+  <rq>
+
+<semantics>
+  <p>This statement executes an external command-line, with many options.
+  The command-line may contain multiple programs with output of the previous
+  programs piped into the following ones. Each program can take one input and
+  may produce an output sream and an error stream.</p>
+  <p>You can specify the working directory this command-line is started with
+  by the <!from> clause, and/or the environment variables fot the new process
+  using the <!with> clause, which can be a series of name=value pairs, or an
+  expression that is a Properties or <!Struct>.</p>
+  <p>The <!input> clause allows script code to write input to the command-line.
+  Or, if <!needSystemIn> is specified, the input stream of the command-line is
+  connected to the system input stream. Otherwise, unless there is an input
+  redirect or a <!input> clause, the command-line is assumed not taking input.</p>
+  <p>The script can also receive output of the command-line by the <!output> clause.
+  The output is read by system function <sfn name=readPipe>.</p>
+  <p>If both <!input> and <!output> clauses are present, the output clause is
+  executed in a second thread; the input block, however, stays in the main thread.</p>
+</semantics>
+</rule>
+
+
+<rule nt=SCPStatement requires=ISNetworks>
+  <!scp> <Expr> <!,> <Expr> <!,> <Expr>
+  <lq> <!,> <Expr> <rq multi="?"> <pi>
+  <!from> <lq> <!remote> <or> <!local> <rq> <Expr>
+  <lq> <!to> <Expr> <rq multi="?"> <lq> <!recursive> <or> <!echo> <rq multi="*">
+
+<semantics>
+  <p>This statement uses ISNetworks' MindTerm package to perform secure copy
+  between the local machine and a remote machine. The first 3 parameters are the
+  remote machine's host, user name and password. The optional 4th parameter is
+  a cipher.</p>
+  <p>The direction of copying is specified by <!from> <!remote> or <!from> <!local>.
+  If <!recursive> is specified, and the source is a directory, all the content
+  in the directory will be copied. The destination should be a directory.</p>
+  TODO -- verify!
+</semantics>
+</rule>
+
+
+<rule nt=MailStatement>
+  <!sendMail> <lq> <Expr> <rq multi="?"> <pi>
+  <lq> <!from> <or> <!to> <or> <!cc> <or> <!bcc> <or> <!subject> <or> <!attach>
+  <or> <!body> <or> <!htmlBody> <rq> <lq> <Expr> <rq multi="?"> <pi>
+  <!:> <lq> <Expr> <or> <nt name=HereDoc> <rq> <rq multi="+"> <!;>
+
+<semantics>
+  <p>This statement sends e-mails to one or more recipients.
+  Before calling this command, you must connect to the mail server with
+  <sfn name=connectMailServer> system function, and when done, call
+  <sfn name=disconnectMailServer>. The message body may be in plain text,
+  HTML or both. The message body, HTML body and addresses can be in different
+  character-sets, designated by their respective optional <Expr>'s.
+  The optional <Expr> following <!sendMail> is the default character-set.</p>
+
+  <p>The <!from> clause is required and should be a string for the sender's e-mail
+  address. The <!subject> clause takes a string just for that. The <!to>, <!cc> and
+  <!bcc> clauses lists the recipients; they are strings contain comma-separated e-mail
+  addresses. The <!to> and <!from> are required. E-mail addresses can be followed
+  by sender or recipient names quoted in &lt; and &gt;.</p>
+
+  <p>The optional <!attach> clause takes a string that contains file
+  names separated by commas, to be attached to the message.</p>
+</semantics>
+</rule>
+
+
+<rule nt=GuiEventsStatement>
+  <!guiEvents> <!{> <pi>
+  <lq> <!&lt;> <lq> <pi>
+    <lq> <!?> <!_IDENTIFIER> <or> <lq> <nt name=PrimaryExpr> <rq multi=",+"> <rq> <pi>
+    <!:> <!_IDENTIFIER> <pi>
+    <!:> <lq> <!_IDENTIFIER> <rq multi=",+"> <pi>
+  <rq multi=",+"> <!&gt;> <!:> <lq> <nt name=Statement> <rq multi="+"> <pi>
+  <rq multi="*"> <pi>
+  <!}>
+
+<semantics>
+  <p>This statement allows event handlers be specified for all Java GUI events,
+  either for one or more components, or as a generic handler that can be
+  dynamically attached to any number of components. One GUI program can have
+  more than one GUI event handler statment. This statement eliminates the need
+  to define tons of anonymous classes for handling GUI events.</p>
+  <p>Each handler starts with a <!&lt;> <!&gt;> <!:> event-binding section
+  followed by a number of statements, where <!$_> represents the current event
+  object.</p>
+  <p>In the event-binding section, there are three parts, separated by <!:>'s.
+  The first part, which normally is one or more <nt name=PrimaryExpr> that
+  are evaluated to be Java GUI components, are the event receivers. This part
+  can also be a name preceded by a <!?> that defines a named, generic event
+  handler, which can be later dynamically attached to any components (see
+  <sfn name=getGuiHandler>). The second part of the event-binding section
+  is an "event name", which corresponds to the name portion of a Java GUI event
+  listener name, e.g. <code>Window</code> in <code>java.awt.event.WindowListener</code>.
+  The third part of the event-binding section can be one or more event listener
+  method names, such as <code>windowOpened</code> and <code>windowIconified</code>.
+  Normally, the event object itself (<!$_>) has a field indicating the message
+  type as well the source and/or target of the event.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FileSystemStatements>
+       <nt name=FSListStatement> <pi>
+  <or> <nt name=FSFileModStatements> <pi>
+  <or> <nt name=FSMakeRemoveDirStatements> <pi>
+  <or> <nt name=FSCopyStatement> <pi>
+  <or> <nt name=FSMoveStatement> <pi>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=FSListStatement>
+  <lq> <!listFiles> <lq> <!{> <Expr> <!}> <rq multi="?"> <or> <!listPrintFiles> <or> <!ls> <rq>
+  <lq> <Expr> <rq multi="?"> <lq> <!in> <Expr> <or> <!except> <Expr> <rq multi="?"> <pi>
+  <lq> <!recursive>
+  <or> <!noHidden>
+  <or> <!fileOnly>
+  <or> <!dirOnly>
+  <or> <!perFile>
+  <or> <!perDir> <pi>
+  <or> <!count>
+  <or> <!countLines>
+  <or> <!size>
+  <or> <!compressedSize>
+  <or> <!as> <!tree>
+  <or> <!ordered> <lq> <!by> <lq> <!Date> <or> <!size> <or> <!extension> <rq> <rq> <pi>
+  <rq multi="*">
+
+<semantics>
+  <p>The <!listFiles> returns the result in <!$$fs_result>; <!listPrintFiles> and <!ls> are synonyms,
+  they print the results to the system standard output.</p>
+
+  <p>The search can happen in a directory or in a ZIP or TAR archive with the <!in> clause. Multiple
+  file patterns can be specified, separated by comma, and so does the <!except> clause.</p>
+
+  <p>These commands list and search various attributes of files and directories, such as total
+  number of files and directories with <!count>, total file size with <!size>, and total number
+  of lines with <!countLines>. In most cases, they are used to list the files themselves, and the
+  resulted can be sorted with the <!ordered> clause.</p>
+
+  <p>For <!list>, the results in <!$$fs_result> are different based on the operation. For normal
+  file listing, it is an array of strings, holding all the paths. If <!as> <!tree> is specified,
+  the result in <!$$fs_result> is a <!treeNode>, where each node has a "path" data member and for
+  directories, there is a "isDir" boolean member set to <!true>; this only apploies to local file
+  systems. For <!size> and <!compressedSize>, if <!perDir> is specified, <!$$fs_result> is an
+  sorted map with directory names and the results; the last entry is "TOTAL" and the total number;
+  otherwise it is simply an integer for the total size. For <!countLines>, if <!perFile> is
+  specified, <!$$fs_result> is an sorted map with file names and the results; the last entry is
+  "TOTAL" and the total number; otherwise it is simply an integer for the total lines. For
+  <!count>, <!$$fs_result> is an array with { file-count, directory-count, total-count }.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FSFileModStatements>
+  <lq> <!remove> <or> <!setFileTime> <or> <!setReadOnly> <or> <!chgrp> <or> <!chmod> <or> <!chown> <rq>
+  <lq> <Expr> <rq multi="?"> <pi>
+  <lq> <!except> <Expr>
+  <or> <!in> <Expr>
+  <or> <!to> <Expr>
+  <or> <!recursive>
+  <or> <!noHidden>
+  <or> <!fileOnly>
+  <or> <!dirOnly>
+  <rq multi="*">
+
+<semantics>
+  <p>For the selected files, perform these operations.</p>
+  <p>Note that <!chgrp>, <!chmod> and <!chown> runs a operating system command to
+  achieve the tasks, so are only available on systems that supports them.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FSMakeRemoveDirStatements>
+  <lq> <!removeDir> <or> <!rmdir> <or> <!makeDir> <or> <!mkdir> <rq>
+  <Expr>
+  <lq> <!in> <Expr> <rq multi="?"> <lq> <!force> <rq multi="?">
+
+<semantics>
+  <p>Makes or removes a directory. When removing a directory, by default it fails
+  if the directory is not empty. Use <!force> to remove all the content and then
+  remove that directory. If there is an access privilege violation, this may still
+  fail, of course.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FSCopyStatement>
+  <!copy> <Expr> <pi>
+  <lq> <!except> <Expr>
+  <or> <!in> <Expr>
+  <or> <!strip> <Expr>
+  <or> <!under> <Expr>
+  <or> <lq> <!to> <or> <!into> <rq> <Expr> <pi>
+  <or> <!recursive>
+  <or> <!echo>
+  <or> <!Echo>
+  <or> <!noHidden>
+  <or> <!keepDirs>
+  <or> <!compress>
+  <or> <!store> <pi>
+  <or> <!transform> <lq> <Expr> <or> <!_IDENTIFIER> <!,> <!_IDENTIFIER> <nt name=Block> <rq> <pi>
+  <rq multi="*">
+
+<semantics>
+  <p>This command copies or processes specific files between file systems and/or
+  archives like JAR, WAR, EAR, ZIP, TAR and Gzipped TAR files.</p>
+  <p>The first parameter is a string for one or more patterns separated by commas.
+  These patterns should be good for absolute path matches. You can specify an <!except>
+  pattern list to exclude certain files or directories. The source location of the
+  files can be specified by the <!in> clause; the source can be a directory or an
+  archive file. If <!recursive> is specified, files under that source are recursively
+  copied. The destination is specified with <!to> clause if it is a directory, or
+  with <!into> if it is an archive. An archive is either a file name that ends with
+  ".jar", ".zip", ".war", ".ear", ".tar" or ".tar.gz", or an open <obj name=JarArchive>
+  or <obj name=TarArchive>.</p>
+  <p>When copying files to a directory, the destination is checked for the existance
+  of the files. If a file exists and has the same size and timestamp, by default the
+  file is left uncopied. To override this behavior, you would have to delete that
+  file first, or the whole directory if it is ok. The <!echo> will report to the
+  system output for any files actually copied. The <!Echo> will report any files
+  being copied, no matter whether they are actually copied physically.</p>
+  <p>The <!compress> and <!store> decorators are only for archiving into a ZIP or
+  JAR file. The <!under> clause allows the files to be stored under a specific
+  folder in an archive; when coping files from an archive, can use <!strip> to strip
+  the leading folder names.</p>
+  <p>The same command can be used to transform files by the <!transform> clause; this
+  is applicable only to local file system destinations. The transform is a lambda
+  function taking 2 parameters of a source and a destination. The <u>source</u> is an
+  input stream and has these read-only attributes:
+  <ul><li> <code>name</code>
+      <li> <code>time</code>
+      <li> <code>size</code>
+      <li> <code>isFile</code>: boolean
+      <li> <code>fromZip</code>: boolean
+  </ul>
+  The destination is an output stream and has these extra methods:
+  <ul><li> <code>getName()</code>
+      <li> <code>setName(<em>aName</em>)</code>
+      <li> <code>setTime(<em>time</em>)</code>
+      <li> <code>copy(<em>input_stream</em>)</code>: returns the count
+  </ul>
+  The setter methods can be called before any writing has taken place. Therefore, the
+  transformation has total control over the destination file name, time and its content.
+  By default the destination file time is the same as the source. The <code>copy()</code>
+  method simply copies all the bytes from the input stream. If no content is written,
+  the destination file is <em>not</em> created. This allows sophisticated file filtering.
+  For text files, it is common to call the <code>toTextInput()</code> and
+  <code>toTextOut()</code> methods of <obj id=IODevice> for the source and/or destination.</p>
+</semantics>
+</rule>
+
+
+<rule nt=FSMoveStatement>
+  <lq> <!rename> <or> <!move> <rq> <Expr>
+  <lq> <!except> <Expr> <or> <!to> <Expr> <or> <!echo> <rq multi="*">
+
+<semantics>
+  <p>Moves files to a different location, or renames a file if the target location
+  is the same.</p>
+</semantics>
+</rule>
+
+
+<rule nt=JdbcStatements>
+  <nt name=ConnectStatement> <pi>
+  <or> <nt name=PrepareStatement> <pi>
+  <or> <nt name=PreparedExecuteStatement> <pi>
+  <or> <nt name=PreparedExecuteQueryStatement> <pi>
+  <or> <nt name=PreapredExecuteUpdateStatement> <pi>
+  <or> <nt name=ExecuteQueryStatement> <pi>
+  <or> <nt name=ExecuteUpdateStatement> <pi>
+  <or> <nt name=ExecuteSqlStatement> <pi>
+  <or> <nt name=ExecuteBatchStatement> <pi>
+  <or> <nt name=ExecuteAnyStatement> <pi>
+  <or> <nt name=CreateBatchStatement> <pi>
+  <or> <nt name=AddBatchStatement> <pi>
+  <or> <nt name=DumpTableStatement>
+
+<semantics ignore=true/>
+</rule>
+
+
+<rule nt=ConnectStatement>
+  <!connect> <lq> <!_IDENTIFIER> <rq multi="?"> <lq> <nt name=MemberInitList> <rq multi="?">
+  <!to> <Expr> <lq> <!,> <Expr> <lq> <!,> <Expr> <rq multi="?"> <rq multi="?"> <!;>
+
+<semantics>
+  <p>This statement connect to a database. The connection is saved in a variable,
+  whose name is the first parameter, which is optional. If no name given, it is saved
+  in the default connection, <!$$con>. The JDBC URL and database user name and password
+  are specified following the <!to> keyword.</p>
+  <p>JDBC driver class names usually do not be loaded explicitly like in Java programs,
+  because <J> has knowledge about the following drivers and pick one from the
+  JDBC URL (and the list will grow to cover new ones that come to attention):</p>
+  <table border=1><tr><th>JDBC DB ID</th><th>JDBC Driver Class</th></tr>
+  <tr><td>cloudscape</td><td>COM.cloudscape.core.JDBCDriver</td></tr>
+  <tr><td>db2</td><td>COM.ibm.db2.jdbc.net.DB2Driver</td></tr>
+  <tr><td>hsqldb</td><td>org.hsqldb.jdbcDriver</td></tr>
+  <tr><td>idb</td><td>org.enhydra.instantdb.jdbc.idbDriver</td></tr>
+  <tr><td>informix-sqli</td><td>com.informix.jdbc.IfxDriver</td></tr>
+  <tr><td>jtds</td><td>org.sourceforge.jtds.jdbc.Driver</td></tr>
+  <tr><td>microsoft</td><td>com.microsoft.jdbc.sqlserver.SQLServerDriver</td></tr>
+  <tr><td>msql</td><td>com.imaginary.sql.msql.MsqlDriver</td></tr>
+  <tr><td>mysql</td><td>com.mysql.jdbc.Driver, org.gjt.mm.mysql.Driver</td></tr>
+  <tr><td>odbc</td><td>sun.jdbc.odbc.JdbcOdbcDriver</td></tr>
+  <tr><td>oracle</td><td>oracle.jdbc.driver.OracleDriver</td></tr>
+  <tr><td>pointbase</td><td>com.pointbase.jdbc.jdbcUniversalDriver</td></tr>
+  <tr><td>postgres95</td><td>postgres95.PGDriver</td></tr>
+  <tr><td>postgresql</td><td>org.postgresql.Driver, postgresql.Driver</td></tr>
+  <tr><td>sapdb</td><td>com.sap.dbtech.jdbc.DriverSapDB</td></tr>
+  <tr><td>solid</td><td>solid.jdbc.SolidDriver</td></tr>
+  <tr><td>sqlbase</td><td>centura.java.sqlbase.SqlbaseDriver</td></tr>
+  <tr><td>sybase</td><td>com.sybase.jdbc2.jdbc.SybDriver</td></tr>
+  </table> 
+  <p>JDBC connections can take a set of options, which can be specified as the
+  <nt name=MemberInitList>. The valid options are:</p>
+  <table border=1><tr><th>Option Name</th><th>Value Type</th></tr>
+  <tr><td>driver</td><td>string of JDBC driver Java class name</td></tr>
+  <tr><td>autoCommit</td><td>boolean</td></tr>
+  <tr><td>readOnly</td><td>boolean</td></tr>
+  <tr><td>catalog</td><td>string</td></tr>
+  <tr><td>typeMap</td><td><code>java.util.Map</code></td></tr>
+  <tr><td>transactionIsolation</td><td>'transaction_none',
+    'transaction_read_committed', 'transaction_read_uncommitted',
+    'transaction_serializable'</td></tr>
+  </table> 
+</semantics>
+</rule>
+
+
+<rule nt=PrepareStatement>
+  <lq> <!prepare> <or> <!prepareCall> <rq> <lq> <!_IDENTIFIER> <rq multi="?">
+  <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!:> <nt name=Mixture> <!;>
+
+<semantics>
+  <p>This prepares a SQL statement, either for query/updates or stored procedure
+  call (<!prepareCall>). It can use the default connection <!$$con> or a named
+  connection with <!using> clause. The prepared statement can be stored in the
+  default database handle variable, <!$$>, or in a named variable. The SQL
+  statement is a <nt name=Mixture> between the <!:> and <!;>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PreparedExecuteStatement>
+  <lq> <!preparedExecute> <or> <!preparedExecuteCall> <rq> <lq> <!_IDENTIFIER> <rq multi="?"> <pi>
+  <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!:>
+  <nt name=Mixture> <!;> <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;>
+
+<semantics>
+  <p>This is a convenience statement that combines <nt name=PrepareStatement>
+  and <nt name=ExecuteSqlStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PreparedExecuteQueryStatement>
+  <lq> <!preparedExecuteQuery> <or> <!preparedExecuteQueryCall> <rq> <lq> <!_IDENTIFIER> <rq multi="?"> <pi>
+  <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!:> <nt name=Mixture> <!;>
+  <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;> <pi>
+  <lq> <!;> <or> <!onSuccess> <nt name=SimpleBlock> <lq> <!else> <nt name=SimpleBlock> <rq multi="?"> <rq>
+
+<semantics>
+  <p>This is a convenience statement that combines <nt name=PrepareStatement>
+  and <nt name=ExecuteQueryStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=PreparedExecuteUpdateStatement>
+  <lq> <!preparedExecuteUpdate> <or> <!preparedExecuteUpdateCall> <rq> <lq> <!_IDENTIFIER> <rq multi="?"> <pi>
+  <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!:>
+  <nt name=Mixture> <!;> <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;>
+
+<semantics>
+  <p>This is a convenience statement that combines <nt name=PrepareStatement>
+  and <nt name=ExecuteUpdateStatement>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecuteQueryStatement>
+  <!executeQuery> <pi>
+  <lq> <lq> <!_IDENTIFIER> <rq multi="?"> <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!:> <nt name=Mixture> <!;> <pi>
+  <or> <lq> <!_IDENTIFIER> <rq multi="?"> <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;> <pi>
+  <rq>
+  <lq> <!;> <or> <!onSuccess> <nt name=SimpleBlock> <lq> <!else> <nt name=SimpleBlock> <rq multi="?"> <rq>
+
+<semantics>
+  <p>This is actually 2 statements: one that executes a SQL statement directly, the other
+  one (using the <!width> clause>) executes a prepared statement. In either case, the
+  query is stored in the <obj name=DBHandle> variable (default is <!$$>) that can be
+  retrived. If a query is known to return no more than one row, can use the <!onSuccess>
+  and <!else> to specify code to handle that single row.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecuteUpdateStatement>
+  <!executeUpdate> <lq> <!_IDENTIFIER> <rq multi="?">
+  <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;>
+
+<semantics>
+  <p>This executes a prepared SQL update statement. If the variable name for the
+  prepared statement is missing, by default it uses <!$$>. The result, which is
+  the number of rows updates, can be obtained via <obj name=DBHandle>'s
+  <code>updateCount</code> member.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecuteSqlStatement>
+  <!executeSQL> <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <pi>
+  <lq> <nt name=RawSqlList> <or> <!:> <nt name=Mixture> <!;> <or> <lq> <!_IDENTIFIER> <rq multi="?">
+  <lq> <!with> <nt name=BindVariableList> <rq multi="?"> <!;> <rq>
+
+<semantics>
+  <p>This is actually 3 statements: one that executes a series of SQL statements,
+  one that executes a single SQL statement, and one that executes a prepared SQL
+  statement. In the last case, if no variable name is provided for the prepared
+  statement, by default uses <!$$>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecuteAnyStatement>
+  <!executeAny> <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <nt name=HereDoc>
+
+<semantics>
+  <p>This is similar to <nt name=ExecuteSqlStatement>, except that it takes
+  only one SQL statement of any kind. This is most useful for a statement that
+  may contain <!;>'s, such as Oracle PL/SQL procedure.</p>
+</semantics>
+</rule>
+
+
+<rule nt=ExecuteBatchStatement>
+  <!executeBatch> <lq> <!_IDENTIFIER> <rq multi="?"> <lq> <!using> <!_IDENTIFIER> <rq multi="?">
+  <lq> <nt name=RawSqlList> <or> <!;> <rq>
+
+<semantics>
+  <p>This statement adds all the SQL statements into a JDBC batch and then run
+  the batch. Statements in a batch typically are updates. If a variable name is
+  given, the total number of updates is returned.</p>
+</semantics>
+</rule>
+
+
+<rule nt=RawSqlList>
+  <!{> <lq> <nt name=Mixture> <!;> <rq multi="+"> <!}>
+
+<semantics>
+  <p>These are multiple SQL statements with no bind variables (i.e., ?'s).
+  Each statement is ended with <!;>. They are enclosed in <!{> and <!}>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=BindVariableList>
+  <lq>
+  <!@> <!_INT_LIT> <pi>
+  <lq> <!::> <!_FUNCTION_NAME> <nt name=Arguments> <pi>
+  <or> <lq> <!:> <!array> <or> <!bigDecimal> <or> <!blob> <or> <!boolean>
+            <or> <!byte> <or> <!bytes> <or> <!clob> <or> <!Date> <or> <!double> <pi>
+            <or> <!float> <or> <!int> <or> <!long> <or> <!Numeric> <or> <!ref>
+            <or> <!short> <or> <!String> <or> <!Struct> <or> <!time> <pi>
+            <or> <!timestamp> <or> <!varchar> <or> <!other>
+            <or> <!oracle_rowid> <or> <!oracle_cursor> <or> <!oracle_bfile> <pi>
+       <rq multi="?">
+  <lq> <!=> <Expr> <or> <!=&gt;> <nt name=PrimaryExpr> <or> <!&lt;=&gt;> <nt name=PrimaryExpr>
+  <rq multi="?"> <pi>
+  <rq>
+  <rq multi=",+">
+
+<semantics>
+  <p>Each bind variable (the ? in the prepared SQL statement) is represented by
+  its index, with 1 being the first. The type of the bind variable can be
+  specified after <!:>; default is string. If the SQL is not a procedure call,
+  a value is bound to the variable. For procedure calls, input variables can be
+  bound to values with <!=>, and output and bi-directional variables can be
+  bound to a <J> variable with <!=&gt;> or <!&lt;=&gt;>.</p>
+  <p>For some RDBMSs, the result column is not a simple value, but rather is an
+  object such as an input or output stream (in the case of BLOBs). Instead of
+  binding values or variables, use the <!::> notation to call the method. These
+  methods of the JDBC result set almost always take a column index as the first
+  parameter; this index is part of <!@> here, so call that method with the rest
+  of the required parameters, if any.</p>
+</semantics>
+</rule>
+
+
+<rule nt=CreateBatchStatement>
+  <!createBatch> <!_IDENTIFIER> <lq> <!using> <!_IDENTIFIER> <rq multi="?"> <!;>
+
+<semantics>
+  <p>Creates an empty JDBC batch using the default connection <!$$con> or a named connection
+  specified in the 2nd parameter. The batch is returned in the variable whose name is the
+  1st parameter.</p>
+</semantics>
+</rule>
+
+
+<rule nt=AddBatchStatement>
+  <!addBatch> <lq> <!to> <rq multi="?"> <!_IDENTIFIER> <!:> <nt name=Mixture> <!;>
+
+<semantics>
+  <p>Adds a SQL statement to a batch variable, created by <nt name=createBatch>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=DumpTableStatement>
+  <!dumpTable> <Expr> <pi>
+  <lq> <!using> <!_IDENTIFIER>
+  <or> <!into> <Expr>
+  <or> <!limit> <Expr>
+  <or> <!prompt> <Expr>
+  <rq multi="*"> <pi>
+  <lq> <!where> <nt name=Mixture> <rq multi="?"> <!;>
+
+<semantics>
+  <p>Dumps whole or part of a database table into a file. The first parameter is the table name.
+  The <!using> clause specifies the database connection; if not specified, use the default
+  connection <!$$con>. The optional <!into> clause allows to specify a file name; the default
+  file namd is the table name with extension ".tdmp". The <!limit> clause limits the number of
+  rows to be dumped. The <!promp> clause takes a number; for every such number of rows dumped,
+  display a "." on the screen to show the progress. The <!where> clause can be used to limit
+  or select the rows to be dumped.</p>
+
+  <p>The table dump file is handled by the <obj name=TableDump> object, which is returned by the
+  system function <sfn name=openTableDump>.</p>
+</semantics>
+</rule>
+
+
+<rule nt=Dom>
+  <!do> <Expr> <lq> <!systemID> <Expr> <rq multi="?"> <!as> <!dom> <lq> <nt name=XmlInitList> <rq multi="?">
+
+<semantics>
+  <p>This statement takes a URL or a file name for an XML document, and parses it into
+  a DOM object which is returned. If <!systemID> clause is specified, the value is set
+  to the XML parser. Optionally <nt name=XmlInitList> can be specified.</p>
+</semantics>
+</rule>
+
+
+<rule nt=XmlInitList>
+  <!with>
+  <lq> <!_IDENTIFIER> <lq> <!=> <!true> <or> <!false> <rq multi="?">
+  <or> <!xmlns> <lq> <!:> <!_IDENTIFIER> <rq multi="?"> <!=> <!_STRING_LIT>
+  <rq multi=",+">
+
+<semantics>
+  <p>The XML initialization parameters include these boolean options:
+  "namespace", "validate", "schema", "ignoreWhite" and "ignoreComment".
+  You can also declare a XML namespace ID with the <!xmlns> option, so that
+  tags starting with the ID and ":" will use this namespace.</p>
+</semantics>
+</rule>
+
+
+<rule nt=XmlStatement>
+  <!do> <Expr> <lq> <!in> <Expr> <rq multi="?"> <lq> <!&lt;> <!_IDENTIFIER> <!&gt;> <rq multi="?">
+  <lq> <!systemID> <Expr> <rq multi="?"> <!as> <!xml>
+  <lq> <nt name=XmlInitList> <rq multi="?"> <!{> <pi>
+  <lq>
+  <!BEFORE> <or> <!AFTER> <or> <!&lt;> <!&gt;> <or>
+  <lq> <!&lt;> <or> <!&lt;/> <rq multi="+"> <!_IDENTIFIER> <lq> <!:> <!_IDENTIFIER> <rq multi="+"> <!&gt;>
+  <pi>
+  <or> <!TEXT> <lq> <!&lt;> <!_IDENTIFIER> <lq> <!:> <!_IDENTIFIER> <rq multi="+"> <!&gt;>
+                    <lq> <!+> <or> <!-> <rq multi="?">
+               <rq multi="?"> <pi>
+  <or> <!WARNING> <or> <!ERROR> <or> <!START_DOC> <or> <!END_DOC> <or> <!START_NS_MAP> <or> <!END_NS_MAP> <pi>
+  <or> <!PI> <or> <!WHITESPACE> <or> <!COMMENT> <or> <!START_CDATA> <or> <!END_CDATA> <pi>
+  <or> <!START_DTD> <or> <!END_DTD> <or> <!START_ENTITY> <or> <!END_ENTITY> <or> <!ELEMENT_DECL> <pi>
+  <or> <!ATTR_DECL> <or> <!ENTITY_DECL> <or> <!EXT_ENTITY_DECL> <or> <!SKIPPED_ENTITY> <pi>
+  <rq> <!:> <lq> <nt name=Statement> <rq multi="+">
+  <pi> <rq multi="+">
+  <!}>
+
+<semantics>
+  <p>This statement provides a straightforward way of SAX2-compatible XML programming. The XML SAX2 parser
+  issues an event for tags, text segments and a number of other SAX2 events; <J> has added two more events,
+  <!BEFORE> and <!AFTER>. Each event becomes a label in this statement, which is followed by statements that
+  handle the event, with <!$_> being the event object; see <obj name=XmlTag>.</p>
+
+  <p>In addition, this statement also supports a text event that is enclosed between a pair of open and
+  close tags, with the <!TEXT> <!&lt;> ... <!&gt;>; see <obj name=XmlTextTag>. It is likely to have other
+  tags embedded in the text between a pair of open/close tags; you have to options to copy them into the
+  text or ignore these embedded tags by the <!+> or <!-> following the tag (before <!:>). By default it
+  copies embedded tags (that is, <!+>).</p>
+
+  <p>The source can be a file, a URL or a file within a zip archive. The text encoding can be
+  specified in <!lt;> and <!gt;>. </p>
+</semantics>
+</rule>
+
+
+<rule nt=XsltStatement>
+  <!xslt> <pi>
+  <lq>
+  <!copy> <pi>
+  <or> <lq> <!xpath> <!(> <rq multi="?">
+       <Expr> <lq> <!systemID> <Expr> <rq multi="?">
+       <lq> <!)> <rq multi="?"> <!on> <pi>
+  <rq> <pi>
+  <Expr> <lq> <!systemID> <Expr> <rq multi="?"> <pi>
+  <lq> <!as> <!dom> <pi>
+  <or> <lq> <!into> <or> <!to> <rq> <Expr> <lq> <!systemID> <Expr> <rq multi="?"> <pi>
+  <rq> <pi>
+  <lq> <!outputProperties> <nt name=MemberInitList>
+  <or> <!parameters> <nt name=MemberInitList>
+  <rq multi="*">
+
+<semantics>
+  <p>This statement applies an XSL transformation upon a source document and generates
+  a result document. The statement can be divided into 4 parts: the transformation, the
+  source, the destination, and output properties and parameters.</p>
+  <p>The transformation can be as simple as a <!copy>, or an XSL script which can be in
+  a file, a URL, a input stream or a reader; it can also be a xpath expression signified
+  by <!xpath> that performs a query.</p>
+  <p>The source and/or result can be a file, a URL, a input/output stream,
+  reader/writer, or a <code>org.w3c.dom.Document</code> object. Optionally the output
+  properties and/or parameters can be specified for the transformer. For all parts,
+  system IDs can be specified.</p>
+</semantics>
+</rule>
+
+
+</gramma>
+

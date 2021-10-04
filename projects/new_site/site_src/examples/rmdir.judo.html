@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/rmdir.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args    = 'dir';
+  author  = 'James Huang';
+  desc    = [[*
+    Removes the specified directory regardless it is empty or not.
+    Use with caution.
+  *]];
+}
+
+rmdir #args[0] force;
+</pre></td></tr></table></body></html>

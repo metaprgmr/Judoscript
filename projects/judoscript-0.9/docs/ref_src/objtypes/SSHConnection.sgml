@@ -1,0 +1,41 @@
+<function sig="cd path">
+  Sends the cd command to the remote machine. The <parm>path</param> can be empty.
+</function>
+
+<function sig="mkdir path">
+  Sends the mkdir command to the remote machine.
+</function>
+
+<function sig="rmdir path">
+  Sends the rmdir command to the remote machine.
+</function>
+
+<function sig="mv src dest">
+  Sends the mv command to the remote machine.
+</function>
+
+<function sig="rm path">
+  Sends the rm command to the remote machine.
+</function>
+
+<function sig="pwd">
+  Returns the result of the pwd command from the remote machine.
+</function>
+
+<function sig="date">
+  Returns the result of the date command from the remote machine.
+</function>
+
+<function sig="showEnv name">
+  Returns the environemnt variable from the remote machine for <param>name</param>.
+</function>
+
+<function sig="justRun cmd">
+  Run the <param>cmd</param> on the remote machine without waiting for the result.
+</function>
+
+<function sig="run cmd, ...">
+  Run the <param>cmd</param>'s on the remote machine, and returns a string array of
+  the commands' output.
+</function>
+

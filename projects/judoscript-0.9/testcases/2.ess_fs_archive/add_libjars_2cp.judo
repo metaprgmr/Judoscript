@@ -1,0 +1,10 @@
+/*
+ * To add all the jar/zip files in ${deploy}/lib and ${thirdparty}/lib
+ * into the (user) classpath.
+ */
+arr = [];
+listFiles <arr> '*.jar, *.zip' in '${deploy}/lib';
+listFiles <arr> '*.jar, *.zip' in '${thirdparty}/lib';
+
+#classpath.add(arr);
+

@@ -1,0 +1,66 @@
+usage {
+  author = 'James Huang';
+  desc   = [[*
+    This program generates a classpath from a list of sources at
+    the end of this script; only those starts with '+' are added.
+    The generated classpath is put into a file whose name is set
+    in 'os_script_name'. Modify for your platform.
+
+    To use,
+     1) update the list at the end of this file;
+     2) run this program by
+          java judo (* #prog *)
+     3) run the generated script to set the classpath for your
+        current session. Or, copy it to your shell startup
+        script. Whatever.
+
+    I was tempted to create a Windows GUI and use putenv() to
+    set the classpath for the current session. Unfortunately
+    setting environment variables in the PARENT process is real
+    hard, if possible at all. Since I can't get a standard way
+    to do that, I fell back to this two-step scripting solution.
+  *]];
+}
+
+os_script_name = 'setcp.bat';
+
+bat = openTextFile(os_script_name,'w');
+print <bat> 'set CLASSPATH=';
+first = true;
+
+do $$local as lines {
+  $_ = $_.trim();
+  if !$_.startsWith('+') { continue; }
+  $_ = $_.substring(1).trim();
+  if first { first = false; }
+  else { print <bat> pathSep(); }
+  print <bat> $_;
+}
+
+flush <bat>;
+bat.close();
+
+println 'Run ', os_script_name, ' to set the classpath.';
+
+
+EndScript -------------------------------------
+
++ .
++ c:\bin\classes
++ c:\xalan-j_2_2_D14\xerces.jar
++ c:\xalan-j_2_2_D14\xalan.jar
++ c:\xalan-j_2_2_D14\xml-apis.jar
++ c:\j2sdkee1.3\lib\j2ee.jar
+  c:\jaxp-1.1\jaxp.jar
+  c:\javatools\oracle\classes12.zip
+  c:\Program Files\SQLLIB\java\db2java.zip
++ c:\mm.mysql.jdbc-1.2c\mysql_uncomp.jar
++ c:\bsf-2_2\lib\bsf.jar
++ c:\jce1.2.1\lib\jce1_2_1.jar
++ c:\jce1.2.1\lib\sunjce_provider.jar
+  c:\reference\JavaCC2.0\bin\lib\JavaCC.zip
++ c:\jdk1.3\lib\tools.jar
+  c:\javatools\javaftp\build\ftp.jar
+  c:\javatools\javacvs\jCVS-5.2.2\jars\jcvsii.jar
+  c:\javatools\JNIRegistry\
+

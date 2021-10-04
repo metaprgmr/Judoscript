@@ -1,0 +1,111 @@
+<function sig="getUrl">
+  Returns the URL for this connection.
+</function>
+
+<function sig="getHost">
+  Returns the host of the URL for this connection.
+</function>
+
+<function sig="getPort">
+  Returns the port of the URL for this connection.
+</function>
+
+<function sig="getDomain">
+  Returns the domain of the URL for this connection.
+</function>
+
+<function sig="getPath">
+  Returns the path of the URL for this connection.
+</function>
+
+<function sig="getFileName">
+  Returns the file name of the URL for this connection.
+</function>
+
+<function sig="getQuery">
+  Returns the query string of the URL for this connection.
+</function>
+
+<function sig="getRef">
+  Returns the reference of the URL for this connection.
+</function>
+
+<function sig="getMethod">
+  Returns the HTTP method for this connection.
+</function>
+
+<function sig="getResponseMessage" alias="getResponseMsg">
+  Returns the HTTP response message for this connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getStatusCode" alias="getStatus">
+  Returns the HTTP response code for this connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getInputStream">
+  Returns the input stream for this HTTP connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getOutputStream">
+  Returns the output stream for this HTTP connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getTextInput">
+  Returns the text input (a buffered reader) for this HTTP connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getTextOutput">
+  Returns the text output (a print writer) for this HTTP connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="connect">
+  Makes the connection to the server. Once connected, no more headers can be set.
+</function>
+
+<function sig="getDateHeader name">
+  Returns a date object for the <param>name</param> HTTP response header.
+</function>
+
+<function sig="getAllHeaders">
+  Returns an array of all the header names for the HTTP response.
+</function>
+
+<function sig="addCookie cookie, cookieValue">
+  Adds a cookie <param>cookie</param> with value <param>cookieValue</param> to
+  the connection headers. This should be called before a connection is made.
+  If only <param>cookie</param>, it should be a <obj id=Cookie> instance.
+</function>
+
+<function sig="loadCookies cookiesFile">
+  Loads all the cookies from a saved cookies file <param>cookiesFile</param>. If
+  no file name specified, default to "cookies.txt".
+</function>
+
+<function sig="getCookies">
+  Returns an array of <obj id=Cookie>'s from the HTTP response sent by the server.
+</function>
+
+<function sig="saveCookies cookiesFile">
+  Saves all the <obj id=Cookie>'s from the HTTP response sent by the server into
+  a file <param>cookiesFile</param>, or "cookies.txt" if no file name specified.
+</function>
+
+<function sig="getContentLength">
+  Returns the "Content-Length" header of the HTTP reponse. If it is not present,
+  -1 is returned.
+</function>
+
+<function sig="getContentType">
+  Returns the "Content-Type" header of the HTTP reponse.
+</function>
+
+<function sig="getContentBytes lengthlimit">
+  Returns a Java byte array of the content. If <param>lengthlimit</param> is <= 0,
+  all the content is returned.
+</function>

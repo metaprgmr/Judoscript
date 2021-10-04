@@ -1,0 +1,17 @@
+println 'a = ', a = 1;
+if a > 2 {
+  println 'Impossible';
+} elif a == 1 {
+  println 'Equal';
+} else {
+  println 'Less than 1.';
+}
+
+println 'a = ', a = 1.0;
+if a > 2 {
+  println 'Impossible';
+} elif a == 1 {
+  println 'Equal';
+} else {
+  println 'Less than 1.';
+}

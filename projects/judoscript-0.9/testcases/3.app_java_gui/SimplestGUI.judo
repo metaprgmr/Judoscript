@@ -1,0 +1,15 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Simplest GUI program. An empty frame; only window closing message is handled.';
+}
+
+const #JFrame = java::javax.swing.JFrame;
+
+frame = new java::#JFrame('Simplest GUI');
+frame.setVisible(true);
+
+gui::events {
+  <frame : Window : windowClosing>:  exit 0;
+}

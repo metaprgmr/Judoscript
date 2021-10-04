@@ -1,0 +1,12 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Filters an array using custom filter functions, one with name the other lambda.';
+}
+
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+println a.filter(&size_filter);
+
+function size_filter elem { return elem.length() < 5; }
+println a.filter( lambda elem { return elem.length() >= 5; }, true );

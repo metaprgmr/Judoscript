@@ -1,0 +1,26 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Two threads, works and sleeps for different periods.
+    Only one thread can be working at any time. This is enforced by a lock.
+  *]];
+}
+
+const #fmt = 'mm:ss.SSS';
+
+thread t name, dur=2000 {
+  while true {
+    sleep(dur);
+    lock 'house';
+    println name, ' have it!  ', Date().fmtDate(#fmt);
+    sleep(dur);
+    println name, ' give up.  ', Date().fmtDate(#fmt);
+    unlock 'house';
+  }
+}
+
+start thread t('Kitty', 1000);
+sleep(1300);
+start thread t('Doggy');

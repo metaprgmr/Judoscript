@@ -1,0 +1,58 @@
+<%
+  var title = 'Lesson 13. Create Custom Controls/Tags'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>In lessons <%!link 'lesson4.jusp', '4' %>, <%!link 'lesson5.jusp', '5' %>
+and <%!link 'lesson6.jusp', '6' %>, we have learned that JuSP provides a
+number of tags in the form of <code>&lt;!xyz %></code> that generate
+different kinds of HTML content as well as perform designated tasks such as
+validation. Under the hood, JuSP simply turns such tags into function calls
+following a simple convention. For a tag like &lt;%!text 'name', 'value' %></code>,
+for instance, the JuSP preprocessor converts it into this, with the red parts
+coming from the tag body:</p>
+
+<pre>
+jusp$<font color=red>text</font> $$context, <font color=red>'name', 'value'</font>;
+</pre>
+
+<p>This calls the built-in function, <code>jusp$text()</code>, which is
+implemented like this:</p>
+
+<pre>
+function jusp$text ctxt, name, value, extra {
+  assert name, "HTML text control must have a 'name' attribute.";
+
+  var val = value != null ? value : ctxt.form.(name);
+  print &lt;ctxt.writer> '&lt;input type=text name="', name,
+                      '" value="', val, '" ', extra, '>';
+}
+</pre>
+
+<p>This is the magic. You can create your own custom tags, because the JuSP
+preprocessor doesn't really care what is following <code>&lt;!</code> (except
+for <code>&lt;!validate %></code>, just to be complete). Custom tags (the
+functions) can be declared within pages if it is used only locally, or can
+be defined in <code>juspInit.judo</code> for any pages to use.</p>
+
+<p>For instance, the <code>index.jusp</code> of this tutorial uses a custom
+tag, <code>&lt;%!lesson %></code>, to list all the lessons (view
+<%!viewsrc 'index.jusp' %>), so that all the lessons are listed cleanly
+without getting mingled with HTML code. This tutorial also uses a global
+custom tag, <code>&lt;!viewsrc %></code>, defined in
+<%!viewsrc 'WEB-INF/judo/juspInit.judo' %>, to generate a link to view the
+code of source files.</p>
+
+<p>In this tutorial, we have also defined a namespaced custom tag,
+<code>&lt;%!my$fmtdate %></code>.
+
+<ul type=square>
+<li>View <code><%!link 'lesson13/customtag.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson13/customtag.jusp' %></li>
+<li>View <%!viewsrc 'WEB-INF/judo/juspInit.judo' %> for
+    <code>&lt;%!my$fmtdate %></code> declaration.</li>
+</ul>
+
+<%!include "footer.jusp" %>

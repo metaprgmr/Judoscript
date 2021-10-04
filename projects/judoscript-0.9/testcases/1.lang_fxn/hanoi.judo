@@ -1,0 +1,9 @@
+cnt = 0;
+hanoiTower(4, 'A', 'B', 'C');
+
+function hanoiTower N, src, aux, dst {
+  if N == 0 { return; }
+  hanoiTower(N-1, src, dst, aux);
+  println 'step ', (++cnt).int() : > 2, ': ', src, ' => ', dst;
+  hanoiTower(N-1, aux, src, dst);
+}

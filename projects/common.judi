@@ -1,0 +1,133 @@
+//////////////////////////////////////////////////////////////////////
+// Check for the root environment variables
+//////////////////////////////////////////////////////////////////////
+
+function checkEnvVar envvar {
+  var x = getEnvVar(envvar);
+  if x == null {
+    println<err> envvar, ' is not set.';
+    exit(0);
+  }
+  if !x.isDir() {
+    println<err> envvar, ' is not a valid directory.';
+    exit(0);
+  }
+  println<err> 'Env variable ', envvar, '=', x;
+}
+
+// The required environment variables:
+checkEnvVar 'JAVA_HOME';
+checkEnvVar 'JUDOROOT';
+
+siteVersion = getEnvVar('SITE_VERSION');
+if siteVersion == null {
+  siteVersion = 'v2';
+  println <err> 'Env variable SITE_VERSION is not set; default to ', siteVersion;
+}
+
+// The source directories:
+bin      = '${JUDOROOT}/bin';          // the build tool executables and other native libraries
+lib      = '${JUDOROOT}/lib';          // the java libraries used to build and in bundle
+projects = '${JUDOROOT}/projects';     // various components of the language, website, etc.
+archives = '${JUDOROOT}/archives';     // archives of each release
+
+// The transient build directories:
+BUILD    = '${JUDOROOT}/build_result'; // the base of all the build results
+TMPROOT  = '${BUILD}/tmp';             // the temporary location for generated content before packaging
+WEBAPPS  = '${BUILD}/webapps';         // the resultant JUSP demonstration (servlet) webapp
+docroot  = '${BUILD}/judoscript.com-' + siteVersion; // the web site of judoscript.com
+
+mkdir WEBAPPS;
+mkdir docroot;
+
+// The java libraries used by the Judoscript language
+activation_jar         = '${lib}/activation.jar';
+ant_jar                = '${lib}/ant.jar';
+axis_jar               = '${lib}/axis.jar';
+bsf_jar                = '${lib}/bsf-2.3.jar';
+commons_lang_jar       = '${lib}/commons-lang-2.0.jar';
+commons_logging_jar    = '${lib}/commons-logging-1.0.4.jar';
+commons_fileupload_jar = '${lib}/commons-fileupload-1.0.jar';
+commons_mail_jar       = '${lib}/commons-mail-20041129.jar';
+commons_net_jar        = '${lib}/commons-net-1.4.0.jar';
+hibernate3_jar         = '${lib}/hibernate3.jar';
+ISNetworksMindTermSCP_jar = '${lib}/ISNetworksMindTermSCP.jar';
+j2ee_jar               = '${lib}/j2ee1.3.jar';
+jaxrpc_jar             = '${lib}/jaxrpc.jar';
+jcom_jar               = '${lib}/jcom.jar';
+log4j_jar              = '${lib}/log4j-1.2.9.jar';
+mail_jar               = '${lib}/mail.jar';
+saaj_jar               = '${lib}/saaj.jar';
+servlet_jar            = '${lib}/servlet.jar';
+wsdl4j_jar             = '${lib}/wsdl4j.jar';
+xalan_jar              = '${lib}/xalan-2.7.2.jar';
+
+
+//////////////////////////////////////////////////////////////////////
+// Set up the tools
+//////////////////////////////////////////////////////////////////////
+
+jcc_jar  = '${bin}/javacc-3.2.jar';
+
+old_judo_jar = '${bin}/judo-20051212.jar';
+new_judo_jar = '${bin}/judo-20051212.jar';
+judo_jar = new_judo_jar;
+
+java   = '${JAVA_HOME}/bin/java';
+javac  = '${JAVA_HOME}/bin/javac';
+javacc = '${java} -cp ${jcc_jar} javacc';
+jjtree = '${java} -cp ${jcc_jar} jjtree';
+judo   = '${java} -jar ${judo_jar}'; // note: This judo is a pre-built one, used to run the build scripts.
+                                     //       During testing, the judo executable is the newly built one.
+
+//////////////////////////////////////////////////////////////////////
+// Menu
+//////////////////////////////////////////////////////////////////////
+
+function menu content, confirm {
+  size = content.size();
+
+  while true {
+    println <err>;
+    cnt = 1;
+    for x in content {
+      println <err> cnt :>2, '. ', x;
+      cnt++;
+    }
+    println <err> ' 0. Exit';
+    flush <err> nl, 'Enter a choice: ';
+
+    line = readLine().int();
+    if line <= 0 {
+      exit(0);
+    }
+    if line > size {
+      println <err> 'Invalid selection.';
+    } else {
+      if !confirm {
+        return line;
+      }
+      flush <err> 'Are you sure to do #', line, '. ', content[line], '? (y/n) ';
+      if readLine().toLower().startsWith('y') {
+        return line;
+      }
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////
+// Helpers
+//////////////////////////////////////////////////////////////////////
+
+function runScript cmdline, startDir {
+  exec '${java} -version';
+
+  exec '${judo} -q ${cmdline}'
+    from startDir.neverEmpty('${.}')
+  ;
+}
+
+function archiveCommon {
+  copy '*.jud*' except '*~' in projects echo into '${archives}/common.zip';
+}
+

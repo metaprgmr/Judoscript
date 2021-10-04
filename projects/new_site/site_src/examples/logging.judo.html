@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_print/logging.judo:</b></td></tr><tr><td><pre>
+!pragma logger = 'warn'
+        // Try any of the valid logger level values:
+        // "all", "off", "trace", "debug", "info", "warn", "error", "fatal"
+
+println &lt;log>       'Hello, world!';
+println &lt;log:trace> 'Hello, this is a trace.';
+println &lt;log:debug> 'Hello, this is not a bug.';
+println &lt;log:info>  'Hello, this is some info.';
+println &lt;log:warn>  'Hello, this is a warning.';
+println &lt;log:error> 'Hello, this is an error.';
+println &lt;log:fatal> 'Hello, this is lethal!';
+</pre></td></tr></table></body></html>

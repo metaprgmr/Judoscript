@@ -1,0 +1,42 @@
+<%
+  if form.size() == 0 { // log out.
+    session.user = null;
+  } else {
+%>
+    <%!validate jusp$textLength 'user', 3 %>
+    <%!validate jusp$textLength 'pass', 5 %>
+<%
+  }
+
+  // if validation passes, assume it is logged in (for this example).
+  session.user = form.user;
+
+  if session.user {
+    var dest = form.dest;
+    if dest {
+      %><%!redirect dest %><%
+    } else {
+      %><%!forward "home.jusp" %><%
+    }
+  }
+%>
+
+<html>
+<head><title>Sample App -- Login Page</title>
+<body>
+<h1>Login Page</h1>
+<%
+  if error.length > 0 { // validation reported errors
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+%>
+<form><table border=0>
+<tr><td>User Name:</td><td><%!text 'user' %> (anything longer than 3 letters)</td></tr>
+<tr><td>Password:</td><td><%!password 'pass' %> (anything longer than 5 letters)</td></tr>
+<tr><td>&nbsp;</td><td><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson8.jusp">lesson 8</a></font>
+</body></html>

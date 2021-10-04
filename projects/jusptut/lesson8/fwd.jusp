@@ -1,0 +1,16 @@
+<html>
+<head><title>Jusp Forward Test</title>
+<body>
+<%
+  request.setAttribute('foo', 'I am set in "fwd.jusp".');
+%>
+<h1>JUSP Forward Test</h1>
+
+You really shouldn't see all these!
+<hr>
+<br>
+<%!forward 'foo.jusp' %>
+<hr>
+After the forward. You shouldn't see this either.
+
+</body></html>

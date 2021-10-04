@@ -1,0 +1,78 @@
+//
+// !! Haven't tested!
+//
+
+url        = 't3://localhost:7011';
+user       = 'system';
+pwd        = 'weblogic';
+server     = 'mainserver';
+filename   = 'ejb.log';
+ejbName    = '???';
+freq       = 5;
+
+JNDI_Home = weblogic.management.MBeanHome::JNDI_NAME;
+
+ctxt      = weblogicContext(url,user,pwd);
+mBeanHome = ctxt.lookup(JNDI_Home @ '.' @ server);
+mBean     = mBeanHome.getMBean(javanew weblogic.management.WebLogicObjectName(ejbName));
+
+ejbTxRTMBean    = null;
+ejbCacheRTMBean = null;
+ejbPoolRTMBean  = null;
+{ ejbTxRTMBean    = mbean.getTransactionRuntime();
+  ejbCacheRTMBean = mbean.getCacheRuntime();
+  ejbPoolRTMBean  = mbean.getPoolRuntime();
+catch: resume; // keep getting the others.
+finally:
+  if ejbTxRTMBean == null {
+    . <err> 'EJB Runtime Type mismatch: ', mbean.getType();
+    exit 1;
+  }
+}
+
+//logFile   = openTextFile(filename, 'w'); // never closed till user kills this job.
+logFile   = getOut(); filname = 'stdout';  // debug
+
+. <err> 'Logging data to ', filename, ' every ', freq, ' seconds...', nl; 
+
+. <logFile> [[*
+    MBeanHome successfully located.
+
+    TCTC  = Transactions Committed Total Count
+    TRBTC = Transactions Rolled BAck Total Couna
+    TTOTC = Transactions Timed Out Total Count
+    AC    = Activation Count
+    PC    = Passivation Count
+    CAC   = Cached Access Count
+    CBCC  = Cached Beans Current Count
+    CHC   = Cached Hit Count
+    BIUC  = Beans In Use Count
+    IBC   = Idle Beans Count
+    TOTC  = Time Out Total Count
+    WTC   = Waiter Total Count
+
+	TIME         TCTC   TRBTC   TTOTC      AC      PC     CAC    CBCC     CHC    BIUC     IBC    TOTC     WTC";
+
+    --------  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- -------*]];
+
+while {
+  . <logFile>
+    date().fmtDate('hh:mm:ss'), ' ',
+    ejbTxRTMBean.getTxsCommittedTotalCount()                             :>8,
+    ejbTxRTMBean.getTxsRolledBackTotalCount()                            :>8,
+    ejbTxRTMBean.getTxsTimedOutTotalCount()                              :>8,
+    (ejbCacheRTMBean ? ejbCacheRTMBean.getActivationCount()         : 0) :>8,
+    (ejbCacheRTMBean ? ejbCacheRTMBean.getPassivationCount()        : 0) :>8,
+    (ejbCacheRTMBean ? ejbCacheRTMBean.getCacheAccessCount()        : 0) :>8,
+    (ejbCacheRTMBean ? ejbCacheRTMBean.getCachedBeansCurrentCount() : 0) :>8,
+    (ejbCacheRTMBean ? ejbCacheRTMBean.getCacheHitCount()           : 0) :>8,
+    (ejbPoolRTMBean  ? ejbPoolRTMBean.getBeansInUseCount()          : 0) :>8,
+    (ejbPoolRTMBean  ? ejbPoolRTMBean.getIdleBeansCount()           : 0) :>8,
+    (ejbPoolRTMBean  ? ejbPoolRTMBean.getTimeoutTotalCount()        : 0) :>8,
+    (ejbPoolRTMBean  ? ejbPoolRTMBean.getWaiterTotalCount()         : 0) :>8;
+
+  sleep(freq*1000);
+}
+
+catch: $_.printInternalStackTrace();
+

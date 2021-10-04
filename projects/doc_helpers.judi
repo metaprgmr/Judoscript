@@ -1,0 +1,44 @@
+!include '${JUDOROOT}/projects/common.judi'
+
+mkdir '${docroot}/articles';
+mkdir '${docroot}/examples';
+mkdir '${docroot}/ref';
+mkdir '${docroot}/share';
+
+j09ref = '${projects}/judoscript-0.9/docs/ref_src';
+new_doc_root = '${projects}/new_site/';
+
+/////////////////////////////////////////////////////////////////////
+//  Helpers
+/////////////////////////////////////////////////////////////////////
+
+relURI = '../';
+
+allFAs = new Object;
+
+do '${j09ref}/funcareas.sgml' as sgml {
+<area>,<topic>: allFAs.($_.id) = $_.name;
+}
+
+function getFAName fa {
+  return allFAs.(fa).neverEmpty(fa);
+}
+function showFALink fa {
+  return '<font class=fa><a href="javascript:showFA(\'${fa}\')">' + getFAName(fa) + '</a></font>';
+}
+function showSFLink fxn {
+  return '<font class=sfn><a href="javascript:showSF(\'${fxn}\')">${fxn}()</a></font>';
+}
+function showObjLink oid {
+  return '<font class=obj><a href="javascript:showObj(\'${oid}\')">${oid}</a></font>';
+}
+function showNTLink nt {
+  return '<font class=nt><a href="javascript:showNT(\'${nt}\')">${nt}</a></font>';
+}
+function showSynNTLink nt {
+  return '<font class=nt><a href="javascript:showSynNT(\'${nt}\')">${nt}</a></font>';
+}
+function oeChar ch, norel {
+  ch = ch.toUpperCase();
+  return '<img src="${relURI}share/oe_${ch}.gif" align=left valign=top border=0 alt="${ch}">';
+}

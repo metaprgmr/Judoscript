@@ -1,0 +1,5 @@
+x = x as set in Object
+y = 9
+x = x as set in Object
+Dynamically set 'xyz' = 5
+Dynamically set 'x.y.z' = 6

@@ -1,0 +1,25 @@
+Invocation          Expect   Result
+------------------- -------- ---------
+foo.bar('a')        char     char
+foo.bar('abc')      char     char
+foo.bar(1)          Integer  Integer
+foo.bar(1.01)       Integer  byte
+foo.bar(Date())     Date     Date
+foo.bar(sqldate)    Date     Date
+
+foo1.bar('a')       String   String
+foo1.bar('abc')     String   String
+foo1.bar(1)         long     int
+foo1.bar(1.01)      double   double
+foo1.bar(Date())    Date     Date
+foo1.bar(sqldate)   SQLDate  SQLDate
+foo1.bar(sqldate_)  Date     Date
+
+foo1.bar(char('1')) char     char
+foo1.bar(byte(1))   byte     byte
+foo1.bar(char(1))   char     char
+foo1.bar(short(1))  int      int
+foo1.bar(int(1))    int      int
+foo1.bar(long(1))   long     long
+foo1.bar(float(1))  double   double
+foo1.bar(double(1)) double   double

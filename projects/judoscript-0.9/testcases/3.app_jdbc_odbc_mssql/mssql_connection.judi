@@ -1,0 +1,6 @@
+const #people_table       = 'people';
+const #media_table        = 'media';
+const #participants_table = 'participants';
+
+db::connect to 'jdbc:odbc:myDSN', 'dbuser', secret('dbpass');
+

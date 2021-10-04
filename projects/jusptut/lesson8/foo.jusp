@@ -1,0 +1,8 @@
+<html>
+<head><title>Foo</title></head>
+<body>
+This is a forwarded page. Below is some message passed in from the original page:
+
+<blockquote><%= request.getAttribute('foo') %></blockquote>
+
+</body></html>

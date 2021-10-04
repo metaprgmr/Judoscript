@@ -1,0 +1,112 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing check boxes by displaying different images.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.ItemEvent;
+
+/*
+ * Four accessory choices provide for 16 different
+ * combinations. The image for each combination is
+ * contained in a separate image file whose name indicates
+ * the accessories. The filenames are "geek-XXXX.gif"
+ * where XXXX can be one of the following 16 choices.
+ * The "choices" StringBuffer contains the string that
+ * indicates the current selection and is used to generate
+ * the file name of the image to display.
+  
+   ----             // zero accessories
+  
+   c---             // one accessory
+   -g--
+   --h-
+   ---t
+  
+   cg--             // two accessories
+   c-h-
+   c--t
+   -gh-
+   -g-t
+   --ht
+  
+   -ght             // three accessories
+   c-ht
+   cg-t
+   cgh-
+  
+   cght             // all accessories
+ */
+
+
+// Create the check boxes
+chinButton = new java::JCheckBox("Chin");
+chinButton.setMnemonic((java::KeyEvent).VK_C); 
+chinButton.setSelected(true);
+
+glassesButton = new java::JCheckBox("Glasses");
+glassesButton.setMnemonic((java::KeyEvent).VK_G); 
+glassesButton.setSelected(true);
+
+hairButton = new java::JCheckBox("Hair");
+hairButton.setMnemonic((java::KeyEvent).VK_H); 
+hairButton.setSelected(true);
+
+teethButton = new java::JCheckBox("Teeth");
+teethButton.setMnemonic((java::KeyEvent).VK_T); 
+teethButton.setSelected(true);
+
+// Indicates what's on the geek.
+choices = new java::StringBuffer('cght');
+
+// Set up the picture label
+pictureLabel = new java::JLabel(new java::ImageIcon("images/geek/geek-" @ choices @ ".gif"));
+pictureLabel.setToolTipText(choices.toString());
+
+// Put the check boxes in a column in a panel
+checkPanel = new java::JPanel;
+checkPanel.setLayout(new java::GridLayout(0, 1));
+checkPanel.add(chinButton);
+checkPanel.add(glassesButton);
+checkPanel.add(hairButton);
+checkPanel.add(teethButton);
+
+demo = new java::JPanel;
+
+demo.setLayout(new java::BorderLayout);
+demo.add(checkPanel, (java::BorderLayout).WEST);
+demo.add(pictureLabel, (java::BorderLayout).CENTER);
+demo.setBorder((java::BorderFactory).createEmptyBorder(20,20,20,20));
+
+frame = new java::JFrame("CheckBoxDemo");
+frame.setContentPane(demo);
+
+gui::events
+{
+  <chinButton, glassesButton, hairButton, teethButton : Item : itemStateChanged> :
+    var index = 0;
+    var c = '-';
+    var source = $_.getItemSelectable();
+
+    if   source == chinButton    { index = 0; c = 'c'; }
+    elif source == glassesButton { index = 1; c = 'g'; }
+    elif source == hairButton    { index = 2; c = 'h'; }
+    elif source == teethButton   { index = 3; c = 't'; }
+    if $_.getStateChange() == (java::ItemEvent).DESELECTED { c = '-'; }
+    choices.setCharAt(index, c);
+    pictureLabel.setIcon(new java::ImageIcon("images/geek/geek-" @ choices @ ".gif"));
+    pictureLabel.setToolTipText(choices.toString());
+
+  <frame : Window : windowClosing> :
+    exit 0;
+}
+
+frame.pack();
+frame.setVisible(true);

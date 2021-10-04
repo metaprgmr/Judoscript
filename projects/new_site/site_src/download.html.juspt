@@ -1,0 +1,162 @@
+<%
+  var title = 'Donwloads for Judo, JuSP, JuSPT, Jamaica and others';
+  var keywords = "judo, judoscript, jusp, jamaica, java scripting, jdbc scripting, hibernate scripting, xml scripting, html scraping, os shell scripting, shell scripting, soap scripting, web app, jusp platform, jvm bytecode, jvm macro assembler, bytecode assembler";
+%>
+<%!include '../site_src/include/header.jusp' %>
+<%
+!include '${JUDOROOT}/projects/common.judi'
+
+  function getDownloadFilesize fname {
+    return (('${docroot}/store/${fname}').fileSize() / 1024).round() + 'K';
+  }
+
+  function getDownloadLink fname {
+    return '<a href="store/${fname}">${fname}</a>';
+  }
+
+  do $$local as sgml {
+  :TEXT, <>: %>$_<%;
+  <hdiv>: if $_.width { %><td><%= jusp$spacer($$context, $_.width, 1) %></td><% }
+          else { %><td>&nbsp;</td><% }
+  <vdiv>:
+    var bgcolor = '';
+    var height = 6;
+    if ($_.color) bgcolor = 'bgcolor="' + $_.color + '"';
+    if ($_.height) height = $_.height;
+    %><tr><td height=<%=height%> <%=bgcolor%> colspan=5><%
+    %><%= jusp$spacer($$context, 1, height) %></td></tr><%
+  <value>:
+    switch $_.id {
+    case 'id':             %><%= versionID()                                    %><% break;
+    case 'info':           %><%= versionInfo()                                  %><% break;
+    case 'whole_size':     %><%= getDownloadFilesize('judoscript-0.9.zip')      %><% break;
+    case 'judo_size':      %><%= getDownloadFilesize('judo.jar.zip')            %><% break;
+    case 'jusptut_size':   %><%= getDownloadFilesize('jusptut.zip')             %><% break;
+    case 'jcom_size':      %><%= getDownloadFilesize('jcom.dll.zip')            %><% break;
+    case 'axis11all_size': %><%= getDownloadFilesize('axis11all.jar.zip')       %><% break;
+    case 'winreg_size':    %><%= getDownloadFilesize('ICE_JNIRegistry.dll.zip') %><% break;
+    case 'src_size':       %><%= getDownloadFilesize('src.jar')                 %><% break;
+    case 'generated_size': %><%= getDownloadFilesize('generated.jar')           %><% break;
+    case 'docs_size':      %><%= getDownloadFilesize('docs.zip')                %><% break;
+    case 'examples_size':  %><%= getDownloadFilesize('examples.zip')            %><% break;
+    case 'jamaica_size':   %><%= getDownloadFilesize('jamaica-1.0.zip')         %><% break;
+    }
+  <download>:
+    switch $_.id {
+    case 'judoscript':     %><%= getDownloadLink('judoscript-0.9.zip')          %><% break;
+    case 'judo':           %><%= getDownloadLink('judo.jar.zip')                %><% break;
+    case 'jusptut':        %><%= getDownloadLink('jusptut.zip')                 %><% break;
+    case 'jcom':           %><%= getDownloadLink('jcom.dll.zip')                %><% break;
+    case 'axis11all':      %><%= getDownloadLink('axis11all.jar.zip')           %><% break;
+    case 'winreg':         %><%= getDownloadLink('ICE_JNIRegistry.dll.zip')     %><% break;
+    case 'src':            %><%= getDownloadLink('src.jar')                     %><% break;
+    case 'generated':      %><%= getDownloadLink('generated.jar')               %><% break;
+    case 'docs':           %><%= getDownloadLink('docs.zip')                    %><% break;
+    case 'examples':       %><%= getDownloadLink('examples.zip')                %><% break;
+    }
+  }
+%>
+<%!include '../site_src/include/footer.jusp' %>
+
+<%@end%>
+
+<h2>Download</h2>
+
+<p>The current version info is: <font color=red><code><value id=info></code></font><br>
+Please read the <a href="relnote.html">release note</a> for <a href="relnote.html#changes">changes</a>.<br>
+Refresh this page to make sure you are downloading the latest version!<br>
+To get version info for your installed JudoScript, run this:
+<pre>  % java judo -x "println versionInfo()"</pre>
+</p>
+
+<p>You can download the whole package containing everything, or just the necessary parts for upgrade.</p>
+
+<table border=0 cellpadding=0 cellspacing=0 class=secondary3>
+<tr bgcolor="#006699" style="color:white">
+ <th class=secondary4>File Name</th>
+ <th>&nbsp;&nbsp;</th>
+ <th class=secondary4>Size</th>
+ <th>&nbsp;&nbsp;</th>
+ <th class=secondary4>Content</th></tr>
+<vdiv>
+<tr><td class=secondary3 valign=top><b><code><download id=judoscript></code></b></td>
+ <hdiv width=16>
+ <td class=secondary3 valign=top align=right><value id=whole_size></td>
+ <hdiv width=16>
+ <td class=secondary3>Contains <b>EVERYTHING</b> plus release and license notes.<br>
+     <em>(If for whatever reason this does not download successfully, download the following
+     pieces then unzip to a same directory.)</em>
+ </td>
+</tr>
+<vdiv>
+<tr><td class=secondary3 valign=top><b><code><download id=jusptut></code></b></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=jusptut_size></td>
+ <hdiv>
+ <td class=secondary3>The complete <a href="http://www.judoscript.com/jusptut/index.jusp">JuSP Comprehensive Tutorial</a> web app. Download and expand it into $TOMCAT/webapps/ and run <code>http://<i>localhost:port</i>/jusptut/index.jusp</code>. You can also rename/copy to a different name for exercise purposes.</td>
+</tr>
+<vdiv>
+<tr bgcolor="#DDDDDD">
+ <td class=secondary3 valign=top><code><download id=judo><br><download id=jcom><br><download id=winreg></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=judo_size><br><value id=jcom_size><br><value id=winreg_size></td>
+ <hdiv>
+ <td class=secondary3>The software binary. Unzip to get judo.jar and put it into classpath.<br>
+     The jcom.dll.zip is the jcom.dll from JCom version 2.2.3,
+     whose Java classes are included in judo.jar, for Windows COM scripting.<br>
+     The ICE_JNIRegistry.dll.zip is the ICE_JNIRegistry.dll from Tim Endre,
+     whose Java classes are included in judo.jar, for Windows registry scripting.<br>
+     <em>(All are included in <download id=judoscript> already!)</em>
+ </td>
+</tr>
+<vdiv>
+<tr bgcolor="#DDDDDD">
+ <td class=secondary3 valign=top><code><download id=src><br><download id=generated></code></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=src_size><br><value id=generated_size></td>
+ <hdiv>
+ <td class=secondary3>The complete source code.
+     <em>(Included in <download id=judoscript> already!)</em><br>
+     The generated Java files are produced by JavaCC for <em>judo.jj</em>.
+ </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+ <td class=secondary3 valign=top><code><download id=docs></code></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=docs_size></td>
+ <hdiv>
+ <td class=secondary3>Complete documentation and all the technical articles.
+     <em>(Included in <download id=judoscript> already!)</em>
+ </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+ <td class=secondary3 valign=top><code><download id=examples></code></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=examples_size></td>
+ <hdiv>
+ <td class=secondary3>The example libarary.
+     <em>(Included in <download id=judoscript> already!)</em>
+ </td>
+</tr>
+<vdiv>
+<tr><td class=secondary3 valign=top><i><code><download id=axis11all></code></code></i></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right><value id=axis11all_size></td>
+ <hdiv>
+ <td class=secondary3>The <download id=axis11all> file is a convenience for <i>SOAP web service</i> scripting.
+     It is an agglomeration of all the executable jar files in the Apache Axis 1.1 distribution.
+     This file is <i>not</i> included in <download id=judoscript>.
+ </td>
+</tr>
+<vdiv>
+<tr><td class=secondary3 valign=top><b><code><a href="store/jamaica-1.0.zip">jamaica-1.0.zip</a></code></b></td>
+ <hdiv>
+ <td class=secondary3 valign=top align=right>280K</td>
+ <hdiv>
+ <td class=secondary3>Jamaica, the JVM Macro Assembler language (2005-01-15 revision).
+Need either <a href='http://asm.objectweb.org'>ASM</a> or <a href='http://jakarta.apache.org/bcel'>Jakarta BCEL</a>.</td>
+</tr>
+<vdiv>
+<vdiv color="#006699" height="2">
+</table>
+

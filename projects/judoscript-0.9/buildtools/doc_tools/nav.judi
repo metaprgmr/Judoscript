@@ -1,0 +1,187 @@
+!include '${JUDOROOT}/projects/doc_helpers.judi'
+
+const #indent = 16;
+
+
+class TOCItem extends TreeNode
+{
+  function getKey   { return this.id; }
+  function toString { return this.name; }
+  function isLeaf   { return this.isLeaf != null; }
+  function getStyle {
+    if this.id.startsWith('synn_') { return 'nt'; }
+    if this.id.startsWith('synt_') { return 't'; }
+    if this.id.startsWith('synk_') { return 'kw'; }
+    if this.id.startsWith('sfn_')  { return 'code'; }
+    if this.id.startsWith('obj_')  {
+      switch this.name {
+      case 'string':
+      case 'integer':
+      case 'float':   return 't';
+      default:        return this.name.charAt(0).isUpperCase() ? 't' : 'kw';
+      }
+    }
+  }
+}
+
+
+class FunctionInfo
+{
+  function addName name {
+    if name.isNotEmpty() {
+      if (this.names != null)
+        this.names.add(name);
+      else
+        this.names = [ name ];
+    }
+  }
+  function setArgs _args { this.args = _args; }
+  function setExampels examples { this.examples = examples; }
+  function setDesc txt {
+    if (this.desc == null)
+      this.desc = txt;
+    else
+      this.desc += txt;
+  }
+  function setJDK14() { this.jdk14 = true; }
+  function isJDK14() { return this.jdk14; }
+}
+
+
+class TOCRoot extends TOCItem
+{
+  ctor {
+    if !has('id')   { this.id = 'toc'; }
+    if !has('name') { this.name = 'Table Of Content'; }
+  }
+
+  // returns all the leaves.
+  function generateNavPages open_node {
+    leaves = [];
+    if open_node.isLeaf() { leaves.append(open_node); }
+    fileName = '${::docroot}/ref/_' + open_node.id + '.html';
+    . 'Generating ', fileName;
+    this.file = openTextFile(fileName, 'w');
+    title = 'JudoScript Reference';
+    if !open_node.isTop() { title += ' - ' + open_node.name; }
+    . <file> [[*
+       <html><head><title>(* title *)</title>
+       <script language=JavaScript src=../share/judolib.js></script>
+       <link rel=stylesheet type=text/css href="../share/judo_styles.css">
+       </head><body>
+       (* writeNavPage(open_node.getTop(), open_node) *)
+       </body></html>
+    *]];
+    file.close();
+
+    for x in open_node.getChildren() {
+      if x.isLeaf() { leaves.append(x); }
+      else { leaves.appendArray(generateNavPages(x)); }
+    }
+    return leaves;
+  }
+
+  function writeNavPage node, openNode {
+    isOpen = openNode.hasInPath(node);
+    jumpUrl = '#' + node.('id');
+    id = node.('id');
+    if node.('isLeaf') {
+      icon = 'icon_page';
+    } else {
+      jumpUrl = '_' + id + '.html' + jumpUrl;
+      icon = 'icon_book';
+      if isOpen { icon += '_open'; }
+    }
+    icon += '.gif';
+    deco = isOpen ? '<em>' : '';
+    _deco = isOpen ? '</em>' : '';
+    level = node.getLevel();
+    if level < 2 { deco += '<b>'; _deco = '</b>' + _deco; }
+    style = node.getStyle();
+    if style != null {
+      if style == 'code' { deco += '<code>'; _deco += '</code>'; }
+      else { deco += '<font class=' + style + '>'; _deco = '</font>' + _deco; }
+    }
+    link = "javascript:showPanes(";
+    link += node.isLeaf() ? "null" : ("'_" + node.id + ".html'");
+    if node.id.startsWith('sfn_') {
+      link += ",'sfn.html#" + node.id + "')";
+    } else {
+      link += ",'" + node.id + ".html')";
+    }
+    . <file> '<nobr><img src="../share/spacer.gif" height=1 width=',
+             (#indent * level).int(), ' border=0>',
+             '<a name=', node.('id'), '><img src="../share/', icon, '" border=0></a> ',
+             '<a href="', link, '">', deco, node.('name'), _deco, '</a></nobr><br>';
+
+    if openNode.hasInPath(node) {
+      for x in node.getChildren() { writeNavPage(x, openNode); }
+    }
+  }
+
+} // end of class TOCRoot.
+
+
+class JudoScriptReference extends TOCRoot
+{
+  ctor {
+    this.id = 'ref';
+    this.name = 'Reference';
+
+    o = new TOCItem( id='fa',  name='Funcional Areas' );
+    addChild(o);
+    this.o_fa = o;
+
+    o = new TOCItem( id='syn', name='Syntax and Semantics' );
+    addChild(o);
+    this.o_syn = o;
+
+    o = new TOCItem( id='sfn', name='System Functions' );
+    addChild(o);
+    this.o_sfn = o;
+
+    o = new TOCItem( id='obj', name='Built-In Object Types' );
+    addChild(o);
+    this.o_obj = o;
+  }
+
+  function addSynNT _id {
+    o = this.o_synn;
+    if o == null {
+      o = findByKey('synn');
+      if o == null {
+        o = new TOCItem( id='synn', name='BNF for Non-Terminals' );
+        this.o_syn.addChild(o);
+        this.o_synn = o;
+        this.o_syn.addChild( new TOCItem( id='synt', name='Terminals' ) );
+        this.o_syn.addChild( new TOCItem( id='synk', name='Keywords' ) );
+      }
+    }
+    o.addChild( new TOCItem( id='synn_'+_id, name=_id, isLeaf=true ) );
+  }
+
+  function addSynT _id {
+    o = this.o_synt;
+    if o == null {
+      o = findByKey('synt');
+      if o == null {
+        o = new TOCItem( id='synt', name='Terminals' );
+        this.o_syn.addChild(o);
+        this.o_synt = o;
+      }
+    }
+    o.addChild( new TOCItem( id='synt_'+_id, name=_id, isLeaf=true ) );
+  }
+
+  function addObj _id {
+    this.o_obj.addChild( new TOCItem( id='obj_'+_id, name=_id, isLeaf=true ) );
+  }
+
+  function addSysFun fxn {
+    this.o_sfn.addChild( new TOCItem( id='sfn_'+fxn, name=fxn, isLeaf=true, detail = fxn ) );
+  }
+
+  // TODO. Use case is a bit tricker as it will have subgroups.
+
+} // end of class JudoScriptReference.
+

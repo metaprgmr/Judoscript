@@ -1,0 +1,18 @@
+println '#cmd_args: ', #cmd_args;
+for x in #cmd_args {
+  println '  #cmd_args[', loopIndex(), '] = ', x;
+}
+
+println nl, '#args: ', #args;
+for x in #args {
+  println '  #args[', loopIndex(), '] = ', x;
+}
+
+println nl, '#options: ', #options;
+for x in #options {
+  println '  #options[', x, '] = ', #options.(x);
+}
+
+println nl, 'Original os.name = ${os.name}';
+#sysprops.('os.name') = 'XXXXXXXXXXXXXX';
+println     'Now,     os.name = ${os.name}';

@@ -1,0 +1,30 @@
+class MyHashtable extends java::Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in this { arr.add(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    for x in values() { arr.add(x); }
+    return arr.toObjectArray();
+  }
+}
+
+mht = new MyHashtable;
+mht.put('adate', Date(2004, 6, 6));
+mht.put('anumber', 2);
+mht.put('astring', 'string');
+
+println '    keys: ', mht.getKeys();
+println '  values: ', mht.getValues();
+println 'hashCode: ', mht.hashCode();
+
+catch: $_.pist();

@@ -1,0 +1,32 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Adapted from Java Swing tutorial';
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+
+frame = new java::JFrame("TopLevelDemo");
+
+yellowLabel = new java::JLabel("");
+yellowLabel.setOpaque(true);
+yellowLabel.setBackground((java::Color).yellow);
+yellowLabel.setPreferredSize(new java::Dimension(200, 180));
+
+yellowLabel = new java::JLabel("");
+cyanMenuBar = new java::JMenuBar;
+cyanMenuBar.setOpaque(true);
+cyanMenuBar.setBackground((java::Color).cyan);
+cyanMenuBar.setPreferredSize(new java::Dimension(200, 20));
+
+frame.setJMenuBar(cyanMenuBar);
+frame.getContentPane().add(yellowLabel, (java::BorderLayout).CENTER);
+frame.pack();
+frame.setVisible(true);
+
+gui::events {
+  <frame : Window : windowClosing> :  exit(0);
+}

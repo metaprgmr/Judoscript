@@ -1,0 +1,12 @@
+x = new java::Date;
+println x.getClass().getName();
+
+import java.awt.*;
+import java.sql.Date;
+
+x = new java::Dimension(100,200);
+println x.getClass().getName();
+
+x = new java::Date(10000);
+println x.getClass().getName();
+

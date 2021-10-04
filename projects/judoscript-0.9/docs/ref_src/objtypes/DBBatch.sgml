@@ -1,0 +1,13 @@
+<function sig="addBatch sql">
+  Adds the <param>sql</param> to this batch.
+</function>
+
+<function sig="getBatchSize">
+  Returns the current number of SQL statements in this batch.
+</function>
+
+<function sig="executeBatch">
+  Executes this batch, and returns an array of integers that correspond to
+  the execution result of each SQL statement.
+</function>
+

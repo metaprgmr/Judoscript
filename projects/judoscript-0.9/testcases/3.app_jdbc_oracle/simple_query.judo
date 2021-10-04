@@ -1,0 +1,18 @@
+!include 'setup/connect.judi'
+
+db::query qry:
+  SELECT emp_no, first_name, last_name, birth_date, salary
+  FROM emp
+;
+
+println 'ID   First-Name  Last-Name    Salary    Birth-Date', nl,
+        '---  ----------  -----------  --------  ----------';
+while qry.next() {
+  println qry[1].int()   :<5,
+          qry.first_name :<12,
+          qry.last_name  :<12,
+          qry.salary     :*7.1, '  ',
+          qry.birth_date.fmtDate('yyyy-MM-dd');
+}
+
+db::disconnect();

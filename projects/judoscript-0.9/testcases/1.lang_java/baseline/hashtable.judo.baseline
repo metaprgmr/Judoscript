@@ -1,0 +1,21 @@
+---- traditional enumerating:
+  java.awt.Dimension = java.awt.Dimension[width=10,height=20]
+     1/1/01 12:00 AM = 1/1/01 12:00 AM
+               10.01 = 10.01
+                   1 = 1
+               Hello = Hello, World!
+---- modern enumerating:
+  java.awt.Dimension = java.awt.Dimension[width=10,height=20]
+     1/1/01 12:00 AM = 1/1/01 12:00 AM
+               10.01 = 10.01
+                   1 = 1
+               Hello = Hello, World!
+---- even easier enumerating:
+  java.awt.Dimension = java.awt.Dimension[width=10,height=20]
+     1/1/01 12:00 AM = 1/1/01 12:00 AM
+               10.01 = 10.01
+                   1 = 1
+               Hello = Hello, World!
+---- access a key via a name:
+a.Hello:       Hello, World!
+a.'Hi, World': Hello, World!

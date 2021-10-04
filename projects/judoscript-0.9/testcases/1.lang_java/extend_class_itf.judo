@@ -1,0 +1,30 @@
+class MySetIterator extends java::HashSet, Iterator
+{
+  Iterator iter;
+
+  constructor a, b, c {
+    super();
+    iter = null;
+    if c != null { add(c); }
+    if b != null { add(b); }
+    if a != null { add(a); }
+  }
+
+  // Iterator methods
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+  Object next() {
+    return (iter==null) ? null : iter.next();
+  }
+}
+
+o = new MySetIterator('Hi!', 9);
+o.add('abc');
+o.add(Date(2003,7,4));
+
+for x in o { println x; }
+

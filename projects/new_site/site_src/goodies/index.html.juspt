@@ -1,0 +1,137 @@
+<%
+  var title = 'Goodies from JudoScript.COM';
+  var keywords = 'judo, jj2xml';
+  ::base = '../';
+%>
+<%!include '../../site_src/include/header.jusp' %>
+
+<h2> Goodies </h2>
+
+Many of the goodies are witten in Judo. You can modify a script a little
+to better suit your needs anytime. To take advantage of the Judo scripts,
+you need JDK1.3+; also download and install
+<a href=http://www.judoscript.com/store/judoscript.zip>judoscript.zip</a>.
+Right-click on the scripts to download, then run like this:
+
+<blockquote><pre>java judo script.judo</pre></blockquote>
+
+
+
+<h3><i>Back up Your Work!</i></h3>
+
+It is a good habit to back up your important information frequently
+regardless what CM systems or other central backup facility your
+organization have -- <i>you</i> are the only reliable person to take
+care of <i>your</i> data. <a href=archive.judo>archive.judo</a> copies
+multiple directories trees into a single ZIP file. (JudoScript will
+soon support encryption, making this process even safer.) Take a
+look and modify for your files and directories.
+
+
+<h3><i>CLASSPATH Viewer and Editor</i></h3>
+
+<a href=showcp.judo>showcp.judo</a> prints your classpath nicely.
+<a href=gencp.judo>gencp.judo</a> allows you to list all the
+potential classpath elements line by line; any line starting with
+'+' will be included. This script generates a O.S. dependent script
+to be run and set the classpath.
+
+<h3><i>Character and Symbol Tables</i></h3>
+
+<a href=ascii.judo>ascii.judo</a> and <a href=entities.judo>entities.judo</a>
+print out ASCII and HTML entity in tabular format for easy reference. The
+output of entities.judo is as follows (for &#231;, it is <code>&amp;#231;</code>):
+
+<p>
+<blockquote><pre>
+     0 1 2 3 4 5 6 7 8 9
+ 20: &#20; &#21; &#22; &#23; &#24; &#25; &#26; &#27; &#28; &#29; 
+ 30: &#30; &#31; &#32; &#33; &#34; &#35; &#36; &#37; &#38; &#39; 
+ 40: &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#48; &#49; 
+ 50: &#50; &#51; &#52; &#53; &#54; &#55; &#56; &#57; &#58; &#59; 
+ 60: &#60; &#61; &#62; &#63; &#64; &#65; &#66; &#67; &#68; &#69; 
+ 70: &#70; &#71; &#72; &#73; &#74; &#75; &#76; &#77; &#78; &#79; 
+ 80: &#80; &#81; &#82; &#83; &#84; &#85; &#86; &#87; &#88; &#89; 
+ 90: &#90; &#91; &#92; &#93; &#94; &#95; &#96; &#97; &#98; &#99; 
+100: &#100; &#101; &#102; &#103; &#104; &#105; &#106; &#107; &#108; &#109; 
+110: &#110; &#111; &#112; &#113; &#114; &#115; &#116; &#117; &#118; &#119; 
+120: &#120; &#121; &#122; &#123; &#124; &#125; &#126; &#127; &#128; &#129; 
+130: &#130; &#131; &#132; &#133; &#134; &#135; &#136; &#137; &#138; &#139; 
+140: &#140; &#141; &#142; &#143; &#144; &#145; &#146; &#147; &#148; &#149; 
+150: &#150; &#151; &#152; &#153; &#154; &#155; &#156; &#157; &#158; &#159; 
+160: &#160; &#161; &#162; &#163; &#164; &#165; &#166; &#167; &#168; &#169; 
+170: &#170; &#171; &#172; &#173; &#174; &#175; &#176; &#177; &#178; &#179; 
+180: &#180; &#181; &#182; &#183; &#184; &#185; &#186; &#187; &#188; &#189; 
+190: &#190; &#191; &#192; &#193; &#194; &#195; &#196; &#197; &#198; &#199; 
+200: &#200; &#201; &#202; &#203; &#204; &#205; &#206; &#207; &#208; &#209; 
+210: &#210; &#211; &#212; &#213; &#214; &#215; &#216; &#217; &#218; &#219; 
+220: &#220; &#221; &#222; &#223; &#224; &#225; &#226; &#227; &#228; &#229; 
+230: &#230; &#231; &#232; &#233; &#234; &#235; &#236; &#237; &#238; &#239; 
+240: &#240; &#241; &#242; &#243; &#244; &#245; &#246; &#247; &#248; &#249; 
+250: &#250; &#251; &#252; &#253; &#254; &#255; &#256; &#257; &#258; &#259; 
+</pre></blockquote>
+
+
+<h3><i>HTML Page Table Checker </i></h3>
+
+<a href=html_table_check.judo>html_table_check.judo</a> prints out
+&lt;table&gt;, &lt;tr&gt; and &lt;td&gt; tags for a HTML page indented,
+with line and column numbers.
+
+
+<h3><i>Get Stock Quotes From Yahoo!</i></h3>
+
+<a href=get_quotes.judo>get_quotes.judo</a> retrieves stock quote information
+from http://quote.yahoo.com. The following is an example:
+
+<blockquote><pre>
+c:\>java judo get_quotes.judo "^DJI" "^IXIC" IBM MSFT SUNW
+
+http://quote.yahoo.com/q?s=^DJI+^IXIC+IBM+MSFT+SUNW+&d=v1
+^DJI    1:55PM   10005.86 -15.64           N/A
+^IXIC   1:55PM    1950.67   0.27           N/A
+IBM     1:35PM     119.97  -0.99     3,498,800
+MSFT    1:40PM      65.76  -0.49    14,014,100
+SUNW    1:40PM      12.79   0.49    23,441,700
+</pre></blockquote>
+
+<h3><i>Java Date/Time Format Symbols</i></h3>
+
+Do you remember all the format symbols in java.text.SimpleDateFormat?
+<a href=date_formats.judo>date_formats.judo</a> helps you to do this.
+
+
+<h3><i>Add Line Numbers</i></h3>
+
+<a href=addlinenum.judo>addlinenum.judo</a> adds line numbers to a
+text file and optionally can escape &amp;, &lt; and &gt; for HTML
+display. The line numbers takes 3 digits; you can certainly modify
+that.
+
+
+<h3><i>Count Lines</i></h3>
+
+Can you wc on files within a zip file?
+<a href=countlines_in_zip.judo>countlines_in_zip.judo</a> does.
+<a href=countlines.judo>countlines.judo</a> may be useful, too.
+
+
+<h3><i>Display Binary Files</i></h3>
+
+<a href=bincat.judo>bincat.judo</a> is yet another tool to display
+contents of binary files.
+
+
+<h3><i>JavaCC Grammar to XML Converter</i></h3>
+
+This utility creates an XML file from a jj file, useful for
+documentation. Download <a href=jj2xml.jar>jj2xml.jar</a>, put it
+in your classpath and do this:
+
+<pre>
+java wws.tool.jj2xml.Main yourgrammar.jj
+</pre>
+
+It prints to <code>System.out</code>. Redirect to a file if you wish.
+
+<%!include '../../site_src/include/footer.jusp' %>

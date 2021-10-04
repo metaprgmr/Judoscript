@@ -1,0 +1,160 @@
+
+  /**
+   * ==================
+   *  Generated method
+   * ==================
+   *
+   * Need these methods:
+   *
+   *  readChar() -- should handle EOF
+   *  action0() -- push back and exit if single&&';' || multi&&'}'
+   *  action1() -- add
+   *  action2() -- mark; add
+   *  action3() -- add; clear mark
+   *  action4() -- remove from mark; clear mark
+   *  action5() -- remove from mark; clear mark; add
+   */
+  private void fsa() throws IOException {
+    state = 0;
+loop:
+    while(true) {
+      ch = readChar();
+      //int old_state = state;
+      switch(state) {
+      case 0:
+        switch(ch) {
+        case '(' : action1(); state=1; break;
+        case ';' : if (action0()) break loop; break;
+        case '}' : if (action0()) break loop; break;
+        case '/' : action2(); state=9; break;
+        case '-' : action2(); state=15; break;
+        case '#' : action2(); state=17; break;
+        default  : action1(); break;
+        }
+        break;
+      case 1:
+        switch(ch) {
+        case '*' : action1(); state=2; break;
+        default  : action1(); state=0; break;
+        }
+        break;
+      case 2:
+        switch(ch) {
+        case ')' : action1(); state=0; break;
+        case ' ' : action1(); break;
+        case '\t': action1(); break;
+        case '\r': action1(); break;
+        case '\n': action1(); break;
+        default  : action1(); state=3; break;
+        }
+        break;
+      case 3:
+        switch(ch) {
+        case '*' : action1(); state=4; break;
+        case '\'': action1(); state=5; break;
+        case '"' : action1(); state=7; break;
+        default  : action1(); break;
+        }
+        break;
+      case 4:
+        switch(ch) {
+        case ')' : action1(); state=0; break;
+        default  : action1(); state=3; break;
+        }
+        break;
+      case 5:
+        switch(ch) {
+        case '\\': action1(); state=6; break;
+        case '\'': action1(); state=3; break;
+        default  : action1(); break;
+        }
+        break;
+      case 6:
+        switch(ch) {
+        default  : action1(); state=5; break;
+        }
+        break;
+      case 7:
+        switch(ch) {
+        case '\\': action1(); state=8; break;
+        case '"' : action1(); state=3; break;
+        default  : action1(); break;
+        }
+        break;
+      case 8:
+        switch(ch) {
+        default  : action1(); state=7; break;
+        }
+        break;
+      case 9:
+        switch(ch) {
+        case '*' : action1(); state=10; break;
+        case '?' : action1(); state=12; break;
+        case '/' : action1(); state=14; break;
+        default  : action3(); state=0; break;
+        }
+        break;
+      case 10:
+        switch(ch) {
+        case '*' : action1(); state=11; break;
+        default  : action1(); break;
+        }
+        break;
+      case 11:
+        switch(ch) {
+        case '/' : action4(); state=0; break;
+        default  : action1(); state=10; break;
+        }
+        break;
+      case 12:
+        switch(ch) {
+        case '?' : action1(); state=13; break;
+        default  : action1(); break;
+        }
+        break;
+      case 13:
+        switch(ch) {
+        case '/' : action4(); state=0; break;
+        default  : action1(); state=12; break;
+        }
+        break;
+      case 14:
+        switch(ch) {
+        case '\r': action5(); state=0; break;
+        case '\n': action5(); state=0; break;
+        default  : action1(); break;
+        }
+        break;
+      case 15:
+        switch(ch) {
+        case '-' : action1(); state=16; break;
+        default  : action1(); state=0; break;
+        }
+        break;
+      case 16:
+        switch(ch) {
+        case '\r': action5(); state=0; break;
+        case '\n': action5(); state=0; break;
+        default  : action1(); break;
+        }
+        break;
+      case 17:
+        switch(ch) {
+        case '!' : action1(); state=18; break;
+        default  : action1(); state=0; break;
+        }
+        break;
+      case 18:
+        switch(ch) {
+        case '\r': action5(); state=0; break;
+        case '\n': action5(); state=0; break;
+        default  : action1(); break;
+        }
+        break;
+      }
+      //System.out.println("["+old_state+"]--" + ((char)ch) + "-->["+state+"] (mark: " + mark + "): " + sb);
+    }
+  } // end of fsa().
+
+} // end of class.
+

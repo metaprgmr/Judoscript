@@ -1,0 +1,145 @@
+!include 'nav.judi'
+!include 'function_info.judi'
+!include 'obj_type.judi'
+
+rootNode = new JudoScriptReference;
+
+nobody = 0;
+nodoc = 0;
+external = 0;
+withdoc = 0;
+total = 0;
+do $$local as sgml {
+<type>: rootNode.addObj($_.name);
+        genObj($_);
+        ++total;
+}
+. unit(withdoc,'document') :>12, ' have bodies;', nl,
+  unit(nobody,'document') :>12, ' have no bodies;', nl,
+  unit(external,'document') :>12, ' are external;', nl,
+  unit(nodoc,'document') :>12, ' missing bodies;', nl,
+  unit(total, 'file') :>8, ' total.';
+
+. nl, 'Create object type nav page.';
+rootNode.generateNavPages(rootNode.o_obj);
+
+function genObj objInfo {
+  if objInfo.external != null {
+    ++external;
+    return;
+  }
+  objName = objInfo.name;
+  file = '${j09ref}/objtypes/${objName}.sgml';
+  type = '';
+  if file.fileExists() {
+    do file as sgml with FUNCTION_INFO;
+    ++withdoc;
+  } else {
+    if objInfo.nobody { ++nobody; type = '-'; }
+    else { ++nodoc; type = 'X'; }
+    allFxns.clear();
+    allMembers.clear();
+  }
+  file = '${docroot}/ref/obj_${objName}.html';
+  . 'Generating ', file, '  ', type;
+  file = openTextFile(file, 'w');
+  dispName = objName;
+  if objName == 'All' { dispName = '<em>' @ objName @ '</em>'; }
+  . <file> [[*
+      <html><head><title>JudoScript Object - (*objName*)</title>
+      <link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+      <script language=JavaScript src=../share/judolib.js></script>
+      <script language=JavaScript src=ntUsedBy.js></script>
+      </head><body style="margin-left:20px">
+      <h3>Built-In Object Type: <u>(*dispName*)</u></h3>
+    *]];
+  if objInfo.name != 'All' {
+    print <file> '<h5>Inherits ', showObjLink('All');
+    if objInfo.("extends") != null {
+      print <file> ', ', showObjLink(objInfo.("extends"));
+    } elif objInfo.("extendsJava") != null {
+      print <file> ', ', showObjLink('JavaObject'), ': <code>', objInfo.("extendsJava"), '</code>';
+    }
+    . <file> '</h5>';
+  }
+  . <file> '<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>'; // TODO
+  if allMembers.size() > 0 {
+    . <file> [[*
+        <h5>Members:</h5>
+        <table border=1>
+        <tr><th>Name</th><th>Writable</th><th>Description</th></tr>
+      *]];
+    for m in allMembers {
+      . <file> '<tr><td valign=top><font class=sfn><a name=', objName, '_', m.name, '>', m.name;
+      if m.alias != null { . <file> '<br>', m.alias; }
+      . <file> '</a></font></td><td align=center>', (m.write=='true').fmtBool('no','yes'),
+               '</td><td>', m.desc, '</td></tr>';
+    }
+    . <file> '</table>';
+  }
+
+  if allFxns.size() > 0 {
+    . <file> [[*
+        <h5>Methods:</h5>
+        <table border=1>
+        <tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+    *]];
+    for fxn in allFxns {
+      print <file> '<tr><td valign=top><font class=sfn>';
+      for x in fxn.names { print <file> '<a name=', objName, '_', x, '></a>'; }
+      for x in fxn.names { print <file> x, '<br>'; }
+      print <file> '</font></td><td valign=top>';
+      if fxn.args == null {
+        print <file> '&nbsp;';
+      } else {
+        for x in fxn.args { print <file> '<font class=param>', x, '</font><br>'; }
+      }
+      . <file> '</td><td valign=top>', fxn.desc.neverEmpty('&nbsp;'), '</td></tr>';
+    }
+    . <file> '</table>';
+  }
+  . <file> '</body></html>';
+  file.close();
+catch: ;
+}
+
+EndScript -------------------------------------------------------
+<type name=All>
+<type name=simple>
+<type name=Date>
+<type name=Array>
+<type name=LinkedList extends=Array nobody=1>
+<type name=Set>
+<type name=Stack>
+<type name=Queue>
+<type name=Object>
+<type name=OrderedMap extends=Object>
+<type name=SortedMap extends=Object nobody=1>
+<type name=TreeNode extends=Object>
+<type name=TableData extendsJava=com.judoscript.util.TableData>
+<type name=TableDump external=1>
+<type name=RegEx extendsJava=java.util.regex.Pattern nobody=1>
+<type name=ZipArchive extendsJava=java.util.zip.ZipFile>
+<type name=IODevice extendsJava="java.io.InputStream, java.io.BufferedReader, java.io.OutputStream, java.io.PrintWriter, java.io.RandomAccessFile">
+<type name=HTTPConnection>
+<type name=HTTPService>
+<type name=Cookie external=1>
+<type name=SchedulerTimer>
+<type name=DOMDoc extendsJava=org.w3c.dom.Document>
+<type name=XMLTag>
+<type name=XMLText extends=XMLTag nobody=1>
+<type name=SGMLTag extends=Object>
+<type name=SSHConnection>
+<type name=ExcptError>
+<type name=ExcptJava extendsJava=java.lang.Exception>
+<type name=JavaObject>
+<type name=JavaArray extends=JavaObject>
+<type name=COMIUnknown>
+<type name=COMIDispatch extends=COMIUnknown nobody=1>
+<type name=DBConnection extendsJava=java.sql.Connection>
+<type name=DBMetaData extendsJava=java.sql.DatabaseMetaData>
+<type name=DBQuery>
+<type name=DBUpdate>
+<type name=DBBatch>
+<type name=BSF extendsJava=org.apache.bsf.util.BSFFunctions nobody=1>
+

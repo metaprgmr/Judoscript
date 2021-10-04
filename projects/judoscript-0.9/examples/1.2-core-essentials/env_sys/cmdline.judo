@@ -1,0 +1,27 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Displays command-line arguments.
+    Experiment by specifying various things on the command line.
+  *]];
+}
+
+println '#cmd_args:  ';
+for x in #cmd_args {
+  print x, ' ';
+}
+println '-----------';
+
+print '     #args: ';
+for x in #args {
+  print x, ' ';
+}
+println;
+if defined #options {
+  println '#options:';
+  for x in #options.keys() {
+    println x, ' = ', #options[x];
+  }
+}

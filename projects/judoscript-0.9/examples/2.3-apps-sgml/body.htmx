@@ -1,0 +1,44 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    This program includes a HTML template at the end,
+    which is processed into a name-sake HTML file.
+  *]];
+}
+
+do $$local as html
+{
+BEFORE: $html = openTextFile(#prog.replace(".htmx",".html"),"w");
+<doc>:  println <$html> [[*
+          <html><head><title>(* $_.title *)</title></html><body>
+          <center><table width=650><tr><td> <h1>(* $_.title *)</h1>
+        *]];
+AFTER:  println <$html> '<hr></td></tr></table> </center></body></html>';
+        $html.close();
+<quote>:  print <$html> '<blockquote><font size=-1>';
+</quote>: print <$html> '</font></blockquote>';
+
+TEXT,<>,<?>,<!>:
+        print <$html> $_;
+}
+
+EndScript ------------------------------------------------
+
+<doc title="Body Systems">
+<p>
+The body can be thought of as a number of systems:
+<ul>
+<li> skeleon
+<li> musculature
+<li> cardiovascular system
+<li> digestive system
+<li> excretory system
+<li> immune system
+<li> respiratory system
+<li> reproductive system
+</ul>
+<quote>
+"The digestive system breaks down food and turns
+it into the right chemicals for the body to use."
+</quote>

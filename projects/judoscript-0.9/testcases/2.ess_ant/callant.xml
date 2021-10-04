@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!--
+   Demonstrates calling Ant targets from within embedded JudoScript.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+<project name="test" default="main" basedir=".">
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  <target name="t1" depends="t1.1">
+    <echo message="Target One." />
+  </target>
+
+  <target name="t1.1">
+    <echo message="Target One'." />
+  </target>
+
+  <target name="t2">
+    <echo message="Target Two." />
+  </target>
+
+  <target name="main">
+    <judoscript>
+      println '-------------';
+      antcall 't1', 't2';
+      println '-------------';
+    </judoscript>
+  </target>
+
+</project>

@@ -1,0 +1,160 @@
+<function sig="size" alias="length">
+  Returns the size of this set.
+</function>
+
+<function sig="clear">
+  Clears all the elements in this set.
+</function.
+
+<function sig="add elem, ..." alias="append">
+  Adds all the elements into this set.
+</function>
+
+<function sig="sort comparatorFunction">
+  Sorts this set locally and returns self. If <param>comparatorFunction</param> is
+  not specified, use the "natural" order of the elements.
+</function>
+
+<function sig="sortAsString">
+  Sorts this set as strings locally and returns self.
+</function>
+
+<function sig="sortAsNumber">
+  Sorts this set as numbers locally and returns self.
+</function>
+
+<function sig="sortAsDate">
+  Sorts this set as dates locally and returns self.
+</function>
+
+<function sig="sum">
+  Returns the sum of all the numbers in this set. The sum is an integer if all
+  the elements are integers; otherwise sum is float.
+</function>
+
+<function sig="average" alias="avg">
+  Returns the average of all the numbers in this set.
+</function>
+
+<function sig="max">
+  Returns the biggest of all the numbers in this set. It is an integer if all
+  the elements are integers; otherwise it is float.
+</function>
+
+<function sig="min">
+  Returns the smallest of all the numbers in this set. It is an integer if all
+  the elements are integers; otherwise it is float.
+</function>
+
+<function sig="range">
+  Returns an array of two values: the smallest and biggest. They are integers if all
+  the elements are integers; otherwise they are float.
+</function>
+
+<function sig="subset filterFunction">
+  Returns a sub-set of this for elements that are qualified by <param>filterFunction</param>.
+</function>
+
+<function sig="exists value, comparatorFunction">
+  Returns <!true> if a match of <param>value</param> in this set is found, based on the
+  <param>comparatorFunction</param>, or -1 if not found. If no <param>comparatorFunction</param>
+  specified, use the "natural" order.
+</function>
+
+<function sig="remove elem">
+  Removes the <param>elem</param>, if it exists.
+</function>
+
+<function sig="concat separator">
+  Returns a string that is a concatenation of all the elements, separated by <param>separator</param>.
+  If no <param>separator</param> specified, default use ','.
+</function>
+
+<function sig="toBooleanArray">
+  Returns a Java array of <code>boolean[]</code>.
+</function>
+
+<function sig="toByteArray">
+  Returns a Java array of <code>byte[]</code>.
+</function>
+
+<function sig="toCharArray">
+  Returns a Java array of <code>char[]</code>.
+</function>
+
+<function sig="toShortArray">
+  Returns a Java array of <code>short[]</code>.
+</function>
+
+<function sig="toIntArray">
+  Returns a Java array of <code>int[]</code>.
+</function>
+
+<function sig="toLongArray">
+  Returns a Java array of <code>long[]</code>.
+</function>
+
+<function sig="toFloatArray">
+  Returns a Java array of <code>float[]</code>.
+</function>
+
+<function sig="toDoubleArray">
+  Returns a Java array of <code>double[]</code>.
+</function>
+
+<function sig="toBooleanObjectArray">
+  Returns a Java array of <code>java.lang.Boolean[]</code>.
+</function>
+
+<function sig="toByteObjectArray">
+  Returns a Java array of <code>java.lang.Byte[]</code>.
+</function>
+
+<function sig="toCharObjectArray">
+  Returns a Java array of <code>java.lang.Character[]</code>.
+</function>
+
+<function sig="toShortObjectArray">
+  Returns a Java array of <code>java.lang.Short[]</code>.
+</function>
+
+<function sig="toIntObjectArray">
+  Returns a Java array of <code>java.lang.Integer[]</code>.
+</function>
+
+<function sig="toLongObjectArray">
+  Returns a Java array of <code>java.lang.Long[]</code>.
+</function>
+
+<function sig="toFloatObjectArray">
+  Returns a Java array of <code>java.lang.Float[]</code>.
+</function>
+
+<function sig="toDoubleObjectArray">
+  Returns a Java array of <code>java.lang.Double[]</code>.
+</function>
+
+<function sig="toStringArray">
+  Returns a Java array of <code>java.lang.String[]</code>.
+</function>
+
+<function sig="toObjectArray">
+  Returns a Java array of <code>java.lang.Object[]</code>.
+</function>
+
+<function sig="toArray">
+  Returns an array of all the elements.
+</function>
+
+<function sig="toJavaSet">
+  Returns a <code>java.util.Set</code> instance containing all the elements
+  as <code>java.lang.Object</code>'s.
+</function>
+
+<function sig="saveAsLine fileName">
+  Write all elements into a file as lines. If values are strings containing newlines, the values will be confused.
+</function>
+
+<function sig="loadAsLine fileName">
+  Load all lines in the text file as elements.
+</function>

@@ -1,0 +1,23 @@
+<function sig="empty">
+  Returns <!true> if this stack is empty.
+</function>
+
+<function sig="push value">
+  Pushes <param>value</param> onto the top of the stack.
+</function>
+
+<function sig="pop">
+  Returns and pops the top of the stack, or <!null> if the stack is empty.
+</function>
+
+<function sig="peek">
+  Returns and the top of the stack, or <!null> if the stack is empty.
+</function>
+
+<function sig="size">
+  Returns the size of the stack.
+</function>
+
+<function sig="get index">
+  Returns the element at <param>index</param> of the stack, or <!null> if not out bounds.
+</function>

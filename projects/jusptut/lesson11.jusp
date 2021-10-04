@@ -1,0 +1,82 @@
+<%
+  var title = 'Lesson 11. Debugging JuSP Web Apps'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<h2>Line Numbers in Error Reports</h2>
+
+<p>When unhandled exceptions occur, the exception message often include
+line numbers in the source code. While the errors are pointing to the
+preprocessed (Judo) files, <u>the line numbers are indeed the same
+as the original JuSP page</u>. Use this as a reference to inspect the
+JuSP page.</p>
+
+<h2>Using Logging and Printing for Debugging JuSP</h2>
+
+<p>Logging and assertion are the two Judo languages features for
+debugging JuSP pages. Logging in Judo supports logging messages to
+different <em>levels</em>: "debug", "info", "warn" and "error", from
+most verbose to least. The following pragma sets the logging level:</p>
+
+<pre>
+!pragma logger = "info"
+</pre>
+
+<p>Once the logging level is, say, set to "info", only <em>info</em>
+and more serious message will be logged. Notice this is a global
+runtime pragma, so if you set it in one JuSP page, the whole system
+uses that new level. To log a new message, use the <code>println</code>
+command:</p>
+
+<pre>
+println &lt;log:warn> 'The ID is null!';
+</pre>
+
+<p>If you want to log an exception, use this syntax (where <code>$_</code>
+is an exception object just caught):</p>
+
+<pre>
+println &lt;log:warn> (\$_)> 'Exception caught.';
+</pre>
+
+<ul type=square>
+<li>View <code><%!link 'lesson11/rt_error.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson11/rt_error.jusp' %></li>
+</ul>
+
+<p>For quick message printout, you can print to <em>stdout</em> or
+<em>stderr</em> on the server:</p>
+
+<pre>
+println "====> I'm here";
+println &lt;out> "====> I'm here"; // same as above
+println &lt;err> "====> I'm here, too";
+</pre>
+
+<h2>Using Assertion for Debugging JuSP</h2>
+
+<p>The <code>assert</code> command is another popular mechanism:</p>
+
+<pre>
+assert form.username, 'User name is not set.';
+</pre>
+
+<p>The <code>assert</code> command checks the first parameter as a
+boolean value; if false, it is considered an assertion failure.
+Based on the current system setting, an assertion failure can be a
+runtime error, a logged warning message, or simply ignored.
+The following pragma sets the assertion failure policy; like the
+above pragma, it is a global runtime assertion.</p>
+
+<pre>
+!pragma assertAs = 'error' // or 'warn' or 'ignore'
+</pre>
+
+<ul type=square>
+<li>View <code><%!link 'lesson11/asserts.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson11/asserts.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

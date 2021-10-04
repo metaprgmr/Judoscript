@@ -1,0 +1,28 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates one-time events as three countdowns towards
+    the next minute.
+  *]];
+}
+
+time = Date();
+if time.second > 56 { time.minute++; }
+
+println 'Current time: ', time.fmtDate('mm:ss'), '; waiting for ', time.minute + 1, ':00...';
+
+time.second = 57; countDown(time, '-3-');
+time.second++;    countDown(time, '-2-');
+time.second++;    countDown(time, '-1-');
+time.second++;    countDown(time, 'MINUTE!');
+
+function countDown moment, msg
+{
+  schedule starting moment {
+    println $$timer.time.fmtDate('mm:ss'), '  ', msg;
+  }
+}
+
+catch: $_.pist();

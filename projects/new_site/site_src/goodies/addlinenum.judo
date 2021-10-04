@@ -1,0 +1,18 @@
+if #args.length() == 0 {
+  . 'Usage: java judo ', #prog, ' [-e] <filename>', nl;
+  . '       if -e option is specified, it escapes for HTML.';
+  exit 0;
+}
+
+$escape = (defined #options) && #options.has('e');
+
+$file = openTextFile(#args[0]);
+for $lineNum=1; ($line=$file.readLine()) != eof; ++$lineNum {
+  if $escape {
+    $line = $line.replace('&','&amp;');
+    $line = $line.replace('<','&lt;');
+    $line = $line.replace('>','&gt;');
+  }
+  . $lineNum : >3, ': ', $line;
+}
+$file.close();

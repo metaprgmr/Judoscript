@@ -1,0 +1,40 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-08';
+  desc    = [[*
+    A Java extension class of java.util.HashSet and also implements
+    the interface java.util.Iterator. It declares one data member,
+    which is initialized in the constructor.
+  *]];
+}
+
+class MySetIterator extends java::HashSet, Iterator
+{
+  Iterator iter;
+
+  constructor {
+    super();
+    iter = null;
+  }
+
+  // Iterator methods
+  boolean hasNext() {
+    if iter == null {
+      iter = iterator(); // of HashSet.
+    }
+    return iter.hasNext();
+  }
+  Object next() {
+    return (iter==null) ? null : iter.next();
+  }
+}
+
+x = new MySetIterator;
+x.add('abc');
+x.add(19);
+x.add(date(2003,7,4));
+
+while x.hasNext() {
+  println x.next();
+}
+

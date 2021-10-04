@@ -1,0 +1,11 @@
+<function sig="instanceof className">
+  Returns <!true> if the current Java object (not class) is an instance of
+  the class represented by <param>className</param>, which can be a string
+  or a Java class object.
+</function>
+
+<function sig="cast className">
+  Returns a new Java object wrapper of the current Java instance as the class
+  represented by <param>className</param>, which can be a string or a Java
+  class object. The current object must be an instance of that class.
+</function>

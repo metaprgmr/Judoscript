@@ -1,0 +1,5 @@
+listFiles '*' in 'c:/src' dirOnly;
+for x in $_ {
+  listFiles '*.java, *.jj' in x recursive size lines words;
+  println $_[0]:>8, '  ', $_[1]:>6, '  ', $_[2]:>6, '  ', x;
+}

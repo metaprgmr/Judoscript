@@ -1,0 +1,14 @@
+usage {
+  desc    = [[*
+                This program displays a text file of any encoding in a simple Java GUI.
+                It is easy to use. Simply provide a text file name and optionally an
+                encoding name; the default is your current Java default encoding.
+            *]];
+  minArgs = 1;
+  args    = 'file [encoding]';
+  author  = 'James Huang';
+  created = '2002-11-14';
+  lastMod = '2004-06-28';
+}
+
+println #usage;

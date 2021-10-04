@@ -1,0 +1,44 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/value_sort.judo:</b></td></tr><tr><td><pre>
+a = new Object;
+
+a.('0-679-40907-6') = { title  : 'Breads from the la Brea Bakery',
+                        author : 'Silverton, Nancy',
+                        pages  : 260 };
+a.('0-06-017315-7') = { title  : 'Four-Star Desserts',
+                        author : 'Luchetti, Emily',
+                        pages  : 252 };
+a.('0-89256-228-5') = { title  : 'Eat to Win',
+                        author : 'Haas, Robert',
+                        pages  : 266 };
+a.('0-517-70442-0') = { title  : 'The Blue Ribbon County Cookbook',
+                        author : 'Roupe, Diane',
+                        pages  : 884 };
+
+println ">> Order by ISBN:";
+keys = a.keysSorted();
+for x in keys {
+  println x, '  ', a.(x).author : &lt; 20, a.(x).pages;
+}
+
+println nl, ">> Order by authors' last name:";
+keys = a.keysSortedByValue( function(lhs, rhs) { return compare(lhs.author,rhs.author); } );
+for x in keys {
+  println x, '  ', a.(x).author : &lt; 20, a.(x).pages;
+}
+
+println nl, ">> Select books with &lt;= 300 pages:";
+keys = a.keysFilteredByValue( function(book) { return book.pages &lt;= 300; } );
+for x in keys {
+  println x, '  ', a.(x).author : &lt; 20, a.(x).pages;
+}
+
+println nl, ">> Select books with &lt;= 300 pages and ordered by descending page numbers:";
+keys = a.keysFilteredAndSortedByValue(
+          function(book) { return book.pages &lt;= 300; },
+          function(lhs, rhs) { return compare(rhs.pages,lhs.pages); }
+        );
+for x in keys {
+  println x, '  ', a.(x).author : &lt; 20, a.(x).pages;
+}
+</pre></td></tr></table></body></html>

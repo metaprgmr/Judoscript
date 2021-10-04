@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="test_prj" default="jdbc_pool_removal" basedir=".">
+
+<target name="jdbc_pool_removal">
+	<wlconfig url="t3://localhost:7001" username="system" password="weblogic">
+		<delete mbean="JavaOneDomain:Name=myPool,Type=JDBCConnectionPool" />
+	</wlconfig>
+</target>
+
+</project>

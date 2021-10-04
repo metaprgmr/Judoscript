@@ -1,0 +1,18 @@
+<member name="message" alias="msg" write=false desc="The message for this Java exception.">
+<member name="name" write=false desc="The Java class name for this Java exception.">
+<member name="type" write=false desc="The type for Java exceptions.">
+<member name="line" write=false desc="The line number where this Java exception occurred.">
+<member name="file" write=false desc="The file name for the code where this Java exception occurred.">
+
+<function sig="toString">
+  Returns a string representation of this Java exception.
+</function>
+
+<function sig="printInternalStackTrace">
+  Same as <code>java.lang.Exception.printStackTrace()</code>.
+</function>
+
+<function sig="getStackTraceAsString">
+  Returns the exception's stack trace as a string.
+</function>
+

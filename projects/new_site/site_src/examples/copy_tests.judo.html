@@ -1,0 +1,36 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/copy_tests.judo:</b></td></tr><tr><td><pre>
+!include 'flagship.judi'
+
+////////////////////////////////////////////////////////////////////
+//
+// Need to run create_flagship_tree.judo and emu_build.judo first!
+//
+
+mkdir 'copied/junk' in #base;
+
+//
+// I. Copy files in two directories to the current directory.
+//
+cd #base @ 'copied/junk';
+copy 'src/java/*.java, src/cpp/*' in #base @ 'flagship';
+
+//
+// II. Copy one file to a directory
+//
+copy #base@'flagship/readme.txt' to #base@'copied/junk/';
+
+//
+// III. Copy two sub-trees to a directory
+//
+copy 'src/java/*.java, src/cpp/*' in #base @ 'flagship' except '*.inc'
+     to #base@'copied/junk' recursive;
+
+//
+// IV. Move two sets of files to another location
+//
+cd '../..';
+mkdir 'copied/junk1';
+move 'copied/junk/src/java/*.java';
+move '*.java' to 'copied/junk1';
+</pre></td></tr></table></body></html>

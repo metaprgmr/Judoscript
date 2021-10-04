@@ -1,0 +1,10 @@
+body{ background: #EEEEEE; font-family: Verdana; font-size: 14px; }
+h1{ font-size: 20px; color: #369; }
+h2{ font-size: 16px; color: #369; padding-left:0px; }
+h3{ font-size: 14px; font-weight: bold; padding-left:0px; }
+code{ font-size: 14px; font-family: Courier New; padding-left:0px; }
+h2.code{ font-size: 16px; }
+ol{ line-height:150%; }
+td{ font-family: Verdana; font-size: 14px; }
+table.tbl{border:1px solid #336699; }
+hr{ color:#369 }

@@ -1,0 +1,31 @@
+
+public class ExceptionTest
+{
+  public static void main(String[] args) {
+    Writer w;
+    PrintWriter out;
+
+  label_start:
+    %set w = %object FileWriter(String) (args[0])
+    %set out = %object PrintWriter(Writer) (w)
+
+    aload out
+    invokevirtual PrintWriter.close()void
+    goto label_finally
+    
+  label_io:
+    %println "Caught IOException."
+    invokevirtual Exception.printStackTrace()void
+    goto label_finally
+
+  label_any:
+    %println "Caught an Exception."
+    invokevirtual Exception.printStackTrace()void
+
+  label_finally:
+    %println "Finally."
+
+    catch IOException (label_start label_io) label_io
+    catch Exception (label_start label_io) label_any
+  }
+}

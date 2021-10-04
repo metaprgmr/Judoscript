@@ -1,0 +1,28 @@
+usage {
+  created = '2003-01-26';
+  author  = 'James Huang';
+  desc    = [[*
+    Demonstrates how to create variables dynamically.
+
+    You can convert all (valid) names in a struct into variables;
+    Or simply call setVariable() system function to create
+    individual variables on the fly.
+  *]];
+}
+
+// Method One:
+a = { x : 'x as set in struct',
+      y : 9,
+      '09898aa' : "this won't be a variable."
+    };
+convertToVariables(a);
+
+println x;
+println y;
+
+a.x = 99;
+println x;
+
+// Method Two:
+setVariable('xyz', 5);
+println "Dynamically set 'xyz' = ", xyz;

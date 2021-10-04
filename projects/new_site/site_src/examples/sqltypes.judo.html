@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_java/sqltypes.judo:</b></td></tr><tr><td><pre>
+import java.sql.Types;
+
+const #Types = java::Types;
+fields = [ 'BIT', 'TINYINT', 'SMALLINT', 'INTEGER', 'BIGINT', 'FLOAT',
+  'REAL', 'DOUBLE', 'NUMERIC', 'DECIMAL', 'CHAR', 'VARCHAR',
+  'LONGVARCHAR', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'VARBINARY',
+  'LONGVARBINARY', 'NULL', 'OTHER', 'JAVA_OBJECT', 'DISTINCT',
+  'STRUCT', 'ARRAY', 'BLOB', 'CLOB', 'REF'
+];
+
+println 'JDBC types in Java ', sysProperty('java.version'), ':';
+for fld in fields {
+  println fld:&lt;13, ': ', #Types.(fld);
+}
+</pre></td></tr></table></body></html>

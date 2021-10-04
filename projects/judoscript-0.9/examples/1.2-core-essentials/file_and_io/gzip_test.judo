@@ -1,0 +1,42 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Direct read and write gzipped files.';
+}
+
+const #read = false;
+
+if #read {
+  a = openGZippedTextFile('aa.gz');
+  while {
+    line = a.readLine();
+    if line == eof { break; }
+    println line;
+  }
+  a.close();
+} else {
+  a = openGZippedTextFile('aa.gz','w');
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println <a> 'abcdefghijklmnopqrstuvwxyz';
+  println <a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  a.close();
+}
+
+// unzip the file
+gunzip 'aa.gz';
+copy 'aa' to 'bb';
+gzip 'bb';

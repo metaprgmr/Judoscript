@@ -1,0 +1,254 @@
+/*usage
+{
+  desc    = [[*
+    The main function, jusp$transform(), converts a JuSP page into
+    Judo source code (in memory) and returns the pageInfo object
+    with its "any" field holding the code.
+
+    The utility function, jusp$processDirectory(), converts all
+    "*.juspt" files in the source directory and runs them and
+    stores the resultant files in the destination directory with
+    the original ".juspt" extension stripped. Therefore, the source
+    files normally have naming convention like "foo.html.juspt".
+  *]];
+  author  = 'James Jianbo Huang';
+  created = '2005-03-03';
+  lastMod = '2005-03-06';
+
+  _the_idea = [[*
+    To process the jusp page into a string and eval it.
+    Included files are inserted into the string itself.
+    The included files are cached.
+  *]];
+}
+*/
+
+
+//
+// Returns a com.judoscript.user.JuspPageInfo.
+//
+function juspt$transform uri, src_path, ctxtUri, isInclude
+{
+  //println<err> '## juspt: Processing JUSP [${uri}]: ${src_path} => ${dest_file}.';
+
+  src_path = src_path.replace('\\','/');
+
+  var inText = false;
+  var isEnd = false;
+  var skipEmpty = true;
+  var pageInfo = new java::com.judoscript.user.JuspPageInfo;
+  var dst = createStringWriter();
+  print<dst>'var $$context={writer=writer}; var root="${ctxtUri}";';
+
+  do src_path as jsp
+  {
+    // scriptlet
+    <%>:
+      if inText { print<dst> '*]];'; inText = false; }
+      print<dst> $_.getText();
+
+    // expression
+    <%=>:
+      if (inText) print<dst> '(*', $_.getText(), '*)';
+      else        print<dst> 'print<writer>', $_.getText(), ';';
+
+    // JUSP/JSP comment
+    <%-->:  // preserved for line number accuracy
+      if inText {
+        print<dst> '*]];/*', $_.getText(), '*/';
+        inText = false;
+      } else {
+        print<dst> '/*', $_.getText(), '*/';
+      }
+
+    // tags
+    <%!>:
+      if inText { print<dst> '*]];'; inText = false; }
+      var s = $_.getText().trim();
+      var name = s.leftOfFirstWhite();
+      var params = s.rightOfFirstWhite().trim();
+
+      switch name {
+      case 'include':
+        if (!params.startsWith('"') && !params.startsWith("'"))
+          throw new java::Exception("<%!include %> tag must take a string literal!");
+
+        params = params.unquote();
+        uri_src_fxn = com.judoscript.user.JuspUtil::uriToFilePath(params, uri, src_path, '', '');
+        uri_src_fxn[2] += '_included';
+        uri     = uri_src_fxn[0];
+        srcPath = uri_src_fxn[1];
+        var pi = juspt$transform(uri, srcPath, ctxtUri, true);
+        print<dst> pi.any;
+        break;
+
+      case 'invoke':
+      case 'forward':
+      case 'redirect':
+      case 'validate':
+      case 'validateNullOK':
+        println<err> '## juspt warning: <%! ${name} %> is ignored.';
+        break;
+
+      default:
+        if (params.isNotEmpty()) params = ', ' + params;
+        print<dst> 'jusp$', name, ' $$context', params, ';';
+      }
+
+    // directives
+    <%@>:
+      if inText { print<dst> '*]];'; inText = false; }
+      switch ($_.getText()) {
+      case 'page':
+        if ($_.skipEmpty == 'false') skipEmpty = false;
+
+        attr = $_.import;
+        if(attr.isNotEmpty())
+          print<dst> 'import ', attr.trim(), ';';
+
+        // buffer
+        attr = $_.buffer;
+        if attr != null {
+          if (attr == 'none')
+            attr = 0;
+          elif (attr.endsWith('kb'))
+            attr = attr.trunc(2) + '*1024';
+          print<dst> 'writer.setBufferSize(${attr});';
+        }
+
+        attr = $_.isErrorPage;
+        if(attr.isNotEmpty())
+          pageInfo.isErrorPage = attr;
+
+        attr = $_.contentType;
+        if(attr.isNotEmpty())
+          pageInfo.contentType = attr;
+
+        attr = $_.pageEncoding;
+        if(attr.isNotEmpty()) {
+          print<dst> 'response.setPageEncoding("${attr}");';
+          pageInfo.pageEncoding = attr;
+        }
+
+        attr = $_.status;
+        if(attr.isNotEmpty()) {
+          print<dst> 'response.setStatus("${attr}");';
+          pageInfo.status = attr;
+        }
+
+        attr = $_.isBinary;
+        if(attr.isNotEmpty()) {
+          print<dst> 'response.setIsBinary();outStream=response.getOutputStream();';
+          pageInfo.isBinary = true;
+        }
+
+        attr = $_.isIncludeOnly;
+        if(attr=='true') {
+          pageInfo.isIncludeOnly = true;
+        }
+
+        break;
+
+      case 'exception':
+        println<err> '## juspt warning: <%@exception %> is ignored.';
+        break;
+
+      case 'end':
+        if (isInclude) {
+          println<err> '## juspt warning: <%@end %> is ignored in included file.';
+        } else {
+          if inText { print<dst> '*]];'; inText = false; }
+          print<dst> [[*
+            flush<writer>; catch:println<err>\$_; finally:writer.close();
+            EndScript
+          *]];
+          isEnd = true;
+        }
+        break;
+
+      default: print<err> '## juspt warning: Unknown directive: ', $_.getText();
+      }
+
+    // text
+    :TEXT:
+      if !isEnd && !inText && ($_.isNotEmpty() || !skipEmpty) {
+        print<dst> 'print<writer>[[[*';
+        inText = true;
+      }
+      print<dst> $_;
+
+  } // do as jsp.
+
+  if (inText) print<dst> '*]];';
+  if !isEnd {
+    print<dst> 'flush<writer>;';
+    if (!isInclude) print<dst> 'catch: println<err>\$_; finally:writer.close();';
+  }
+  flush<dst>;
+
+  pageInfo.any = dst.toString();
+
+  return pageInfo;
+
+  catch:
+    println<err> [[*
+      ## Failed to process JUSP: (* $_ *)
+      ##       =>           uri: ${uri}
+      ##       =>   source path: ${src_path}
+      ##       => function name: ${fxn_name}
+      ##       =>     dest path: ${dest_path}
+      ##       =>     dest file: ${dest_file}
+   *]];
+   throw $_;
+
+} // juspt$transform().
+
+
+//
+// Processes all juspt pages from a source directory
+// into a destination directory.
+//
+function juspt$processDirectory src_dir, dest_dir, ctxt_path, is_debug {
+  var src_dir = src_dir.toAbsolutePath().ensureEndsWithFileSep();
+  var dest_dir = dest_dir.toAbsolutePath().ensureEndsWithFileSep();
+  var src_dir_len = src_dir.length();
+
+  println<err> 'juspt$processDirectory: ', src_dir, nl,
+               '                        ', dest_dir, nl,
+               '                        ', ctxt_path;
+
+  //
+  // Process "juspt" pages:
+  //
+  listFiles '*.juspt' in src_dir recursive
+  {
+    println<err> $_;
+
+    var uri = $_.substring(src_dir_len);
+    var pageInfo = juspt$transform(uri, $_, ctxt_path);
+
+    if pageInfo.isIncludeOnly {
+      println<err> '## juspt: isIncludeOnly -- ignored.';
+    } else {
+      if is_debug {
+        println '>>>>>>>>>>>>>>>>>>>>>', nl, pageInfo,any, nl, '<<<<<<<<<<<<<<<<<<<<<';
+      } else {
+        var fname = dest_dir + $_.substring(src_dir_len).trunc(6); // rid of ".juspt"
+        juspt$runPage pageInfo, fname;
+      }
+    }
+  }
+}
+
+function juspt$runPage pageInfo, outFilename, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 {
+  mkdir outFilename.getFilePath();
+  evalSeparate
+    [[* writer=openTextFile('(* outFilename.escapeJava() *)','w'); (* pageInfo.any *) *]],
+    arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9;
+}
+
+///////////
+// Test
+
+//juspt$processDirectory #args[0], #args[1], #args[2];
+

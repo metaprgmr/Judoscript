@@ -1,0 +1,117 @@
+
+------ Print the whole table data ------
+    name                age                 
+    ------------------- ------------------- 
+  0 Young Man           28                  
+  1 Young Woman         24                  
+  2 Young Daughter      4                   
+  3 Younger Daughter    2                   
+  4                                         
+  5                                         
+  6                                         
+  7                                         
+  8 Mid-Aged Man                            
+  9 Old Man             104                 
+ 10 Old Woman           101                 
+ 11 Old Son             83                  
+ 12 Old Daughter        77                  
+------ Print a few rows ----------------
+a[3]      = [Younger Daughter,2]
+a[3].name = Younger Daughter
+a[3].age  = 2
+a[5]      = [null,null]
+a[5].name = 
+a[5].age  = 
+Young Daughter      4                   
+
+------ Print a column ------------------
+[28,24,4,2,null,null,null,null,null,104,101,83,77]
+------ Print column names and indices --
+Index for "name" is: 0
+Index for "age" is:  1
+Index for "NAME" is: 0
+Index for "AGE" is:  1
+Title[0]: name
+Title[1]: age
+
+------ Filter non-null rows and columns 
+Not null rows: 
+    name                age                 
+    ------------------- ------------------- 
+  0 Young Man           28                  
+  1 Young Woman         24                  
+  2 Young Daughter      4                   
+  3 Younger Daughter    2                   
+  4 Mid-Aged Man                            
+  5 Old Man             104                 
+  6 Old Woman           101                 
+  7 Old Son             83                  
+  8 Old Daughter        77                  
+Column-1 not null: 
+    name                age                 
+    ------------------- ------------------- 
+  0 Young Man           28                  
+  1 Young Woman         24                  
+  2 Young Daughter      4                   
+  3 Younger Daughter    2                   
+  4 Old Man             104                 
+  5 Old Woman           101                 
+  6 Old Son             83                  
+  7 Old Daughter        77                  
+
+------ Filter for Old and < 100 --------
+    name                age                 
+    ------------------- ------------------- 
+  0 Old Son             83                  
+  1 Old Daughter        77                  
+
+------ Sort on column-1 as number ------
+    name                age                 
+    ------------------- ------------------- 
+  0 Old Man             104                 
+  1 Old Woman           101                 
+  2 Old Son             83                  
+  3 Old Daughter        77                  
+  4 Young Man           28                  
+  5 Young Woman         24                  
+  6 Young Daughter      4                   
+  7 Younger Daughter    2                   
+  8                                         
+  9                                         
+ 10                                         
+ 11                                         
+ 12 Mid-Aged Man                            
+
+------ Sort on column-0 ----------------
+    name                age                 
+    ------------------- ------------------- 
+  0 Old Woman           101                 
+  1 Old Daughter        77                  
+  2 Young Woman         24                  
+  3 Young Daughter      4                   
+  4 Younger Daughter    2                   
+  5 Old Man             104                 
+  6 Old Son             83                  
+  7 Young Man           28                  
+  8                                         
+  9                                         
+ 10                                         
+ 11                                         
+ 12 Mid-Aged Man                            
+
+------ Sort on rows --------------------
+    name                age                 
+    ------------------- ------------------- 
+  0 Younger Daughter    2                   
+  1 Young Daughter      4                   
+  2 Young Woman         24                  
+  3 Old Daughter        77                  
+  4 Old Woman           101                 
+  5 Old Man             104                 
+  6 Old Son             83                  
+  7 Young Man           28                  
+  8                                         
+  9                                         
+ 10                                         
+ 11                                         
+ 12 Mid-Aged Man                            

@@ -1,0 +1,3 @@
+<function sig="indexOf name">
+  Returns the index of the key <param>name</param>.
+</function>

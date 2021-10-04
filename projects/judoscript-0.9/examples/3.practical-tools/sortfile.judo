@@ -1,0 +1,10 @@
+usage {
+  minArgs = 1;
+  args    = 'file';
+  desc    = 'Prints out the file's line sorted.';
+}
+
+arr = {};
+do #args[0] as lines { arr.add($_); }
+arr.sort();
+for x in arr { println x; }

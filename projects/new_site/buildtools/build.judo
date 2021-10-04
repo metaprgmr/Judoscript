@@ -1,0 +1,62 @@
+!include 'com/judoscript/jusp/juspt.judo'
+!include '${JUDOROOT}/projects/common.judi'
+
+buildtools = '${projects}/new_site/buildtools/';
+site_src = '${projects}/new_site/site_src/';
+site_dir = '${docroot}/';
+
+mkdir '${docroot}/store';
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+menuItems = [ // all are referenced by 'all.judo'.
+  'Copy site static content',   // 1
+  'Build site juspt content',   // 2
+  'Build book JudoScript 0.9',  // 3
+  'Build articles',             // 4
+  'Copy examples/index.html',   // 5
+];
+
+option = 0;
+
+if #args.length <= 0 {
+  choice menu(menuItems, false); // no confirm
+} else {
+  for opt in #args {
+    if (opt.isInt())
+      choice opt;
+    else
+      println <err> 'Option ', opt, ' ignored.';
+  }
+}
+
+function choice opt {
+  switch opt {
+  case 1:  copy '*' except '*/alfa, *~, *.png, *.juspt, *.sgml, *.save, */examples/*' in site_src
+                recursive echo to site_dir;
+           copy 'readme.0.9.html' in '${buildtools}judo_releases' to '${site_dir}relnote.html' echo;
+           copy 'license.html' in '${buildtools}judo_releases' to site_dir echo;
+           copy 'ICE_JNIRegistry.dll' in '${JUDOROOT}/bin/' into '${docroot}/store/ICE_JNIRegistry.dll.zip' echo;
+           copy 'jcom.dll'            in '${JUDOROOT}/bin/' into '${docroot}/store/jcom.dll.zip' echo;
+
+           break;
+
+  case 2:  juspt$processDirectory site_src, site_dir, '/new_site';
+           break;
+
+  case 3:  println<err> 'To build JudoScript 0.9, run "buildbook.judo".', nl;
+           break;
+
+  case 4:  println<err> 'To build articles, run "buildarticles.judo".', nl;
+           break;
+
+  case 5:  println<err> 'To copy examples/index.html', nl;
+           copy 'index.html' in '${projects}/new_site/site_src/examples/' to '${site_dir}/examples/index.html' echo;
+           break;
+
+  default: ;
+  }
+}
+

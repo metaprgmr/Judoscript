@@ -1,0 +1,16 @@
+<html>
+<head><title>Custom System Error Page</title></head>
+<body>
+<h2>Custom System Error Page</h2>
+
+<p><u>A system error has occured</u>:</p>
+
+<font color="#333333">
+<pre><%= request.getAttribute('exception') %>
+</pre></font>
+
+
+<hr><a href="<%=root%>/index.jusp">JuSP Tutorial</a> | <a href="<%=root%>/lesson10.jusp">Lesson 10</a>
+
+</body></html>
+

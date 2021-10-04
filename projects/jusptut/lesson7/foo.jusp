@@ -1,0 +1,5 @@
+<%
+  var x = "I'm a happy foo! ... whatever.";
+%>
+
+<%= x %>

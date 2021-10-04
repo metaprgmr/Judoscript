@@ -1,0 +1,14 @@
+// Assumed the junit.jar is somewhere in the installation directory tree
+// where this script is also located.
+
+cd #script.getFilePath(), '..'; // move up one directory
+listFiles '*/junit.jar' recursive limit 1;
+if $_.length <= 0 {
+  println <err> "junit.jar is not found. Can't proceed with testing.";
+  return;
+}
+
+#classpath.add( $_[0] );
+
+// now, do some unit testing
+// ....

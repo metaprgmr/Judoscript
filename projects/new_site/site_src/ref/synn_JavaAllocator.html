@@ -1,0 +1,27 @@
+<html><head><title>JudoScript Semantics - JavaAllocator</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>JavaAllocator</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=JavaAllocator>JavaAllocator</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>new</font>  <font class=kw>java</font>  <font class=kw><nobr>::</nobr></font>  <br>  (  <font class=nt><a href="javascript:showNT('JavaPrimitiveTypes')">JavaPrimitiveTypes</a></font>  |  <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font>  |  <font class=t>CONST_NAME</font>   |  <font class=kw><nobr>:</nobr></font>  <font class=t>IDENTIFIER</font>   )  <br>   (  <font class=nt><a href="javascript:showNT('Arguments')">Arguments</a></font>  )?   |   (  <font class=kw><nobr>[> <!]</nobr></font>   )+  <font class=nt><a href="javascript:showNT('JavaArrayAllocator')">JavaArrayAllocator</a></font>  |   (  <font class=kw><nobr>[> <Expr</nobr></font>  <font class=kw><nobr>]</nobr></font>   )+   )  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('JavaAllocator'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Creates a new Java object or Java array. The Java class name can be specified as-is, 
+  or in a constant or a variable. Since the variable name may be confused to be the class
+  name itself, a <font class=kw><nobr>:</nobr></font>  must precede a variable name. If creating a Java object with its
+  default constructor, no <font class=kw><nobr>(</nobr></font>  <font class=kw><nobr>)</nobr></font>  pair is needed. For others, just pass the parameters
+  as any function calls.</p>
+
+  <p>Java arrays can be created with <font class=kw><nobr>[> <!]</nobr></font>  and initializers. Arrays must be
+  initialized for dimensions and sizes.</p>
+ </body></html>

@@ -1,0 +1,42 @@
+<function sig="size" alias="length">
+  Returns the size of the input file. It may not be available, in which case 0 is returned.
+</function>
+
+<function sig="lastModified">
+  Returns the last modified time of the input file. It may not be available, in which case 0 is returned.
+</function>
+
+<function sig="setBigEndian">
+  Sets the underlying input or output stream to use big-endian sequence.
+  This is typically called before any I/O operations.
+</function>
+
+<function sig="setLittleEndian">
+  Sets the underlying input or output stream to use little-endian sequence.
+  This is typically called before any I/O operations.
+</function>
+
+<function sig="isBigEndian">
+  Returns <!true> if the underlying input or output stream uses big-endian sequence.
+</function>
+
+<function sig="isLittleEndian">
+  Returns <!true> if the underlying input or output stream uses little-endian sequence.
+</function>
+
+<function sig="readBytesAsString length, encoding">
+  Reads <param>length</param> bytes and returns a string with <param>encoding</param>.
+  If <param>encoding</pram> is not specified, use the JVM's current default text encoding.
+  If <param>length</param> is not specified, read a single byte.
+</function>
+
+<function sig="toTextInput">
+  Returns a buffered reader for the underlying input stream. If this is a buffered reader
+  already, returns self.
+</function>
+
+<function sig="toTextOutput">
+  Returns a print writer for the underlying output stream. If this is a print writer
+  already, returns self.
+</function>
+

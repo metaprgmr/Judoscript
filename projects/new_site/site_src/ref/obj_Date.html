@@ -1,0 +1,90 @@
+<html><head><title>JudoScript Object - Date</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>Date</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Members:</h5>
+<table border=1>
+<tr><th>Name</th><th>Writable</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=Date_monthName>monthName
+</a></font></td><td align=center>no</td><td>The name of the month.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_shortMonthName>shortMonthName
+</a></font></td><td align=center>no</td><td>The short name of the month.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_weekDayName>weekDayName
+</a></font></td><td align=center>no</td><td>The name of the day in the week.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_shortWeekDayName>shortWeekDayName
+</a></font></td><td align=center>no</td><td>The short name of the day in the week.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_isAM>isAM
+</a></font></td><td align=center>no</td><td>The boolean value indicating morning.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_isPM>isPM
+</a></font></td><td align=center>no</td><td>The boolean value indicating afternoon.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_epoch>epoch
+</a></font></td><td align=center>yes</td><td>The Epoch.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_year>year
+</a></font></td><td align=center>yes</td><td>The year.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_month>month
+</a></font></td><td align=center>yes</td><td>The month, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_day>day
+<br>date
+</a></font></td><td align=center>yes</td><td>The day, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_hour>hour
+</a></font></td><td align=center>yes</td><td>The hour.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_minute>minute
+</a></font></td><td align=center>yes</td><td>The minute.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_second>second
+</a></font></td><td align=center>yes</td><td>The second.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_milliSecond>milliSecond
+</a></font></td><td align=center>yes</td><td>The milliSecond.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_zoneOffset>zoneOffset
+</a></font></td><td align=center>yes</td><td>The time zone offset.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_dstOffset>dstOffset
+</a></font></td><td align=center>yes</td><td>The DST offset.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_weekOfYear>weekOfYear
+</a></font></td><td align=center>no</td><td>The week of the year, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_weekOfYear>weekOfYear
+</a></font></td><td align=center>no</td><td>The week of the year, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_weekOfMonth>weekOfMonth
+</a></font></td><td align=center>no</td><td>The week of the month, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_dayOfMonth>dayOfMonth
+</a></font></td><td align=center>no</td><td>The day of the month, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_dayOfYear>dayOfYear
+</a></font></td><td align=center>no</td><td>The day of the year, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_dayOfWeek>dayOfWeek
+</a></font></td><td align=center>no</td><td>The day of the week, starting at 1.</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_dayOfWeekInMonth>dayOfWeekInMonth
+</a></font></td><td align=center>no</td><td>The day of week in the month, such as 'the first Tuesday'.</td></tr>
+</table>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=Date_after></a>after<br></font></td><td valign=top><font class=param>datetime</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if this date object is after <font class=param>datetime</font>.
+  If no <font class=param>datetime</font> specified, compare to the current date.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_before></a>before<br></font></td><td valign=top><font class=param>datetime</font><br></td><td valign=top>
+  Returns <font class=kw>true</font>  if this date object is before <font class=param>datetime</font>.
+  If no <font class=param>datetime</font> specified, compare to the current date.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_formatDate></a><a name=Date_fmtDate></a>formatDate<br>fmtDate<br></font></td><td valign=top><font class=param>format</font><br><font class=param> timezone</font><br></td><td valign=top>
+  Returns a string representing this date object in <font class=param>format</font> and
+  <font class=param>timezone</font>, if specified.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_getTime></a>getTime<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the integer value of this date/time object.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_next></a>next<br></font></td><td valign=top><font class=param>period</font><br></td><td valign=top>
+  Returns a new date object that is for the next <font class=param>period</font>, which
+  can be 'year', 'month', 'day', 'hour', 'minute' and 'second'.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=Date_setTime></a>setTime<br></font></td><td valign=top><font class=param>datetime</font><br></td><td valign=top>
+  Sets the time value to <font class=param>datetime</font>.
+  If no <font class=param>datetime</font> specified, set to current time.
+</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,37 @@
+<%
+  var title = 'JuSP, the Judo Server Page Web Development Platform';
+  var keywords = "jusp, juspt, jusp platform, juspt transform, judo server page";
+  var tabID = 'jusp';
+%>
+<%!include '../site_src/include/header.jusp' %>
+
+<%!leftPane%>
+
+<p><IMG height=91 alt="JuSP Platform" hspace=10 vspace=10 src="share/jusp_picture.gif" width=111 border=0 align=right>
+<em>JuSP</em> stands for <u>Ju</u>do <u>S</u>erver <u>P</u>age. It is a web app development platform that is extremely simple and flat, yet gracefully addresses all the web development needs and MVC pattern. There are also some nice features that you may not expect. The JuSP pages are natural to experienced JSP/ASP/PHP/CodeFusion developers.</p>
+
+<p>JuSP uses Judo as its programming language, which is dynamic, rich in functionality and simple in programming. Judo is fully capable of Java scripting, so that all Java resources, including Hibernate, EJBs and any APIs, can be readily used for building JuSP web apps. Judo programming is best known for its simplicity, effectiveness and intuitiveness, hence the development will enjoy great productivity and maintainability.</p>
+
+<p>Powerful and versatile as JuSP is, it is a very lightweight framework and highly scalable.</p>
+
+<p>The <a href="http://www.judoscript.com/jusptut/index.jusp">JuSP Comprehensive Tutorial</a> is by far the best resource and documentation for the JuSP technology. It not only explains all the features and design patterns, but also include live demos throughout. Within a couple of hours, you can be a good and productive JuSP developer. You can <a href="download.html">download the tutorial</a>, modify and use the sample code as the starting point for your own projects.</p>
+
+<p>JuSP is an independent technology. More specifically, it is not related to Java Servlet API. Its current implementation, however, is built and deployed as a Java Servlet.</p>
+
+<%!rightPane%>
+
+<p><IMG height=91 alt="JuSP Transform" hspace=10 vspace=10 src="share/juspt_picture.gif" width=111 border=0 align=right>
+<em>JuSPT</em> stands for <u>JuSP</u> <u>T</u>ransform. JuSPT is an off-line tool set that processes JuSP pages into static contents such as HTML, XML, text and any format files.</p>
+
+<p>In the context of JuSPT, JuSP pages are truly templates. JuSP templates residing within a directory structure can be converted into the target location with the same structure; or individual templates can be applied to a file set of any type, such as XML, SGML, CSV, ... and produce a set of resultant pages. The programming model is naturally similar to JuSP coding. JuSPT is a great tool for building sophisticated content management.</p>
+
+<p>One nice thing about JuSPT and JuSP together is, they can share the same include files such as headers, footers, etc., so your static content and dynamic content can look very much alike.</p>
+
+<p>As a sample application, this JudoScript.COM site is largely managed by a content management system built with JuSPT.</p>
+
+<p><em>The JuSPT documentation is under construction right now.</em></p>
+
+<%!endPanes%>
+
+<%!include '../site_src/include/footer.jusp' %>
+

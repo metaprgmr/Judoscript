@@ -1,0 +1,9 @@
+#! /usr/bin/env judo
+
+do getScriptPath() as lines for $_.isNotEmpty() && !$_.startsWith('#')
+{
+
+  println $_;
+
+}
+

@@ -1,0 +1,12 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/readlines.judo:</b></td></tr><tr><td><pre>
+#! /usr/bin/env judo
+
+do getScriptPath() as lines for $_.isNotEmpty() &amp;&amp; !$_.startsWith('#')
+{
+
+  println $_;
+
+}
+
+</pre></td></tr></table></body></html>

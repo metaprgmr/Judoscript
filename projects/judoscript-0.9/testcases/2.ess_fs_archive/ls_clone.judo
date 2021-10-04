@@ -1,0 +1,5 @@
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp';
+
+for x in $_ {
+  println x;
+}

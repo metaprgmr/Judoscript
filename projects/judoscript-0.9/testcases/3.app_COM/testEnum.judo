@@ -1,0 +1,27 @@
+usage {
+  desc = [[*
+    This program tests IEnumVARIANT feature.
+
+    Adapted from <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom">JCom</a>
+    file 'demo/samples/testEnum.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+excel = com::Excel.Application;
+excel.Visible = true;
+
+xlBooks = excel.Workbooks;
+xlBook = xlBooks.Add;
+xlSheets = xlBook.Worksheets;
+
+ary = xlSheets._NewEnum.getIEnumVARIANT();
+for xlSheet in ary { . xlSheet.Name; }
+
+
+sleep(2000);
+xlBook.Close(false,null,false);
+excel.Quit();
+

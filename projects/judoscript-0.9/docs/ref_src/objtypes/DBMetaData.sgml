@@ -1,0 +1,114 @@
+<function sig="getSchemas">
+  Returns a <obj id=TableData> for the schemas in the database.
+</function>
+
+<function sig="getCatalogs">
+  Returns a <obj id=TableData> for the catalogs in the database.
+</function>
+
+<function sig="getTableTypes">
+  Returns a <obj id=TableData> for the table types in the database.
+</function>
+
+<function sig="getTypeInfo">
+  Returns a <obj id=TableData> for the type information in the database.
+</function>
+
+<function sig="getProcedures procPattern">
+  Returns a <obj id=TableData> for the procedures matching <param>procPattern</param>.
+  The <param>procPattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getProcedureColumns procPattern, columnPattern">
+  Returns a <obj id=TableData> for the procedure columns matching <param>procPattern</param>
+  and <param>columnPattern</param>.
+  The <param>procPattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getTablePrivileges tablePattern">
+  Returns a <obj id=TableData> for the table privileges matching <param>tablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getTables tablePattern, columnPattern">
+  Returns a <obj id=TableData> for the tables matching <param>tablePattern</param>
+  and <param>columnPattern</param>(s).
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getColumns tablePattern, type, ...">
+  Returns a <obj id=TableData> for the columns matching <param>tablePattern</param>
+  and <param>type</param>(s).
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getColumnPrivileges tablePattern, type, ...">
+  Returns a <obj id=TableData> for the column privileges matching <param>tablePattern</param>
+  and <param>type</param>(s).
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getBestRowIdentifier tablePattern, scope, nullable">
+  Returns a <obj id=TableData> for the row identifiers matching <param>tablePattern</param>,
+  <param>scope</param> and <param>nullable</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+  The <param>scope</param> can be one of these: "bestRowNotPseudo" (default), "bestRowPseudo",
+  "bestRowSession", "bestRowTemporary" and "bestRowTransaction"; <param>nullable</param> is a
+  boolean, default is <!true>.
+</function>
+
+<function sig="getVersionColumns tablePattern">
+  Returns a <obj id=TableData> for the version columns matching <param>tablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getPrimaryKeys tablePattern">
+  Returns a <obj id=TableData> for the primary keys matching <param>tablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getImportddKeys tablePattern">
+  Returns a <obj id=TableData> for the imported keys matching <param>tablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getExportddKeys tablePattern">
+  Returns a <obj id=TableData> for the exported keys matching <param>tablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getCrossReference primaryTablePattern, foreignTablePattern">
+  Returns a <obj id=TableData> for the cross reference for <param>primaryTablePattern</param>
+  and <param>foreignTablePattern</param>.
+  Both are patterns in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="getIndexInfo tablePattern, unique, approximate">
+  Returns a <obj id=TableData> for the index information for <param>tablePattern</param>,
+  <param>unique</param> and <param>foreignTablePattern</param>.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+  The <param>unique</param> is boolean, default <!false>.
+  The <param>approximate</param> is boolean, default <!false>.
+</function>
+
+<function sig="getUDTs tablePattern, type, ...">
+  Returns a <obj id=TableData> for the user-defined types matching <param>tablePattern</param>
+  and <param>type</param>(s). The <param>type</param>(s) can be "java_object", "struct" or "distinct".
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="tableExists tablePattern">
+  Returns <!true> if table <param>tablePattern</param> exists.
+  The <param>tablePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="procedureExists tablePattern" alias="procExists>
+  Returns <!true> if procedure <param>procPattern</param> exists.
+  The <param>procPattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+
+<function sig="userTypeExists typePattern" alias="userDefinedTypeExists">
+  Returns <!true> if user-defined type <param>typePattern</param> exists.
+  The <param>typePattern</param> is a pattern in the form of <em>catalog.schema.pattern</em>.
+</function>
+

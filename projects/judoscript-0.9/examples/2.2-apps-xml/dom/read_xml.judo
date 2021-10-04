@@ -1,0 +1,11 @@
+usage {
+  minArgs = 1;
+  args    = 'file.xml';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Reads an XML file as a DOM and write it out using  xslt copy().';
+}
+
+doc = do #args[0] as dom; // with namespace, validate
+xslt copy doc to getOut();

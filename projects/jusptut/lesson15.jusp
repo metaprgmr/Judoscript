@@ -1,0 +1,36 @@
+<% var title = 'Lesson 15. Rendering Binary Content'; // required by header.jusp.
+%>
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>To render binary content, do these two things:</p>
+
+<ol>
+<li>Use the <code>&lt;@page %></code> directive to set content-type
+    and the <code>isBinary</code> flag.</li>
+<li>Only scriptlet code are valid, and use the <code>outStream</code>
+    to write binary data out to the client. When <code>isBinary</code>
+    is set, text content is simply ignored.</li>
+</li>
+
+<p>The default buffer size is 8kb; you may want to enlarge this buffer size if,
+say, you foresee that exception may happen after a large quantity of content
+has been rendered.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson15/graphix.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson15/graphix.jusp' %></li>
+</ul>
+
+<p>This example simply sends an image file to the client. You can, say,
+run some reporting SQL to retrieve data and use a image creation API to
+generate images on the fly.</p>
+
+<p>One trick in rendering binary content is error handling. If an
+exception happens, since the client is only expecting, say, an image,
+it is virtually impossible to provide error messages to the user;
+the only option would be logging errors.</p>
+
+<%!include "footer.jusp" %>

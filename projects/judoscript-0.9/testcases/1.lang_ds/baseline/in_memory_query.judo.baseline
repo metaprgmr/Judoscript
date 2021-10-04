@@ -1,0 +1,17 @@
+
+List employees by age in ascending order:
+23 Sanjay Buch
+29 Michael Chu
+30 Rick Policsi
+33 Tony Nugyen
+42 Kathy Murphy
+
+List employees older than 30 years old:
+30 Rick Policsi
+42 Kathy Murphy
+33 Tony Nugyen
+
+List employees older than 30 years old in ascending order:
+30 Rick Policsi
+33 Tony Nugyen
+42 Kathy Murphy

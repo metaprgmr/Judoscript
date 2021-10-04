@@ -1,0 +1,6 @@
+<member name=time write=false desc="The time of the current event.">
+<member name=period write=false desc="The period of this scheduler.">
+<member name=cmd write=false desc="The user command sent by the user through the HTTP HTML interface.">
+<member name=htmlOut write=false desc="The user interface output. What is written shows up in the second half of the HTML interface.">
+<member name=count alias=eventCount write=false desc="The count of events that have happened since the start of this scheduler.">
+

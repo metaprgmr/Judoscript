@@ -1,0 +1,4 @@
+a = ¤
+a.unicode() = 164
+a.ascii() = 164
+a.unicode().fmtHex() = A4

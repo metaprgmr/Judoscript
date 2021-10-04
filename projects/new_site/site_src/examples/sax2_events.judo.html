@@ -1,0 +1,52 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_sax/sax2_events.judo:</b></td></tr><tr><td><pre>
+usage {
+   author  = 'James Huang';
+   created = '2001-11-12';
+   desc    = [[*
+      Displays SAX-2 XML events for the data files in directory
+      sax2_events/; cd there and run.
+
+      Note: This seems to work only with the Xerces parser.
+   *]];
+}
+
+do 'sax2_events/SAX2.0.xml' as xml with namespace, validate
+{
+TEXT:           println '             TEXT: ', $_;
+&lt;>:             println '&lt;', $_.getRaw():>15, '>: name =', $_.getName();
+                println '                   uri  =', $_.getUri();
+                println '                   local=', $_.getLocal();
+                for $x from 0 to $_.countAttrs()-1 {
+                  println '                  Attribute: ',
+                          $_.getAttrName($x), '=', $_.getAttrValue($x);
+                }
+BEFORE:         println '         &lt;BEFORE>.';
+AFTER:          println '          &lt;AFTER>.';
+START_DOC:      println '      &lt;START_DOC>.';
+END_DOC:        println '        &lt;END_DOC>.';
+START_NS_MAP:   println '   &lt;START_NS_MAP>: ', $_.prefix, ' => ', $_.uri;
+END_NS_MAP:     println '     &lt;END_NS_MAP>: ', $_;
+PI:             println '             &lt;PI>: ', $_.instruction;
+                println '                   ', $_.data;
+COMMENT:        println '        &lt;COMMENT>: ', $_;
+START_CDATA:    println '    &lt;START_CDATA>.';
+END_CDATA:      println '      &lt;END_CDATA>.';
+START_DTD:      println '      &lt;START_DTD>: name=', $_.name,
+                        ' publicID=', $_.publicID, ' systemID=', $_.systemID;
+END_DTD:        println '        &lt;END_DTD>.';
+END_ENTITY:     println '     &lt;END_ENTITY>: ', $_;
+ELEMENT_DECL:   println '   &lt;ELEMENT_DECL>: name=', $_.name, ' model=', $_.model;
+ATTR_DECL:      println '      &lt;ATTR_DECL>: element=', $_.element;
+                println '                   name   =', $_.name;
+                println '                   type   =', $_.type;
+                println '                   default=', $_.default;
+                println '                   value  =', $_.value;
+ENTITY_DECL:    println '    &lt;ENTITY_DECL>: name   =', $_.name;
+                println '                   value  =', $_.value;
+EXT_ENTITY_DECL:println '&lt;EXT_ENTITY_DECL>: name   =', $_.name;
+                println '                   pubID  =', $_.publicID;
+                println '                   sysID  =', $_.systemID;
+SKIPPED_ENTITY: println ' &lt;SKIPPED_ENTITY>: ', $_;
+}
+</pre></td></tr></table></body></html>

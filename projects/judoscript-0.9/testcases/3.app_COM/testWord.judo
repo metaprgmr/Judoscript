@@ -1,0 +1,40 @@
+usage {
+  minArgs = 1;
+  args = 'word.doc';
+  desc = [[*
+    This program takes a Word document and prints out its words and tables.
+
+    Adapted from <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom">JCom</a>
+    file 'demo/word/testWord.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-16';
+}
+
+
+wdApp = new com::Word.Application;
+wdApp.Visible = true;
+
+wdDocuments = wdApp.Documents;
+wdDocument  = wdDocuments.Open(#args[0].toAbsolutePath());
+println 'fullname=', wdDocument.FullName;
+
+wdWords = wdDocument.Words;
+word_count = wdWords.Count;
+for i from 1 to word_count {
+  println wdWords.Item(i).Text;
+}
+
+wdTables = wdDocument.Tables;
+println wdTables;
+table_count = wdTables.Count;
+println 'table count=', table_count;
+for i from 0 to table_count-1 {
+  println 'tables[', i, "]=", wdTables.Item(i+1);
+}
+
+//wdDocument.PrintOut();
+
+sleep(1000);
+finally:
+  wdApp.Quit();

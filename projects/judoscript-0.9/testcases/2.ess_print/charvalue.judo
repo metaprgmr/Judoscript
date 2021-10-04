@@ -1,0 +1,4 @@
+println 'a = ', a = '\u00A4';
+println 'a.unicode() = ', a.unicode();
+println 'a.ascii() = ', a.ascii();
+println 'a.unicode().fmtHex() = ', a.unicode().fmtHex();

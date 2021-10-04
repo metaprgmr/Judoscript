@@ -1,0 +1,8 @@
+whichFoo(&foo1, 2, 3) = 5
+whichFoo(&foo2, 2, 3) = 6
+x = [foo1(),foo2()]
+x[0](2, 3) = 5
+x[1](2, 3) = 6
+y = {fxn1=foo1(),fxn2=foo2()}
+y.fxn1(4, 6) = 10
+y.fxn2(4, 6) = 24

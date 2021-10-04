@@ -1,0 +1,294 @@
+<doc title="Embed JudoScript In Java" author="James Jianbo Huang"
+ created="December 2001"
+ keywords="Java scripting language, embed in Java, embed JudoScript in Java"
+>
+
+<sectiondefs>
+<sectiondef name="bsf"      caption="Bean Scripting Support">
+<sectiondef name="engine"   caption="JudoScript Java Engine">
+<sectiondef name="multi" sub="1" caption="Single Script Many Instances">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+Two ways to embed <J> in Java: through its support of Bean Scripting
+Framework and its own, simpler engine interface. <J> is designed for
+Java, using Java is intrinsic. The only issue regarding embedding in
+Java is passing Java objects between Java code and the script. IBM's
+Bean Scripting Framework (BSF) is a popular interface for this purpose.
+It also supports event handling of beans by scripts, a feature not needed
+here. BSF support is significant because there are Java applications, such
+as Ant, use this bridge to embed a number of BSF-supporting scripting
+languages. However, if you intend to use just <J> for your embedded
+scripting needs, <J> has a simpler and lighter-weight interface. You don't
+need any extra packages (BSF, that is). You can also parse a script and
+run in multiple engines in their own Java threads.
+</abstract>
+</doc>
+
+
+<section name=bsf>
+
+<p>
+The <a href=http://www-124.ibm.com/developerworks/projects/bsf>Bean
+Scripting Framework</a> (BSF) is a popular architecture for incorporating
+scripting languages (not necessarily written in Java) into Java software.
+The key features are: a) pass Java objects, or beans, between Java and
+scripts, and b) allow script code to handle Java bean events. For many
+scripting languages written in Java, the second part is not used because
+once they get hold of a Java object, they can handle events by themselves.
+To these scripting languages, all they need is BSF's mechanism to pass
+Java objects around. This is exactly what <J> uses BSF for.
+
+<p>
+Download the BSF, put its jar file in your classpath along with <J>'s,
+and with just a little extra coding, your Java software will have
+embedded scripting capability. This is how.
+
+<codelist name="BSFTest" caption="BSFTest.java" type="java">
+ 1: import java.awt.Frame;
+ 2: import java.io.FileReader;
+ 3: import com.ibm.bsf.*;
+ 4: import com.ibm.bsf.util.*;
+ 5:
+ 6: public class BSFTest
+ 7: {
+ 8:   public static void main (String[] args) throws Exception
+ 9:   {
+10:     // 1. Register judoscript to BSF
+11:     BSFManager.registerScriptingEngine(
+12:       "judoscript", "com.judoscript.BSFJudoEngine", new String[]{"judo","jud"} );
+13:
+14:     String fileName = "randgen.judo";
+15:
+16:     // 2. Create a BSF manager
+17:     BSFManager manager = new BSFManager();
+18:
+19:     // 3. Create an object to pass on to the script
+20:     Frame frame = new Frame();
+21:     manager.declareBean("frame", frame, Frame.class);
+22:
+23:     try {
+24:
+25:       // 4. Invoke judoscript
+26:       manager.exec(manager.getLangFromFilename(fileName), fileName, 0, 0,
+27:                    IOUtils.getStringFromReader(new FileReader(fileName)));
+28:
+29:       // 5. Get back an object from judoscript
+30:       String title = (String)manager.lookupBean("title");
+31:
+32:       // 6. Show the frame
+33:       frame.setTitle(title);
+34:       frame.show();
+35:
+36:     } catch(BSFException be) {
+37:       System.out.println("exception: " + be.getMessage());
+38:       Throwable oe= be.getTargetException();
+39:       if(null != oe)
+40:         System.out.println("\nOriginal Exception:"+ oe.getMessage());
+41:       be.printStackTrace();
+42:     } catch(Exception e) {
+43:       e.printStackTrace();
+44:     }
+45:   }
+46: }
+</codelist>
+
+The BSF package has predefined a number of scripting language engines. When
+a script is being loaded, the file extension is used to identify the language.
+<J> is not listed as a default languages yet; it is possible to add it to the
+<code>com/ibm/bsf/Languages.properties</code> file. Programmatically
+registering (lines 11 through 12) is just as easy. To use a scripting
+language, get an <code>BSFManager</code> first (line 17).
+
+<p>
+This is an AWT application just for exercise. It passes a Java object to the
+script (lines 20 through 21), and obtains a Java object created in the script
+(line 30), and starts the GUI (lines 33 through 34). On line 33, the
+<code>frame</code> is actually running with event handlers set up in the
+script, and it contains components created in the script. Here is the script.
+
+<codelist name="randgen" caption="randgen.judo">
+ 1: standalone = (frame == null); // frame may be set in Java!
+ 2:
+ 3: if standalone {
+ 4:   frame = javanew java.awt.Frame('RandGen - standalone JudoScript');
+ 5: } else { // embedded -- pass 'title' back to Java
+ 6:   {
+ 7:     $$bsf.registerBean("title", 'RandGen - JudoScript thru BSF');
+ 8:   catch: // if not BSF
+ 9:     ::title = 'RandGen - JudoScript in Java';
+10:   }
+11: }
+12:
+13: result = javanew java.awt.TextField("0");
+14: button = javanew java.awt.Button('next');
+15: frame.resize(400, 100);
+16: frame.add("North", result);
+17: frame.add("Center", button);
+18: if standalone { frame.show(); }
+19:
+20: // *** handle data entry keys
+21: guiEvents {
+22: &lt; frame : Window : windowClosing   &gt;: exit 0;
+23: &lt; button: Action : actionPerformed &gt;: result.text = rand(0,100);
+24: }
+</codelist>
+
+Interestingly, this script can be run stand-alone, embedded by BSF, or
+embedded by the <J> engine introduced later. The key is the <code>frame</code>
+variable. At the very beginning, if it is set by the host, this program
+is being embedded. Otherwise, a new frame is created (line 4). An event
+handler is assigned to it (line 22), no matter how it is created, and a
+number of components are added to it (lines 16, 17).
+
+<p>
+<J> interacts with BSF through the built-in variable, <kw>$$bsf</kw>.
+If it is not defined, calling its method will exception (lines 7, 8).
+Line 7 calls its <kw>registerBean()</kw> method to pass back an object;
+find information about this and other methods in the BSF API documentation.
+
+<p>
+The following program loads a function created by the Java code, and
+then calls it. On line 14 it obtains a <J> BSF engine; this is reasonable
+because we are going to load <J> code (line 19).
+
+<codelist name="BSFCallTest" caption="BSFCallTest.java" type="java">
+ 1: import com.ibm.bsf.*;
+ 2: import com.ibm.bsf.util.*;
+ 3:
+ 4: public class BSFCallTest
+ 5: {
+ 6:   public static void main (String[] args) throws Exception
+ 7:   {
+ 8:     // 1. Register judoscript to BSF
+ 9:     BSFManager.registerScriptingEngine(
+10:       "judoscript", "com.judoscript.BSFJudoEngine", new String[]{"judo","jud"} );
+11:
+12:     // 2. Create a BSF manager and obtain the engine
+13:     BSFManager manager = new BSFManager();
+14:     BSFEngine engine = manager.loadScriptingEngine("judoscript");
+15:
+16:     try {
+17:
+18:       // 3. Create a JudoScript function
+19:       engine.exec(null,0,0,"function foo a,b { return a+b; }");
+20:
+21:       // 4. Call the function
+22:       Object[] params = new Object[] { new Integer(1), new Double(2) };
+23:       System.out.println( engine.call(null,"foo",params) );
+24:       params[1] = new Integer(2);
+25:       System.out.println( engine.call(null,"foo",params) );
+26:
+27:     } catch(Exception e) { e.printStackTrace(); }
+28:   }
+29: }
+</codelist>
+
+
+<section name="engine">
+
+<p>
+<J> provides an engine for Java programs to embed it. It is much
+simpler because all it has to support is passing Java objects between
+the two parties and execute the scripts. The class is
+<kw>com.judoscript.JudoEngine</kw>, whose methods are:
+
+<demo>
+public void putBean(String name, Object value);
+public void clearBean(String name);
+public Object getBean(String name);
+public void runScript(Object script);
+public void runScript(String path);
+public void runCode(String code);
+public Object call(String fxn, Object[] params);
+public static Object parseScript(Script path);
+public static Object parseCode(String code);
+</demo>
+
+A Java object can be put into the engine to be used by subsequent runs
+of a script. When a script is run, its functions and other declarations
+stays until the next run. Use the <kw>call()</kw> method to invoke a
+function. These mechanisms should suffice for Java/<J> interactions.
+
+<p>
+The following program does the same as the above BSFTest example.
+
+<codelist name="EmbedTest" caption="EmbedTest.java" type="java">
+ 1: import java.awt.Frame;
+ 2: import com.judoscript.JudoEngine;
+ 3:
+ 4: public class EmbedTest
+ 5: {
+ 6:   public static void main (String[] args) throws Exception
+ 7:   {
+ 8:     // 1. Create a JudoScript engine
+ 9:     JudoEngine je = new JudoEngine();
+10:
+11:     try {
+12:
+13:       // 2. Create an object to pass on to the script
+14:       Frame frame = new Frame();
+15:       je.putBean("frame", frame);
+16:
+17:       // 3. Invoke judoscript
+18:       je.runScript("randgen.judo");
+19:
+20:       // 4. Get back an object from judoscript
+21:       String title = (String)je.getBean("title");
+22:
+23:       // 5. Show the frame
+24:       frame.setTitle(title);
+25:       frame.show();
+26:
+27:     } catch(Exception e) { e.printStackTrace(); }
+28:   }
+29: }
+</codelist>
+
+The objects that Java passes to <J> and those that <J> intends to expose
+to Java are all in the root context. See line 9 in <codelist href="randgen">.
+
+<p>
+The following example creates a <J> function (line 13) then invokes it
+(lines 17, 19):
+
+<codelist name="CallTest" caption="CallTest.java" type="java">
+ 1: import com.judoscript.JudoEngine;
+ 2:
+ 3: public class CallTest
+ 4: {
+ 5:   public static void main (String[] args) throws Exception
+ 6:   {
+ 7:     // 1. Create a JudoScript engine
+ 8:     JudoEngine je = new JudoEngine();
+ 9:
+10:     try {
+11:
+12:       // 2. Create a JudoScript function
+13:       je.runCode("function foo a,b { return a+b; }");
+14:
+15:       // 3. Call the function
+16:       Object[] params = new Object[] { new Integer(1), new Double(2) };
+17:       System.out.println( je.call("foo",params) );
+18:       params[1] = new Integer(2);
+19:       System.out.println( je.call("foo",params) );
+20:
+21:     } catch(Exception e) { e.printStackTrace(); }
+22:   }
+23: }
+</codelist>
+
+
+<section name="multi">
+
+<p>
+To parse a script then run multiple instances in different threads, call the
+<kw>parseScript()</kw> or <kw>parseCode()</kw> method, then pass the returned
+script object to multiple <kw>JudoEngine</kw> instances.
+
+
+<section name="listings">
+
+<insert name="codelistings">
+

@@ -1,0 +1,46 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_wsdl/map_values.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This test program runs against the "echoStruct" operation on the
+    Apache Axis sample web service, "echo", by supplying values of
+    various types.
+
+    The "echoStruct" operation takes a SOAPStruct value, which has
+    three fields: varString, varInt and varFloat. We use different
+    input object types: a JudoScript Object, a java.util.HashMap and
+    a native Java class; all has these 3 fields.
+
+    We also tested using various types for the "echoMap" operation.
+  *]];
+  author = 'James Huang';
+  created = '2004-11-25';
+}
+
+//
+// The WSDL:
+//
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+judoObj = { varString='xyz', varInt=1, varFloat=1.01 };
+javaMap = new java::HashMap( varString='xyz', varInt=1, varFloat=1.01 );
+javaObj = new java::Object {
+            String varString;
+            int    varInt;
+            float  varFloat;
+
+            constructor {
+              super();
+              varString = 'xyz';
+              varInt = 1;
+              varFloat = 1.01;
+            }
+          };
+
+println 'Object      as Map:        ', wsdl.echoMap( judoObj );
+println 'Java Map    as Map:        ', wsdl.echoMap( javaMap );
+
+println 'Object      as SOAPStruct: ', wsdl.echoStruct( judoObj );
+println 'Java Map    as SOAPStruct: ', wsdl.echoStruct( javaMap );
+println 'Java Object as SOAPStruct: ', wsdl.echoStruct( javaObj );
+</pre></td></tr></table></body></html>

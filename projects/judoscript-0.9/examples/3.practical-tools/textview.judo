@@ -1,0 +1,42 @@
+usage {
+  minArgs = 1;
+  args    = 'text_file [ encoding ]';
+  author  = 'James Huang';
+  desc = [[*
+    Displays the text file in the Swing JTextArea. It displays
+    any text encoding supported by your platform.
+
+    For instance, if your JVM environment supports Chinese
+    characters, you can display Chinese and probably Japanese
+    and Korean text files. Obviously, you need to specify the
+    right text encoding in order to see what you would expect.
+  *]];
+}
+
+!JavaGuiClass #JFrame, #JScrollPane, #JTextArea, #BorderLayout
+
+$file = #args[0];
+$encoding = #args.length<2 ? 'UTF8' : #args[1]; // e.g. 'GB2312'
+
+output = javanew #JTextArea(15, 30);
+output.setEditable(false);
+output.setFont(javanew java.awt.Font('SimSun',0,12)); // or other fonts.
+scrollPane = javanew #JScrollPane(output);
+frame = javanew #JFrame('Text Viewer - ' @ $file @ ' : ' @ $encoding);
+guiEvents { <frame : Window : windowClosing> : exit(0); }
+frame.getContentPane().add(scrollPane, #BorderLayout.CENTER);
+frame.setSize(450, 260);
+frame.setVisible(true);
+
+output.append(readFile($file,$encoding));
+
+
+function readFile $file, $encoding
+{
+  buffer = javanew byte[$file.fileLength()];
+  is = openFile($file);
+  is.read(buffer);
+  is.close();
+  return $encoding == null ? javanew java.lang.String(buffer)
+                           : javanew java.lang.String(buffer,$encoding);
+}

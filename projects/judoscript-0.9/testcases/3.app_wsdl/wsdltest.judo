@@ -1,0 +1,16 @@
+wsdlURL = 'http://coldrooster.com/dhtmldude/mathservice.asmx?WSDL';
+
+svc = wsdl::wsdlURL; // without service name
+//svc = wsdl::wsdlURL : '{http://tempuri.org/}MathService'; // with service name
+
+println '3 + 2 = ', svc.Add(3, 2);
+println '3 - 2 = ', svc.Subtract(3, 2);
+println '3 * 2 = ', svc.Multiply(3, 2);
+println '3 / 2 = ', svc.Divide(3, 2);
+
+println nl, 'Called with the port name:';
+println '3 + 2 = ', svc.MathServiceSoap.Add(3, 2);
+println '3 - 2 = ', svc.MathServiceSoap.Subtract(3, 2);
+println '3 * 2 = ', svc.MathServiceSoap.Multiply(3, 2);
+println '3 / 2 = ', svc.MathServiceSoap.Divide(3, 2);
+

@@ -1,0 +1,163 @@
+
+public class IterateTest
+{
+  static void iteratorTest() {
+    %println "\n--- Iterator Test ---"
+
+    %object ArrayList
+
+    dup
+    %object Hashtable
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+
+    dup
+    ldc "a textual string."
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+
+    invokevirtual AbstractList.iterator()Iterator
+
+    Iterator iter;
+    astore iter
+
+    // Now, start the iterator --
+    Object tmp;
+    %iterate iter tmp
+    %println tmp
+    %end_iterate
+  }
+
+  static void enumerationTest() {
+    %println "\n--- Enumeration Test ---"
+
+    %object Vector
+
+    dup
+    %object Hashtable
+    invokevirtual Vector.addElement(Object)void
+
+    dup
+    ldc "a textual string."
+    invokevirtual Vector.addElement(Object)void
+
+    invokevirtual Vector.elements()Enumeration
+
+    Enumeration enum;
+    astore enum
+
+    // Now, start the iterator --
+    Object tmp;
+    %iterate enum tmp
+    %println tmp
+    %end_iterate
+  }
+
+  static void embeddedIteratorTest() {
+    %println "\n--- Embeded Iterator Test ---"
+
+    %object Vector
+
+    dup // Vector
+
+    // add an ArrayList with content
+
+    %object ArrayList
+
+    dup
+    ldc "String 1-1"
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+    dup
+    ldc "String 1-2"
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+
+    invokevirtual Vector.addElement(Object)void // add the ArrayList
+
+    // add another ArrayList with content
+
+    dup // Vector
+
+    %object ArrayList
+
+    dup
+    ldc "String 2-1"
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+    dup
+    ldc "String 2-2"
+    invokevirtual ArrayList.add(Object)boolean
+    pop
+
+    invokevirtual Vector.addElement(Object)void // add the ArrayList
+
+    // Now, start the iterator --
+    Enumeration enum;
+    Iterator iter;
+    Object tmp;
+
+    invokevirtual Vector.elements()Enumeration
+    astore enum
+    %iterate enum
+      // stack-top is an ArrayList
+      checkcast ArrayList
+      invokevirtual AbstractList.iterator()Iterator
+      astore iter
+      %iterate iter tmp
+        %println tmp
+      %end_iterate
+    %end_iterate
+  }
+
+  static void arrayIteratorTest() {
+    %println "\n--- Array-Iterator Test ---"
+
+    int[] arr;
+    %set arr = %array int[] { 10, 20, 30, 40 }
+
+    // Now, start the iterator --
+    int idx;
+    %array_iterate arr idx
+      %println arr[idx]
+    %end_iterate
+  }
+
+  static void embeddedArrayIteratorTest() {
+    %println "\n--- Embedded Array Iterator Test ---"
+
+    int[][] arr;
+    %set arr = %array int[4][4]
+
+    // Now, start the iterator --
+    int i, j, tmp;
+    int arr1[];
+
+    %array_iterate arr i
+      %set arr1 = arr[i]
+      %array_iterate arr1 j
+        iload i
+        iload j
+        imul
+        istore tmp
+        %set arr1[j] = tmp
+      %end_iterate
+    %end_iterate
+
+    %array_iterate arr i
+      %set arr1 = arr[i]
+      %array_iterate arr1 j
+        %println "arr[", i, "][", j, "] = ", arr1[j]
+      %end_iterate
+    %end_iterate
+  }
+
+  public static void main(String[] args) {
+    invokestatic iteratorTest()void
+    invokestatic enumerationTest()void
+    invokestatic arrayIteratorTest()void
+    invokestatic embeddedIteratorTest()void
+    invokestatic embeddedArrayIteratorTest()void
+  }
+
+}

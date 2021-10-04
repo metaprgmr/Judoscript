@@ -1,0 +1,48 @@
+usage {
+  minArgs = 1;
+  args    = 'filename [ offset=0 [length=256] ]';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-12';
+  desc    = [[*
+    Takes a binary file name and displayes its binary content in HEX
+    starting at the offset for so many bytes specified on the command
+    line; default 256 bytes.
+  *]];
+}
+
+offset = #args.length < 2 ? 0   : #args[1];
+bytes  = #args.length < 3 ? 256 : #args[2];
+
+file = openFile(#args[0]);
+file.skip(offset);
+buf = new java::byte[256];
+
+i = 0;
+println (i++).fmtHex():>3 {16}, '   ', ((i++)-16).fmtHex() {16};
+println ' --' {16}, '   ', '-' {16};
+
+while bytes > 0 {
+  len = file.read(buf);
+  if len <= 0 { break; }
+  bytes -= len;
+  asc = null;
+  i = 0;
+  for ; i < len; ++i {
+    if buf[i] > 26 && buf[i] <= 0x7F {
+      asc @= buf[i].chr();
+    } else {
+      asc @= ' ';
+    }
+    print buf[i].fmtHex():>3;
+    if i > 0 && i % 16 == 15 { // print the ASCII form
+      println '   ', asc;
+      asc = null;
+    }
+  }
+  if asc {
+    println '   '{16-i%16}, '   ', asc;
+  }
+}
+
+file.close();

@@ -1,0 +1,75 @@
+/**
+ * Must run with an output file name.
+ */
+
+public class InvokeSpecialTest extends MyBaseClass
+{
+  %default_constructor <public>
+
+  public InvokeSpecialTest(Writer out) {
+    aload this
+    aload out
+    invokespecial super(Writer)void
+  }
+
+  public InvokeSpecialTest(Writer out, int any) {
+    aload this
+    aload out
+    invokespecial this(Writer)void
+
+    %println "Constructor(Write,int)"
+  }
+
+  /**
+   * Call the immediate super's method.
+   */
+  public void close() {
+    %println "InvokeSpecialTest::close()"
+
+    aload this
+    invokespecial MyBaseClass.close()void
+  }
+
+  /**
+   * Call super's super's method.
+   */
+  public void println(String s) {
+    %println "InvokeSpecialTest::println()"
+
+    aload this
+    dup
+    ldc "virtual"
+    invokevirtual secret(String)void
+    dup
+    ldc "special"
+    invokespecial secret(String)void
+
+    aload s
+    invokespecial PrintWriter.println(String)void
+  }
+
+  private void secret(String msg) {
+    %println "InvokeSpecialTest::secret(", msg, ')'
+  }
+
+  public static void main(String[] args) {
+    Writer out;
+
+    %println <err> "You must supply an output file name."
+
+    new FileWriter
+    dup
+    %load args[0]
+    invokespecial FileWriter<init>(String)void
+    astore out
+
+    %object InvokeSpecialTest(Writer,int)(out,1)
+
+    dup
+    ldc "ABCDEFG"
+    invokevirtual println(String)void
+
+    invokevirtual close()void
+  }
+
+}

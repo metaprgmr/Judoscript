@@ -1,0 +1,106 @@
+a = new TableData('name', 'age');
+a.setTitleCaseSensitive(false);
+
+a[0] = [ 'Young Man',       28 ];
+a[1] = [ 'Young Woman',     24 ];
+a[2] = [ 'Young Daughter',   4 ];
+a[3] = [ 'Younger Daughter', 2 ];
+
+a[8].name = 'Mid-Aged Man';  // age is null.
+
+a[9,0] = 'Old Man';
+a[9,1] = 104;
+
+a.add('Old Woman', 101);
+a.addRow('Old Son', 83);  // synonym to add().
+a.addRow('Old Daughter', 77);
+
+println nl, '------ Print the whole table data ------';
+printTD a;
+
+println '------ Print a few rows ----------------';
+println 'a[3]      = ', a[3];
+println 'a[3].name = ', a[3].name;
+println 'a[3].age  = ', a[3].age;
+println 'a[5]      = ', a[5];
+println 'a[5].name = ', a[5].name;
+println 'a[5].age  = ', a[5].age;
+b = a[2];
+for x in b { print x :<20; }
+println;
+
+println nl, '------ Print a column ------------------';
+b = a.getColumn(1);
+println b;
+
+println '------ Print column names and indices --';
+println 'Index for "name" is: ', a.getColumnIndex('name');
+println 'Index for "age" is:  ', a.getColumnIndex('age');
+println 'Index for "NAME" is: ', a.getColumnIndex('NAME');
+println 'Index for "AGE" is:  ', a.getColumnIndex('AGE');
+println 'Title[0]: ', a.getTitle(0);
+println 'Title[1]: ', a.getTitle(1);
+
+println nl, '------ Filter non-null rows and columns ';
+b = a.filterNotNull();
+println 'Not null rows: ';
+printTD b;
+b = a.filterByColumnNotNull(1);
+println 'Column-1 not null: ';
+printTD b;
+
+println nl, '------ Filter for Old and < 100 --------';
+filter = function(x) {
+  return x.name.startsWith('Old') && x.age < 100;
+};
+printTD a.filter(filter);
+
+println nl, '------ Sort on column-1 as number ------';
+printTD a.sortByColumnAsNumber(1,false); // descending
+
+println nl, '------ Sort on column-0 ----------------';
+ladiesFirst = function (lhs, rhs) {
+  if lhs.contains('Woman','Daughter') { return -1; }
+  if rhs.contains('Woman','Daughter') { return 1; }
+  return 0;
+};
+printTD a.sortByColumn(0,ladiesFirst);
+
+println nl, '------ Sort on rows --------------------';
+youngLadiesFirst = function (lhs, rhs) {
+  l = lhs.name.contains('Woman','Daughter');
+  r = rhs.name.contains('Woman','Daughter');
+  if l && r {
+    if lhs.age < rhs.age { return -1; }
+    if lhs.age > rhs.age { return 1; }
+    return 0;
+  }
+  if l { return -1; }
+  if r { return 1; }
+  return 0;
+};
+printTD a.sort(youngLadiesFirst);
+
+//
+// Print a TableData "conventionally"
+//
+function printTD td {
+  print '    ';
+  for x in td.getTitles() {
+    print x :<20!;
+  }
+  println;
+  print '    ';
+  for x to td.getTitles().length-1 {
+    print '------------------- ';
+  }
+  println;
+  for x to td.size()-1 {
+    print x:>3, ' ';
+    row = td[x];
+    for y in row {
+      print y :<20!;
+    }
+    println;
+  }
+}

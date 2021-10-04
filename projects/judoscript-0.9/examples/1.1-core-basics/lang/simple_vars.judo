@@ -1,0 +1,45 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Uses various number types in different situations.
+    Strings of invalid number format may throw exceptions,
+    which are caught, displayed, then execution is resumed.
+  *]];
+}
+
+println 'A) a = 1: '       :<18, a = 1;
+println 'B) a = 1.00: '    :<18, a = 1.00;
+println "C) a = '1.00': "  :<18, a = '1.00';
+println 'D) a = 1.5e5: '   :<18, a = 1.5e5;
+println "   a = '1.5e5': " :<18, a = '1.5e5';
+println 'E) a = null: '    :<18, a = null;
+println '   a = 1.0:'      :<18, a = 1.0;
+println 'F) a += 2: '      :<18, a += 2;
+println "   a = '1.1'"     :<18, a = '1.1';
+println 'G) a *= 4: '      :<18, a *= 4;
+println '   a = 10:'       :<18, a = 10;
+println 'H) b = a / 2.5: ' :<18, b = a / 2.5;
+println '   a = 3.5:'      :<18, a = 3.5;
+println '   b = 2.5:'      :<18, b = 2.5;
+println 'I) a % b = '      :<18, a % b;
+println '   a = 5.0:'      :<18, a = 5.0;
+println 'J) a - c = '      :<18, a - c; // c is not defined.
+println 'K) a + "abc" = '  :<18, a + "abc" ;
+println 'L) "abc" + a = '  :<18, "abc" + a;
+println 'M) "abc" @ a = '  :<18, "abc" @ a; // concatenation
+println '   a @= "xyz": '  :<18, a @= "xyz"; // self concatenation
+println 'N) a + "0x0a" = ' :<18, a + "0x0a" ;
+println 'O) a + "0x0m" = ' :<18, a + "0x0m" ;
+println 'P) a + "007" = '  :<18, a + "008" ;
+println 'Q) a + "008" = '  :<18, a + "008" ;
+println '   a = 5:'        :<18, a = 5;
+println 'R) a + "0x0a" = ' :<18, a + "0x0a" ;
+println 'S) a + "0x0m" = ' :<18, a + "0x0m" ;
+println 'T) a + "007" = '  :<18, a + "007" ;
+println 'U) a + "008" = '  :<18, a + "008" ;
+
+catch:
+  println 'EXCEPTION: ', $_.message;
+  resume;

@@ -1,0 +1,18 @@
+usage {
+  author  = 'James Huang';
+  created = '2003-01-19';
+  desc    = [[*
+    Runs a command line, writes to the input stream and reads the output.
+  *]];
+}
+
+exec 'java test.ToLower | java test.Echo'
+input {
+  . <pipe> 'Hello,';
+  . <pipe> 'World!';
+}
+output {
+  for cnt=1; (line=readPipe()) != eof; ++cnt {
+    . 'Line #', cnt, ': ', line;
+  }
+}

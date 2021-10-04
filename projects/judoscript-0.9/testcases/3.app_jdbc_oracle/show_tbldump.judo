@@ -1,0 +1,13 @@
+dump_name = 'EMP.tdmp';
+
+dump_file = openTableDump(dump_name);
+ca = dump_file.getColumnAttrs();
+
+println 'Column         Type            Precision   Scale Nullable';
+println '-------------- ------------ ------------ ------- ----------';
+printTable ca for
+  column('name') :<15!,
+  column('type') :<13!,
+  column('precision')   :>12,
+  column('scale')       :>8, ' ',
+  column('nullable');

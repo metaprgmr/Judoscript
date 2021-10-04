@@ -1,0 +1,56 @@
+<% var title = 'Lesson 18. Review and Summary of JuSP '; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p><b>Congratulations!</b> You have learned everything about developing
+web apps with the JuSP platform. Let's review and summarize what JuSP
+provides and how you as a developer can use them.</p>
+
+<h2>Summary of the JuSP Platform Development</h2>
+
+<p>JuSP web apps are very simple in structure: it only has two components:
+a) a global script, <code>juspInit.judo</code>, started when the JuSP engine
+starts, and b) JuSP pages for view and control.</p>
+
+<p>In the <code>juspInit.judo</code> script, you can put any Judo function
+class and constant definitions and global variables holding resources
+useful for the whole web app, such as JNDI lookups, WSDL handles and
+Hibernate environments. It is common to organize different functional
+pieces into separate files and use Judo's <code>!include</code> to put
+them into <code>juspInit.judo</code>.</p>
+
+<p>The <code>juspInit.judo</code> script is initiated by the JuSP engine
+with a <code>juspContext</code> object, where you can set various options;
+the configuration information is also specified here, and you can use
+Java properties files and/or XML configuration files but that's totally up
+to you.</p>
+
+<p>In JuSP pages, there are <code>&lt;% %></code> scriptlets,
+<code>&lt;%= %></code> embedded expressions, <code>&lt;%!validate %></code>
+tags, <code>&lt;%@page %></code> and <code>&lt;%@exception %></code>
+directives, and custom tags in the form of <code>&lt;%!xyz %></code>.
+In the <code>&lt;% %></code> scriptlets, there are a number of objects
+available, such as <code>request</code>, <code>response</code>,
+<code>session</code>, <code>form</code>, <code>writer</code> and
+<code>outStream</code>.</p>
+
+<p>As simple and straightforward as JuSP is, it is extremely capable of
+delivering well-structured web applications using commonly recognized
+patterns such as MVC. The key to MVC in JuSP is to dedicate certain JuSP
+pages to be <em>controllers</em> while others being dedicated <em>view</em>
+pages.</p>
+
+<p>In the <%!link 'lesson19.jusp', 'next lesson' %>, you will find an
+exercise that would cover most of the techniques you have learned.
+It can serve as a starting point of JuSP web app development that you
+will not quit for years, hopefully!</p>
+
+<h2>New Development of JuSP</h2>
+
+<p>The current JuSP is already a complete web development platform, but is
+tested only in English. The only major feature of JuSP planned but not
+implemented at this point is solid <em>Internationalization support</em>.
+
+<%!include "footer.jusp" %>

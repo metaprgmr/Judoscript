@@ -1,0 +1,43 @@
+<html>
+<head><title>Jusp Test</title>
+<body>
+<h2>JUSP Include and Invoke Tests</h2>
+
+<p>View <%!viewsrc 'lesson16/test_limits.jusp', '../' %></p>
+
+<%
+  ::juspContext.setUploadLimits(2048, 4096); // memory size, upload size
+%>
+<p>(Upload memory limit: 2kb; upload limit: 4k)</p>
+
+<form method="POST" enctype="multipart/form-data" action="upload.jusp">
+File name: <%!file 'filename1' %><br>
+File name: <%!file 'filename2' %><br>
+<%!submit "Upload" %>
+</form>
+
+<%
+  var uploads = request.getUploads();
+  if uploads != null {
+    %><table border=1 cellspacing=0><caption align=left>Uploaded files</caption><%
+    %><tr><th>Field Name</th><th>Content-Type</th><th>File Name</th><th>File Size</th><th>&nbsp;</th></tr><%
+    for item in uploads {
+      %><tr><td><%= item.getFieldName() %></td><%
+      %><td><%= item.getContentType() %></td><%
+      %><td><%= item.getFileName() %></td><%
+      %><td><%= item.getFileSize() %></td><td>(deleted)</td></tr><%
+      item.delete();
+    }
+    %></table><%
+  }
+%>
+
+&nbsp;<br>
+<hr><font size=-1>Back to <a href="../lesson16.jusp">lesson 16</a></font>
+</body></html>
+
+<%@ exception %>
+<html><body>
+<h2>Upload failed:</h2>
+<p><%= $_.message %></p>
+</body></html>

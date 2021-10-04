@@ -1,0 +1,39 @@
+!include 'com/judoscript/jusp/juspt.judo'
+!include '${JUDOROOT}/projects/common.judi'
+!include 'bookinfo.judi'
+
+var buildtools = '${JUDOROOT}/projects/new_site/buildtools';
+var srcDir     = '${JUDOROOT}/projects/new_site/judo_book_src';
+var targetDir  = '${docroot}/books/judoscript-0.9';
+
+println<err> nl, '::: Process Book ...', nl;
+
+bookInfo = new BookInfo(srcDir=srcDir);
+println<err> 'Information collected for book: ', bookInfo.title;
+
+needIntro = isNewer('${srcDir}/toc.sgml', '${targetDir}/toc_details.html');
+mkdir '${targetDir}/chapters/';
+
+// Create "toc_details.html".
+pageInfo = juspt$transform('', '${buildtools}/templates/toc_details.juspt', '/');
+tgtname = '${targetDir}/toc_details.html';
+println<err> 'Creating ', tgtname;
+juspt$runPage pageInfo, tgtname, bookInfo;
+
+
+// Create all chapters
+pageInfo = juspt$transform('', '${buildtools}/templates/chapter.juspt', '/');
+for ch in bookInfo.chapters {
+  srcname = '${srcDir}/chapters/' + ch.id + '.sgml';
+  if (srcname.fileExists()) {
+    tgtname = '${targetDir}/chapters/' + ch.id + '.html';
+    juspt$runPage pageInfo, tgtname, bookInfo, ch, srcname, needIntro, ch.id+'_p.html', false;
+    println<err> 'Created ', tgtname;
+
+    tgtname = '${targetDir}/chapters/' + ch.id + '_p.html';
+    println<err> 'Creating', tgtname;
+    juspt$runPage pageInfo, tgtname, bookInfo, ch, srcname, needIntro, ch.id+'.html', true;
+  }
+}
+
+catch: $_.pist();

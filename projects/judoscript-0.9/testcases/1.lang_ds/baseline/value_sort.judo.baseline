@@ -1,0 +1,21 @@
+>> Order by ISBN:
+0-06-017315-7  Luchetti, Emily     252
+0-517-70442-0  Roupe, Diane        884
+0-679-40907-6  Silverton, Nancy    260
+0-89256-228-5  Haas, Robert        266
+
+>> Order by authors' last name:
+0-89256-228-5  Haas, Robert        266
+0-06-017315-7  Luchetti, Emily     252
+0-517-70442-0  Roupe, Diane        884
+0-679-40907-6  Silverton, Nancy    260
+
+>> Select books with <= 300 pages:
+0-06-017315-7  Luchetti, Emily     252
+0-89256-228-5  Haas, Robert        266
+0-679-40907-6  Silverton, Nancy    260
+
+>> Select books with <= 300 pages and ordered by descending page numbers:
+0-89256-228-5  Haas, Robert        266
+0-679-40907-6  Silverton, Nancy    260
+0-06-017315-7  Luchetti, Emily     252

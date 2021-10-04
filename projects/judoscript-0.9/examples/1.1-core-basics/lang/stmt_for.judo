@@ -1,0 +1,31 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Uses for;;, for from and for in statements.';
+}
+
+println '==================';
+println 'for ; ; statement and break/continue';
+for a=1; a<10; ++a {
+  println '# ', a, ' before.';
+  if (a > 7) { break; }
+  if a > 5 { continue; }
+  println '# ', a, ' after.';
+}
+
+println '==================';
+print 'for [from 0] to 3:           '; for a to 3                    { print a, ' '; } println;
+print 'for from 3 to 5:             '; for a from 3 to 5             { print a, ' '; } println;
+print 'for from 3 to 10 step 2:     '; for a from 3 to 10 step 2     { print a, ' '; } println;
+print 'for from 10 downto 5 step 2: '; for a from 10 downto 5 step 2 { print a, ' '; } println;
+
+println '==================';
+println a = [ 'elem1', 'elem2', 'elem3', 'elem4' ];
+print "--- for in                 "; for e in a                 { print e, ' '; } println;
+print "--- for in backward        "; for e in a backward        { print e, ' '; } println;
+print "--- for in from 1          "; for e in a from 1          { print e, ' '; } println;
+print "--- for in to 1            "; for e in a to 1            { print e, ' '; } println;
+print "--- for in from 1 to 2     "; for e in a from 1 to 2     { print e, ' '; } println;
+print "--- for in from 2 downto 1 "; for e in a from 2 downto 1 { print e, ' '; } println;
+print "--- for in downto 1        "; for e in a downto 1        { print e, ' '; } println;

@@ -1,0 +1,38 @@
+<notyet href="../../../articles/embed.html">
+
+
+<!--===============================================================-->
+<section1 title="The Easy Way to Embed Judo in Java Software" status="red">
+
+<!------------------------------------->
+<section2 title="Default Function Name in the Embedded Script">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Capture and Redirect Output">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Syntax and Runtime Error Reporting">
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Introduction to Bean Scripting Framework (BSF)" id="bsf" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="BSF Support for Judo" id="withbsf" status="red">
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Use Judo Inside Ant Through BSF" status="red">
+
+</section1><!--=====================================================-->
+

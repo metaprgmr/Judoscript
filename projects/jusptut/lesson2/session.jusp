@@ -1,0 +1,32 @@
+<%
+  // Set the session attributes (from the previous screen):
+  name = form.name;
+  if name.isNotEmpty() {
+    val  = form.value;
+    if (val.isEmpty())
+      val = null; // to remove it.
+    session.(name) = val;
+  }
+%>
+<html><body>
+<h2>Set Session Values</h2>
+
+<p>View <%!viewsrc 'lesson2/session.jusp', '../' %></p>
+
+<table border=1><caption align=left>Session attributes:</caption>
+<tr><th>Attribute</th><th>Value</th></tr>
+<%
+  for attr in session {
+    %><tr><td><%= attr %></td><td><%= session.(attr) %></td></tr><%
+  }
+%>
+</table>
+
+<form><table border=0>
+<tr><td>Attribute:</td><td><input type=text name=name></td></tr>
+<tr><td>Value:</td><td><input type=text name=value> (leave blank to remove the attribute)</td></tr>
+<tr><td>&nbsp;</td><td><input type=submit value="Submit"></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson2.jusp">lesson 2</a></font>
+</body></html>

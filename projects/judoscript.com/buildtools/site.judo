@@ -1,0 +1,495 @@
+!include '${JUDOROOT}/projects/doc_helpers.judi'
+
+myroot = '${projects}/judoscript.com';
+home   = '${myroot}/home_src';
+
+onlyNewer = true;
+
+/*
+** Actions:
+*/
+
+. <err> nl, 'Start creating root pages ..';
+genHomePage();
+//genTipPage();
+genDownloadPage();
+genNewUsersPage();
+genSiteMapPage();
+genFAQOSPage 'faq.sgml', 'faq.html', 'JudoScript FAQ', 'faq,FAQ,why JudoScript', true;
+genFAQOSPage 'opensource.sgml', 'opensource.html', 'JudoScript To-Do List', 'open source,to-do,to-do list';
+genSitePage 'articles.html', 'articles/index.html', 'articles', 'Articles', 'articles', '../';
+genSitePage 'weblinks.html', 'weblinks.html', 'home', 'Useful Links', 'links', '';
+genSitePage 'contributions.html', 'contrib/index.html', 'home', 'Contributions', 'links', '../';
+genSitePage 'goodies.html', 'goodies/index.html', 'goodies', 'Goodies', 'judoscript,jj to xml', '../';
+. <err> 'Done creating root pages.';
+
+
+// For the home page:
+//
+//  printBeginning htmlOut, 'home', 'JudoScript Home',
+//      'JudoScript,Java Platform,scripting,Java,shell,JDBC scripting,JDBC,XML,HTML scraping,mail';
+//  printPreamble htmlOut;
+//  --> print preamble
+//  . <htmlOut> #leftPane;
+//  --> print left-pane portlets
+//  . <htmlOut> #rightPane;
+//  --> print right-pane portlets
+//  . <htmlOut> getEnding();
+//
+// For regular pages:
+//
+//  printBeginning htmlOut, pageName, pageTitle, pageKeywords;
+//  --> print content.
+//  . <htmlOut> getEnding();
+//
+
+function printBeginning htmlOut, name, page_title, keywords {
+  . <htmlOut> [[*
+<html><head>
+<title>(* page_title *)</title>
+<meta http-equiv="Content-Type" content="text/html;">
+<meta name="keywords" content="(* keywords *)">
+<link href="(*relURI*)share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor=#ffffff topmargin=0 leftmargin=0>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+ <td width=138 style="background:url( (*relURI*)share/home_tl.gif)" valign=bottom>
+<!--
+<FORM ACTION="" METHOD=GET  target=_self>
+<INPUT TYPE=TEXT NAME=query SIZE=9><br>
+<small><INPUT TYPE=SUBMIT VALUE=" Find "></small><br>
+</FORM>
+-->
+<!--img src=(*relURI*)share/spacer.gif width=1 height=1 border=0-->
+</td>
+ <td style="background:url( (*relURI*)share/home_tm.gif)" align=center><a
+href="http://www.judoscript.com"><img src=(*relURI*)share/home_main.gif height=120 border=0></a></td>
+ <td width=72><img src=(*relURI*)share/home_tr.gif width=72 height=120 border=0></td>
+</tr>
+<tr>
+ <td width=138 valign=top class=menuText style="background:url( (*relURI*)share/home_lm.gif)">
+*]]; // -- -- -- MENU PANE -- -- --
+
+  . <htmlOut> menuCategory('home',         relURI + 'index.html',      name);
+  . <htmlOut> menuItem('intro (Flash)',    relURI + 'JudoScript.swf', false, true);
+  . <htmlOut> menuItem('white paper',      relURI + 'articles/whitepaper.html', false, true);
+  . <htmlOut> menuItem('FAQ',              relURI + 'faq.html');
+  . <htmlOut> menuItem('site map',         relURI + 'sitemap.html');
+  . <htmlOut> menuItem('feedback',         'mailto:judoscript@judoscript.com');
+  . <htmlOut> menuItem('useful links',     relURI + 'weblinks.html');
+  . <htmlOut> menuItem('contributions',    relURI + 'contrib/index.html');
+  . <htmlOut> menuCategory('JuSP',         '/jusptut/',  name);
+  . <htmlOut> menuCategory('Jamaica',      relURI + 'articles/jamaica.html',  name);
+  . <htmlOut> menuCategory('download',     relURI + 'download.html',  name);
+  . <htmlOut> menuItem('release note',     relURI + 'relnote.html');
+  . <htmlOut> menuItem('license (LGPL)',   relURI + 'license.html');
+  . <htmlOut> menuCategory('articles',     relURI + 'articles/index.html', name);
+  . <htmlOut> menuItem('Java Scripting',   relURI + 'books/judoscript-0.9/chapters/java.html');
+  . <htmlOut> menuItem('JDBC Scripting',   relURI + 'books/judoscript-0.9/chapters/jdbc.html');
+  . <htmlOut> menuItem('SOAP Scripting',   relURI + 'books/judoscript-0.9/chapters/wsdl.html');
+  . <htmlOut> menuItem('COM Scripting',    relURI + 'articles/activex.html');
+  . <htmlOut> menuItem('XML Scripting',    relURI + 'articles/xml.html');
+  . <htmlOut> menuItem('Ant Scripting',    relURI + 'books/judoscript-0.9/chapters/ant.html');
+//  . <htmlOut> menuItem('J2EE Uses',        relURI + 'articles/j2ee_uses.html');
+//  . <htmlOut> menuItem('White-Box Testing',relURI + 'articles/javatest.html');
+  . <htmlOut> menuItem('.........',        relURI + 'articles/index.html');
+  . <htmlOut> menuCategory('examples',     relURI + 'examples/index.html', name);
+  . <htmlOut> menuCategory('reference',    relURI + 'ref/index.html',      name);
+  . <htmlOut> menuItem('functional areas', relURI + 'ref/index.html?l=_fa.html&r=fa.html');
+  . <htmlOut> menuItem('syntax/semantics', relURI + 'ref/index.html?l=_syn.html&r=syn.html');
+  . <htmlOut> menuItem('system functions', relURI + 'ref/index.html?l=_sfn.html&r=sfn.html');
+  . <htmlOut> menuItem('built-in objects', relURI + 'ref/index.html?l=_obj.html&r=obj.html');
+  . <htmlOut> menuCategory('goodies',      relURI + 'goodies/index.html');
+
+// <table border=0 cellspacing=0 cellpadding=0 width=95><tr><td>&nbsp;&nbsp;</td><td>
+// <font style="font-size:12px; line-height:12px; color:#DDDDDD">
+// on all major and interesting topics, from <i>language basics</i> and
+// <i>calling Java</i> to <i>JDBC scripting</i>, <i>HTML scraping</i>,
+// <i>XML</i>, <i>GUI</i>, and <u>many nifty features</u>.</font>
+// </td></tr></table>
+  . <htmlOut> [[*
+<br>
+<!-- -- -- /MENU PANE -- -- -->
+ </td>
+ <td rowspan=2 colspan=2 align=left valign=top class=bodyText>&nbsp;
+<!-- ========================= CONTENT PANE ========================= -->
+*]];
+}
+
+function menuCategory name, url, cur_name {
+  if (url == null) || (name == cur_name) {
+    return '&nbsp;<nobr class=menuText1><b>${name}</b></nobr><br>';
+  } else {
+    return '&nbsp;<nobr class=menuText1><a href="${url}">${name}</a></nobr><br>';
+  }
+}
+
+function menuItem name, url, notYet, em {
+  if notYet {
+    return '&nbsp;<nobr><font color=#CCCCCC>${name}</font></nobr><br>';
+  } elif url == null {
+    return '&nbsp;<nobr><b>${name}</b></nobr><br>';
+  } elif em {
+    return '&nbsp;<nobr><b><a href="${url}">${name}</a></b></nobr><br>';
+  } else {
+    return '&nbsp;<nobr><a href="${url}">${name}</a></nobr><br>';
+  }
+}
+
+function printPreamble htmlOut {
+  . <htmlOut> '<table width=100% border=0 class=bodyText><!-- only for portal page -->';
+  // -- -- -- TOP CONTENT PANE -- -- -- beginning of preamble.
+}
+
+const #leftPane = [[*
+<!-- -- -- /TOP CONTENT PANE -- -- -->
+<tr><td valign=top width=50%>
+<!-- -- -- LEFT CONTENT PANE -- -- -->
+*]];
+
+function _printPortletStart htmlOut {
+  print <htmlOut> [[*
+<!-- portlet start --><table border=0 cellpadding=0 cellspacing=0 width=100% class=bodyText>
+<tr>
+ <td width=9><img src=(*relURI*)share/portlet_tl.gif width=9 height=9 border=0></td>
+ <td style="background:url( (*relURI*)share/portlet_tm.gif)"><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+ <td width=13><img src=(*relURI*)share/portlet_tr.gif width=13 height=9 border=0></td>
+</tr>
+<tr>
+ <td width=9 style="background:url( (*relURI*)share/portlet_l.gif)"><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+ <td><!-- portlet content -->
+*]];
+}
+
+function printPortletStart htmlOut, nonjs {
+  print <htmlOut> [[*
+<!-- portlet start --><table border=0 cellpadding=0 cellspacing=0 width=100% class=bodyText>
+<tr>
+ <td width=9>&nbsp;</td>
+ <td><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+ <td width=13>&nbsp;</td>
+</tr>
+<tr>
+ <td width=9>&nbsp;</td>
+ <!-- portlet content -->
+*]];
+  if (nonjs)
+    flush <htmlOut> '<td bgcolor="#ffffdd">';
+  else
+    flush <htmlOut> '<td>';
+}
+
+function _printPortletEnd htmlOut, url, nonjs {
+  if url.isNotEmpty() {
+    print <htmlOut> '<a href="', url, '"><img src=', relURI, 'share/tritriangle.gif valign=top border=0></a>';
+  }
+  flush <htmlOut> [[*
+ </td><!-- /portlet content -->
+ <td width=13 style="background:url( (*relURI*)share/portlet_r.gif)"><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+</tr>
+<tr>
+ <td width=9><img src=(*relURI*)share/portlet_bl.gif width=9 height=15 border=0></td>
+ <td style="background:url( (*relURI*)share/portlet_bm.gif)"><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+ <td width=15><img src=(*relURI*)share/portlet_br.gif width=13 height=15 border=0></td>
+</tr>
+</table><!-- portlet end -->
+*]];
+}
+
+function printPortletEnd htmlOut, url {
+  if url.isNotEmpty() {
+    . <htmlOut> '<a href="', url, '"><img src=', relURI, 'share/tritriangle.gif valign=top border=0></a>';
+  }
+  . <htmlOut> [[*
+ </td><!-- /portlet content -->
+ <td width=13><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+</tr>
+<tr>
+ <td width=9>&nbsp;</td>
+ <td ><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+ <td width=15>&nbsp;</td>
+</tr>
+</table><!-- portlet end -->
+*]];
+}
+
+const #rightPane = [[*
+<!-- -- -- /LEFT CONTENT PANE -- -- -->
+</td><td valign=top width=50%>
+<!-- -- -- RIGHT CONTENT PANE -- -- -->
+*]];
+
+const #closeRightPane = [[*
+<!-- -- -- /RIGHT CONTENT PANE -- -- -->
+</td></tr></table>
+*]];
+
+function getEnding {
+  return [[*
+<center><br> <hr size=1 width=99% color=#66CCFF>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-(*#year*) <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+All rights reserved.<br><br>
+Better viewed with IE5+, NN6+ and Mozilla. </font>
+</center>
+<!-- ========================= /CONTENT PANE ========================= -->
+</td><td width=15><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td></tr>
+<tr>
+ <td width=138 valign=top><img src=(*relURI*)share/home_lb.gif width=138 height=36 border=0><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td>
+</tr>
+</table></body></html>
+*]];
+}
+
+function genHomePage {
+  relURI = '';
+  src = '${home}/home.sgml';
+  dst = '${docroot}/index.html';
+  . <err> 'Generating ', dst;
+  if onlyNewer && isNewer(dst, src) { return; }
+  htmlOut = openTextFile(dst, 'w');
+  printBeginning htmlOut, 'home', 'JudoScript Home',
+                 'JudoScript,Java Platform,scripting,Java,shell,JDBC scripting,JDBC,XML,HTML scraping,mail';
+  portletUrl = null;
+  portletNonJS = null;
+  do src as sgml {
+  <preamble>:    printPreamble(htmlOut);
+  </preamble>:   continue;
+  <leftPane>:    print <htmlOut> #leftPane;
+  </leftPane>:   ;
+  <rightPane>:   print <htmlOut> #rightPane;
+  </rightPane>:  print <htmlOut> #closeRightPane, getEnding();
+  <portlet>:     portletUrl = $_.url;
+                 portletNonJS= $_.nonjs;
+                 printPortletStart htmlOut, portletNonJS;
+  </portlet>:    portletNonJS = $_.nonjs;
+                 printPortletEnd htmlOut, portletUrl, portletNonJS;
+  :TEXT, <>, <!>: print <htmlOut> $_;
+  <oeA>,<oeB>,<oeC>,<oeD>,<oeE>,<oeF>,<oeG>,<oeH>,<oeI>,<oeJ>,<oeK>,<oeL>,<oeM>,
+  <oeN>,<oeO>,<oeP>,<oeQ>,<oeR>,<oeS>,<oeT>,<oeU>,<oeV>,<oeW>,<oeX>,<oeY>,<oeZ>:
+                 print <htmlOut> oeChar($_.getName().substring(2));
+  <j>:           print <htmlOut> 'Judo';
+  <j_>:          print <htmlOut> 'Judo';
+  <all_articles>:
+    do '${home}/articles.sgml' as sgml {
+    <>,:TEXT: print <htmlOut> $_;
+    <a>:      $_.href = 'articles/' + $_.href;
+              print <htmlOut> $_;
+    }
+
+  <new>:         print <htmlOut> '<a href="', $_.href, '"><img src=share/new.gif alt="',
+                                 $_.alt, '" border=0></a>';
+  }
+  htmlOut.flush();
+  htmlOut.close();
+}
+
+function genTipPage {
+  // placeholder for dailyTip.html.
+  dst = '${docroot}/dailyTip.html';
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+  . <htmlOut> [[*
+      <html><head>
+      <link href="(*relURI*)share/judo_styles.css" rel="stylesheet" type="text/css">
+      </head>
+      <body style="margin-left:5; margin-top:0"><h4>Everyday Code Snippet</h4>
+      <pre>
+      ht = javanew java.util.Hashtable();
+      ht.put('key-one', 1);
+      ht.('key2') = date().fmtDate('yy-MM-dd');
+      for k in ht.keys() { . k:<9, ht.(k); }
+
+      // % java judo foo.judo
+      // key2     02-10-20
+      // key-one  1
+      </pre>
+      </body></html>
+    *]];
+  htmlOut.close();
+}
+
+function getDownloadFilesize fname {
+  return (('${docroot}/store/${fname}').fileSize() / 1024).round() @ 'K';
+}
+
+function getDownloadLink fname {
+  return '<a href="store/${fname}">${fname}</a>';
+}
+
+function genDownloadPage {
+  relURI = '';
+  dst = '${docroot}/download.html';
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+  printBeginning htmlOut, 'download', 'JudoScript Download';
+  do '${home}/download.sgml' as sgml {
+  :TEXT, <>: print <htmlOut> $_;
+  <value>:
+    switch $_.id {
+    case 'id':             print <htmlOut> versionID(); break;
+    case 'info':           print <htmlOut> versionInfo(); break;
+    case 'whole_size':     print <htmlOut> getDownloadFilesize('judoscript-0.9.zip');      break;
+    case 'judo_size':      print <htmlOut> getDownloadFilesize('judo.jar.zip');            break;
+    case 'jusptut_size':   print <htmlOut> getDownloadFilesize('jusptut.zip');             break;
+    case 'jcom_size':      print <htmlOut> getDownloadFilesize('jcom.dll.zip');            break;
+    case 'axis11all_size': print <htmlOut> getDownloadFilesize('axis11all.jar.zip');       break;
+    case 'winreg_size':    print <htmlOut> getDownloadFilesize('ICE_JNIRegistry.dll.zip'); break;
+    case 'src_size':       print <htmlOut> getDownloadFilesize('src.jar');                 break;
+    case 'generated_size': print <htmlOut> getDownloadFilesize('generated.jar');           break;
+    case 'docs_size':      print <htmlOut> getDownloadFilesize('docs.zip');                break;
+    case 'examples_size':  print <htmlOut> getDownloadFilesize('examples.zip');            break;
+    case 'jamaica_size':   print <htmlOut> getDownloadFilesize('jamaica-1.0.zip');         break;
+    }
+  <download>:
+    switch $_.id {
+    case 'judoscript':     print <htmlOut> getDownloadLink('judoscript-0.9.zip');          break;
+    case 'judo':           print <htmlOut> getDownloadLink('judo.jar.zip');                break;
+    case 'jusptut':        print <htmlOut> getDownloadLink('jusptut.zip');                 break;
+    case 'jcom':           print <htmlOut> getDownloadLink('jcom.dll.zip');                break;
+    case 'axis11all':      print <htmlOut> getDownloadLink('axis11all.jar.zip');           break;
+    case 'winreg':         print <htmlOut> getDownloadLink('ICE_JNIRegistry.dll.zip');     break;
+    case 'src':            print <htmlOut> getDownloadLink('src.jar');                     break;
+    case 'generated':      print <htmlOut> getDownloadLink('generated.jar');               break;
+    case 'docs':           print <htmlOut> getDownloadLink('docs.zip');                    break;
+    case 'examples':       print <htmlOut> getDownloadLink('examples.zip');                break;
+    }
+  }
+  . <htmlOut> getEnding();
+  htmlOut.close();
+}
+
+function genNewUsersPage {
+  relURI = '';
+  src = '${home}/newusers.sgml';
+  dst = '${docroot}/newusers.html';
+  if onlyNewer && isNewer(dst, src) { return; }
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+  printBeginning htmlOut, 'home', 'For New Users';
+  do src as sgml {
+  :TEXT,<>: print <htmlOut> $_;
+  <note>:  . <htmlOut> '<table border=0 width=100%><tr><td width=110 valign=top><img src=', relURI,
+                       'share/brain.gif alt="memorize"></td><td bgcolor=#CCCCFF>';
+  </note>: . <htmlOut> '</td></tr></table><p>&nbsp;</p>';
+  }
+  . <htmlOut> getEnding();
+  htmlOut.close();
+}
+
+function genSiteMapPage {
+  src = '${home}/sitemap.html';
+  dst = '${docroot}/sitemap.html';
+  relURI = '';
+  if onlyNewer && isNewer(dst, src) { return; }
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+
+  . <htmlOut> [[*
+<html><head>
+<title>JudoScript Site Map</title>
+<meta http-equiv="Content-Type" content="text/html;">
+<meta name="keywords" content="sitemap, site map, judoscript site map">
+<link href="(*relURI*)share/judo_styles.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor=#ffffff topmargin=0 leftmargin=0>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+ <td style="background:url( (*relURI*)share/home_tm.gif)" align=center><a
+href="http://www.judoscript.com"><img src=(*relURI*)share/home_main.gif height=120 border=0></a></td>
+ <td width=72><img src=(*relURI*)share/home_tr.gif width=72 height=120 border=0></td>
+</tr>
+<tr>
+ <td rowspan=2 colspan=2 align=center valign=top class=bodyText>&nbsp;
+<!-- ========================= CONTENT PANE ========================= -->
+*]];
+
+
+  flush <htmlOut> getFileAsString(src);
+
+  . <htmlOut> [[*
+<center><br>
+<hr size=1 width=80% color=#66CCFF>
+<font style="font-size:10px;color:#999999">
+Copyright 2001-2003 <u>www.judoscript.com</u> &nbsp;
+All rights reserved.<br><br>
+Better viewed with IE5+, NN6+ and Mozilla. </font>
+</center>
+<!-- ========================= /CONTENT PANE ========================= -->
+</td><td width=15><img src=(*relURI*)share/spacer.gif width=1 height=1 border=0></td></tr>
+</table></body></html>
+*]];
+  htmlOut.close();
+}
+
+function genSitePage fileName, outFileName, name, title, keywords, rel_url {
+  relURI = rel_url;
+  src = '${home}/${fileName}';
+  dst = '${docroot}/${outFileName}';
+  if onlyNewer && isNewer(dst, src) { return; }
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+  printBeginning htmlOut, name, title, keywords;
+  flush <htmlOut> getFileAsString(src);
+  . <htmlOut> getEnding();
+  htmlOut.close();
+}
+
+function genFAQOSPage fileName, outFileName, title, keywords, isFAQ {
+  answer = isFAQ ? 'Answer:' : '';
+  relURI = '';
+  src = '${home}/${fileName}';
+  dst = '${docroot}/${outFileName}';
+  if onlyNewer && isNewer(dst, src) { return; }
+  . <err> 'Generating ', dst;
+  htmlOut = openTextFile(dst, 'w');
+  printBeginning htmlOut, 'home', title, keywords;
+  . <htmlOut> '<a name=begin></a><h2>', title, '</h2>';
+  if !isFAQ { . <htmlOut> '<ol>'; }
+
+  bText = false;
+  numQuestion = 1;
+  do src as sgml {
+  <category>:  . <htmlOut> '<h3>', $_.title, '</h3><ol start=', numQuestion, '>';
+               bText = true;
+  </category>: . <htmlOut> '</ol>';
+               bText = false;
+  :TEXT,<>:    if bText { . <htmlOut> $_; }
+  <q>:         url = ($_.url != null) ? $_.url : ('#q' + numQuestion);
+               . <htmlOut> '<li><a href=', url, '><b>';
+               ++numQuestion;
+               bText = true;
+  </q>:        . <htmlOut> '</b></a>';
+               bText = false;
+  }
+
+  if !isFAQ { . <htmlOut> '</ol>'; }
+  . <htmlOut> '<hr width=90%><br>'; // answers start here
+
+  bText = false;
+  numQuestion = 1;
+  . <htmlOut> '<table border=0 cellpadding=5 cellspacing=5>';
+  do src as sgml {
+  <category>,
+  </category>: bText = false;
+  <q>:         . <htmlOut> '<tr bgcolor=lightblue><td colspan=2>';
+               if $_.id { . <htmlOut> '<a name=', $_.id, '></a>'; }
+               . <htmlOut> '<b><a name=q', numQuestion, '></a><b>', numQuestion, '. '; 
+               ++numQuestion;
+               bText = true;
+  </q>:        . <htmlOut> '</b></td></tr>';
+               bText = false;
+  :TEXT,<>:    if bText { . <htmlOut> $_; }
+  <sample>:    print <htmlOut> '<table border=0 cellspacing=0 cellpadding=0><tr bgcolor=#DDDDDD><td><pre>';
+  </sample>:   print <htmlOut> '</pre></td></tr></table>';
+  <ans>:       . <htmlOut> '<tr><td valign=top><b>', answer, '</b></td><td>'; 
+               bText = true;
+  </ans>:      . <htmlOut> '<tr><td>&nbsp;</td><td><a href=#begin>[back to top]</a></td></tr>';
+               bText = false;
+  }
+  . <htmlOut> '</table>', getEnding();
+
+  htmlOut.close();
+}
+

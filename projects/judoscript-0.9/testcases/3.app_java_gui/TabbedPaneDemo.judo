@@ -1,0 +1,55 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates Swing tabbed panes.
+    Adapted from Java Swing tutorial.
+  *]];
+}
+
+import java.awt.*;
+import javax.swing.*;
+
+
+demo = new java::JPanel;
+
+icon = new java::ImageIcon("images/middle.gif");
+tabbedPane = new java::JTabbedPane;
+
+panel1 = makeTextPanel("Blah");
+tabbedPane.addTab("One", icon, panel1, "Does nothing");
+tabbedPane.setSelectedIndex(0);
+
+panel2 = makeTextPanel("Blah blah");
+tabbedPane.addTab("Two", icon, panel2, "Does twice as much nothing");
+
+panel3 = makeTextPanel("Blah blah blah");
+tabbedPane.addTab("Three", icon, panel3, "Still does nothing");
+
+panel4 = makeTextPanel("Blah blah blah blah");
+tabbedPane.addTab("Four", icon, panel4, "Does nothing at all");
+
+//Add the tabbed pane to this panel.
+demo.setLayout(new java::GridLayout(1, 1)); 
+demo.add(tabbedPane);
+
+function makeTextPanel text {
+  var panel = new java::JPanel(false);
+  var filler = new java::JLabel(text);
+  filler.setHorizontalAlignment((java::JLabel).CENTER);
+  panel.setLayout(new java::GridLayout(1, 1));
+  panel.add(filler);
+  return panel;
+}
+
+demoFrame = new java::JFrame("TabbedPaneDemo");
+demoFrame.getContentPane().add(demo, (java::BorderLayout).CENTER);
+
+gui::events
+{
+  <demoFrame : Window : windowClosing>: exit(0);
+}
+
+demoFrame.setSize(400, 125);
+demoFrame.setVisible(true);

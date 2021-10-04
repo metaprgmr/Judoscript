@@ -1,0 +1,39 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    A simple program that displays tag and text values of the XML data
+    included at the end of the source file, using SAX-style XML processing.
+  *]];
+}
+
+do $$local as xml
+{
+<book>:        println ($_.hardcover=='true') ? "Hard-cover " : "Soft-cover ",
+                       'Book ------------';
+TEXT<date> :   println '  Date: ', $_, ' (', $_.type, ')';
+TEXT<title> :  println ' Title: ', $_;
+TEXT<author> : println 'Author: ', $_;
+TEXT<isbn> :   println '  ISBN: ', $_;
+}
+
+EndScript -------------------------------------------------------
+
+<booklist>
+ <book>
+  <title> UNIX in a Nutshell </title>
+  <author> Daniel Gilly </author>
+  <publisher> O&apos;Reilly &amp; Associates, Inc. </publisher>
+  <isbn> 1-56592-001-5 </isbn>
+  <date type="first edition"> 1986-12 </date>
+  <date type="second edition"> 1992-06 </date>
+ </book>
+ <book hardcover="true">
+  <title> Advanced Programming in the UNIX Environment </title>
+  <author> Richard Stevens </author>
+  <publisher> Addison-Wesley </publisher>
+  <isbn> 0-201-56317-7 </isbn>
+  <date type="copyright"> 1993 </date>
+  <date type="twelfth printing"> 1996-12 </date>
+ </book>
+</booklist>

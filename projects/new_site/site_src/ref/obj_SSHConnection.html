@@ -1,0 +1,46 @@
+<html><head><title>JudoScript Object - SSHConnection</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body style="margin-left:20px">
+<h3>Built-In Object Type: <u>SSHConnection</u></h3>
+
+<h5>Inherits <font class=obj><a href="javascript:showObj('All')">All</a></font></h5>
+<font color=red><em>(MORE DESCRIPTION TO COME.)</em></font>
+<h5>Methods:</h5>
+<table border=1>
+<tr><th>Name</th><th>Arguments</th><th>Description</th></tr>
+
+<tr><td valign=top><font class=sfn><a name=SSHConnection_cd></a>cd<br></font></td><td valign=top><font class=param>path</font><br></td><td valign=top>
+  Sends the cd command to the remote machine. The <parm>path</font> can be empty.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_date></a>date<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the result of the date command from the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_justRun></a>justRun<br></font></td><td valign=top><font class=param>cmd</font><br></td><td valign=top>
+  Run the <font class=param>cmd</font> on the remote machine without waiting for the result.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_mkdir></a>mkdir<br></font></td><td valign=top><font class=param>path</font><br></td><td valign=top>
+  Sends the mkdir command to the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_mv></a>mv<br></font></td><td valign=top><font class=param>src dest</font><br></td><td valign=top>
+  Sends the mv command to the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_pwd></a>pwd<br></font></td><td valign=top>&nbsp;</td><td valign=top>
+  Returns the result of the pwd command from the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_rm></a>rm<br></font></td><td valign=top><font class=param>path</font><br></td><td valign=top>
+  Sends the rm command to the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_rmdir></a>rmdir<br></font></td><td valign=top><font class=param>path</font><br></td><td valign=top>
+  Sends the rmdir command to the remote machine.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_run></a>run<br></font></td><td valign=top><font class=param>cmd</font><br><font class=param> ...</font><br></td><td valign=top>
+  Run the <font class=param>cmd</font>'s on the remote machine, and returns a string array of
+  the commands' output.
+</td></tr>
+<tr><td valign=top><font class=sfn><a name=SSHConnection_showEnv></a>showEnv<br></font></td><td valign=top><font class=param>name</font><br></td><td valign=top>
+  Returns the environemnt variable from the remote machine for <font class=param>name</font>.
+</td></tr>
+</table>
+</body></html>

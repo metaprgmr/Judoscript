@@ -1,0 +1,14 @@
+usage {
+  minArgs = 1;
+  args    = 'class_file';
+  desc    = [[*
+    Uses JudoScript's internal class to print out a HTML page
+    for a Java class. The input parameter must be a file name,
+    and the output is that name appended with '.html'.
+  *]];
+}
+
+import com.judoscript.util.classfile.ClassFileReader;
+
+(new java::ClassFileReader(#args[0])).printHtml( #args[0] + '.html' );
+

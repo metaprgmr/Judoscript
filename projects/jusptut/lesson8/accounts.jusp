@@ -1,0 +1,18 @@
+<%
+  var title = 'Accounts'; // required by "header.jusp".
+%>
+<%!include "header.jusp" %>
+
+<p>My <em>Welsh Bargo</em> account balances:
+
+<table border=1 cellspacing=1 cellpadding=5>
+<tr><th>Account #</th><th>Balance</th></tr>
+<tr><td>Checking</td><td align=right>3456.70</td></tr>
+<tr><td>Saving</td><td align=right>9876.54</td></tr>
+</table>
+
+<hr>
+<p><a href="home.jusp">home</a> | <a href="login.jusp">logout</a></p>
+
+<hr><font size=-1>Back to <a href="../lesson8.jusp">lesson 8</a></font>
+</body></html>

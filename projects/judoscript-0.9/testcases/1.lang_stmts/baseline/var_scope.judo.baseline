@@ -1,0 +1,16 @@
+global a = 1
+var a = 2
+::a = 1
+global a = 1
+in class: a = 
+in class: var a = 2
+in class: ::a = 1
+
+Set abc=9 in while-block.
+Outside the while-block, abc = 
+
+Set uvw=9 in if-block.
+Outside the if-block, uvw = 9
+
+Set xyz=9 in switch-block.
+Outside the switch-block, xyz = 9

@@ -1,0 +1,2 @@
+listFiles exec isWindows() ? 'attrib +r $_' : 'chmod 666 $_';
+

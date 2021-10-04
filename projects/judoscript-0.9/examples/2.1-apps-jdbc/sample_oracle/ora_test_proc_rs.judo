@@ -1,0 +1,36 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Creates a stored procedure which does a query and returns
+    a result set in an out-bound parameter. Oracle-specific.
+  *]];
+}
+
+!include 'ora_connection.judi'
+
+executeAny [[*
+  create or replace package types 
+  as 
+    type cursorType is ref cursor; 
+  end; 
+*]];
+
+executeAny [[*
+  create or replace function ListPeople return types.cursortype 
+  as 
+    l_cursor types.cursorType; 
+  begin 
+    open l_cursor for select * from people; 
+    return l_cursor; 
+  end; 
+*]];
+
+prepareCall: { ? = call ListPeople };
+
+executeSQL with @1:oracle_cursor => res;
+
+while res.next() { println res[1]; }
+
+disconnect();

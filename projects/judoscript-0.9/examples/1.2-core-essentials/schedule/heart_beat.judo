@@ -1,0 +1,24 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Demonstrates not-so-precise scheduled jobs by an emulation of heart beats.
+    The scheduled job is run in a function, and has the HTTP agent started on
+    port 3333.
+  *]];
+}
+
+heart_beat(56);
+
+function heart_beat bpm // beats-per-minute
+{
+  schedule repeat 60000 / bpm
+  {
+    println 'puh #', $$timer.count :>2, ': ', $$timer.time.fmtDate('hh:mm:ss');
+  }
+  listen on 3333 title '<h3>Heart Beat at ' @ bpm @ 'bpm</h3>'
+  {
+    println <$$timer.htmlOut> '<b>User Command:</b> ', $$timer.cmd;
+  }
+}

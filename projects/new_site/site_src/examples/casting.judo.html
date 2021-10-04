@@ -1,0 +1,34 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_java/casting.judo:</b></td></tr><tr><td><pre>
+foo = new java::Foo;
+foo1 = new java::Foo1;
+
+sqldate = new java::java.sql.Date(1000);
+sqldate_ = sqldate.cast(java::java.util.Date);
+
+println 'Invocation          Expect   Result', nl,
+        '------------------- -------- ---------', nl,
+        "foo.bar('a')        char     ", foo.bar('a'),        nl,
+        "foo.bar('abc')      char     ", foo.bar('abc'),      nl,
+        "foo.bar(1)          Integer  ", foo.bar(1),          nl,
+        "foo.bar(1.01)       Integer  ", foo.bar(1.01),       nl,
+        "foo.bar(Date())     Date     ", foo.bar(Date()),     nl,
+        "foo.bar(sqldate)    Date     ", foo.bar(sqldate),    nl, nl,
+
+        "foo1.bar('a')       String   ", foo1.bar('a'),       nl,
+        "foo1.bar('abc')     String   ", foo1.bar('abc'),     nl,
+        "foo1.bar(1)         long     ", foo1.bar(1),         nl,
+        "foo1.bar(1.01)      double   ", foo1.bar(1.01),      nl,
+        "foo1.bar(Date())    Date     ", foo1.bar(Date()),    nl,
+        "foo1.bar(sqldate)   SQLDate  ", foo1.bar(sqldate),   nl,
+        "foo1.bar(sqldate_)  Date     ", foo1.bar(sqldate.cast(java::java.util.Date)), nl, nl,
+
+        "foo1.bar(char('1')) char     ", foo1.bar(char('1')), nl,
+        "foo1.bar(byte(1))   byte     ", foo1.bar(byte(1)),   nl,
+        "foo1.bar(char(1))   char     ", foo1.bar(char(1)),   nl,
+        "foo1.bar(short(1))  int      ", foo1.bar(short(1)),  nl,
+        "foo1.bar(int(1))    int      ", foo1.bar(int(1)),    nl,
+        "foo1.bar(long(1))   long     ", foo1.bar(long(1)),   nl,
+        "foo1.bar(float(1))  double   ", foo1.bar(float(1)),  nl,
+        "foo1.bar(double(1)) double   ", foo1.bar(double(1));
+</pre></td></tr></table></body></html>

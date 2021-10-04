@@ -1,0 +1,11 @@
+listFiles '*.java' fileOnly lines perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats:>8, '  ', f;
+}
+
+listFiles '*.java' fileOnly size lines words perFile;
+for f in $_ {
+  stats = $_.(f);
+  println stats[0]:>8, '  ', stats[1]:>6, '  ', stats[2]:>6, '  ', f;
+}

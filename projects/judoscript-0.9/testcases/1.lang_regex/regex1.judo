@@ -1,0 +1,14 @@
+input = 'aAabFOOAABFooABfOOb';
+println input.replaceAll(['a*b','i'], '-'); // result: -FOO-Foo-fOO-
+
+input = 'zzdogzzdigzz';
+println input.replaceFirst('d.g','cat');    // result: zzcatzzdigzz
+
+input = 'boo:and:foo';
+println input.split(':',2);  // result: [boo,and:foo]
+println input.split(':',5);  // result: [boo,and,foo]
+println input.split(':',-1); // result: [boo,and,foo]
+println input.split('o',5);  // result: [b,,:and:f,,]
+println input.split('o',-1); // result: [b,,:and:f,,]
+println input.split('o',0);  // result: [b,,:and:f]
+println input.split('o');    // result: [b,,:and:f]

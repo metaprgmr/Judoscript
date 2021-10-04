@@ -1,0 +1,39 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    A simple program that sends a message to fake addresses. Correct
+    the from/to address and the mail server parameters before run.
+  *]];
+}
+
+connectMailServer 'my-mail-server', 'user', 'password';
+
+sendMail
+   from: 'syang@exotic.nat'
+     to: 'foodback@judoscript.com, syang56@yahoo.cum'
+subject: 'bug report'
+   body: [[*
+         Hi there,
+
+         JudoScript is cool. I'm doing a lot and will do a lot more
+         with it.
+
+         I think I've found a bug. I have a program, 'tvcontrol.judo';
+         there is a function like this:
+
+           function switchTV on {
+             if on { turnOnTV(); } else { turnOffTV(); }
+           }
+
+         however, when it is called with on=3, it turns off my VCR!
+         I believe this is a bug in JudoScript that, when the value
+         is not 0 or 1, it emits erroneous radio shock waves that
+         affect other appliances than the intended one. Please take
+         a look. Thank you!
+
+         Best regards,
+         -- Steve Young
+         *]];
+
+disconnectMailServer();

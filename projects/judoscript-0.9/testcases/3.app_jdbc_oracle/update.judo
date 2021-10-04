@@ -1,0 +1,9 @@
+!include 'setup/connect.judi'
+
+db::update:
+  UPDATE emp SET salary=48500.0 WHERE emp_no=105
+;
+
+println 'db::update result = ', $_;
+
+db::disconnect();

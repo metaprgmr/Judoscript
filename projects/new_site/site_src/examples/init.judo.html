@@ -1,0 +1,77 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_oracle/setup/init.judo:</b></td></tr><tr><td><pre>
+!include 'connect.judi'
+
+//
+// create tables and objects
+//
+
+if tableExists('EMP') {
+  db::sql:
+    DROP   -- test comment
+    TABLE  // test comment
+    emp /* 'emp' is case-insensitive */;
+}
+
+db::sql {
+  CREATE TABLE emp(emp_no     INTEGER PRIMARY KEY,
+                   first_name VARCHAR(100),   -- test comment
+                   last_name  VARCHAR(100),   // test comment
+                   birth_date DATE,
+                   salary     NUMBER);        -- test comment
+
+  CREATE INDEX emp_fname  ON emp(first_name); // test comment
+  CREATE INDEX emp_lname  ON emp(last_name);  /* test comment */
+  CREATE INDEX emp_bday   ON emp(birth_date);
+  CREATE INDEX emp_salary ON emp(salary);     // test comment
+
+  /*
+   * Insert some test data.
+   */
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 100, 'Mary', 'Malone', to_date('1-3-1954','dd-mm-yyyy'), 86500.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 101, 'Linda', 'Jordan', to_date('24-7-1980','dd-mm-yyyy'), 45250.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 102, 'Kathy', 'Yao', to_date('8-4-1970','dd-mm-yyyy'), 78500.0 );
+  -- test comment
+}
+
+println 'db::sql result: ', $_;
+
+//
+// insert data to table
+//
+/* - this is the better way -- for the dates.
+prepare upd:
+  INSERT INTO    emp( emp_no, first_name, last_name, birth_date, salary  ) -- test comment
+              VALUES( :empNo, :firstName, :lastName, :birthDate, :salary ) // test comment
+;
+
+values = [
+  [ 100, 'Jim',   'Malone', Date(1954,1,3),  86500.0 ],
+  [ 101, 'Linda', 'Jordan', Date(1980,7,24), 45250.0 ],
+  [ 102, 'Kathy', 'Yao',    Date(1970,8,4),  78500.0 ],
+];
+
+for v in values {
+  db::udpate upd with @empNo          = v[0],
+                      @firstName      = v[1],
+                      @lastName       = v[2],
+                      @birthDate:Date = v[3],
+                      @salary:Number  = v[4];
+}
+*/
+
+//
+// finishing -- return 0 if successful
+//
+
+db::disconnect();
+return 0;
+catch: println &lt;err> $_;
+       return 1;
+</pre></td></tr></table></body></html>

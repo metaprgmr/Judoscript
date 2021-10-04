@@ -1,0 +1,8 @@
+listFiles '*.java, *.judo' except '*/save/*, */alfa*' in 'c:/temp'
+  recursive as tree;
+
+println $_;
+
+for x in $_.getChildren() {
+  println x;
+}

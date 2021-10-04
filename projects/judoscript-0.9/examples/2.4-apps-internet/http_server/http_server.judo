@@ -1,0 +1,16 @@
+usage {
+  author  = 'James Huang';
+  created = '2003-01-14';
+  desc    = [[*
+    A multi-threaded HTTP server that serves files from a directory.
+  *]];
+}
+
+const #docroot = '~/docroot'; 
+const #port = 8088;
+thread httpHandler(a) { a.serveFile(#docroot); } 
+
+ss = startServer(#port); 
+while { 
+   start thread httpHandler(acceptHttp(ss)); 
+} 

@@ -1,0 +1,7 @@
+src = '.';
+
+anttask::
+  <exec dir="${src}" executable="cmd.exe" os="Windows 2000" output="dir.txt">
+    <arg line="/c dir"/>
+  </exec>
+

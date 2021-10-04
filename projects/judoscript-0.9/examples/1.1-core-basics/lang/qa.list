@@ -1,0 +1,121 @@
+<script name="excpt_test.judo"
+        output="stdout"
+/>
+
+<script name="number_methods.judo"
+        output="stdout"
+/>
+
+<script name="parse_url.judo"
+        output="stdout"
+/>
+
+<script name="date_attr.judo"
+        output="stdout"
+/>
+
+<script name="stmt_for.judo"
+        output="stdout"
+/>
+
+<script name="fxn_var_param_list.judo"
+        output="stdout"
+/>
+
+<script name="var_scope.judo"
+        output="stdout"
+/>
+
+<script name="fxn_basics.judo"
+        output="stdout"
+/>
+
+<script name="exprs_arith.judo"
+        output="stdout"
+/>
+
+<script name="exprs_inc_dec.judo"
+        output="stdout"
+/>
+
+<script name="stmt_switch.judo"
+        output="stdout"
+/>
+
+<script name="stmt_if.judo"
+        output="stdout"
+/>
+
+<script name="lambda.judo"
+        output="stdout"
+/>
+
+<script name="fxn_var.judo"
+        output="stdout"
+/>
+
+<script name="cond_inc.judo"
+        output="stdout"
+        note="conditionally includes hanoi.judo or john_son.judo"
+/>
+
+<script name="exprs_unary.judo"
+        output="stdout"
+/>
+
+<script name="heredoc.judo"
+        output="stdout"
+/>
+
+<script name="simple_vars.judo"
+        output="stdout"
+/>
+
+<script name="exprs_cond_rel.judo"
+        output="stdout"
+/>
+
+<script name="base64.judo"
+        output="stdout"
+/>
+
+<script name="const.judo"
+        output="stdout"
+/>
+
+<script name="dyn_vars.judo"
+        output="stdout"
+/>
+
+<script name="string_replace.judo"
+        output="stdout"
+/>
+
+<script name="fxn_default_params.judo"
+        output="stdout"
+/>
+
+<script name="stmt_while.judo"
+        output="stdout"
+/>
+
+<script name="hanoi.judo"
+        output="stdout"
+/>
+
+<script name="assert_test.judo"
+        output="stdout"
+/>
+
+<script name="conversions.judo"
+        output="stdout"
+/>
+
+<script name="string_methods.judo"
+        output="stdout"
+/>
+
+<script name="unix_run.judo"
+        output="stdout"
+/>
+

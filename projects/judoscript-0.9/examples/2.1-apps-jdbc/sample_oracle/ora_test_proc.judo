@@ -1,0 +1,39 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Use executeAny to create a simple stored procedure with
+    in-, out- and in-out parameters. Run a prepeared executeSQL
+    to call the procedure.
+  *]];
+}
+
+!include 'ora_connection.judi'
+
+executeAny [[*
+  create or replace procedure test_proc(param_io IN OUT number,
+                                        param_i IN varchar,
+                                        param_o OUT varchar)
+  as
+  begin
+    param_o := param_i;
+    if param_io is not null then
+      param_io := param_io + 1;
+    else
+      param_io := -1;
+    end if;
+  end;
+*]];
+
+prepareCall: { call test_proc(?,?,?) };
+
+x = null;
+y = 'abcd';
+executeSQL with @1:int <=> x,
+                @2:varchar =  y,
+                @3:varchar => z;
+println 'x = ', x;
+println 'z = ', z;
+
+disconnect();

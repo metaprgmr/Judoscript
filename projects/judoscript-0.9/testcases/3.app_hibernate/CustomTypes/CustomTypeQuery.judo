@@ -1,0 +1,31 @@
+usage {
+  author  = 'James Huang';
+  created = '2005-1-28';
+  desc    = [[*
+    Runs HQL statements to find objects and values.
+  *]];
+}
+
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  Foo
+;
+
+//
+// Query for objects:
+//
+hib::query qry:
+  from Foo
+;
+
+// now, qry is a List of Foo's --
+for o in qry {
+  println o.key, ' ', o.custom;
+}
+
+hib::close;

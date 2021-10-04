@@ -1,0 +1,98 @@
+======================
+Basic Array operations
+[1,abc]
+a[0] = 1
+a[1] = abc
+++a[0] = 2
+a[1] @= "xyz": abcxyz
+a[2] = 5
+a.size() = 3
+======================
+Array Initialization
+[1,abc,2,def,3,ghi]
+0  1
+1  abc
+2  2
+3  def
+4  3
+5  ghi
+a.clear()
+a.size() = 0
+======================
+Array: append() and prepend()
+[1,abc,2,def,3,ghi]
+a.prepend( 9, 'xyz' )
+a.append( 4, 'jkl' )
+0  9
+1  xyz
+2  1
+3  abc
+4  2
+5  def
+6  3
+7  ghi
+8  4
+9  jkl
+======================
+Array: subarray(1,3)
+[1,abc,2,def,3,ghi]
+0  abc
+1  2
+2  def
+Array: subarray(4,)
+0  3
+1  ghi
+======================
+Array: sum(), max(), min(), avg()
+[1,-2,3,9]
+a.sum() = 11
+a.max() = 9
+a.min() = -2
+a.avg() = 2.75
+======================
+Array: insert()
+[1,abc,2,def,3,9]
+0  1
+1  1/2/01 12:00 AM
+2  abc
+3  2
+4  def
+5  3
+6  9
+======================
+Array: sort methods 
+[10,abc,2,def,3,9]
+a.sort()
+0  9
+1  2
+2  3
+3  abc
+4  def
+5  10
+a.sortAsString()
+0  10
+1  2
+2  3
+3  9
+4  abc
+5  def
+a.sortAsNumber()
+0  2
+1  3
+2  9
+3  10
+4  abc
+5  def
+a.sortAsDate()
+[1/4/01 12:00 AM,6/10/96 12:00 AM,4/5/50 12:00 AM]
+0  6/10/96 12:00 AM
+1  1/4/01 12:00 AM
+2  4/5/50 12:00 AM
+0  4/5/50 12:00 AM
+1  1/4/01 12:00 AM
+2  6/10/96 12:00 AM
+[1:xxx,2:yy,3:zzz]
+a.indexOf(1,cptr) = 1
+a.indexOf(2,cptr) = 0
+a.indexOf(3,cptr) = 0
+a.indexOf(4,cptr) = 0

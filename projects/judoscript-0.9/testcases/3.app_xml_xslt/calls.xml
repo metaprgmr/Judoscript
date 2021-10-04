@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE PHONE_RECORDS SYSTEM "calls.dtd">
+
+<PHONE_RECORDS>
+
+  <!-- Call Record 1 -->
+  <CALL>
+    <FROM>703-433-5678</FROM>
+    <DATE>5/5/2000</DATE>
+    <TIME HOUR="19" MINUTE="32"/>
+    <DESTINATION STATE="California" CITY="Sunnyvale"
+     COUNTRY="US">510-798-8390</DESTINATION>
+    <DURATION HOURS="1" MINUTES="15"/>
+  </CALL>
+
+  <!-- Call Record 2 -->
+  <CALL>
+    <FROM>703-373-2318</FROM>
+    <DATE>5/15/2000</DATE>
+    <TIME HOUR="20" MINUTE="12"/>
+    <DESTINATION CITY="Birmingham"
+     COUNTRY="UK">44-121-738-4294</DESTINATION>
+    <DURATION HOURS="0" MINUTES="34"/>
+  </CALL>
+
+</PHONE_RECORDS>

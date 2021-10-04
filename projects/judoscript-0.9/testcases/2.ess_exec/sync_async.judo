@@ -1,0 +1,5 @@
+exec 'dir';
+println "--- I am done with: exec command.";
+
+exec && 'dir';
+println "--- I am done with: exec && command.";

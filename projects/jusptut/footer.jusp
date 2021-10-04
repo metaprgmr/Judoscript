@@ -1,0 +1,24 @@
+<br>&nbsp;<br>&nbsp;<table border=0 width="100%" cellpadding=0><tr><td align=left>
+<%
+  var prev=-1, next=-1;
+  var uri = request.getServletPath();
+  if uri.startsWith('/lesson') && uri.endsWith('.jusp') {
+    uri = uri.trunc(5).substring(7);
+    prev = uri - 1;
+    next = uri + 1;
+  }
+  if prev >= 0 {
+    %><a href="lesson<%= prev.int() %>.jusp">&#171; previous</a> | <%
+  }
+%>
+<a href="<%= root %>/index.jusp">JuSP Tutorial</a>
+<%
+  if next > 0 && next <= 19 {
+    %> | <a href="lesson<%= next %>.jusp">next &#187;</a><%
+  }
+%>
+
+</td><td align=right><a href="juspview.jusp?file=<%= $$annotation.src_path.getFileName() %>">source</a></td></tr></table>
+<hr><div align=center style="font-size:10px">Copyright <%= #year %> James Jianbo Huang. All rights reserved.</div>
+<br>&nbsp;</td><td>&nbsp;</td></tr>
+</table></center></body></html>

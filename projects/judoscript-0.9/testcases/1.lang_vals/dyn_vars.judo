@@ -1,0 +1,19 @@
+// Method One:
+a = { x = 'x as set in Object',
+      y = 9,
+      '09898aa' = "this won't be a variable."
+    };
+convertToVariables(a);
+
+println 'x = ', x;
+println 'y = ', y;
+
+a.x = 99;
+println 'x = ', x;
+
+// Method Two:
+setVariable('xyz', 5);
+setVariable('x.y.z', 6);
+
+println "Dynamically set 'xyz' = ", xyz;
+println "Dynamically set 'x.y.z' = ", ${x.y.z};

@@ -1,0 +1,40 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Uses <code>createDom()</code> to create a document, appends a few
+    nodes, and prints it out using <code>xslt copy</code> statement.
+  *]];
+}
+
+doc = createDom();
+
+// Start with a "<Person>"
+person = doc.createElement("Person");
+
+// Create the "<FirstName>" element
+firstName = doc.createElement("FirstName");
+
+// Create a Text node "Al" and add it to the "FirstName" tag
+firstName.appendChild( doc.createTextNode("Al") );
+
+// Add the "<FirstName>" tag to "<Person>"
+person.appendChild(firstName);
+
+// Same as above
+surname = doc.createElement("Surname");
+surname.appendChild( doc.createTextNode("Gore") );
+person.appendChild(surname);
+
+president = doc.createElement("President");
+
+// Set the "Country" attribute in "<Presedent>"
+president.setAttribute("Country","Us");
+president.appendChild( person );
+
+// Add everything to the XmlDocument (doc)
+doc.appendChild( president );
+
+// Write the DOM to stdout.
+xslt copy doc to getOut();

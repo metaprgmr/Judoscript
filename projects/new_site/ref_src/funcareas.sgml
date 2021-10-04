@@ -1,0 +1,668 @@
+<topic id=start name="Start-Up Environment and Command-Line">
+
+<area id=lang name="Language Essentials">
+  <topic id=lang_id name="Identifiers, Keywords and Comments">
+  <area id=lang_const name="Constant">
+    <topic id=lang_const_pre name="Predefined Constants">
+  </area>
+  <area id=lang_dt  name="Data Types">
+    <topic id=lang_dt_int name="Integral Value">
+    <topic id=lang_dt_flt name="Floating-Point Value">
+    <topic id=lang_dt_str name="String Value">
+    <topic id=lang_dt_dat name="Date and Time Value">
+    <topic id=lang_dt_obj name="Object and Class">
+  </area>
+  <area id=lang_exp name="Expressions">
+    <topic id=lang_exp_str  name="String Expression">
+    <topic id=lang_regex    name="Regular Expression">
+    <topic id=lang_exp_num  name="Numeric Expressions">
+    <topic id=lang_exp_log  name="Logical Expressions">
+    <topic id=lang_exp_cmp  name="Comparison Expressions">
+    <topic id=lang_exp_more name="Other Expressions">
+  </area>
+  <topic id=lang_var name="Variables, Scope and Runtime Contexts">
+  <topic id=lang_fc  name="Flow Control">
+  <topic id=lang_ex  name="Exception Handling">
+  <topic id=lang_fun name="Function and Method">
+  <topic id=lang_fun_var name="Function Variable and Lambda">
+  <topic id=lang_thrd name="Thread Programming">
+  <area id=java name="Using Java Classes">
+    <topic id=java_cls name="Using Java Classes">
+    <topic id=java_obj name="Using Java Objects and Arrays">
+    <topic id=java_st  name="Using Java Static Members">
+    <topic id=java_extend name="Extend Java Classes and Interfaces">
+    <topic id=java_jndi name="JNDI">
+  </area>
+  <topic id=lang_dynx name="Dynamic Code Evaluation">
+  <topic id=incl name="File Inclusion">
+  <topic id=localdata name="In-Script Data">
+</area>
+
+<topic id=sys name="System Information">
+
+<topic id=io name="Printing, I/O and File Operations">
+
+<area id=fs name="File Systems and Archives">
+  <topic id=fs_list name="List/Search Files and Directories">
+  <topic id=fs_copy name="Copy Files and Directories and Archives">
+  <topic id=fs_more name="Manipulate Files and Directories">
+  <topic id=fs_chop name="Chopping and Restoring Files">
+</area>
+
+<area id=jdbc name="JDBC Scripting">
+  <topic id=jdbc_con name="Database Connections and Meta Information">
+  <topic id=jdbc_sql name="Direct SQL Executions">
+  <topic id=jdbc_prep name="Prepared SQL Executions">
+  <topic id=jdbc_call name="Stored Procedure Invocations">
+  <topic id=jdbc_bat name="Batch Run of SQL Statements">
+  <topic id=jdbc_dump name="Database Table Dumping">
+</area>
+
+<topic id=activex name="ActiveX Scripting">
+
+<topic id=sgml name="HTML/SGML Processing">
+
+<area id=xml name="XML Programming">
+  <topic id=xml_sax name="SAX-Style Programming">
+  <topic id=xml_dom name="DOM Programming">
+  <topic id=xml_xsl name="XSL Transformation">
+</area>
+
+<area id=http name="Web Programming">
+  <topic id=http_server name="HTTP Server Programming">
+  <topic id=http_client name="HTTP Client Programming">
+  <topic id=jusp name="JUSP: Server-Side Scripting">
+</area>
+
+<topic id=gui name="Building Java GUIs">
+
+<topic id=mail name="Send E-Mails">
+
+<topic id=exec name="Execute Other Programs">
+
+<topic id=sched name="Scheduled Jobs">
+
+<topic id=ssh name="SSH and SCP">
+
+<topic id=embed_in_src name="Embed JudoScript Code in Source Files">
+
+<area id=java_judo name="Embed JudoScript Engine in Java">
+  <topic id=java_judo_eng name="JudoScript Engine for Java">
+  <topic id=java_judo_bsf name="JudoScript BSF Engine">
+</area>
+
+<topic id=custom_judo name="Customize JudoScript For Your Java Applications">
+
+
+
+<content id=start seeObj="orderedMap,array" seeFA="lang_const" seeSyn="UsageDeclaration">
+  <p>The main class to run <J> on the command-line is <code>judo</code>. It normally runs a
+  script file, but can run a short program specified on the command-line itself, or compile
+  a script without executing.</p>
+
+  <p>To run a script, this is the general format:
+  <pre>java <em>[ java-options ]</em> judo <em>[ judo-option ] script_name [ script-parameters ]</em></pre>
+  <J> script file names normally end with <code>.judo</code>, although it can be anything;
+  included file names normally end with <code>.judi</code>.</p>
+
+  <p>The script file and its included files, if any, are located in this order:
+  <ol>
+  <li> the specified path
+  <li> directories listed in a system propertied called <code>JUDOPATH</code>
+  <li> <code>$HOME/.judobase</code>
+  <li> <code>c:/judobase</code> on Windows or <code>/usr/judobase</code> otherwise
+  <li> the CLASSPATH for the current JVM (can be turned off with <code>-Dnocp</code> Java option.)
+  </ol>
+  Item 3 and 4 allow users to store common programs in a common place. <code>JUDOPATH</code>
+  uses the same format as Java <code>CLASSPATH</code> except that ZIP or JAR files are not
+  supported. It is optional, and is defined as a JVM system property (the -D option).
+  JVM CLASSPATH is searched last, ZIP and JAR files can include <J> scripts. This can be
+  turned off if the JVM system property <code>nocp</code> is specified.</p>
+
+  <p><b><u>Judo-Option</u></b>:
+  <ul>
+  <li> <code>-c</code>: to compile the script only to check for the syntax.
+  <li> <code>-q</code>: quite mode, not to display the copy notice.
+  <li> <code>-x</code>: to execute the code specified on the command-line. All on rest of the
+                        command-line are concatenated, and an extra <!;> is appended.
+  </ul></p>
+
+  <p><b><u>Script-Parameters</u></b>: any further parameters on the command-line are passed in
+  to the script as its parameters; they are accessible in the program by the predefined constant
+  array, <!#cmd_args>. <J> supports a simple yet useful parameter format: if specified parameter
+  is like <code>-name=value</code> or <code>-name:value</code>, it is deemed as an option; the
+  value can be omitted which will be defaulted to 1. These options are accessible in the program
+  by the predefined constant ordered map <!#options>. The rest of the parameters are accessed as
+  constant array <!#args>.</p>
+
+  <p>A special <J> option, <code>-?</code> or <code>--helper</code>, tells the <J> engine to print
+  out a help message, specified at the beginning of the script as <nt name=UsageDeclaration>. The
+  <nt name=UsageDeclaration> can also specify a minimum number of arguments, and if the number of
+  arguments on the command-line is less than that, the engine also displays the help message and aborts.</p>
+</content>
+
+<content id=lang>
+  <p><J> has two cornerstones in its architecture: the scripting language engine and the Java
+  pass-through. All the other application features are built on top of these two. This
+  functional area contains all the aspects regarding these two.</p>
+</content>
+
+<content id=lang_id>
+  <p><em>Identifiers</em> are words used to represent variables, class members, new class and
+  function names, labels, Java class names, etc. They are composed of letters, digits and
+  special symbols including <!$>, <!#> and <!_>, with the exception that the first character
+  can not be a digit.</p>
+
+  <p>Identifiers that start with <!#> are <em>constant names</em>.</p>
+  <p><em>Keywords</em> are words reserved for the language itself. Some of <J>'s reserved
+  words can not be used as identifiers at all, while others can still be used as identifiers
+  based on context. See <a href="javascript:showSynKW()"><em>Keywords</em> in Syntax</a>.</p>
+
+  <p><J> has 4 forms of comments:
+  <ul>
+  <li>Single-line comment: anything following <!//> up to the end of the line is comment.
+  <li>Single-line comment: anything following <!#!> up to the end of the line is comment.<br>
+      This form is primarily to support the Unix script auto-run feature.
+  <li>Multi-line comment: anything in between <!/*> and <!*/> is comment.
+  <li>Multi-line comment: anything in between <!/?> and <!?/> is comment.<br>
+      This form is introduced to comment out a chunk of code which may contain <!/*> <!*/>
+      comments.
+  </ul>
+</content>
+
+<content id=lang_const seeSyn="ConstantDefinition">
+  <p>Constant names start with <!#>. They are declared with the <!const> decorator. The value
+  must also be constants or constant expressions. Constant declaration can be conditional.</p>
+
+  <p>Constants are evaluated and assigned before any part of the script is run.</p>
+</content>
+
+<content id=lang_const_pre>
+  <p><J> runtime engine defines a number of internal constants, some of which reflects the
+  underlying runtime environment, others describe the characteristics of this script and
+  this instance. They are all listed in the following table.</p>
+
+  <table border=1>
+  <tr><th>Constant</th><th>Descriptoin</th></tr>
+  <tr><td>#versionInfo</td>
+      <td>The <J> version information.</td>
+  </tr>
+  <tr><td>#versionID</td>
+      <td>The <J> version identifier.</td>
+  </tr>
+  <tr><td>#pathSep</td>
+      <td>The same as <code>java.lang.File.pathSeparator</code>. This is the same as the shortcut expression <!&#36;{:}>.</td>
+  </tr>
+  <tr><td>#fileSep</td>
+      <td>The same as <code>java.lang.File.separator</code>. This is the same as the shortcut expression <!&#36;{/}>.</td>
+  </tr>
+  <tr><td>#home</td>
+      <td>The home directory for the user of the current run. This is the same as the shortcut expressoin <!&#36;{~}>.</td>
+  </tr>
+  <tr><td>#here</td>
+      <td>The current directory for the user of the current run. This is the same as the shortcut expressoin <!&#36;{.}>.</td>
+  </tr>
+  <tr><td>#os</td>
+      <td>The operation system name.</td>
+  </tr>
+  <tr><td>#user</td>
+      <td>The user name.</td>
+  </tr>
+  <tr><td>#prog</td>
+      <td>The name of this script.</td>
+  </tr>
+  <tr><td>#args</td>
+      <td>A string array of the arguments specified on the command line. This does not include options.</td>
+  </tr>
+  <tr><td>#options</td>
+      <td>An ordered map of the command-line options. Command-line options are -name=value or -name:value pairs.</td>
+  </tr>
+  <tr><td>#cmd_args</td>
+      <td>A string array of the original command-line parameters.</td>
+  </tr>
+  <tr><td>#usage</td>
+      <td>This is a hashtable that holds the information <a href="javascript:showNT('UsageDeclaration')">specified
+          by the user in the script</a>.
+      </td>
+  </tr>
+  <tr><td>#year</td>
+      <td>The current year.</td>
+  </tr>
+  </table>
+</content>
+
+<content id=lang_dt>
+  <p>Values in <J> are all objects; they can be partitioned into simple and complex types.
+  The simple types include <a href="javascript:showFA('lang_dt_int')">integer</a>,
+  <a href="javascript:showFA('lang_dt_flt')">floating-point number</a>,
+  <a href="javascript:showFA('lang_dt_str')">string</a> and
+  <a href="javascript:showFA('lang_dt_dat')">data and time</a>.</p>
+
+  <p>Complex types include container data structures, various built-in objects in different
+  situations, Java objects and user-defined class instances.</p>
+
+  <p>See <a href="javascript:showObj()">Object Type Reference</a> for details.</p>
+</content>
+
+<content id=lang_dt_int seeObj="simple">
+  <p>Integer is one of the "simple" data types, along with floating-point number and string.</p>
+</content>
+
+<content id=lang_dt_flt seeObj="simple">
+  <p>Floating-point number is one of the "simple" data types, along with integer and string.</p>
+</content>
+
+<content id=lang_dt_str seeObj="simple">
+  <p>String is one of the "simple" data types, along with integer and floating-point number.</p>
+
+  <p>A string object is also used to represent a URL or a file path. The string object has
+  methods supporting URL and file operations.</p>
+</content>
+
+<content id=lang_dt_dat seeObj="date", seeSysFun="date,time,timeToday" seeSyn=ObjectAllocator>
+  <p>Date/time values can be created with <!new> <!date>, or be returned by <sfn name=date>
+  and other system functions.</p>
+</content>
+
+<content id=lang_dt_obj seeSyn=ObjectAllocator
+         seeObj="Object,OrderedMap,SortedMap,TreeNode,Date,Array,LinkedList,Set,Stack,Queue,TableData">
+  <p>In <J>, every value is an object. Users can also define their own classes, which by
+  default extends <!Object>. A class can also extend <!OrderedMap>, <!TreeNode> or anoother
+  user-defined class.</p>
+
+  <p>Objects are created with the <!new> operator. including general built-in types such as
+  container data structures and <!Object>, <!Orderedmap>, <!TreeNode>, <!TableData> and <!Date>.
+  Any <!Object>-derived classes can take <a href="javascript:showNT('MemberInitList')">named
+  initializers</a>.</p>
+</content>
+
+<content id=lang_exp seeSyn="Expr,HereDoc">
+  <p><J> expressions include arithmetic and logical, string concatenation, member accessing,
+  function or method invocation, various object, Java object and class creations and some
+  special cases. Different expression expect certain operand types.</p>
+</content>
+
+<content id=lang_exp_str seeObj="string">
+  <p>Concatenation is the only string expression; the operator is <!@>. All other string
+  operations are part of the string value object.</p>
+</content>
+
+<content id=lang_regex seeSysFun="regex" seeObj="RegEx">
+  <p><J>'s regular expression support is based on JDK1.4+; it is not available to JDK
+  versions lower than 1.4. Basically you call <sfn name=regex> to compile a regular
+  expression, then apply it to strings and parameters for matching, replacing and splitting.</p>
+</content>
+
+<content id=lang_exp_num
+  seeSyn="InclusiveOrExpr,ExclusiveOrExpr,AndExpr,ShiftExpr,AdditiveExpr,MultiplicativeExpr,UnaryExpr,PrefixExpr,PostfixExpr">
+  <p>Numeric expressions expects values to be integers or floating-point numbers; the result
+  is always floating-point number.</p>
+</content>
+
+<content id=lang_exp_log seeSyn="ConditionalOrExpr,ConditionalAndExpr,UnaryExprNotPlusMinus"/>
+
+<content id=lang_exp_cmp seeSyn="EqualityExpr,RelationalExpr"/>
+
+<content id=lang_exp_more
+ seeSyn="ConditionalExpr,PrimaryExpr,ObjectAllocator,JavaAllocator,JavaClassAllocator,JavaAdapter,LambdaDeclaration,AtomicExpr"/>
+
+<content id=lang_var seeSyn="LocalVariableDecleration,AtomicExpr">
+  <p>Variables do not need be declared before using, but they do have scopes. The smallest scope
+  is a block between a pair of <!{> and <!}> that enclose the statements. (The only exception is
+  the <nt name=IfStatement>, whose <!{> and <!}> are used only to group statements and do not
+  constitute blocks.) A block can be enclosed in another block. A function and a thread body is
+  a block, and it does not have a parent scope. For statements without any <!{> and <!}>, they
+  are in the one and only global scope.</p>
+
+  <p>When a variable is assigned a value, the runtime engine traces the scope stack trying to find
+  the variable; if a variable is found, it is used; otherwise, a new variable is created in the
+  inner-most scope. To force the variable to be local to the current scope, declare the variable
+  as <!local>. A local variable shields any same-name variable beyond the current scope.</p>
+
+  <p>A variable in the global scope is called a global variable. To explicitly access a global
+  variable, precede the name with the <!::> decorator. This may happen from within functions,
+  class methods or threads.</p>
+</content>
+
+<content id=lang_fc seeSyn="IfStatement,WhileStatement,DoWhileStatement,SwitchStatement,ForStatement,ForInStatement,ForFromToStatement,LinesStatement,BreakStatement,ContinueStatement,ReturnStatement">
+  <p>General flow control include if-else test, switch, loop, break and continue, function calls
+  and returns, etc. These are mostly similar to Java's flow control statement, except that the
+  test part are not required to be quoted in <!(> and <!)>.</p>
+
+  <p>There are a few <!for> loop variations. One is the <nt name=ForInStatement> which is used
+  to iterate through a array. <nt name=ForFromInStatement> iterates through integer numbers. The
+  <LinesStatement> is a convenience that takes a file or input stream and reads in lines.</p>
+
+  <p>Like Java, <J> does not support <!goto>. Labels are only valid for loop statements. Within
+  a loop, can use <!break> or <!continue> to jump out of the current loop, possibly to an outer
+  loop.</p>
+
+  <p>Function calls alreays return a value. If no <!return> statement is used at the end, or
+  <!return> with no return value, a <!null> is returned.</p>
+</content>
+
+<content id=lang_ex seeObj="ExcptError,ExcptJava" seeSyn="Block,ResumeStatement,ThrowStatement">
+  <p>Exceptions can be raised during program execution, either by the <J> language engine or by
+  the Java code invoked in the program. Both types of exceptions are handled in the same way.</p>
+
+  <p>In most blocks, at the end a <!catch><!:> and <!finally><!:> label can be used. Statements
+  following <!catch><!:> are executed when an exception is raised. The built-in variable, <!$_>,
+  in this context represents the exception object. The <!resume> statement is new to Java
+  programmers; it allows program to continue following the line where the exception is thrown.
+  Statements following <!finally><!:> are executed when control is leaving the current block.
+  These two are independent of each other but if <!catch> is present, <!finally> has to appear
+  after.</p>
+
+  <p>You can use <!throw> statement to throw a new error exception or a Java exception, or
+  re-throw an existing one.</p>
+</content>
+
+<content id=lang_fun seeFA="lang_var"
+         seeSyn="FunctionDeclaration,ReturnStatement,StaticJavaFunctionDeclaration,ClassDefinition">
+  <p>Functions can be declared, in the global context or class context. Functions in classes
+  are commonly called methods. See <a href="javascript:showFALinke('lang_var')">Variables, Scope
+  and Runtime Contexts</a> for variable scopes.</p>
+
+  <p>Any function calls can take any number of parameters. In a function/method declaration, the
+  named parameters can be used in the code as local variables. If not enough number of parameters
+  are specified at the runtime, <!null> is used for the missing values. If there are more than
+  the declared parameters, those extra parameters (beyond the declared ones) are accessed via the
+  built-in array <!$$args>. A function declaration can explicitly declare that it takes variable
+  number of parameters by <!..>; it does not actually do anything.</p>
+
+  <p>For class methods, data members should be accessed with <!this><!.> prefix, otherwise they
+  may be confused with variables. For a name without <!this><!.>, if a non-<!null> variable value
+  is found, that variable/value is used; otherwise, try to find a data member with that name.</p>
+
+  <p>A class method is overridden by a same-name method in a derived class. The code in the
+  child class method can invoke the parent's same-name method with the prefix <!super><!.>.</p>
+</content>
+
+<content id=lang_fun_var seeSyn="LambdaDeclaration">
+  <p>A function can be taken its reference and have it stored in a variable or class data member
+  or a Java variable (such as a class member or array element).</p>
+
+  <p>A function reference is called by the <!-&gt;><!(><!)> operator if the lefthand-side is a
+  name (variable or class data member); the <!-&gt;> part can be omitted if the left-hand side
+  is an array element operator <![><!]> or another function call (which ends with <!)>).
+
+  <p>Anonymous function can be created via the <!lambda> declaration. A lambda has to be
+  assigned to a variable, or passed to another function as a parameter.</p>
+</content>
+
+<content id=lang_thrd seeSyn="ThreadDeclaration,StartThreadStatement"
+         seeSysFun="lock,unlock,waitFor,notify,notifyAll" seeFA="gui">
+  <p>A thread is declared similar to function except for the keyword to be <!thread>. A thread
+  can be anonyous which is started directly. To start a thread, use <!start> <!thread>
+  statement.  The parameters are passed and handled the same way as in functions.</p>
+
+  <p>Threads run in their own contexts. The global context and global variables are shared by
+  all threads. Accesses to global variables may cause problems without approppriate
+  synchronization. The <sfn name=lock> and <sfn name=unlock> are designed to protected
+  shared variable accesses. Threads can synchronize with each other with <sfn name=waitFor>,
+  <sfn name=notify> and <sfn name=notifyAll>.</p>
+</content>
+
+<content id=java>
+  <p><J> is not a something like an "extension language" for Java, as somehow some people have
+  come up with such terms. However, because of its indimate relationship with Java, it supports
+  using Java code, embedding Java classes and <a href="fa_java_judo.html">embedding itself into
+  Java software</a>. See the various subsections on details of all these.</p>
+</content>
+
+<content id=java_cls seeSyn="JavaClassAllocator,JavaClassShortcuts" seeObj="JavaClass">
+  <p>Java classes can be represented by a literal which is a concatenation of identifiers and
+  <!.>'s, in appropriate context. They can also be obtained and assigned to constants or
+  variables with the <!javaclass> operator. Static methods and data members of Java class
+  literals are accessed or invoked with the <!::> operator. Those of class constants or
+  variables can be used like any regular objects. The Java class itself for a Java class
+  object is obtained via its <code>.class</code> data member.</p>
+
+  <p>Remembering all the Java class names especially with various package names can be very
+  tedious. <J> provides a mechanism called <em>Java class shortcut</em> in the hope of
+  alleviate this pain. See the link below for details.</p>
+</content>
+
+<content id=java_obj seeSyn="JavaAllocator" seeObj="JavaObject">
+  <p>Java objects, when returned by function calls, can be used almost like any <J> objects.
+  One difference is that, while <J> functions and methods can take any number of parameters,
+  Java methods take predetermined number (and types) of parameters. For overloaded Java
+  methods, <J> is pretty intelligent to pick the right method to call based on the parameter
+  number and types, but there are situations where explicit casting is needed. Casting is
+  normally needed only for primitive types, but you may want to cast a Java object to a
+  different type via the Java object's built-in <code>.cast()</code> method.</p>
+
+  <p>Any Java objects, including arrays, in <J> are wrapped in a standard <obj name=JavaObject>.</p>
+
+  <p>Java objects and arrays can be created via the <!javanew> operator. If the class's
+  constructor takes no parameters, no parentheses are needed; otherwise, just specify as
+  any legitimate Java method calls.</p>
+</content>
+
+<content id=java_st useSyn="StaticJavaFunctionDeclaration"/>
+
+<content id=java_extend useSyn="JavaExtensionDefinition"/>
+
+<content id=java_jndi
+ seeSysFun="getInitialContext,getWeblogicContext,getWebsphereContext,getOracle9iASContext,getJBossContext,getIonaContext"/>
+
+<content id=lang_dynx useSyn="DynamicStatements"/>
+
+<content id=incl useSyn="IncludeDirective"/>
+
+<content id=sys seeSysFun="isSunOS,isMac,isHP,isLinux,isWindows,isUnix,isOS400,isNetscape,isSunVendor,userName,homeDir,osName,javaVendor,systemProperty,systemProperties,lineSep,fileSep,pathSep,versionInfo,versionID">
+  <p>A group of sytstem functions retrieve system information, many of them get information from the system properties.</p>
+</content>
+
+<content id=io seeSyn="PrintStatement,LinesStatement" seeSysFun="openFile,openTextFile,openGZippedFile,openGZippedTextFile,getFileAsString,getGZippedFileAsString,openRandomAccessFile" seeObj="IODevice,ZipArchive">
+  <p>The <nt name=PrintStatement> writes string content to text output files or standard
+  output streams, which include <!out>, <!err> and <!log>.</p>
+
+  <p>Files can be opened in binary mode by system function <sfn name=openFile>,
+  <sfn name=openGZippedFile> and <obj id=ZipArchive>'s <code>openFile()</code> method; or
+  they can be opened in text mode by system functions <sfn name=openTextFile>,
+  <sfn name=openGZippedTextFile> and <obj id=ZipArchive>'s <code>openTextFile()</code>
+  method. The system functions take a second parameter which can be <code>'r'</code>
+  (default) for reading, <code>'w'</code> for writing and <code>'a'</code> for appending.
+  Each open file is an <obj id=IODevice> object. For text input files, use its
+  <code>readLine()</code>, or simply use the <nt name=LinesStatement> to read line by
+  line.</p>
+</content>
+
+<content id=fs seeSysFun="cd,pwd">
+  <p>A number of system functions and special commands support file system and ZIP/TAR
+  archive manipulation.</p>
+
+  <p><J> supports its own <em>current directory</em>. It has a <!cd> command that changes
+  the current directory. Also in most cases this current directory is used, keep in mind
+  that when invoking Java directory, this current directory may not be used. <sfn name=pwd>
+  returns that.</p>
+
+  <p>For all the other operations, refer to the subsections.</p>
+</content>
+
+<content id=fs_list useSyn=FSListStatement/>
+
+<content id=fs_copy useSyn=FSCopyStatement/>
+
+<content id=fs_more
+ seeSyn="FSFileModStatements,FSMakeRemoveDirStatements,FSMoveStatement"
+/>
+
+<content id=fs_chop seeSysFun="fileChop,fileUnchop,fileChopCheck"/>
+
+<content id=jdbc seeSyn=ConnectStatement>
+  <p>JDBC scripting is supported by a number of special statements that allow for free-form
+  SQL statements. SQL statements, including stored procedure calls, can be executed directly
+  or prepared first. Parameter binding is easy and intuitive.</p>
+</content>
+
+<content id=jdbc_con seeObj="DBCon" useSyn=ConnectStatement/>
+
+<content id=jdbc_sql
+ seeSyn="ExecuteQueryStatement,ExecuteUpdateStatement,ExecuteSqlStatement,ExecuteAnyStatement"/>
+
+<content id=jdbc_prep
+ seeSyn="PrepareStatement,PreparedExecuteStatement,PreparedExecuteQueryStatement,PreapredExecuteUpdateStatement"/>
+
+<content id=jdbc_call
+ seeSyn="PrepareStatement,PreparedExecuteStatement,PreparedExecuteQueryStatement,PreapredExecuteUpdateStatement"/>
+
+<content id=jdbc_bat seeSyn="CreateBatchStatement,AddBatchStatement,ExecuteBatchStatement"/>
+
+<content id=jdbc_dump useSyn=DumpTableStatement/>
+
+<content id=activex seeSysFun="createActiveXComponent"/>
+
+<content id=sgml useSyn=SgmlStatement/>
+
+<content id=xml>
+  <p>XML programming in <J> includes SAX and DOM style programming and applying XSL transformations
+  and queries. See sub-sections for details.</p>
+</content>
+
+<content id=xml_sax useSyn=XmlStatement/>
+
+<content id=xml_dom useSyn=Dom/>
+
+<content id=xml_xsl useSyn=XsltStatement/>
+
+<content id=http>
+  <p><J> supports both HTTP server and client programming. It is easy to set up a HTTP server, and
+  just as easy to make a client connection and manipulate HTTP headers, cookies, etc.</p>
+</content>
+
+<content id=http_server seeObj="HTTPService,Cookie" seeSysFun="acceptHttp,startServer">
+  <p>To handle a HTTP request from a client, call <sfn name=startServer> to start a server socket,
+  then pass it to <sfn name=acceptHttp>, which waits for a client connection and handles it as HTTP
+  request by returning a <obj id=HttpService> object, which is then typically passed to a function
+  or thread for processing.</p>
+</content>
+
+<content id=http_client seeSysFun="httpGet,httpPost,copyStream" seeObj=Cookie>
+  <p>The simplest HTTP client in <J> is actually <sfn name=copyStream> with the first parameter
+  as a URL; it simply copies the content referenced by the URL to a file.</p>
+
+  <p>To deal with HTTP client request more intimately, use <sfn name=httpGet> or
+  <sfn name=httpPost> with a URL, and they both return a <obj id=HttpConnection>.</p>
+</content>
+
+<content id=jusp>
+  <p><J> can be used to produce dynamica web pages just like JSP or ASP; the mechanism is called
+  JUSP (pronounced /ju:sp/). A JUSP page is a HTML template with embedded <J> code; a block of
+  code is enclosed in <!&lt;%> and <!%&gt;>; an expression is enclosed in <!&lt;%=> and <!%&gt;>;
+  and <!&lt;%--> and <!&#45;-%&gt;> enclose comments that become JudoScript comments and not shown
+  in the generated HTML.</p>
+
+  <p>The JUSP engine is the servlet <code>com.judoscript.jusp.JuspServlet</code>. It must be
+  configured with an init-parameter <b>juspRoot</b> that points to the root of all JUSP
+  pages. Within a JUSP page, these variables are predefined:
+  <ul><li><code>servlet</code>  -- <code>javax.servlet.http.HttpServlet</code>
+      <li><code>request</code>  -- <code>javax.servlet.http.HttpServletRequest</code>
+      <li><code>response</code> -- <code>javax.servlet.http.HttpServletResponse</code>
+      <li><code>session</code>  -- <code>javax.servlet.http.HttpSession</code>
+      <li><code>params</code>   -- <code>java.util.Hashtable</code> for the query string or posted data.
+                                   The values can be a string or a string array.
+  </ul>
+  In addition, the following are predefined:
+<pre>
+const #Cookie = javaclass javax.servlet.http.Cookie;
+</pre>
+</p>
+
+  <p>JUSP pages can include other JUSP pages via the <!!@include> directive. The extra <!@> in the
+  otherwise ordinary <!include> directive tells <J> to preprocess the included file as JUSP.</p>
+</content>
+
+<content id=gui seeSyn=GuiEventsStatement seeSysFun="timerHandler,setGuiListener" seeFA="java,java_obj">
+  <p>Java GUI programs are essentially made of two parts: assembly of GUI components and event
+  handling. Using <J>'s Java scripting capability, assembling AWT and Swing components is easy.
+  <J> uses a special <nt name=GuiEventsStatement> to handle GUI events. This statement can
+  specify event handlers for individual components or a group of components. In the latter case,
+  a named handler is created, which is used by <sfn name=setGuiListener> to assign to
+  specific components. Different <nt name=GuiEventsStatement>'s can be used for different sets
+  of components.</p>
+
+  <p>For a <code>javax.swing.Timer</code> object, the event handler is specified the same was
+  as other GUI components. The <code>Timer</code> constructor takes a
+  <code>java.awt.event.ActionListener</code> instance; in <J> this is obtained by
+  <sfn name=timerHandler>. What really happens is, a <J> GUI program has just one 
+  <code>java.awt.event.ActionListener</code> object, and it routes all the GUI events to the
+  respective handler code written in <J>. <sfn name=timerHandler> returns just that
+  <code>ActionListener</code> object.</p>
+</content>
+
+<content id=mail useSyn=MailStatement/>
+
+<content id=exec useSyn=ExecStatement/>
+
+<content id=sched useSyn=ScheduleStatement/>
+
+<content id=ssh seeSyn=SCPStatement seeSysFun=ssh seeObj=SSHConnection/>
+
+<content id=embed_in_src>
+  <p>The <J> language engine takes source files of Java, C and C++, filters out <J>
+  code encoded in <!/*[judo]> and <![judo]*/> and runs it. This is useful for unit
+  testing of that source file, or other purposes.</p>
+</content>
+
+<content id=java_judo>
+  <p><J> language engine has an interface that allows itself to be embedded in other Java software;
+  its LGPL licencing helps, too;) Alternatively, Java software can use the Bean-Scripting Framework
+  (BSF), a standard API for scripting languages to interact with Java software. You can construct
+  <J> program text on-the-fly and execute it, and pass objects between <J> and Java back and forth.</p>
+</content>
+
+<content id=java_judo_eng external=1/>
+
+<content id=java_judo_bsf seeObj=BSF>
+  <p><J>'s <a href="http://www-124.ibm.com/developerworks/projects/bsf">Bean Scripting Framework</a>
+  (BSF) engine is implemented by class <a href=bsfengine.html>com.judoscript.BSFJudoEngine</a>.
+
+  <p>The following table summarises using BSF.</p>
+  <table border="1"><tbody class="text">
+  <tr><th>Category</th><th>Description</th></tr>
+  <tr><td>Language identifier</td><td>judoscript</td></tr>
+  <tr><td>File extension(s)</td><td>.judo, .jud</td></tr>
+  <tr><td>Look up a bean</td><td>$$bsf.lookupBean("name-of-bean")</td></tr>
+  <tr><td>Create a new bean</td><td>JudoScript's javanew operator</td></tr>
+  <tr><td>Register a bean</td><td>$$bsf.registerBean("name-of-bean",$bean)</td></tr>
+  <tr><td>Unregister a bean</td><td>$$bsf.unregisterBean("name-of-bean")</td></tr>
+  <tr><td>Bind a script to be executed upon event firing</td><td>JudoScript's guiEvent{} or adapter</td></tr>
+  <tr><td>Do all bean operations</td><td>JudoScript method call</td></tr>
+  <tr><td>Language home</td><td>http://www.judoscript.com</td></tr>
+  </table>
+</content>
+
+<content id=custom_judo>
+  <p>With the ability to <fa id=java_judo>, <J> can be used in your applications. Here are
+  a few hints for embedding <J>.</p>
+
+  <p>The recommended way to build library for <J> is actually to write Java, not only for
+  performance but also for reusability across Java and <J> code. This does not exclude
+  building <J> libraries of functions and classes; in fact, such libraries (<J> source
+  files) can be put anywhere in the CLASSPATH.</p>
+
+  <p><J> has a few mechanisms to make using your Java code even easier. One is the
+  <fa id=java_st> to make Java static methods look like regular functions, the other
+  is <syn id=JavaClassShorts> to make using your Java classes easier (without having to
+  worry about long Java class names.)</p>
+
+  <h4>myjsysfxns.properties and myjavapkgs.properties</h4>
+
+  <p>A large portion of <J> system functions are actually implemented by static Java
+  methods; they are listed in <code>com/judoscript/jsysfxns.properties</code>. You can
+  extend this system function list by creating a similar properties file and name it as
+  <code>com/judoscript/myjsysfxns.properties</code>. Since this properties file does not
+  exist in the standard <J> distribution, your changes will not be overwritten by <J>
+  version upgrades. Another properties file, <code>com/judoscript/javapkgs.properties</code>,
+  holds the predefined Java package shortcuts. You can create your predefined Java package
+  shortcuts in <code>com/judoscript/myjavapkgs.properties</code>.</p>
+</content>
+
+<content id=localdata>
+  <p>In the script, anything starting on the next line of <!EndScript> can be accessed via
+  a predefined <!$$local> input stream. Anything on the rest of the line containing of
+  <!EndScript> is discarded.
+</content>
+

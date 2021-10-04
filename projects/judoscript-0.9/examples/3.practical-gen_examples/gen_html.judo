@@ -1,0 +1,148 @@
+usage {
+  author  = 'James Huang';
+  created = '20002-12-21';
+  desc    = [[*
+    This program generates the framed HTML view of all the examples.
+    If you are viewing online, what you see now is the output of
+    this very program. In the shipped version, only example source
+    code is included; you can run this program to generate the same
+    view on your local machine.
+
+    This program must be run from where it resides, which is
+    checked first thing. On the JudoScript production server, an
+    env.judi file contains information for where to produce the
+    HTML pages. When run on individual machines, it creates the
+    files under the current directory in 'generated/examples/';
+    the start-up page is 'index.html'.
+  *]];
+}
+
+
+// Check if this program is started from where it is.
+if ! #prog.getFileName().fileExists() {
+  println <err> #prog, ' must be run from where it appropriately resides.';
+  exit(0);
+}
+
+const #indent = 16;
+
+!include ifexists '../../env.judi'      // on the production system
+const #targetDir = 'generated/' ifndef; // env.judi is not included
+
+// Make sure the target directories and copy the shared files.
+mkdir #targetDir @ '/examples';
+copy '*' in 'static' to #targetDir @ '/examples';
+
+list '*.judo, *.judi, *.java, *.html, *.x?l, *.dtd, *.jusp' in '../'
+     except '*/save*, */audio*, */static*, *JavaGUI/image*, *JavaGUI/html*, */generated*, */readme.*'
+     recursive as tree;
+tree = $$fs_result; // we want a tree as result.
+
+. 'Root path: ', tree.path;
+
+for x in tree.dfsAllNodes() {
+  if x.isDir { generateNavPage  x; }
+  else       { generateHtmlView x; }
+}
+
+. [[*
+  Done with generating HTML pages.
+
+  Move the 'examples/' directory (under 'generated/') to JudoScript
+  distribution directory so that you have such a directory structure:
+
+    judoscript.(* #versionID *)/share/
+    judoscript.(* #versionID *)/articles/
+    judoscript.(* #versionID *)/ref/
+    judoscript.(* #versionID *)/examples/
+*]];
+
+
+function generateNavPage open_node
+{
+  if !open_node.isDir { return; }
+  path = #targetDir @ 'examples/_' @ open_node.path.getFileName() @ '.html';
+
+  println 'Generating navigation: ', path;
+  file = openTextFile(path, 'w');
+  println <file> [[*
+     <html><head><title>JudoScript Sample Code</title>
+     <script language=JavaScript src=../share/judolib.js></script>
+     <link rel=stylesheet type=text/css href="../share/judo_styles.css">
+     </head><body>
+     (* writeNavItems(tree, open_node, file) *)
+     </body></html>
+  *]];
+  file.close();
+
+  path   = #targetDir @ 'examples/' @ open_node.path.getFileName() @ '.html';
+  readme = open_node.path @ '/readme.txt';
+  file = openTextFile(path, 'w');
+  println <file> '<html><body style="margin-left:0px;margin-top:0px;margin-right:0px">',
+           '<table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>';
+  for p in open_node.getPath() {
+    print <file> p.path.getFileName(), '/';
+  }
+  println <file> open_node.path.getFileName(), ':</b></td></tr><tr><td><font color=blue><pre>';
+  if readme.fileExists() {
+    do readme as lines { println <file> $_; }
+  } else {
+    println <file> '&nbsp;';
+  }
+  println <file> '</pre></font></td></tr></table></body></html>';
+  file.close();
+}
+
+// Write for startNode, then recursively call on to its children.
+function writeNavItems startNode, openNode, file
+{
+  isOpen = openNode.hasInPath(startNode);
+
+  deco = isOpen ? '<em>' : '';
+  _deco = isOpen ? '</em>' : '';
+  level = startNode.getLevel();
+  if level < 2 {
+    deco @= '<b>';
+    _deco = '</b>' @ _deco;
+  }
+  if startNode.isDir {
+    icon = isOpen ? 'icon_book_open' : 'icon_book';
+  } else {
+    icon = 'icon_page';
+  }
+  id = startNode.path.getFileName();
+
+  nav_id = startNode.isDir ? id : startNode.getParent().path.getFileName();
+
+  println <file> [[*
+     <nobr><img src="../share/spacer.gif" height=1 width=(* #indent*level *) border=0>
+     <a name="(* id *)"><img src="../share/(* icon *).gif" border=0></a>
+     <a href="javascript:showPanes('_(* nav_id *).html','(* id *).html')">
+     (* deco *)(* id *)(* _deco *)</a></nobr><br>
+  *]];
+
+  if isOpen {
+    for x in startNode.getChildren() {
+      writeNavItems(x, openNode, file);
+    }
+  }
+}
+
+function generateHtmlView sampleFile
+{
+  path = #targetDir @ 'examples/' @ sampleFile.path.getFileName() @ '.html';
+  println 'Generating target:     ', path;
+  file = openTextFile(path, 'w');
+  println <file> '<html><body style="margin-left:0px;margin-top:0px;margin-right:0px">',
+           '<table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>';
+  for p in sampleFile.getPath() {
+    print <file> p.path.getFileName(), '/';
+  }
+  println <file> sampleFile.path.getFileName(), ':</b></td></tr><tr><td><pre>';
+  do sampleFile.path as lines {
+    println <file> $_.replace('&','&amp;').replace('<','&lt;');
+  }
+  println <file> '</pre></td></tr></table></body></html>';
+  file.close();
+}
+

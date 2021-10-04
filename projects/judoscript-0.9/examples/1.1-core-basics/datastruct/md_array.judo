@@ -1,0 +1,24 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc =    'Initializes a multi-dimension array and print them in two ways.';
+}
+
+a = [ [ 1, 2, 3, 4, 5 ],
+      [ 10, 20, 30, 40, 50 ],
+      [ 100 ],
+      [ 'a', 'b', 'c', 'd', 'e' ]
+    ];
+
+println 'One way of printing:';
+for x in a {
+  for y in x { print y, ' '; }
+  println;
+}
+
+println nl, 'Another way of printing:';
+for x from 0 to 3 {
+  for y from 0 to 4 { print a[x][y], ' '; }
+  println;
+}

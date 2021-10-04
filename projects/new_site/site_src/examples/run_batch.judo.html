@@ -1,0 +1,19 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/run_batch.judo:</b></td></tr><tr><td><pre>
+testDir = 'c:/temp';
+bat_file = '${testDir}${/}alfa.bat';
+
+f = openTextFile(bat_file, 'w');
+flush &lt;f> [[*
+  @echo 'This is some garbage.' > alfa.alfa
+  @echo ABCDEFG=%ABCDEFG%
+  @echo PATH=%PATH%
+*]];
+f.close();
+
+exec bat_file
+     from testDir
+     with ABCDEFG = 1234567,
+          PATH    = testDir;
+
+</pre></td></tr></table></body></html>

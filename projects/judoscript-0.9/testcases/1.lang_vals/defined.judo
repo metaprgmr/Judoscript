@@ -1,0 +1,27 @@
+const #ccc = 1;
+
+if defined #ccc {
+  println '#ccc is defined: ', #ccc;
+}
+
+if #ccc != undefined {
+  println '#ccc is defined: ', #ccc;
+}
+
+if aaa != undefined {
+  println 'aaa is defined: ', aaa;
+} else {
+  println 'aaa is not defined.';
+}
+
+if defined aaa {
+  println 'aaa is defined: ', aaa;
+} else {
+  println 'aaa is not defined.';
+}
+
+bbb = 9;
+
+if defined bbb {
+  println 'bbb is defined: ', bbb;
+}

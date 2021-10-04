@@ -1,0 +1,38 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/parse_url.judo:</b></td></tr><tr><td><pre>
+a = ['http://localhost:8080/articles/developer.html#top',
+     'http://localhost/cgi-bin/check.pl?id=1234&amp;sess=abc',
+     '/index.html',
+     'index.html',
+     '',
+     '/',
+     'http://www.judoscript.com',
+     'images/bg.gif'
+    ];
+
+for url in a {
+  b = url.parseUrl();
+  println '-----------------------------------------------';
+  println '            URL: ', url;
+  println '           root: ', b.root;
+  println '       protocol: ', b.protocol;
+  println '         domain: ', b.domain;
+  println '           host: ', b.host;
+  println '           port: ', b.port;
+  println '           path: ', b.path;
+  println '      file_name: ', b.file_name;
+  println '   query_string: ', b.query_string;
+  println '            ref: ', b.ref;
+  println 'constructed URL: ', b.transpose('UrlInfo');
+}
+
+class UrlInfo
+{
+  function toString() {
+    ret = root + path;
+    if query_string != null { ret += '?' + query_string; }
+    if ref != null { ret += '#' + ref; }
+    return ret;
+  }
+}
+</pre></td></tr></table></body></html>

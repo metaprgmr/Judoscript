@@ -1,0 +1,32 @@
+<%--
+  This example re-sets the built-in object `form` to populate HTML controls.
+--%>
+<html><body>
+<h2>Programmatically Set Text Control Value</h2>
+
+<p>View <%!viewsrc 'lesson4/textsetvalue.jusp', '../' %></p>
+
+<%-- Use Case I. use a POJO to populate controls --%>
+<%
+  form = new java::Object { // Java adapter; an instance of a genuine Java class.
+           String getMsg() { return 'Hello from Java!'; }
+         };
+%>
+<p>Value from a POJO: <%!text 'msg' %></p>
+
+<%-- Use Case II. use a java.util.Map to populate controls --%>
+<%
+  form = new java::HashMap ( // JudoScript-style named initialization
+           msg = 'Hello from Atlas!'
+         );
+%>
+<p>Value from a Map: <%!text 'msg' %></p>
+
+<%-- Use Case III. use a JudoScript Object to populate controls --%>
+<%
+  form = { msg = 'Hello from JudoScript!' };
+%>
+<p>Value from an Object: <%!text 'msg', null, 'size=22' %></p>
+
+<hr><font size=-1>Back to <a href="../lesson4.jusp">lesson 4</a></font>
+</body></html>

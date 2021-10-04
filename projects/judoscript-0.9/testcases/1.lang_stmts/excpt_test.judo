@@ -1,0 +1,19 @@
+{
+  xxxxx();  // method does not exist
+  println 'Not reached.';
+catch:
+  println '[Line ', $_.line, '] INSIDE CATCH: <',
+          $_.name, '> ', $_.message;
+  throw $_;
+finally:
+  println 'INSIDE FINALLY.';
+}
+
+throw;
+throw new java::Exception("This exception is pure Java.");
+throw "ABCDE";
+
+catch:
+  println '[Line ', $_.line, '] OUTSIDE CATCH: <',
+          $_.name, '> ', $_.message;
+  resume;

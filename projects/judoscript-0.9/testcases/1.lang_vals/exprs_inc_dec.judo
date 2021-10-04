@@ -1,0 +1,5 @@
+         println 'a = ', a = 4;
+b = ++a; println 'b = ++a = ', b, ', a = ', a;
+b = a++; println 'b = a++ = ', b, ', a = ', a;
+b = --a; println 'b = --a = ', b, ', a = ', a;
+b = a--; println 'b = a-- = ', b, ', a = ', a;

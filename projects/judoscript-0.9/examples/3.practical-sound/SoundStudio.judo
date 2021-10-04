@@ -1,0 +1,141 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    A GUI sound studio program. It uses Java classes created in the
+    Java Sound sample code. (adapted from Java Sound sample code.)
+  *]];
+}
+
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+import javax.sound.midi.*;
+import javax.sound.sampled.*;
+
+//
+// The Java/Judo Sound Samples : MidiSynth, Juke, CapturePlayback, Groove.
+//
+
+const #width = 760;
+const #height = 500;
+const #media = "./audio";
+
+demos = new array;
+index = 0;
+
+function _close { demos[index].close(); }
+
+function open() { demos[index].open(); }
+
+function showInfoDialog() {
+  msg = [[*
+             When running the Java Sound demo as an applet these permissions
+             are necessary in order to load/save files and record audio:
+
+             grant {
+               permission java.io.FilePermission "<<ALL FILES>>", "read, write";
+               permission javax.sound.sampled.AudioPermission "record";
+               permission java.util.PropertyPermission "user.dir", "read";
+             };
+
+             The permissions need to be added to the .java.policy file.
+         *]];
+
+  (java::JOptionPane).showMessageDialog(null, msg, "Applet Info", (java::JOptionPane).INFORMATION_MESSAGE);
+}
+
+
+audioDirectory = #media;
+
+tabPane = new java::JTabbedPane;
+guiEvents {
+  < tabPane : Change : stateChanged > :
+    _close();
+    (java::System).gc();
+    index = tabPane.getSelectedIndex();
+    open();
+}
+
+demo = new java::JPanel;
+demo.setLayout(new java::BorderLayout);
+demo.setPreferredSize(new java::Dimension(#width, #height));
+
+menuBar = new java::JMenuBar;
+
+fileMenu = menuBar.add(new java::JMenu("File"));
+item = fileMenu.add(new java::JMenuItem("Exit"));
+guiEvents { < item : Action : actionPerformed > : exit(0); }
+options = menuBar.add(new java::JMenu("Options"));
+item = options.add(new java::JMenuItem("Applet Info"));
+guiEvents { < item : Action : actionPerformed > : showInfoDialog(); }
+
+demo.add(menuBar, (java::BorderLayout).NORTH);
+
+eb = new java::EmptyBorder(5,5,5,5);
+bb = new java::BevelBorder((java::BevelBorder).LOWERED);
+cb = new java::CompoundBorder(eb,bb);
+p = new java::JPanel(new java::BorderLayout);
+p.setBorder(new java::CompoundBorder(cb, new java::EmptyBorder(0,0,90,0)));
+juke = new java::Juke(audioDirectory);
+p.add(juke);
+demos.append(juke);
+tabPane.addTab("Juke Box", p);
+
+// In the original Java code it loads stuff in a separate thread. here we just do it.
+// Lazy load the tabbed pane with CapturePlayback, MidiSynth and Groove. -- original comment.
+eb = new java::EmptyBorder(5,5,5,5);
+bb = new java::BevelBorder((java::BevelBorder).LOWERED);
+cb = new java::CompoundBorder(eb,bb);
+p = new java::JPanel(new java::BorderLayout);
+p.setBorder(new java::CompoundBorder(cb,new java::EmptyBorder(0,0,90,0)));
+capturePlayback = new java::CapturePlayback;
+demos.append(capturePlayback);
+p.add(capturePlayback);
+tabPane.addTab("Capture/Playback", p);
+ 
+midiSynth = new java::MidiSynth;
+demos.append(midiSynth);
+tabPane.addTab("Midi Synthesizer", midiSynth);
+
+p = new java::JPanel(new java::BorderLayout);
+p.setBorder(new java::CompoundBorder(cb,new java::EmptyBorder(0,0,5,20)));
+groove = new java::Groove;
+demos.append(groove);
+p.add(groove);
+tabPane.addTab("Groove Box", p);
+
+demo.add(tabPane, (java::BorderLayout).CENTER);
+
+
+if (java::MidiSystem).getSequencer() == null {
+  println <err> "MidiSystem Sequencer Unavailable, exiting!";
+  exit 1;
+} elif (java::AudioSystem).getMixer(null) == null {
+  println <err> "AudioSystem Unavailable, exiting!";
+  exit 1;
+}
+
+if args.length > 0 {
+  file = new java::File(args[0]);
+  if file == null || !file.isDirectory() {
+    println "usage: java judo Sound audioDirectory";
+  } else {
+    media = #args[0];
+  }
+}
+
+f = new java::JFrame("JudoScript Sound Demo");
+guiEvents {
+  < f : Window : windowClosing > :     exit(0);
+  < f : Window : windowDeiconified > : demo.open();
+  < f : Window : windowIconified > :   demo.close();
+}
+
+f.getContentPane().add("Center", demo);
+f.pack();
+d = (java::Toolkit).getDefaultToolkit().getScreenSize();
+f.setLocation(d.width/2 - #width/2, d.height/2 - #height/2);
+f.setSize(new java::Dimension(demo.getWidth(), demo.getHeight()));
+f.setVisible(true);

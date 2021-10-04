@@ -1,0 +1,29 @@
+usage {
+  args = '[ inclusion_list [ exclusion_list ] ]';
+  desc = [[*
+    This program use the list command to collect the intended files
+    and use 'do .. as lines {}' statement to count the lines.
+  *]];
+}
+
+switch #args.length() {
+case 0:  list recursive; break;
+case 1:  list #args[0] recursive; break;
+default: list #args[0] except #args[1] recursive;
+}
+
+fileCnt = 0;
+lineCnt = 0;
+
+for x in $$fs_result.sort() {
+  if x.isFile() {
+    var mycnt = 0;
+    do x as lines { ++mycnt; }
+    lineCnt += mycnt;
+    println ++fileCnt :>3, mycnt :>8, ' ', x;
+  }
+}
+
+println "Total files: ", fileCnt;
+println "Total lines: ", lineCnt;
+

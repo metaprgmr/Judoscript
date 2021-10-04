@@ -1,0 +1,64 @@
+allFxns = [];
+allMembers = [];
+inFxn = false;
+desc = null;
+fxn = null;
+
+sgml FUNCTION_INFO
+{
+:BEFORE:
+  allFxns.clear();
+  allMembers.clear();
+  inFxn = false;
+  desc = null;
+  fxn = null;
+
+:AFTER:
+  allFxns = allFxns.sort( function(lhs,rhs){ return compare(lhs.names[0], rhs.names[0]); } );
+
+<member>: allMembers.add($_);
+
+<function>:
+  fxn = new FunctionInfo;
+  name = $_.sig.trim();
+  idx = name.indexOf(' ');
+  if idx <= 0 {
+    fxn.addName(name);
+  } else {
+    fxn.addName(name.substring(0,idx));
+    fxn.setArgs(name.substring(idx+1).csv(','));
+  }
+  for x in $_.alias.csv(',') { fxn.addName(x.trim()); }
+  inFxn = true;
+  desc = '';
+  if $_.ready == 'false' { fxn.exclude = true; }
+
+</function>:
+  if !fxn.exclude {
+    fxn.setDesc(desc);
+    allFxns.add(fxn);
+  }
+  inFxn = false;
+  fxn = null;
+
+<!>:
+  x = $_.toString().substring(2);
+  if x.startsWith('_') {
+    x = x.substring(1,x.length()-1);
+    desc += '<font class=t>${x}</font> ';
+  } else {
+    x = x.substring(0,x.length()-1);
+    if !x.charAt(0).isLetter() { x = '<nobr>${x}</nobr>'; }
+    desc += '<font class=kw>${x}</font> ';
+  }
+
+<param>:  desc += '<font class=param>';
+</param>: desc += '</font>';
+
+<sfn>:    desc += showSFLink($_.name);
+<obj>:    desc += showObjLink($_.id);
+<nt>:     desc += showNTLink($_.name);
+<fa>:     desc += showFALink($_.id);
+
+:TEXT,<>: if (inFxn) desc += $_;
+}

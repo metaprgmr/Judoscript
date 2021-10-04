@@ -1,0 +1,30 @@
+public class InputTest
+{
+  public static String getInput() {
+    %flush "Type something: "
+    invokestatic getBufferedReader()BufferedReader
+    invokevirtual BufferedReader.readLine()String
+    areturn
+  }
+
+  static BufferedReader getBufferedReader() {
+    InputStream is;
+    getstatic System.in InputStream
+    astore is
+
+    InputStreamReader isr;
+    %set isr = %object InputStreamReader(InputStream)(is)
+
+    %object BufferedReader(Reader)(isr)
+    areturn
+  }
+
+  public static void main(String[] args) {
+    String line;
+
+    invokestatic getInput()String
+    astore line
+
+    %println "You typed: ", line
+  }
+}

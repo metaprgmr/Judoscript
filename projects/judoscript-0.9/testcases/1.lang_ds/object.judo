@@ -1,0 +1,49 @@
+a = new Object( alfa = 1, beta : 'abc' );
+println a;
+
+a = { alfa : 1, beta : 'BCDE' };
+println 'a.getClassName() = ', a.getClassName(); . 'a.size() = ', a.size();
+println 'a.clear()', a.clear();
+println 'a.size()  = ', a.size();
+
+println;
+println 'a."1.10"  = ', a."1.10"  = 'chapter 1 section 10';
+println 'a."2.5"   = ', a."2.5"   = 'chapter 2 section 5';
+println 'a."3"     = ', a."3"     = 'chapter 3';
+println 'a."1.2"   = ', a."1.2"   = 'chapter 1 section 2';
+println 'a."3.4"   = ', a."3.4"   = 'chapter 3 section 4';
+println 'a."1.2.1" = ', a."1.2.1" = 'chapter 1 section 2.1';
+println 'a.size()  = ', a.size();
+println 'a."3.4"   = ', a."3.4";
+
+println;
+println 'a.has("2.5") = ', a.has("2.5");
+println 'a.has("2.6") = ', a.has("2.6");
+
+println nl, 'List by a.keys()';
+for x in a.keys() {
+  println ' ', x:5, ' => ', a.(x);
+}
+
+println nl, 'List by a.keysSorted()';
+for x in a.keysSorted() {
+  println ' ', x:5, ' => ', a.(x);
+}
+
+println nl, 'List by a.keysSorted(&my_comparator)';
+for x in a.keysSorted(&my_comparator) {
+  println ' ', x:5, ' => ', a.(x);
+}
+
+function my_comparator lhs, rhs {
+  la = lhs.csv('.');
+  ra = rhs.csv('.');
+  lali = la.lastIndex();
+  rali = ra.lastIndex();
+  for i from 0 to min(lali, rali) {
+    if la[i].int() < ra[i].int() { return -1; }
+    if la[i].int() > ra[i].int() { return 1; }
+  }
+  if lali == rali { return 0; }
+  return lali > rali;
+}

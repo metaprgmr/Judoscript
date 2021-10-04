@@ -1,0 +1,18 @@
+println str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('defABC','-+-+-+'), " -- replacedIgnoreCase('defABC','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('defABC','-+-+-+'), " -- replace('defABC','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('defabc','-+-+-+'), " -- replacedIgnoreCase('defabc','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('defabc','-+-+-+'), " -- replace('defabc','-+-+-+')";
+
+        str = 'abcdefABCDEF';
+println str.replace('abc','-+-'), " -- replace('abc','-+-')";
+
+        str = 'abcdefABCDEF';
+println str.replaceIgnoreCase('aBc','-+-'), " -- replaceIgnoreCase('aBc','-+-')";
+

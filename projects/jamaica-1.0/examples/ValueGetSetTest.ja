@@ -1,0 +1,463 @@
+/**
+ *
+ * Value Get and Set:
+ *
+ *    Data Types And Classes        Individual  1-Dim Array  M-Dim Array
+ *    ----------------------------  ----------  -----------  -----------
+ *    int                               x            x            x
+ *    long                              x            x            x
+ *    float                             x            x            x
+ *    double                            x            x            x
+ *    short                             x            x            x
+ *    char                              x            x            x
+ *    byte                              x            x            x
+ *    boolean                           x            x            x
+ *    String                            x            x            x
+ *    java-core package class           x            x            x
+ *    non-core, custom java class       x            x            x
+ *
+ *    For each type:
+ *
+ *    1.1 Class static data members
+ *    1.2 Class instance data members
+ *    1.3 Method variables
+ *    1.4 %object
+ *    1.5 %array
+ *    1.6 %set
+ *    1.7 %println
+ *    1.8 Static and non-static methods and data member access
+ */
+
+import org.apache.commons.lang.BitField;
+
+public class ValueGetSetTest
+{
+  ///////////////////////////////////////////////////////////
+  //
+  // Constructors
+  //
+  /////////////////////////////////////////////////////////// 
+
+  %default_constructor <public>
+
+  //---------------------------------------------------------
+  //
+  // CI: Class individual data members
+  //
+  //---------------------------------------------------------
+
+  static int        iSFld;  // int
+  static long       lSFld;  // long
+  static float      fSFld;  // float
+  static double     dSFld;  // double
+  static short      sSFld;  // short
+  static char       cSFld;  // char
+  static byte       bSFld;  // byte
+  static boolean    zSFld;  // boolean
+  static String     tSFld;  // java.lang.String
+  static ArrayList  jSFld;  // java-core package class
+  static BitField   aSFld;  // non-core, custom java class
+
+  //---------------------------------------------------------
+  //
+  // CA: Class Array Data Members
+  //
+  //---------------------------------------------------------
+
+  static int        aiSFld[];  // int
+  static long       alSFld[];  // long
+  static float      afSFld[];  // float
+  static double     adSFld[];  // double
+  static short      asSFld[];  // short
+  static char       acSFld[];  // char
+  static byte       abSFld[];  // byte
+  static boolean    azSFld[];  // boolean
+  static String     atSFld[];  // java.lang.String
+  static ArrayList  ajSFld[];  // java-core package class
+  static BitField   aaSFld[];  // non-core, custom java class
+  
+  static int        maiSFld[][][];  // int
+  static long       malSFld[][][];  // long
+  static float      mafSFld[][][];  // float
+  static double     madSFld[][][];  // double
+  static short      masSFld[][][];  // short
+  static char       macSFld[][][];  // char
+  static byte       mabSFld[][][];  // byte
+  static boolean    mazSFld[][][];  // boolean
+  static String     matSFld[][][];  // java.lang.String
+  static ArrayList  majSFld[][][];  // java-core package class
+  static BitField   maaSFld[][][];  // non-core, custom java class
+  
+  //---------------------------------------------------------
+  //
+  // OI: Object Individual Data Members
+  //
+  //---------------------------------------------------------
+
+  int        iFld;  // int
+  long       lFld;  // long
+  float      fFld;  // float
+  double     dFld;  // double
+  short      sFld;  // short
+  char       cFld;  // char
+  byte       bFld;  // byte
+  boolean    zFld;  // boolean
+  String     tFld;  // java.lang.String
+  ArrayList  jFld;  // java-core package class
+  BitField   aFld;  // non-core, custom java class
+  
+  //---------------------------------------------------------
+  //
+  // IA: Instance Array Data Members
+  //
+  //---------------------------------------------------------
+
+  int        aiFld[];  // int
+  long       alFld[];  // long
+  float      afFld[];  // float
+  double     adFld[];  // double
+  short      asFld[];  // short
+  char       acFld[];  // char
+  byte       abFld[];  // byte
+  boolean    azFld[];  // boolean
+  String     atFld[];  // java.lang.String
+  ArrayList  ajFld[];  // java-core package class
+  BitField   aaFld[];  // non-core, custom java class
+
+
+  ///////////////////////////////////////////////////////////
+  //
+  // Class All Data Member Initialization
+  //
+  ///////////////////////////////////////////////////////////
+
+  static {
+    // CI: class individual fields
+    %set iSFld = 5
+    %set lSFld = 0xFEDCBA9876543210
+    %set fSFld = 100.012
+    %set dSFld = 100.012
+    %set sSFld = 25
+    %set cSFld = 'a'
+    %set bSFld = 'a'
+    %set zSFld = true
+    %set tSFld = "It's only me!"
+    %set jSFld = null
+    %set aSFld = null
+
+    // CA: class array fields
+
+    %set aiSFld = %array int[] { 100, 200, 300, 400, 500 }
+    %set alSFld = %array long[] { 1000000, 2000000, 3000000, 4000000, 5000000 }
+    %set afSFld = %array float[] { 10.01, 20.022, 30.0333, 40.04444, 50.05555 }
+    %set adSFld = %array double[] { 1000.01, 2000.022, 3000.0333, 4000.04444, 5000.05555 }
+    %set asSFld = %array short[] { 10, 20, 30, 40, 50 }
+    %set acSFld = %array char[] { 'a', 'b', 'c', 'd', 'e' }
+    %set abSFld = %array byte[] { 1, 2, 3, 4, 5 }
+    %set azSFld = %array boolean[] { true, true, false, false, true }
+    %set atSFld = %array String[7]
+    %set ajSFld = %array ArrayList[8]
+    %set aaSFld = %array BitField[9]
+
+    // CA: class multi-dim array fields
+
+    %set maiSFld = %array int      [2][2][2]
+    %set malSFld = %array long     [2][2][ ]
+    %set mafSFld = %array float    [2][ ][ ]
+    %set madSFld = %array double   [2][2][2]
+    %set masSFld = %array short    [2][2][ ]
+    %set macSFld = %array char     [2][ ][ ]
+    %set mabSFld = %array byte     [2][2][2]
+    %set mazSFld = %array boolean  [2][2][ ]
+    %set matSFld = %array String   [2][ ][ ]
+    %set majSFld = %array ArrayList[2][2][2]
+    %set maaSFld = %array BitField [2][2][ ]
+
+    %set maiSFld[0][1][1] = 1
+    %set malSFld[0][1] = %array long[9]
+    %set mafSFld[0] = %array float[9][]
+    %set macSFld[0] = %array char[9][9]
+  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // CI: Class individual data member getter/setters
+  //
+  ///////////////////////////////////////////////////////////
+
+  public static int       getIntSField()         { getstatic iSFld int       ireturn }
+  public static long      getLongSField()        { getstatic lSFld long      lreturn }
+  public static float     getFloatSField()       { getstatic fSFld float     freturn }
+  public static double    getDoubleSField()      { getstatic dSFld double    dreturn }
+  public static short     getShortSField()       { getstatic sSFld short     ireturn }
+  public static char      getCharSField()        { getstatic cSFld char      ireturn }
+  public static byte      getByteSField()        { getstatic bSFld byte      ireturn }
+  public static boolean   getBooleanSField()     { getstatic zSFld boolean   ireturn }
+  public static String    getStringSField()      { getstatic tSFld String    areturn }
+  public static ArrayList getJavaSField()        { getstatic jSFld ArrayList areturn }
+  public static BitField  getObjectSField()      { getstatic aSFld BitField  areturn }
+
+  public static void setIntSField(int v)         { iload v  putstatic iSFld int       }
+  public static void setLongSField(long v)       { lload v  putstatic lSFld long      }
+  public static void setFloatSField(float v)     { fload v  putstatic fSFld float     }
+  public static void setDoubleSField(double v)   { dload v  putstatic dSFld double    }
+  public static void setShortSField(short v)     { iload v  putstatic sSFld short     }
+  public static void setCharSField(char v)       { iload v  putstatic cSFld char      }
+  public static void setByteSField(byte v)       { iload v  putstatic bSFld byte      }
+  public static void setBooleanSField(boolean v) { iload v  putstatic zSFld boolean   }
+  public static void setStringSField(String v)   { aload v  putstatic tSFld String    }
+  public static void setJavaSField(ArrayList v)  { aload v  putstatic jSFld ArrayList }
+  public static void setObjectSField(BitField v) { aload v  putstatic aSFld BitField  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // CA: Class array data member getter/setters
+  //
+  ///////////////////////////////////////////////////////////
+
+  public static int[]       getIntArraySField()     { getstatic aiSFld int[]       areturn }
+  public static long[]      getLongArraySField()    { getstatic alSFld long[]      areturn }
+  public static float[]     getFloatArraySField()   { getstatic afSFld float[]     areturn }
+  public static double[]    getDoubleArraySField()  { getstatic adSFld double[]    areturn }
+  public static short[]     getShortArraySField()   { getstatic asSFld short[]     areturn }
+  public static char[]      getCharArraySField()    { getstatic acSFld char[]      areturn }
+  public static byte[]      getByteArraySField()    { getstatic abSFld byte[]      areturn }
+  public static boolean[]   getBooleanArraySField() { getstatic azSFld boolean[]   areturn }
+  public static String[]    getStringArraySField()  { getstatic atSFld String[]    areturn }
+  public static ArrayList[] getJavaArraySField()    { getstatic ajSFld ArrayList[] areturn }
+  public static BitField[]   getObjectArraySField() { getstatic aaSFld BitField[]  areturn }
+
+  public static void setIntSField(int[] v)          { aload v  putstatic aiSFld int[]       }
+  public static void setLongSField(long[] v)        { aload v  putstatic alSFld long[]      }
+  public static void setFloatSField(float[] v)      { aload v  putstatic afSFld float[]     }
+  public static void setDoubleSField(double[] v)    { aload v  putstatic adSFld double[]    }
+  public static void setShortSField(short[] v)      { aload v  putstatic asSFld short[]     }
+  public static void setCharSField(char[] v)        { aload v  putstatic acSFld char[]      }
+  public static void setByteSField(byte[] v)        { aload v  putstatic abSFld byte[]      }
+  public static void setBooleanSField(boolean[] v)  { aload v  putstatic azSFld boolean[]   }
+  public static void setStringSField(String[] v)    { aload v  putstatic atSFld String[]    }
+  public static void setJavaSField(ArrayList[] v)   { aload v  putstatic ajSFld ArrayList[] }
+  public static void setObjectSField(BitField[] v)  { aload v  putstatic aaSFld BitField[]  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // OI: Object individual data member getter/setters
+  //
+  ///////////////////////////////////////////////////////////
+
+  public int       getIntField()         { aload this  getfield iFld int       ireturn }
+  public long      getLongField()        { aload this  getfield lFld long      lreturn }
+  public float     getFloatField()       { aload this  getfield fFld float     freturn }
+  public double    getDoubleField()      { aload this  getfield dFld double    dreturn }
+  public short     getShortField()       { aload this  getfield sFld short     ireturn }
+  public char      getCharField()        { aload this  getfield cFld char      ireturn }
+  public byte      getByteField()        { aload this  getfield bFld byte      ireturn }
+  public boolean   getBooleanField()     { aload this  getfield zFld boolean   ireturn }
+  public String    getStringField()      { aload this  getfield tFld String    areturn }
+  public ArrayList getJavaField()        { aload this  getfield jFld ArrayList areturn }
+  public BitField   getObjectField()     { aload this  getfield aFld BitField  areturn }
+
+  public void setIntField(int v)         { aload this  iload v  putfield iFld int       }
+  public void setLongField(long v)       { aload this  lload v  putfield lFld long      }
+  public void setFloatField(float v)     { aload this  fload v  putfield fFld float     }
+  public void setDoubleField(double v)   { aload this  dload v  putfield dFld double    }
+  public void setShortField(short v)     { aload this  iload v  putfield sFld short     }
+  public void setCharField(char v)       { aload this  iload v  putfield cFld char      }
+  public void setByteField(byte v)       { aload this  iload v  putfield bFld byte      }
+  public void setBooleanField(boolean v) { aload this  iload v  putfield zFld boolean   }
+  public void setStringField(String v)   { aload this  aload v  putfield tFld String    }
+  public void setJavaField(ArrayList v)  { aload this  aload v  putfield jFld ArrayList }
+  public void setObjectField(BitField v) { aload this  aload v  putfield aFld BitField  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // OI: Object array data member getter/setters
+  //
+  /////////////////////////////////////////////////////////// 
+
+  public int[]       getIntArrayField()         { aload this  getfield aiFld int[]       areturn }
+  public long[]      getLongArrayField()        { aload this  getfield alFld long[]      areturn }
+  public float[]     getFloatArrayField()       { aload this  getfield afFld float[]     areturn }
+  public double[]    getDoubleArrayField()      { aload this  getfield adFld double[]    areturn }
+  public short[]     getShortArrayField()       { aload this  getfield asFld short[]     areturn }
+  public char[]      getCharArrayField()        { aload this  getfield acFld char[]      areturn }
+  public byte[]      getByteArrayField()        { aload this  getfield abFld byte[]      areturn }
+  public boolean[]   getBooleanArrayField()     { aload this  getfield azFld boolean[]   areturn }
+  public String[]    getStringArrayField()      { aload this  getfield atFld String[]    areturn }
+  public ArrayList[] getJavaArrayField()        { aload this  getfield ajFld ArrayList[] areturn }
+  public BitField[]   getObjectArrayField()     { aload this  getfield aaFld BitField[]  areturn }
+
+  public void setIntArrayField(int[] v)         { aload this  aload v  putfield aiFld int[]       }
+  public void setLongArrayField(long[] v)       { aload this  aload v  putfield alFld long[]      }
+  public void setFloatArrayField(float[] v)     { aload this  aload v  putfield afFld float[]     }
+  public void setDoubleArrayField(double[] v)   { aload this  aload v  putfield adFld double[]    }
+  public void setShortArrayField(short[] v)     { aload this  aload v  putfield asFld short[]     }
+  public void setCharArrayField(char[] v)       { aload this  aload v  putfield acFld char[]      }
+  public void setByteArrayField(byte[] v)       { aload this  aload v  putfield abFld byte[]      }
+  public void setBooleanArrayField(boolean[] v) { aload this  aload v  putfield azFld boolean[]   }
+  public void setStringArrayField(String[] v)   { aload this  aload v  putfield atFld String[]    }
+  public void setJavaArrayField(ArrayList[] v)  { aload this  aload v  putfield ajFld ArrayList[] }
+  public void setObjectArrayField(BitField[] v) { aload this  aload v  putfield aaFld BitField[]  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // Local Variables
+  //
+  /////////////////////////////////////////////////////////// 
+
+  public void foo() {
+    // Individuals
+    int       iVar;  // int
+    long      lVar;  // long
+    float     fVar;  // float
+    double    dVar;  // double
+    short     sVar;  // short
+    char      cVar;  // char
+    byte      bVar;  // byte
+    boolean   zVar;  // boolean
+    String    tVar;  // java.lang.String
+    ArrayList jVar;  // java-core package class
+    BitField   aVar;  // non-core, custom java class
+
+    // Arrays
+    int       aiVar[];  // int
+    long      alVar[];  // long
+    float     afVar[];  // float
+    double    adVar[];  // double
+    short     asVar[];  // short
+    char      acVar[];  // char
+    byte      abVar[];  // byte
+    boolean   azVar[];  // boolean
+    String    atVar[];  // java.lang.String
+    ArrayList ajVar[];  // java-core package class
+    BitField   aaVar[];  // non-core, custom java class
+
+    %set iVar = 9999
+    %set lVar = 99999999
+    %set fVar = 99.99999
+    %set dVar = 99999999.99999
+    %set sVar = 99
+    %set cVar = '9'
+    %set bVar = 9
+    %set zVar = false
+    %set tVar = "nine"
+
+    %set jVar  = %object ArrayList(int)(5)
+    %set aVar  = %object BitField(int)(1)
+
+    %set aiVar = %array int[] { 1, 2, 3 }
+    %set alVar = %array long[] { 1, 2, 3 }
+    %set afVar = %array float[] { 1, 2, 3 }
+    %set adVar = %array double[] { 1, 2, 3 }
+    %set asVar = %array short[] { 1, 2, 3 }
+    %set acVar = %array char[] { '1', '2', '3' }
+    %set abVar = %array byte[] { 1, 2, 3 }
+    %set azVar = %array boolean[] { true, false, true, false }
+    %set atVar = %array String[] { "one", null, "three" }
+    %set ajVar = %array ArrayList[9]
+    %set aaVar = %array BitField[9]
+  }
+
+  public static void bar() throws IOException {
+//    %println "aiFld: ", aiFld
+  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // main
+  //
+  ///////////////////////////////////////////////////////////
+
+  public static void main(String[] args) {
+    ValueGetSetTest obj;
+    String tmp;
+
+    %set obj = %object ValueGetSetTest
+
+    aload obj
+    invokevirtual foo()void
+
+    invokestatic bar()void
+
+    %println <err> obj
+
+    // Print static fields --
+
+    %println "iSFld:   ", iSFld, '\n',
+             "lSFld:   ", lSFld, '\n',
+             "fSFld:   ", fSFld, '\n',
+             "dSFld:   ", dSFld, '\n',
+             "sSFld:   ", sSFld, '\n',
+             "cSFld:   ", cSFld, '\n',
+             "bSFld:   ", bSFld, '\n',
+             "zSFld:   ", zSFld, '\n',
+             "tSFld:   ", tSFld, '\n',
+             "jSFld:   ", jSFld, '\n',
+             "aSFld:   ", aSFld, "\n\n",
+
+             "aiSFld:  ", aiSFld, '\n',
+             "alSFld:  ", alSFld, '\n',
+             "afSFld:  ", afSFld, '\n',
+             "adSFld:  ", adSFld, '\n',
+             "asSFld:  ", asSFld, '\n',
+             "acSFld:  ", acSFld, '\n',
+             "abSFld:  ", abSFld, '\n',
+             "azSFld:  ", azSFld, '\n',
+             "atSFld:  ", atSFld, '\n',
+             "ajSFld:  ", ajSFld, '\n',
+             "aaSFld:  ", aaSFld, "\n\n",
+  
+             "maiSFld: ", maiSFld, '\n',
+             "malSFld: ", malSFld, '\n',
+             "mafSFld: ", mafSFld, '\n',
+             "madSFld: ", madSFld, '\n',
+             "masSFld: ", masSFld, '\n',
+             "macSFld: ", macSFld, '\n',
+             "mabSFld: ", mabSFld, '\n',
+             "mazSFld: ", mazSFld, '\n',
+             "matSFld: ", matSFld, '\n',
+             "majSFld: ", majSFld, '\n',
+             "maaSFld: ", maaSFld, "\n\n"
+
+    // String concat --
+
+    %set tmp = %concat "Concatenated string: ",
+      "iSFld   : ", iSFld, '\n',
+      "lSFld   : ", lSFld, '\n',
+      "fSFld   : ", fSFld, '\n',
+      "dSFld   : ", dSFld, '\n',
+      "sSFld   : ", sSFld, '\n',
+      "cSFld   : ", cSFld, '\n',
+      "bSFld   : ", bSFld, '\n',
+      "zSFld   : ", zSFld, '\n',
+      "tSFld   : ", tSFld, '\n',
+      "jSFld   : ", jSFld, '\n',
+      "aSFld   : ", aSFld, '\n',
+      "aiSFld  : ", aiSFld, '\n',
+      "alSFld  : ", alSFld, '\n',
+      "afSFld  : ", afSFld, '\n',
+      "adSFld  : ", adSFld, '\n',
+      "asSFld  : ", asSFld, '\n',
+      "acSFld  : ", acSFld, '\n',
+      "abSFld  : ", abSFld, '\n',
+      "azSFld  : ", azSFld, '\n',
+      "atSFld  : ", atSFld, '\n',
+      "ajSFld  : ", ajSFld, '\n',
+      "aaSFld  : ", aaSFld, '\n',
+      "maiSFld : ", maiSFld, '\n',
+      "malSFld : ", malSFld, '\n',
+      "mafSFld : ", mafSFld, '\n',
+      "madSFld : ", madSFld, '\n',
+      "masSFld : ", masSFld, '\n',
+      "macSFld : ", macSFld, '\n',
+      "mabSFld : ", mabSFld, '\n',
+      "mazSFld : ", mazSFld, '\n',
+      "matSFld : ", matSFld, '\n',
+      "majSFld : ", majSFld, '\n',
+      "maaSFld : ", maaSFld
+
+    %println tmp
+
+  }
+
+} // end of class.

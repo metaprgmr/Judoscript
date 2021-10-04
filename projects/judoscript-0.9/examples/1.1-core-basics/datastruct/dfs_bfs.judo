@@ -1,0 +1,56 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Defines a class Node, uses it to build a tree, and implements depth-first
+    and breadth-first searchs which involves a stack and a queue.
+  *]];
+}
+
+class Node extends treeNode
+{
+  constructor {
+    assert(has('name')); // make sure initialized
+  }
+  function toString { return name; }
+}
+
+// constuct a tree
+root = new Node(name='ROOT');
+a = new Node( name='A' );
+a.addChild(new Node(name='A1'));
+a.addChild(new Node(name='A2'));
+root.addChild(a);               // left subtree
+a = new Node( name='B');
+a.addChild(new Node(name='B1'));
+a.addChild(new Node(name='B2'));
+a.addChild(new Node(name='B3'));
+root.addChild(a);               // right subtree
+
+dfs(root); // ROOT A A1 A2 B B1 B2 B3
+bfs(root); // ROOT A B A1 A2 B1 B2 B3
+
+function dfs root {
+  print 'Depth-first traverse:   ';
+  stk = new stack;
+  stk.push(root);
+  while !stk.isEmpty() {
+    node = stk.pop();
+    print node, ' ';
+    for x in node.getChildren() backward { stk.push(x); }
+  }
+  println;
+}
+
+function bfs root {
+  print 'Breadth-first traverse: ';
+  q = new queue;
+  q.enq(root);
+  while !q.isEmpty() {
+    node = q.deq();
+    print node, ' ';
+    for x in node.getChildren() { q.enq(x); }
+  }
+  println;
+}

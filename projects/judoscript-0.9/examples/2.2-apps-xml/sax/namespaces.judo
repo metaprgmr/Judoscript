@@ -1,0 +1,36 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Displays tag and text values of the XML data with namespaces, which is
+    included at the end of the source file, using SAX-style XML processing.
+    Also uses the ERROR handler.
+  *]];
+}
+
+do $$local as xml with namespace, validate, xmlns:n="judoscript/xml/namespaces"
+{
+    <n:article>:  println '    Date >> ', $_.date;
+TEXT<n:headline>: println 'Headline >> ', $_;
+TEXT<n:author>:   println '  Author >> ', $_;
+TEXT<n:body>:     println '    Body >> ', $_;
+ERROR:            println '   <ERROR>: ', $_.message;
+}
+
+catch: $_.printInternalStackTrace();
+
+EndScript ------------------------------------------------------
+<?xml version="1.0"?>
+<!DOCTYPE news:article [
+ <!ELEMENT news:article (news:headline, news:author, news:body)>
+ <!ATTLIST news:article date CDATA #REQUIRED>
+ <!ELEMENT news:headline (#PCDATA)>
+ <!ELEMENT news:author (#PCDATA)>
+ <!ELEMENT news:body (#PCDATA)>
+]>
+<news:article xmlns:news="judoscript/xml/namespaces" date="02-Dec-2000">
+  <news:headline>SAX 2.0 Released</news:headline>
+  <news:author>F. Bar</news:author>
+  <news:body>SAX 2.0 has been released into the public domain</news:body>
+</news:article>
+

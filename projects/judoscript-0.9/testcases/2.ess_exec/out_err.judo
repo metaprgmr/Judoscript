@@ -1,0 +1,5 @@
+setOut "stdout.txt";      // set standard output to this file
+setErr "stderr.txt";      // set standard error to this file
+
+exec 'java test.Hello';   // to stdout
+exec 'java test.Hello a'; // to stderr

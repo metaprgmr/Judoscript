@@ -1,0 +1,67 @@
+usage {
+  minArgs = 1;
+  args    = 'audio_file';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Plays a sound file of these types: wav, aif, au
+    (adapted from Java Sound API sample code.)
+  *]];
+}
+
+import java.awt.*;
+import javax.sound.sampled.*;
+
+audioEOM = false;
+file = new java::File(#args[0]);
+sound = AudioSystem::getAudioInputStream(file);
+
+format = sound.getFormat();
+
+// can't yet open the device for ALAW/ULAW playback; convert ALAW/ULAW to PCM
+if ((format.getEncoding() == AudioFormatEncoding::ULAW) ||
+    (format.getEncoding() == AudioFormatEncoding::ALAW)) 
+{
+  var tmp = new java::AudioFormat(AudioFormatEncoding::PCM_SIGNED, 
+                                  format.getSampleRate(),
+                                  format.getSampleSizeInBits() * 2,
+                                  format.getChannels(),
+                                  format.getFrameSize() * 2,
+                                  format.getFrameRate(),
+                                  true);
+  sound = AudioSystem::getAudioInputStream(tmp, sound);
+  format = tmp;
+}
+
+info = new java::DataLine$Info(Clip::class, 
+                              sound.getFormat(), 
+                              sound.getFrameLength() * format.getFrameSize());
+
+clip = AudioSystem::getLine(info);
+clip.addLineListener(
+  adapter for LineListener {
+    <update>: if ($_.getType()==LineEvent$Type::STOP)
+                audioEOM = true;
+    });
+
+clip.cast(java::Clip).open(sound);
+
+value = 50;
+panControl = clip.getControl(FloatControl$Type::PAN);
+panControl.cast(java::FloatControl).setValue(value/100.0f);
+
+value = 0.80;
+gainControl = clip.getControl(FloatControl$Type::MASTER_GAIN);
+gainControl.cast(java::FloatControl).setValue(value.log10() * 20.0);
+
+clip.cast(java::DataLine).start();
+//while (!audioEOM && clip.cast(java::DataLine).isActive()) {
+while (clip.cast(java::DataLine).isActive()) {
+  sleep(599);
+}
+clip.cast(java::DataLine).stop();
+clip.close();
+
+exit 0; // necessary to kill dangling threads.
+

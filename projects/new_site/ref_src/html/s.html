@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>JudoScript Reference</title>
+<script language=JavaScript src=../share/judolib.js></script>
+</head>
+
+<script language=JavaScript>
+document.write('<frameset rows="52,*">');
+document.write(' <frame name=top src=ref_title.html noresize frameborder=no scrolling=no></frame>');
+document.write(' <frameset cols="250,*">');
+
+var args = parseQueryString();
+var l = '_ref.html';
+var r = 'ref.html';
+
+var x = args['obj'];
+if (x != null) {
+  l = '_obj.html';
+  r = 'obj_' + x + '.html';
+} else {
+  x = args['sfn'];
+  if (x != null) {
+    l = '_sfn.html';
+    r = 'sfn.html#sfn_' + x;
+  } else {
+    x = args['fa'];
+    if (x != null) {
+      l = '_fa.html';
+      r = 'fa_' + x + '.html';
+    } else {
+      x = args['syn'];
+      if (x != null) {
+        l = '_synn.html';
+        r = 'synn_' + x + '.html';
+      } else {
+      }
+    }
+  }
+}
+
+document.write('<frame src="' + l + '">');
+document.write('<frame src="' + r + '">');
+
+document.write(' </frameset>');
+document.write('</frameset>');
+//--></script>
+
+</html>

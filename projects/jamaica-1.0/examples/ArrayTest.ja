@@ -1,0 +1,64 @@
+
+public class ArrayTest
+{
+  static int aSFld[];
+  static int aaSFld[][];
+  static int aaaSFld[][][];
+  static int sIdx;
+
+  int aFld[];
+  int aaFld[][];
+  int aaaFld[][][];
+  int idx;
+
+  static {
+    %set aSFld = %array int[]{ 2, 3, 4 }
+    %set aaSFld = %array int[5][6]
+    %set aaaSFld = %array int[5][][]
+    %set sIdx = 0
+  }
+
+  %default_constructor <public>
+
+  void foo() {
+    %println "------------ foo() ------------"
+    %set aFld = %array int[]{ 2, 3, 4 }
+    %set aaFld = %array int[5][6]
+    %set aaaFld = %array int[5][][]
+    %set idx = 0
+
+    %println "aFld [ aFld [ idx=", idx, " ] ] = ", aFld[aFld[idx]]
+
+    %set aaFld[0][0] = 9
+    %println "aaFld[0][0] = ", aaFld[0][0]
+
+    %set aaaFld[1] = %array int[3][4]
+    %set aaaFld[1][1][1] = 123
+    %println "aaaFld[1][1][1] = ", aaaFld[1][1][1]
+  }
+
+  void bar() {
+    %println "------------ bar() ------------"
+    %set aSFld = %array int[]{ 2, 3, 4 }
+    %set aaSFld = %array int[aSFld[2]][6]
+    %set aaaSFld = %array int[5][][]
+    %set idx = 0
+
+    %println "aSFld [ aSFld [ idx=", idx, " ] ] = ", aSFld[aSFld[idx]]
+
+    %set aaSFld[0][0] = 9
+    %println "aaSFld[0][0] = ", aaSFld[0][0]
+
+    %set aaaSFld[1] = %array int[3][4]
+    %set aaaSFld[1][1][1] = 123
+    %println "aaaSFld[1][1][1] = ", aaaSFld[1][1][1]
+  }
+
+  public static void main(String[] args) {
+    %object ArrayTest
+    dup
+    invokevirtual foo()void
+    invokevirtual bar()void
+  }
+}
+

@@ -1,0 +1,3 @@
+<antlib>
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask" />
+</antlib>

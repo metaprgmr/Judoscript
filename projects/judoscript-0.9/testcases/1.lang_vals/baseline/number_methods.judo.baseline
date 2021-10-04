@@ -1,0 +1,37 @@
+------ initialization ------
+i = 5
+f = 5.5
+minus_i = -5
+minus_f = -5.5
+
+------ numeric functions ------
+i.int() = 5;  f.int() = 5
+i.float() = 5.0;  f.float() = 5.5
+i.abs() = 5; minus_i.abs() = 5
+f.abs() = 5.5; minus_f.abs() = 5.5
+i.sqrt() = 2.23606797749979;  f.sqrt() = 2.345207879911715
+i.log() = 1.6094379124341003;  f.log() = 1.7047480922384253
+i.log10() = 0.6989700043360187;  f.log10() = 0.7403626894942438
+i.floor() = 5.0;  f.floor() = 5.0
+i.ceil() = 5.0;  f.ceil() = 6.0
+i.round() = 5;  f.round() = 6
+i.pow(2) = 25.0;  f.pow(2) = 30.25
+
+------ trigonometry ------
+60' in radian: angle = 1.0471975666666666
+angle.degree() = 60.0
+angle.sin() = 0.866
+angle.cos() = 0.5
+angle.tan() = 1.732
+f = 1.0
+f.asin() = 1.571
+f.acos() = 0
+f.atan() = 0.785
+60' in degrees: angle = 60
+angle.radian() = 1.047
+angle.sin_d() = 0.866
+angle.cos_d() = 0.5
+angle.tan_d() = 1.732
+f.asin_d() = 90.0
+f.acos_d() = 0
+f.atan_d() = 45.0

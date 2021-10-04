@@ -1,0 +1,221 @@
+/********************************************************************
+  A book is a collection of chapters; chapters may be organized
+  into parts. The source of a book is encoded in SGML, which are
+  organized like this:
+
+    ${ROOT}/toc.sgml
+    ${ROOT}/chapters/foo.sgml
+    ${ROOT}/chapters/bar.sgml
+
+  All chapters are listed in the toc.sgml file via the <chapter>
+  tag; each <chapter> has an "id" attribute. <chapter>'s may be
+  grouped into <part>'s. For a chapter with ID of "foo", its
+  content is stored in the file of ${ROOT}/chapters/foo.sgml.
+
+  Chapter content can be logically organized in up to two levels.
+  Text are these well-formed blocks:
+
+                 Pre-     Ref-
+    Tag          formated able Description
+    ------------ -------- ---- ---------------------------------------
+    <preface>    no       no   The preface; TOC-only.
+    <section1>   no       yes  First level section; listed in TOC.
+    <section2>   no       yes  Second level section; listed in TOC.
+    <p>          no       no   Normal text.
+    <title3>     no       no   3rd-level title in the text (in <p>).
+    <tip>        no       no   Text for a tip.
+    <codelist>   yes      yes  Code listing. Line numbers optoinal.
+    <grammar>    no       yes  Syntax listing.
+    <rule>       no       no   Syntax rule.
+    <asis>       yes      no   Computer output listing.
+    <note>       no       no   Note.
+    <j1note>     no       no   JudoScript version 1.0 note.
+
+  There are a few structured text:
+
+                          Ref-
+    Tag          HTML     able Description
+    ------------ -------- ---- ---------------------------------------
+    <figure>     no       yes  Figure content.
+    <ul>         yes      no   Unordered list.
+    <ol>         yes      no   Ordered list.
+     <li>        yes      no   List item.
+    <table>      yes      yes  Table content.
+     <ttitle3>   no       no   Table subtitle.
+     <tr>        yes      no   Table row.
+     <th>        yes      no   Table header.
+     <td>        yes      no   Table column.
+    <blockquote> yes      no   A paragraph of quote.
+
+  Within text blocks, these text decorations may be used:
+
+    Tag          HTML     Description
+    ------------ -------- ---------------------------------------
+    <a>          yes      hyperlink
+    <b>          yes      bold font
+    <i>          yes      italics font
+    <u>          yes      underlined
+    <sup>        yes      superscript
+    <sub>        yes      subscript
+    <br>         yes      line-break
+    <code>       yes      code
+    <img>        yes      image. For now, exactly the same as in HTML.
+    <kw>         no       keyword
+    <kwci>       no       case-insensitive keyword
+    <nt>         no       non-terminal
+    <bio>        no       built-in object
+    <ref>        no       reference to another anchor point
+    <linkable>   no       the enclosed text is a URL that can be clicked.
+
+    <todo>:      no
+    <notyet>:    no
+    <test>:      no
+
+  SGML entities can be used. Symbols like '<' and '&' and
+  non-ASCII characters must be escaped with entities.
+
+
+  Referenceability
+  ^^^^^^^^^^^^^^^^
+  All referenceable tags can have an "id" attribute; IDs of all
+  kinds are in the same name space for a same chapter. Each tag
+  has a "published name"; e.g., for the figure #2 in chapter 3, its
+  published name is "2.3". This "2.3" can be a published name for a
+  figure, a table, or a code listing. Published names of <section1>
+  and <section2> tags are their "title" attribute.
+  
+  The <ref> may have a "href" attribute for external reference; but
+  most likely it has a "id", whose format is one of the following:
+  "chapterID:id", "chapterID:" or "id".
+
+ *******************************************************************/
+
+/**
+ * This class is used by buildBook() to pre-obtain chapter information,
+ * and used later on (in writeArticle()) for reference resolution, etc.
+ */
+class ChapterInfo
+{
+  constructor {
+    assert(this.id != null);
+    assert(this.number != null);
+    assert(this.title != null);
+
+    this.pubNames  = {};  // of { ID => published-name }
+    this.section1s = [];  // of Object's: { id, title, section2s[] }
+    this.codelists = [];  // of Object's: { id, name, pubname }
+    this.grammars  = [];  // of Object's: { id, name, pubname }
+    this.figures   = [];  // of Object's: { id, name, pubname }
+    this.tables    = [];  // of Object's: { id, name, pubname }
+  }
+
+  function addSection1 id, title, stat {
+    section1s.add(new Object( id=id, title=title, section2s=[] ));
+    if stat != null { section1s.last().status = stat; }
+    addPubName id, title;
+  }
+
+  function addSection2 id, title {
+    section1s.last().section2s.add(new Object( id=id, title=title ));
+    addPubName id, title;
+  }
+
+  function addCodeList id, title { _add id, title, codelists; }
+  function addGrammar  id, title { _add id, title, grammars; }
+  function addFigure   id, title { _add id, title, figures; }
+  function addTable    id, title { _add id, title, tables; }
+
+  function _add id, title, lst {
+    var pub_name = this.number @ '.' @ (lst.length+1);
+    lst.add(new Object( id=id, name=title, pubname=pub_name ));
+    addPubName id, pub_name;
+  }
+
+  function addPubName id, value {
+//    if pubNames.has(id) {
+//      throw "The public name for '" + id + "' already exists.";
+//    }
+    pubNames.(id) = value;
+  }
+
+  function getPubName id { return pubNames.(id); }
+
+} // end of class ChapterInfo.
+
+
+//
+// Start building the book information by creating a BookInfo instance:
+//
+//   bookInfo = new BookInfo(srcDir=srcDir);
+//
+class BookInfo
+{
+  constructor {
+    assert(this.srcDir != null);
+
+    this.title      = null; // must be set.
+    this.chapters   = [];  // of ChapterInfo's.
+    this.parts      = [];  // of { title, leadChapterIndex (incl), endChapterIndex (excl) }'s
+    this.hasPreface = false;
+
+    var chapterNum = 1;
+    var appendixNum = 1;
+
+    do '${srcDir}/toc.sgml' as sgml {
+    <title>:   this.title = $_.name;
+    <preface>: addPreface();
+    <part>:    startPart($_.title, $_.synopsis);
+    </part>:   endPart();
+    <chapter>,<appendix>:
+      var chptId = $_.id;
+      var isapp = $_.getName()=='appendix';
+      addChapter($_, isapp, isapp ? appendixNum : chapterNum);
+      chptFile = '${srcDir}/chapters/${chptId}.sgml';
+      if chptFile.fileExists() {
+        do chptFile as sgml {
+        <synopsis>: chapters.last().hasSynopsis = true;
+        <section1>: addSection1($_.id, $_.title, $_.status);
+        <section2>: addSection2($_.id, $_.title);
+        <codelist>: addCodeList($_.id, $_.name);
+        <grammar>:  addGrammar($_.id, $_.name);
+        <figure>:   addFigure($_.id, $_.name);
+        <table>:    addTable($_.id, $_.name);
+        }
+      }
+      if (isapp) ++appendixNum;
+      else       ++chapterNum;
+    }
+  }
+
+  function addPreface { this.hasPreface = true; }
+
+  function hasParts { return parts.length > 0; }
+  function startPart title, synopsis {
+    parts.add(new Object( title=title, synopsis=synopsis, leadChapterIndex=chapters.length));
+  }
+  function endPart { parts.last().endChapterIndex = chapters.length; }
+
+  function addChapter tag, isapp, num {
+    ci = new ChapterInfo( id=tag.id, number=num, title=tag.title );
+    if (tag.status)   ci.status = tag.status;
+    if (tag.synopsis) ci.synopsis = tag.synopsis;
+    if (isapp)        ci.isAppendix = true;
+    chapters.add(ci);
+  }
+
+  function getChapter id {
+    for ch in chapters {
+      if (ch.id == id) return ch;
+    }
+    return null;
+  }
+
+  function addSection1 id, title, stat { chapters.last().addSection1(id, title, stat); }
+  function addSection2 id, title { chapters.last().addSection2(id, title); }
+  function addCodeList id, title { chapters.last().addCodeList(id, title); }
+  function addGrammar  id, title { chapters.last().addGrammar(id, title); }
+  function addFigure   id, title { chapters.last().addFigure(id, title); }
+  function addTable    id, title { chapters.last().addTable(id, title); }
+
+} // end of class BookInfo.
+

@@ -1,0 +1,27 @@
+<html><body>
+<h2>Show JUSP Predefined Objects</h2>
+
+<p>View <%!viewsrc 'lesson1/snoop.jusp', '../' %></p>
+
+<table border=1><caption align=left>JUSP builtin objects:</caption>
+<tr><td><code>request  </code></td><td>&nbsp;<%= request %></td></tr>
+<tr><td><code>response </code></td><td>&nbsp;<%= response %></td></tr>
+<tr><td><code>session  </code></td><td>&nbsp;<%= session %></td></tr>
+<tr><td><code>form     </code></td><td><%
+  if form.size() == 0 {
+    %>&nbsp;<%
+  } else {
+    for fp in form {
+      %><%= fp %> = <%= form.(fp) %><br><%
+    }
+  }
+%></td></tr>
+<tr><td><code>root     </code></td><td>&nbsp;<%= root %></td></tr>
+<tr><td><code>writer   </code></td><td>&nbsp;<%= writer %></td></tr>
+<tr><td><code>outStream</code></td><td>&nbsp;<%= outStream %></td></tr>
+</table>
+
+<p><a href="?a=1&b=xyz&c=val1&c=val2&c=val3">View this with form parameters</a></p>
+
+<hr><font size=-1>Back to <a href="../lesson1.jusp">lesson 1</a></font>
+</body></html>

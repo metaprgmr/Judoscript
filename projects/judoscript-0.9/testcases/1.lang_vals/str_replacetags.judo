@@ -1,0 +1,16 @@
+tags = { alfa = 'A',
+         beta = 'B',
+         gamma = 'C'
+       };
+
+str = [[*
+         alfa is @alfa@,
+         beta is @beta@, and
+         gamma is @gamma@.
+      *]];
+
+title = 'Original string is:';
+println title, nl, '-'{title.length}, nl, str;
+
+title = 'Replaced string is:';
+println title, nl, '-'{title.length}, nl, str.replaceTags(tags, '@');

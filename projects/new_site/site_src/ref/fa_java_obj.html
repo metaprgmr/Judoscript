@@ -1,0 +1,19 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Using Java Objects and Arrays</u></h3>
+  <p>Java objects, when returned by function calls, can be used almost like any JudoScript objects.
+  One difference is that, while JudoScript functions and methods can take any number of parameters,
+  Java methods take predetermined number (and types) of parameters. For overloaded Java
+  methods, JudoScript is pretty intelligent to pick the right method to call based on the parameter
+  number and types, but there are situations where explicit casting is needed. Casting is
+  normally needed only for primitive types, but you may want to cast a Java object to a
+  different type via the Java object's built-in <code>.cast()</code> method.</p>
+
+  <p>Any Java objects, including arrays, in JudoScript are wrapped in a standard <font class=obj><a href="javascript:showObj('')"></a></font>.</p>
+
+  <p>Java objects and arrays can be created via the <font class=kw>javanew</font>  operator. If the class's
+  constructor takes no parameters, no parentheses are needed; otherwise, just specify as
+  any legitimate Java method calls.</p>
+<h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('JavaAllocator')">JavaAllocator</a></font></ul><h4>Related Object Types</h4><ul><li><font class=obj><a href="javascript:showObj('JavaObject')">JavaObject</a></font></ul></body></html>

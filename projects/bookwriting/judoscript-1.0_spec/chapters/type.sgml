@@ -1,0 +1,276 @@
+
+<!--===============================================================-->
+<section title="Data Types" id=datatypes>
+
+<!------------------------------------->
+<section title="Primitive and Non-Primitive Types" id=datatypes_1>
+
+<p>Primitive types are passed by value. Non-primitive types are passed
+by reference. When a value is used in a data structure or as a key,
+primitive values are copied; non-primitive values are referenced.</p>
+
+<p>All types have methods, including primitive values. All types
+provide <kw>Object</kw>'s non-data-member-access methods, so
+conceptually all types extend <kw>Object</kw>.
+
+<p>Java primitive types are <J> primitive types; Java primitive type
+wrapper class instances are <J> primitive types; all other Java types
+are <J> non-primitive types.</p>
+
+</section><!--------------------------->
+
+<!------------------------------------->
+<section title="Iteratible Types" id=datatypes_2>
+
+<p><J>'s <kw>for .. in ..</kw> statement allows for easy iterations
+through <em>iteratible values</em>. <p>All <J> built-in data structure
+types are iteratible.</p>
+
+<p>Java arrays and any objects that either implements the
+<kw>java.util.Iterator</kw> or <kw>java.util.Enumerable</kw>, or have
+a method that returns a <kw>java.util.Iterator</kw> or
+<kw>java.util.Enumeration</kw> are <J> iteratible. If there are more
+than one method that returns these, the method is selected in this
+order:
+<ol>
+<li> The method signature is <code>iterator()</code>, or
+<li> The method name contains <code>keys</code> or <code>Keys</code>, or
+<li> The method that returns <kw>java.util.Iterator</kw>, or
+<li> The first method in the list.
+</ol>
+</p>
+
+<p>In <J>'s functional support areas, some special-purpose objects are
+iteratible.</p>
+
+</section><!--------------------------->
+
+</section><!--=====================================================-->
+
+
+
+<!--===============================================================-->
+<section title="Built-In Data Type Listing" id=builtin>
+
+<table border=1>
+<tr><!-- == == -->
+<th>Type</th>
+<th>Primitive</th>
+<th>Iteratible</th>
+<th>Values</th>
+<th>Compatible</th>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Void</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td><kw>undefined</kw></td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Boolean</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td><kw>true</kw> and <kw>false</kw></td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Integer</kw>, <kw>long</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between -9223372036854775808 and 9223372036854775807 inclusive
+and <kw>NaN</kw>.</td>
+<td>ES4</td>
+<tr><!-- -- -- -->
+<td><kw>ulong</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between 0 and 9223372036854775807 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>sbyte</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between -128 and 127 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>byte</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between 0 and 255 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>short</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between -32768 and 32767 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>uint</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between 0 and 4294967295 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>int</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between -2147483648 and 2147483647 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>uint</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Integral values between 0 and 4294967295 inclusive and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>char</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Single 16-bit unicode characters.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Number</kw>, <kw>double</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Double-precision IEEE floating-point numbers, <kw>-INFINITY</kw>, <kw>INFINITY</kw> and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>float</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Single-precision IEEE floating-point numbers, <kw>-INFINITY</kw>, <kw>INFINITY</kw> and <kw>NaN</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Currency</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>Double-precision IEEE floating-point numbers and <kw>NaN</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>String</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>All String instances and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Date</kw></td>
+<td>primitive</td>
+<td>&nbsp;</td>
+<td>All date and time instances and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Function</kw></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>All functions and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Type</kw></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>All types and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Array</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All arrays and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>LinkedList</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All LinkedList instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Object</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All Object instances and <kw>null</kw>.</td>
+<td>ES4</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>OrderedMap</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All OrderedMap instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>SortedMap</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All SortedList instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Set</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All Set instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>OrderedSet</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All OrderedSet instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>SortedSet</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All SortedSet instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>TableData</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All TableData instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>TreeNode</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All TreeNode instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Stack</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All Stack instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+<tr><!-- -- -- -->
+<td><kw>Queue</kw></td>
+<td>&nbsp;</td>
+<td>iteratible</td>
+<td>All Queue instances and <kw>null</kw>.</td>
+<td>&nbsp;</td>
+</tr>
+</table>
+
+</section><!--=====================================================-->
+

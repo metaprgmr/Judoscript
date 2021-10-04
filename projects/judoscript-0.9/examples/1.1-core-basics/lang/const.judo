@@ -1,0 +1,11 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = 'Define a simple constant.';
+}
+
+println '    #PI = ', #PI : 2.7;
+println '5 * #PI = ', 5 * #PI : 2.7;
+
+const #PI = 3.14 ifndef;
+println '    #PI = ', #PI : 2.7;

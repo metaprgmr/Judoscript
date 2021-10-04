@@ -1,0 +1,40 @@
+// This script copies multiple directory trees of selected files
+// into a ZIP file.
+//
+// Modify the file and directory specifications for your needs.
+//
+
+$src = 'c:/work/src/';
+$doc = 'k:/bonanza/';
+// and more sources...
+
+// This creates a file like 'c:/backup/mywork_02-01-12.zip'
+$zip = createZip( 'c:/backup/mywork_' @ date().fmtDate('yy-MM-dd') @ '.zip' );
+
+
+// Copy source code into the ZIP file
+copy '*.java, *.txt, *.html, *.properties' in $src
+     except '*.class, */a.html, *Test*, */save/*'
+     recursive noHidden echo
+     into $zip;
+
+// Copy documentation files into the ZIP file
+copy '*' in $doc
+     except '*test*'
+     recursive noHidden echo
+     into $zip;
+
+// Copy ...
+
+
+$zip.close(); // check the folders in this ZIP file.
+
+
+// Note: if you archive a single directory tree, no need to use createZip;
+//       This will do:
+//
+//copy '*' in 'c:/work/'
+//     except '*.obj, *.exe, *.dll, *.class, *Test*'
+//     recursive noHidden echo
+//     into 'c:/backup/mywork_' @ date().fmtDate('yy-MM-dd') @ '.zip';
+//

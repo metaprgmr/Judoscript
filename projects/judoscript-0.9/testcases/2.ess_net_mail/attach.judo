@@ -1,0 +1,51 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Sends a message with both text and HTML plus an attachment
+    (of this script) to fake addresses. Correct the from/to
+    address and the mail server parameters before run.
+  *]];
+}
+
+connectMailServer 'mail-server', 'user', 'password';
+
+sendMail
+     from: 'foodback@judoscript.com'
+       to: 'A@some-site.cum'
+       cc: 'A@other-site.cum'
+  subject: 'The software. Thank you!'
+   attach: #prog
+     body: [[*
+           Dear Mr. A,
+
+           Thank you very much for your interest in this software.
+           Attached is a zip file for the software and a readme
+           text file. Follow the instructions therein for
+           installation and using. Enjoy!
+
+           Please visit www.judoscript.com for the latest news
+           and information. Thank you!
+
+           Sincerely,
+           JudoScript
+           *]]
+ htmlBody: [[*
+           <html><body>
+           <p>Dear Mr. A,
+
+           <p>Thank you very much for your interest in <i>this software</i>.
+           Attached is a <u>zip file</u> for the software and a <u>readme
+           text</u> file. Follow the instructions therein for installation
+           and using. Enjoy!
+
+           <p>Please visit <a href=www.judoscript.com>www.judoscript.com</a>
+           for the latest news and information. Thank you!
+
+           <p>Sincerely,
+           <p>JudoScript
+           </body></html>
+           *]]
+  ;
+
+disconnectMailServer;

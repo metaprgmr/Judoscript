@@ -1,0 +1,219 @@
+<html><head><title>JudoScript Language Version 0.5</title>
+<style type="text/css"><!--
+BODY { font-family:arial; font-size:12px; margin-top:0; margin-left:0 }
+H1 { margin-top:10; font-size:16px }
+H2 { font-size:14px; margin-bottom:5px }
+H3 { font-size:12px; font-weight:bold; }
+UL { margin-left:10px; margin-top:12px; margin-bottom:12px; list-style-type:square}
+OL { margin-left:10px; margin-top:12px; margin-bottom:12px; }
+LI { margin-left:20px }
+TH { font-family:arial; font-size:14px; font-weight:bold; }
+.text  { font-family:arial; font-size:12px; vertical-align:top }
+.index { font-family:arial; font-size:16px; font-weight:bold; vertical-align:top }
+--></style>
+</head>
+<body><center>
+<table width=650><tbody class=text><tr><td>
+<h1><em>JudoScript</em> Language Version 0.5</h1>
+<ol class=index>
+<li> <a href=#install>Install and Run</a>
+<li> <a href=#relnote>Release Notes</a>
+<li> <a href=#changes>Changes</a>
+<li> <a href=#doc>Documentation and Examples</a>
+<li> <a href=#bug>Report Bugs and Feedbacks</a>
+<li> <a href=#copyright>Copyright and Warranty Notice</a>
+<li> <a href=#misc>Acknowledgement</a>
+</ol>
+
+<p><hr>
+
+<a name=install><h2>Install and Run</h2></a>
+
+<p>
+Now that you are reading this page, you have successfully obtained the
+software and have it unpacked. Check the following list before run any
+JudoScript programs:
+<ol>
+<li> Your JVM version is JDK 1.3 or equivalent or highter.
+<li> Put file <code>judo.jar</code> in your JVM's class path.
+<li> If you intend to use JDBC, make sure the JDBC driver classes for
+     your database is in the class path.
+<li> If you intend to use XML features, make sure a Java XML parser is
+     in the class path. We recommend Apache Xerces parser, available 
+     from <a href=http://www.apache.org>Apache's site</a>. For JDK 1.4
+     users, a XML parser is already included; Xerces may still be
+     preferrable for advanced XML features. Just make sure Xerces class
+     files are before JDK classes.
+<li> If you intend to send e-mail, make sure <code>javax.mail.*</code>
+     classes are in your class path. The JavaMail package can be
+     downloaded from <a href=http://java.sun.com>JavaSoft's site</a>.
+     It is also part of J2EE.
+<li> If you intend to use <a href=doc/articles/http_html.html#jusp>JUSP</a>
+     to develop web sites, register the servlet class
+     <code>wws.judo.jusp.JuspServlet</code> to your servlet engine and
+     provide a <code>juspRoot</code> init parameter that serves as the
+     root directory for all JUSP pages. If it is not specified, JUSP
+     pages are resolved the same way as other web pages.
+<li> To use the SSH and SCP features, <a href=http://www.isnetworks.com/ssh>the
+     MindTerm/SSH package</a> must be downloaded and installed.
+<li> To use the Windows registry support, download Tim Endres'
+     <a href=http://www.trustice.com>JNI Registry Library</a>.
+</ol>
+
+To learn how to run a <em>JudoScript</em> program,
+<a href=doc/articles/intro.html#run>click here</a>.
+
+
+<p><hr>
+
+<a name=relnote><h2>Release Notes</h2></a>
+
+<p>
+<em>JudoScript</em> is open source! The language is almost finalized,
+although there are still major (but not critical) application features
+need be implemented. If you are interested in helping, click
+<a href=http://www.judoscript.com/opensource.html>this link</a> for a
+list of projects currently open. There is still a lot of work for the
+tools, such as the language engine, precompiling, error handling, etc.
+
+<p>
+The <a href=doc/langspec/spectoc.html>Language Specification</a>
+lists all the languages features. The <a href=doc/articles/intro.html>articles</a> 
+explain major topics in detail.
+
+
+<p><hr>
+
+<a name=changes><h2>Changes</h2></a>
+
+<p>
+Changes for <em>0.5</em>:
+
+<ol>
+<li> Open source!
+<li> Added <b>transform</b> clause for the <b>copy</b> command.
+<li> Provides a console debugger. This is rudimental, and is more or less a
+     reference for a more robust, GUI-based debugger.
+<li> Provides the Java file white-box testing feature.
+</ol>
+
+<p>
+Changes for <em>pre.0.4</em>:
+
+<ol>
+<li> Added support for generic Java package lists; the built-in package
+     lists have become aliases using this feature.
+<li> Added support for conditional include and const definitions.
+<li> Added support for initialization script, ".judoscript".
+<li> Added countLines option to list/ls commands.
+<li> Added support for SSH and SCP (requires ISNetworks distribution of
+     MindTerm/SCP version 1.2.1 SCP Release 3).
+<li> Added support for encryption (requires JCE1.2.1; in JDK1.4 already).
+<li> Added support for XSLT (requires Xalan/Xerces).
+<li> Added support for Windows registry (requires Tim Endres' JNI Registry Library at
+     http://www.trustice.com).
+<li> Added support for Unix syslog (uses Jef Poskanzer's Acme package class).
+</ol>
+
+<p>
+Changes for <em>pre.0.3</em>:
+
+<ol>
+<li> Added regular expression support (requires JDK1.4).
+<li> Added TAR file support -- use just like ZIP/JAR.
+<li> Added chown/chgrp/chmod commands.
+<li> Added database table dumping feature.
+<li> Added better database meta data support.
+<li> Added tableData data structure.
+<li> Added printTable statement for tabular data printing.
+<li> Added evalFile statement (in addition to eval and evalExternal).
+<li> For JDBC, allow PreparedStatement and ResultSet methods to be
+     called directly. These can be RDBMS-specific.
+<li> Added FTP support (uses the Java FTP Client Library from
+     http://www.enterprisedt.com).
+</ol>
+
+<p>
+Changes for <em>pre.0.2</em>:
+
+<ol>
+<li> <a href=http://www-124.ibm.com/developerworks/projects/bsf>Bean
+     Scripting Framework</a> support.
+<li> Bug fix: XML packages should not be mandatory but optional.
+</ol>
+
+
+<p><hr>
+
+<a name=doc><h2>Documentation and Examples</h2></a>
+
+<p>
+Documentation includes a <a href=doc/langspec/spectoc.html>language specification</a>
+that describes each feature precisely and a set of
+<a href=doc/articles/intro.html>articles</a> discussing major features with
+a lot of code examples. The source code of the formal code listings are all
+included in the <a href=examples/index.html>examples</a> directory.
+
+
+
+<p><hr>
+<a name=bug><h2>Report Bugs and Feedbacks</h2></a>
+
+<p>
+To report bugs, submit feedback or have a question, come to
+<a href=http://www.judoscript.com>www.judoscript.com</a> and click the
+feedback link. When submitting bugs, check the latest version first, and
+make sure the version number is included in the message. To get a version
+information, do this:
+
+<pre>
+  java judo -x . versionInfo()
+</pre>
+
+
+<p><hr>
+<a name=copyright><h2>Copyright and Warranty Notice</h2></a>
+
+<p>
+JudoScript is free software; you can embed, modify and redistribute it
+under the terms of the GNU Lesser General Public License version 2.1 or
+up as published by the Free Software Foundation, which you should have
+received a copy along with this software. It can be found at
+<a href=http://www.gnu.org/copyleft/lesser.html>the GNU site</a>.
+
+<p>
+This software is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+ 
+
+<p><hr>
+<a name=misc><h2>Acknowledgement</h2></a>
+
+<p>
+A handful of Java source files concerning HTTP cookies are derived
+from Apache Tomcat project; they are in a different Java package, so
+name clashes is prevented. This also serves the purpose of fulfilling
+the licence requirement of using such source files.
+
+<p>
+Some of the examples are ported from Java programs in Java tutorials
+from JavaSoft. You may download the Java source from
+<a href=java.sun.com>Sun</a>.
+
+<p>
+The TAR support of JudoScript uses classes developed and contributed
+to the public domain by Timothy Gerard Endres. Many thanks for his
+wonderful work!
+
+<p>
+The bundled software are either public domain without licensing
+restrictions or under the same license for this software (i.e., LGPL).
+Their package names are changed so that no conflicts would occur
+should a user machine have another version of the same software
+available in the class path. Their source code is included in the
+source code distribution of this software.
+
+</td></tr></table>
+</center></body></html>

@@ -1,0 +1,1142 @@
+<Doc title="JDBC Scripting" author="James Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, JDBC scripting, Java JDBC scripting, executeSQL, executeQuery, executeUpdate, executeAny, executeBatch, createBatch, prepare, prepareCall, executeCall, next, in-bound, out-bound, in-out-bound, onSuccess, free-form SQL"
+ deprecated="../books/judoscript-0.9/chapters/jdbc.html"
+>
+
+<sectiondefs>
+<sectiondef name="example"  caption="Example: A Multimedia Library">
+<sectiondef name="insert"   caption="Insert Records">
+<sectiondef name="batch"    caption="Batch Updates">
+<sectiondef name="query"    caption="Queries">
+<sectiondef name="proc"     caption="Stored Procedures">
+<sectiondef name="mssql"    caption="Microsoft SQL Server Examples">
+<sectiondef name="cross"    caption="Cross-Database Operations">
+<sectiondef name="tables"   caption="Describe and Dump Tables">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+JDBC scripting with free-form SQL is one of the main motivations for <J>
+itself. SQL statements can be run directly by <kw>executeSQL</kw> and
+<kw>executeQuery</kw> or prepared and run by <kw>prepare</kw> and its family
+of shortcut statements. Stored procedure calls are supported, too. SQL
+statements can be run individually or in a batch via <kw>executeBatch</kw>;
+they can be specified altogether or added one by one. This article describes
+all the basic features with a small sample database application. The scrtipts
+herein are executable; they create the sample database and its content;
+explanation is done for Oracle code. Some Microsoft SQL Server code is
+provided, too. More advanced JDBC topics will be in another article.
+</abstract>
+
+</doc>
+
+
+<p>
+JDBC is cool because it is database neutral. Working with multiple,
+heterogeneous databases is a given. <J> allows you to specify free form
+SQL statements to execute with JDBC individually or as a group or a batch,
+prepared or directly. They can mostly replace the RDBMS's native SQL tools,
+so different kinds of databases can be manipulated in a single, consistent
+way. By balancing the power of SQL and <J>'s programmability, one can work
+the database activities most effectively and efficiently. 
+
+<p>
+Free form SQL statements make a world of difference in interacting with
+databases. The following is a Java JDBC code snippet:
+
+<demo>
+String sql = "SELECT * FROM table1" +
+             "WHERE seq < 5";
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery(sql);
+ ....
+</demo>
+
+See anything wrong? It compiles but will be rejected by the database server
+at runtime. The source of this kind of problems is quoting, concatenation
+and escaping of the SQL statements. APIs tend to break things down to
+pieces, and for a well-defined area such as relational database and SQL, a
+natural, dedicated way is desirable. That is how database tools like Oracle
+SQL*Plus does. Let us see how <J> does the same query:
+
+<demo>
+executeQuery qry:
+  select * from table1
+  where seq < 5;
+
+while qry.next() {
+  println '--------';
+  println qry[1];            // column 1
+  println qry."Record Type"; // column by that name
+}
+</demo>
+
+<p>
+<J> has a slew of special statements for JDBC and general database
+functionalities. In this article, the basic JDBC features in <J> are
+introduced in a context of a fictitious multimedia library database.
+All the explanation is done for the scripts for Oracle 8i; change the
+connection parameters and run. Microsoft SQL Server counterpart is
+provided.
+
+
+
+<section name=example>
+
+Let us build a database to keep track of family pictures, videos and
+sound files; the database maintains information about every family
+member and friend in each media file, so we can easily find all the
+photos the pet is in, or all the MP3 files for kids' piano recitals.
+We use table <em>MEDIA</em> for media files and table <em>PEOPLE</em>
+for each character. A character can appear in many media files; each
+media file may contain 0 or more characters. This relationship is
+stored in table <em>PARTICIPANTS</em>:
+
+            <center><img src=er.gif border=0></center>
+
+Let us create the tables. We use an Oracle database called
+<em>crescent</em>, running on <em>localhost</em>.
+
+<codelist name="ora_create_tables" caption="ora_create_tables.judo">
+ 1: const #dbUrl  = 'jdbc:oracle:thin:@localhost:1521:crescent';
+ 2: const #dbUser = 'jamesh';
+ 3: const #dbPass = secret('guess');
+ 4: 
+ 5: connect to #dbUrl, #dbUser, #dbPass;
+ 6: 
+ 7: // drop the tables, if already exist
+ 8: tables = [ 'participants', 'media', 'people' ];
+ 9: 
+10: for tbl in tables {
+11:   if tableExists(#dbUser.toUpper() @ '.' @ tbl.toUpper()) {
+12:     // For Oracle: prepend user schema name to object names.
+13:     executeSQL: drop table (* tbl *);
+14:   }
+15: }
+16: 
+17: executeSQL
+18: {
+19:   create table people
+20:   ( personID  int primary key,
+21:     name      varchar(20) not null,
+22:     alias     varchar(20),
+23:     birthDay  date,
+24:     sex       varchar(1),  // 'M', 'F'
+25:     addTime   date
+26:   );
+27: 
+28:   create table media
+29:   ( folderID  varchar(512) not null, // relative path
+30:     fileName  varchar(128) not null, // file name w/o path
+31:     type      varchar(1) not null,   // I: image, M: movie, A: audio
+32:     fileTime  date,
+33:     bytes     int,
+34:     width     int,
+35:     height    int,
+36:     addTime   date,
+37:     constraint pathName primary key ( folderID, fileName )
+38:   );
+39: 
+40:   create table participants
+41:   ( folderID  varchar(512),
+42:     fileName  varchar(128),
+43:     personID  int,
+44:     constraint ref_media  foreign key (folderID,fileName)
+45:                           references media (folderID,fileName),
+46:     constraint ref_people foreign key (personID)
+47:                           references people (personID)
+48:   );
+49: 
+50: } // end of executeSQL.
+51:
+52: disconnect();
+</codelist>
+
+This short <J> program shows many language features as well as basic JDBC
+usages, and we will discuss every single one of them.
+
+<p>
+The <code>executeSQL</code> block between line 17 and 50 is intuitive enough:
+it runs a series of SQL statements. Line 13 shows that <code>executeSQL</code>
+can run single SQL statement as well, and expressions can be embedded in SQL.
+Now, for most common database operations, you don't need the native database
+scripts any more!
+
+<p>
+Certainly, we must connect to the database before anything else, as does line 5.
+The <code>connect</code> used three constants, defined in lines 1 through 3.
+On line 3, the password is created as a "secret", which should contain an
+encrypted text value and optionally a decryptor object. When the decryptor is
+not present, for now <J> returns the value as-is but in the future will resort
+to a default decryptor specified in the <J> initialization. In <J>, constants
+and variables are weakly typed; the basic types are integer, floating point
+numbers, strings and dates. Strings can be singly or doubly quoted. There is no
+need to declare variables except when a variable is explicitly declared
+<code>local</code>. Beyond these types, <J> has data structures like
+<code>array</code>s (see line 8), <code>stack</code>s, <code>queue</code>s and
+<code>struct</code>s, etc. Constant names start with a pound sign (<code>#</code>).
+Lines 10 and 11 show that <J> uses pretty much the same syntax as Java for
+expressions and flow-control statements, except that parentheses
+('<code>(</code>' and '<code>)</code>') are generally not required but curly
+braces ('<code>{</code>' and '<code>}</code>') are.
+
+<p>
+The syntax of the <code>connect</code> statement is:
+
+<gramma>
+<kw>connect</kw> [ <nt>Variable</nt> ] <kw>to</kw>
+ <nt>Expr</nt> [ "," <nt>Expr</nt> [ "," <nt>Expr</nt> ] ] ";"
+</gramma>
+
+The optional <em>Variable</em> denotes a "connection" object, one of
+<J>'s built-in objects. If it is not present, the default
+connection object, named <code>$$con</code>, is used, and its methods can be
+invoked directly. Therefore, the following line has exactly the same meaning
+as line 11:
+
+<demo>
+if $$con.tableExists(#dbUser.toUpper() @ '.' @ tables[i].toUpper()) {
+</demo>
+
+where <code>@</code> is the string concat operator.
+
+<p>
+As a Java programmer familiar with JDBC, you may wonder where does this
+statement go:
+
+<demo>
+Class.forName("oracle.jdbc.driver.OracleDriver"); // or any driver class
+</demo>
+
+<J> simplifies your life by remembering <em>all</em> major JDBC driver names;
+from the JDBC URL it picks up the right driver for you. As of today, the
+pre-registered drivers include: <i>Cloudscape</i>, <i>DB2</i>, <i>idb</i>,
+<i>Informix</i>, <i>mSQL</i>, <i>MySQL</i>, <i>ODBC</i>, <i>Oracle</i>,
+<i>PostgreSQL</i>, <i>Postgres95</i>, <i>Solid</i>, <i>SQLBase</i> and
+<i>Sybase</i>.  If a new driver class is loaded, do it just like in Java:
+
+<demo>
+!JavaBaseClass #Class
+#Class.forName('bobs.newdb.jdbc.Driver');
+</demo>
+ 
+<p>
+Database connections have attributes that can be read and set. They include
+<kw>autoCommit</kw>, <kw>readOnly</kw>, <kw>catalog</kw> and
+<kw>transactionIsolation</kw> and <kw>driver</kw>. The <kw>driver</kw>
+attribute allows you to provide a specific JDBC driver that is not in the
+known JDBC driver list. <kw>transactionIsolation</kw> is one of these
+values: "transaction_none", "transaction_read_committed",
+"transaction_read_uncommitted" and "transaction_serializable". 
+To set the catalog and read-only, for instance, do this:
+
+<demo>
+connect to #url, #user, #pass;
+$$con.catalog = 'MYCATALOG';
+$$con.readOnly = true;
+</demo>
+
+or
+
+<demo>
+connect (catalog='MYCATALOG', readOnly=true) to #url, #user, #pass;
+</demo>
+
+<p>
+Before we move on to the next topic, let us use <code>!include</code>.
+Since all the <J> programs in this article will be connecting to the same
+database, and your database must be different from mine, retyping the JDBC
+URL, database user name and password everywhere is boring. We can put lines
+1 through 5 into a separate file named <code>connection.judi</code>, then
+in <code>create_tables.judo</code>, change lines 1 through 5 into:
+
+<demo>
+!include 'connection.judi'
+</demo>
+
+The extension "judi" stands for <u>jud</u>oscript <u>i</u>nclude file. This
+is merely a convension; it can be anything.
+
+
+<review>
+<question> Constant names must start with which letter? How to define constants?
+<question> Variable names must start with which letter? Do they have to be declared before using?
+<question> What basic data types does <J> have? Data structures?
+<question> How to concatenate strings?
+<question> For expressions and flow-control statements, what are the differences
+           between <J> and Java?
+<question> How to include a file? What does "judi" stand for? Is it a required extension?
+<question> How to connect to a database?
+<question> What is the default connection variable? How to assign a connection to a variable?
+           What is the significance of having connection variables?
+<question> Why you don't need to specify JDBC driver class names like Java programs do?
+<question> Can <code>executeSQL</code> statement run one or more SQL statements?
+           Can expressions be embedded in SQL? How?
+</review>
+
+
+<section name=insert>
+
+Now that the tables are created, we need some content. First we insert
+all the characters (family members, friends, pets, ...) since this
+information is fairly static:
+
+<codelist name="ora_insert_members" caption="insert_members.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: executeSQL
+ 4: {
+ 5:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+ 6:        values ( 1, 'Little Bear', 'bear', null, 'M', sysdate);
+ 7:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+ 8:        values ( 2, 'Father Bear', 'father', null, 'M', sysdate);
+ 9:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+10:        values ( 3, 'Mother Bear', 'mother', null, 'M', sysdate);
+11:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+12:        values ( 4, 'Emily', 'emily', null, 'F', sysdate);
+13:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+14:        values ( 5, 'Aunty Hen', 'hen', null, 'F', sysdate);
+15:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+16:        values ( 6, 'Cat', 'cat', null, 'M', sysdate);
+17:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+18:        values ( 7, 'Owl', 'owl', null, 'M', sysdate);
+19:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+20:        values ( 8, 'No Feet', 'snake', null, 'M', sysdate);
+21:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+22:        values ( 9, 'Duck', 'duck', null, 'F', sysdate);
+23: }
+24:
+25: disconnect();
+</codelist>
+
+Next, we will use prepared statements. Prepared statements allow JDBC drivers
+and/or the database server to do preprocessing, caching and optimization, so
+they should always be considered for repetitive database operations.
+
+<codelist name="ora_insert_1_image" caption="ora_insert_1_image.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: prepare mediatbl:
+ 4:   insert into media (folderID,fileName,type,fileTime,bytes,width,height,addTime)
+ 5:   values (?,?,?,?,?,?,?,sysdate);
+ 6:
+ 7: prepare partbl:
+ 8:   insert into participants (folderID,fileName,personID)
+ 9:   values (?,?,?);
+10:
+11: executeUpdate mediatbl
+12:          with @1 = '/2001-06',      // default type is "string".
+13:               @2 = 'DSC00001.jpg',
+14:               @3 = 'I',
+15:               @4:date = date(2001,6,3),
+16:               @5:int = 45044,
+17:               @6:int = null,
+18:               @7:int = null
+19: ;
+20: println unit(mediatbl.updateCount,'row'), " inserted into 'media' table.";
+21:
+22: executeUpdate partbl
+23:          with @1 = '/2001-06',
+24:               @2 = 'DSC00001.jpg',
+25:               @3:int = 1            // for alias 'bear'
+26: ;
+27: println unit(partbl.updateCount,'row')," inserted into table participants.";
+28:
+29: disconnect();
+</codelist>
+
+Lines 3 through 5 and 7 through 9 are two <code>prepare</code> statements. The
+variable in a <code>prepare</code> statement is called a <em>handle</em>, and
+is used subsequently to run and store results. If a single prepared statement
+is involed, this variable can be omitted and the default handle name
+<code>$$</code> is used. The first <code>prepare</code> statement has seven
+bind variables, the second has three. When the SQLs are run, they must be
+bound to values (lines 11 through 18 and 22 through 26).
+
+<p>
+Move your eyes up and down and make sure you get the picture, then try to
+visualize writing the same program in Java and sense the difference.
+
+<p>
+The <code>println</code> statement is probably one of the most frequently used
+statement. It has a shortcut form: a dot. The <code>unit()</code> function is
+just a convenience to print singular and plural names. To show you more about
+<code>println</code>, the following is the program that adds line numbers to
+all the listings:
+
+<codelist name="addlinenum" caption="addlinenum.judo">
+ 1: usage {
+ 2:   minArgs = 1;
+ 3:   args '&lt;filename&gt;';
+ 4: }
+ 5:
+ 6: file = openTextFile(#args[0]);
+ 7: for lineNum=1; (line=file.readLine()) != eof; ++lineNum {
+ 8:   println lineNum : >2, ': ', line;
+ 9: }
+10: file.close();
+</codelist>
+
+Line 8 shows that <code>println</code> can take multiple parameters, and
+alignment directives can be attached. A new-line directive (<code>nl</code>)
+can be used as parameter. Line 1 shows how to use the command line
+parameters. Lines 6, 7, 8 and 10 shows how to read text files.
+
+<p>
+Let us not lose our focus on the topic of JDBC. The following is a more
+complicated version of inserting records into the <em>MEDIA</em> and
+<em>PARTICIPANTS</em> tables. The idea is to group all relevant information
+about each media file and have the program figure out where to insert what.
+
+<codelist name="ora_insert_n_media" caption="ora_insert_n_media.judo">
+ 1: !include 'connection.judi'
+ 2: 
+ 3: prepare mediatbl:
+ 4:   insert into media (folderID,fileName,type,fileTime,bytes,width,height,addTime)
+ 5:   values (?,?,?,?,?,?,?,sysdate)
+ 6: ;
+ 7: 
+ 8: prepare partbl:
+ 9:   insert into participants (folderID,fileName,personID)
+10:   values (?,?,?)
+11: ;
+12: 
+13: // Insert from an array of media files.
+14: 
+15: const #folder1 = '/2001-07';
+16: const #folder2 = '/2001-08';
+17: const #folder3 = '/2001-09';
+18: 
+19: media_files = [ { folder   : #folder1,
+20:                   filename : 'DSC00002.jpg',
+21:                   type     : 'I',
+22:                   filetime : date(2001,7,4),
+23:                   bytes    : 45056,
+24:                   people   : 'bear,father,mother' // aliases
+25:                 },
+26:                 { folder   : #folder2,
+27:                   filename : 'recital.mp3',
+28:                   type     : 'A',
+29:                   filetime : date(2001,8,5),
+30:                   bytes    : 3048005,
+31:                   people   : 'bear,emily'
+32:                 }
+33:               ];
+34:
+35: for x in media_files
+36: {
+37:   // insert into media table (handle mediatbl):
+38:   executeUpdate mediatbl
+39:            with @1 = x.folder,
+40:                 @2 = x.filename,
+41:                 @3 = x.type,
+42:                 @4:date = x.filetime,
+43:                 @5:int = x.bytes,
+44:                 @6:int = x.width,  // null
+45:                 @7:int = x.height  // null
+46:   ;
+47:   // insert into participants table (handle partbl).
+48:   // this is done for each participants listed in x.people;
+49:   aliases = x.people.csv(',');
+50:   for y in aliases
+51:   {
+52:     // because y is an alias, find the personID
+53:     local personID = null;
+54:     executeQuery getID:
+55:       select personID from people where alias = ?;
+56:     with @1 = y
+57:     onSuccess { personID = getID[1]; }
+58:
+59:     if personID {
+60:       executeUpdate partbl
+61:                with @1 = x.folder,
+62:                     @2 = x.filename,
+63:                     @3:int = personID
+64:       ;
+65:     }
+66:   }
+67: }
+68:
+69: disconnect();
+</codelist>
+
+Lines 19 through 33 creates an array of several <code>struct</code>'s.
+Each <code>struct</code> is initialized with a number of attributes.
+The last attribute, <em>people</em>, is a comma-separated string of
+character aliases. They are parsed by the string value's <code>csv()</code>
+method (see line 49) into an array of strings.
+
+<p>
+Lines 35 and 50 introduce a variant to the familiar <code>for</code>
+statement. This is an easy way to enumerate array values.
+
+<p>
+Inserting into table <em>MEDIA</em> is straightforward. In order to insert
+into table <em>PARTICIPANTS</em> (lines 62 through 64), we need to obtain
+the persion IDs from the aliases. Line 49 gets the aliases, and line 54
+through 58 tries to get the person ID. This is the first time we encounter
+a query. Lines 54 through 58 are exactly the same as:
+
+<demo>
+prepare getID: select personID from people where alias = ? ;
+executeQuery getID with @1 = y;
+if getID.next() { personID = getID[1]; }
+</demo>
+
+<code>executeQuery</code> stores the result set in the handle, and
+<code>next()</code> method is used to enumerate it.
+The <code>onSuccess</code> clause is handy when no more than one row is
+expected.
+
+<p>
+Now, in principle we are able to load information from a file (line-based
+or XML). Create a file with lines of records like those in line 19 through
+33, with fields separated by a vertical bar ('|'). Consult
+<codelist href="addlinenum"> on how to read text files, and replace
+lines 15 through 33 in <codelist href="ora_insert_n_media"> with the file
+reading and field parsing operation (using <code>csv()</code> method).
+This can be an exercise for you.
+
+<review>
+<question> How to prepare a SQL statement?
+<question> What is a database handle? What is the default database handle variable name?
+<question> Can a prepared statement be executed for update, query or stored procedure call?
+<question> How to bind variables at runtime? What about their SQL data types?
+<question> How to get the update count?
+<question> How to open text files and read lines?
+<question> How to initialize attributes when creating <code>struct</code>'s?
+<question> How to parse character-separated strings?
+<question> When do you the <code>onSuccess</code> clause in the <code>executeQuery</code>
+           statement?
+</review>
+
+
+<section name=batch>
+
+<p>
+JDBC 2.0 supports batch updates, that is, multiple SQL statements can be
+added into a "batch" in the JDBC driver, and they are sent to the server
+all at once. It is easy to run batch updates in <J>; in
+<codelist href="ora_insert_members">, simply change <code>executeSQL</code> to
+<code>executeBatch</code> will work.
+
+<p>
+We show another version of batch updates which dynamically addes SQL statements
+to a batch before running.
+
+<codelist name="ora_batch_updates" caption="ora_batch_updates.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: members = [ [ 1, 'Little Bear', 'bear',   'M' ],
+ 4:             [ 2, 'Father Bear', 'father', 'M' ],
+ 5:             [ 3, 'Mother Bear', 'mother', 'M' ],
+ 6:             [ 4, 'Emily',       'emily',  'F' ],
+ 7:             [ 5, 'Aunty Hen',   'hen',    'F' ],
+ 8:             [ 6, 'Cat',         'cat',    'M' ],
+ 9:             [ 7, 'Owl',         'owl',    'M' ],
+10:             [ 8, 'No Feet',     'snake',  'M' ],
+11:             [ 9, 'Duck',        'duck',   'F' ]
+12:           ];
+13:
+14: batch = createBatch();
+15:
+16: for x in members {
+17:   addBatch to batch:
+18:     insert into people (personID,name,alias,birthDay,sex,addTime)
+19:     values ( (*x[0]*),'(*x[1]*)','(*x[2]*)',null,'(*x[3]*)',sysdate)
+20:   ;
+21: }
+22:
+23: updateCnt = batch.executeBatch();
+24: println unit(updateCnt,'row'), ' updated.';
+25:
+26: disconnect();
+</codelist>
+
+As you see, a <code>batch</code> variable is created by the call to the
+<code>createBatch()</code> system function; the batch variable is used
+to accept batch SQL statements (lines 17 through 20). On line 23, it is just
+a regular method call to invoke <code>executeBatch</code>, unlike many other
+JDBC statements that employ their own syntaxes. (Why?)
+
+
+<review>
+<question> Can SQL statements be added to a batch individually? How?
+</review>
+
+
+<section name=query>
+
+<p>
+The following listing demonstrates a simple query. The crux of this program
+is variable <code>a</code> the database handler; to access values in a row, you can use
+the column numbers (lines 8 through 10) or column names (lines 11 through 13).
+
+<codelist name="ora_query_members" caption="ora_query_members.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: executeQuery a:
+ 4:   select * from people order by alias
+ 5: ;
+ 6:
+ 7: while a.next() {
+ 8:   println 'personID: ', a[1];
+ 9:   println '    name: ', a[2];
+10:   println '   alias: ', a[3];
+11:   println 'birthDay: ', a.birthDay;
+12:   println '     sex: ', a.SEX;
+13:   println ' addTime: ', a.addTime;
+14:   println '--------';
+15: }
+16:
+17: disconnect();
+</codelist>
+
+Prepared SQL execution is common in JDBC programming. The <code>prepare</code>
+statement can be used to prepare any statements (see lines 3 through 5 in
+<codelist href="ora_insert_n_media">); the subsequent <code>executeUpdate</code>,
+<code>executeQuery</code> or <code>executeCall</code> statement runs the SQL
+in its intended way. To use prepared statements in our example, replace lines
+3 through 5 with:
+
+<blockquote><pre>
+prepare a:
+  select * from people order by alias
+;
+executeQuery a;
+</pre></blockquote>
+
+Prepared statements are more likely to contain bind variables (that is,
+question marks). Bind variables in queries are used exactly the same way as
+in updates (see, for example, lines 12 through 18 in
+<codelist href="ora_insert_1_image">).
+
+<p>
+As a practical example, here is a program that prints the source code of
+Oracle stored procedures. You can use the second part (commented out by
+default) to write to a text file. The center of this program is the Oracle
+table <code>user_source</code>, which has these columns:
+
+<blockquote><pre>
+NAME  VARCHAR2(30)
+TYPE  VARCHAR2(12)
+LINE  NUMBER
+TEXT  VARCHAR2(4000)
+</pre></blockquote>
+
+For each procedure or function, each line of code takes a row, numbered by
+<code>LINE</code>, kept in the <code>TEXT</code> column, which seems to
+keep the new line character at the end.
+
+<codelist name="get_proc_src" caption="get_proc_src.judo">
+ 1: connect to 'jdbc:oracle:thin:@localhost:1521:crescent','jamesh','guess';
+ 2:
+ 3: executeQuery a:
+ 4:    select distinct type, name, line, text
+ 5:      from user_source
+ 6:      order by name, type, line
+ 7: ; // add where clause to get specific procedures/objects.
+ 8:
+ 9: name = null;
+10: while a.next() {
+11:   if name != a[2] {
+12:     if name != null { prinltn nl; }
+13:     name = a[2];
+14:     prinltn name, ':';
+15:   }
+16:   flush '    ', a[4];
+17: }
+18:
+19: // Or, save the code to files
+20: // Modify to suit your needs, e.g. "create" scripts, etc.
+21:
+22: /*****
+23: name = null;
+24: file = null;
+25: while a.next() {
+26:   if name != a[2] {
+27:     name = a[2];
+28:     if file != null {
+29:       // anything AFTER the stored procedure code goes here
+30:       file.close();
+31:     }
+32:     file = openTextFile(name @ '.' @ a[1], 'w');
+33:     // anything BEFORE the stored procedure code goes here
+34:   }
+35:   print <file> a[4];
+36: }
+37: if file != null {
+38:   // anything AFTER the stored procedure code -- for the last one.
+39:   file.close();
+40: }
+41: *****/
+42:
+43: disconnect();
+</codelist>
+
+
+<review>
+<question> Can you access a column value in a row by index or by name?
+<question> Does the column index start from 0 or 1?
+</review>
+
+
+<section name=proc>
+
+
+The following listing shows how to pass input and/or output parameters
+to a stored procedure. Line 3 shows an <code>executeAny</code> statement,
+which sends anything specified to the database server. <code>executeSQL</code>
+is not up to the task because semicolons are used as SQL statement
+separators but they are valid characters in stored procedures. Line 18
+prepares a SQL stored procedure call via <code>prepareCall</code> statement,
+and lines 22 through 24 runs it. Since a stored procedure has the liberty to
+essentially do anything in the database, both queries and updates are
+expected. There is no special execute statement for stored procedure calls.
+Note the syntax for binding in-, out- and in-out-bound parameters. The
+in-out-bound parameters should be bound to variables with valid input values.
+
+<codelist name="test_proc" caption="test_proc.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: executeAny [[*
+ 4:   create or replace procedure test_proc(param_io IN OUT number,
+ 5:                                         param_i IN varchar,
+ 6:                                         param_o OUT varchar)
+ 7:   as
+ 8:   begin
+ 9:     param_o := param_i;
+10:     if param_io is not null then
+11:       param_io := param_io + 1;
+12:     else
+13:       param_io := -1;
+14:     end if;
+15:   end;
+16: *]];
+17:
+18: prepareCall: { call test_proc(?,?,?) };
+19:
+20: println 'x = ', x = 1;
+21: println 'y = ', y = 'abcd';
+22: executeSQL with @1:int <=> x,
+23:                 @2:varchar =  y,
+24:                 @3:varchar => z;
+25: println 'x = ', x;
+26: println 'z = ', z;
+27:
+28: disconnect();
+</codelist>
+
+For more information about stored procedure calls, see
+<a href=adv_jdbc.html><em>Advanced JDBC</em></a>.
+
+
+<review>
+<question> When is <code>executeAny</code> statement useful?
+<question> Is it different to prepare a query and prepare a stored procedure call?
+<question> In JDBC stored procedure calls, out-bound parameters need be registered
+           prior to execution. Do you need to do the same in <J>?
+           How to use out-bound and in-out-bound parameters?
+</review>
+
+
+<section name=mssql>
+
+<p>
+The above examples are all for Oracle. Similar code for Microsoft SQL Server is
+listed below with little explanation. The database is set up as an ODBC data
+source.
+
+<codelist name="ms_connection" caption="connection.judi -- <em>for Microsoft SQL Server</em>">
+1: connect to 'jdbc:odbc:myDSN', 'dbuser', secret('dbpass');
+</codelist>
+
+<codelist name="ms_create_tables" caption="ms_create_tables.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: // drop the tables, if exist already
+ 4: tables = [ participants, media, people ];
+ 5: for i=0; i < tables.size; ++i {
+ 6:   if $$con.tableExists(tables[i]) {
+ 7:     executeSQL: drop table (* tables[i] *);
+ 8:   }
+ 9: }
+10:
+11: executeSQL
+12: {
+13:   create table people
+14:   ( personID  int primary key,
+15:     name      varchar(20) not null,
+16:     alias     varchar(20),
+17:     birthDay  datetime,
+18:     sex       varchar(1),  // 'M', 'F'
+19:     addTime   datetime
+20:   );
+21:
+22:   create table media
+23:   ( folderID  varchar(512) not null,
+24:     fileName  varchar(128) not null,
+25:     type      varchar(1) not null, // I -- image, M -- movie, A -- audio
+26:     fileTime  datetime,
+27:     bytes     int,
+28:     width     int,
+29:     height    int,
+30:     addTime   datetime,
+31:     constraint pathName primary key clustered ( folderID, fileName)
+32:   );
+33:
+34:   create table participants
+35:   ( folderID  varchar(512),
+36:     fileName  varchar(128),
+37:     personID  int,
+38:     constraint ref_media  foreign key (folderID,fileName)
+39                            references media (folderID,fileName),
+40:     constraint ref_people foreign key (personID)
+41                            references people (personID)
+42:   );
+43:
+44: } // end of executeSQL.
+45:
+46: disconnect();
+</codelist>
+
+
+<codelist name="ms_create_sp" caption="ms_create_sp.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: if $$con.procExists('insert_person') {
+ 4:   executeSQL: drop procedure insert_person;
+ 5: }
+ 6: if $$con.procExists('get_person') {
+ 7:   executeSQL: drop procedure get_person;
+ 8: }
+ 9:
+10: executeSQL
+11: {
+12:   create procedure insert_person
+13:                      @id int,
+14:                      @name  varchar(20),
+15:                      @alias varchar(20) = null,
+16:                      @bday  datetime = null,
+17:                      @sex   varchar(1) = 'M'
+18:   as
+19:     insert into people ( personID, name, alias, birthDay, sex, addTime)
+20:     values ( @id, @name, @alias, @bday, @sex, current_timestamp )
+21:   ;
+22:
+23:   create procedure get_person
+24:                      @name varchar(20),
+25:                      @id int output
+26:   as
+27:     select @id = personID from people where name = @name
+28:   ;
+29:
+30: } // end of executeSQL.
+31:
+32: disconnect();
+</codelist>
+
+
+<codelist name="ms_insert" caption="ms_insert.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: executeSQL
+ 4: {
+ 5:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+ 6:   values ( 1, 'Judy Fox', 'Judy', null, 'F', current_timestamp );
+ 7:
+ 8:   insert into people ( personID, name, alias, birthDay, sex, addTime)
+ 9:   values ( 4, 'Sanjay Deepak', 'Sanjay', null, 'M', current_timestamp );
+10: }
+11:
+12: disconnect();
+</codelist>
+
+
+<codelist name="ms_query" caption="ms_query.judo">
+ 1: !include 'connection.judi'
+ 2:
+ 3: executeQuery a:
+ 4:   select * from people;
+ 5:
+ 6: while a.next() {
+ 7:   println 'personID: ', a[1];
+ 8:   println '    name: ', a[2];
+ 9:   println '   alias: ', a[3];
+10:   println 'birthDay: ', a[4];
+11:   println '     sex: ', a[5];
+12:   println ' addTime: ', a[6];
+13: }
+14:
+15: disconnect();
+</codelist>
+
+
+<codelist name="ms_call" caption="ms_call.judo">
+1: !include 'connection.judi'
+2:
+3: name = 'Sanjay';
+4: executeCall: { call get_person(?,?) } ;
+5:   with @1:varchar = name,
+6:        @2:int => x;
+7: println 'id for ', name, ' is: ', x;
+8:
+9: disconnect();
+</codelist>
+
+
+<section name=cross>
+
+<p>
+One of the most useful and powerful features of <J> (actually, JDBC),
+is its cross-database capability. Many efforts have taken place to
+achieve universal database opertions, such as ODBC/CLI and Perl DBI.
+JDBC has the advantage over others in that, virtually all major RDBMS
+vendors provide pure Java (type-IV) JDBC driver for their own products.
+This is significant! Think about the difference between a pure Java
+JDBC driver from a vendor versus the set of ODBC/CLI drivers for the
+same database from the same vendor; the ODBC/CLI drivers have to be
+ported to various platforms, each has its own memory, process and
+thread management implications. This means more chances to contain
+anormalies on, say, AS400 or Windows ME. For Java, as long as the JVM
+works correctly, the JDBC driver effort is just a one time deal.
+
+<p>
+In <J>, all JDBC statements are bound to a connection object, and
+multiple connections can be open at the same time. You can collect
+data from heterogeneous databases, analyze and consolidate business
+intelligence with some <J> code, and insert the results into yet
+another database. Suppose you work in the IT department of a national
+company with data centers across the nation. There is an Oracle
+database in San Francisco, a DB2 in Chicago and a Sybase in Dallas.
+You need to consolidate the monthly sales data into a Microsoft Access
+database, so that you can use your production software to create a
+pretty report for the executives. You may do something like this:
+
+<demo>
+ 1: // 1. make all the connections
+ 2: connect west to #westDB,'SFUser',secret('SFPass');
+ 3: connect cent to #centralDB, 'ChicagoUser',secret('ChicagoPass');
+ 4: connect east to #eastDB,'DallasUser',secret('DallasPass');
+ 5: connect here to 'jdbc:odbc:myAccess';
+ 6: 
+ 7: // 2. run queries agains each database, and
+ 8: //    get the monthly summaries in memory
+ 9: prepare westQry using west:
+10:   SELECT purchase_date, sum(amount) FROM sales
+11:   WHERE purchase_date >= ? and purchase_date <= ?
+12:   GROUP BY purchase_date
+13: ;
+14: prepare centQry using cent:
+15:   SELECT order_date, sum(order_amount) FROM orders
+16:   WHERE order_date >= ? and order_date <= ?
+17:   GROUP BY order_date
+18: ;
+19: prepare eastQry using east:
+20:   SELECT buy_date, sum(amount) FROM sales
+21:   WHERE buy_date >= ? and buy_date <= ?
+22:   GROUP BY buy_date
+23: ;
+24: queries = [ westQry, centQry, eastQry ];
+25: 
+26: summaries = new struct; // to hold the results
+27: 
+28: // run all 3 queries, and accumulate sales numbers for each month.
+29: for q in queries {
+30:   executeQuery q with @1:date = date(2001,1,1),
+31:                       @2:date = date(2001,12,31) ;
+32:   while q.next() {
+33:     key = q[1].formatDate('yyyy-MM');
+34:     summaries.(key) += q[2];
+35:   }
+36: }
+37: 
+38: // 3. Insert the summaries into the access databse
+39: prepare upd using here:
+40:   insert into monthly (month, amount) value (?, ?)
+41: ;
+42:     
+43: for x in summaries.keys() {
+44:   executeUpdate using here
+45:            with @1 = x,
+46:                 @2:int = summaries[x]
+47:   ;
+48: }
+49:
+50: west.disconnect();
+51: cent.disconnect();
+52: east.disconnect();
+53: here.disconnect();
+</demo>
+
+<p>
+Lines 2 through 5 connect to various databases, whose JDBC URLs are defined
+in the constnats. Lines 9 though 23 prepare the queries to the three
+databases and put into an array at line 24. Lines 29 through 36 execute the
+queries and process the combined result. Finally, lines 39 throught 48
+insert the result the local Access database.
+
+
+<section name=summary>
+
+<p>
+Running SQL in <J> is as easy as in SQL*Plus or any query tools. Connect
+to a database with <kw>connect</kw> command with a JDBC URL, user name
+and password. The password is more likely a secret value. A connection is
+assigned to a variable; a default connection variablen, <kw>$$con</kw> is
+provided for a single connection application. Queries are run with
+<kw>executeQuery</kw>, which takes a variable called <nt>handle</nt> that
+keeps the result set. A default handle name, <kw>$$</kw> is provided for
+convenience. <kw>executeSQL</kw> runs one or a group of non-query SQL
+statements, and the SQL can be dynamic with embedded expressions. Another
+way to run a group of SQL statements is <kw>executeBatch</kw>. Batches can
+be constructed dynamically with the <kw>createBatch()</kw> function and
+the <kw>addBatch</kw> command.
+
+<p>
+SQL statement runs with different values at different times are preferred
+to be prepared and run with JDBC. <kw>prepareCall</kw> prepares stored
+procedure calls, and <kw>prepare</kw> prepares SQL queries, updates and
+any non-call statements, usually with bind parameters in the SQL text as
+<kw>?</kw>'s, which are indexed from 1. These bind varialbes are bound in
+the <kw>with</kw> clauses in <kw>executeQuery</kw>, <kw>executeUpdate</kw>
+and <kw>executeSQL</kw>. Bind variables are assigned SQL types; the
+default is string. The <kw>onSuccess</kw> clause is handy for queries
+known to have no more than one row of result.
+
+<p>
+Each SQL statement is run with a connection object via the <kw>using</kw>
+clause; for single database connections it is normally ignored and the
+default connection object, <kw>$$con</kw>, is implicitly used.
+Cross-database operation is naturally supported. Don't forget to make
+sure all the JDBC classes (say, those from Oracle and Sybase) are in the
+classpath.
+
+<p>
+You can connect to multiple databases at the same time, and use text files,
+XML documents, HTML pages, network connections, etc. to do data processing
+and transformations. <J> is a powerful multi-source, multi-format data
+processing platform.
+
+
+<section name=tables>
+
+<p>
+The database connection has a number of helper methods. Its <kw>describe()</kw>
+describes a database table and returns the information in tableData, a
+2-dimensional data structure. The following is a utility script:
+
+<codelist name="desc" caption="desc.judo">
+ 1: if #args.length < 2 {
+ 2:   println <err> [[*
+ 3:      Usage: java judo ', #prog, ' table_name, jdbc_url [, username, password]
+ 4:   *]];
+ 5:   exit 0;
+ 6: }
+ 7:
+ 8: table = #args[0];
+ 9: url   = #args[1];
+10: username =  (#args.length > 2) ? #args[2] : null;
+11: password =  (#args.length > 3) ? #args[3] : null;
+12:
+13: connect to url, username, password;
+14: tableInfo = describe(table);
+15:
+16: println 'Table: ', table, nl;
+17: println 'Column         Type            Precision   Scale Nullable';
+18: println '-------------- ------------ ------------ ------- ----------';
+19:
+20: printTable tableInfo for
+21:   column('name')      :<15!,
+22:   column('type')      :<13!,
+23:   column('precision') :>12,
+24:   column('scale')     :>8, ' ',
+25:   column('nullable');
+26:
+27: disconnect();
+</codelist>
+
+Line 14 calls the default connection object's <code>describe()</code> to
+get the tableData object holding column attributes. To find out what the
+columns are, you can do this:
+
+<demo>
+println tableInfo.getTitles();
+</demo>
+
+Lines 20 through 25 uses the <code>printTable</code> statement to print
+out the data in a tabular format. It can be used to print out result sets,
+too. Column data are referenced by the <code>column()</code> expression.
+It can take the columnn name or its index; for tableData's, it is 0-based;
+for result sets, it is 1-based. Formatting directives can applied as you
+see in the example. Expressions can be used like this:
+
+<demo>
+printTable xxx for
+  column('Birthday').fmtDate('yyyy-MM-dd'), ' ',
+  (15.5 * column(1)) : 5.2;
+}
+</demo>
+
+<p>
+The database connection object has other helper methods. One of them is
+<kw>getMetaData()</kw>. It returns an extended object of
+<code>java.sql.DatabaseMetaData</code> class, where any of its methods
+that returns a result set are overridden and return a <code>tableData</code>
+instead, like this:
+
+<demo>
+connect to ...;
+md = getMetaData();
+
+tables = md.getTables('PROJ_%');
+println tables;
+
+disconnect();
+</demo>
+
+<p>
+Datbases can be backed up in many ways. <J> has a <kw>dumpTable</kw>
+statement that dumps all or a portion of a table into a file, called a
+table dump. This table dump file can be opened by the system function
+<kw>openTableDump()</kw> and read and reloaded. The following example
+dumps a portion of a table:
+
+<demo>
+connect to ...;
+dumpTable 'mytable'
+  into 'mytable.tdmp'
+  where id > 170000 && id < 250000;
+disconnect();
+</demo>
+
+The <code>into</code> can be omitted and by default a file with the
+same name as the table followed by the extension of ".tdmp" is used.
+A dump file keeps the table structure and the data. It also keeps the
+Java, JVM and Java class versions used to create this file. (The file
+itself is actually gzipped.) When the file is opened, you can get
+these attributes:
+
+<demo>
+a = openTableDump('mytable.tdmp');
+println 'Java version:       ', a.javaVersion;
+println 'Java VM version:    ', a.javaVmVersion;
+println 'Java Class version: ', a.javaClassVersion;
+println 'Columns           : ', a.getColumnAttrs();
+
+while (row = a.next()) != null {
+  // row is an Object[]; use them to load into a table.
+}
+</demo>
+
+<p>
+The <code>getColumnAttrs()</code> method returns a tableData. For 
+better formatting with <code>printTable</code>, see
+<a href=misc.html#printTable>here</a>.
+
+
+<section name=listings>
+
+<insert name="codelistings">

@@ -1,0 +1,7 @@
+sw = createStringWriter();
+
+println <sw> 'Hello, string!';
+
+println sw.toString();
+
+println sw;

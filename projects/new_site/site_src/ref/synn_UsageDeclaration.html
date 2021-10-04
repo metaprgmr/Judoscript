@@ -1,0 +1,81 @@
+<html><head><title>JudoScript Semantics - UsageDeclaration</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>UsageDeclaration</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=UsageDeclaration>UsageDeclaration</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>usage</font>  <font class=kw><nobr>{</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>=</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>;</nobr></font>   )+  <font class=kw><nobr>}</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('UsageDeclaration'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The usage declaration helps to document the usage of the script. It serves two purposes:
+  <ol>
+  <li> If <code>-?</code> or <code>--help</code> is specified, or if the number of arguments
+       is less than the required number, the JudoScript engine displays the usage information.
+  <li> For a JudoScript companion tool extracts usage information from scripts for indexing and
+       documentation purposes.
+  </ol>
+  </p>
+
+  <p>The usage information, if specified, is stored in a predefined constants, <font class=kw><nobr>#usage</nobr></font> , as
+  a hashtable. Its content is a list of comma-separated name=value pairs. The names can be
+  anything, but there are a number of predefined attributes:
+
+  <table border="1">
+  <tr><th>Name</th><th>Source</th><th>Description</th></tr>
+  <tr>
+    <td>minArgs</td> <td>user</td>
+    <td>The minimum number of arguments (excluding options). If not specified, assumed 0.
+        If specified and greater than 0, and the actual argument number is less than that,
+        JudoScript prints out the usage help message and exits.
+    </td>
+  </tr>
+  <tr>
+    <td>args</td> <td>user</td>
+    <td>The command-line arguments. Can use any format but do not include the program name.</td>
+  </tr>
+  <tr>
+    <td>desc</td> <td>user</td>
+    <td>The description of this script. Can be anything.</td>
+  </tr>
+  <tr>
+    <td>author</td> <td>user</td>
+    <td>The author(s). Use comma to separate multiple names.</td>
+  </tr>
+  <tr>
+    <td>created</td> <td>user</td>
+    <td>The created date, in the format of 2002-08-18.</td>
+  </tr>
+  <tr>
+    <td>lastMod</td> <td>user</td>
+    <td>The last modified date, in the format of 2002-08-18.</td>
+  </tr>
+  <tr>
+    <td>prog</td> <td>parser</td>
+    <td>The script name. The same as the predefined constant <font class=kw><nobr>#prog</nobr></font> .</td>
+  </tr>
+  <tr>
+    <td>firstLine</td> <td>parser</td>
+    <td>The first line number for the <font class=kw>usage</font>  block.</td>
+  </tr>
+  <tr>
+    <td>lastLine</td> <td>parser</td>
+    <td>The last line number for the <font class=kw>usage</font>  block.</td>
+  </tr>
+  </table>
+
+  <p>Every script can have one usage block, but only the main one is stored; the usage
+  blocks of included scripts are ignored. The usage block should appear at the beginning
+  of a script, although it can appear anywhere.</p>
+
+  <p>The system function <font class=sfn><a href="javascript:showSF('obtainUsage')">obtainUsage()</a></font> retrieves the usage information for the
+  specified script.</p>
+ </body></html>

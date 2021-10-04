@@ -1,0 +1,8 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/pipe_script2in.judo:</b></td></tr><tr><td><pre>
+exec 'java test.ToLower | java test.Echo'
+input {
+  println &lt;pipe> 'You should see this message in lower case, not UPPER CASE!';
+  println &lt;pipe> 'Cheers!';
+}
+</pre></td></tr></table></body></html>

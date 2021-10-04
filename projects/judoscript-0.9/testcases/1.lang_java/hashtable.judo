@@ -1,0 +1,31 @@
+import java.awt.Dimension;
+
+a = new java::Hashtable;
+d = Date(2001,1,1,0,0,0,0);
+a.put( d, d);
+a.put( 1, 1 );
+a.put( 10.01,  10.01 );
+a.put( 'Hello', 'Hello, World!' );
+a.put( java::Dimension, new java::Dimension(10,20) );
+
+println '---- traditional enumerating:';
+for keys=a.keys(); keys.hasMoreElements(); {
+  k = keys.nextElement();
+  println k:>20, ' = ', a.get(k);
+}
+
+println '---- modern enumerating:';
+for k in a.keys() {
+  println k:>20, ' = ', a.get(k);
+}
+
+println '---- even easier enumerating:';
+for k in a {
+  println k:>20, ' = ', a.get(k);
+}
+
+println '---- access a key via a name:';
+a.'Hi, World' = 'Hello, World!';
+
+println 'a.Hello:       ', a.Hello;
+println "a.'Hi, World': ", a.'Hi, World';

@@ -1,0 +1,12 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_fxn/hanoi.judo:</b></td></tr><tr><td><pre>
+cnt = 0;
+hanoiTower(4, 'A', 'B', 'C');
+
+function hanoiTower N, src, aux, dst {
+  if N == 0 { return; }
+  hanoiTower(N-1, src, dst, aux);
+  println 'step ', (++cnt).int() : > 2, ': ', src, ' => ', dst;
+  hanoiTower(N-1, aux, src, dst);
+}
+</pre></td></tr></table></body></html>

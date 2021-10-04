@@ -1,0 +1,24 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_xslt/calls.dtd:</b></td></tr><tr><td><pre>
+&lt;!ELEMENT PHONE_RECORDS ( CALL )* >
+&lt;!ELEMENT CALL ( FROM, DATE, TIME, DESTINATION, DURATION, CALL_PROMOTION? ) >
+&lt;!ELEMENT FROM ( #PCDATA ) >
+&lt;!ELEMENT DATE ( #PCDATA ) >
+&lt;!ELEMENT TIME EMPTY >
+&lt;!ATTLIST TIME
+  HOUR NMTOKEN #REQUIRED
+  MINUTE NMTOKEN #REQUIRED
+>
+&lt;!ELEMENT DESTINATION ( #PCDATA ) >
+&lt;!ATTLIST DESTINATION
+  CITY NMTOKEN #REQUIRED
+  COUNTRY NMTOKEN #REQUIRED
+  STATE NMTOKEN #IMPLIED
+>
+&lt;!ELEMENT DURATION ( #PCDATA ) >
+&lt;!ATTLIST DURATION
+  HOURS NMTOKEN #REQUIRED
+  MINUTES NMTOKEN #REQUIRED
+>
+
+</pre></td></tr></table></body></html>

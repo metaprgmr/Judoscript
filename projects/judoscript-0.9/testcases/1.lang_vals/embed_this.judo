@@ -1,0 +1,9 @@
+do $$local as sgml {
+<>: println "MY TAG IS: $_.";
+}
+
+
+EndScript =======
+<a href="llll">
+<a href="mmmm">
+<a href="nnnn">

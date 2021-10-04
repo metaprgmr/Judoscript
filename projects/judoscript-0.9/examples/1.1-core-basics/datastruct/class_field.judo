@@ -1,0 +1,21 @@
+usage {
+  author  = 'James Huang';
+  created = '2003-07-15';
+  desc    = '';
+}
+
+class MyCls
+{
+  var alfa = 'abcdefg';
+  println "Hahaha!";
+
+  constructor {
+    println "Explicit constructor().";
+    println 'this.alfa = ', this.alfa;
+    alfa = null;
+    alfa = 1;
+    println 'this.alfa = ', this.alfa;
+  }
+}
+
+new MyCls;

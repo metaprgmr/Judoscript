@@ -1,0 +1,35 @@
+a = ['http://localhost:8080/articles/developer.html#top',
+     'http://localhost/cgi-bin/check.pl?id=1234&sess=abc',
+     '/index.html',
+     'index.html',
+     '',
+     '/',
+     'http://www.judoscript.com',
+     'images/bg.gif'
+    ];
+
+for url in a {
+  b = url.parseUrl();
+  println '-----------------------------------------------';
+  println '            URL: ', url;
+  println '           root: ', b.root;
+  println '       protocol: ', b.protocol;
+  println '         domain: ', b.domain;
+  println '           host: ', b.host;
+  println '           port: ', b.port;
+  println '           path: ', b.path;
+  println '      file_name: ', b.file_name;
+  println '   query_string: ', b.query_string;
+  println '            ref: ', b.ref;
+  println 'constructed URL: ', b.transpose('UrlInfo');
+}
+
+class UrlInfo
+{
+  function toString() {
+    ret = root + path;
+    if query_string != null { ret += '?' + query_string; }
+    if ref != null { ret += '#' + ref; }
+    return ret;
+  }
+}

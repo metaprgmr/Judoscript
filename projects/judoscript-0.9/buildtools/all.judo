@@ -1,0 +1,275 @@
+/////////////////////////////////////////////////////////////////////
+// Environment
+/////////////////////////////////////////////////////////////////////
+
+//!include '${JUDOROOT}/projects/doc_helpers.judi'
+!include '${JUDOROOT}/projects/common.judi'
+
+versionId   = 'judoscript-0.9';
+myroot      = '${projects}/${versionId}';
+tmp         = '${TMPROOT}/${versionId}';
+
+myarchives  = '${archives}/${versionId}';
+docs        = '${myroot}/docs';
+examples    = '${myroot}/testcases';
+articles    = '${docs}/art_src';
+j09ref      = '${docs}/ref_src';
+
+mkdir myarchives;
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+println <err> [[*
+
+  ********************** Project (* versionId *) *********************
+*]];
+
+menuItems = [
+
+  'Clobber All Development',       // 1  -> build.judo 1
+  'Build All Development',         // 2  -> build.judo 2
+  '. Generate Parser',             // 3  -> build.judo 3
+  'X   Compile Base',              // 4  -> build.judo 4
+  'X   Compile JDK1.4',            // 5  -> build.judo 5
+  'X   Compile JCom',              // 6  -> build.judo 6
+  'X   Compile Registry',          // 7  -> build.judo 7
+  'X   Compile SSH',               // 8  -> build.judo 8
+  'X   Compile User',              // 9  -> build.judo 9
+  '. Compile Util',                // 10 -> build.judo 10
+  '. Compile Third-Party',         // 11 -> build.judo 11
+  '. Create Executable Jar',       // 12 -> build.judo 13
+
+  'Build All Documentation',       // 13
+  '. Copy Project Static Content', // 14
+  '. Build All Articles',          // 15
+  '. Build All References',        // 16
+  '. . Build Syntax Pages',        // 17 -> syntax.judo
+  '. . Build Syntax Navigation',   // 18 -> synn.judo
+  '. . Build Functional Areas',    // 19 -> funcareas.judo
+  '. . Build System Functions',    // 20 -> sysfuns.judo
+  '. . Build Built-in Objects',    // 21 -> objtypes.judo
+  '. Create TreeDemo Content',     // 22
+
+  'Build All Examples',            // 23
+
+  'Run Test Cases',                // 24
+
+  'Ship It!',                      // 25
+  'Archive',                       // 26
+];
+
+option = 0;
+
+if #args.length <= 0 {
+  option = menu(menuItems, false); // no confirm
+} elif #args[0].isInt() {
+  option = #args[0];
+}
+
+switch option {
+  case 1:
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
+  case 11:  runBuildScript option; break;
+  case 12:  runBuildScript 13; break;
+
+  case 13:  copyStatic();
+            buildAllRefs();
+            runDocScript 'Build All Articles',      'articles.judo';
+            //forTreeDemo();
+            break;
+  case 14:  copyStatic(); break;
+  case 15:  runDocScript 'Build All Articles',      'articles.judo';  break;
+  case 16:  buildAllRefs();                                           break;
+  case 17:  runDocScript 'Build Syntax Pages',      'syntax.judo';    break;
+  case 18:  runDocScript 'Build Syntax Navigation', 'synn.judo';      break;
+  case 19:  runDocScript 'Build Functional Areas',  'funcareas.judo'; break;
+  case 20:  runDocScript 'Build System Functions',  'sysfuns.judo';   break;
+  case 21:  runDocScript 'Build Built-In Objects',  'objtypes.judo';  break;
+  case 22:  //forTreeDemo();                                            break;
+            println <err> 'Tree Demo is no more.'; break;
+  case 23:  runDocScript 'Build All Examples',      'examples.judo';  break;
+  case 24:  println 'Run build.judo and choose.';                     break;
+  case 25:  shipIt();                                                 break;
+  case 26:  archive();                                                break;
+  default:  ;
+}
+
+function buildAllRefs {
+  runDocScript 'Build Syntax Pages',      'syntax.judo';
+  runDocScript 'Build Syntax Navigation', 'synn.judo';
+  runDocScript 'Build Functional Areas',  'funcareas.judo';
+  runDocScript 'Build System Functions',  'sysfuns.judo';
+  runDocScript 'Build Built-In Objects',  'objtypes.judo';
+}
+
+/////////////////////////////////////////////////////////////////////
+// Run External Scripts
+/////////////////////////////////////////////////////////////////////
+
+function runBuildScript param {
+  println <err> nl, '*** Build ...', nl;
+  runScript 'build.judo ${param}', '${myroot}/buildtools';
+}
+
+function runDocScript title, script {
+  println <err> nl, '*** ', title, ' ...', nl;
+  println <err> '----  ${script}  ----  ${myroot}/buildtools/doc_tools';
+  runScript script, '${myroot}/buildtools/doc_tools';
+}
+
+/////////////////////////////////////////////////////////////////////
+// Archive
+/////////////////////////////////////////////////////////////////////
+
+function archive {
+  println <err> nl, '*** Archiving ...', nl;
+
+  zipname = '${myarchives}/${versionId}-' + Date().fmtDate('yyyy-MM-dd') + '.zip';
+  println <err> 'Archive: ', zipname;
+
+  copy '*' except '*/archives/*, */alfa*, */beta*, *.class, *~'
+       in myroot recursive echo into zipname under versionId;
+  copy zipname to '${archives}/${versionId}-latest.zip' echo;
+  archiveCommon();
+}
+
+/////////////////////////////////////////////////////////////////////
+// Copy Static Content
+/////////////////////////////////////////////////////////////////////
+
+function copyStatic {
+  println <err> nl, '*** Copy ${versionId} Static Content ...', nl;
+
+  mkdir '${docroot}/articles/';
+  mkdir '${docroot}/ref/';
+
+  copy 'license.html' in '${docs}/releases' to docroot echo;
+  copy 'readme.0.9.html' in '${docs}/releases' to '${docroot}/relnote.html' echo;
+  copy '*' in '${articles}/images/' to '${docroot}/articles/' recursive echo;
+  copy '*' in '${j09ref}/html/' to '${docroot}/ref/' recursive echo;
+//  copy '*' except '*/alfa*, */save/*, */images/*, *.doc, */images/*, */audio/*'
+//       in examples recursive to '${docroot}/examples' echo;
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// Create TreeDemo Content
+/////////////////////////////////////////////////////////////////////
+
+function forTreeDemo {
+  println <err> nl, '*** Process For TreeDemo ...', nl;
+
+  listFiles "*.htm_";
+  for x in $_ {
+    do x as html
+    {
+    :BEFORE:    $html = openTextFile('e:\\judo\\examples\\gui\\html\\treeDemo\\_' + // no more......
+                                     x.getFileName().replace('.sgml','.html'), 'w');
+                $inAbs = false;
+    <doc>:      print <$html> [[*
+                   <html><head><title>(* $_.title *)></title></header>
+                   <body><h1>(* $_.title *)</h1>
+                *]];
+    </doc>:     print <$html> '</body></html>';
+                $html.flush();
+                $html.close();
+                break;
+    <j>:        print <$html> '<em>JudoScript</em>';
+    <abstract>: $inAbs = true;
+    :TEXT:      if $inAbs { print <$html> $_; }
+    <>:         if $inAbs { print <$html> $_.toString(); }
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////////////////
+// Create Shipping Package
+/////////////////////////////////////////////////////////////////////
+
+function shipIt {
+  println <err>
+[[[*
+*** Create Shipping Package ...
+
+  *********************************************************
+  * Make sure you have run all these (or equivalent of):  *
+  *   1. Build All Development                            *
+  *   2. Build All Document                               *
+  *   3. Run All Test Cases                               *
+  * In the end, the whole thing will be archived.         *
+  *********************************************************
+*]];
+
+  store = '${docroot}/store';
+  mkdir store;
+
+  // Copy individually downloadable zip files:
+  copy 'src.jar, generated.jar' in tmp to store;
+  copy 'judo.jar' in tmp into '${store}/judo.jar.zip';
+
+  if !('${store}/jcom.dll.zip').fileExists() {
+    copy '${JUDOROOT}/lib/jcom.dll' into '${store}/jcom.dll.zip';
+  }
+  if !('${store}/ICE_JNIRegistry.dll.zip').fileExists() {
+    copy '${JUDOROOT}/lib/ICE_JNIRegistry.dll' into '${store}/ICE_JNIRegistry.dll.zip';
+  }
+
+  // Create examples
+  copy '*'
+       except '*/alfa*, */save/*, */images/*, *.doc, */images/*, */audio/*, */baseline*, */testdata/*, *~'
+       in examples recursive into '${store}/examples.zip' under 'examples';
+
+  // Create docs
+  if !('${docroot}/docs.html').fileExists() {
+    f = openTextFile('${docroot}/docs.html', 'w');
+    println <f> [[*
+      <html><head><title>Documentation</title></head>
+      <body>
+      <ul>
+      <li> <a href="articles/index.html">Articles</a>
+      <li> <a href="books/judoscript-0.9/toc_details.html">Book Chapters</a>
+      <li> <a href="ref/index.html">References (may be out of date)</a>
+      </ul>
+      </body></html>
+    *]];
+    f.close();
+  }
+
+  copy 'articles/*, ref/*, share/*, books/*, docs.html'
+       except '*/alfa*, */by_example*, */save/*, */oe_*.gif, */sample_*.gif'
+       in docroot recursive into '${store}/docs.zip';
+
+  // Make whole package
+  jar = createZip('${store}/${versionId}.zip');
+  copy 'judo.jar, src.jar, generated.jar' in tmp into jar under versionId;
+  copy 'relnote.html, license.html' in docroot into jar under versionId;
+  copy 'log4j.properties, logging.properties' in '${projects}/${versionId}/src' into jar under versionId;
+  copy '*'
+       except '*/alfa*, */save/*, */images/*, *.doc, */images/*, */audio/*, */baseline*, */testdata/*, *~'
+       in examples recursive into jar under '${versionId}/examples';
+  copy 'articles/*, ref/*, share/*'
+       except '*/alfa*, */by_example*, */save/*, */oe_*.gif, */sample_*.gif'
+       in docroot recursive into jar under versionId;
+  jar.close();
+
+  // Make JuSP Tutorial web app package
+  jar = createZip('${store}/jusptut.zip');
+  copy 'jusptut/*' except '*/alfa, *~, */classes/*, */lib/*' in webapps recursive into jar;
+  copy 'judo.jar' in tmp into jar under 'jusptut/WEB-INF/lib/';
+  copy '${JUDOROOT}/lib/log4j-1.2.8.jar' in tmp into jar under 'jusptut/WEB-INF/lib/';
+  jar.close();
+
+  // Make generically named judoscript.zip
+  copy versionId + '.zip' in store to '${store}/judoscript.zip';
+}
+

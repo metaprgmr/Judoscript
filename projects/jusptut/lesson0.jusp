@@ -1,0 +1,149 @@
+<%
+  var title = 'Lesson 0. Introduction to the JuSP Platform'; // required by header.jusp.
+  var book = "http://www.judoscript.com/books/judoscript-0.9";
+  var bookch = "${book}/chapters";
+
+  function jusp$lesson ctxt, num, title, tbd {
+    print <ctxt.writer> tbd ? '<li>${title} <sup><font size=-1><b>TBD</b></font></sup></li>'
+                            : '<li><a href="lesson${num}.jusp">${title}</a></i>';
+  }
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<h2>The JuSP Platform and the Judo Language</h2>
+
+<p><b>JuSP</b> stands for <em><u>Ju</u>do <u>S</u>erver <u>P</u>age</em>.
+The JuSP Platform is an easy and complete server-side development solution
+based on the intuitive and functional <a href="<%=book%>/toc_details.html">Judo</a>
+language. JuSP is design to provided all the facilities for the needs of web
+app development, and it is extremely <em>flat</em>. In a JuSP web app, there
+are only two components that the developers need to implement:</p>
+
+<ol>
+<li>JuSP pages that provide application views and means for user interactions.</li>
+<li>A global script that includes everything, from back-end interfacing,
+    business logic, to initialization and configuration.</li>
+</ol>
+
+<p>Judo is a simple, functional and dynamic language with powerful built-in
+features; it has <em>syntactic sugar</em> to make programming easy plus
+<em>semantic sugar</em> for intuitively working with today's most popular
+enterprise computing topics (domains). Judo is ideal for web app development
+because of at least these features:</p>
+
+<ul>
+<li><a href="<%=bookch%>/hib.html">Hibernate scripting</a></li>
+<li><a href="<%=bookch%>/jdbc.html">JDBC scripting</a></li>
+<li><a href="<%=bookch%>/java.html">Java scripting (including EJBs,
+    JNDI and any server-side Java technologies)</a></li>
+<li><a href="<%=bookch%>/wsdl.html">SOAP web service scripting</a></li>
+<li><a href="<%=bookch%>/net.html#mail">send mail</a></li>
+<li><a href="<%=bookch%>/datastr.html">rich, powerful data structures</a></li>
+</ul>
+
+
+<h2>The JuSP Platform, Java, J2EE and JSR 223</h2>
+
+<p>Both the JuSP Platform and the Judo language are implemented in Java and
+are intimately related to Java. Among all Judo's major features, totally
+competent Java scripting is one of the most imporant. This opens the door
+to use any Java softwre in JuSP web apps. In a way, JuSP is an easier
+platform for developing web apps with Java.</p>
+
+<p>The JuSP pages are conspicuously similar to JSP, ASP, PHP, etc.
+However, the development model is much closer to ASP and PHP.</p>
+
+<p>When the dust of the J2EE hype settles, more and more people realize
+and acknowledge that it is unduly complex. This is evidenced by efforts
+like <em>Hibernate</em>, which is the <em>de facto</em> ORM framework
+that negates the anti-pattern of entity EJBs. On the web front-end tier,
+the <%!link 'http://www.judoscript.com/articles/jsr223.html', 'JSR 223' %>
+in 2003 acknowledged the existence of better, simpler web development
+methods and intended to make Java resources available to them.</p>
+
+<p>Speaking of JSR 223, since JuSP/Judo can readily access Java resources,
+JSR 223 is pointless here. JuSP is implemented as independent of JSR 223.
+This situation may or may not change based on user requests.</p>
+
+<h2>JuSP-Judo-Java vs. ASP-VB-COM</h2>
+
+<p>The effort of JuSP is to make web development as simple as it should
+be. Years of web app development experience is not wasted and JuSP is
+design to gracefully address all the popular web app development use cases.</p>
+
+<p>The trio of <b>JuSP-Judo-Java</b> is a very appropriate counterpart
+for <b>ASP-VB-COM</b> in the Java world, and hence inherently
+cross-platform and cross-vendor.</p>
+
+
+<h2>About This Tutorial</h2>
+
+<p>This tutorial is a web app written in JuSP itself. All examples are
+live, and you can view source code and syntax-colored JuSP pages. The
+code uses relative URIs; you are highly encouraged to copy this web app
+into a separate one that you can experiment on.</p>
+
+<p>This tutorial comprehensively teaches all fetures of JuSP. The
+lessons are organized as follows:</p>
+
+<table class=tbl border=0 cellpadding=5 cellspacing=0>
+<caption align=left>Summary of tutorial lessons:</caption>
+<tr><th>Category</th><th>Lessons</th><th>Description</th></tr>
+<tr><td valign=top><i>Core<br>Techniques</i></td>
+<td nowrap><ol>
+ <%!lesson 1, 'JuSP Page Scripting' %>
+ <%!lesson 2, 'Session and Cookie' %>
+ <%!lesson 3, 'Form &mdash; Getting Values' %>
+ <%!lesson 4, 'Form &mdash; HTML Controls and Value Population' %>
+ <%!lesson 5, 'Form &mdash; Extended HTML Controls' %>
+ <%!lesson 6, 'Form &mdash; Validation' %>
+ <%!lesson 7, 'Include and Invoke Other Pages' %>
+ <%!lesson 8, 'Forward, Redirect and Page Flow' %>
+</ol></td>
+<td valign=top>All the very basic JuSP constructs.</td></tr>
+<tr><td>&nbsp;</td>
+<td><ol start=9>
+ <%!lesson 9, 'Write the Global <code>juspInit.judo</code> Script' %>
+ <%!lesson 10, 'Exception Handling and Global Cleanup' %>
+ <%!lesson 11, 'Debugging JuSP Web Apps' %>
+</ol></td>
+<td valign=top>The global <code>juspInit.judo</code> file and other global issues.</td></tr>
+<tr><td>&nbsp;</td>
+<td><ol start=12>
+ <%!lesson 12, 'MVC Paradigm and Web App Design' %>
+</ol></td>
+<td valign=top>The web app design, with a sample mini web app.</td></tr>
+<tr><td valign=top><i>Further<br>Techniques</i></td>
+<td><ol start=13>
+ <%!lesson 13, 'Create Custom Controls/Tags' %>
+ <%!lesson 14, 'Page Attributes' %>
+ <%!lesson 15, 'Binary Content Rendering' %>
+ <%!lesson 16, 'File Upload' %>
+ <%!lesson 17, 'E-Mail' %>
+</ol></td>
+<td valign=top>More practical techniques for building JuSP web apps.</td></tr>
+<tr><td valign=top><i>Summary</i></td>
+<td><ol start=18>
+ <%!lesson 18, 'Review and Summary of JuSP' %>
+ <%!lesson 19, 'Exercise: A Challenge' %>
+</ol></td>
+<td valign=top>Summary and review of the JuSP platform and an exercise
+ for you to get started.</td></tr>
+<tr><td valign=top><i>Application<br>Design</i></td>
+<td><ol start=20>
+ <%!lesson 20, 'JuSP Web App with JDBC', true %>
+ <%!lesson 21, 'JuSP Web App with Hibernate', true %>
+ <%!lesson 22, 'JuSP Web App with EJBs', true %>
+ <%!lesson 23, 'JuSP Web App with SOAP', true %>
+</ol></td>
+<td valign=top>Sample web apps demosntrating JuSP web app architectures
+ with major back-end strategies.</td></tr>
+</table>
+
+<p>This tutorial is not for Judo programming; please refer to the Judo
+book. We do, however, summarize Judo features and techniques that are
+useful for web app development as much as possible.</p>
+
+<%!include "footer.jusp" %>

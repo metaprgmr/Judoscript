@@ -1,0 +1,45 @@
+println 'i1 = ', i1 = 62;
+println 'i2 = ', i2 = 12345678;
+println 'f1 = ', f1 = 54.12345;
+println 'f2 = ', f2 = 54.56789;
+println 'f3 = ', f3 = 54.56123;
+println 'c = "', c = "A", '"';
+println 's = "', s = "abcdefg", '"';
+
+println nl, '=== integer <=> float ===';
+println 'i1.float()  = ', i1.float();
+println 'f1.int()    = ', f1.int();
+println 'f2.int()    = ', f2.int();
+
+println nl, '=== character <=> number ===';
+println 'i1.chr()    = ', i1.chr();
+println 'i2.chr()    = ', i2.chr();
+println 'f1.chr()    = ', f1.chr();
+println 'c.ascii()   = ', c.ascii();
+println 's.ascii()   = ', s.ascii();
+println 'c.unicode() = ', c.unicode();
+println 's.unicode() = ', s.unicode();
+
+println nl, '=== float and integer precision control and formatting ===';
+println 'f1.ceil(), f1.floor(), f1.round() =  ',
+        f1.ceil(), '  ', f1.floor(), '  ', f1.round();
+println 'f2.ceil(), f2.floor(), f2.round() =  ',
+        f2.ceil(), '  ', f2.floor(), '  ', f2.round();
+println 'i2.groupNumber()      = ', i2.groupNumber();
+println 'i2.groupNumber(4)     = ', i2.groupNumber(4);
+println "i2.groupNumber(4,'.') = ", i2.groupNumber(4,'.');
+println 'f2.fractionDigits()   = ', f2.fractionDigits();
+println 'f2.fractionDigits(2)  = ', f2.fractionDigits(2);
+println 'f3.fractionDigits(2)  = ', f3.fractionDigits(2);
+println 'i1.fmtCurrency()      = ', i1.fmtCurrency();
+println 'f3.fmtCurrency()      = ', f3.fmtCurrency();
+
+println nl, '=== numbers => Java objects ===';
+println 'i1.toBoolean()   is a ', i1.toBoolean().getClass().getName();
+println 'i1.toByte()      is a ', i1.toByte().getClass().getName();
+println 'i1.toCharacter() is a ', i1.toCharacter().getClass().getName();
+println 'i1.toShort()     is a ', i1.toShort().getClass().getName();
+println 'i1.toInteger()   is a ', i1.toInteger().getClass().getName();
+println 'i1.toLong()      is a ', i1.toLong().getClass().getName();
+println 'i1.toFloat()     is a ', i1.toFloat().getClass().getName();
+println 'i1.toDouble()    is a ', i1.toDouble().getClass().getName();

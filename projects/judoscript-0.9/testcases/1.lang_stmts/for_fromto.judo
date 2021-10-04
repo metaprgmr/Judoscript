@@ -1,0 +1,19 @@
+print 'for [from 0] to 3:           ';
+for a to 3 { print a, ' '; }
+println;
+
+print 'for from 3 to 5:             ';
+for a from 3 to 5 { print a, ' '; }
+println;
+
+print 'for from 3 upto 5:           ';
+for a from 3 upto 5 { print a, ' '; }
+println;
+
+print 'for from 3 to 10 step 2:     ';
+for a from 3 to 10 step 2 { print a, ' '; }
+println;
+
+print 'for from 10 downto 5 step 2: ';
+for a from 10 downto 5 step 2 { print a, ' '; }
+println;

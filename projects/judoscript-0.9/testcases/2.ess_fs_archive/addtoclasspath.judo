@@ -1,0 +1,4 @@
+cd #script.getFilePath(), '../lib'; // move to the lib/ directory
+listFiles '*.jar, *.zip' addToClasspath;
+
+println #classpath; // verify

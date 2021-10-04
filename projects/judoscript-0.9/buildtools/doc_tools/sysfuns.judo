@@ -1,0 +1,55 @@
+!include 'nav.judi'
+!include 'function_info.judi'
+
+println 'Creating system function pages -- one nav and one content.', nl;
+
+do '${j09ref}/sysfuns.sgml' as sgml with FUNCTION_INFO;
+
+allNames = [];
+for fxn in allFxns {
+  for n in fxn.names {
+    allNames.add(n);
+  }
+}
+
+rootNode = new JudoScriptReference;
+
+// Create the nav pane for system functions
+for fxn in allNames.sort() {
+  rootNode.addSysFun(fxn);
+}
+rootNode.generateNavPages(rootNode.o_sfn);
+
+// Create the system function listing
+file = '${docroot}/ref/sfn.html';
+println 'Generating ', file;
+file = openTextFile(file, 'w');
+println <file> [[*
+    <html><head><title>JudoScript System Functions</title>
+    <link rel=stylesheet type=text/css href="../share/judo_styles.css">
+    <script language=JavaScript src="../share/judolib.js"></script>
+    </head><body style="margin-left:20px">
+    <h1>System Functions</h1>
+    <p>System functions are an integral part of the many features of JudoScript language.</p>
+    <table border=1><tr><th>Name</th><th>Arguments</th><th>Description</th><th>Examples</th></tr>
+  *]];
+for fxn in allFxns {
+  print <file> '<tr><td valign=top><font class=sfn>';
+  for x in fxn.names { print <file> '<a name=sfn_', x, '></a>'; }
+  for x in fxn.names { print <file> x, '<br>'; }
+  print <file> '</font></td><td valign=top>';
+  if fxn.args == null {
+    print <file> '&nbsp;';
+  } else {
+    for x in fxn.args { print <file> '<font class=param>', x, '</font><br>'; }
+  }
+  print <file> '</td><td valign=top>', fxn.desc.neverEmpty('&nbsp;'), '</td><td valign=top>';
+  if fxn.examples == null {
+    print <file> '&nbsp;';
+  } else {
+    for x in fxn.examples { print <file> x, '<br>'; }
+  }
+  println <file> '</td></tr>';
+}
+. <file> '</table></body></html>';
+file.close();

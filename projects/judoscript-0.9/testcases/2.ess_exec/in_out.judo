@@ -1,0 +1,10 @@
+exec 'java test.ToLower | java test.Echo'
+input {  // feed input to the cmdline
+  println <pipe> 'Hello,';
+  println <pipe> 'World!';
+}
+output { // read output from the cmdline
+  while (line = readPipe()) != eof {
+    println 'Line #', loopIndex()+1, ': ', line;
+  }
+}

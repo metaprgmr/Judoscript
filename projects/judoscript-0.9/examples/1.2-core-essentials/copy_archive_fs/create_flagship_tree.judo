@@ -1,0 +1,64 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    Part of the fictitious "flagship" project.
+    Creates the directory tree and files in #base.
+  *]];
+}
+
+!include 'flagship.judi' // for #base and genFile().
+
+// To create a tree in #base:
+//           Directory                                   Files
+//  --------------------------   ---------------------------------------------------
+//  flagship/                    readme.txt
+//  flagship/doc/                
+//  flagship/doc/pub/            index.html ug.html spec.html architecture.gif logo.gif
+//  flagship/doc/dev/            design.doc tasks.xls pres.ppt architecture.vsd
+//  flagship/src/                makefile
+//  flagship/src/java/           CommandCenter.java DecisionEngine.java
+//  flagship/src/cpp/            flagship.h fs_jni.c util.h util.c engine.inc flagship.cpp
+//  flagship/src/cpp/save        engine.inc flagship.cpp
+//  flagship/src/cpp/basics      types.h _win32.h _unix.h _mac.h
+//  flagship/examples/           load.judo unload.judo common.judi data.xml data.dtd
+//
+
+mkdir 'flagship/doc/pub, flagship/doc/dev, ' @
+      'flagship/src/java, ' @
+      'flagship/src/cpp/save, flagship/src/cpp/basics, ' @
+      'flagship/examples'
+      in #base;
+
+genFile( 'flagship/', 'readme.txt' );
+genFile( 'flagship/doc/pub/', 'index.html' );
+genFile( 'flagship/doc/pub/', 'ug.html' );
+genFile( 'flagship/doc/pub/', 'spec.html' );
+genFile( 'flagship/doc/pub/', 'architecture.gif' );
+genFile( 'flagship/doc/pub/', 'logo.gif' );
+genFile( 'flagship/doc/dev/', 'design.doc' );
+genFile( 'flagship/doc/dev/', 'tasks.xls' );
+genFile( 'flagship/doc/dev/', 'pres.ppt' );
+genFile( 'flagship/doc/dev/', 'architecture.vsd' );
+genFile( 'flagship/src/', 'makefile' );
+genFile( 'flagship/src/java/', 'CommandCenter.java' );
+genFile( 'flagship/src/java/', 'DecisionEngine.java' );
+genFile( 'flagship/src/java/', 'alfa' );
+genFile( 'flagship/src/cpp/', 'flagship.h' );
+genFile( 'flagship/src/cpp/', 'fs_jni.c' );
+genFile( 'flagship/src/cpp/', 'util.h' );
+genFile( 'flagship/src/cpp/', 'util.c' );
+genFile( 'flagship/src/cpp/', 'engine.inc' );
+genFile( 'flagship/src/cpp/', 'alfa' );
+genFile( 'flagship/src/cpp/', 'flagship.cpp' );
+genFile( 'flagship/src/cpp/save/', 'engine.inc' );
+genFile( 'flagship/src/cpp/save/', 'flagship.cpp' );
+genFile( 'flagship/src/cpp/basics/', 'types.h' );
+genFile( 'flagship/src/cpp/basics/', '_win32.h' );
+genFile( 'flagship/src/cpp/basics/', '_unix.h' );
+genFile( 'flagship/src/cpp/basics/', '_mac.h' );
+genFile( 'flagship/examples/', 'load.judo' );
+genFile( 'flagship/examples/', 'unload.judo' );
+genFile( 'flagship/examples/', 'common.judi' );
+genFile( 'flagship/examples/', 'data.dtd' );
+genFile( 'flagship/examples/', 'data.xml' );

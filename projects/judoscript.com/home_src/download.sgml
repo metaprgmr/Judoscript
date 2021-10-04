@@ -1,0 +1,80 @@
+<h2>Download</h2>
+
+<p>The current version info is: <font color=red><code><value id=info></code></font><br>
+Please read the <a href="relnote.html">release note</a> for <a href="relnote.html#changes">changes</a>.<br>
+Refresh this page to make sure you are downloading the latest version!<br>
+To get version info for your installed JudoScript, run this:
+<pre>  % java judo -x "println versionInfo()"</pre>
+</p>
+
+<p>You can download the whole package containing everything, or just the necessary parts for upgrade.</p>
+
+<table border=1 cellpadding=5 cellspacing=1>
+<tr><th>File Name</th><th>Size</th><th>Content</th></tr>
+<tr><td valign=top><b><code><download id=judoscript></code></b></td>
+    <td valign=top align=right><value id=whole_size></td>
+    <td>Contains <b>EVERYTHING</b> plus release and license notes.<br>
+        <em>(If for whatever reason this does not download successfully, download the following
+        pieces then unzip to a same directory.)</em>
+    </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+    <td valign=top><code><download id=judo><br><download id=jcom><br><download id=winreg></td>
+    <td valign=top align=right><value id=judo_size><br><value id=jcom_size><br><value id=winreg_size></td>
+    <td>The software binary. Unzip to get judo.jar and put it into classpath.<br>
+        The jcom.dll.zip is the jcom.dll from JCom version 2.2.3,
+        whose Java classes are included in judo.jar, for Windows COM scripting.<br>
+        The ICE_JNIRegistry.dll.zip is the ICE_JNIRegistry.dll from Tim Endre,
+        whose Java classes are included in judo.jar, for Windows registry scripting.<br>
+        <em>(All are included in <download id=judoscript> already!)</em>
+    </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+    <td valign=top><code><download id=src><br><download id=generated></code></td>
+    <td valign=top align=right><value id=src_size><br><value id=generated_size></td>
+    <td>The complete source code.
+        <em>(Included in <download id=judoscript> already!)</em><br>
+        The generated Java files are produced by JavaCC for <em>judo.jj</em>.
+    </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+    <td valign=top><code><download id=docs></code></td>
+    <td valign=top align=right><value id=docs_size></td>
+    <td>Complete documentation and all the technical articles.
+        <em>(Included in <download id=judoscript> already!)</em>
+    </td>
+</tr>
+<tr bgcolor="#DDDDDD">
+    <td valign=top><code><download id=examples></code></td>
+    <td valign=top align=right><value id=examples_size></td>
+    <td>The example libarary.
+        <em>(Included in <download id=judoscript> already!)</em>
+    </td>
+</tr>
+<tr><td valign=top><i><code><download id=axis11all></code></code></i></td>
+    <td valign=top align=right><value id=axis11all_size></td>
+    <td>The <download id=axis11all> file is a convenience for <i>SOAP web service</i> scripting.
+        It is an agglomeration of all the executable jar files in the Apache Axis 1.1 distribution.
+        This file is <i>not</i> included in <download id=judoscript>.
+    </td>
+</tr>
+<tr><td valign=top><b><code><download id=jusptut></code></b></td>
+    <td valign=top align=right><value id=jusptut_size></td>
+    <td>The complete <a href="http://www.judoscript.com/jusptut/index.jusp">JuSP Comprehensitve Tutorial</a> web app. Download and expand it into $TOMCAT/webapps/ and run <code>http://<i>localhost:port</i>/jusptut/index.jusp</code>. You can also rename/copy to a different name for exercise purposes.</td>
+</tr>
+<!--
+<tr><td valign=top><i><code><a href="store/judoscript.v0.8a.zip">judoscript.v0.8a.zip</a></code></i></td>
+    <td valign=top align=right>2319K</td>
+    <td>The last version before the ECMAScript-compatibility syntax changes.</td>
+</tr>
+-->
+<tr><td valign=top><b><code><a href="store/jamaica-1.0.zip">Jamaica 1.0</a></code></b></td>
+    <td valign=top align=right>280K</td>
+    <td>Jamaica, the JVM Macro Assembler language (2005-01-15 revision).
+Need either <a href='http://asm.objectweb.org'>ASM</a> or
+<a href='http://jakarta.apache.org/bcel'>Jakarta BCEL</a>.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+

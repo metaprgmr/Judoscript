@@ -1,0 +1,16 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/fxn_var_param_list.judo:</b></td></tr><tr><td><pre>
+function foo a {  // or: function foo a, .. {
+  println a;
+  if $$args != null {
+    println '----- length: ', $$args.length;
+    for x in $$args { . x; }
+  }
+}
+
+foo 'A', '1', 2, 3;
+
+println nl, '----- array expanded as parameters -----';
+params = [ 'a', '0', 1, 2 ];
+foo( {params} );
+</pre></td></tr></table></body></html>

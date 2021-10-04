@@ -1,0 +1,311 @@
+//
+// NOT COMPLETED YET!
+//
+
+import org.hibernate.auction.*; // the Object Model classes.
+
+//
+// setup and global variables
+//
+
+hib::setup ( 'hibernate.hbm2ddl.auto' = 'create' // Environment::HBM2DDL_AUTO
+             // , 'hibernate.show_sql' = 'true'
+           )
+  org.hibernate.auction.AuctionItem,
+  org.hibernate.auction.Bid,
+  org.hibernate.auction.User
+;
+
+var mainItem;   // AuctionItem
+var mainBidder; // User
+var mainSeller; // User
+
+
+//
+// main
+//
+
+createTestAuctions();
+viewAllAuctionsSlow();
+
+viewAllAuctionsFast();
+bidOnAuction(mainBidder, mainItem, 5.5f);
+viewAllAuctionsFast();
+
+viewUserAuctions( mainSeller.getId() );
+mainSeller.setEmail('oldirty@jboss.org');
+changeUserDetails(mainSeller);
+changeItemDescription(mainItem.getId(), 'new description');
+viewUserAuctions( mainSeller.getId() );
+
+viewAuctionsByDescription('It', 0);
+viewAuctionsByDescription('DESC', 3);
+viewAuctionsByDescription('DESC', 8);
+
+catch:   println $_;
+
+
+//
+// functions
+//
+
+/**
+ * Demonstrates HQL projection/aggregation
+ */
+function viewAllAuctionsFast {
+  println 'Viewing all auction item info';
+
+  hib::query limit=100:
+    select new AuctionInfo( item.id, item.description, item.ends, max(bid.amount) )
+    from AuctionItem item
+    left join item.bids bid
+    group by item.id, item.description, item.ends
+    order by item.ends desc
+  ;
+
+  for ai in $_ {
+    println 'Auction: ', ai.getId(), ' - ', ai.getDescription(), ', ends: ',
+            ai.getEnds(), ', highest bid: ', ai.getMaxAmount(), nl;
+  }
+
+  hib::close;
+}
+
+
+/**
+ * Demonstrates HQL with runtime fetch strategy
+ */
+function viewAllAuctionsSlow {
+  println 'Viewing all auction item objects');
+
+  sess = hib::get('session'); // This is how you arbitrarily manipulate
+  sess.setFlushMode('NEVER'); // the Hibernate session object.
+
+  hib::query limit=100:
+    from AuctionItem item
+    left join fetch item.bids bid left join fetch bid.bidder
+    order by item.ends desc
+  ;
+
+  for ai in $_ {
+    println 'Auction: ', auction.getId(), ' - ', auction.getDescription(), ',
+            ends: ', auction.getEnds(), ', bids: ', auction.getBids(), nl;
+  }
+
+  hib::close;
+}
+
+
+/**
+ * Demonstrates transitive persistence with detached object support
+ *
+ *@param bidder User
+ *@param item   AuctionItem
+ *@param amount number
+ */
+function bidOnAuction bidder, item, amount {
+  println 'Creating a new bid for auction item: ', item.getId(),
+          ' by user: ', bidder.getId();
+
+  hib::txBegin;
+
+  hib::lock(item, 'NONE');
+  hib::lock(bidder, 'NONE');
+
+  bid = new java::Bid;
+  bid.setBidder(bidder);
+  bid.setDatetime( Date() );
+  bid.setAmount(amount);
+  bid.setItem(item);
+  bidder.getBids().add(bid);
+  item.getBids().add(bid);
+
+  hib::txEnd;
+catch:
+  hib::txAbort;
+  println 'Failed: ', $_;
+finally:
+  hib::close;
+}
+
+
+/**
+ * Demonstrates detached object support
+ *
+ *@param user User
+ */
+function changeUserDetails user {
+  println 'Changing user details for: ' + user.getId();
+
+  hib::saveOrUpdate(user); // auto-commited
+
+  hib::close;
+}
+
+
+/**
+ * Demonstrates automatic dirty checking
+ */
+function changeItemDescription itemId, description {
+  println 'Changing auction item description for: ' + itemId;
+
+  hib::txBegin;
+
+  item = hib::get(java::AuctionItem, itemId);
+  if (item==null)
+    throw new IllegalArgumentException('No item for the given id: ' + itemId);
+
+  item.setDescription(description);
+
+  hib::txEnd;
+catch:
+  hib::txAbort;
+  println 'Failed: ', $_;
+finally:
+  hib::close;
+}
+
+/**
+ * Demonstrates query by criteria with runtime fetch strategy
+ */
+function viewUserAuctions sellerId {
+  println 'Viewing user and auctions: ' + sellerId;
+
+  hib::txBegin;
+
+      List list = s.createCriteria(java::User)
+        .add( Expression.eq('id', sellerId) )
+        .setFetchMode('auctions', FetchMode.EAGER)
+        .list();
+
+      if (list.size()==0) throw new IllegalArgumentException('No user for the given id: ' + sellerId);
+      User user = (User) list.get(0);
+      println
+        'User: ' + user.getId() + ' - ' + user.getName() +
+        ', email: ' + user.getEmail() +
+        ', auctions: ' + user.getAuctions()
+      );
+
+  hib::txEnd;
+catch:
+  hib::txAbort;
+  println 'Failed: ', $_;
+finally:
+  hib::close;
+}
+
+
+/**
+ * Demonstrates query by example
+ */
+function viewAuctionsByDescription description, condition {
+  msg = 'Viewing auctions containing: ' + description;
+  if (condition > 0)
+    msg += ' with condition: ' + condition + '/10';
+
+  item = new java::AuctionItem;
+  item.setDescription(description);
+  item.setCondition(condition);
+
+  hib::txBegin;
+  sess = hib::get('session');
+
+  iter = sess.createCriteria(java::AuctionItem)
+             .add( Example.create(item)
+                          .enableLike(MatchMode::ANYWHERE)
+                          .ignoreCase()
+                          .excludeZeroes()
+                 )
+             .list()
+             .iterator();
+
+  println msg;
+  while iter.hasNext() {
+    item = iter.next();
+    println 'Item: ', item.getId(), ' - ', item.getDescription();
+  }
+  println;
+
+  hib::txEnd;
+catch:
+  hib::txAbort;
+  println 'Failed: ', $_;
+finally:
+  hib::close;
+}
+
+/**
+ * Demonstrates transitive persistence
+ */
+function createTestAuctions {
+  println 'Setting up some test data';
+
+  hib::txBegin;
+
+  seller = new java::User;
+  seller.setUserName('oldirty');
+  seller.setName( new Name('ol' dirty', null, 'bastard') );
+  seller.setEmail('oldirty@hibernate.org');
+  seller.setAuctions( new ArrayList() );
+  s.save(seller);
+
+  bidder1 = new java::User;
+  bidder1.setUserName('1E1');
+  bidder1.setName( new Name( 'oney', new Character('1'), 'one') );
+  bidder1.setEmail('oney@hibernate.org');
+  bidder1.setBids( new ArrayList() );
+  s.save(bidder1);
+
+  bidder2 = new java::User;
+  bidder2.setUserName('izi');
+  bidder2.setName( new Name('iz', null, 'inizi') );
+  bidder2.setEmail('izi@hibernate.org');
+  bidder2.setBids( new ArrayList() );
+  s.save(bidder2);
+
+  for i from 0 to 2 {
+    item = new java::AuctionItem;
+    item.setDescription('auction item ' + i);
+    item.setEnds( new Date() );
+    item.setBids( new ArrayList() );
+    item.setSeller(seller);
+    item.setCondition(i*3 + 2);
+    for j from 0 upto i {
+      bid = new java::Bid;
+      bid.setBidder(bidder1);
+      bid.setAmount(j);
+      bid.setDatetime( new Date() );
+      bid.setItem(item);
+      item.getBids().add(bid);
+      bidder1.getBids().add(bid);
+
+      bid2 = new java::Bid;
+      bid2.setBidder(bidder2);
+      bid2.setAmount( j+ 0.5f);
+      bid2.setDatetime( new Date() );
+      bid2.setItem(item);
+      item.getBids().add(bid2);
+      bidder2.getBids().add(bid2);
+    }
+    seller.getAuctions().add(item);
+    mainItem = item;
+  }
+  mainBidder = bidder2;
+  mainSeller = seller;
+
+  buyNow = new java::BuyNow;
+  buyNow.setAmount(1.0f);
+  buyNow.setDatetime( new Date() );
+  buyNow.setBidder(mainBidder);
+  buyNow.setItem(mainItem);
+  mainBidder.getBids().add(buyNow);
+  mainItem.getBids().add(buyNow);
+
+  hib::txEnd;
+catch:
+  hib::txAbort;
+  println 'Failed: ', $_;
+finally:
+  hib::close;
+}
+

@@ -1,0 +1,30 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/copy_op.judo:</b></td></tr><tr><td><pre>
+//
+// Test of copy operator := for Arrays/Objects vs. their compatible types.
+//
+
+srcObj = { a=1, B='xyz' };
+srcMap = new java::HashMap( A=1, B='XYZ' );
+
+srcArr = [ 1, 2, 3 ];
+srcJavaArr = new java::int[]{ 10, 20, 30 };
+
+obj = {};
+obj := srcObj;      println 'Copied srcObj into Object:    obj = ', obj;
+obj := srcMap;      println 'Copied srcMap into Object:    obj = ', obj;
+
+map = new java::HashMap;
+map := srcObj;      println 'Copied srcObj into Map:       map = ', map;
+map := srcMap;      println 'Copied srcMap into Map:       map = ', map;
+
+arr = [];
+arr := srcArr;      println 'Copied srcArr into Array:     arr = ', arr;
+arr := srcJavaArr;  println 'Copied srcJavaArr into Array: arr = ', arr;
+
+list = new java::ArrayList;
+list := srcArr;     println 'Copied srcArr into List:     list = ', list;
+list := srcJavaArr; println 'Copied srcJavaArr into List: list = ', list;
+
+catch: $_.pist();
+</pre></td></tr></table></body></html>

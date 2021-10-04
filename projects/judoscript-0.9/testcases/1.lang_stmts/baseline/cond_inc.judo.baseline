@@ -1,0 +1,15 @@
+step  1: A => B
+step  2: A => C
+step  3: B => C
+step  4: A => B
+step  5: C => A
+step  6: C => B
+step  7: A => B
+step  8: A => C
+step  9: B => C
+step 10: B => A
+step 11: C => A
+step 12: B => C
+step 13: A => B
+step 14: A => C
+step 15: B => C

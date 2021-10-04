@@ -1,0 +1,33 @@
+#!/usr/bin/env judo
+
+// On Unix, make sure the executable script, 'judo', is available in the PATH.
+// Make chmod script to be executable, and simply run.
+
+text = [[*
+
+  Does the first line of this script
+
+    #!/usr/bin/env judo
+
+  look familiar? It does do what you would expect.
+
+  In JudoScript, there are 4 forms of comments:
+
+    /* ....
+       .... multi-line comment
+    */
+
+    /? ....
+       .... multi-line comment
+       -- recommended used rarely, only to disable a block of code.
+    ?/
+
+    // .... single-line comment
+
+    #! .... yet another single-line comment!
+
+  The last form is designed for auto-run scripts on Unix.
+
+*]];
+
+flush text;

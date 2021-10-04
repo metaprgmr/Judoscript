@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!--
+   Demonstrates the same syntax and results of ${..}
+   but with different meanings.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+<project name="test" default="main" basedir=".">
+  <taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  <target name="main" depends="step1,step2" />
+
+  <target name="step1">
+    <echo message=" ${java.class.path}" />
+  </target>
+
+  <target name="step2">
+    <judoscript>
+      println ${java.class.path};
+    </judoscript>
+  </target>
+
+</project>

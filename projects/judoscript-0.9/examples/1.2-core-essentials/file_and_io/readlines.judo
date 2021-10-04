@@ -1,0 +1,14 @@
+usage {
+  minArgs = 1;
+  created = '2003-02-03';
+  args    = 'textfile';
+  desc    = [[*
+    This program reads the file and prints out lines that are not
+    empty (all-white-characters) nor comment that starts with '#'.
+  *]];
+}
+
+do #args[0] as lines for $_.isNotEmpty() && !$_.startsWith('#') {
+  println $_;
+}
+

@@ -1,0 +1,71 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    A single-threaded HTTP proxy server handling only HTTP requets.
+    It prints all the headers going both ways, excluding a list of
+    file extensions. Each cookie is displayed nicely on a new line.
+    To use, have your browser use a proxy server and point the proxy
+    server to localhost:8088.
+  *]];
+}
+
+port = 8088;
+exclude = Set[ 'gif', 'jpg', 'jpeg', 'bmp', 'css', 'txt', 'js', 'class' ];
+
+ss = startServer(port);
+println <err> 'Proxy server on port ', port;
+while {
+  relay(acceptHttp(ss)); // single-thread
+}
+
+function relay c {
+  // Connect to server; browser should send absolute URL.
+  url = c.getUrl();
+  display = ! exclude.contains( url.getFileExt().toLower() );
+  
+  doPost = c.getMethod().equalsIgnoreCase('post');
+  println '--- URL: ', url;
+  if (display) println '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>';
+  if doPost { s = httpPost(url); }
+  else      { s = httpGet(url); }
+
+  // pass all client headers and content to server
+  headers = c.getAllHeaders();
+  if display {
+    for x in headers {
+      s.(x) = c.(x);
+      println x, ': ', c.(x);
+    }
+  }
+  if doPost {
+    in = c.getInputStream();
+    out = s.getOutputStream();
+    if (in != null && out != null)
+      copyStreams c.getInputStream(), s.getOutputStream(), false;
+    { in.flush(); in.close(); catch: ; }
+    { out.flush(); out.close(); catch: ; }
+  }
+
+  // pass all server headers and content to client
+  headers = s.getAllHeaders();
+  if display {
+    println '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<';
+    for x in headers {
+      c.(x) = s.(x);
+      println x, ': ', s.(x);
+    }
+  }
+  in = s.getInputStream();
+  out = c.getOutputStream();
+  if (in != null && out != null)
+    copyStreams s.getInputStream(), c.getOutputStream();
+  { in.flush(); in.close(); catch: ; }
+  { out.flush(); out.close(); catch: ; }
+
+catch:
+  println <err> '[', $_.name, '] ', $_.message;
+finally:
+  if (display) println; // separate requests.
+}

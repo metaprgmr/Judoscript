@@ -1,0 +1,14 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_xml_xslt/xslt_to_out.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2002-02-20';
+  desc    = [[*
+    Applies XSLT of 'calls.xsl' and generate to the system output.
+    Sets a parameter in the script for the XSL to use.
+  *]];
+}
+
+xslt 'calls_param.xsl' on 'calls.xml' to getOut()
+  parameters( pageTitle = 'Welcome to Online Phone Listings' );
+</pre></td></tr></table></body></html>

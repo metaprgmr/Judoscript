@@ -1,0 +1,13 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_exec/in_out.judo:</b></td></tr><tr><td><pre>
+exec 'java test.ToLower | java test.Echo'
+input {  // feed input to the cmdline
+  println &lt;pipe> 'Hello,';
+  println &lt;pipe> 'World!';
+}
+output { // read output from the cmdline
+  while (line = readPipe()) != eof {
+    println 'Line #', loopIndex()+1, ': ', line;
+  }
+}
+</pre></td></tr></table></body></html>

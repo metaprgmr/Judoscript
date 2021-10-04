@@ -1,0 +1,151 @@
+<title name="The Judo Language 0.9" />
+
+<preface/>
+
+<part title="Introduction"
+ synopsis="is introductory."
+>
+  <chapter title="Introduction to Judo" id="intro" status="green"
+   synopsis="is a high-level overview."
+  />
+  <chapter title="Major Use Cases Illustrated" id="usecases" status="red"
+   synopsis="presents all the use cases Judo is designed for, usually supported by code examples. This is almost a how-to guide."
+  />
+</part>
+
+<part title="Core Language Programming"
+ synopsis="covers all the important programming and Java scripting topics."
+>
+  <chapter title="Basic Program Structure" id="basic" status="green"
+   synopsis="covers the basic program structures, including lexical entities, variables and constants, !include, dynamic evaluation and the run-time environment."
+  />
+  <chapter title="Running Judo and Logging" id="running" status="green"
+   synopsis="discusses all the aspects of running the Judo language engine."
+  />
+  <chapter title="Basic Data Types and Expressions" id="datatypes" status="yellow"
+   synopsis="introduces the data types in Judo, and details on simple data types, their values and expressions. The string data type has very rich functionlity and serves many purposes; this chapters details on text embedded expressions and variables, representation of files and URLs, and regular expressions."
+  />
+  <chapter title="Flow Control" id="flow" status="green"
+   synopsis="covers basic program flow control, including function and exception handling."
+  />
+  <chapter title="Built-In Data Structures" id="datastr" status="orange"
+   synopsis="details on all the built-in, general-purpose data structures."
+  />
+  <chapter title="Threads and Dynamic Evaluation" id="thread" status="orange"
+   synopsis="introduces thread programming and its issues."
+  />
+  <chapter title="Namespace and Package" id="nspkg" status="hide"
+   synopsis="covers package and namespace."
+  />
+  <chapter title="Object-Oriented Programming" id="oop" status="orange"
+   synopsis="is for creating and using user-defined classes."
+  />
+  <chapter title="Java Scripting" id="java" status="green"
+   synopsis="covers all aspects of Java scripting."
+  />
+  <chapter title="Aspect-Oriented Programming" id="aop" status="hide"
+   synopsis="introduces aspect-oriented programming (AOP) in Judo."
+  />
+  <chapter title="Judo and ECMAScript" id="ecmascript" status="hide"
+   synopsis="lists the differences between <J> and different versions of ECMAScript."
+  />
+</part>
+
+<part title="Essential Services and Shell Scripting"
+ synopsis="explains the system-level services. Most such services are typically supported in conventional scripting languages, and Judo has many enhanced features."
+>
+  <chapter title="Print, File I/O and In-Script Data" id="io" status="orange"
+   synopsis="explains input-output, including the in-script text feature."
+  />
+  <chapter title="File System and Archives" id="fs" status="green"
+   synopsis="introduces all the commands for manipulating files, directories and archives."
+  />
+  <chapter title="Run Executables" id="exec" status="green"
+   synopsis="details the flexibility of running native executables."
+  />
+  <chapter title="Internet Scripting" id="net" status="orange"
+   synopsis="covers internet scripting, such as HTTP scripting, sendMail, SSH, SCP and FTP."
+  />
+  <chapter title="Scheduled Jobs" id="schedule" status="orange"
+   synopsis="introduces the schedule facility."
+  />
+  <chapter title="Java GUI Scripting" id="gui" status="orange"
+   synopsis="is dedicated to building Java GUI applications using AWT or Swing."
+  />
+  <chapter title="Ant Scripting and Scripting Ant" id="ant" status="green"
+   synopsis="explains how to embed Judo code in Ant build scripts and how to take advantage of the growing resources of the Ant tasks in Judo."
+  />
+  <chapter title="Internalization and Localization" id="i18n" status="red"
+   synopsis="introduces no specific language features but discusses the internationalization with Judo and Java programming."
+  />
+</part>
+
+<part title="Advanced Data Processing and Applications"
+ synopsis="is about advanced data processing services; data processing is the emphasis of the Judo language."
+>
+  <chapter title="JDBC (SQL) Scripting" id="jdbc" status="green"
+   synopsis="introduces all the ways you can run SQL through JDBC scripting."
+  />
+  <chapter title="JDBC (SQL) Scripting - Work with RDBMSs" id="db" status="red"
+   synopsis="continues JDBC scripting discussion and tries to cover a number of popular RDBMSs."
+  />
+  <chapter title="Hibernate ORM and HQL Scripting" id="hib" status="green"
+   synopsis="natively supports Hibernate ORM and HQL similar to SQL scripting."
+  />
+  <chapter title="SGML and JSP Scraping" id="sgml" status="orange"
+   synopsis="introduces SGML/HTML and JSP scraping and its usages in documentation, content management and building template systems."
+  />
+  <chapter title="XML Scripting - SAX Style" id="xml" status="orange"
+   synopsis="introduces XML scripting in Judo, including its own SAX-style statement, DOM programming and XSLT."
+  />
+  <chapter title="XML Scripting - DOM Style" id="e4x" status="red"
+   synopsis="introduces yet another way to script XML &mdash; <i>native XML scripting</i>, also known as "XScript" or "E4X" (<i>ECMAScript for XML</i>.)"
+  />
+  <chapter title="SOAP Web Service Scripting" id="wsdl" status="green"
+   synopsis="introduces scripting SOAP web services in Judo."
+  />
+  <chapter title="Scripting for Windows" id="win32" status="red"
+   synopsis="discussses using Judo with Windows registry and other services."
+  />
+  <chapter title="Microsoft ActiveX Scripting" id="activex" status="orange"
+   synopsis="details on Microsoft ActiveX scripting, and includes using ADO to access databases."
+  />
+  <chapter title="Use Microsoft Office Products" id="msoffice" status="red"
+   synopsis="discusses using Microsoft Office products through ActiveX scripting."
+  />
+</part>
+
+<part title="Beyond Basics"
+ synopsis="discusses topics of the Judo language software."
+>
+  <chapter title="JuSP: the Judo Server Page Technology" id="jusp" status="green"
+   synopsis="introduces the JuSP technology, a server-side web development solution built on top of the Judo language."
+  />
+  <chapter title="Embed Judo in Java Software" id="embedjava" status="red"
+   synopsis="explains how to embed the Judo language engine in Java software via BSF and its own language engine Java API."
+  />
+  <chapter title="Extending Judo" id="extend" status="red"
+   synopsis="explores ways to extend Judo."
+  />
+  <chapter title="Judo Tools and Special Usages" id="tools" status="red"
+   synopsis="covers some of the tools."
+  />
+</part>
+
+<part title="Judo Language Reference"
+ synopsis="contains cross-reference for the Judo language. Judo is a functionally rich language. The language constituents are a) grammar, b) system functions and c) built-in object types. Each functional support has its own collection of syntax rules, system functions and/or built-in object types."
+>
+  <appendix title="Functional Areas" id="a_fa" status="red"
+   synopsis="lists all the functional areas and assigns a unique name for each, used in the following appendices."
+  />
+  <appendix title="Grammar" id="a_g" status="red"
+   synopsis="lists Judo grammar in BNF."
+  />
+  <appendix title="Built-In System Functions" id="a_sf" status="red"
+   synopsis="lists all the built-in system functions."
+  />
+  <appendix title="Built-In Object Types" id="a_ot" status="red"
+   synopsis="lists all the built-in object types."
+  />
+</part>
+

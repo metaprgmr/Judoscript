@@ -1,0 +1,40 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-08';
+  desc    = [[*
+    A Java extension class of java.util.Hashtable. 
+    It implements a couple of new methods, and
+    overrides the hashCode() method which calls the
+    parent class's method first.
+  *]];
+}
+
+class MyHashtable extendsjava java.util.Hashtable
+{
+  // Test overriding an existing method
+  int hashCode() { return super.hashCode() ^ 1; }
+
+  // A new method.
+  String[] getKeys() {
+    arr = [];
+    for x in keys() { arr.append(x); }
+    return arr.toStringArray();
+  }
+
+  // A new method.
+  Object[] getValues() {
+    arr = [];
+    iter = values().iterator();
+    while iter.hasNext() { arr.append(iter.next()); }
+    return arr.toObjectArray();
+  }
+}
+
+mht = new MyHashtable;
+mht.put('adate', date());
+mht.put('anumber', 2);
+mht.put('astring', 'string');
+
+println '    keys: ', mht.getKeys();
+println '  values: ', mht.getValues();
+println 'hashCode: ', mht.hashCode();

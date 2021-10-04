@@ -1,0 +1,18 @@
+<html><body>
+<h2>Date Controls and Date Values</h2>
+
+<p>View <%!viewsrc 'lesson5/date.jusp', '../' %></p>
+
+<%
+  var adate = jusp$readDate(form, 'adate');
+  if adate != null {
+    %>You selected: <%= adate.fmtDate('yyyy-MM-dd') %><br><%
+  }
+%>
+
+<form>
+<%!date 'adate', 5, 10 %>&nbsp;&nbsp;<%!submit 'Submit' %>
+</form>
+
+<hr><font size=-1>Back to <a href="../lesson5.jusp">lesson 5</a></font>
+</body></html>

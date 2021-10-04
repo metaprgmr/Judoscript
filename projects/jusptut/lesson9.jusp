@@ -1,0 +1,49 @@
+<%
+  var title = 'Lesson 9. Write the Global <code>juspInit.judo</code> Script'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>When writing JuSP web applications, developers just create up to two
+components: the JuSP pages and optionally a global
+<code>juspInit.judo</code> script. At runtime, the JuSP engine initiates
+and maintains a global Judo context. Each JuSP page is converted into a
+function and is invoked in a separate thread (created by the JuSP engine);
+all the JuSP functions use that same runtime context.</p>
+
+<p>When JuSP engine starts, it first loads the built-in JuSP support;
+then it looks for a script named <code>juspInit.judo</code> in the
+classpath of the current web application, and runs it if found.
+In a JuSP web app, you can typically put the <code>juspInit.judo</code>
+file in a jar file under <code>${WEB_APP}/WEB-INF/lib/</code> or simply
+leave it in the <code>${WEB_APP}/WEB-INF/classes/</code> directory.</p>
+
+<p>In the <code>juspInit.judo</code>, the variable <code>juspContext</code>
+is instantiated. JuSP engine also recognizes a few variable names, such as
+<code>juspFinally</code> for custom page exception and cleanup handling.
+You can also control system logging and assertion with <code>!pragma</code>'s.
+Beyond web app system settings, <code>juspInit.judo</code> contains
+everything for a JuSP web app. This may include custom tags, validation
+functions, etc., and the back-end business logic and configuration (e.g.,
+database and/or JNDI context connection information, mail server, Hibernate
+object model initialization, WSDL handle preload, ...) In other words,
+<code>juspInit.judo</code> contains <em>everything</em> for the web app
+(besides the JuSP pages), including web app configuration, initialization
+and system libraries.</p>
+
+<p>It is common to put various parts into individual source files, and
+<code>!include</code> them in the <code>juspInit.judo</code> file,
+To avoid name clashes, you can apply namespaces to idenfier names with
+embedded dollar signs (<code>$</code>) such as <code>jusp$myapp$myTag</code>.</p>
+
+<p>In this JuSP Comprehensive Tutorial web app, we have a sample
+<code>juspInit.judo</code> file. It has a few custom tags such as
+<code>&lt;%!juspview %></code>. The rest is used by various lessons,
+notably the last few lines (see <a href="lesson12.jusp">lesson 12</a>.)</p>
+
+<ul type=square>
+<li>View <%!viewsrc 'WEB-INF/judo/juspInit.judo' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

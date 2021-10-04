@@ -1,0 +1,27 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_ant/show_cp.xml:</b></td></tr><tr><td><pre>
+&lt;?xml version="1.0"?>
+
+&lt;!--
+   Demonstrates the same syntax and results of ${..}
+   but with different meanings.
+
+   Works with Ant-1.5.4 and Ant-1.6.2.
+ -->
+&lt;project name="test" default="main" basedir=".">
+  &lt;taskdef name="judoscript" classname="com.judoscript.AntJudoScriptTask"/>
+
+  &lt;target name="main" depends="step1,step2" />
+
+  &lt;target name="step1">
+    &lt;echo message=" ${java.class.path}" />
+  &lt;/target>
+
+  &lt;target name="step2">
+    &lt;judoscript>
+      println ${java.class.path};
+    &lt;/judoscript>
+  &lt;/target>
+
+&lt;/project>
+</pre></td></tr></table></body></html>

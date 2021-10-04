@@ -1,0 +1,7 @@
+<!ELEMENT article (headline, author, body)>
+<!ATTLIST article date CDATA #REQUIRED>
+<!ELEMENT headline (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+<!ENTITY pubname "The XML News">
+<!ENTITY cent SYSTEM "articleEntities.dtd">

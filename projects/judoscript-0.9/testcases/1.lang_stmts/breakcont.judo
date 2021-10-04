@@ -1,0 +1,11 @@
+aloop:
+  for i from 0 to 5 {
+    for j from 1 to 5 {
+      if i+j < 5 {
+        continue aloop;
+      } else if i+j >= 10 {
+        break aloop;
+      }
+      println i, '-', j;
+    }
+  }

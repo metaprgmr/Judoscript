@@ -1,0 +1,305 @@
+!include '${JUDOROOT}/projects/doc_helpers.judi'
+
+versionId = 'judoscript-0.9';
+myroot    = '${projects}/${versionId}';
+articles  = '${myroot}/docs/art_src';
+
+// The assumption is: a listing appears before any references.
+
+println <err> nl, '::: Process All Articles ...', nl;
+
+// Collect code listing information
+sections = new OrderedMap;
+listingInfo = new OrderedMap;
+in_codelisting = false;
+htmlOut = null;
+last = null;
+sectionNum = 1;
+doc = null;
+
+listFiles '${articles}/*.sgml';
+
+for a in $$fs_result {
+  var htmlName = '${docroot}/articles/' + a.getFileName().replace('.sgml','.html');
+  if (!isNewer(a, htmlName)) continue;
+  println 'Generating "', htmlName, '" ...';
+  htmlOut = openTextFile(htmlName,'w');
+  sections.clear();
+  listingInfo.clear();
+  last = null;
+  in_codelisting = false;
+  do a as html {
+    <doc>:          if $_.deprecated != null {
+                      flush <htmlOut> [[*
+                        <html><head><meta keywords="(* $_.keywords *)">
+                        <meta http-equiv="refresh" content="1;url=(* $_.deprecated *)">
+                        </head><body>Redirecting ...</body></html>
+                      *]];
+                      htmlOut.close();
+                      break;
+                    } else {
+                      doc = $_;
+                      printHeader();
+                    }
+    <sectiondefs>:  startTOC();
+    </sectiondefs>: endTOC();
+    <sectiondef>:   printTOC($_);
+    <section>:      printSection($_);
+    <abstract>:     startAbstract();
+    </abstract>:    endAbstract();
+    </doc>:         startContent();
+
+    :TEXT:          print <htmlOut> $_;
+    <>:             print <htmlOut> $_;
+    <?>:            print <htmlOut> $_;
+    <!>:            print <htmlOut> $_;
+    <oeA>,<oeB>,<oeC>,<oeD>,<oeE>,<oeF>,<oeG>,<oeH>,<oeI>,<oeJ>,<oeK>,<oeL>,<oeM>,
+    <oeN>,<oeO>,<oeP>,<oeQ>,<oeR>,<oeS>,<oeT>,<oeU>,<oeV>,<oeW>,<oeX>,<oeY>,<oeZ>:
+                    print <htmlOut> oeChar($_.getName().substring(2));
+
+    <insert> :
+      if $_.name == 'codelistings' {
+        print <htmlOut> '<ol>';
+        for x in listingInfo {
+          print <htmlOut> '<li> <a href=#', x, '>', listingInfo.(x), '</a>';
+        }
+        println <htmlOut> '</ol>';
+      }
+
+    <codelist> :
+      if $_.name {
+        // a. collect the info to the dictionary
+        var key = $_.name;
+        var listTitle = $_.caption;
+        if key.startsWith(':') { key = key.substring(1); }
+        if !listTitle { listTitle = key; }
+        var listNum = listingInfo.size() + 1;
+        listingInfo.(key) = listTitle;
+
+        // b. write the tag and beginning of the code listing
+        in_codelisting = true;
+        print <htmlOut> [[*
+          <p align=center><table width=640><thead>
+          <th><a name="(* key *)">Listing (* listNum.int() *)</a>. (* listTitle *)</th>
+          </thead><tr><td class=code><pre>
+        *]];
+      } elif $_.href {
+        var key = $_.href;
+        if key.startsWith(':') { key = key.substring(1); }
+        var x = ($_.first == 'true') ? 'L' : 'l';
+        x @= 'isting ' @ (listingInfo.indexOf(key)+1).int();
+        print <htmlOut> '<a href=#', key, '>', x, '</a>';
+      }
+
+    </codelist> :
+      if in_codelisting {
+        in_codelisting = false;
+        println <htmlOut> "</pre></td></tr></table></p><p>";
+      }
+
+    <demo> :    $fontcolor = '';
+                if $_.type=='java' { $fontcolor = ' color=blue'; }
+                print <htmlOut> '<blockquote><font', $fontcolor, '><pre>';
+    </demo> :   print <htmlOut> '</pre></font></blockquote>';
+
+    <deflist>:  println <htmlOut> '<p><table border=1><tbody class=text><tr><td align=center><b>',
+                            $_.column1, '</b></td><td align=center><b>', $_.column2, '</b></td></tr>';
+                colAlign1 = $_.align1;
+                colAlign2 = $_.align2;
+    <item>:     print <htmlOut> '<tr><td';
+                if colAlign1 { print <htmlOut> ' align=', colAlign1; }
+                print <htmlOut> '><code>', $_.name, '</code></td><td';
+                if colAlign2 { print <htmlOut> ' align=', colAlign2; }
+                print <htmlOut> '>', $_.value, '</td></tr>';
+    </deflist>: println <htmlOut> '</table></p><p>';
+
+    <j>:        print <htmlOut> '<em>JudoScript</em>';
+    <jcc>:      print <htmlOut> '<a href="JavaClassCreator.html"><code>JavaClassCreator</code></a>';
+    <j_>:       print <htmlOut> '<em>Judo</em>';
+    <gramma>:   print <htmlOut> '<blockquote>';
+    </gramma>:  print <htmlOut> '</blockquote>';
+    <kw>:       print <htmlOut> '<b><code>';
+    </kw>:      print <htmlOut> '</code></b>';
+    <nt>:       print <htmlOut> '<em>';
+    </nt>:      print <htmlOut> '</em>';
+    <anno>:     print <htmlOut> '<sub>';
+    </anno>:    print <htmlOut> '</sub>';
+    <incap>:    print <htmlOut> '<b><i>';
+    </incap>:   print <htmlOut> '</i></b> &nbsp;';
+    <mthd>:     print <htmlOut> '<code>';
+    </mthd>:    print <htmlOut> '()</code>';
+
+    <keywordlist>:  keywordlistColumns = $_.columns ? $_.columns : 1;
+                    $inKeywordlist = true;
+                    println <htmlOut> '<table width=640>';
+    </keywordlist>: $inKeywordlist = false;
+                    println <htmlOut> '</table>';
+
+    <review>:   print <htmlOut> '<h3><em>Review Questions</em></h3><ul>';
+    <question>: print <htmlOut> '<li>';
+    </review>:  print <htmlOut> '</ul>';
+
+    <displayTable>:  captions = $_.captions.csv();
+                     columnNum = (1 + 2 * captions.length).int();
+                     hdiv = '<tr><td colspan=${columnNum} height=1><img ' +
+                            'src=../share/spacer.gif border=0 height=1></td></tr>';
+                     vdiv = '<td width=1><img src=../share/spacer.gif border=0 width=1></td>';
+                     print <htmlOut> '<table border=1 cellspacing=0 cellpadding=0 width=95%>',
+                                     hdiv, '<tr>', vdiv;
+                     for x in captions {
+                       print <htmlout> '<th>', x.neverEmpty('&nbsp;'), '</th>', vdiv;
+                     }
+                     print <htmlOut> '</tr>';
+    </displayTable>: print <htmlOut> hdiv, '</table>';
+    <displayRow>:    print <htmlOut> '<tr><td>';
+    </displayRow>:   print <htmlOut> '</td></tr>';
+    <displayNext>:   print <htmlOut> '</td>', vdiv, '<td>';
+
+    :AFTER:          endContent();
+                     htmlOut.close();
+  } // end of html.
+
+} // end of for a loop.
+
+
+function printHeader {
+  background = '';
+  redirect_msg = '';
+  if doc.class == null {
+//    background = ' background="../share/TBU.gif"';
+    redirect_msg = [[*
+      <blockquote><font color=red>This article is old and is being consolidated into
+      the <a href="../books/judoscript-0.9/toc_details.html">book</a>.<br>
+      Please refer to the corresponding chapter(s) therein.<br>If the chapters or
+      sections are not completed yet, you can use this article.<br>Refer to the
+      examples as they are tested against the latest code.</font></blockquote>
+    *]];
+  }
+  println <htmlOut> [[*
+<html><head>
+<title>(* doc.title *)</title>
+<link href="../share/judo_styles.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html;">
+</head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" (* background *)>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td style="background:url(../share/art_1.gif)" width=110 height=53><a href="index.html"><img
+ src=../share/spacer.gif width=110 height=53 border=0></a></td>
+<td style="background:url(../share/art_2.gif)" align=center valign=center><h1>(* doc.title *)</h1></td>
+<td width=95 valign=top nowrap><font style="line-height:13px; font-size:12px"
+ ><img src=../share/triangle.gif>&nbsp;<a href="http://www.judoscript.com">home</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../examples/">examples</a> <br>
+<img src=../share/triangle.gif>&nbsp;<a href="../ref/">references</a></font>
+</td></tr></table>
+(* redirect_msg *)<center><table border=0 width=98% class=bodyText><tr><td>
+*]];
+}
+
+function startTOC
+{
+  println <htmlOut> [[*
+<br>
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px">
+<!-- tops -->
+<tr>
+<td width=9><img src=../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../share/portlet_tm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=13><img src=../share/portlet_tr.gif width=13 height=9 border=0></td>
+<!-- left-left -->
+<tr><td width=9 style="background:url(../share/portlet_l.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td><td valign=top>
+<h3>Table Of Content</h3>
+<ol>
+*]];
+}
+
+function endTOC
+{
+  println <htmlOut> [[*
+</ol></td>
+<td width=13 style="background:url(../share/portlet_r.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td></tr>
+<!-- bottoms -->
+<tr>
+<td width=9><img src=../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../share/portlet_bm.gif)"><img src=../share/spacer.gif width=1 height=1 border=0></td>
+<td width=15><img src=../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+*]];
+}
+
+function printTOC sectiondef
+{
+  url = null;
+  if (sectiondef.href != null)
+    url = sectiondef.href;
+  else {
+    url = '#' + sectiondef.name;
+    sections.(sectiondef.name) = sectiondef;
+  }
+
+  print <htmlOut> sectiondef.sub ? '<br>&#187; ' : '<li>',
+                  ' <a href="', url, '">', sectiondef.caption, '</a>';
+}
+
+function startAbstract
+{
+  println <htmlOut> [[*
+     <font face="Arial" style="font-size:9px">BY</font> <em>(* doc.author *)</em></font> &nbsp; &nbsp;
+     (* doc.created *) &nbsp;
+  *]];
+  if (doc.last)
+    println <htmlOut> '<font face="Arial" style="font-size:9px">UPDATED:</font> ', doc.last;
+  println <htmlOut> '<p><b>Abstract</b> &nbsp;';
+}
+
+function endAbstract
+{
+  println <htmlOut> '<hr>';
+}
+
+function startContent
+{
+  println <htmlOut> [[*
+      <p>&nbsp;</p>
+      <!-- ARTICLE CONTENT -->
+    *]];
+  sectionNum = 1;
+}
+
+function endContent
+{
+  println <htmlOut> [[*
+      <!-- /ARTICLE CONTENET -->
+      </td></tr></table>
+      <br> <hr size=1 width=95%>
+      <font style="font-size:10px;color:#999999">
+      Copyright 2001-(*#year*) <a href="http://www.judoscript.com">www.judoscript.com</a> &nbsp;
+      All rights reserved.<br><br>
+
+      <a href="http://www.judoscript.com">home</a> |
+      <a href="../download.html">download</a> |
+      <a href="../articles/">articles</a> |
+      <a href="../ref/">references</a> |
+      <a href="../examples">examples</a>
+      <br><br>Better viewed with IE5+, NN6+ and Mozilla.</center>
+      </body></html>
+    *]];
+}
+
+function printSection section
+{
+  var sec = sections.(section.name);
+  var name = sec.name;
+  if sec.sub == 1 {
+    print <htmlOut> '<h3><a name=', name, '>', sec.caption, '</a></h3><p>';
+  } else {
+    if sectionNum > 1 {
+      print <htmlOut> ' <p>&nbsp;<center>&#187;&#187;&#187; <a href=#top>Top</a> ';
+      if (last)
+        print <htmlOut> ' | &nbsp;<a href=#', last, '>This Section</a> ';
+      print <htmlOut> ' &#171;&#171;&#171;</center><p>&nbsp;<p>';
+    }
+    print <htmlOut> '<h2><a name=', name, '>', sectionNum, '. ', sec.caption, '</a></h2><p>';
+    ++sectionNum;
+  }
+}
+

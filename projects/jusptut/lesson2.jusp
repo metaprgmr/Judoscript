@@ -1,0 +1,44 @@
+<%
+  var title = 'Lesson 2. Session and Cookie'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<h2>Working with the <code>session</code> Object</h2>
+
+<p>In the scriptlet code within <code>&lt;% %&gt;</code>,
+the <code>session</code> object is essentially a map holding
+user-defined attributes. These attributes can be easily
+accessed as a field:</p>
+
+<pre>session.foo = 'bar';</pre>
+
+The attribute name can be a variable; the following example
+takes the advantage of the fact that <code>session</code>
+<i>is</i> a collection:
+
+<pre>for attr in session {
+  %>&lt;%= attr %> = &lt;%= session.(attr) %>&lt;%
+}</pre>
+
+<p>Session values are maintained across requests, as the following
+experiment demonstrates:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson2/session.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson2/session.jusp' %></li>
+</ul>
+
+<h2>Working with Cookies</h2>
+
+<p>Cookie is a client-side session control mechanism. In a JUSP page,
+you get cookies from the <code>request</code> object, and set new
+cookies to the <code>response</code>.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson2/cookie.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson2/cookie.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

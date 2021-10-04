@@ -1,0 +1,130 @@
+<%
+  if #args==null || #args.length==0 {
+    println<err> 'ERROR: toc_details.juspt takes a BookInfo parameter.';
+    return;
+  }
+  var bookInfo = #args[0];
+  var title = 'Book: ' + bookInfo.title;
+  var tabID = 'judo';
+  var base = '../../';
+
+  function jusp$writeTOCChapter ctxt, ch, f {
+    var color = null;
+    switch ch.status {
+    case 'hide':   return;
+    case 'red':
+    case 'orange':
+    case 'yellow':
+    case 'green':  color = '<img src="../../share/status_' + ch.status + '.gif">&nbsp;';
+    }
+
+    var chapterHeader = ch.number;
+    if (ch.isAppendix) chapterHeader = chapterHeader.fmtRoman('I');
+    print<ctxt.writer> [[*
+      <tr><td class=text14b nowrap valign=top><a name=(* ch.id *)> (* chapterHeader *)</a>.&nbsp;
+      (* color *)<a href="chapters/(* ch.id *).html">(* ch.title *)</a></td></tr>
+    *]];
+
+    for s1 in ch.section1s {
+      switch s1.status {
+      case 'red':
+      case 'orange':
+      case 'yellow':
+      case 'green':  color = '<img src="../../share/status_' + s1.status + '.gif">&nbsp;';
+                     break;
+      default:       color = null;
+      }
+
+      print<ctxt.writer> [[*
+        <tr><td nowrap valign=top class=text12b>&nbsp;&nbsp;&nbsp;
+        (* color *)<a href="chapters/(* ch.id *).html#(* s1.id *)">(* s1.title *)</a></td></tr>
+      *]];
+      for s2 in s1.section2s {
+        print<ctxt.writer> [[*
+          <tr><td nowrap valign=top class=text10b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="chapters/(* ch.id *).html#(* s2.id *)">(* s2.title *)</a></td></tr>
+        *]];
+      }
+    }
+  }
+
+  function jusp$writeTOCChapter1 ctxt, ch, f {
+    var color = null;
+    switch ch.status {
+    case 'hide':   return;
+    case 'red':
+    case 'orange':
+    case 'yellow':
+    case 'green':  color = '<img src="../../share/status_' + ch.status + '.gif">&nbsp;';
+    }
+
+    var chHdr = ch.number;
+    if (ch.isAppendix) chHdr = chHdr.fmtRoman('I');
+    print <ctxt.writer> [[*
+<tr><td>&nbsp;</td><td valign=top nowrap=1><b><a href="#(* ch.id *)">(* chHdr *).</a></b>&nbsp;</td>
+<td nowrap=1 width="98%">(* color *)<a href="chapters/(* ch.id *).html"><b>(* ch.title *)</b></a></td></tr>
+    *]];
+  }
+%>
+
+<%--
+<html><head><link href="../../share/main.css" rel="stylesheet" type="text/css"></head>
+<body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3>
+--%>
+<%!include '../../site_src/include/header.jusp' %>
+<center><h1><%= bookInfo.title %></h1>
+<table border=0 width=98% class=bodyText><tr><td>
+By <i>James Jianbo Huang</i>&nbsp;&nbsp;&nbsp;Last update: <%= Date().fmtDate('yyyy-MM-dd') %></p>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%" class=secondary3>
+<%
+  if bookInfo.hasParts() {
+    for pt in bookInfo.parts {
+      var x = (loopIndex()+1).fmtRoman(true) + '. ' + pt.title;
+      %><tr><td nowrap valign=top>&nbsp;</td><td nowrap=1 colspan=2 bgcolor="#DDDDDD"><b>Part<%
+      %> <%= x %></b></td></tr><%
+      for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+        %><%!writeTOCChapter1 bookInfo.chapters[i], f %><%
+      }
+    }
+  } else {
+    for ch in bookInfo.chapters {
+      %><%!writeTOCChapter1 ch, f %><%
+    }
+  }
+%>
+</table>
+<blockquote>
+Click on the chapter/appendix number to go to the expanded Table of Content.<br>
+Click on the chapter/appendix title to go to the chapter itself.<br>
+<em>This book is work-in-process.
+The square icons next to the chapter numbers indicate the progress.</em>
+</blockquote>
+<hr><a name="toc"></a><table border=0 cellspacing=0 cellpadding=1 width=100% class=secondary3>
+<%
+  if bookInfo.hasPreface {
+    %><tr><td class=text14b nowrap valign=top><a name=preface>0</a>.&nbsp;<%
+    %><a href="chapters/preface.html">Preface</a></td></tr><%
+  }
+
+  if bookInfo.hasParts() {
+    for pt in bookInfo.parts {
+      var x = (loopIndex()+1).fmtRoman(true) + '. ' + pt.title;
+      %><tr><td bgcolor="#DDDDDD"><h2>Part <%= x %></h2></td></tr><%
+      for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+        %><%!writeTOCChapter bookInfo.chapters[i], f %><%
+      }
+    }
+  } else {
+    for ch in bookInfo.chapters {
+      %><%!writeTOCChapter ch, f %><%
+    }
+  }
+%>
+
+</table><%= copyright %>
+<!-- /ARTICLE CONTENET -->
+</td></tr></table>
+
+<%-- </body></html> --%>
+<%!include '../../site_src/include/footer.jusp' %>

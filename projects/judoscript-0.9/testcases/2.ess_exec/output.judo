@@ -1,0 +1,14 @@
+usage {
+  desc = [[*
+           Use `...` to read the output of an executable, or
+           use ``...`` to read the output as lines.
+         *]];
+}
+
+println '--- ', `dir *.judo`;   // one string
+
+println;
+
+for x in ``dir *.judo`` { // an array of strings
+  println '::: ', x;
+}

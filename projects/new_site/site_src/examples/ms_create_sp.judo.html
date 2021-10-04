@@ -1,0 +1,40 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_odbc_mssql/ms_create_sp.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = 'Creates 2 stored procedures with db::sql{}.';
+}
+
+!include 'mssql_connection.judi'
+
+if $$con.procExists('insert_person') {
+  db::sql: drop procedure insert_person;
+}
+if $$con.procExists('get_person') {
+  db::sql: drop procedure get_person;
+}
+
+db::sql {
+  create procedure insert_person
+                     @id int,
+                     @name  varchar(20),
+                     @alias varchar(20) = null,
+                     @bday  datetime = null,
+                     @sex   varchar(1) = 'M'
+  as
+    insert into people ( personID, name, alias, birthDay, sex, addTime)
+    values ( @id, @name, @alias, @bday, @sex, current_timestamp )
+  ;
+
+  create procedure get_person
+                     @name varchar(20),
+                     @id int output
+  as
+    select @id = personID from people where name = @name
+  ;
+
+} // end of db::sql.
+
+db::disconnect();
+</pre></td></tr></table></body></html>

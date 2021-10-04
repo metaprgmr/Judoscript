@@ -1,0 +1,148 @@
+/////////////////////////////////////////////////////////////////////
+// Environment
+/////////////////////////////////////////////////////////////////////
+
+!include '${JUDOROOT}/projects/common.judi'
+
+versionId  = 'jamaica-1.0';
+myroot     = '${projects}/${versionId}';
+tmp        = '${TMPROOT}/${versionId}';
+
+src        = '${myroot}/src';
+docs       = '${myroot}/docs';
+examples   = '${myroot}/examples';
+myarchives = '${archives}/jamaica';
+buildtools = '${myroot}/buildtools';
+
+mkdir myarchives;
+mkdir tmp;
+mkdir '${tmp}/jj';
+mkdir '${tmp}/classes';
+
+cp = '${tmp}/classes${:}${lib}/commons-lang-2.0.jar${:}${lib}/asm-1.4.2.jar${:}${lib}/bcel-5.1.jar';
+cp = cp.toOSPath();
+
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+menuItems = [
+  'Clobber All',
+  'Build All',
+  '  Generate Parser',
+  '  Compile Non-Parser Source Code',
+  '  Compile All Source Code',
+  '  Package',
+  '  Archive',
+  'Deploy to local',
+];
+
+option = menu(menuItems, false);
+switch option {
+  case 1:  clobberAll();     break;
+  case 2:  buildAll();       break;
+  case 3:  generateParser(); break;
+  case 4:  compileSource();  break;
+  case 5:  compileAll();     break;
+  case 6:  pkg();            break;
+  case 7:  archive();        break;
+  default: ;
+}
+
+catch: $_.pist();
+
+function buildAll {
+  generateParser();
+  compileAll();
+  pkg();
+  archive();
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// Build Targets
+/////////////////////////////////////////////////////////////////////
+
+function generateParser {
+  println <err> nl, '::: Jjtree jamaica.jjt ...', nl;
+  exec <> jjtree + ' -OUTPUT_DIRECTORY:${tmp}/jj ${src}/jjt/jamaica.jjt'
+       with PATH = j13path
+  ;
+
+  println <err> nl, '::: Javacc jamaica.jj ...', nl;
+  exec <> javacc + ' -OUTPUT_DIRECTORY:${tmp}/jj ${tmp}/jj/jamaica.jj'
+       with PATH = j13path
+  ;
+}
+
+function compileSource {
+  println <err> nl, '::: Javac source ...', nl;
+  exec <> 'javac -d ${tmp}/classes ${src}/*.java ${src}/parser/*.java'
+       with PATH = j13path, CLASSPATH = cp
+  ;
+}
+
+function compileAll {
+  println <err> nl, '::: Javac all ...', nl;
+  exec <> 'javac -d ${tmp}/classes ${src}/*.java ${src}/parser/*.java ${tmp}/jj/*.java'
+       with PATH = j13path, CLASSPATH = cp
+  ;
+}
+
+function clobberAll {
+  println <err> nl, '::: Clobber all ...', nl;
+  if ( '${tmp}/jj' ).fileExists()      { rmdir '${tmp}/jj' force; }
+  if ( '${tmp}/classes' ).fileExists() { rmdir '${tmp}/classes' force; }
+  mkdir '${tmp}/jj';
+  mkdir '${tmp}/classes';
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// Archive Target
+/////////////////////////////////////////////////////////////////////
+
+function archive {
+  println <err> nl, '::: Archiving ...', nl;
+  zipname = '${myarchives}/jamaica-' + Date().fmtDate('yyyy-MM-dd') + '.zip';
+  copy 'buildtools/*, src/*, docs/*, examples/*' in myroot
+       except '*/alfa*, */beta*, *.class, *~'
+       recursive into zipname under versionId;
+
+  copy zipname to '${archives}/${versionId}-latest.zip' echo;
+  archiveCommon();
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// Package Target
+/////////////////////////////////////////////////////////////////////
+
+function pkg {
+  println <err> nl, '::: Packaging ...', nl;
+
+  manif = [[*
+    Manifest-Version: 1.0
+    Main-Class: com.judoscript.jamaica.Main
+    Created-By: James Jianbo Huang (c) 2004-(* #year *)
+  *]];
+
+  jar = createJar('${tmp}/jamaica.jar', manif);
+  copy 'org/apache/commons/lang/*.class' in '${lib}/commons-lang-2.0.jar' store into jar;
+  copy '*.class' in '${tmp}/classes' store recursive into jar;
+  jar.close();
+
+  copy '*' in src except '*~' into '${tmp}/src.jar' recursive under 'src';
+
+  mkdir '${docroot}/store';
+  file = '${docroot}/store/${versionId}.zip';
+  zip = createZip(file);
+  copy '${tmp}/jamaica.jar, ${tmp}/src.jar' into zip under versionId;
+  copy 'license.html, readme.html' in '${docs}' into zip under versionId;
+  copy 'examples/*' in myroot except '*~, */alfa*' recursive into zip under versionId;
+  zip.close();
+
+  println 'Created ${file}.';
+}
+

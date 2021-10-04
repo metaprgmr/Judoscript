@@ -1,0 +1,15 @@
+<html><body>
+<h2>Other Extended HTML Controls</h2>
+
+<p>View <%!viewsrc 'lesson5/xctls.jusp', '../' %></p>
+
+<form><table border=0>
+<tr><td nowrap>Countries:  </td><td><%!countryList 'country' %></td></tr>
+<tr><td nowrap>U.S. States:</td><td><%!US_StateList 'st' %></td></tr>
+<tr><td nowrap>Time Zones: </td><td><%!timeZoneList 'tz' %></td></tr>
+<tr><td nowrap>Locales:    </td><td><%!localeList 'loc' %></td></tr>
+<tr><td nowrap>&nbsp;      </td><td><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson5.jusp">lesson 5</a></font>
+</body></html>

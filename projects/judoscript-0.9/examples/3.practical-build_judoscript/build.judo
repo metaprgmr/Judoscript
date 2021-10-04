@@ -1,0 +1,236 @@
+usage {
+  minArgs = 1;
+  args    = 'target';
+  created = '2003-02-02';
+  author  = 'James Huang';
+  desc    = [[*
+    The available targets are:
+
+    all      -- compiles all the source files into class files
+
+    javacc   -- runs JavaCC to generate parser files from judo.jj
+    others   -- compiles the third-part packages
+    util     -- compiles the util packages
+    baseOnly -- compiles the base packages
+    base     -- runs 'javacc', 'others', 'util' and 'baseOnly'.
+
+    jdk14    -- compiles the JDK1.4-specific features
+
+    win32    -- compiles the extension-win32 features
+    ssh      -- compiles the extension-ssh/scp features
+
+    pack     -- packages the compiled classes and source files
+  *]];
+}
+
+/*-----------------------------------------------*
+ * PRE-BUILD: analyze the target(s)              *
+ *-----------------------------------------------*/
+
+t_pack     = (#args[0] == 'pack');
+t_javacc   = (#args[0] == 'javacc')   || (#args[0] == 'base');
+t_others   = (#args[0] == 'others')   || (#args[0] == 'base');
+t_util     = (#args[0] == 'util')     || (#args[0] == 'base');
+t_baseOnly = (#args[0] == 'baseOnly') || (#args[0] == 'base');
+t_jdk14    = (#args[0] == 'jdk14');
+t_win32    = (#args[0] == 'win32');
+t_ssh      = (#args[0] == 'ssh');
+
+if #args[0] == 'all' {
+  t_javacc   = true;
+  t_others   = true;
+  t_util     = true;
+  t_baseOnly = true;
+  t_jdk14    = true;
+  t_win32    = true;
+  t_ssh      = true;
+}
+
+
+/*-----------------------------------------------*
+ * PRE-BUILD: check for source and destination   *
+ *-----------------------------------------------*/
+
+!include 'buildenv.judi'
+
+//
+// Make sure the destination directory is there:
+//
+CLASSDIR = DESTDIR @ 'classes/';
+mkdir CLASSDIR;
+if !CLASSDIR.fileExists() {
+  println 'Error: destination directory can not be created: ', CLASSDIR;
+  return;
+}
+
+//
+// Make sure the source files are there:
+//
+JUDOSRCBASE = SRCBASE @ 'com/judoscript/';
+if !(SRCBASE @ 'others').fileExists() {
+  println 'Error: needed third-party source files not found.';
+  return;
+}
+if !(JUDOSRCBASE @ 'judo.java').fileExists() {
+  println 'Error: JudoScript source files not found.';
+  return;
+}
+copy '*.properties' in SRCBASE recursive to CLASSDIR;
+
+/*-----------------------------------------------*
+ * BUILD: JavaCC                                 *
+ *-----------------------------------------------*/
+
+if t_javacc {
+  if !JAVACC.fileExists() {
+    println 'JavaCC is not found.';
+    return;
+  }
+  src = JUDOSRCBASE @ 'parser/judo.jj';
+  if src.fileTime() > (JUDOSCRBASE @ 'parser/JudoParser.java').fileTime() {
+    exec <> JAVACC @ ' -OUTPUT_DIRECTORY:' @ JUDOSRCBASE @ 'parser/ ' @ src;
+  } else {
+    println 'No need for JavaCC to re-generate; files are current.';
+  }
+}
+
+/*-----------------------------------------------*
+ * BUILD: third-party packages                   *
+ *-----------------------------------------------*/
+
+if t_others {
+  pkgs = [ 'others/com/ice/tar/*.java', 'others/com/enterprisedt/net/ftp/*.java', 'others/Acme/*.java' ];
+  buildPkgs 'Third-Party', pkgs, SRCBASE;
+}
+
+/*-----------------------------------------------*
+ * BUILD: independent packages                   *
+ *-----------------------------------------------*/
+
+if t_util {
+  pkgs = [ 'util/*.java', 'util/classfile/*.java' ];
+  buildPkgs 'Util', pkgs;
+}
+
+/*-----------------------------------------------*
+ * BUILD: base packages                          *
+ *-----------------------------------------------*/
+
+if t_baseOnly {
+  pkgs = [ '*.java', 'parser/*.java', 'parser/helper/*.java', 'bio/*.java',
+           'db/*.java', 'gui/*.java', 'xml/*.java', 'jusp/*.java', 'studio/*.java',
+           'ext/FactoryUtil.java'
+         ];
+  buildPkgs 'Base', pkgs;
+}
+
+/*-----------------------------------------------*
+ * BUILD: jdk1.4 package                         *
+ *-----------------------------------------------*/
+
+if t_jdk14 {
+  pkgs = [ 'jdk14/*.java' ];
+  buildPkgs 'JDK1.4-Specific', pkgs, null, null, JAVAC14;
+}
+
+/*-----------------------------------------------*
+ * EXTENSION BUILD: win32 features               *
+ *-----------------------------------------------*/
+
+if t_win32 {
+  if !(JCOMDIR @ 'jcom.jar').fileExists() {
+    println "Error: JCom jar file is not found.";
+    println "       Can't to build Win32 features.";
+    return;
+  }
+  println 'Copy JCom classes.';
+  copy '*.class' except '*/excel*' in (JCOMDIR @ 'jcom.jar') recursive to CLASSDIR;
+  pkgs = [ 'ext/COMFactory.java', 'ext/win32/*.java' ];
+  buildPkgs 'Win32', pkgs;
+}
+
+/*-----------------------------------------------*
+ * EXTENSION BUILD: SSH/SCP                      *
+ *-----------------------------------------------*/
+
+if t_ssh {
+  if !ISNETWORKSJAR.fileExists() {
+    println "Error: ISNetworks/MindBright SSH jar file is not found.";
+    println "       Can't to build SSH features.";
+    return;
+  }
+  pkgs = [ 'ext/SSHFactory.java', 'ext/SSHAPI.java' ];
+  buildPkgs 'SSH/SCP', pkgs, JUDOSRCBASE, ISNETWORKSJAR;
+}
+
+/*-----------------------------------------------*
+ * PACK                                          *
+ *-----------------------------------------------*/
+
+if t_pack {
+  if !(CLASSDIR @ 'judo.class').fileExists() {
+    println 'Error: JudoScript executables are not found to create judo.jar.';
+    return;
+  }
+  manifest = [[*
+                Manifest-Version: 1.0
+                Main-Class: judo
+                Created-By: James Huang (c) 2001-2003
+             *]];
+  jar = createJar(DESTDIR @ 'judo.jar', manifest);
+  copy '*.class, *.properties'
+       in CLASSDIR recursive noHidden echo store
+       into jar;
+  jar.close();
+
+  jar = createJar(DESTDIR @ 'src.jar');
+  copy '*.java, *.jj, *.properties'
+       except '*JudoParse*.java,*/ParseException.java,*/ASCII_*.java,*/Token*.java'
+       in SRCBASE recursive noHidden echo
+       into jar under 'src';
+  copy 'jp/ne/so_net/ga2/no_ji/jcom/*.java' except '*/excel*'
+       in JCOMDIR recursive noHidden echo
+       into jar under 'src';
+  copy '*'
+       in (JCOMDIR @ 'cpp/') recursive noHidden echo
+       into jar under 'cpp/jcom';
+  jar.close();
+
+  copy '*.java'
+       in JUDOSRCBASE @ 'parser/' noHidden echo
+       into DESTDIR @ 'generated.jar' under 'src/com/judoscript/parser/';
+}
+
+
+/*===============================================*
+ * FACILITY                                      *
+ *===============================================*/
+
+function buildPkgs msg, pkgs, base, cp, javac
+{
+  println nl, 'Building ', msg, ' packages ...';
+
+  // Default to JDK1.3 javac.
+  if javac.isEmpty() { javac = JAVAC13; }
+
+  // Construct the command-line parameters for all source files.
+  if base.isEmpty() { base = JUDOSRCBASE; }
+  files = ' ';
+  first = true;
+  for p in pkgs {
+    if first { first = false; } else { files @= ' '; }
+    files @= base @ p;
+  }
+
+  // Construct the command line and run it.
+  cmdline = javac @ ' -d ' @ CLASSDIR;
+
+  // Set up the own build classpath.
+  if cp.isNotEmpty() { cp @= #pathSep; }
+  cp @= CLASSDIR @ #pathSep @ J2EECP @ #pathSep @ BSFCP;
+
+  // synchronized, with specified classpath only.
+  println ' >>> CLASSPATH: ', cp;
+  exec <> cmdline @ files with CLASSPATH=cp;
+}
+

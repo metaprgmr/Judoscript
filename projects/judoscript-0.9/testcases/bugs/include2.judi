@@ -1,0 +1,13 @@
+usage{
+  desc='BETA';
+}
+
+/* Bug:
+ *
+ * If the following println is uncommented,
+ * include1.judo will throw an exception during parsing.
+ */
+
+//println 'In beta: ', #usage;
+
+x = 9;

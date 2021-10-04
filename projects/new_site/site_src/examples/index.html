@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Judo Language Examples</title>
+<script language=JavaScript src=../share/judolib.js></script>
+</head>
+
+<script language=JavaScript>
+document.write('<frameset rows="140,*">');
+document.write(' <frame name=top src=examples_title.html noresize frameborder=no scrolling=no></frame>');
+document.write(' <frameset cols="250,*">');
+
+var args = parseQueryString();
+var u = args['l'];
+if (u == null) u = '_testcases.html';
+document.write('<frame src="' + u + '">');
+var u = args['r'];
+if (u == null) u = 'testcases.html';
+document.write('<frame src="' + u + '">');
+
+document.write(' </frameset>');
+document.write('</frameset>');
+//--></script>
+
+</html>

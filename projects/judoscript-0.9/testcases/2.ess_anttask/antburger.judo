@@ -1,0 +1,8 @@
+anttask::<taskdef name="judo" classname="com.judoscript.AntJudoScriptTask" />
+
+anttask::<judo>
+  println 'This is Judo-in-Ant-in-Judo, a.k.a. AntBurger!',
+          nl, nl, 'AntBurger is delicious!';
+</judo>
+
+catch: $_.pist();

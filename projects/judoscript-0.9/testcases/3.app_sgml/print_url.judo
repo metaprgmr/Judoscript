@@ -1,0 +1,6 @@
+do 'http://www.yahoo.com' as html // or sgml; same thing.
+{
+<a>:    if ($_.href!=null)
+          println 'LINK: ', $_.href;
+<img>:  println 'IMAGE: ', $_.src;
+}

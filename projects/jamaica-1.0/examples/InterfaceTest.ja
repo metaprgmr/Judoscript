@@ -1,0 +1,7 @@
+
+public interface InterfaceTest extends Serializable
+{
+  public static final String LABEL = "label";
+
+  public void foo(int idx) throws IllegalArgumentException;
+}

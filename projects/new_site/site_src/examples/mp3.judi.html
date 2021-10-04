@@ -1,0 +1,181 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/mp3.judi:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    A function, mp3info(fname), that extracts interesting
+    information about an MP3 file and returns them in a struct.
+
+    A helper function, printMP3Info(fname), displays
+    information obtained.
+  *]];
+}
+
+
+// test:
+//printMP3info(#args[0]);
+
+////////////////////////////////////////////////////////////
+//
+// The MP3 Library Functions
+//
+////////////////////////////////////////////////////////////
+
+
+function printMP3info(fname)
+{
+  if fname == null { return; }
+  mp3 = mp3info(fname);
+  if mp3 == null { return; }
+  if mp3.msg != null { println "msg:       ", mp3.msg; }
+  println "type:      ", mp3.type;
+  println "mode:      ", mp3.mode;
+  println "bitrate:   ", mp3.bitrate;
+  println "frequency: ", mp3.frequency;
+  println "title:     ", mp3.title;
+  println "artist:    ", mp3.artist;
+  println "album:     ", mp3.album;
+  println "year:      ", mp3.year;
+  println "comment:   ", mp3.comment;
+  println "track:     ", mp3.track;
+  println "genre:     ", mp3.genre;
+}
+
+/**
+ * @param  fname the MP3 file name
+ * @return a struct with potentially these fields:
+ *         .msg       -- most likely error occured
+ *         .type
+ *         .mode
+ *         .bitrate
+ *         .frequency
+ *         .title     -- ID3v1
+ *         .artist    -- ID3v1
+ *         .album     -- ID3v1
+ *         .year      -- ID3v1
+ *         .comment   -- ID3v1
+ *         .track     -- ID3v1
+ *         .genre     -- ID3v1
+ */
+function mp3info(fname)
+{
+  a = openRandomAccessFile(fname);
+  ret = new struct;
+
+  // look for ID3v1
+  a.seek(a.size() - 128);
+  tag = a.readBytesAsString(3);
+  if tag == 'TAG' {
+    ret.title   = a.readBytesAsString(30).trim();
+    ret.artist  = a.readBytesAsString(30).trim();
+    ret.album   = a.readBytesAsString(30).trim();
+    ret.year    = a.readBytesAsString(4).trim();
+    ret.comment = a.readBytesAsString(28).trim();
+    ret.track   = a.read();
+    ret.genre   = #genres[ a.read() ];
+  }
+
+  // get the first chunk
+  a.seek(0);
+  buf = javanew byte[512]; // normally this is big enough for a frame
+  len = a.read(buf);
+  a.close(); // we don't need the file anymore.
+
+  // look for the FF E0 pattern
+  local $start;
+  for $start = 0; $start &lt; len; ++$start {
+    if (buf[$start] == 0x0FF) &amp;&amp; ((buf[$start + 1] &amp; 0x0E0) == 0x0E0) {
+      break;
+    }
+  }
+  if ($start >= len) {
+    ret.msg = 'No chunk header found.';
+    return ret;
+  }
+
+  mpeg_layer = (0 == (buf[$start + 1] &amp; 0x08)) ? #MPEG_2_I : #MPEG_1_I;
+  switch(buf[$start+1] &amp; 0x06) {
+  case 0x02: mpeg_layer += 2; break;
+  case 0x04: ++mpeg_layer; break;
+  case 0x06: break;
+  }
+  ret.type = #type_names[ mpeg_layer ];
+
+  switch(buf[$start + 2] &amp; 0x0C) {
+  case 0x4: ret.frequency = (0==(buf[$start + 1] &amp; 0x08)) ? 24000 : 48000; break;
+  case 0x8: ret.frequency = (0==(buf[$start + 1] &amp; 0x08)) ? 16000 : 32000; break;
+  case 0x0: ret.frequency = (0==(buf[$start + 1] &amp; 0x08)) ? 22050 : 44100; break;
+  case 0xC:
+  }
+
+  switch(buf[$start + 3] &amp; 0xC0) {
+  case 0x00: ret.mode = "Stereo"; break;
+  case 0x40: ret.mode = "Joint Stereo"; break;
+  case 0x80: ret.mode = "Dual Channel"; break;
+  case 0xC0: ret.mode = "Mono"; break;
+  }
+
+  ret.bitrate = #bitrate_table[ (buf[$start + 2] >> 4) &amp; 0x0F][mpeg_layer];
+
+  return ret;
+
+} // mp3info().
+
+const #MPEG_1_I   = 0;
+const #MPEG_1_II  = 1;
+const #MPEG_1_III = 2;
+const #MPEG_2_I   = 3;
+const #MPEG_2_II  = 4;
+const #MPEG_2_III = 5;
+
+const #bitrate_table = [
+        /*0000*/ [      0,      0,      0,      0,      0,      0 ],
+        /*0001*/ [  32000,  32000,  32000,  32000,   8000,   8000 ],
+        /*0010*/ [  64000,  48000,  40000,  48000,  16000,  16000 ],
+        /*0011*/ [  96000,  56000,  48000,  56000,  24000,  24000 ],
+        /*0100*/ [ 128000,  64000,  56000,  64000,  32000,  32000 ],
+        /*0101*/ [ 160000,  80000,  64000,  80000,  40000,  40000 ],
+        /*0110*/ [ 192000,  96000,  80000,  96000,  48000,  48000 ],
+        /*0111*/ [ 224000, 112000,  96000, 112000,  56000,  56000 ],
+        /*1000*/ [ 256000, 128000, 112000, 128000,  64000,  64000 ],
+        /*1001*/ [ 288000, 160000, 128000, 144000,  80000,  80000 ],
+        /*1010*/ [ 320000, 192000, 160000, 160000,  96000,  96000 ],
+        /*1011*/ [ 352000, 224000, 192000, 176000, 112000, 112000 ],
+        /*1100*/ [ 384000, 256000, 224000, 192000, 128000, 128000 ],
+        /*1101*/ [ 416000, 320000, 256000, 224000, 144000, 144000 ],
+        /*1110*/ [ 448000, 384000, 320000, 256000, 160000, 160000 ],
+        /*1111*/ [      0,      0,      0,      0,      0,      0 ]
+      ];
+
+const #type_names = [
+       "MPeg-1 Layer-I", "MPeg-1 Layer-II", "MPeg-1 Layer-III",
+       "MPeg-2 Layer-I", "MPeg-2 Layer-II", "MPeg-2 Layer-III"
+      ];
+
+const #genres = [
+       "Blues", "Classic Rock", "Country", "Dance", "Disco", "Funk", "Grunge", "Hip-Hop",
+       "Jazz", "Metal", "New Age", "Oldies", "Other", "Pop", "R&amp;B", "Rap", "Reggae", "Rock",
+       "Techno", "Industrial", "Alternative", "Ska", "Death Metal", "Pranks", "Soundtrack",
+       "Euro-Techno", "Ambient", "Trip-Hop", "Vocal", "Jazz+Funk", "Fusion", "Trance",
+       "Classical", "Instrumental", "Acid", "House", "Game", "Sound Clip", "Gospel", "Noise",
+       "AlternRock", "Bass", "Soul", "Punk", "Space", "Meditative", "Instrumental Pop",
+       "Instrumental Rock", "Ethnic", "Gothic", "Darkwave", "Techno-Industrial", "Electronic",
+       "Pop-Folk", "Eurodance", "Dream", "Southern Rock", "Comedy", "Cult", "Gangsta",
+       "Top 40", "Christian Rap", "Pop/Funk", "Jungle", "Native American", "Cabaret",
+       "New Wave", "Psychadelic", "Rave", "Showtunes", "Trailer", "Lo-Fi", "Tribal",
+       "Acid Punk", "Acid Jazz", "Polka", "Retro", "Musical", "Rock &amp; Roll", "Hard Rock",
+       "Folk", "Folk/Rock", "National folk", "Swing", "Fast-fusion", "Bebob", "Latin",
+       "Revival", "Celtic", "Bluegrass", "Avantgarde", "Gothic Rock", "Progressive Rock",
+       "Psychedelic Rock", "Symphonic Rock", "Slow Rock", "Big Band", "Chorus",
+       "Easy Listening", "Acoustic", "Humour", "Speech", "Chanson", "Opera", "Chamber Music",
+       "Sonata", "Symphony", "Booty Bass", "Primus", "Porn Groove", "Satire", "Slow Jam",
+       "Club", "Tango", "Samba", "Folklore", "Ballad", "Powder Ballad", "Rhythmic Soul",
+       "Freestyle", "Duet", "Punk Rock", "Drum Solo", "A Capella", "Euro-House", "Dance Hall",
+       "Goa", "Drum &amp; Bass", "Club House", "Hardcore", "Terror", "Indie", "BritPop",
+       "NegerPunk", "Polsk Punk", "Beat", "Christian Gangsta", "Heavy Metal", "Black Metal",
+       "Crossover", "Contemporary C", "Christian Rock", "Merengue", "Salsa", "Thrash Metal",
+       "Anime", "JPop", "SynthPop"
+      ];
+</pre></td></tr></table></body></html>

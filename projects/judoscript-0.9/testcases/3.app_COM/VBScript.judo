@@ -1,0 +1,19 @@
+usage {
+  desc = [[*
+    This program obtains a ScriptControl for VBScript and evaluates a
+    series of expressions.
+
+    Adapted from <a href="http://www.danadler.com/jacob">JACOB</a>
+    file 'samples/test/speed.java'.
+  *]];
+  author  = 'James Huang';
+  created = '2002-12-15';
+}
+
+
+sc = new com::ScriptControl;
+sc.Language = 'VBScript';
+
+for i=0; i<10; ++i {
+  println sc.Eval(i @ '+1001');
+}

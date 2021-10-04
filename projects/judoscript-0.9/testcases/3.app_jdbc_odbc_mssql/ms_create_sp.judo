@@ -1,0 +1,37 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = 'Creates 2 stored procedures with db::sql{}.';
+}
+
+!include 'mssql_connection.judi'
+
+if $$con.procExists('insert_person') {
+  db::sql: drop procedure insert_person;
+}
+if $$con.procExists('get_person') {
+  db::sql: drop procedure get_person;
+}
+
+db::sql {
+  create procedure insert_person
+                     @id int,
+                     @name  varchar(20),
+                     @alias varchar(20) = null,
+                     @bday  datetime = null,
+                     @sex   varchar(1) = 'M'
+  as
+    insert into people ( personID, name, alias, birthDay, sex, addTime)
+    values ( @id, @name, @alias, @bday, @sex, current_timestamp )
+  ;
+
+  create procedure get_person
+                     @name varchar(20),
+                     @id int output
+  as
+    select @id = personID from people where name = @name
+  ;
+
+} // end of db::sql.
+
+db::disconnect();

@@ -1,0 +1,37 @@
+!include 'setup/connect.judi'
+
+//
+// create the stored procedure
+//
+
+db::any [[*
+  CREATE OR REPLACE PROCEDURE test_proc(param_io IN OUT NUMBER,
+                                        param_i  IN     VARCHAR,
+                                        param_o  OUT    VARCHAR)
+  AS BEGIN
+    param_o := param_i;
+    IF param_io IS NOT NULL THEN
+      param_io := param_io + 1;
+    ELSE
+      param_io := -1000;
+    END IF;
+  END;
+*]];
+
+//
+// test the procedure
+//
+
+db::prepareCall: { call test_proc( :paramIO, :paramIn, :paramOut) };
+
+x = null;
+y = 'abcd';
+
+db::sql with @paramIO :int     <=> x,
+             @paramIn :varchar =  y,
+             @paramOut:varchar => z; // z will be the same as y
+
+println 'x = ', x;
+println 'z = ', z;
+
+db::disconnect();

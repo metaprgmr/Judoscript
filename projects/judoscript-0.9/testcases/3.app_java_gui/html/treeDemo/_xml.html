@@ -1,0 +1,20 @@
+<html><head><title>XML Scripting and XSLT></title></header>
+<body><h1>XML Scripting and XSLT</h1>
+
+XML scripting is one of the main motivations for <em>JudoScript</em> itself. <em>JudoScript</em> supports
+SAX and DOM programming and XSL transformation. In the <kw>do..as xml</kw>
+event-driven statement, SAX events, including tags, are denoted as labels,
+followed by handler code. <em>JudoScript</em> extends SAX with a <em>text</em> tag, which is
+a compound tag that includes the opening, closing tags and the text enclosed
+within. The opening tag's attributes are accessible, too. If a tag has mixed
+content, you have the option to copy or ignore all the embedded tags. For
+each event, the built-in variable <kw>$_</kw> represents the tag or the
+event. XML data can be read into a DOM by the <kw>do..as dom</kw> expression,
+which returns an <code>org.w3c.dom.Document</code> object. You can use a
+function variable as a node filter when using the Java DOM traversal API. To
+create a DOM, use system functions <kw>createDom()</kw>. The <kw>xslt</kw>
+statement applies XSL transformations and also copies XML documents and
+outputs files or DOMs.
+</abstract>
+
+</body></html>

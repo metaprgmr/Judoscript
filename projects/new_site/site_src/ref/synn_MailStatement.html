@@ -1,0 +1,35 @@
+<html><head><title>JudoScript Semantics - MailStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>MailStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=MailStatement>MailStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>sendMail</font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>from</font>   |  <font class=kw>to</font>   |  <font class=kw>cc</font>   |  <font class=kw>bcc</font>   |  <font class=kw>subject</font>   |  <font class=kw>attach</font>   |  <font class=kw>body</font>   |  <font class=kw>htmlBody</font>   )   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br> <font class=kw><nobr>:</nobr></font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=nt><a href="javascript:showNT('HereDoc')">HereDoc</a></font>  )   )+  <font class=kw><nobr>;</nobr></font>  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('MailStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement sends e-mails to one or more recipients.
+  Before calling this command, you must connect to the mail server with
+  <font class=sfn><a href="javascript:showSF('connectMailServer')">connectMailServer()</a></font> system function, and when done, call
+  <font class=sfn><a href="javascript:showSF('disconnectMailServer')">disconnectMailServer()</a></font>. The message body may be in plain text,
+  HTML or both. The message body, HTML body and addresses can be in different
+  character-sets, designated by their respective optional <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>'s.
+  The optional <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> following <font class=kw>sendMail</font>  is the default character-set.</p>
+
+  <p>The <font class=kw>from</font>  clause is required and should be a string for the sender's e-mail
+  address. The <font class=kw>subject</font>  clause takes a string just for that. The <font class=kw>to</font> , <font class=kw>cc</font>  and
+  <font class=kw>bcc</font>  clauses lists the recipients; they are strings contain comma-separated e-mail
+  addresses. The <font class=kw>to</font>  and <font class=kw>from</font>  are required. E-mail addresses can be followed
+  by sender or recipient names quoted in &lt; and &gt;.</p>
+
+  <p>The optional <font class=kw>attach</font>  clause takes a string that contains file
+  names separated by commas, to be attached to the message.</p>
+ </body></html>

@@ -1,0 +1,32 @@
+<function sig="createNodeIterator root, whatToShow, filter, entityReferenceExpansion">
+  This method functions only if the current object implements interface
+  <code>org.w3c.dom.traversal.DocumentTraversal</code>. The parameters are all required:
+  <param>root</param> is an <param>org.w3c.dom.Node</param>; <param>whatToShow</param> is a
+  short integer that is the combination of flags defined in
+  <code>org.w3c.dom.traversal.NodeFilter</code>; <param>filter</param> can be an instance of
+  <code>org.w3c.dom.traversal.NodeFilter</code>, or a node-filter function that takes an
+  <code>org.w3c.dom.Node</code> and returns one of the following:
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_ACCEPT</code>,
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_REJECT</code> or
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_SKIP</code>;
+  and finally, <param>entityReferenceExpansion</param> is a boolean.
+  It create a new NodeIterator over the subtree rooted at the specified node, as stated
+  in the javadoc for the name-sake method of <code>org.w3c.dom.traversal.DocumentTraversal</code>.
+</function>
+
+<function sig="createTreeWalker root, whatToShow, filter, entityReferenceExpansion">
+  This method functions only if the current object implements interface
+  <code>org.w3c.dom.traversal.DocumentTraversal</code>. The parameters are all required:
+  <param>root</param> is an <param>org.w3c.dom.Node</param>; <param>whatToShow</param> is a
+  short integer that is the combination of flags defined in
+  <code>org.w3c.dom.traversal.NodeFilter</code>; <param>filter</param> can be an instance of
+  <code>org.w3c.dom.traversal.NodeFilter</code>, or a node-filter function that takes an
+  <code>org.w3c.dom.Node</code> and returns one of the following:
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_ACCEPT</code>,
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_REJECT</code> or
+  <code>org.w3c.dom.traversal.NodeFilter::FILTER_SKIP</code>;
+  and finally, <param>entityReferenceExpansion</param> is a boolean.
+  Create a new TreeWalker over the subtree rooted at the specified node, as stated 
+  in the javadoc for the name-sake method of <code>org.w3c.dom.traversal.DocumentTraversal</code>.
+</function>
+

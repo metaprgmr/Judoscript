@@ -1,0 +1,226 @@
+<function sig="size" alias="length">
+  Returns the size of this array.
+</function>
+
+<function sig="lastIndex">
+  Returns the index of the last element, which is size - 1.
+</function>
+
+<function sig="first">
+  Returns the first element, or <!null> if not elements.
+</function>
+
+<function sig="last">
+  Returns the last element, or <!null> if not elements.
+</function>
+
+<function sig="clear">
+  Clears all the elements in this array.
+</function>
+
+<function sig="insert elem, index">
+  Inserts the <param>elem</param> at <param>index</param>; if <param>index</param>
+  is not specified, insert at 0.
+</function>
+
+<function sig="prepand elem, ...">
+  Inserts all the new elements at the beginning of this array.
+</function>
+
+<function sig="prependArray anArray, ...">
+  Inserts all the elements in all the arrays at the beginning of this array.
+</function>
+
+<function sig="append elem, ..." alias="add">
+  Adds all the elements at the end of this array.
+</function>
+
+<function sig="appendArray anArray, ...">
+  Adds all the elements in all the arrays at the end of this array.
+</function>
+
+<function sig="setSize newSize, fillValue">
+  If <param>newSize</param> is greater than the current size,
+  enlarge to that by filling new elements with <param>fillValue</param>.
+  If <param>newSize</param> is less than the current size, shrink to that size.
+</function>
+
+<function sig="sort comparatorFunction">
+  Sorts this array locally and returns self. If <param>comparatorFunction</param> is
+  not specified, use the "natural" order of the elements.
+</function>
+
+<function sig="sortAsString">
+  Sorts this array as strings locally and returns self.
+</function>
+
+<function sig="sortAsNumber">
+  Sorts this array as numbers locally and returns self.
+</function>
+
+<function sig="sortAsDate">
+  Sorts this array as dates locally and returns self.
+</function>
+
+<function sig="reverse">
+  Reverse all the elements in this array and returns self.
+</function>
+
+<function sig="sum">
+  Returns the sum of all the numbers in this array. The sum is an integer if all
+  the elements are integers; otherwise sum is float.
+</function>
+
+<function sig="average" alias="avg">
+  Returns the average of all the numbers in this array.
+</function>
+
+<function sig="max">
+  Returns the biggest of all the numbers in this array. It is an integer if all
+  the elements are integers; otherwise it is float.
+</function>
+
+<function sig="min">
+  Returns the smallest of all the numbers in this array. It is an integer if all
+  the elements are integers; otherwise it is float.
+</function>
+
+<function sig="range">
+  Returns an array of two values: the smallest and biggest. They are integers if all
+  the elements are integers; otherwise they are float.
+</function>
+
+<function sig="subarray startIndex, endIndex">
+  Returns a sub-array of this, starting at <param>startindex</param> inclusive to
+  <param>endIndex</param> exclusive. If <param>endIndex</param> is not specified or
+  beyond range, the end of array is used.
+</function>
+
+<function sig="indexOf value, comparatorFunction">
+  Returns the index of the first match of <param>value</param> in this array, based on the
+  <param>comparatorFunction</param>, or -1 if not found. If no <param>comparatorFunction</param>
+  specified, use the "natural" order.
+</function>
+
+<function sig="lastIndexOf value, comparatorFunction">
+  Returns the index of the last match of <param>value</param> in this array, based on the
+  <param>comparatorFunction</param>, or -1 if not found. If no <param>comparatorFunction</param>
+  specified, use the "natural" order.
+</function>
+
+<function sig="exists value, comparatorFunction">
+  Returns <!true> if a match of <param>value</param> in this array is found, based on the
+  <param>comparatorFunction</param>, or -1 if not found. If no <param>comparatorFunction</param>
+  specified, use the "natural" order.
+</function>
+
+<function sig="remove index">
+  Removes the element at <param>index</param>, and returns the removed element.
+  The following elements are moved up to fill the empty spot.
+</function>
+
+<function sig="concat separator, valueDecorator, start, length" alias="toCsv">
+  Returns a string that is a concatenation of all the elements, separated by <param>separator</param>.
+  If no <param>separator</param> specified, default use ','.
+  The optoinal <param>valueDecorator</param> function takes one parameter and returns a string.
+  The optional <param>start</param> specifies where to start, and the optional <param>length</param>
+  specifies how many elements to concatenate, up to the end of the array.
+</function>
+
+<function sig="filter filterFunction, locally">
+  Filters the elements by the <param>filterFunction</param>. If <param>locally</param> is <!true>,
+  these elements are stored locally and returns self; otherwise, the filtered elements are returned
+  in a new array.
+</function>
+
+<function sig="convert convertFunction, locally">
+  Converts all the elements with the the <param>convertFunction</param>. If <param>locally</param>
+  is <!true>, these elements are stored locally and returns self; otherwise, the filtered elements
+  are returned in a new array.
+</function>
+
+<function sig="toFixedPositionString len, ...">
+  Returns a string of the concatenation of all the elements, each with specified length. That is,
+  each element is at a fixed position in the resultant string. (This method applies to Java arrays
+  and <code>java.util.List</code> instances.)
+</function>
+
+<function sig="toBooleanArray">
+  Returns a Java array of <code>boolean[]</code>.
+</function>
+
+<function sig="toByteArray">
+  Returns a Java array of <code>byte[]</code>.
+</function>
+
+<function sig="toCharArray">
+  Returns a Java array of <code>char[]</code>.
+</function>
+
+<function sig="toShortArray">
+  Returns a Java array of <code>short[]</code>.
+</function>
+
+<function sig="toIntArray">
+  Returns a Java array of <code>int[]</code>.
+</function>
+
+<function sig="toLongArray">
+  Returns a Java array of <code>long[]</code>.
+</function>
+
+<function sig="toFloatArray">
+  Returns a Java array of <code>float[]</code>.
+</function>
+
+<function sig="toDoubleArray">
+  Returns a Java array of <code>double[]</code>.
+</function>
+
+<function sig="toBooleanObjectArray">
+  Returns a Java array of <code>java.lang.Boolean[]</code>.
+</function>
+
+<function sig="toByteObjectArray">
+  Returns a Java array of <code>java.lang.Byte[]</code>.
+</function>
+
+<function sig="toCharObjectArray">
+  Returns a Java array of <code>java.lang.Character[]</code>.
+</function>
+
+<function sig="toShortObjectArray">
+  Returns a Java array of <code>java.lang.Short[]</code>.
+</function>
+
+<function sig="toIntObjectArray">
+  Returns a Java array of <code>java.lang.Integer[]</code>.
+</function>
+
+<function sig="toLongObjectArray">
+  Returns a Java array of <code>java.lang.Long[]</code>.
+</function>
+
+<function sig="toFloatObjectArray">
+  Returns a Java array of <code>java.lang.Float[]</code>.
+</function>
+
+<function sig="toDoubleObjectArray">
+  Returns a Java array of <code>java.lang.Double[]</code>.
+</function>
+
+<function sig="toStringArray">
+  Returns a Java array of <code>java.lang.String[]</code>.
+</function>
+
+<function sig="toObjectArray">
+  Returns a Java array of <code>java.lang.Object[]</code>.
+</function>
+
+<function sig="saveAsLine fileName">
+  Write all elements into a file as lines. If values are strings containing newlines, the values will be confused.
+</function>
+
+<function sig="loadAsLine fileName">
+  Load all lines in the text file as elements.
+</function>

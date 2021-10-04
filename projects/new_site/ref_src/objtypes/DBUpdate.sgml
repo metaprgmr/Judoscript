@@ -1,0 +1,21 @@
+<function sig="getSQL">
+  Returns the SQL statement for this query.
+</function>
+
+<function sig="getPreparedStatement">
+  Returns the prepared statement (an instance of <code>java.sql.PreparedStatement</code>)
+  for this query.
+</function>
+
+<function sig="close">
+  Closes this prepared statement.
+</function>
+
+<function sig="hasResult">
+  Returns <!true> if the last run has results.
+</function>
+
+<function sig="getResult">
+  Returns the last run result, which is a count of affected rows.
+</function>
+

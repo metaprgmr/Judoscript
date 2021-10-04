@@ -1,0 +1,11 @@
+function sentence subj, verb, obj {
+  print subj, ' ', verb, ' ', obj;
+  for x in $$args { print ' ', x; }
+  println '.';
+}
+
+params = [ 'James', 'wrote', 'JudoScript' ];
+sentence( {{params}} );
+
+params = [ 'He', 'uses', 'JudoScript', 'day-in', 'and', 'day-out' ];
+sentence( {{params}} );

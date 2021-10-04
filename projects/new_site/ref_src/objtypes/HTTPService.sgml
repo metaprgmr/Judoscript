@@ -1,0 +1,113 @@
+<function sig="getUrl">
+  Returns the URL for the client connection.
+</function>
+
+<function sig="getHost">
+  Returns the host of the URL for the client connection.
+</function>
+
+<function sig="getPort">
+  Returns the port of the URL for the client connection.
+</function>
+
+<function sig="getDomain">
+  Returns the domain of the URL for the client connection.
+</function>
+
+<function sig="getPath">
+  Returns the path of the URL for the client connection.
+</function>
+
+<function sig="getFileName">
+  Returns the file name of the URL for the client connection.
+</function>
+
+<function sig="getQuery">
+  Returns the query string of the URL for the client connection.
+</function>
+
+<function sig="getRef">
+  Returns the reference of the URL for the client connection.
+</function>
+
+<function sig="getMethod">
+  Returns the HTTP method for the client connection.
+</function>
+
+<function sig="setResponseMessage msg" alias="setResponseMsg">
+  Sets the HTTP response message to <param>msg</param> for the client connection.
+</function>
+
+<function sig="setStatusCode code" alias="setStatus">
+  Sets the HTTP response code to <param>code</param> for the client connection.
+</function>
+
+<function sig="getInputStream">
+  Returns the input stream for the client connection.
+</function>
+
+<function sig="getOutputStream">
+  Returns the output stream for the client connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getTextInput">
+  Returns the text input (a buffered reader) for the client connection.
+</function>
+
+<function sig="getTextOutput">
+  Returns the text output (a print writer) for the client connection.
+  This implicitly makes the connection if not connected yet.
+</function>
+
+<function sig="getDateHeader name">
+  Returns a date object for the <param>name</param> HTTP request header.
+</function>
+
+<function sig="getAllHeaders">
+  Returns an array of all the header names for the HTTP request.
+</function>
+
+<function sig="addCookie cookie, cookieValue">
+  Adds a cookie <param>cookie</param> with value <param>cookieValue</param> to the
+  response headers. This should be called before the response body is sent to the
+  client. If only <param>cookie</param>, it should be a <obj id=Cookie> instance.
+</function>
+
+<function sig="getCookies">
+  Returns an array of <obj id=Cookie>'s from the HTTP request.
+</function>
+
+<function sig="getServerName">
+  Returns this machine's host name.
+</function>
+
+<function sig="getServerPort">
+  Returns this server socket's local port number.
+</function>
+
+<function sig="serveError code">
+  Sends an error response with <param>code</param> to the client.
+  If no <param>code</param> is specified, defaut to 500.
+</function>
+
+<function sig="serveFile docRoot">
+  Sends the file whose is composed of <param>docRoot</param> and the virtual path of the URL.
+  The mime-type is based on the file extension and the internal mime type table. For unknown
+  extensions, default mime type is "text/plain".
+</function>
+
+<function sig="close">
+  Close the connection to the client.
+</function>
+
+<function sig="getContentLength">
+  Returns the "Content-Length" header of the HTTP reponse. If it is not present,
+  -1 is returned.
+</function>
+
+<function sig="parseFormVars">
+  Returns form variables, whether it is posted or in the query string for a GET request,
+  as a <!struct>. Each value is usually a string or a string array.
+</function>
+

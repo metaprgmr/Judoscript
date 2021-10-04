@@ -1,0 +1,39 @@
+<%
+  // for the <select> control.
+  var goodList = [ 'a', 'b', 'c' ];
+  var aList = [ 'a', 'x', 'b', 'y', 'c', 'z' ];
+
+  if form.size() > 0 { // otherwise it's a new page, let it go.
+%>
+    <%!validate       jusp$validEMailAddress 'email' %>
+    <%!validate       jusp$textLength 'pwd', 5, 10 %>
+    <%!validateNullOK jusp$dateRange 'bday', Date(1998,1,1), Date() %>
+    <%!validateNullOK jusp$numberRange 'age', 18, 80 %>
+    <%!validateNullOK jusp$in 'sel', goodList %>
+<%
+  } // if()
+%>
+<html><body>
+<h2>Form Value Validation</h2>
+
+<p>View <%!viewsrc 'lesson6/validate.jusp', '../' %></p>
+
+<%
+  if error.length > 0 { // validation reported errors
+    %><div style="border:2px solid; font-family:arial; color=red">&nbsp;Input incorrect:<ol><%
+    for e in error { %><li><%= e %></li><% }
+    %></ol></div><%
+  }
+%>
+<form>
+<table border=0>
+<tr><td nowrap>Pick a date:</td><td><%!date 'bday', 9, 2 %></td></tr>
+<tr><td nowrap>Email:      </td><td><%!text 'email' %> <b>REQUIRED!</b></td></tr>
+<tr><td nowrap>Password:   </td><td><%!password 'pwd' %> <b>REQUIRED!</b> (5 to 10 letters)</td></tr>
+<tr><td nowrap>Age:        </td><td><%!text 'age', null, 'size=3' %> (18 to 80)</td></tr>
+<tr><td nowrap>Pick one:   </td><td><%!select 'sel', aList, aList %>(a, b or c)</td></tr>
+<tr><td>&nbsp;</td><td><%!submit 'Submit' %></td></tr>
+</table></form>
+
+<hr><font size=-1>Back to <a href="../lesson6.jusp">lesson 6</a></font>
+</body></html>

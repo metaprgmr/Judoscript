@@ -1,0 +1,20 @@
+<%
+  var title = 'Lesson 3. Form &mdash; Getting Values'; // required by header.jusp.
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>Form parameters are the most dealt with in web applications.
+In a JuSP, the <code>form</code> object holds all the form parameters.
+The values are typically strings, but can also be string arrays in cases
+of, say, checkboxes with the same names and multiple-select lists.</p>
+
+<p>The following example demonstrates these cases:</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson3/form1.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson3/form1.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

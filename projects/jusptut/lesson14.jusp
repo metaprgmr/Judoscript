@@ -1,0 +1,120 @@
+<%
+  var title = 'Lesson 14. The Page Attributes and Page Caching'; // required by header.jusp.
+
+  function jusp$tagRow ctxt, attr, value, desc, todo {
+    if (!todo)
+      print <ctxt.writer> '<tr><td valign=top nowrap><code>${attr}</code></td>',
+                          '<td valign=top>${value}</td><td valign=top>${desc}</td></tr>';
+  }
+%>
+%>
+<%!include "header.jusp" %>
+
+<h1><%= title %></h1>
+
+<p>The <code>&lt;%@page %></code> directive can be used to set attributes for the page.
+There may be multiple occurrances of <code>&lt;%@page %></code>, and the later one's
+settings overrides earlier ones. Its attributes are named values. The following table
+lists them all.</p>
+
+<table class=tbl cellpadding="5px">
+<tr><th>Page Attribute</th><th>Value</th><th>Description</th></tr>
+<%!tagRow 'autoFlush',
+          '<b>true</b>|false',
+          'Indicates this page should be flushed at the end. It may be desirable to turn this off for included pages and let the enclosing page handle the flushing.' %>
+<%!tagRow 'buffer',
+          'none|<b>8kb</b>|<size>kb',
+          'The internal butter size. This buffer is important because it allows you to set various page attributes before the content is flushed out, due to the nature of HTTP.' %>
+<%!tagRow 'contentType',
+          '&lt;mimeType><br>[ ; charset=&lt;characterSet> ]',
+          'Sets the HTTP content-type header (including character set). If the page has been flushed already, this will fail.' %>
+<%!tagRow 'isBinary',
+          'true|<b>false</b>',
+          'Indicates this page is rendering binary content. The <code>contentType</code> must be set accordingly, and any textural output is ignored.' %>
+<%!tagRow 'isStatic',
+          'true|<b>false</b>',
+          'Indicates this page is static. A static page is pre-rendered into a cached file. See the <code>refresh</code> attribute.' %>
+<%!tagRow 'refresh',
+          'integer',
+          'If <code>isStatic</code> is true, this attribute indicates how often the cached, pre-rendered page should be refreshed.' %>
+<%!tagRow 'import',
+          'comma-separated Java class/package names.',
+          'This is for importing Java classes so that in the code you can use the class names without package prefix. (You also can use <code>!import</code> inside the scriptlets to do the same.)' %>
+<%!tagRow 'isErrorPage',
+          'true|<b>false</b>',
+          '',
+          'TODO' %>
+<%!tagRow 'isStatic',
+          'true|<b>false</b>',
+          '',
+          'TODO' %>
+<%!tagRow 'noCleanup',
+          'true|<b>false</b>',
+          "When the global page cleanup routine is set up, every page will call it before existing. This attribute indicates that this doesn't need it." %>
+<%!tagRow 'pageEncoding',
+          '&lt;characterSet>',
+          '',
+          'TODO' %>
+<%!tagRow 'skipEmpty',
+          '<b>true</b>|false',
+          'The preprocess by default ignores text segments of only white spaces. You can turn this feature off.' %>
+<%!tagRow 'status',
+          'integer',
+          'The HTTP response status; regular response is 200.' %>
+</table>
+
+<p>This table documents all attributes well enough.
+In <%!link 'lesson15.jusp', 'lesson 15' %>, we will see how to render binary
+content involving a few of these values. The following is an example:</p>
+
+<pre>
+&lt;%@page buffer='32kb'
+        noCleanup='false'
+        autoFlush='false'
+        import 'com.foo.bar.*, org.foo.bar.*'
+%>
+</pre>
+
+<h2>On Buffer Size</h2>
+
+<p>The internal buffer is used for two reasons:</p>
+<ol>
+<li>HTTP response messages start with headers and follow with a message body.
+    The JuSP page content is for the message body; this buffer allows JuSP
+    to set HTTP response headers within the page.</li>
+<li>Allow exception handling to dislay clean error messages. If the internal
+    buffer has not be flushed and an exception happens, JuSP can forward to a
+    clean error page; otherwise, if the buffer has been flushed to the client,
+    the error message will have to follow in that page, causing distorted
+    pages with error messages.</li>
+</ol>
+
+<p>The default buffer size is 8kb; you may want to enlarge this buffer size if,
+say, you foresee that exception may happen after a large quantity of content
+has been rendered.</p>
+
+<h2>Static Pages and Caching</h2>
+
+<p>In web apps, pages may be static:</p>
+
+<ul>
+<li><em>Completely static pages</em>, such as the informational pages, etc.</li>
+<li><em>Semi-static pages</em>, such as home page with rotating advertisement.</li>
+<li><em>Parametized static pages</em>, such as weblog for June 12, 2004.</li>
+</ul>
+
+<p>Re-generating such pages all the time is a big waste of CPU. JuSP supports
+caching of static pages with the <code>isStatic</code> and <code>refresh</code>
+page attributes. If a page is completely static, use <code>isStatic</code>
+without <code>refresh</code>. For a semi-static page, accompany <code>isStatic</code>
+with <code>refresh</code>. For parametized static pages, you may set
+<code>refresh</code> to be, say, a day.</p>
+
+<ul type=square>
+<li>View <code><%!link 'lesson14/semi-static.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson14/semi-static.jusp' %></li>
+<li>View <code><%!link 'lesson14/parameterized-static.jusp' %></code> in action</li>
+<li>View <%!viewsrc 'lesson14/parameterized-static.jusp' %></li>
+</ul>
+
+<%!include "footer.jusp" %>

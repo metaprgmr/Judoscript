@@ -1,0 +1,16 @@
+usage {
+  minArgs = 1;
+  args    = 'file_or_url';
+  author  = 'James Huang';
+  lastMod = '2002-12-23';
+  desc    = [[*
+    Prints out the URLs for <a> and <img> tags.
+    Extend this to cover more cases as a practice.
+  *]];
+}
+
+do #args[0] as html // or sgml; same thing.
+{
+<a>:    if $_.href { println $_.href; }
+<img>:  println $_.src;
+}

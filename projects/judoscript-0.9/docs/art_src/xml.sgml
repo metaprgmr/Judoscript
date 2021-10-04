@@ -1,0 +1,1033 @@
+<doc title="XML Scripting and XSLT"
+ author="James Jianbo Huang" created="February 2002"
+ keywords="Java scripting language, JudoScript, scripting language for Java, XML scripting, Java XML scripting, JudoScript XML programming, JudoScript XML processing, SAX scripting, SAX programming, JudoScript SAX programming, DOM programming, JudoScript DOM programming, XML Text Tag, createNodeIterator, createTreeWalker"
+>
+
+<sectiondefs>
+<sectiondef name="sax"  caption="SAX-Style XML Processing">
+<sectiondef name="ns"   sub="1" caption="Namespace">
+<sectiondef name="sax2" sub="1" caption="SAX 2.0 Events">
+<sectiondef name="dom"  caption="DOM Processing">
+<sectiondef name="ns_dom"   sub="1" caption="Namespaces">
+<sectiondef name="create"   sub="1" caption="Create XML from DOM">
+<sectiondef name="traverse" sub="1" caption="List and Navigate DOM">
+<sectiondef name="xslt" caption="XSLT">
+<sectiondef name="parsers" caption="Java XML Parsers">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+XML scripting is one of the main motivations for <J> itself. <J> supports
+SAX and DOM programming and XSL transformation. In the <kw>do..as xml</kw>
+event-driven statement, SAX events, including tags, are denoted as labels,
+followed by handler code. <J> extends SAX with a <em>text</em> tag, which is
+a compound tag that includes the opening, closing tags and the text enclosed
+within. The opening tag's attributes are accessible, too. If a tag has mixed
+content, you have the option to copy or ignore all the embedded tags. For
+each event, the built-in variable <kw>$_</kw> represents the tag or the
+event. XML data can be read into a DOM by the <kw>do..as dom</kw> expression,
+which returns an <code>org.w3c.dom.Document</code> object. You can use a
+function variable as a node filter when using the Java DOM traversal API. To
+create a DOM, use system functions <kw>createDom()</kw>. The <kw>xslt</kw>
+statement applies XSL transformations and also copies XML documents and
+outputs files or DOMs.
+</abstract>
+
+</doc>
+
+
+<section name="sax">
+
+<p>SAX is, indeed, a simple API for XML programming. Each tag, including text,
+becomes an event that application code may choose to respond. <J> goes one
+step further by supporting the text enclosed in between specific tags. This
+saves you the trouble to implement state machines just to retrieve text
+content of tags.
+
+<codelist name="books" caption="books.judo">
+ 1: do $$local as xml
+ 2: {
+ 3: &lt;book&gt;:        print ($_.hardcover=='true')?"Hard":"Soft";
+ 4:                println '-cover Book ------------';
+ 5: &lt;date&gt;TEXT :   println '  Date: ', $_, ' (', $_.type, ')';
+ 6: &lt;title&gt;TEXT :  println ' Title: ', $_;
+ 7: &lt;author&gt;TEXT : println 'Author: ', $_;
+ 8: &lt;isbn&gt;TEXT :   println '  ISBN: ', $_;
+ 9: }
+10:
+11: EndScript -------------------------------------------------------
+12:
+13: &lt;booklist&gt;
+14:  &lt;book&gt;
+15:   &lt;title&gt; UNIX in a Nutshell &lt;/title&gt;
+16:   &lt;author&gt; Daniel Gilly &lt;/author&gt;
+17:   &lt;publisher&gt; O&amp;apos;Reilly &amp;amp; Associates, Inc. &lt;/publisher&gt;
+18:   &lt;isbn&gt; 1-56592-001-5 &lt;/isbn&gt;
+19:   &lt;date type="first edition"&gt; 1986-12 &lt;/date&gt;
+20:   &lt;date type="second edition"&gt; 1992-06 &lt;/date&gt;
+21:  &lt;/book&gt;
+22:  &lt;book hardcover="true"&gt;
+23:   &lt;title&gt; Advanced Programming in the UNIX Environment &lt;/title&gt;
+24:   &lt;author&gt; Richard Stevens &lt;/author&gt;
+25:   &lt;publisher&gt; Addison-Wesley &lt;/publisher&gt;
+26:   &lt;isbn&gt; 0-201-56317-7 &lt;/isbn&gt;
+27:   &lt;date type="copyright"&gt; 1993 &lt;/date&gt;
+28:   &lt;date type="twelfth printing"&gt; 1996-12 &lt;/date&gt;
+29:  &lt;/book&gt;
+30: &lt;/booklist&gt;
+</codelist>
+
+Briefly on logistics. On line 1, <kw>$$local</kw> represents an input text
+stream for the data enclosed in this script after the <kw>EndScript</kw>
+marker, starting on the following line. The <kw>do..as xml</kw> statement
+can take input streams, readers, files and URLs. It takes some options;
+in this example we just accept its defaults.
+
+<p>
+Let us discuss regular XML tags first. In their handlers, <kw>$_</kw>
+represents the current tag. It is a read-only struct, with its members
+being the tag attributes; see line 3. Its <kw>toString()</kw> method,
+which implicitly called by print statement, reproduces the tag itself. To
+enumerate its attributes, though, it is different. It uses these methods:
+<kw>countAttrs()</kw>, <kw>getAttrName()</kw> and <kw>getAttrValue()</kw>.
+
+<demo>
+&lt;some_tag&gt;: for x from 0 to $_.countAttrs() {
+              println $_.getAttrName(x), ' => ', $_.getAttrValue(x);
+            }
+</demo>
+
+The closing tags can be handled the same way, except they do not have
+attributes.
+
+<p>
+The named text tags, like lines 5 though 8 above, are represented by
+<kw>$_</kw>, which contains all the attributes for the opening tag.
+But its <kw>toString()</kw> returns the text, not the tags. The opening
+and closing tags can be handled separately; if the closing tag is being
+handled, it happens after its text handler is called. So this is the
+way to reproduce a text tag:
+
+<demo>
+&lt;some_tag&gt;:     println $_;
+&lt;some_tag&gt;TEXT: println $_;
+&lt;/some_tag&gt;:    println $_;
+</demo>
+
+In XML data, text content may be enclosed within tags along with other
+tags; the parent tag, in this case, is referred to as having mixed
+content. So how to get the text of a mixed tag? The <J> SAX-style
+processing allows you to either copy the embedded tags (which is the
+default), or ignore them. That is it. If more detailed, accurate
+handling is needed, switch to DOM. To ignore the embedded tags,
+specify a minus sing <kw>-</kw> before <kw>:</kw>. To explicitly
+specify copying the embedded tags, put a plus sing <kw>+</kw> before
+<kw>:</kw>.
+
+<demo>
+&lt;some_tag&gt;TEXT-: println $_;
+</demo>
+
+Annonymous tags, both opening and closing ones, can be handled by
+<kw>&lt;&gt;</kw>; unnamed text pieces can be handled by just <kw>:TEXT</kw>.
+
+<demo>
+&lt;&gt;:   println $_;
+:TEXT: println $_;
+</demo>
+
+SAX also reports other events as shall we see later, and <J> addes two
+more: <kw>BEFORE</kw> and <kw>AFTER</kw> events.
+
+
+<section name="ns">
+
+<p>
+The options for <kw>do..as xml</kw> are passed on to the XML parser.
+At this stage, these two flags are used most often: <kw>namespace</kw>
+and <kw>validate</kw>. They are by default false.
+
+<codelist name="namespaces" caption="namespaces.judo">
+ 1: do $$local as xml with namespace, validate,
+ 2:                        xmlns:n="judoscript/xml/namespaces"
+ 3: {
+ 4:     &lt;n:article&gt;:  println '    Date &gt;&gt; ', $_.date;
+ 5: TEXT&lt;n:headline&gt;: println 'Headline &gt;&gt; ', $_;
+ 6: TEXT&lt;n:author&gt;:   println '  Author &gt;&gt; ', $_;
+ 7: TEXT&lt;n:body&gt;:     println '    Body &gt;&gt; ', $_;
+ 8:
+ 9: ERROR:            println '   &lt;ERROR&gt;: ', $_.getMessage();
+10: }
+11:
+12: EndScript ------------------------------------------------------
+13: &lt;?xml version="1.0"?&gt;
+14: &lt;!DOCTYPE news:article [
+15:  &lt;!ELEMENT news:article (news:headline, news:author, news:body)&gt;
+16:  &lt;!ATTLIST news:article date CDATA #REQUIRED&gt;
+17:  &lt;!ELEMENT news:headline (#PCDATA)&gt;
+18:  &lt;!ELEMENT news:author (#PCDATA)&gt;
+19:  &lt;!ELEMENT news:body (#PCDATA)&gt;
+20: ]&gt;
+21: &lt;news:article xmlns:news="judoscript/xml/namespaces" date="02-Dec-2000"&gt;
+22:   &lt;news:headline&gt;SAX 2.0 Released&lt;/news:headline&gt;
+23:   &lt;news:author&gt;F. Bar&lt;/news:author&gt;
+24:   &lt;news:body&gt;SAX 2.0 has been released into the public domain&lt;/news:body&gt;
+25: &lt;/news:article&gt;
+</codelist>
+
+On line 2, the <code>xmlns:n=...</code> associates the prefix "n" to
+a URI; any appearances of this prefix in the handler labels (lines 4
+though 7) are using this namespace. Note that in the data, the prefix
+is different ("news") but they both represent the same namespace, hence
+the tags match.
+
+<p>
+Line 9 shows one of the events other than tags and text: <kw>ERROR</kw>.
+This is a recoverable error as opposed to fatal error; parsers may call
+this and later recover and fix the problem. Using the "crimson" parser,
+for example, this handler is called for data on line 21 for "news:article"
+that its prefix is not defined, even though in the same tag the namespace
+is being defined. The "xerces" parser does not have this issue.
+
+
+<section name="sax2">
+
+<p>
+SAX 2.0 has defined some more events that applications can handle. The
+following program demonstrates all the SAX 2.0 and <J>-defined events
+you can handle in <kw>do..as xml</kw>.
+
+<codelist name="sax2_events" caption="sax2_events.judo">
+ 1: do 'SAX2.0.xml' as xml with namespace, validate
+ 2: {
+ 3: :TEXT:           println '             TEXT: ', $_;
+ 4: &lt;&gt;:              println '&lt;', $_.getRaw():&gt;14, '&gt;: name =', $_.getName();
+ 5:                  println '                  uri  =', $_.getUri();
+ 6:                  println '                  local=', $_.getLocal();
+ 7:                  for x from 0 to $_.countAttrs()-1 {
+ 8:                    println '                  Attribute: ',
+ 9:                            $_.getAttrName(x), '=', $_.getAttrValue(x);
+10:                  }
+11: :BEFORE:         println '         &lt;BEFORE&gt;.';
+12: :AFTER:          println '          &lt;AFTER&gt;.';
+13: :START_DOC:      println '      &lt;START_DOC&gt;.';
+14: :END_DOC:        println '        &lt;END_DOC&gt;.';
+15: :START_NS_MAP:   println '   &lt;START_NS_MAP&gt;: ', $_.prefix, ' =&gt; ', $_.uri;
+16: :END_NS_MAP:     println '     &lt;END_NS_MAP&gt;: ', $_;
+17: :PI:             println '             &lt;PI&gt;: ', $_.instruction;
+18:                  println '                   ', $_.data;
+19: :COMMENT:        println '        &lt;COMMENT&gt;: ', $_;
+20: :START_CDATA:    println '    &lt;START_CDATA&gt;.';
+21: :END_CDATA:      println '      &lt;END_CDATA&gt;.';
+22: :START_DTD:      println '      &lt;START_DTD&gt;: name=', $_.name,
+23:                          ' publicID=', $_.publicID, ' systemID=', $_.systemID;
+24: :END_DTD:        println '        &lt;END_DTD&gt;.';
+25: :END_ENTITY:     println '     &lt;END_ENTITY&gt;: ', $_;
+26: :ELEMENT_DECL:   println '   &lt;ELEMENT_DECL&gt;: name=',$_.name,' model=',$_.model;
+27: :ATTR_DECL:      println '      &lt;ATTR_DECL&gt;: element=', $_.element;
+28:                  println '                   name   =', $_.name;
+29:                  println '                   type   =', $_.type;
+30:                  println '                   default=', $_.default;
+31:                  println '                   value  =', $_.value;
+32: :ENTITY_DECL:    println '    &lt;ENTITY_DECL&gt;: name   =', $_.name;
+33:                  println '                   value  =', $_.value;
+34: :EXT_ENTITY_DECL:. '&lt;EXT_ENTITY_DECL&gt;: name   =', $_.name;
+35:                  println '                   pubID  =', $_.publicID;
+36:                  println '                   sysID  =', $_.systemID;
+37: :SKIPPED_ENTITY: println ' &lt;SKIPPED_ENTITY&gt;: ', $_;
+38: }
+</codelist>
+
+As the program shows, events may have no parameters, a string parameter,
+or a struct parameter with defined members, which are all listed here.
+<kw>:START_DOC</kw> and <kw>:END_DOC</kw> are SAX events; <kw>:BEFORE</kw>
+and <kw>:AFTER</kw> are <J> events which happen outside START_DOC and
+after END_DOC.
+
+
+<review>
+<question> How to process an XML file on the hard drive or on the internet
+           using <kw>do..as xml</kw> statement?
+<question> How to use namespaces with <kw>do..as xml</kw> statement?
+           How to make sure the tag prefixes in the code and in the data
+           are using the same namespace? Why need to ensure this?
+<question> Write a program to count one particular tag and all the tags
+           in an XML document.
+<question> For an opening tag, how to get all its attributes?
+<question> For a text tag, can you get the attributes in the opening tag?
+<question> <kw>:PI</kw> stands for the "processing instruction" event.
+           What are the values for this event (in <kw>$_</kw>)?
+           What is the value for the <kw>:SKIPPED_ENTITY</kw> event?
+</review>
+
+
+<section name="dom">
+
+<p>
+XML data can be read in or written out using a DOM object, which contains
+a tree of nodes representing the data. The key to DOM is two Java interfaces:
+<code>org.w3c.dom.Document</code> and <code>org.w3c.dom.Node</code>.
+
+<p>
+To process XML data with DOM, use <kw>do..as dom</kw>. It looks similar to
+<kw>do..as xml</kw>, with two differences: a) it has no body, and b) it is
+an expression that returns an instance of <code>org.w3c.dom.Document</code>.
+
+<codelist name="read_xml" caption="read_xml.judo">
+1: if #args.length == 0 {
+2:   println &lt;err&gt; 'Usage: java judo ', #prog, ' file.xml';
+3:   exit 0;
+4: }
+5:
+6: doc = do #args[0] as dom; // with namespace, validate
+7: xslt copy doc to getOut();
+</codelist>
+
+In this program, line 6 reads in the file or URL as a DOM, and line 7
+<kw>xslt copy</kw> to write it out to system output. The document itself
+is a tree of <code>org.w3c.dom.Node</code>'s of various kinds. The
+following GUI program visually displays the tree.
+
+<codelist name="XML2JTree" caption="XML2JTree.judo">
+  1: !JavaGuiClass #JTree, #JFrame, #DefaultMutableTreeNode, #DefaultTreeModel
+  2: !JavaGuiClass #JScrollPane, #Dimension, #JPanel, #TreeSelectionModel
+  3: !JavaGuiClass #BorderLayout, #Toolkit, #Color, #JOptionPane
+  4: !JavaBaseClass #Node, #Document, #DocumentBuilderFactory
+  5: 
+  6: 
+  7: if #args.length &lt; 1 {
+  8:   println &lt;err&gt; 'Usage: java judo ', #prog, ' filename.xml';
+  9:   exit 0;
+ 10: }
+ 11: 
+ 12: const #FRAME_WIDTH  = 440;
+ 13: const #FRAME_HEIGHT = 280;
+ 14: 
+ 15: showDetails = true;
+ 16: filename = #args[0];
+ 17: 
+ 18: frame = javanew #JFrame("XML to JTree");
+ 19: frame.setBackground(#Color.lightGray);
+ 20: frame.getContentPane().setLayout(javanew #BorderLayout);
+ 21: {
+ 22:   local toolkit = #Toolkit.getDefaultToolkit();
+ 23:   local dim = toolkit.getScreenSize();
+ 24:   local screenHeight = dim.height;
+ 25:   local screenWidth  = dim.width;
+ 26: 
+ 27:   // Display in the middle of the screen
+ 28:   frame.setBounds( (screenWidth-#FRAME_WIDTH)/2,
+ 29:                    (screenHeight-#FRAME_HEIGHT)/2,
+ 30:                    #FRAME_WIDTH, #FRAME_HEIGHT );
+ 31: }
+ 32: guiEvents {
+ 33:   &lt;frame : Window : windowClosing&gt; :  exit(0);
+ 34: }
+ 35: 
+ 36: doc = null; // global scope
+ 37: {
+ 38:   doc = do filename as dom;
+ 39: catch:
+ 40:   #JOptionPane.showMessageDialog(frame, $_.message, "Exception",
+ 41:                                  #JOptionPane.WARNING_MESSAGE);
+ 42:   exit 0;
+ 43: }
+ 44: 
+ 45: top     = createTreeNode(doc.getDocumentElement(), showDetails );
+ 46: dtModel = javanew #DefaultTreeModel(top);
+ 47: jTree   = javanew #JTree(dtModel);
+ 48: 
+ 49: jTree.getSelectionModel().setSelectionMode(
+ 50:                           #TreeSelectionModel.SINGLE_TREE_SELECTION);
+ 51: jTree.setShowsRootHandles(true);
+ 52: jTree.setEditable(false);
+ 53: 
+ 54: // Create a new JScrollPane to override one of the methods.
+ 55: !JavaClass
+ 56:   import java.awt.Dimension;
+ 57:   import javax.swing.JTree;
+ 58: 
+ 59:   public class XmlTreePane extends javax.swing.JScrollPane
+ 60:   {
+ 61:     int width, height;
+ 62:     public XmlTreePane(JTree tree, int width, int height) {
+ 63:       super(tree);
+ 64:       this.width = width;
+ 65:       this.height = height;
+ 66:     }
+ 67:     public Dimension getPreferredSize() {
+ 68:       return new Dimension( width-20, height-40 );
+ 69:     }
+ 70:   };
+ 71: 
+ 72: main = javanew #JPanel;
+ 73: jScroll = javanew XmlTreePane(jTree,#FRAME_WIDTH,#FRAME_HEIGHT);
+ 74: 
+ 75: panel = javanew #JPanel;
+ 76: panel.setLayout(javanew #BorderLayout);   
+ 77: panel.add("Center", jScroll);
+ 78: main.add("Center", panel);
+ 79: frame.getContentPane().add(main, #BorderLayout.CENTER);
+ 80: frame.validate();
+ 81: frame.setVisible(true);
+ 82: 
+ 83: function createTreeNode root, showDetails
+ 84: {
+ 85:   type = getNodeType(root);
+ 86:   name = root.getNodeName();
+ 87:   value = root.getNodeValue();
+ 88: 
+ 89:   if showDetails {
+ 90:     dmtNode = javanew #DefaultMutableTreeNode(
+ 91:                        "[" @ type @ "] --&gt; " @ name@" = " @ value);
+ 92:   } else { // Special case for TEXT_NODE
+ 93:     dmtNode = javanew #DefaultMutableTreeNode(
+ 94:                  root.getNodeType()==#Node.TEXT_NODE ? value : name );
+ 95:   }
+ 96: 
+ 97:   // Display the attributes if there are any
+ 98:   attribs = root.getAttributes();
+ 99:   if attribs != null &amp;&amp; showDetails {
+100:     for i from 0 to attribs.getLength()-1 {
+101:       local attNode = attribs.item(i);
+102:       local attName = attNode.getNodeName().trim();
+103:       local attValue = attNode.getNodeValue().trim();
+104: 
+105:       if attValue.isNotEmpty() &amp;&amp; attValue.isNotEmpty() {
+106:         dmtNode.add(javanew #DefaultMutableTreeNode(
+107:           "[Attribute] --&gt; " @ attName @ "=\"" @ attValue @ "\"") );
+108:       }
+109:     }
+110:   }
+111: 
+112:   // If there are any children and they are non-null then recurse...
+113:   if root.hasChildNodes() {
+114:     childNodes = root.getChildNodes();
+115:     if childNodes != null {
+116:       for k from 0 to childNodes.getLength()-1 {
+117:         local nd = childNodes.item(k);
+118:         if nd != null {
+119:           // A special case could be made for each Node type.
+120:           if nd.getNodeType() == #Node.ELEMENT_NODE {
+121:             dmtNode.add(createTreeNode(nd, showDetails));
+122:           }
+123:           elif nd.getNodeValue().isNotEmpty() { // the default
+124:             dmtNode.add(createTreeNode(nd, showDetails));
+125:           }
+126:         }
+127:       }
+128:     }
+129:   }
+130: 
+131:   return dmtNode;
+132: }
+133: 
+134: function getNodeType node
+135: {
+136:   switch node.getNodeType() {
+137:   case #Node.ELEMENT_NODE:               return "Element";
+138:   case #Node.ATTRIBUTE_NODE:             return "Attribute";
+139:   case #Node.TEXT_NODE:                  return "Text";
+140:   case #Node.CDATA_SECTION_NODE:         return "CData section";
+141:   case #Node.ENTITY_REFERENCE_NODE:      return "Entity reference";
+142:   case #Node.ENTITY_NODE:                return "Entity";
+143:   case #Node.PROCESSING_INSTRUCTION_NODE:return "Processing instruction";
+144:   case #Node.COMMENT_NODE:               return "Comment";
+145:   case #Node.DOCUMENT_NODE:              return "Document";
+146:   case #Node.DOCUMENT_TYPE_NODE:         return "Document type";
+147:   case #Node.DOCUMENT_FRAGMENT_NODE:     return "Document fragment";
+148:   case #Node.NOTATION_NODE:              return "Notation";
+149:   default:                               return "Unknown";
+150:   }
+151: }
+</codelist>
+
+As true for any GUI programs, the majority of the code above is dedicated
+to building the GUI. The only interesting parts (as far as DOM is concerned)
+lie between lines 36 and 47 and the function <code>createTreeNode()</code>
+between lines 83 and 132. That function takes an open document, traverses
+the whole node tree and builds a DefaultTreeModel that is displayable in
+a Swing JTree component. You can customize this to display more detailed
+information about each specific node type.
+
+
+<section name="ns_dom">
+
+<p>
+Like SAX, to enable namespace during reading a DOM, specify these flags
+using the <kw>with</kw> clause.
+
+<codelist name="dom_namespace" caption="dom_namespace.judo">
+ 1: doc = do $$local as dom with namespace;
+ 2: 
+ 3: ns_ex = "judoscript/xml/dom_namespace";
+ 4: $local = "a";
+ 5: ns_c24 = "http://www.c24solutions.com";
+ 6:          
+ 7: // Get a list of Nodes by TagName Namespace
+ 8: println "Elements in the '", ns_ex, "' namespace...";
+ 9: nodelist = doc.getElementsByTagNameNS(ns_ex,"*");
+10: for i from 0 to nodelist.getLength()-1 {
+11:   var n = nodelist.item(i);
+12:   println n.getNodeName();
+13: }
+14: 
+15: // Use the "local name" 
+16: println nl, "Elements with a local name of '", $local, "'...";
+17: nodelist = doc.getElementsByTagNameNS("*",$local);
+18: for i from 0 to nodelist.getLength()-1 {
+19:   var n = nodelist.item(i);
+20:   println n.getNodeName();
+21: }
+22: 
+23: // Get all nodes and look for specified Attributes...
+24: println nl, "Attributes in the ", ns_c24, " namespace...";
+25: nodelist = doc.getElementsByTagName("*");
+26: for i from 0 to nodelist.getLength()-1 {
+27:   if nodelist.item(i).instanceof(#Element) {
+28:     // Save the text part
+29:     var t = nodelist.item(i).getFirstChild();
+30: 
+31:     // Search for particular attributes, no wildcards here!
+32:     var e = nodelist.item(i);
+33:     var a = e.getAttributeNodeNS(ns_c24,"class");
+34: 
+35:     if a != null { // a is the attribute
+36:       var val = a.getNodeValue();
+37:       println "&lt;", val, "&gt;", t.getNodeValue(), "&lt;/", val, "&gt;";
+38:     }
+39:   }
+40: }
+41: 
+42: EndScript -----------------------------------------------------
+43: &lt;?xml version='1.0' encoding='utf-8'?&gt;
+44: 
+45: &lt;DOMExample&gt;
+46: 
+47:  &lt;section xmlns="judoscript/xml/dom_namespace"&gt;
+48:   &lt;title price="$49.95"&gt;XML with JudoScript&lt;/title&gt;
+49:   &lt;chapter title="DOM Programming"&gt;
+50:    &lt;author title="Mr." name="James Huang"/&gt;
+51:   &lt;/chapter&gt;
+52:  &lt;/section&gt;
+53: 
+54:  &lt;order xmlns:html="http://www.c24solutions.com"&gt;
+55:   &lt;name html:class="H1"&gt;Vince Muller&lt;/name&gt;
+56:   &lt;payment type="credit" html:class="H3"&gt;Paid&lt;/payment&gt;
+57:   &lt;html:a href="/jsp/prebookings?order-ref=0527658"&gt;Check order&lt;/html:a&gt;
+58:   &lt;date location="London" html:class="H3"&gt;2002-02-22&lt;/date&gt;
+59:  &lt;/order&gt;
+60: 
+61: &lt;/DOMExample&gt;
+</codelist>
+
+This program builds a DOM using namespaces for the XML data attached at
+the end of the script, and conducts three tests that selects nodes based
+on their namespaces or names.
+
+
+<section name="create">
+
+<p>
+To create an XML file, you can simply write to a text file. Or you can
+build a DOM tree and write to the file. To do so, use system function
+<kw>createDom()</kw> to create a DOM, then create and attach the nodes
+before finally write out with <kw>xslt copy</kw> statement.
+
+<codelist name="create_president" caption="create_president.judo">
+ 1: doc = createDom();
+ 2:
+ 3: // Start with a "&lt;Person&gt;"
+ 4: person = doc.createElement("Person");
+ 5:
+ 6: // Create the "&lt;FirstName&gt;" element
+ 7: firstName = doc.createElement("FirstName");
+ 8:
+ 9: // Create a Text node "Al" and add it to the "FirstName" tag
+10: firstName.appendChild( doc.createTextNode("Al") );
+11:
+12: // Add the "&lt;FirstName&gt;" tag to "&lt;Person&gt;"
+13: person.appendChild(firstName);
+14:
+15: // Same as above
+16: surname = doc.createElement("Surname");
+17: surname.appendChild( doc.createTextNode("Gore") );
+18: person.appendChild(surname);
+19:
+20: president = doc.createElement("President");
+21:
+22: // Set the "Country" attribute in "&lt;Presedent&gt;"
+23: president.setAttribute("Country","Us");
+24: president.appendChild( person );
+25:
+26: // Add everything to the XmlDocument (doc)
+27: doc.appendChild( president );
+28:
+29: // Write the DOM to stdout.
+30: xslt copy doc to getOut();
+</codelist>
+
+See anything wrong with this program?
+
+
+
+<section name="traverse">
+
+<p>
+To traverse a DOM in Java, use the facilities defined in package
+<code>org.w3c.dom.traversal</code>. Only when the document object implements
+<code>org.w3c.dom.traversal.DocumentTraversal</code> can it be traversed
+using these facilities. As of this writing, it seems that "xerces" parser has
+the better support for this feature. This interface has two methods,
+<code>createNodeIterator()</code> and <code>createTreeWalker()</code>, that
+creates a node iterator or tree walker for this DOM. Both of them take a
+<code>org.w3c.dom.traversal.NodeFilter</code> interface to qualify the nodes
+for the traverse. In <J>, these methods have been extended to take a <J>
+function variable for node filtering, as demonstrated in the following
+program on line 18 and 31. If you have a valid <code>NodeFilter</code>
+implementation, you can still pass it to these methods.
+
+<codelist name="dom_traverse" caption="dom_traverse.judo">
+ 1: !JavaBaseClass #NodeFilter
+ 2:
+ 3: doc = do $$local as dom;
+ 4:
+ 5: if ! doc.isSupported("Traversal","2.0") {
+ 6:   println &lt;err&gt; 'Traversal is not implemented by this XML parser.';
+ 7:   exit 0;
+ 8: }
+ 9:
+10: /*
+11:  * Use NodeIterator.
+12:  */
+13: println 'Members of the royal family with children...', nl;
+14: filter = lambda n {
+15:            return n.hasChildNodes() &amp;&amp; n.getNodeName()=="Person"
+16:                   ? #NodeFilter.FILTER_ACCEPT : #NodeFilter.FILTER_SKIP;
+17:          };
+18: iter = doc.createNodeIterator( doc, #NodeFilter.SHOW_ALL, filter, true );
+19: while (n=iter.nextNode()) != null {
+20:   println n.getAttribute("name"), " (", n.getAttribute("born"), ")";
+21: }
+22:
+23: /*
+24:  * Use TreeWalker
+25:  */
+26: println nl, 'Looking for Princess Anne...';
+27: filter = lambda n {
+28:            return n.getNodeName()=="Person"
+29:                   ? #NodeFilter.FILTER_ACCEPT : #NodeFilter.FILTER_SKIP;
+30:          };
+31: walker = doc.createTreeWalker( doc,#NodeFilter.SHOW_ALL,filter,true );
+32: while (n=walker.nextNode()) != null {
+33:   name = n.getAttribute("name");
+34:   if name.indexOf("Anne") &gt;= 0 { break; }
+35:   println 'Skipping ', name;
+36: }
+37:
+38: // Store the Node so we can come back
+39: anne = walker.getCurrentNode();
+40: println 'Found "', anne.getAttribute("name"), '".', nl;
+41:
+42: walker.setCurrentNode(anne);
+43: println 'PreviousSibling = "', walker.previousSibling().getAttribute('name'), '"';
+44: walker.setCurrentNode(anne);
+45: println '    NextSibling = "', walker.nextSibling().getAttribute('name'), '"';
+46: walker.setCurrentNode(anne);
+47: println '     firstChild = "', walker.firstChild().getAttribute('name'), '"';
+48: walker.setCurrentNode(anne);
+49: println '      LastChild = "', walker.lastChild().getAttribute('name'), '"';
+50: walker.setCurrentNode(anne);
+51: println '   PreviousNode = "', walker.previousNode().getAttribute('name'), '"';
+52: walker.setCurrentNode(anne);
+53: println '       NextNode = "', walker.nextNode().getAttribute('name'), '"';
+54:
+55: EndScript ----------------------------------------------------------
+56: &lt;FamilyTree name="The Royal Family"&gt;
+57:    &lt;Person born="1926" name="Queen Elizabeth II" spouse="Phillip"&gt;
+58:       &lt;Person born="1948" name="Charles, Prince of Wales" spouse="Diana"&gt;
+59:          &lt;Person born="1982" name="Prince William"/&gt;
+60:          &lt;Person born="1984" name="Prince Henry of Wales"/&gt;
+61:       &lt;/Person&gt;
+62:       &lt;Person born="1950" name="Anne, Princess Royal"
+63:               spouse="Mark" spouse2="Tim"&gt;
+64:          &lt;Person born="1977" name="Peter Phillips"/&gt;
+65:          &lt;Person born="1981" name="Zara Phillips"/&gt;
+66:       &lt;/Person&gt;
+67:       &lt;Person born="1960" name="Andrew, Duke of York" spouse="Sarah"&gt;
+68:          &lt;Person born="1988" name="Princess Beatrice of York"/&gt;
+69:          &lt;Person born="1990" name="Princess Eugenie or York"/&gt;
+70:       &lt;/Person&gt;
+71:       &lt;Person born="1964" name="Edward, Earl of Wessex"
+72:               spouse="Sophie"/&gt;
+73:    &lt;/Person&gt;
+74: &lt;/FamilyTree&gt;
+</codelist>
+
+This is the result of the run:
+
+<demo>
+Members of the royal family with children...
+
+Queen Elizabeth II (1926)
+Charles, Prince of Wales (1948)
+Anne, Princess Royal (1950)
+Andrew, Duke of York (1960)
+
+Looking for Princess Anne...
+Skipping Queen Elizabeth II
+Skipping Charles, Prince of Wales
+Skipping Prince William
+Skipping Prince Henry of Wales
+Found "Anne, Princess Royal".
+
+PreviousSibling = "Charles, Prince of Wales"
+    NextSibling = "Andrew, Duke of York"
+     firstChild = "Peter Phillips"
+      LastChild = "Zara Phillips"
+   PreviousNode = "Prince Henry of Wales"
+       NextNode = "Peter Phillips"
+</demo>
+
+
+
+<section name=xslt>
+
+<p>
+Applying XSLT is easy in <J> with the <kw>xslt</kw> statement. In addition
+to doing XSL transformation, it also writes out XML documents and selects
+parts of documents with XPath expressions. This is how to apply an XSLT:
+
+<codelist name="xslt" caption="xslt.judo">
+1: xslt 'calls.xsl' on 'calls.xml' to 'out_calls.html';
+</codelist>
+
+File "calls.xml" is:
+
+<demo>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE PHONE_RECORDS SYSTEM "calls.dtd"&gt;
+
+&lt;PHONE_RECORDS&gt;
+
+  &lt;!-- Call Record 1 --&gt;
+  &lt;CALL&gt;
+    &lt;FROM&gt;703-433-5678&lt;/FROM&gt;
+    &lt;DATE&gt;5/5/2000&lt;/DATE&gt;
+    &lt;TIME HOUR="19" MINUTE="32"/&gt;
+    &lt;DESTINATION STATE="California" CITY="Sunnyvale"
+     COUNTRY="US"&gt;510-798-8390&lt;/DESTINATION&gt;
+    &lt;DURATION HOURS="1" MINUTES="15"/&gt;
+  &lt;/CALL&gt;
+
+  &lt;!-- Call Record 2 --&gt;
+  &lt;CALL&gt;
+    &lt;FROM&gt;703-373-2318&lt;/FROM&gt;
+    &lt;DATE&gt;5/15/2000&lt;/DATE&gt;
+    &lt;TIME HOUR="20" MINUTE="12"/&gt;
+    &lt;DESTINATION CITY="Birmingham"
+     COUNTRY="UK"&gt;44-121-738-4294&lt;/DESTINATION&gt;
+    &lt;DURATION HOURS="0" MINUTES="34"/&gt;
+  &lt;/CALL&gt;
+
+&lt;/PHONE_RECORDS&gt;
+</demo>
+
+This is the DTD file:
+
+<demo>
+&lt;!ELEMENT PHONE_RECORDS ( CALL )* &gt;
+&lt;!ELEMENT CALL ( FROM, DATE, TIME, DESTINATION, DURATION, CALL_PROMOTION? ) &gt;
+&lt;!ELEMENT FROM ( #PCDATA ) &gt;
+&lt;!ELEMENT DATE ( #PCDATA ) &gt;
+&lt;!ELEMENT TIME EMPTY &gt;
+&lt;!ATTLIST TIME
+  HOUR NMTOKEN #REQUIRED
+  MINUTE NMTOKEN #REQUIRED
+&gt;
+&lt;!ELEMENT DESTINATION ( #PCDATA ) &gt;
+&lt;!ATTLIST DESTINATION
+  CITY NMTOKEN #REQUIRED
+  COUNTRY NMTOKEN #REQUIRED
+  STATE NMTOKEN #IMPLIED
+&gt;
+&lt;!ELEMENT DURATION ( #PCDATA ) &gt;
+&lt;!ATTLIST DURATION
+  HOURS NMTOKEN #REQUIRED
+  MINUTES NMTOKEN #REQUIRED
+&gt;
+</demo>
+
+And "calls.xsl" is:
+
+<demo>
+&lt;?xml version="1.0"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+
+&lt;xsl:template match="PHONE_RECORDS"&gt;
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;Phone Listing&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;h1&gt;Phone Call Records&lt;/h1&gt;
+  &lt;table border="1"&gt;
+    &lt;th&gt;Item&lt;/th&gt;
+    &lt;th&gt;Source Number&lt;/th&gt;
+    &lt;th&gt;Destination Number&lt;/th&gt;
+    &lt;th&gt;Date (MM/DD/YY)&lt;/th&gt;
+
+  &lt;xsl:apply-templates/&gt;
+
+  &lt;/table&gt;
+  &lt;/body&gt;&lt;/html&gt;
+&lt;/xsl:template&gt;
+
+&lt;xsl:template match="CALL"&gt;
+  &lt;tr&gt;
+  &lt;td&gt;&lt;xsl:number/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="FROM"/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="DESTINATION"/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="DATE"/&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+</demo>
+
+The input XML file and the XSL file can be any valid XML source, such as 
+files, URLs, input streams, or DOM documents. If the input is not a file
+or URL, you may want to specify its system ID so that referenced documents
+such as DTDs can be resolved by the parser:
+
+<codelist name="xslt_local_src" caption="xslt_local_src.judo">
+ 1: xslt 'calls.xsl' on $$local systemID 'calls.xml' to 'out_calls.html';
+ 2:
+ 3: EndScript ------------------
+ 4:
+ 5: &lt;?xml version="1.0"?&gt;
+ 6: &lt;!DOCTYPE PHONE_RECORDS SYSTEM "calls.dtd"&gt;
+ 7:
+ 8: &lt;PHONE_RECORDS&gt;
+ 9:
+10:   &lt;!-- Call Record 1 --&gt;
+11:   &lt;CALL&gt;
+12:     &lt;FROM&gt;703-433-5678&lt;/FROM&gt;
+13:     &lt;DATE&gt;5/5/2000&lt;/DATE&gt;
+14:     &lt;TIME HOUR="19" MINUTE="32"/&gt;
+15:     &lt;DESTINATION STATE="California" CITY="Sunnyvale"
+16:      COUNTRY="US"&gt;510-798-8390&lt;/DESTINATION&gt;
+17:     &lt;DURATION HOURS="1" MINUTES="15"/&gt;
+18:   &lt;/CALL&gt;
+19:
+20:   &lt;!-- Call Record 2 --&gt;
+21:   &lt;CALL&gt;
+22:     &lt;FROM&gt;703-373-2318&lt;/FROM&gt;
+23:     &lt;DATE&gt;5/15/2000&lt;/DATE&gt;
+24:     &lt;TIME HOUR="20" MINUTE="12"/&gt;
+25:     &lt;DESTINATION CITY="Birmingham"
+26:      COUNTRY="UK"&gt;44-121-738-4294&lt;/DESTINATION&gt;
+27:     &lt;DURATION HOURS="0" MINUTES="34"/&gt;
+28:   &lt;/CALL&gt;
+29:
+30: &lt;/PHONE_RECORDS&gt;
+</codelist>
+
+The XSL or XML data can also be text within the script. Since a string is
+interpreted as a file name or URL, you must call the string's <code>getReader()</code>
+to turn the string into a Reader:
+
+<codelist name="xslt_text_src" caption="xslt_text_src.judo">
+ 1: data = [[*
+ 2:   &lt;?xml version="1.0"?&gt;
+ 3:   &lt;!DOCTYPE PHONE_RECORDS SYSTEM "calls.dtd"&gt;
+ 4:
+ 5:   &lt;PHONE_RECORDS&gt;
+ 6:
+ 7:     &lt;!-- Call Record 1 --&gt;
+ 8:     &lt;CALL&gt;
+ 9:       &lt;FROM&gt;703-433-5678&lt;/FROM&gt;
+10:       &lt;DATE&gt;5/5/2000&lt;/DATE&gt;
+11:       &lt;TIME HOUR="19" MINUTE="32"/&gt;
+12:       &lt;DESTINATION STATE="California" CITY="Sunnyvale"
+13:        COUNTRY="US"&gt;510-798-8390&lt;/DESTINATION&gt;
+14:       &lt;DURATION HOURS="1" MINUTES="15"/&gt;
+15:     &lt;/CALL&gt;
+16:
+17:     &lt;!-- Call Record 2 --&gt;
+18:     &lt;CALL&gt;
+19:       &lt;FROM&gt;703-373-2318&lt;/FROM&gt;
+20:       &lt;DATE&gt;5/15/2000&lt;/DATE&gt;
+21:       &lt;TIME HOUR="20" MINUTE="12"/&gt;
+22:       &lt;DESTINATION CITY="Birmingham"
+23:        COUNTRY="UK"&gt;44-121-738-4294&lt;/DESTINATION&gt;
+24:       &lt;DURATION HOURS="0" MINUTES="34"/&gt;
+25:     &lt;/CALL&gt;
+26:
+27:   &lt;/PHONE_RECORDS&gt;
+28: *]];
+29:
+30: xslt 'calls.xsl' on data.getReader() systemID 'calls.xml' to 'out_calls.html';
+</codelist>
+
+The XSL or XML data can be DOM documents. You can also output the resultant tree
+as a DOM node.
+
+<codelist name="xslt_from_dom" caption="xslt_from_dom.judo">
+ 1: doc = do 'calls.xml' as dom;
+ 2: xslt 'calls.xsl' on doc to 'out_calls1.html';
+ 3:
+ 4: doc = do 'calls.xsl' as dom;
+ 5: xslt doc on 'calls.xml' to 'out_calls2.html';
+ 6:
+ 7: xslt doc on 'calls.xml' as dom;
+ 8: xslt copy $_ to 'out_calls3.html';
+</codelist>
+
+On line 2, we do a simple XSLT but take a DOM document as the XML data source.
+On line 5, a DOM document is used for the XSL. Line 7 does the same as line 2
+except it produces the result in a DOM node. Line 8 shows how to copy a DOM.
+
+<p>
+The following example shows how to a query using XPath expressions in <J>.
+
+<codelist name="xslt_query" caption="xslt_query.judo">
+ 1: xslt xpath('/PHONE_RECORDS/CALL[1]/DESTINATION') on 'calls.xml' to 'result.xml'
+ 2:   outputProperties( 'omit-xml-declaration' = 'yes' );
+</codelist>
+
+The <kw>xpath</kw> tells <kw>xslt</kw> to interpret the text to be an XPath
+expression and query the XML data to produce a list of nodes. In this example 
+we also used the <kw>outputProperties</kw>. <kw>xslt</kw> takes the output
+property names as defined in <code>javax.xml.transform.OutputKey</code>, which
+are:
+
+<demo>
+cdata-section-elements
+doctype-public
+doctype-system
+encoding
+indent
+media-type
+method
+omit-xml-declaration
+standalone
+version
+</demo>
+
+where boolean options take "yes" or "no" as values.
+
+<p>
+To pass parameter values to the XSL, use the <kw>parameters</kw> clause like this:
+
+<codelist name="xslt_param" caption="xslt_param.judo">
+ 1: xslt 'calls_param.xsl' on 'calls.xml' to getOut()
+ 2:   parameters( pageTitle = 'Welcome to Online Phone Listings' );
+</codelist>
+
+First of all, note the output is written to the system output of the
+language engine, usually the same as <code>System.out</code>. The XSL takes
+a parameter:
+
+<demo>
+&lt;?xml version="1.0"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+
+&lt;xsl:param name="pageTitle"/&gt;
+&lt;xsl:template match="PHONE_RECORDS"&gt;
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;&lt;xsl:value-of select="$pageTitle"/&gt;&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;h1&gt;&lt;xsl:value-of select="$pageTitle"/&gt;&lt;/h1&gt;
+  &lt;table border="1"&gt;
+    &lt;th&gt;Item&lt;/th&gt;
+    &lt;th&gt;Source Number&lt;/th&gt;
+    &lt;th&gt;Destination Number&lt;/th&gt;
+    &lt;th&gt;Date (MM/DD/YY)&lt;/th&gt;
+
+  &lt;xsl:apply-templates/&gt;
+
+  &lt;/table&gt;
+  &lt;/body&gt;&lt;/html&gt;
+&lt;/xsl:template&gt;
+
+&lt;xsl:template match="CALL"&gt;
+  &lt;tr&gt;
+  &lt;td&gt;&lt;xsl:number/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="FROM"/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="DESTINATION"/&gt;&lt;/td&gt;
+  &lt;td&gt;&lt;xsl:value-of select="DATE"/&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+</demo>
+
+
+
+
+<section name=parsers>
+
+<p>
+Currently there are two most popular Java XML parsers, "crimson" and
+"xerces". Sun's JAXP1.1 reference implementation includes and uses "crimson"
+parser in the file "crimson.jar". We found "xerces" to be more comfortable
+to use for its better support of the latest features. "Xerces" is recommended
+at this point.
+
+<p>
+To use "xerces" with JDK1.3, download the package from
+<a href=http://www.apache.org>http://www.apache.org</a>, unpack, and put
+"xerces.jar" into the classpath; make sure it is <u>before any class
+libraries from Sun</u>, such as "j2ee.jar", etc.
+
+
+
+<section name=summary>
+
+<p>
+<J> supports processing XML data in SAX- or DOM-style, with options of
+namespace, validation and other features. SAX programming is done through
+the <kw>do..as xml</kw> event-driven statement; it not only supports all
+the SAX 2.0 events, but also has a "text" tag feature that allows text
+enclosed between a pair tags be processed, part of which is the attributes
+of the opening tag. If a tag has mixed content, its text can be obtained
+by either copying all the embedded tags or ignoring them. Each event is
+specified as a label, where handler code follows. In the code, the tag
+itself is represented by the built-in variable <kw>$_</kw>, which contains
+attributes that can be accessed as struct members. For specific events
+(such as <kw>PI</kw>, <kw>ENTITY_DECL</kw>, etc.), the members are
+predefined. Annonymous tags and unnamed text can be handled by these
+special labels: <kw>&lt;&gt;</kw> and <kw>TEXT</kw>.  
+
+<p>
+XML data can be read into a DOM by the <kw>do..as dom</kw> expression, 
+which returns an <code>org.w3c.dom.Document</code> object. You can
+process the DOM with all the Java DOM APIs, such as searching and
+traversals. When using Java DOM traversal API, in addition to
+<code>org.w3c.dom.traversal.NodeFilter</code>, <J> function variables
+can be used for node filters by the <code>createNodeIterator()</code>
+and <code>createTreeWalker()</code> methods in <code>DocumentTraversal</code>
+interface. 
+
+<p>
+To create XML files via DOMs, use system function <code>createDom()</code>
+to create an empty DOM, and create a node tree by calling its methods to
+create and attach various kinds of nodes to each other.
+
+<p>
+XSL transformation is done with the <kw>xslt</kw> statement. It takes the
+XSL and an XML data source which can be files, URLs, input streams or
+readers or DOMs, and produce the output to files, output streams or
+writers or other DOMs. It can copy the XML document to the output, useful
+for writing DOM objects, and can do queries using XPath expressions. You
+can optionally set output properties and XSL parameter values.
+
+
+<p>
+Currently there are two popular Java XML parsers, "crimson" and "xerces".
+Sun's JAXP1.1 reference implementation includes and uses "crimson" parser
+in the file "crimson.jar". We found "xerces" to be more comfortable to use
+for its better support of the latest features. "Xerces" is recommended at
+this point. For XSLT, Apache's Xalan has been used and tested with.
+
+
+
+<section name=listings>
+
+<insert name="codelistings">

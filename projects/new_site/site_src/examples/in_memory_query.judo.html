@@ -1,0 +1,29 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/in_memory_query.judo:</b></td></tr><tr><td><pre>
+
+empl = new Object;
+empl.'0001' = new Object( name = 'Tony Nugyen',  age = 33 );
+empl.'0002' = new Object( name = 'Kathy Murphy', age = 42 );
+empl.'0003' = new Object( name = 'Michael Chu',  age = 29 );
+empl.'0004' = new Object( name = 'Rick Policsi', age = 30 );
+empl.'0005' = new Object( name = 'Sanjay Buch',  age = 23 );
+
+age_comp = function(lhs,rhs) { return compare(lhs.age, rhs.age); };
+age_flt  = function(elem) { return (elem.age >= 30); };
+
+println nl, 'List employees by age in ascending order:';
+listThem empl.keysSortedByValue(age_comp);
+
+println nl, 'List employees older than 30 years old:';
+listThem empl.keysFilteredByValue(age_flt);
+
+println nl, 'List employees older than 30 years old in ascending order:';
+listThem empl.keysFilteredAndSortedByValue(age_flt,age_comp);
+
+function listThem keys {
+  for x in keys {
+    var emp = empl.(x);
+    println emp.age, ' ', emp.name;
+  }
+}
+</pre></td></tr></table></body></html>

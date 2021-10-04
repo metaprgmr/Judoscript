@@ -1,0 +1,116 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Does these array operations: basic get/set, initialization, append()/prepend(),
+    and various sorting.
+  *]];
+}
+
+println '======================';
+println 'Basic Array operations';
+a = new array;
+a[0] = 1;
+a[1] = 'abc';
+println a;
+println 'a[0] = ', a[0];
+println 'a[1] = ', a[1];
+println '++a[0] = ', ++a[0];
+println 'a[1] @= "xyz": ', a[1] @= "xyz";
+println 'a[2] = ', a[2] = 5;
+println 'a.size() = ', a.size();
+
+println '======================';
+println "Array Initialization";
+a = [ 1, 'abc', 2, 'def', 3, 'ghi' ];
+println a;
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+println 'a.clear()';
+a.clear();
+println 'a.size() = ', a.size();
+
+println '======================';
+println "Array: append() and prepend()";
+a = [ 1, 'abc', 2, 'def', 3, 'ghi' ];
+println a;
+println "a.prepend( 9, 'xyz' )";
+a.prepend( 9, 'xyz' );
+println "a.append( 4, 'jkl' )";
+a.append( 4, 'jkl' );
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+
+println '======================';
+println "Array: subarray(0,2)";
+a = [ 1, 'abc', 2, 'def', 3, 'ghi' ];
+println a;
+b = a.subarray(0, 2);
+for i from 0 to b.lastIndex() {
+  println i, '  ', b[i];
+}
+println "Array: subarray(4)";
+b = a.subarray(4);
+for i from 0 to b.lastIndex() {
+  println i, '  ', b[i];
+}
+
+println '======================';
+println "Array: sum(), max(), min(), avg()";
+a = [ 1, -2, 3, '9' ];
+println a;
+println 'a.sum() = ', a.sum();
+println 'a.max() = ', a.max();
+println 'a.min() = ', a.min();
+println 'a.avg() = ', a.avg();
+
+println '======================';
+println "Array: insert()";
+a = new array ( 1, 'abc', 2, 'def', 3, '9' );
+println a;
+a.insert(date(2001,1,2), 1);
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+
+println '======================';
+println "Array: sort methods ";
+a = new array ( 10, 'abc', 2, 'def', 3, '9' );
+println a;
+a.sort();
+println 'a.sort()';
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+a.sortAsString();
+println 'a.sortAsString()';
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+a.sortAsNumber();
+println 'a.sortAsNumber()';
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+println 'a.sortAsDate()';
+a = [ date(2001,1,4), date(1996,6,10), date(2050,4,5) ];
+println a;
+a.sortAsDate();
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+a.sortAsDate(false); // descending
+for i from 0 to a.lastIndex() {
+  println i, '  ', a[i];
+}
+
+a = [ '1:xxx', '2:yy', '3:zzz' ];
+cptr = lambda x, y { return y.startsWith(x); };
+println a;
+println 'a.indexOf(1,cptr) = ', a.indexOf(1,cptr);
+println 'a.indexOf(2,cptr) = ', a.indexOf(2,cptr);
+println 'a.indexOf(3,cptr) = ', a.indexOf(3,cptr);
+println 'a.indexOf(4,cptr) = ', a.indexOf(4,cptr);

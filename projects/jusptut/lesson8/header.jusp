@@ -1,0 +1,11 @@
+<%
+  var user = session.user; // a string holding user name (for simplicity)
+  if user == null { // not logged in yet
+    session.dest = request.getAbsoluteURL();
+    %><%!forward "login.jusp" %><%
+  }
+%>
+<html>
+<head><title>Sample App -- <%= title %> Page</title>
+<body>
+<h1><%= title %></h1>

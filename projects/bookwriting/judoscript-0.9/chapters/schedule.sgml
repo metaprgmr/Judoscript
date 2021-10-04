@@ -1,0 +1,84 @@
+<!--===============================================================-->
+<section1 title="Different Modes of Scheduling" ready="no">
+
+<p>The <kw>schedule</kw> statement schedules jobs to run in the future. Any actions can be specified, such as database operations, run Java or native executables, sending e-mails, etc. It has a number of modes: one-time or repetitive, absolute or non-absolute, and starting at a specific time or after a delay. A HTTP interface is integrated and started when a port number is provided, so that the job can be monitored or controlled via a browser or any HTTP client program.</p>
+
+<grammar id="Schedule">
+<kw>schedule</kw> [ <kw>absolute</kw> ]
+[ ( <kw>starting</kw> | <kw>after</kw> ) <nt>time_or_delay</nt>
+[ <kw>repeating</kw> <nt>period</nt> ] <nt>block</nt> <br>
+[ <kw>listen on</kw> [ <kw>title</kw> <nt>html_title</nt> ] <nt>control_block</nt> ]
+</grammar>
+
+<p>Schedules can not be embedded. A program can have one schedule running at a time. Each schedule is run by a timer called <kw>$$timer</kw>. It can be accessed in the scheduler code, which has these members: <kw>time</kw> for the current event being handled, <kw>period</kw> for the current period, <kw>htmlOut</kw> is the HTML output stream and <kw>cmd</kw> is the command sent by the control panel client (most likely a brower) -- the last two are valid only in the control block.</p>
+
+<p>To abort a schedule job, run <kw>break schedule;</kw>.</p>
+
+<p>The following program emulates a count-down process, where 4 one-time events are run one second apart.</p>
+
+<codelist name="countdown" caption="countdown.judo -- <em>one-time event</em>">
+1: time = date(2001,10,12,19,4,57);
+2: schedule starting time { println $$timer.time, ": Three!"; }
+3: ++time.second;
+4: schedule starting time { println $$timer.time, ": Two!"; }
+5: ++time.second;
+6: schedule starting time { println $$timer.time, ": One!"; }
+7: ++time.second;
+8: schedule starting time { println $$timer.time, ": LAUNCH!"; }
+</codelist>
+
+<p>This is a simple repetitive motion:</p>
+
+<codelist name="heart_beat" caption="heart_beat.judo -- <em>not-so-accurate repetitive events</em>">
+1: beats_per_minute = 80;
+2:
+3: schedule repeat 60000 / beats_per_minute
+4: {
+5:   println 'puh ... at ', $$timer.time;
+6: }
+</codelist>
+
+<p>Next, we emulate a coocoo clock that every hour it plays so many "Cukoo" sound. Lines 1 through 4 gets the time for the next hour. Line 7 gets the time for this event, and its hour attribute is used for the number of "Cucoo" sound.</p>
+
+<codelist name="coocoo_clock" caption="coocoo_clock.judo -- <em>accurate repetitive events</em>">
+ 1: $start = date();
+ 2: ++$start.hour;
+ 3: $start.minute = 0;
+ 4: $start.second = 0;
+ 5: schedule absolute starting $start repeat 3600000
+ 6: {
+ 7:   local time = $$timer.time;
+ 8:   for $i from 1 to time.hour { print 'Cukoo...'; }
+ 9:   println;
+10: }
+</codelist>
+
+<p>Scheduled jobs should run quickly, that is, they should not run longer than the scheduled periods. If they do sometimes and mess up the operation, practical synchronization mechanism should be put in place. For instance, suppose every 5 minutes the job checks the database for unprocessed order data. If it founds some, process them. Sometimes e-commerce site may take so many orders in a short period of time, that within that 5-minute period they can not be all processed. What you can do is, for instance, use a temporary database table; when start processing, set a flag there, and reset it when done; if this flag is set, other jobs will simply bypass. The crux of this solution is, use an operation that is always short than the period to enforce the synchronization.</p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="HTTP Console Interface for Schedules" ready="no">
+
+<p>By issuing a <kw>listen on</kw> clause with a port number, you have the scheduled job start a single-thread HTTP server. A title can be specified for the HTML output. If not, the default title is "Judo Scheduler Control Panel".</p>
+
+<codelist name="changing_time" caption="changing_time.judo">
+ 1: history = linkedList{};
+ 2:
+ 3: schedule repeat 2000
+ 4: {
+ 5:   history.add($$timer.time);
+ 6:   if $history.length() &gt; 10 { history.remove(0); }
+ 7: }
+ 8: listen on 3333 title '&lt;h1&gt;Changing Time&lt;/h1&gt;'
+ 9: {
+10:   println &lt;$$timer.htmlOut&gt; '&lt;h3&gt;Latest Events&lt;/h3&gt;';
+11:   for x in history backward { println &lt;$$timer.htmlOut&gt; x, '&lt;br&gt;'; }
+12: }
+</codelist>
+
+<img src=changing_time.gif align=right>
+
+<p>The job itself does nothing but keeping the execution time in a list for the last 10 events (line 6). Its control panel server listens on port 3333. The control panel is typically run from a browser. The title, "Changing Time", is issued on line 8. The screen is standard above the horizontal line. If and only if both boxes are checked will the job be stopped and closed. Anything user type in to the edit box is sent to the server and becomes the content of <kw>$$timer.cmd</kw>. What it means is totally up to your interpretation, such as a mini command system. In the control panel code, we used <kw>$$timer.htmlOut</kw> to write out custom content that shows below the horizontal line (lines 10 and 11).</p>
+
+</section1><!--=====================================================-->

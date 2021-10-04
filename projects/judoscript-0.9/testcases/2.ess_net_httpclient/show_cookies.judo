@@ -1,0 +1,5 @@
+h = httpGet('http://www.google.com');
+
+for x in h.getCookies() {
+  println x;
+}

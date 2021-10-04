@@ -1,0 +1,72 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-08';
+  desc    = [[*
+    A Java extension class of java.io.Writer. 
+    It implements the abstract methods, has a constructor, and
+    overrides the toString() method.
+  *]];
+}
+
+class MyStringWriter extends java::java.io.Writer
+{
+  /**
+   * Data members
+   */
+  java.lang.StringBuffer buf;
+
+  /**
+   * The optional one-and-only constructor
+   */
+  constructor initText {
+    super();
+    this.buf = new java::java.lang.StringBuffer;
+    if initText { buf.append(initText); }
+  }
+
+  /**
+   * Abstract method given an empty implementation.
+   */
+  //void flush() {}
+
+  /**
+   * Implement parent's abstract method
+   */
+  void close() { buf.setLength(0); }
+
+  /**
+   * Implement parent's abstract method
+   */
+  void write(char[] cbuf, int off, int len) {
+    for i=off; i<off+len; ++i { buf.append(cbuf[i]); }
+  }
+
+  /**
+   * Override parent's non-abstract methods
+   */
+  String toString { return buf.toString(); }
+
+  /**
+   * Own method
+   */
+  String getString {
+    ret = buf.toString();
+    close();
+    return ret;
+  }
+
+} // end of Java extension class MyStringWriter.
+
+
+//
+// Test
+//
+
+x = new MyStringWriter('Wonder');
+
+ca = new java::char[]{ 'f', 'u', 'l' };
+x.write(ca,0,3);
+
+x.write( (int)('!').ascii() );
+
+println x.getString();

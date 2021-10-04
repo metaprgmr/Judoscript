@@ -1,0 +1,11 @@
+usage {
+  author  = 'James Huang';
+  created = '2003-01-07';
+  desc    = 'Shows how to read input from keyboard.';
+}
+
+while {
+  line = readLine();
+  if line == eof { break; }
+  println '[ECHO] ', line;
+}

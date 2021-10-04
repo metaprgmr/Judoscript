@@ -1,0 +1,12 @@
+t = Date();
+++t.hour;
+t.minute = 0;
+t.second = 0;
+t.milliSecond = 0;
+
+schedule absolute starting t repeat 3600000
+{
+  t = $$timer.time; // reuse the variable
+  for i from 1 to t.hour { print 'Cukoo-'; }
+  println;
+}

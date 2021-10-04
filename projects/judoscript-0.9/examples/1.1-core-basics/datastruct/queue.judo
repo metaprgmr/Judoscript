@@ -1,0 +1,43 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Constructs a bidirectionaly graph and run a
+    breadth-first search with a queue.
+  *]];
+}
+
+a = { name : 'A' };
+b = { name : 'B' };
+c = { name : 'C' };
+d = { name : 'D' };
+e = { name : 'E' };
+a.children = [ b, c ];     //  ==> a
+b.children = [ a, d ];     //     / \
+c.children = [ a, d, e ];  //    b   c
+d.children = [ b, c ];     //     \ / \
+e.children = [ c ];        //      d   e
+
+print 'Breadth-First Search --  ';
+
+queue = new queue;
+queue.enq(a);
+
+while ! queue.isEmpty() {
+  var node = queue.deq();
+  if ! node.visited {
+    process node;
+    node.visited = true;
+    for x in node.children {
+      if ! x.visited { queue.enq(x); }
+    }
+  }
+}
+println;
+
+
+// This function handles the node
+function process x {
+  print x.name, '  ';
+}

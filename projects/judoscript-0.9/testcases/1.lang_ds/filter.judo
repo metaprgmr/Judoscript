@@ -1,0 +1,6 @@
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+
+println a.filter(&size_filter);
+function size_filter elem { return elem.length() < 5; }
+
+println a.filter( function(elem){ return elem.length() >= 5; }, true );

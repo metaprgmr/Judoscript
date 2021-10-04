@@ -1,0 +1,482 @@
+<html><head><title>JudoScript Language Version 0.9 Release Note</title>
+<style type="text/css"><!--
+BODY { font-family:arial; font-size:12px; margin-top:0; margin-left:0 }
+H1 { margin-top:10; font-size:16px }
+H2 { font-size:14px; margin-bottom:5px }
+H3 { font-size:12px; font-weight:bold; }
+UL { margin-left:10px; margin-top:12px; margin-bottom:12px; list-style-type:square}
+OL { margin-left:10px; margin-top:12px; margin-bottom:12px; }
+LI { margin-left:20px }
+TH { font-family:arial; font-size:14px; font-weight:bold; }
+.text  { font-family:arial; font-size:12px; vertical-align:top }
+.index { font-family:arial; font-size:16px; font-weight:bold; vertical-align:top }
+--></style>
+</head>
+<body><center>
+<table width=650><tbody class=text><tr><td>
+<h1><em>JudoScript</em> Language Version 0.9 Release Note</h1>
+<ol class=index>
+<li> <a href=#install>Install and Run</a>
+<li> <a href=#relnote>Release Notes</a>
+<li> <a href=#changes>Changes</a>
+<li> <a href=#doc>Documentation and Examples</a>
+<li> <a href=#bug>Report Bugs and Feedbacks</a>
+<li> <a href=#copyright>Copyright and Warranty Notice</a>
+<li> <a href=#misc>Acknowledgement</a>
+</ol>
+
+<p><hr>
+
+<a name=install><h2>Install and Run</h2></a>
+
+<p>
+Now that you are reading this page, you have successfully obtained the software and
+have it unpacked. Check the following list before run any JudoScript programs:
+<ol>
+<li> Your JVM version must be JDK 1.3 or equivalent or highter.
+     Better to use JDK 1.4 or equivalent or higher.
+<li> Put file <code>judo.jar</code> in your JVM's class path.
+<li> If you intend to use Windows COM and/or registry scripting, make sure the
+     jcom.dll and/or ICE_JNIRegistry.dll are in the path!
+<li> If you intend to use JDBC, make sure the JDBC driver classes for your database
+     is in the class path.
+<li> If you intend to use XML features, make sure a Java XML parser is in the class
+     path. We recommend Apache Xerces parser, available from
+     <a href=http://www.apache.org>Apache's site</a>. For JDK 1.4 users, a XML
+     parser is already included; Xerces may still be preferrable for advanced XML
+     features. Just make sure Xerces class files are before JDK classes.
+<li> If you intend to send e-mail, make sure <code>javax.mail.*</code> classes are
+     in your class path. The JavaMail package can be downloaded from
+     <a href=http://java.sun.com>JavaSoft's site</a>. It is also part of J2EE.
+<li> If you intend to use Ant task scripting, you need to need ant.jar from
+     <a href=http://ant.apache.org>Apache</a>.
+<li> If you intend to use <a href=doc/articles/http_html.html#jusp>JUSP</a> to
+     develop web sites, register the servlet class
+     <code>com.judoscript.jusp.JuspServlet</code> to your servlet engine and provide a
+     <code>juspRoot</code> init parameter that serves as the root directory for all
+     JUSP pages. If it is not specified, JUSP pages are resolved the same way as
+     other web pages.
+<li> To use the SSH and SCP features, <a href=http://www.isnetworks.com/ssh>the
+     MindTerm/SSH package</a> must be downloaded and installed.
+</ol>
+
+
+<p><hr>
+
+<a name=relnote><h2>Release Notes</h2></a>
+
+<p>
+<em>JudoScript</em> version 0.9 moves towards the direction of ECMAScript compatibility!
+The core JudoScript is very close to ECMAScript Edition 4, still under specification;
+or, rather, the other way around.
+This version makes a few <a href=#changes>changes to the language syntax</a>,
+<b>some are not backward compatible!</b>
+
+<p>This version is a work-in-progress, as it will continue to catch up with the
+latest ECMAScript development.
+
+<hr>
+
+<a name=changes><h2>Changes</h2></a>
+
+<p>
+Changes for <em>0.9</em> are mainly directed towards ECMAScript compatibility.
+There are incompatible syntactic changes but hopefully acceptable to current users.
+
+<ul>
+<li> [2005-2-23] <b>The JuSP Platform</b>!
+<li> [2005-2-23] <b>Added robust logging,</b> using Jakarta's commons-logging package.
+<li> [2005-2-23] Added embedded function declartion.
+<li> [2005-2-23] Added function annotation, which is programmatically available via
+     <code>$$annotation</code>
+<li> [2005-2-23] Added function context access via <code>$$context</code>.
+<li> [2005-2-23] Added these pragmas: <code>!pragma undefinedAccessPolicy</code> and
+     <code>!pragma assertAs</code>.
+<li> [2005-2-23] Added the <em>copy</em> operator <code>:=</code> for maps, arrays,
+     sets and lists.
+<li> [2005-1-30] <b>Added Hibernate ORM/HQL support.</b>
+<li> [2004-11-27] <b>Added <code>wsdl::</code> operator and support for SOAP web service
+     scripting!</b>
+<li> [2004-11-14] <b>Added <code>do .. as jsp</code> statement.</b>
+<li> [2004-11-14] Added <code>saveProperties</code> system function.
+<li> [2004-11-14] In <code>copy</code> command, added a <code>dupOk</code> option to
+     allow duplicate entries copied from multiple file sets into a single archive.
+<li> [2004-11-9] For the <code>simple</code> values, added <code>splitWithMatches()</code>
+     and <code>splitWithMatchesOnly()</code> and <code>writeToFile()</code> methods,
+     and improved <code>startsWith()</code>, <code>endsWith()</code> and
+     <code>trim()</code> methods.
+<li> [2004-11-9] In <code>listFiles</code> command, option <code>fileOnly</code> is now
+     default. To show directories as well, specify <code>showDir</code> option.
+<li> [2004-11-3] Use <code>db::</code> namespace for all SQL scripting statements.
+<li> [2004-11-3] Use <code>mail::</code> namespace for mail statements/functions:
+     <code>mail::connect</code>, <code>mail::send</code> (instead of <code>sendMail</code>)
+     and <code>mail::disconnect</code>.
+<li> [2004-11-3] Use <code>new com::</code> to obtain ActiveX controls.
+<li> [2004-11-3] Use <code>gui::events</code> instead of <code>guiEvents</code>.
+<li> [2004-11-3] Change <code>eval</code>/<code>evalExternal</code>/<code>evalFile</code>
+     to systems functions and become <code>eval</code>, <code>evalFile</code>,
+     <code>evalSeparate</code> and <code>evalFileSeparate</code>. The latter two commands
+     return the exit values.
+<li> [2004-11-3] Change SGML/XML events to be prefixed with ":", to reduce reserved words.
+<li> [2004-09-22] <b>Support named bind parameters within prepared SQL statements!</b>
+<li> [2004-09-22] Allow name-value pair initialization of new <code>java.util.Map</code>
+     instances, and allow dots in keys in <code>Object</code> and
+     <code>java.util.Map</code> initialization.
+<li> [2004-09-22] Add <code>addToClasspath</code> and <code>limit</code> clause to
+     the <code>listFiles</code> command.
+<li> [2004-09-22] <b>Support closure-like syntax for annonymous function declaration.</b>
+<li> [2004-09-12] <b>Greatly enhanced <code>listFiles</code></b>, so that this command
+     not only finds and return files, but also a generic file processing statement.
+     For each selected file, you can also choose to do <code>remove</code>,
+     <code>setFileTime</code>, <code>setReadOnly</code>, or apply O.S. commands via
+     the <code>exec</code> clause, or do any processing with a block of code, where
+     <code>$_</code> represents the file. Consequently, a number of file processing
+     commands, such as <code>remove</code>, <code>chmod</code>, <code>chgrp</code>,
+     <code>chown</code>, <code>setFileTime</code> and <code>setReadOnly</code> have
+     be removed. Also, the <code>transform</code> clause in <code>copy</code> has
+     been removed as well.
+<li> [2004-09-12] Now <code>$_</code> can be used in string literals directly just
+     like <code>${xxx}</code>.
+<li> [2004-08-14] <b>Enhanced Java interface adapter</b>, so that you can do like this:
+<pre>
+a = new java::MouseListener, WindowListener, KeyListener {
+  .... // The body is same as Java-extension class.
+};
+</pre>
+<li> [2004-08-14] <b>Added <b>#classpath</b> and user classpath support.</b>
+<li> [2004-08-14] <b>exec</b> by default runs <em>synchronously</em>.
+     To run <em>asynchronously</em>, use this syntax:
+<pre>
+exec && cmdline;
+</pre>
+<li> [2004-07-30] <b>Ant task scripting support.</b> Any Ant action tasks can be specified with
+     this syntax:
+<pre>
+anttask::&lt;echo message="Hello, ${var}!"/&gt;
+anttask::&lt;echo&gt;
+ Hello, ${var}!
+&lt;/echo&gt;
+</pre>
+<li> [2004-07-30] Have a native <b>&lt;judoscript> tag for Ant build scripts</b>. Enhanced
+     ${} operator to take names with dots. ${} searches for variables first; if not found,
+     it tries the system properties. This feature is mainly for use in Ant build scripts.
+<li> [2004-07-30] Use predefined <code>#sysprops</code> to get and set system properties.
+<li> [2004-07-14] <b>The <code>list</code> command has been replaced by <code>listFiles</code>!
+     The <code>listPrint</code> command has been replaced by <code>listPrintFiles</code>!</b>
+
+<li> [2004-07-14] The <code>regex()</code> system function has been deprecated (but not removed);
+     use an array of two elements if regex mode is needed and simply pass it to String's
+     regex methods.
+
+<li> [2004-07-14] The dynamic function parameters with an array is changed to use <code>{{ }}</code>
+     instead of <code>{ }</code>, as <code>{ }</code> is also used to initialize an Object which
+     can be passed as a parameter as well. So now,
+<pre>
+params = [ 1, 2, 4 ];
+foo({{params}});
+</pre>
+instead of 
+<pre>
+params = [ 1, 2, 4 ];
+foo({params});
+</pre>
+
+<li> [2004-06-20] The <code>preparedExecuteQuery</code>, <code>preparedExecuteUpdate</code>, 
+     <code>preparedExecuteQueryCall</code> and <code>preparedExecuteUpdateCall</code>
+     have all been deprecated and replaced by the counterparts without <code>prepared</code>
+     prefix.
+
+<li> [2004-06-20] <b>Syntax for using Java has been improved by treating Java classes as
+     a special namespace; also supports the Java-like <code>import</code> mechanism</b>.
+     The old way is deprecated but is kept for backward compatibility for now.
+     The following are examples of the new way:
+<pre>
+a = new java::Hashtable;
+b = new java::int[4];
+c = java::Map;
+
+class MyClass extends java::HashMap { ... }
+</pre>
+where the old way is:
+<pre>
+a = javanew java.util.Hashtable;
+b = javanew int[4];
+c = javaclass java.util.Map;
+
+class MyClass extendsjava HashMap { ... }
+</pre>
+
+<li> <b>Syntax for array, struct and set initialization has been changed!</b>
+     The following are examples of the new initialization syntax:
+<pre>
+a = [ 1, 'abc', Date(2003,6,26) ]; // array
+a = new Array(); // same as a = new array;
+a = Set [ 1, 'abc', Date(2003,6,26) ]; // set
+a = new Set( 1, 'abc', Date(2003,6,26) ); 
+a = { name : 'James Huang', 'last name' : 'Huang' }; // struct
+a = new Object(); // same as a = new struct;
+</pre>
+where the old way is:
+<pre>
+a = { 1, 'abc', Date(2003,6,26) }; // array
+a = new Struct ( name : 'James Huang', 'last name' : 'Huang' );
+</pre>
+Hence, the new syntax is <code>[]</code> for array literals and <code>{}</code> for struct.
+
+<li> The + operator has changed meaning! It is also used for string concatenation.
+     This means the string values are not converted to numbers automatically
+     in arithmic expressions. The @ operator is still available as explicit string
+     concatenation.
+
+<li> Added <code>NaN</code> (Not-a-Number) and <code>Infinity</code> values.
+     There are also <code>MAX_VALUE</code> and <code>MIN_VALUE</code> for nubmers.
+
+<li> Function reference calls have been simplified.
+     The <code>-&gt;</code> is still available but is not necessary any more.
+     For <code>foo()</code>, it looks for the function named <code>foo</code> first;
+     if not found, JudoScript tries to resolve the name from the variable <code>foo</code>
+     for a function reference. If <code>-&gt;</code> operator is used, it will explicitly
+     use function reference.
+
+<li> Built-in object names have the first letter capitalized. They become <code>Struct</code>,
+     <code>Array</code>, <code>TableData</code>, <code>Set</code>, etc. The old names are
+     still available but not recommended.
+
+<li> The <code>Struct</code> is deprecated and becomes <code>Object</code>.
+
+<li> The <code>for-in</code> for <code>struct</code> and <code>java.util.Map</code>
+     iterates through the keys.
+
+<li> Tim Endre's Windows Registry package is bundled with software.
+
+<li> Example library has been re-tested and updated, and
+     documentation, including articles, are updated for the new features.
+</ul>
+
+<p>
+Changes for <em>0.8a</em> and <em>0.8</em>:
+
+<ol>
+<li> <em>JudoScript</em> supports
+     <a href="articles/activex.html">ActiveX scripting</a>!
+<li> <em>JudoScript</em> supports
+     <a href="ref/s.html?syn=JavaExtensionDefinition">Java extension classes</a>, that is,
+     you can extend Java classes and interfaces.  Because of this, the embedded Java class
+     and adapter mechanisms are deprecated.
+<li> <em>JudoScript</em> supports variables embedded inside string literals with <code><b>${</b><i>Xyz</i><b>}</b></code>.
+     They can be used individually as well. If a variable named <i>Xyz</i> exists, its value is taken,
+     otherwise, the environment variable with that name, if exists, is retrieved. There are also a number
+     of predefined shortcuts, such as <code>${~}</code> for home directory, <code>${.}</code> for the
+     current directory, <code>${:}</code> for path separator and <code>${/}</code> for file separator.
+<li> <em>JudoScript</em> now uses an easy way to consistently document scripts with its
+     <a href="ref/s.html?syn=UsageDeclaration">usage</a> mechanism.
+</ol>
+
+<p>
+Changes for <em>0.7</em>:
+
+<ol>
+<li> Documentation has been completely re-written, accompanying the overall code
+     review and functionality finalization. There are still a few areas need be
+     finished, but it is much better than the older version under the title Language
+     Specification.
+<li> Variable names no longer need to start with <code>$</code>! Dollar signs in
+     variable names make an immeidate false impression that <em>JudoScript</em> is
+     somewhat like some archaic language, which is unfortunate. However, it does
+     segregate the name spaces for variables, object data members and function names.
+     Now that dollar sign is not required to start variable names, they all fall in
+     the same name space and can potentially clash. This causes two problems in terms
+     of the syntax:
+     <ul>
+     <li> Class data member and variables:
+<pre>
+class Foo {
+  function bar { aData = 'abcde'; }
+}</pre>
+          Is <code>aData</code> a local variable or a data member of class <code>Foo</code>?
+          It is resolved to be a variable if already exists (not available in this example),
+          or a data member if the variable did not exist but the data member does, or as a
+          new variable if not variable nor data member exist at the moment. To ensure it is
+          a data member, use the <code>this</code> modifier to reference a data member
+          inside a class method: <code>this.aData = 'abcde'; </code>
+     <li> Function variables. In the case of <code>a()</code>, say, it is not clear whether
+          <code>a</code> is a function name or a variable that holds a reference to a
+          function. <em>JudoScript</em> chooses to interpret it as a function name. To
+          invoke a function reference, use this new notation: <code>a-&gt;()</code>. This
+          applies to class data members as well: <code>obj.a-&gt;()</code>, whereas
+          <code>obj.a()</code> invokes the object's method. If the function reference is
+          stored in an array, however, this notation is not needed: <code>arr[i]()</code>.
+     </ul>
+<li> Changed the way static Java member usage, e.g.<br>
+     <code>java.lang.System::out.println('hello');</code>
+<li> Changed function alias declarations for Java static methods, e.g.<br>
+     <code>function rt for <code>java.lang.Runtime::getRuntime();</code>
+<li> Added "sgml" as a synonym to "html".
+<li> Added "do ... as lines" statement.
+<li> String contains() method also works with regex's.
+<li> Added "hsqldb" and "pointbase" to the known JDBC driver list.
+<li> Added &lt;!--&gt; as a separate case than &lt;!&gt;; &lt;!&gt; includes
+     &lt;!--&gt; only if the latter is not handled.
+<li> UserDefined, added method "copy(UserDefined)".
+<li> Added isA() method to all value objects.
+<li> Added "isOdd" and "isEven" user methods to values.
+<li> Added "fmt/formatRoman" and "parseIntRoman" user methods to numeric values.
+<li> Added "isAlpha/isLetter", "isAlnum/isLetterOrDigit" and
+     "isWhite/isWhitespace" user methods to character values.
+<li> Added "exists" user methods to array.
+<li> Added "createTreeOutput" system method.
+<li> Added "ear" and "war" in addition to "jar" for FS commands.
+</ol>
+
+<p>
+Changes for <em>0.6</em>:
+
+<ol>
+<li> Changed package names to <code>com.judoscript.*</code>. This affects BSF and embedded engine.
+<li> Modified syntax error message, so it does not print out a long list of "expected symbols".
+</ol>
+
+<p>
+Changes for <em>0.5</em>:
+
+<ol>
+<li> Open source!
+<li> Added <b>transform</b> clause for the <b>copy</b> command.
+<li> Provides a console debugger. This is rudimental, and is more or less a
+     reference for a more robust, GUI-based debugger.
+<li> Provides the Java file white-box testing feature.
+</ol>
+
+<p>
+Changes for <em>pre.0.4</em>:
+
+<ol>
+<li> Added support for generic Java package lists; the built-in package
+     lists have become aliases using this feature.
+<li> Added support for conditional include and const definitions.
+<li> Added support for initialization script, ".judoscript".
+<li> Added countLines option to list/ls commands.
+<li> Added support for SSH and SCP (requires ISNetworks distribution of
+     MindTerm/SCP version 1.2.1 SCP Release 3).
+<li> Added support for encryption (requires JCE1.2.1; in JDK1.4 already).
+<li> Added support for XSLT (requires Xalan/Xerces).
+<li> Added support for Windows registry (requires Tim Endres' JNI Registry Library at
+     http://www.trustice.com) <em>(Included since v0.8b so no such need any more).</em>
+<li> Added support for Unix syslog (uses Jef Poskanzer's Acme package class).
+</ol>
+
+<p>
+Changes for <em>pre.0.3</em>:
+
+<ol>
+<li> Added regular expression support (requires JDK1.4).
+<li> Added TAR file support -- use just like ZIP/JAR.
+<li> Added chown/chgrp/chmod commands.
+<li> Added database table dumping feature.
+<li> Added better database meta data support.
+<li> Added tableData data structure.
+<li> Added printTable statement for tabular data printing.
+<li> Added evalFile statement (in addition to eval and evalExternal).
+<li> For JDBC, allow PreparedStatement and ResultSet methods to be
+     called directly. These can be RDBMS-specific.
+<li> Added FTP support (uses the Java FTP Client Library from
+     http://www.enterprisedt.com).
+</ol>
+
+<p>
+Changes for <em>pre.0.2</em>:
+
+<ol>
+<li> <a href=http://www-124.ibm.com/developerworks/projects/bsf>Bean
+     Scripting Framework</a> support.
+<li> Bug fix: XML packages should not be mandatory but optional.
+</ol>
+
+
+<p><hr>
+
+<a name=doc><h2>Documentation and Examples</h2></a>
+
+<p>
+Documentation includes a <a href="ref/">Language Comprehensive Documentation</a> that
+describes each feature precisely, and a set of <a href=articles/index.html>articles</a>
+discussing major features with a lot of code examples. The source code of the formal
+code listings are all included in the <a href=examples/index.html>examples</a> directory.
+
+
+
+<p><hr>
+<a name=bug><h2>Report Bugs and Feedbacks</h2></a>
+
+<p>
+To report bugs, submit feedback or have a question, come to
+<a href=http://www.judoscript.com>www.judoscript.com</a> and click the
+feedback link. When submitting bugs, check the latest version first, and
+make sure the version number is included in the message. To get a version
+information, do this:
+
+<pre>
+  java judo -x . versionInfo()
+</pre>
+
+
+<p><hr>
+<a name=copyright><h2>Copyright and Warranty Notice</h2></a>
+
+<p>
+JudoScript is free software; you can embed, modify and redistribute it
+under the terms of the GNU Lesser General Public License version 2.1 or
+up as published by the Free Software Foundation, which you should have
+received a copy along with this software. It can be found at
+<a href=http://www.gnu.org/copyleft/lesser.html>the GNU site</a>.
+
+<p>
+This software is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+ 
+
+<p><hr>
+<a name=misc><h2>Acknowledgement</h2></a>
+
+<p>
+A handful of Java source files concerning HTTP cookies are derived from
+Apache Tomcat project; they are in a different Java package, so name
+clashes is prevented. This also serves the purpose of fulfilling the
+licence requirement of using such source files.
+
+<p>
+Some of the examples are ported from Java programs in Java tutorials from
+JavaSoft. You may download the Java source from <a href=java.sun.com>Sun</a>.
+
+<p>
+JudoScript bundles some other software packages that are either public domain
+without licensing restrictions or under the same license for this software
+(i.e., LGPL). Their package names are <em>usually</em> changed so that no
+conflicts would occur should a user machine have another version of the same
+software available in the class path. Their source code is included in the
+source code distribution of this software. The following is a descriptiong
+of these.
+
+<p>
+A number of Apache commons packages are included and used, such as
+<code>org.apache.commons.lang</code>.
+
+<p>
+The Microsoft COM support is by <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom/">JCom package</a>
+by Yoshinori Watanabe. It is included verbatim.
+
+<p>
+The TAR support of JudoScript uses classes developed and contributed to the
+public domain by Timothy Gerard Endres. Many thanks for his wonderful work!
+
+<p>
+The Unix syslog feature is included from <a href="http://www.acme.com/java/">ACME Labs</a>
+
+<p>
+An FTP client is included (but not documented and used yet). This software is
+created by <a href="http://www.enterprisedt.com">Enterprise Distributed Technologies Ltd</a>.
+
+</td></tr></table>
+</center></body></html>

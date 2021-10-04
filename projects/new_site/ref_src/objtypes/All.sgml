@@ -1,0 +1,65 @@
+<function sig="typeName">
+  Returns the type name for this value.
+</function>
+
+<function sig="isA typeName">
+  Checks the <param>typeName</param> against the type name of this object, and returns
+  <!true> if they are compatible.
+</function>
+
+<function sig="isInt" alias="isInteger">
+  Returnes <!true> if this value is an integer. This includes integer, boolean and date.
+  Java primitive-type objects except for <code>java.lang.Float</code> and <code>java.lang.Double</code>
+  are also integers.
+</function>
+
+<function sig="isFloat" alias="isDouble">
+  Returnes <!true> if this value is a floating-point number. This also includes any integer
+  types plus Java objects of <code>java.lang.Float</code> and <code>java.lang.Double</code>.
+</function>
+
+<function sig="isNumber">
+  Same as <code>isFloat()</code>.
+</function>
+
+<function sig="isString">
+  Returns <!true> for string values and Java object of <code>java.lang.String</code>.
+</function>
+
+<function sig="isDate">
+  Returns <!true> for date values and Java object of <code>java.util.Date</code>.
+</function>
+
+<function sig="isArray">
+  Returns <!true> for arrays, linked lists and Java arrays.
+</function>
+
+<function sig="isSet">
+  Returns <!true> for sets. It returns <!false> for Java objects of <code>java.util.Set</code>.
+</function>
+
+<function sig="isStruct">
+  Returns <!true> for <!struct>, <!orderedMap>, <!sortedMap>, <!treeNode> and all
+  user-defined classes.
+</function>
+
+<function sig="isStack">
+  Returns <!true> for <!stack>.
+</function>
+
+<function sig="isQueue">
+  Returns <!true> for <!queue>.
+</function>
+
+<function sig="isJava">
+  Returns <!true> for Java objects, arrays and class instances.
+</function>
+
+<function sig="isFunction">
+  Returns <!true> if this value is a function reference.
+</function>
+
+<function sig="toString">
+  Returns a string representation of this value. User-defined classes can override this method.
+</function>
+

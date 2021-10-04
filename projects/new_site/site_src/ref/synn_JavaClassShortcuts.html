@@ -1,0 +1,80 @@
+<html><head><title>JudoScript Semantics - JavaClassShortcuts</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>JavaClassShortcuts</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=JavaClassShortcuts>JavaClassShortcuts</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw><nobr>!JavaPackages</nobr></font>  <font class=kw><nobr>&lt;</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>&gt;</nobr></font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw><nobr>!DefineJavaPackages</nobr></font>   (  <font class=kw><nobr>&lt;</nobr></font>   )?  <font class=t>IDENTIFIER</font>   (  <font class=kw><nobr>&gt;</nobr></font>   )?  <font class=kw><nobr>{</nobr></font>   (  <font class=nt><a href="javascript:showNT('JavaClassName')">JavaClassName</a></font>  ),+  <font class=kw><nobr>}</nobr></font>  <br>  |  <font class=kw><nobr>!JavaBaseClass</nobr></font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw><nobr>!JavaGuiClass</nobr></font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw><nobr>!JavaEnterpriseClass</nobr></font>   (  <font class=t>CONST_NAME</font>   ),+  <br>  |  <font class=kw><nobr>!JavaCorbaClass</nobr></font>   (  <font class=t>CONST_NAME</font>   ),+  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('JavaClassShortcuts'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The Java class shortcut is a convenience to assign a constant name to a matching
+  Java class name in one or more Java packages.</p>
+
+  <p>A number of Java packages can be assigned to a name via the <font class=kw><nobr>!DefineJavaPackages</nobr></font> 
+  directive. Once such a name is established, use <font class=kw><nobr>!JavaPackages</nobr></font>  directive for a number
+  of constants.</p>
+
+  <p>As yet a further convenience, there are a number of predefined Java package
+  collections, and constants can be defined by <font class=kw><nobr>!JavaBaseClass</nobr></font> , <font class=kw><nobr>!JavaEnterpriseClass</nobr></font> ,
+  <font class=kw><nobr>!JavaGuiClass</nobr></font> , <font class=kw><nobr>!JavaCorbaClass</nobr></font> .The following table lists all the packages for
+  each directive; note that some packages are included in multiple directives.</p>
+
+  <table border="1"><tr><th>Directive</th><th>Java Packages</th></tr>
+  <tr><td valign="top nowap"><font class=kw><nobr>!JavaBaseClass</nobr></font> </td><td><code>
+  java.lang, java.util, java.io, java.net, java.text, java.sql,
+  java.applet, java.math, java.util.zip, java.util.jar, java.beans,
+  java.beans.beancontext, javax.sound.midi, javax.sound.sampled,
+  java.awt, java.awt.event, java.awt.color, java.awt.dnd, java.awt.font,
+  java.awt.geom, java.awt.im, java.awt.image, java.awt.image.renderable,
+  java.rmi, java.rmi.server, java.lang.ref, java.lang.reflect,
+  java.security, java.security.acl, java.security.cert,
+  java.security.interfaces, java.security.spec, javax.naming,
+  javax.crypto, javax.crypto.interfaces, javax.crypto.spec,
+  javax.xml.parsers, javax.xml.transform, javax.xml.transform.dom,
+  javax.xml.transform.sax, javax.xml.transform.stream,
+  org.xml.sax, org.xml.sax.ext, org.xml.sax.helpers, org.w3c.dom,
+  org.w3c.dom.html, org.w3c.dom.range, org.w3c.dom.traversal
+  </code></td></tr>
+  <tr><td valign="top nowap"><font class=kw><nobr>!JavaEnterpriseClass</nobr></font> </td><td><code>
+  javax.ejb, java.rmi, java.rmi.activation, java.rmi.dgc, javax.rmi.CORBA,
+  java.rmi.server, javax.rmi, java.rmi.registry, javax.xml.parsers,
+  javax.xml.transform, javax.xml.transform.dom, javax.xml.transform.sax,
+  javax.xml.transform.stream,
+  org.xml.sax, org.xml.sax.ext, org.xml.sax.helpers, org.w3c.dom,
+  org.w3c.dom.html, org.w3c.dom.range, org.w3c.dom.traversal,
+  javax.sql, javax.jms, javax.mail, javax.mail.event, javax.mail.internet,
+  javax.mail.search, javax.servlet, javax.servlet.http, javax.naming.directory,
+  javax.naming.event, javax.naming, javax.naming.ldap, javax.transaction,
+  javax.transaction.xa, javax.activation, javax.resource, javax.resource.cc,
+  javax.security.auth, javax.security.auth.callback, javax.security.auth.login,
+  javax.crypto, javax.crypto.interfaces, javax.crypto.spec
+  </code></td></tr>
+  <tr><td valign="top nowap"><font class=kw><nobr>!JavaGuiClass</nobr></font> </td><td><code>
+  java.awt, java.awt.event, javax.swing, javax.swing.event,
+  javax.swing.border, javax.swing.colorchooser, javax.swing.plaf.multi,
+  javax.swing.table, javax.swing.text, javax.swing.text.html,
+  javax.swing.text.html.parser, javax.swing.text.rtf, javax.swing.tree,
+  javax.swing.undo, java.awt.color, java.awt.dnd, java.awt.font,
+  java.awt.geom, java.awt.im, java.awt.image, java.awt.image.renderable,
+  java.awt.print, java.awt.datatransfer, javax.swing.filechooser,
+  javax.swing.plaf, javax.swing.plaf.basic, javax.swing.plaf.metal
+  </code></td></tr>
+  <tr><td valign="top nowap"><font class=kw><nobr>!JavaCorbaClass</nobr></font> </td><td><code>
+  javax.rmi.CORBA,
+  org.omg.CORBA, org.omg.CORBA_2_3, org.omg.CORBA_2_3.portable,
+  org.omg.CORBA.DynAnyPackage, org.omg.CORBA.ORBPackage, org.omg.CORBA.portable,
+  org.omg.CORBA.TypeCodePackage, org.omg.CosNaming,
+  org.omg.CosNaming.NamingContextPackage, org.omg.SendingContext,
+  org.omg.stub.java.rmi
+  </code></td></tr>
+  </table>
+ </body></html>

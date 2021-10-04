@@ -1,0 +1,63 @@
+<html><head><title>JudoScript Semantics - FSCopyStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>FSCopyStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=FSCopyStatement>FSCopyStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>copy</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <br>  (  <font class=kw>except</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>strip</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>under</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |   (  <font class=kw>to</font>   |  <font class=kw>into</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <br>  |  <font class=kw>recursive</font>   |  <font class=kw>echo</font>   |  <font class=kw>Echo</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>keepDirs</font>   |  <font class=kw>compress</font>   |  <font class=kw>store</font>  <br>  |  <font class=kw>transform</font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=t>IDENTIFIER</font>  <font class=kw><nobr>,</nobr></font>  <font class=t>IDENTIFIER</font>  <font class=nt><a href="javascript:showNT('Block')">Block</a></font>  )  <br>  )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('FSCopyStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This command copies or processes specific files between file systems and/or
+  archives like JAR, WAR, EAR, ZIP, TAR and Gzipped TAR files.</p>
+  <p>The first parameter is a string for one or more patterns separated by commas.
+  These patterns should be good for absolute path matches. You can specify an <font class=kw>except</font> 
+  pattern list to exclude certain files or directories. The source location of the
+  files can be specified by the <font class=kw>in</font>  clause; the source can be a directory or an
+  archive file. If <font class=kw>recursive</font>  is specified, files under that source are recursively
+  copied. The destination is specified with <font class=kw>to</font>  clause if it is a directory, or
+  with <font class=kw>into</font>  if it is an archive. An archive is either a file name that ends with
+  ".jar", ".zip", ".war", ".ear", ".tar" or ".tar.gz", or an open <font class=obj><a href="javascript:showObj('JarArchive')">JarArchive</a></font>
+  or <font class=obj><a href="javascript:showObj('TarArchive')">TarArchive</a></font>.</p>
+  <p>When copying files to a directory, the destination is checked for the existance
+  of the files. If a file exists and has the same size and timestamp, by default the
+  file is left uncopied. To override this behavior, you would have to delete that
+  file first, or the whole directory if it is ok. The <font class=kw>echo</font>  will report to the
+  system output for any files actually copied. The <font class=kw>Echo</font>  will report any files
+  being copied, no matter whether they are actually copied physically.</p>
+  <p>The <font class=kw>compress</font>  and <font class=kw>store</font>  decorators are only for archiving into a ZIP or
+  JAR file. The <font class=kw>under</font>  clause allows the files to be stored under a specific
+  folder in an archive; when coping files from an archive, can use <font class=kw>strip</font>  to strip
+  the leading folder names.</p>
+  <p>The same command can be used to transform files by the <font class=kw>transform</font>  clause; this
+  is applicable only to local file system destinations. The transform is a lambda
+  function taking 2 parameters of a source and a destination. The <u>source</u> is an
+  input stream and has these read-only attributes:
+  <ul><li> <code>name</code>
+      <li> <code>time</code>
+      <li> <code>size</code>
+      <li> <code>isFile</code>: boolean
+      <li> <code>fromZip</code>: boolean
+  </ul>
+  The destination is an output stream and has these extra methods:
+  <ul><li> <code>getName()</code>
+      <li> <code>setName(<em>aName</em>)</code>
+      <li> <code>setTime(<em>time</em>)</code>
+      <li> <code>copy(<em>input_stream</em>)</code>: returns the count
+  </ul>
+  The setter methods can be called before any writing has taken place. Therefore, the
+  transformation has total control over the destination file name, time and its content.
+  By default the destination file time is the same as the source. The <code>copy()</code>
+  method simply copies all the bytes from the input stream. If no content is written,
+  the destination file is <em>not</em> created. This allows sophisticated file filtering.
+  For text files, it is common to call the <code>toTextInput()</code> and
+  <code>toTextOut()</code> methods of <font class=obj><a href="javascript:showObj('')"></a></font> for the source and/or destination.</p>
+ </body></html>

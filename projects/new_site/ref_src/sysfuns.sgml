@@ -1,0 +1,675 @@
+<function sig="antcall target, ...">
+  <u>This function is only valid within embedded code inside Ant build scripts.</u>
+  It runs the named Ant targets of the enclosing Ant build script.
+</function>
+
+<function sig="obtainUsage scriptName">
+  Returns the usage block (a Hashtable) of the script <param>scriptName</param>,
+  if it has one; otherwise, returns <!null>. See <nt name=UsageDeclaration>.
+</function>
+
+<function sig="javaVendor">
+  Returns the system property for "java.vendor".
+</function>
+
+<function sig="isSunOS">
+  Returns <!true> if the system property for "os.name" contains "SunOS".
+</function>
+
+<function sig="isMac">
+  Returns <!true> if the system property for "os.name" contains "Mac".
+</function>
+
+<function sig="isHP">
+  Returns <!true> if the system property for "os.name" contains "HP-UX".
+</function>
+
+<function sig="isLinux">
+  Returns <!true> if the system property for "os.name" contains "Linux".
+</function>
+
+<function sig="isWindows">
+  Returns <!true> if the system property for "os.name" contains "Windows".
+</function>
+
+<function sig="isUnix">
+  Returns <!true> if the system property for "os.name" does not contain "/400",
+  and <code>java.io.File.pathSeparatorChar</code> is ":" and
+  <code>java.io.File.separatorChar</code> is "/".
+</function>
+
+<function sig="isOS400" alias="isAS400">
+  Returns <!true> if the system property for "os.name" contains "/400".
+</function>
+
+<function sig="isNetscape">
+  Returns <!true> if the system property for "java.vendor" contains "Netscape".
+</function>
+
+<function sig="isSunVendor">
+  Returns <!true> if the system property for "java.vendor" contains "Sun".
+</function>
+
+<function sig="isNewer file1, file2">
+  Compares the two files based on their time stamps. Also handles the cases where
+  one of the files does not exist. Returns <!true> if file <param>file1</param>
+  is newer than file <param>file2</param>.
+</function>
+
+<function sig="neverNull value, default_value">
+  If the <param>value</param> is <!null>, returns the <param>default_value</param>;
+  if not <param>default_value</param> specified, return ''. Otherwise, returns the
+  original value.
+</function>
+
+<function sig="neverEmpty value, default_value">
+  If the <param>value</param> is empty, that is, <!null> or only containing
+  whitespace characters, returns the <param>default_value</param>, which is
+  required. Otherwise, returns the original value.
+</function>
+
+<function sig="fileChop fileName, [baseName], subFileSize">
+  <p>This utility function takes a (big) file <param>fileName</param> and
+  generates a number of smaller files of the size <param>subFileSize</param>.
+  The new files have <param>baseName</param> plus "." and incremented indices
+  starting from 1. If <param>basename</param> is missing, the default base
+  name is the same as <param>fileName</param>.</p>
+  <p>The <param>subFileSize</param> can be a number or a string such as "floppy"
+  (for the size of a 1.44M floppy diskette), "zip100" or "zip250" for 100M/250M
+  ZIP drive, or "CD" (for a 650M CD-ROM). It can also be a number followed by
+  "M" or "m" (for megabytes) or "K" or "k" (for kilobytes). The number must be
+  integer. If no <param>subFileSize</param> specified, default size is for
+  floppy diskettes.</p>
+  <p>This function returns an integer array of all the sub-file sizes.
+  Typically the last one is different than the others.</p>
+  <p>See <sfn name=fileUnchop> and <sfn name=fileChopCheck>.</p>
+</function>
+
+<function sig="fileUnchop baseName, outfileName">
+  <p>This utility function does the reverse of <sfn name=fileChop>: it
+  goes through a series of files that starts with the <param>baseName</param>
+  followed by "." and incremented indices, and assembles them into the
+  output file. If <param>outfileName</param> is not empty, it is used for
+  the output file name, otherwise defaulted to <param>baseName</param>.</p>
+  <p>See <sfn name=fileChop> and <sfn name=fileChopCheck>.</p>
+</function>
+
+<function sig="fileChopCheck fileName, subFileSize">
+  <p>This utility function works with <sfn name=fileChop>. It returns
+  an integer array for the sub-file sizes if the input file is to be
+  chopped. The parameters are the same as in <sfn name=fileChop>.</p>
+</function>
+
+<function sig="date year, month, day, hour, minute, second">
+  Creates a <!date> value with the provided attributes. These attributes, if omitted,
+  are defaulted to 0 or 1 except for <param>year</param>; if no parameters specified,
+  creates a <!date> for the current time.
+</function>
+
+<function sig="time hour, minute, second">
+  Creates a <!date> value with the provided attribute. The year/month/day values are 0.
+</function>
+
+<function sig="timeToday hour, minute, second">
+  Creates a <!date> value for today but with the provided <param>hour</param>,
+  <param>minute</param> and <param>second</param>.
+</function>
+
+<function sig="rand [lower], upper" alias=random>
+  <p>If no parameters, it returns a random between 0.0 and 1.0.</p>
+  <p>If <param>lower</param> is missing, it is defaulted to 0 or 0.0.
+  If <param>lower</param> is present and is an integer, this function
+  will return a uniformly distributed random number between <param>lower</param>
+  and <param>upper</param>; if <param>lower</param> is a floating-point,
+  the result is a float as well. If <param>lower</param> is not present,
+  the return type is the same as <param>upper</param>.</p>
+</function>
+
+<function sig="sleep duration">
+  Forces the current thread to sleep for <param>duration</param> milliseconds.
+  If no <param>duration</param> specified, sleep forever.
+</function>
+
+<function sig="getIn">
+  Returns the current system standard input.
+</function>
+
+<function sig="getInStream">
+  Returns the current system standard binary input stream.
+</function>
+
+<function sig="getOut">
+  Returns the current system standard output.
+</function>
+
+<function sig="getErr">
+  Returns the current system error output.
+</function>
+
+<function sig="getLog">
+  Returns the current system logger output.
+</function>
+
+<function sig="setOut textOutput">
+  Sets the current system standard output. The very original one is reserved
+  and can be restored by calling this function without the parameter.
+</function>
+
+<function sig="setErr textOutput">
+  Sets the current system error output. The very original one is reserved
+  and can be restored by calling this function without the parameter.
+</function>
+
+<function sig="setLog textOutput">
+  Sets the current system logger output. The very original one is reserved
+  and can be restored by calling this function wihout the parameter.
+</function>
+
+<function sig="setIn inputFile">
+  Sets the input stream to the input file <param>inputFile</param>. The very
+  original one is reserved and can be restored by calling this function
+  without the parameter.
+</function>
+
+<function sig="exit exitValue">
+  Exits the current session, optionally with <param>exitValue</param> (default is 0).
+  Note this is not the same as calling <code>java.lang.System.exit()</code>.
+</function>
+
+<function sig="setHttpProxy host, port">
+  <p>If no <param>host</param> and <param>port</param> specified, put "false" into
+  the system property "http.proxySet".</p>
+  <p>Otherwise, set the system property "http.proxySet" to "true" as well as those
+  for "http.proxyHost" and "http.proxyPort". The <param>port</param> can be omitted,
+  which will be defaulted to 80.
+</function>
+
+<function sig="getGuiHandler" alias="guiHandler,timerHandler">
+  <p>In a JudoScript GUI program, there is only one Java <code>ActionListener</code>
+  object; it receives and dispatches all the GUI events to user-defined event
+  handlers, which may be defined in multiple <nt name=GuiEventsStatement> statements.
+  This statement actually returns this Java <code>ActionListener</code>.</p>
+  <p>This function is most useful for <code>javax.swing.Timer</code>'s 
+  constructor, which takes a <code>java.awt.event.ActionListener</code> as
+  its second parameter.</p>
+</function>
+
+<function sig="setGuiListener handlerName, comp1, ...">
+  <p>This function is used in conjunction with <nt name=GuiEventsStatement>'s <em>generic
+  handler</em> feature. A generic handler is a named handler that is not bound
+  to any specific GUI component.</p>
+  <p>The first parameter <param>handlerName</param> is that for the handler name.
+  The following parameters are one or more GUI components to add the handler to.</p>
+</function>
+
+<function sig="connectMailServer host, username, password">
+  Connects to the mail server referenced by <param>host</param>.
+  Only one mail server connection is allowed in a program. Once done
+  with sending mails, should call <sfn name=disconnectMailServer>.
+</function>
+
+<function sig="disconnectMailServer">
+  Disconnects the one and only mail server connection.
+  If the mail server connection was not open,  no effect.
+</function>
+
+<function sig="getDefaultDateFormat" alias=defaultDateFormat>
+  Returns the default date format as a string.
+</function>
+
+<function sig="setDefaultDateFormat format">
+  Sets the default date format.
+</function>
+
+<function sig="unit count, nameSingular, namePlural">
+  This is a convenience function returning a string that displays the number
+  of <param>count</param> followed by the namd in correct English. If
+  <param>namePlural</param> is omitted, when <param>number</param> is not 1,
+  an 's' is append to <param>nameSingular</param>. If <param>namePlural</param>
+  is present, then it is used if <param>count</param> is not 1.
+</function>
+
+<function sig="getInitialContext factory, url, username, password" alias=initialContext>
+  <p>Returns a <code>javax.naming.InitialContext</code> for the initial context
+  <param>factory</param> class name and the other parameters.</p>
+  <p>Also see <sfn name=getWeblogicContext>, <sfn name=getWebsphereContext>,
+  <sfn name=getOracle9iASContext>, <sfn name=getJBossContext> and <sfn name=getIonaContext>.
+</function>
+
+<function sig="getWeblogicContext url, username, password" alias=weblogicContext>
+  Returns a <code>javax.naming.InitialContext</code> for a WebLogic application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "weblogic.jndi.WLInitialContextFactory".
+</function>
+
+<function sig="getSunContext url, username, password" alias=sunContext>
+  Returns a <code>javax.naming.InitialContext</code> for a Sun One application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "com.sun.jndi.cosnaming.CNCtxFactory".
+</function>
+
+<function sig="getWebsphereContext url, username, password" alias=websphereContext>
+  Returns a <code>javax.naming.InitialContext</code> for a WebSphere application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "com.ibm.websphere.naming.WsnInitialContextFactory".
+</function>
+
+<function sig="getApacheContext url, username, password" alias=apacheContext>
+  Returns a <code>javax.naming.InitialContext</code> for a WebSphere application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "org.apache.naming.java.javaURLContextFactory". This is
+  typically used on Tomcat.
+</function>
+
+<function sig="getOracle9iASContext url, username, password" alias=oracle9iASContext>
+  Returns a <code>javax.naming.InitialContext</code> for an Oracle 9iAS application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "com.evermind.server.rmi.RMIInitialContextFactory".
+</function>
+
+<function sig="getIonaContext url, username, password" alias=ionaContext>
+  Returns a <code>javax.naming.InitialContext</code> for an IONA application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "com.ejbhome.nameing.spi.rmi.RMIInitCtxFactory".
+</function>
+
+<function sig="getJBossContext url, username, password" alias=jbossContext>
+  Returns a <code>javax.naming.InitialContext</code> for a JBoss application
+  server context. It is a shortcut for <sfn name=getInitialContext> with the
+  first parameter being "org.jnp.interfaces.NamingContextFactory".
+</function>
+
+<function sig="compare left, right">
+  Returns 1, 0 or -1 by comparing <param>left</param> to <param>right</param> as
+  numerical or <code>java.lang.Comparable</code> values.
+</function>
+
+<function sig="lock lockName">
+  <p>Locks are used to protect shared resources among multiple threads.
+  They reside only in the root context, so that all threads have access to.
+  A lock is simply represented by a name, <param>lockName</param>. If a lock
+  is already acquired by one thread, another thread requesting the same lock
+  will wait, until the <sfn name=unlock> is called by the holding thread.</p>
+</function>
+
+<function sig="unlock lockName">
+  <p>See <sfn name=lock>.</p>
+</function>
+
+<function sig="waitFor signalName">
+  <p>Signals are used to synchronize different threads. A signal is just a name
+  <param>signalName</param>. See <sfn name=notify> and <sfn name=notifyAll>.</p>
+</function>
+
+<function sig="notify signalName">
+  <p>Sends out a signal of <param>signalName</param> for the threads waiting for it
+  (see <sfn name=waitFor>). One of the waiting threads will be awakened.</p>
+</function>
+
+<function sig="notifyAll signalName">
+  <p>Sends out a signal of <param>signalName</param> for the threads waiting for it
+  (see <sfn name=waitFor>). All of the waiting threads will be awakened.</p>
+  <p>See <sfn name=notify>.</p>
+</function>
+
+<function sig="getFileAsString fileName, limit, encoding">
+  <p>Returns a string that is the content of the file <param>fileName</param>.
+  <param>limit</param> and <param>encoding</param> are optional.</p>
+</function>
+
+<function sig="getFileAsStringFromCP fileName, limit, encoding">
+  <p>Returns a string that is the content of the file <param>fileName</param>
+  which resides somewhere on the classpath. <param>limit</param> and
+  <param>encoding</param> are optional.</p>
+</function>
+
+<function sig="getGZipFileAsString gzipName, limit, encoding">
+  <p>Returns a string that is the content of the GZipped file <param>gzipName</param>.
+  <param>limit</param> and <param>encoding</param> are optional.</p>
+</function>
+
+<function sig="getFileAsBytes fileName, limit, encoding">
+  <p>Returns a byte array that is the content of the file <param>fileName</param>.
+  <param>limit</param> and <param>encoding</param> are optional.</p>
+</function>
+
+<function sig="getFileAsBytesFromCP fileName">
+  <p>Returns a byte array that is the content of the file <param>fileName</param> which resides somewhere on the classpath.</p>
+</function>
+
+<function sig="getGZipFileAsBytes gzipName">
+  <p>Returns a byte array that is the content of the GZipped file <param>gzipName</param>.</p>
+</function>
+
+<function sig="secret encryptedValue, cryptoAgent">
+  <p>This is a special-type value <obj id=Secret> that can be only used by certain
+  system functions and statements. It is not accesible by regular print statements
+  or string operations.</p>
+  <p>The <param>cryptoAgent</param> is a Java crypto class. If not present, the
+  <param>encryptedValue</param> is used verbatim (no encryption).</p>
+</function>
+
+<function sig="startServer port, address, backlog">
+  <p>Starts and returns a <code>java.net.ServerSocket</code> for the given <param>port</param>,
+  and optionally the bind address (a string or a java.net.InetAddress) and backlog.</p>
+</function>
+
+<function sig="acceptHttp serverSocket">
+  <p>Accepts a connection from the <param>serverSocket</param> and returns a
+  <obj id=HttpService> object for a HTTP connection.</p>
+</function>
+
+<function sig="openSocket address, port, localAddress, localPort">
+  <p>Connects to the remote <param>address</param>:<param>port</param>, and optionally bind it to <param>localAddress</param>:<param>localPort</param>, and returns a <code>java.net.Socket</code>.
+</function>
+
+<function sig="httpGet url">
+  <p>Issues a HTTP GET request to the <param>url</param>.  Returns a HTTPConnection object.</p>
+</function>
+
+<function sig="httpPost url">
+  <p>Issues a HTTP POST request to the <param>url</param>.  Returns a HTTPConnection object.</p>
+</function>
+
+<function sig="cookie name, value">
+  <p>Creates and returns a cookie object for <param>name</param> with <param>value</param>.</p>
+</function>
+
+<function sig="getMimeTypeMap">
+  <p>Returns a <code>java.util.Hashtable</code> that contains all the mime type mapping currently
+  used by the <obj id=HTTPConnection>. The mapping maps file extensions to mime types.</p>
+</function>
+
+<function sig="addMimeType ext, value">
+  <p>Sets the mime type for file extension <param>ext</param> to <param>value</param>.</p>
+</function>
+
+<function sig="getHttpResponseMsg code">
+  <p>Returns a short message that corresponds to the HTTP response <param>code</param>.
+</function>
+
+<function sig="copyStream input, output, closeStreams" alias=copyStreams>
+  <p>Copies all the bytes from <param>input</param> stream to the <param>output</param>.
+  Closes both streams if <param>closeStreams</param> is <!true>. The <param>input</param>
+  can be a file, a URL or an open stream (such as of a open <obj id=HTTPConnection>.
+  The <param>output</param> can be a file name or any open output stream. It can be
+  omitted, in which case the system standard output stream is used.</p>
+</function>
+
+<function sig="resourceBundle resourceName">
+  <p>Returns a <code>java.util.ResourceBundle</code> for <param>resourceName</param>.</p>
+</function>
+
+<function sig="setCharset charset">
+  <p>Sets the current character set to <param>charset</param> for the system.
+  Default character set is used by <nt name=MailStatement>.</p>
+</function>
+
+<function sig="getCharset">
+  <p>Returns the current character of the system. Default character set is
+  used by <nt name=SendMailStatement>.</p>
+  <p>See <sfn name=setCharset>.</p>
+</function>
+
+<function sig="getOutStream">
+  Returns the current system standard binary output stream.
+</function>
+
+<function sig="assert boolExpr">
+  Takes a boolean expression and, if assertion is on (see <sfn name=setAssert>),
+  evaluates the expression. If the result is <!false>, throws an assertion exception.
+</function>
+
+<function sig="thisLine">
+  Returns the current line number in the script, relative to the current source file
+  (see <sfn name=thisFile>).
+</function>
+
+<function sig="thisFile">
+  Returns the current source file name.
+</function>
+
+<function sig="encode input, encoding">
+  Takes an <param>input</param>, which can be a string or a byte array, and returns a
+  string encoded with <param>encoding</param>. If <param>encoding</param> is omitted, use
+  the default text encoding scheme. Base-64 encoding is support as <param>encoding</param>
+  being "base64".
+</function>
+
+<function sig="openTableDump fileName">
+  Opens the file as a table dump and returns a <obj id=TableDump> object.
+</function>
+
+<function sig="ssh host, username, password, cipher" requires=ISNetworks>
+  Starts a connection to <param>host</param> with the <param>username</param> and
+  <param>password</param>. The <param>cipher</param> can be omitted or <!null>.
+  The <param>host</param> may include a port number separated by colon ":"; default port
+  is 22. Returns a <obj id=SSHConnection> object.
+</function>
+
+<function sig="getFunctions namePattern">
+  Returns a string array of the function names defined in the system that match <param>namePattern</param>.
+  If <param>namePattern</param> is <!null>, returns all the names.
+</function>
+
+<function sig="getThreads namePattern">
+  Returns a string array of the thread names defined in the system that match <param>namePattern</param>.
+  If <param>namePattern</param> is <!null>, returns all the names.
+</function>
+
+<note id=EncryptorClass>
+  <p>The default encryptor class is <code>com.judoscript.util.PBEWithMD5AndDES</code>.
+  This classes uses the <code>javax.crypto.</code> packages. It is part of J2SDK 1.4.
+  For J2SDK 1.3 users, JCE 1.2.1 is needed.</p>
+</note>
+
+<function sig="encryptFile password, inputFile, outputFile">
+  <p>Encrypts the <param>inputFile</param> with the <param>password</param> using an
+  encryptor class and writes the result into the <param>outputFile</param>.</p>
+  <addnote id=EncryptorClass>
+</function>
+
+<function sig="decryptFile">
+  <p>Decrypts the <param>inputFile</param> with the <param>password</param> using an
+  encryptor class and writes the result into the <param>outputFile</param>.</p>
+  <addnote id=EncryptorClass>
+</function>
+
+<function sig="encrypt password, input">
+  <p>The <param>input</param> is a byte array. This function uses a password-based
+  encryptor class to encrypt the input byte array and returns the result as a byte array.</p>
+  <addnote id=EncryptorClass>
+</function>
+
+<function sig="decrypt password, input">
+  <p>The <param>input</param> is a byte array. This function uses a password-based
+  encryptor class to decrypt the input byte array and returns the result as a byte array.</p>
+  <addnote id=EncryptorClass>
+</function>
+
+<function sig="setAssert" alias=setAssertion>
+  Turns on or off the assertion. See <sfn name=assert>.
+</function>
+
+<function sig="createDom">
+  Returns a new, empty <obj id=DOMDoc> object.
+</function>
+
+<function sig="createCOMObject id" alias="createActiveXComponent">
+  <p>Returns a Microsoft COM IDispatch instance. The parameter can be a program ID such as
+  "Word.Application", or a class ID in the form of "{FB7FDAE2-89B8-11CF-9BE8-00A0C90A632C}".</p>
+
+  <p>The returned object's methods can be called directly like any regular object methods
+  (that is, without using the IDispatch interface method <code>invoke()</code>), and its
+  properties can be set and got like any regular object data members.</p>
+
+  <p>This feature requires <a href="http://www.hcn.zaq.ne.jp/no-ji/jcom/">JCom</a> support,
+  which is only available on Wintel platforms. JCom 2.2.3 is included in JudoScript, and make
+  sure that <u>jcom.dll</u> is in the path. (If you download a newer version of JCom, make
+  sure the new jcom.dll is before JudoScript's in the PATH environment variable, and its
+  jcom.jar is before judo.jar in the CLASSPATH.)</p>
+</function>
+
+<function sig="createJar jarFileName, manifest">
+  Returns an open <obj id=ZipArchive> for the <param>jarFileName</param>. The <param>manifest</param>
+  is optional; if present, is the content of the manifest file put in the jar file.
+</function>
+
+<function sig="createZip zipFileName">
+  Returns an open <obj id=ZipArchive> for the <param>zipFileName</param>.
+</function>
+
+<function sig="createTar tarFileName">
+  Returns an open <obj id=TarArchive> for the <param>tarFileName</param>.
+</function>
+
+<function sig="loadProperties propsFile, eval">
+  Returns a <code>java.util.Properties</code> that holds the property values of the <param>propsFile</param>.
+  If <param>eval</param> is <!true>, this function evaluates all the values and replace embedded
+  <code>${<i>xyz</i>}</code> tags with the values in the same properties. This process is repeated
+  a number of times to ensure all values are replaced.
+</function>
+
+<function sig="saveProperties properties, propsFile, head">
+  Saves <param>properties</param> into <param>propsFile</param>. It cleans up the content first.
+</function>
+
+<function sig="getEnvVars" alias="getenvs">
+  Returns a <code>java.util.Properties</code> that all the environment variable values of the current JVM process.
+  The <code>java.util.Properties</code>'s values can be updated, and the next call to <code>getEnvVars()</code>
+  will return this modified one.
+</function>
+
+<function sig="getEnvVar varName" alias="getenv">
+  Returns the environment variable value for <param>varName</param> of the current JVM process.
+</function>
+
+<function sig="max value1, ...">
+  Returns the greatest numeric value among all the parameters.
+</function>
+
+<function sig="min value1, ...">
+  Returns the smallest numeric value among all the parameters.
+</function>
+
+<function sig="openFile file_name, mode">
+  Opens a binary file for <param>file_name</param>; <param>mode</param> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append). Returns an <obj id=IODevice>.
+</function>
+
+<function sig="openZip file_name">
+  Opens a zip or jar file for <param>file_name</param>.
+</function>
+
+<function sig="openGZippedFile file_name, mode">
+  Opens a GZipped binary file for <param>file_name</param>; <param>mode</param> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append). Returns an <obj id=IODevice>.
+</function>
+
+<function sig="openTextFile file_name, mode, encoding">
+  Opens a text file for <param>file_name</param>; <param>mode</param> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append); <param>encoding</param> is the text encoding, default is to
+  use the JVM's current text encoding. Returns an <obj id=IODevice>.
+</function>
+
+<function sig="openGZippedTextFile file_name, mode, encoding">
+  Opens a GZipped text file for <param>file_name</param>; <param>mode</param> can be 'r' for read (default),
+  'w' (for write) or 'a' (for append); <param>encoding</param> is the text encoding, default is to
+  use the JVM's current text encoding. Returns an <obj id=IODevice>.
+</function>
+
+<function sig="openRandomAccessFile file_name, mode, encoding">
+  Opens a random-access binary file for <param>file_name</param>; <param>mode</param> can be 'r' for read (default),
+  'w' (for write) or 'rw' (for read/write). Returns an <obj id=IODevice>.
+</function>
+
+<function sig="getWindowsRegistry">
+  Returns a Java object of
+  <a href="http://www.gjt.org/javadoc/com/ice/jni/registry/package-summary.html"><code>com.ice.jni.registry.Registry</code></a>,
+  for manipulating Windows registry. The <a href="http://www.trustice.com/java/jnireg/index.shtml">JNI
+  Windows Registry library by Tim Endre</a> must be installed.
+</function>
+
+<function sig="generateClassFile className superClassName" alias="genClassFile" ready=false>
+  Returns a <obj id=JavaClassFileGenerator> for <param>className</param>. The super class
+  <param>superClassName</param> is optional; if missing, it is <code>java.lang.Object</code>.
+</function>
+
+<function sig="readLine">
+  Returns a string by reading from the system input. It can return <!eof>.
+</function>
+
+<function sig="convertToVariables map, isLocal">
+  This function takes a <param>map</param> which is either <!Object> or
+  a <code>java.util.Map</code>, and converts all the data elements into
+  variables in the current scope. If <param>isLocal</param> is specified
+  and is <!true>, local variables are created; otherwise, normal scoping
+  rules decide where the variables are.
+</function>
+
+<function sig="setVariable name, value, isLocal">
+  Creates a variable with <param>name</param>. If <param>isLocal</param>
+  is specified and is <!true>, local variables are created; otherwise,
+  normal scoping rules decide where the variables are.
+</function>
+
+<function sig="getVariable name">
+  Returns the named variable.
+</function>
+
+<function sig="crc32 src, offset, length, prevCrc">
+  Returns the CRC32 value of the source. The <param>src</param> can be an input stream, a java.io.File
+  of a string as file name, in which case only one parameter is allowed. It can also be a byte array,
+  and <param>offset</param>, <param>length</param> and <param>prevCrc</param> may apply.
+</function>
+
+<function sig="loopIndex level">
+  This is only used in loops. Typically <param>level</param> is not specified, and this function
+  returns the loop index; the index for the first iteration is 0. For embedded loops, -1 denotes
+  the outer loop's index, -2 denotes the second outer loop's, and so on.
+</function>
+
+<function sig="escapeHtml str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeJava str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeJavaScript str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeSql str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="escapeXml str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeHtml str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeJava str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeJavaScript str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="unescapeXml str">
+  The same as the name-sake method in <code>org.apache.commons.lang.StringEscapeUtils</code>.
+</function>
+
+<function sig="pushd dir1, dir2, ...">
+  Changes directory to each one of them, and push all these directories to a directory stack for
+  use of <code>popd()</code> function.
+</function>
+
+<function sig="popd">
+  Pops the directory from the directory stack and change current directory there.
+</function>

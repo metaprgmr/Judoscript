@@ -1,0 +1,80 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_sgml/get_quotes.judo:</b></td></tr><tr><td><pre>
+/*  Usage: java judo get_quotes.judo sym1 sym2 ....
+ *
+ *  -- YAHOO! MUST HAVE FOUND THIS OUT AND THEY HAVE CHANGED THE
+ *     PAGE LAYOUT, SO THIS PROGRAM DOES NOT WORK ANY MORE.
+ *
+ *     IF WE WANT TO, WE CAN UPDATE THE STATE MACHINE FOR THIS.
+ *
+ *  This script scapes quotes date from a Yahoo Financial page, whose
+ *  center piece is a HTML table like that in 'yahoo_quotes.html'.
+ *  A state machine is used to retrieve pieces of information:
+ *
+ *   ---------- ------------------ -------- ------
+ *   From State       Input        To State Output
+ *   ---------- ------------------ -------- ------
+ *       0            &lt;th>             1
+ *       1       :TEXT:"Last Trade"    2
+ *       2            &lt;tr>             3
+ *       3            &lt;td>             4
+ *       4      &lt;a href="/q?s=..">     5
+ *       5       "Get a snap..."   abort
+ *       5           :TEXT             6    symbol
+ *       6            &lt;td>             7
+ *       7           :TEXT             8    time
+ *       8            &lt;td>             9
+ *       9           :TEXT            10    quote
+ *      10            &lt;td>            11
+ *      11           :TEXT            12    delta
+ *      12            &lt;td>            13
+ *      13            &lt;td>            14
+ *      14           :TEXT             2    volumn
+ *   ---------- ------------------ -------- ------
+ *
+ *  Note: this state machine is based on such a Yahoo page; if Yahoo
+ *  changes the structure of the page, this state machine may very
+ *  well become invalid and need to be updated.
+ */
+
+if #args.length==0 {
+  println [[*
+     Usage:  java judo (*#prog*) "^DJI" "^IXIC" ibm msft csco jdsu
+     Symbol names should comply with "http://quote.yahoo.com",
+     especially the standard indices.
+  *]];
+  exit 0;
+}
+
+// construct the URL --
+url = 'http://quote.yahoo.com/q?s=';
+for sym in #args { url += sym + '+'; }
+url += '&amp;d=v1';
+
+// get the quotes --
+do url as html
+{
+  :BEFORE: state = 0;
+  &lt;th>:    if state == 0 { ++state; }
+  &lt;tr>:    if state == 2 { ++state; }
+  &lt;td>:
+           switch state {
+           case 3: case 6: case 8: case 10: case 11: case 12: case 13:
+              ++state;
+           }
+  &lt;a>:     if state == 4 {
+             if $_.href.startsWith("/q?s=") { ++state; }
+           }
+  :TEXT:    switch state {
+           case 1:  if $_ == "Last Trade" { ++state; }
+                    break;
+           case 5:  if $_.length() > 10 { abort; }
+                    flush $_:8;   ++state; break; // symbol
+           case 7:  flush $_:8;   ++state; break; // date/time
+           case 9:  flush $_:6.2; ++state; break; // price
+           case 11: flush $_:4.3; ++state; break; // delta
+           case 14: println $_:>13; state=2; break; // volumn
+           }
+
+} // end of do as html.
+</pre></td></tr></table></body></html>

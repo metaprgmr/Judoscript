@@ -1,0 +1,14 @@
+usage {
+  minArgs = 0;
+  args    = 'output_file';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Create a T utility with the help of Java program <code>test.Echo</code>.
+    If no file name specified, writes to file "output.dump".
+  *]];
+}
+
+outfile = #args[0].neverEmpty('output.dump');
+exec 'java test.Echo > ' @ outfile @ ' | java test.Echo' needSystemIn;

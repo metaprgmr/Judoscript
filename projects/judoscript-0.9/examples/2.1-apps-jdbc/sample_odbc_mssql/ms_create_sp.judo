@@ -1,0 +1,38 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = 'Creates 2 stored procedures with executeSQL{}.';
+}
+
+!include 'mssql_connection.judi'
+
+if $$con.procExists('insert_person') {
+  executeSQL: drop procedure insert_person;
+}
+if $$con.procExists('get_person') {
+  executeSQL: drop procedure get_person;
+}
+
+executeSQL
+{
+  create procedure insert_person
+                     @id int,
+                     @name  varchar(20),
+                     @alias varchar(20) = null,
+                     @bday  datetime = null,
+                     @sex   varchar(1) = 'M'
+  as
+    insert into people ( personID, name, alias, birthDay, sex, addTime)
+    values ( @id, @name, @alias, @bday, @sex, current_timestamp )
+  ;
+
+  create procedure get_person
+                     @name varchar(20),
+                     @id int output
+  as
+    select @id = personID from people where name = @name
+  ;
+
+} // end of executeSQL.
+
+disconnect();

@@ -1,0 +1,9 @@
+!include 'include2.judi'
+
+usage {
+  desc = 'ALFA';
+}
+
+. 'In alfa: ', #usage;
+
+. ' x= ', x;

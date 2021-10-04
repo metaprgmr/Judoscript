@@ -1,0 +1,25 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_jdbc_odbc_mssql/ms_query.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Does a simple query (not prepared).';
+}
+
+!include 'mssql_connection.judi'
+
+db::query a:
+  select * from people;
+
+while a.next() {
+  println 'personID: ', a[1];
+  println '    name: ', a[2];
+  println '   alias: ', a[3];
+  println 'birthDay: ', a[4];
+  println '     sex: ', a[5];
+  println ' addTime: ', a[6];
+}
+
+db::disconnect();
+</pre></td></tr></table></body></html>

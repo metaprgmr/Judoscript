@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+  "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+  <class name="Address">
+
+    <id name="id" column="ADDRESS_ID">
+      <generator class="foreign">
+        <param name="property">user</param>
+      </generator>
+    </id>
+
+    <property name="street"  type="string" />
+    <property name="city"    type="string" />
+    <property name="state"   type="string" />
+    <property name="zipcode" type="string" />
+
+    <one-to-one name="user"
+                class="User"
+                constrained="true" />
+      <!-- 'constrained' means there's a FK constaint on the PK. -->
+
+  </class>
+
+</hibernate-mapping>

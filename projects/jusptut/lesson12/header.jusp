@@ -1,0 +1,15 @@
+<%
+  // check authentication
+  if !session.user {
+    session.dest = request.getAbsoluteURL();
+. '====> session.dest: ', session.dest;
+    %><%!forward "login.jusp" %><%
+  }
+%>
+<html>
+<head><title><%= title %></title></head>
+<body>
+<h2><%= title %></h2>
+<table border=0 width="100%">
+<tr><td><b>User: <%= session.user %></b><td><td align=right><a href="login.jusp">logout</a></td></tr>
+</table><hr>

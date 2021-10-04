@@ -1,0 +1,297 @@
+<%
+  if #args==null || #args.length<6 {
+    println<err> 'ERROR: chapter.juspt takes 6 parameters.';
+    return;
+  }
+
+  var bookInfo = #args[0];
+  var ch = #args[1];
+  var srcname = #args[2];
+  var needIntro = #args[3];
+  var otherVersionURI = #args[4];
+  var isPrinterFriendlyVersion = #args[5];
+  var subTitle = 'Book: <a href="../toc_details.html" class=tinywhite>' + bookInfo.title + '</a>';
+
+  var line  = '<tr><td bgcolor=black height=1 width="100%"><img src="../../../share/spacer.gif"></td></tr>';
+  var line2 = '<tr><td bgcolor=black height=2 width="100%"><img src="../../../share/spacer.gif"></td></tr>';
+//  var copyright = '&nbsp;<br><a href="#top">back to top</a><br><hr width="100%">' +
+//                  'Copyright &copy; 2001-' + #year + ' James Jianbo Huang';
+  var copyright = '&nbsp;<br><a href="#top" class=tiny>back to top</a><br>&nbsp;<br>';
+
+  var title = 'Chapter ' + ch.number + '. ' + ch.title;
+  var tabID = 'judo';
+  var base = '../../../';
+
+  function removeFirstEmptyLine txt {
+    if (txt.startsWith('\n')) txt = txt.substring(1);
+    if (txt.startsWith('\r')) txt = txt.substring(1);
+    return txt;
+  }
+
+  function jusp$writeChapterSynopsis ctxt, ch, f {
+    if (ch.status == 'hide') return;
+    if (ch.isAppendix)
+      print<ctxt.writer> '<u>Appendix ', ch.number.fmtRoman(true), '</u> ', ch.synopsis, ' ';
+    else
+      print<ctxt.writer> '<u>Chapter ', ch.number, '</u> ', ch.synopsis, ' ';
+  }
+
+  if isPrinterFriendlyVersion {
+    %><html><head><title><%= ::title %></title>
+      <link href="../../../share/main.css" rel="stylesheet" type="text/css">
+      </head><body bgcolor="#ffffff" style="margin-top:0; margin-left:0" class=secondary3><%
+  } else {
+    %><%!include '../../site_src/include/header.jusp' %><%
+  }
+%>
+<center>
+<table border=0 width=98% class=bodyText><tr><td>
+
+<table border=0 width="100%"><tr>
+<%-- TOC PART --%><td valign=top rowspan=2 width="50%">
+<table border=0 cellpadding=0 cellspacing=0 align=left style="margin-right:20px" class=secondary3>
+<%-- tops --%>
+<tr><td width=9><img src=../../../share/portlet_tl.gif width=9 height=9 border=0></td>
+<td style="background:url(../../../share/portlet_tm.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td>
+<td width=13><img src=../../../share/portlet_tr.gif width=13 height=9 border=0></td>
+<%-- left-left --%>
+<tr><td width=9 style="background:url(../../../share/portlet_l.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td><td valign=top><b>In this chapter:</b><ul>
+<%
+  for s1 in ch.section1s {
+    %><li><a href="#<%= s1.id %>"><%= s1.title %></a></li><%
+    for s2 in s1.section2s {
+      %><br>&#187;&nbsp;<a href="#<%= s2.id %>"><%= s2.title %></a><%
+    }
+  }
+%>
+</ul></td>
+<td width=13 style="background:url(../../../share/portlet_r.gif)"><img src=../../../share/spacer.gif
+ width=1 height=1 border=0></td></tr><%-- bottoms --%>
+<tr><td width=9><img src=../../../share/portlet_bl.gif width=9 height=15 border=0></td>
+<td style="background:url(../../../share/portlet_bm.gif)"><img src=../../../share/spacer.gif width=1
+ height=1 border=0></td>
+<td width=15><img src=../../../share/portlet_br.gif width=13 height=15 border=0></td></tr></table>
+</td>
+<%-- CAPTION AND AUTHOR PART --%><td valign=top align=right width="50%">
+ <table border=0 cellpadding=0 cellspacing=0 class=secondary3><tr><td align=right>
+<%
+  if isPrinterFriendlyVersion {
+    %><p class=tiny>Book: <a href="../toc_details.html"><%= bookInfo.title %></a></p><%
+  }
+%>
+ <h1><%= ::title %></h1>
+ By <i>James Jianbo Huang</i><br><br>
+<%
+  if isPrinterFriendlyVersion {
+   %><br><a href="<%= otherVersionURI %>">non-printer version</a><%
+  } else {
+   %><img src="../../../share/printer.gif"> <a href="<%= otherVersionURI %>">printer-friendly version</a><%
+  }
+%>
+ </td></tr></table>
+ </td></tr>
+</td></tr><%-- CAPTION AND AUTHOR PART --%>
+<%
+  if !ch.hasSynopsis { %></table><% }
+
+  var tblColumns = 0;
+  var isPre = false;
+  var isLinkable = false;
+
+  do srcname as sgml {
+  <synopsis>:  %><%-- SYNOPSIS PART --%><tr><td valign=top><%
+               %><table border=0 cellpadding=5 class=secondary3><tr><td valign=top><%
+               %><b>Synopsis:</b></td><td valign=top><%
+  </synopsis>: %></td></tr></table></td></tr><%-- SYNOPSIS PART --%></table><%
+
+  <section1>:  %><h2>&nbsp;<br><a name=<%= $_.id %>> <%= $_.title %></a><%
+               switch $_.status {
+               case 'red':
+                 %><sub><font color=red>&nbsp; &nbsp;to be done</font></sub><%
+                 break;
+               case 'yellow':
+               case 'orange':
+                 %><sub><font color=orange>&nbsp; &nbsp;to be finished</font></sub><%
+                 break;
+               }
+               %></h2><%
+  </section1>: %><br><%
+  <section2>:  %><a name=<%= $_.id %>><h3> <%= $_.title %></h3></a><%
+  </section2>: %><br><%
+
+  <p>,</p>:    %>$_<% // may need special processing
+
+  <title3>:    %><b><%
+  </title3>:   %></b><br><%
+
+  <tip>,</tip>: ; // TODO
+
+  <codelist> :
+    // a. collect the info to the dictionary
+    var listTitle = $_.caption;
+    if !listTitle { listTitle = $_.name; }
+
+    // b. write the tag and beginning of the code listing
+    %><p align=center><table cellpadding=0 cellspacing=0 width="100%" class=secondary3><thead>
+      <th align=left><a name="<%= $_.id %>">Listing <%= ch.getPubName($_.id) %></a> <%= listTitle %></th>
+      </thead><%= line %><tr><td bgcolor="#DDDDDD"><pre><%
+    isPre = true;
+
+  </codelist>:%></pre></td></tr><%= line2 %></table></p><p><%
+              isPre = false;
+
+  <grammar>:  %><a name="<%= $_.id %>"><table border=0 class=secondary3><%
+  </grammar>: %></table></a><%
+  <rule>:     %><tr><td valign=top><i><%= $_.name %></i></td><td valign=top>&nbsp;::=&nbsp;</td><td valign=top><%
+  </rule>:    %></td></tr><%
+
+  <asis>:     fontcolor = ' color=black';
+              if $_.type=='java' { fontcolor = ' color=brown'; }
+              %><font <%= fontcolor %>><pre><%
+              isPre = true;
+  </asis>:    %></pre></font><%
+              isPre = false;
+
+  <note>:     %><font color=blue><i><%
+  </note>:    %></i></font><%
+
+  <j1note>:   %><font color=brown><i>In the forth-coming JudoScript version 1.0, <%
+  </j1note>:  %></i></font><%
+
+  <table>:    %><table border=1 cellspacing=0 class=secondary3><caption align=left><b>Table <%= ch.getPubName($_.id) %> <%= $_.name %></b></caption><%
+              tblColumns = $_.columns;
+  </table>:   %>$_<% tblColumns = 0;
+  <ttitle3>:  %><tr><td colspan="<%= tblColumns %>"><b><%
+  </ttitle3>: %></b></td><%
+  <tr>, </tr>,
+  <th>, </th>,
+  </td>:       %>$_<%
+  <td>:        %><td valign=top><%
+
+  <figure>:  %><a name="<%= $_.id %>"><img src="<%= $_.src %>" border=0></a><%
+  </figure>: ;
+
+  :TEXT:     x = isPre ? removeFirstEmptyLine($_) : $_;
+             if (isLinkable) {
+               %><a href="<%= $_ %>">$_</a><%
+               isLinkable = false; // no need for </linkable> handling.
+             } else {
+               %>$_<%
+             }
+
+  <img>,
+  <br>, </br>,
+  <code>, </code>,
+  <a>, </a>,
+  <b>, </b>,
+  <i>, </i>,
+  <u>, </u>,
+  <sup>, </sup>,
+  <sub>, </sub>,
+  <ul>, </ul>,
+  <ol>, </ol>,
+  <li>, </li>,
+  <blockquote>, </blockquote>: %>$_<%
+
+  <kw>:   %><b><code><%
+  </kw>:  %></code></b><%
+  <kwci>: %><b><i><code><%
+  </kwci>:%></code></i></b><%
+  <nt>:   %><i><%
+  </nt>:  %></i><%
+  <bio>:  %><code><i><%
+  </bio>: %></i></code><%
+  <tag>:  %><code>&lt;<%
+  </tag>: %>&gt;</code><%
+
+  <ref:sysfxn>:  %><pre>function <b><%= $_.name %></b><%
+  </ref:sysfxn>: %></pre><%
+
+  <ref>:
+    %><i><a href="<%
+    if $_.href != null {  // external link.
+      %><%= $_.href %>"><%
+    } elif $_.id != null {  // in-book cross-link.
+      // Get chptID and refID:
+      chptID = ch.id;
+      refID = null;
+      if $_.id.contains(':') {
+        if $_.id.endsWith(':') {
+          chptID = $_.id.trunc(1);
+        } else {
+          tmp = $_.id.csv(':');
+          chptID = tmp[0];
+          refID = tmp[1];
+        }
+      } else {
+        refID = $_.id;
+      }
+
+      var tmpch = bookInfo.getChapter(chptID);
+      var display = null;
+      if refID == null {  // referencing a chapter
+        %><%= tmpch.id %>.html"><%
+        display = tmpch.number + '. ' + tmpch.title;
+      } else {  // referencing a section in a chapter.
+        %><%= tmpch.id %>.html#<%= refID %>"><%
+        display = tmpch.getPubName(refID);
+        if display == null {
+          println <err> '??? REFERENCE TO "', chptID, ':', refID, '" NOT RESOLVED';
+        }
+      }
+      if $_.isClosed() {
+        %><%= display %><%
+      }
+    }
+
+  </ref>: %></a></i><%
+
+  <linkable>:  isLinkable = true;
+  </linkable>: ;
+
+  ////////////////////////////////////////////////
+  // Special Tags
+  ////////////////////////////////////////////////
+
+  <!>:      ;
+  <j>:      %>Judo<%
+  <jusp>:   %>JuSP<%
+  <hib>:    %>Hibernate<%
+
+  <>:       println <err> '??? UNKNOWN Tag: ', $_.getName();
+
+  <book_org>: // only in the section of "How This Book is Organized" in intro.sgml.
+    if bookInfo.hasParts() {
+      for pt in bookInfo.parts {
+        %><p><i>Part <%= (loopIndex()+1).fmtRoman(true) %></i> <%= pt.synopsis %> <%
+        for i from pt.leadChapterIndex to pt.endChapterIndex-1 {
+          %><%!writeChapterSynopsis bookInfo.chapters[i], f %><%
+        }
+        %></p><%
+      }
+    } else {
+      for ch in bookInfo.chapters {
+        %><%!writeChapterSynopsis ch, f %><%
+      }
+    }
+
+  <system_function_listing>: ; // only in the section of "System Functions" in flow.sgml. TODO.
+
+  <todo>:   %><font color=gray>TODO: <i><%= $_.desc %></i></font><%
+  <notyet>: %><p class="font-size:16px">Not done yet. For now, please read <a href="<%= $_.href %>">this article</a>.</p><%
+  <test>:   %><font color=red><%
+  </test>:  %></font><%
+  }
+%>
+<%-- /ARTICLE CONTENET --%>
+</td></tr></table><%= copyright %>
+<%
+  if isPrinterFriendlyVersion {
+    %><P class=tiny align=center><hr width="98%">Copyright c 2001-<%= #year %> JudoScript.COM.<%
+    %> All Rights Reserved.</P> </center></body></html><%
+  } else {
+    %><%!include '../../site_src/include/footer.jusp' %><%
+  }
+%>

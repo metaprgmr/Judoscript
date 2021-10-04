@@ -1,0 +1,9 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_ds/filter.judo:</b></td></tr><tr><td><pre>
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+
+println a.filter(&amp;size_filter);
+function size_filter elem { return elem.length() &lt; 5; }
+
+println a.filter( function(elem){ return elem.length() >= 5; }, true );
+</pre></td></tr></table></body></html>

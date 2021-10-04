@@ -1,0 +1,16 @@
+testDir = 'c:/temp';
+bat_file = '${testDir}${/}alfa.bat';
+
+f = openTextFile(bat_file, 'w');
+flush <f> [[*
+  @echo 'This is some garbage.' > alfa.alfa
+  @echo ABCDEFG=%ABCDEFG%
+  @echo PATH=%PATH%
+*]];
+f.close();
+
+exec bat_file
+     from testDir
+     with ABCDEFG = 1234567,
+          PATH    = testDir;
+

@@ -1,0 +1,49 @@
+usage {
+  author  = 'James Huang';
+  lastMod = '2001-11-12';
+  desc    = [[*
+    Displays tags, text and other XML events for the data included
+    at the end of the source file, using SAX-style XML processing.
+  *]];
+}
+
+do $$local as xml with namespace, validate,
+                       xmlns:n="judoscript/xml/namespaces"
+{
+BEFORE:       println '        <BEFORE>.';
+AFTER:        println '         <AFTER>.';
+START_DOC:    println '     <START_DOC>.';
+END_DOC:      println '       <END_DOC>.';
+TEXT:         println '            TEXT: ', $_;
+<>:           println '<', $_.getRaw():>14, '>: name =', $_.getName();
+              println '                  uri  =', $_.getUri();
+              println '                  local=', $_.getLocal();
+              for $x from 0 to $_.countAttrs()-1 {
+                println '                  Attribute: ',
+                        $_.getAttrName($x), '=', $_.getAttrValue($x);
+              }
+WARNING:      println '       <WARNING>: ', $_.getMessage();
+ERROR:        println '         <ERROR>: ', $_.getMessage();
+START_NS_MAP: println '  <START_NS_MAP>: ', $_.prefix, ' => ', $_.uri;
+END_NS_MAP:   println '    <END_NS_MAP>: ', $_;
+PI:           println '            <PI>: ', $_.instruction;
+              println '                  ', $_.data;
+}
+
+EndScript ------------------------------------------------------
+<?xml version="1.0"?>
+<!DOCTYPE news:article [
+ <!ELEMENT news:article (news:headline, news:author, news:body)>
+ <!ATTLIST news:article date CDATA #REQUIRED>
+ <!ELEMENT news:headline (#PCDATA)>
+ <!ELEMENT news:author (#PCDATA)>
+ <!ELEMENT news:body (#PCDATA)>
+]>
+<?article-processor destination="news"?>
+<news:article xmlns:news="judoscript/xml/namespaces" date="02-Dec-2000">
+  <news:headline>SAX 2.0 Released</news:headline>
+  <news:author>F. Bar</news:author>
+  <?author-processor destination="Someone"?>
+  <news:body>SAX 2.0 has been released into the public domain</news:body>
+</news:article>
+

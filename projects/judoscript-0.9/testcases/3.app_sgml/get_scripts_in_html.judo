@@ -1,0 +1,8 @@
+// Display all the JavaScript code in a HTML page.
+//
+
+do #args[0] as html {
+:BEFORE:    $$parser.rushToTag("script");
+<script>:   println $_;
+</script>:  println $_; $$parser.rushToTag("script");
+}

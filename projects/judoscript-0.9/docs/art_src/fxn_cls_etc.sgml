@@ -1,0 +1,998 @@
+<doc title="Functions, Classes, Threads and Eval"
+ author="James Jianbo Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, function, parameters, default value, lambda, function variable, system function, system function listing, class, inheritance, constructor, methods, class transposition, transposition, variable scope, thread, thread programming, start thread, start daemon thread, dynamic programming, eval, evalExternal, evalFile, sorting, array sorting, comparator, filter"
+>
+
+<sectiondefs>
+<sectiondef name="fxn"     caption="User-Defined Functions">
+<sectiondef name="varparm" sub="1" caption="Parameters">
+<sectiondef name="fxnvar"  sub="1" caption="Function Variables">
+<sectiondef name="lambda"  sub="1" caption="Lambda">
+<sectiondef name="javafxn" sub="1" caption="Aliases for Java Static Methods">
+<sectiondef name="sysfxn"  caption="System Functions">
+<sectiondef name="cls"     caption="User-Defined Classes">
+<sectiondef name="transpose" sub="1" caption="Class Transposition">
+<sectiondef name="scope"   caption="Variable Scope">
+<sectiondef name="thrd"    caption="Threads">
+<sectiondef name="eval"    caption="Dynamic Programming">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+This article discusses user functions, classes, threads and dynamic
+evaluation. Variable scope is an important topic and many things are
+cleared here. <J> supports lambda functions, or anonymous functions,
+and function variables; these are useful for, say, array sorting and
+filtering.  Also supported is aliasing for Java class static methods.
+System functions are generally discussed. <J> threads are declared
+like functions and started with <kw>start thread</kw>. Dynamically
+created code can be evaluated either locally with <kw>eval</kw> or
+separately with <kw>evalExternal</kw> and <kw>evalFile</kw>.
+</abstract>
+</doc>
+
+
+<section name=fxn>
+
+<p>
+The syntax for function declaration is:
+
+<gramma>
+<kw>function</kw> <nt>fxn_name</nt> [ <kw>(</kw> ]
+<nt>params</nt> [ <kw>)</kw> ]  <kw>{</kw> <nt>statements</nt> <kw>}</kw>
+</gramma>
+
+The parentheses around parameters are not required. Functions always return
+a value, either a <kw>null</kw> or a value issued in a return statement.
+Parameter names are the same as variable names. A function is invoked by its
+name with parameter values. The following is the famous Hanoi Tower problem
+followed by the result of a test run. Note that functions can be declared
+anywhere, because a script is parsed and all declarations are collected
+before any runs. 
+
+<codelist name="hanoi" caption="hanoi.judo">
+1: cnt = 0;
+2: hanoiTower(4, 'A', 'B', 'C');
+3:
+4: function hanoiTower N, src, aux, dst {
+5:   if N == 0 { return; }
+6:   hanoiTower(N-1, src, dst, aux);
+7:   println 'step ', ++cnt : &gt; 2, ':  ', src, ' =&gt; ', dst;
+8:   hanoiTower(N-1, aux, src, dst);
+9: }
+</codelist>
+
+<demo>
+step  1:  A => B
+step  2:  A => C
+step  3:  B => C
+step  4:  A => B
+step  5:  C => A
+step  6:  C => B
+step  7:  A => B
+step  8:  A => C
+step  9:  B => C
+step 10:  B => A
+step 11:  C => A
+step 12:  B => C
+step 13:  A => B
+step 14:  A => C
+step 15:  B => C
+</demo>
+
+
+<section name=varparm>
+
+<p>
+Function parameters may take default values. In fact, a function name
+is unique, and functions can be called with any number of parameters
+regardless of those specified in the declaration. If fewer parameter
+values are supplied than as declared, the default values are used; if
+not default values, <kw>null</kw> is used. What happens if more
+values than declared parameters? Those extra values are stored in an
+internal array variable, <kw>$$args</kw>. To explicitly declare that
+a function takes variable number of parameters, you may end the
+parameter list with two dots (".."):
+
+<demo>
+function inc x, delta=1, .. {
+  ret = x + delta;
+  if $$args != null {
+    for x in $$args { ret += x; }
+  }
+  return ret;
+}
+println inc(2);
+println inc(2,2);
+println inc(2,2,2);
+
+function sum .. {
+  ret = 0;
+  for x in $$args { ret += x; }
+  return ret;
+}
+println sum(1,2,3,4,5,6,7,8,9);
+
+function oneparam a {
+  println 'param: ', a;
+  if $$args != null {
+    println $$args.length, ' useless parameters.';
+  }
+}
+oneparam('abc');
+oneparam('abc', x, y, z);
+</demo>
+
+The dot command is a shortcut for <kw>println</kw>, real short.
+
+
+<section name=fxnvar>
+
+<p>
+A function variable is a variable that references a function. A function
+reference is obtained by the <kw>&amp;</kw> operator. They can be assigned
+to variables or passed as paramter values to other functions. 
+
+<demo>
+function foo x, y { return x+y; }
+a = &foo;
+println a->(1,2);
+</demo>
+
+<codelist name="fxn_var" caption="fxn_var.judo">
+1: function foo1 a, b { return a + b; }
+2: function foo2 a, b { return a * b; }
+3: function whichFoo f, a, b { return f->(a,b); }
+4:
+5: println 'whichFoo(&amp;foo1,2,3) = ', whichFoo(&amp;foo1,2,3);
+6: println 'whichFoo(&amp;foo2,2,3) = ', whichFoo(&amp;foo2,2,3);
+</codelist>
+
+<J> supports array sorting, filtering and element-wise
+conversion. They all take function variables as parameters. For instance,
+array sorting take a function that should take two parameters and return
+1, 0 or -1 as the result of comparison.
+
+<codelist name="custom_sort" caption="custom_sort.judo">
+ 1: a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+ 2: a.sort( &amp;my_comparator );
+ 3: for i from 0 to a.lastIndex() { println i, '  ', a[i]; }
+ 4:
+ 5: function my_comparator(lhs, rhs) {
+ 6:   la = lhs.csv('.');
+ 7:   ra = rhs.csv('.');
+ 8:   for i from 0 to la.size() {
+ 9:     if la[i].int() &lt; ra[i].int() { return -1; }
+10:     if la[i].int() &gt; ra[i].int() { return 1; }
+11:   }
+12:   if la.size() == ra.size() { return 0; }
+13:   return la.size() &gt; ra.size();
+14: }
+</codelist>
+
+Lines 5 through 14 defines a custom comparator. On line 1, we have an array
+of something that looks like book sections. Normal string comparison fails
+to yield correct order. Our comparator takes apart the section number to an
+array (lines 6 and 7), and compares each parts. The result is:
+
+<demo>
+0  1.2
+1  1.2.1
+2  1.10
+3  2.3
+4  3
+5  3
+6  3.9
+</demo>
+
+
+<section name=lambda>
+
+<p>
+With function variables, functions do not always need names. Anonymous
+functions are called <em>lambda</em> functions.
+
+<demo>
+a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+f = lambda elem { return elem.length() &gt;= 5; };
+a.filter(f,true);
+println a;
+</demo>
+
+In the <kw>filter()</kw> call, the second parameter of <kw>true</kw>
+indicates the filtering is done locally. The first parameter is a lambda
+as a filter function.
+
+
+
+<section name=javafxn>
+
+Java class static methods can be aliased to appear like regular <J>
+functions.
+
+<demo>
+function currentTimeMillis for javaclass java.lang.System.currentTimeMillis();
+function loadLibrary for javaclass java.lang.System.loadLibrary();
+
+millis = currentTimeMillis();
+loadLibrary("native.dll");
+</demo>
+
+<review>
+<question> How to declare a function?
+<question> Can functions call themselves?
+<question> If a function is invoked with more parameters than declared, how to
+           get the extra ones?
+<question> If a function is invoked with less parameters than declared, what
+           happens?
+<question> How to assign a function to a variable? How to invoke that function
+           variable? Can it be passed to a function?
+<question> How to create an anonymous function?
+<question> What is a comparator function? What is its requirements?
+           What is a filter function? Can you guess its requirements?
+<question> How to declare a function to be an alias to a Java class static method?
+</review>
+
+
+
+<section name=sysfxn>
+
+<p>
+<J> has a number of system functions for various purposes. They are
+actually the methods of an internal <kw>$$sys</kw> object but
+<kw>$$sys</kw> is not required to use them. This is called method
+shortcut. In addition to <kw>$$sys</kw>, shortcut methods also exists
+for these internal objects: <kw>$$con</kw> (database connection) and
+<kw>$$timer</kw> (scheduler timer). In <J>, values and objects all 
+have methods. The mathematical functions, for instance, are methods
+of numeric values. System functions (or, rather, methods), are those
+that do not belong to any objects but useful system-wide.
+
+<p>
+The system functions fall into the following categories: values and
+numbers, system properties and related, system controls, system
+standard input-output, file input-output and generic.
+See <a href=../langspec/spec4.html#sysfuns>language specification</a>
+for a complete listing. These functions are discussed in detail in
+respective topics; they are briefly listed below.
+
+<p>
+Value and number functions:
+
+<gramma>
+<kw>date</kw> [ <nt>year</nt> [ <kw>,</kw> <nt>month</nt> [ <kw>,</kw> <nt>day</nt>
+    [ <kw>,</kw> <nt>hour</nt> [ <kw>,</kw> <nt>minute</nt>
+    [ <kw>,</kw> <nt>second</nt> ] ] ] ] ] ] <br>
+<kw>time</kw> <nt>hour</nt> [ <kw>,</kw> <nt>minute</nt> [ <kw>,</kw> <nt>second</nt> ] ] <br>
+<kw>timeToday</kw> <nt>hour</nt> [ <kw>,</kw> <nt>minute</nt> [ <kw>,</kw> <nt>second</nt> ] ] <br>
+<kw>rand|random</kw> [ <nt>lower</nt> <kw>,</kw> ] <nt>upper</nt> <br>
+<kw>unit</kw> <nt>count</nt><kw>,</kw> <nt>singular</nt> [ <kw>,</kw> <nt>plural</nt> ] <br>
+<kw>compare</kw> <nt>left</nt><kw>,</kw> <nt>right</nt>
+</gramma>
+
+<p>
+System properties and related functions:
+
+<gramma>
+<kw>systemProperty</kw> <nt>name</nt> [ , <nt>defaultVal</nt> ] <br>
+<kw>systemProperties</kw> <br>
+<kw>osName</kw> <br>
+<kw>isMac</kw> <br>
+<kw>isWindows</kw> <br>
+<kw>isHPUX</kw> <br>
+<kw>isLinux</kw> <br>
+<kw>isSunOS</kw> <br>
+<kw>javaVendor</kw> <br>
+<kw>userName</kw> <br>
+<kw>homeDir</kw> <br>
+<kw>curDir|pwd</kw> <br>
+</gramma>
+
+<p>
+System control functions:
+
+<gramma>
+<kw>exit</kw> [ <nt>returnVal</nt> ] <br>
+<kw>sleep</kw> [ <nt>duration</nt> ] <br>
+<kw>lock</kw> <nt>lockname</nt> <br>
+<kw>unlock</kw> <nt>lockname</nt> <br>
+<kw>waitFor</kw> <nt>signalname</nt> <br>
+<kw>notify</kw> <nt>signalname</nt> <br>
+<kw>notifyAll</kw> <nt>signalname</nt>
+</gramma>
+
+<p>
+System standard input-output:
+
+<gramma>
+<kw>getOut</kw> <br>
+<kw>getErr</kw> <br>
+<kw>getLog</kw> <br>
+<kw>setOut</kw> <nt>printwriter</nt> <br>
+<kw>setErr</kw> <nt>printwriter</nt> <br>
+<kw>setLog</kw> <nt>printwriter</nt>
+</gramma>
+
+<p>
+File input-output functions:
+
+<gramma>
+<kw>openFile</kw> <nt>filename</nt> [ <kw>,</kw> <nt>mode</nt> ] <br>
+<kw>openTextFile</kw> <nt>filename</nt> [ <kw>,</kw> <nt>mode</nt> ] <br>
+<kw>openRandomAccessFile</kw> <nt>filename</nt> [ <kw>,</kw> <nt>mode</nt> ] <br>
+<kw>openGZippedFile</kw> <nt>filename</nt> [ <kw>,</kw> <nt>mode</nt> ] <br>
+<kw>openGZippedTextFile</kw> <nt>filename</nt> [ <kw>,</kw> <nt>mode</nt> ] <br>
+<kw>openZip</kw> <nt>zipfilename</nt> <br>
+<kw>createZip</kw> <nt>zipfilename</nt> <br>
+<kw>createJar</kw> <nt>zipfilename</nt> [ <kw>,</kw> <nt>manifest</nt> ] <br>
+<kw>getFileContent</kw> <nt>filename</nt> <br>
+<kw>getGZippedFileContent</kw> <nt>gzipfilename</nt>
+</gramma>
+
+<p>
+Generic functions:
+
+<gramma>
+<kw>setHttpProxy</kw> <nt>server</nt> <kw>,</kw> <nt>port</nt> <br>
+<kw>timerHandler</kw> <br>
+<kw>setGuiListener</kw> <nt>component</nt> <kw>,</kw> <nt>eventhandlername</nt> <br>
+<kw>connectMailServer</kw> <nt>server</nt>
+    [ <kw>,</kw> <nt>username</nt> [ <kw>,</kw> <nt>password</nt> ] ] <br>
+<kw>disconnectMailServer</kw> <br>
+<kw>getInitialContext|initialContext</kw> <nt>factoryname</nt> <kw>,</kw> <nt>url</nt>
+    [ <kw>,</kw> <nt>username</nt> [ <kw>,</kw> <nt>password</nt> ] ] <br>
+<kw>getWeblogicContext|weblogicContext</kw> <nt>url</nt>
+    [ <kw>,</kw> <nt>username</nt> [ <kw>,</kw> <nt>password</nt> ] ] <br>
+</gramma>
+
+
+<review>
+<question> What is "method shortcut"?
+<question> How to easily print out "I have 1 apple." or "I have 3 apples"?
+<question> How to get the home directory?
+<question> How to save logged information to a file of your choice?
+<question> How to platform-specific tasks, such as loading native libraries?
+</review>
+
+
+<section name=cls>
+
+<p>
+<J> supports user-defined classes. A <J> class is just a struct with
+user-defined methods. All struct operations are available to user-defined
+classes. See the other <a href=value_ds.html#struct>article</a> for how
+to use structs. All the members (or attributes) are accessible; there
+is no accesss control such as "private" or "protected". A class instance
+is initialized just like an Object except the class name is used instead
+of "Object":
+
+<demo>
+a = new MyClass( alfa=1, beta='abc' );
+println a.alfa, ' ', a.beta;
+</demo>
+
+Classes can have constructors; they do not take any parameters, and are invoked
+after the object is initialized. Because data members are not declared, it is
+good practice to document them in the comment preceding or withing the class.
+The following example defines a Node class and constructs a tree for traversals.
+
+<codelist name="dfs_bfs" caption="dfs_bfs.judo">
+ 1: class Node
+ 2: {
+ 3:   constructor {
+ 4:     assert(name != null);  // mandates that 'name' is initialized
+ 5:     children = [];
+ 6:   }
+ 7:   function addChild child { children.add(child); }
+ 8:   function toString { return name; }
+ 9: }
+10:
+11: // constuct a tree
+12: root = new Node(name='ROOT');
+13: a = new Node( name='A' );
+14: a.addChild(new Node(name='A1'));
+15: a.addChild(new Node(name='A2'));
+16: root.addChild(a);               // left subtree
+17: a = new Node( name='B');
+18: a.addChild(new Node(name='B1'));
+19: a.addChild(new Node(name='B2'));
+20: a.addChild(new Node(name='B3'));
+21: root.addChild(a);               // right subtree
+22:
+23: dfs(root);
+24: bfs(root);
+25:
+26: function dfs root {
+27:   print 'Depth-first traverse: ';
+28:   $stack = new stack;
+29:   $stack.push(root);
+30:   while !$stack.isEmpty() {
+31:     node = $stack.pop();
+32:     print node, ' ';
+33:     for x in node.children backward { $stack.push(x); }
+34:   }
+35:   println;
+36: }
+37:
+38: function bfs root {
+39:   print 'Breadth-first traverse: ';
+40:   $queue = new queue;
+41:   $queue.enq(root);
+42:   while !$queue.isEmpty() {
+43:     node = $queue.deq();
+44:     print node, ' ';
+45:     for x in $node.children { $queue.enq(x); }
+46:   }
+47:   println;
+48: }
+</codelist>
+
+Class <code>Node</code> has two attributes: "name" and "children". In the
+constructor, lines 4 mandates that an attributed called "name" must be
+initialized, and line 5 creates the attribute "children" as an array. The
+class defines a method calld <kw>addChild</kw>. It also defines a
+<kw>toString()</kw> method; when this is defined, the <kw>println</kw>
+statement prints whatever it returns.
+
+<p>
+A class can extend another. For methods, since parameters have no types
+and any number of parameters are allowed, each method must be unique.
+When a class is extended, that method may be overridden. To invoke a
+parent's method. use the <kw>super</kw> qualifier.
+
+<codelist name="john_son" caption="john_son.judo">
+ 1: class John
+ 2: {
+ 3:   constructor {
+ 4:     println "I love my baseball club.";
+ 5:   }
+ 6:
+ 7:   function plays {
+ 8:     return new array( 'baseball' );
+ 9:   }
+10: }
+11:
+12: class Johnson extends John
+13: {
+14:   constructor {
+15:     println "I always bring my tennis racket.";
+16:   }
+17:
+18:   function plays {
+19:     arr = super.plays();
+20:     arr.add('basketball', 'tennis', 'soccer', 'gymnastics', 'piano' );
+21:     return arr;
+22:   }
+23: }
+24:
+25: println (new Johnson).plays();
+</codelist>
+
+The method <kw>plays()</kw> is overridden in the child class; it calls
+the parent's version to get an array of what his dad is up to, addes
+his own and returns the array. The constructors of both classes print
+out a message. The parent classes' constructors are run first. The
+result is:
+
+<demo>
+I love my baseball bat.
+I always bring my tennis racket.
+[baseball,basketball,tennis,soccer,gymnastics,piano]
+</demo>
+
+In the methods, own methods can be invoked without any qualifiers; in
+other words, own method names take precedence over global function
+names. To access own's own attributes, use <kw>get()</kw> method or
+the <kw>this.()</kw> notion.
+
+<p>
+Classes without a parent conceptually extend struct. You can make
+a class extend ordered map.
+
+<demo>
+class MyClass extends orderedMap
+{
+  constructor { alfa=1, beta=2, gamma=3 }
+  function printAll {
+    for x in keys() { println x, ' => ', this.(x); }
+  }
+}
+</demo>
+
+<section name="transpose">
+
+<p>
+Instances of a class can be converted to another class on-the-fly by the
+built-in method <kw>transpose()</kw>. This is typically used when a struct,
+orderedMap or class is returned from some functions and methods (especially
+the built-in ones), and later a new class with more and newer methods is
+intended to act upon it. As we know, a class is nothing but a collection of
+dynamic data members, transposing a class to another is essentially
+re-associating the data with a new set of methods, except that structs can
+not be cast to orderedMaps because the latter has mechanisms that the
+former lacks.
+
+<p>
+The following program calls the string method <kw>parseUrl()</kw> which
+returns a struct of various information; on lines 26 through 34, a custom
+class, <code>UrlInfo</code>, is defined with a <kw>toString()</kw> method
+(lines 28 through 33) that reconstructs the URL. It is used on line 23 to
+convert the struct into a UrlInfo, and calles its <kw>toString()</kw>
+method implicitly.
+
+<codelist name="parse_url" caption="parse_url.judo">
+ 1: a = ['http://localhost:8080/articles/developer.html#top',
+ 2:       'http://localhost/cgi-bin/check.pl?id=1234&amp;sess=abc',
+ 3:       '/index.html',
+ 4:       'index.html',
+ 5:       '',
+ 6:       '/',
+ 7:       'http://www.judoscript.com',
+ 8:       'images/bg.gif'
+ 9:      ];
+10: for url in a {
+11:   b = url.parseUrl();
+12:   println '-----------------------------------------------';
+13:   println '            URL: ', url;
+14:   println '           root: ', b.root;
+15:   println '       protocol: ', b.protocol;
+16:   println '         domain: ', b.domain;
+17:   println '           host: ', b.host;
+18:   println '           port: ', b.port;
+19:   println '           path: ', b.path;
+20:   println '      file_name: ', b.file_name;
+21:   println '   query_string: ', b.query_string;
+22:   println '            ref: ', b.ref;
+23:   println 'constructed URL: ', b.transpose('UrlInfo');
+24: }
+25:
+26: class UrlInfo
+27: {
+28:   function toString() {
+29:     ret = root @ path;
+30:     if query_string != null { ret @= '?' @ query_string; }
+31:     if ref != null { ret @= '#' @ ref; }
+32:     return ret;
+33:   }
+34: }
+</codelist>
+
+<review>
+<question> Define a class called <code>Order</code> that have an attribute
+           "createTime" defaulted to now and "amount" defaulted to 0.
+<question> The <code>Order</code> class requires attribute "name" be initialized
+           to a non-empty string. How to enforce this?
+<question> A class is just a struct. User can attach more and more attributes.
+           How to list all the attributes at a particular moment?
+<question> When a class is extended, when is the parent class's constructor called?
+<question> The <code>this</code> reference is avaiable in a method.
+           Can you think of its uses?
+<question> An object is of a user-defined class which extends <kw>orderedMap</kw>.
+           When it is being converted to another class which extends <kw>struct</kw>
+           via a <kw>transpose()</kw> call, what happens? And vice versa?
+</review>
+
+
+<section name=scope>
+
+<p>
+First of all, let us clear some terminology. A function in the global scope
+is called a function; a function defined within a class is called a method.
+A pair of curly braces that enclose 0 or more statements is called block;
+blocks can be enclosed in other blocks. The curly braces for a class does
+not constitute a block because they never enclose statements. A variable
+name starts with a dollar sign; a name without a leading dollar sign is a
+class data member (or attribute).
+
+<p>
+A context is where variables reside. When a program starts, it is in a root
+or global context. In most cases, a block is equivalent to a context, for
+instance, a function, a thread, a loop statement like <kw>for</kw> and
+<kw>while</kw>, a try-catcn-finally block, and anonymous blocks. The only
+exceptions are the blocks in <kw>if-else</kw> and <kw>switch</kw>
+statements, because such simple braching does not deserve a separate
+context yet syntactically they do have blocks.
+
+<p>
+When a variable is referenced, the <J> engine starts searching from the
+current context up the block chain, until either the variable is found in
+one of the context, or a "terminal" context is reached, in which case a
+<kw>null</kw> is returned. A terminal context is that of a method or the
+global context itself. Global functions are considered child contexts of
+the global one. You can force to access a global variable (variables in
+the global context) from any code by preceding the variable name with the
+<kw>::</kw> decorator. Constants are always global.
+
+<p>
+When a variable is being assigned a value, the same search process
+occurs; if found, the value is set for the variable in that context. If
+not, a new variable is created in the current context. A local variable
+can be created in the current context by the decorator <kw>local</kw> in
+front of the assignment, so that an variables with the same name in
+parent contexts are not accessed and affected.
+
+<p>
+Class members are, strictly speaking, not variables. They can be
+referenced and assigned values, and are always in the class instance.
+
+<p>
+The following is a boring example that simply experiments with scopes:
+
+<codelist name="var_scope" caption="var_scope.judo">
+ 1: println "global a = ", a = 1;
+ 2: {
+ 3:   local a = 2;
+ 4:   println "local a = ", a;
+ 5:   println "::a = ", ::a;
+ 6: }
+ 7: println 'global a = ', a;
+ 8:
+ 9: class MyCls
+10: {
+11:   function foo {
+12:     println "in class: a = ", a;
+13:     local a = 2;
+14:     println "in class: local a = ", a;
+15:     println "in class: ::a = ", ::a;
+16:   }
+17: }
+18: (new MyCls).foo();
+</codelist>
+
+The result is:
+
+<demo>
+global a = 1
+local a = 2
+::a = 1
+global a = 1
+in class: a =
+in class: local a = 2
+in class: ::a = 1
+</demo>
+
+<review>
+<question> What is the difference between a function and a method in terms of
+           variable scope?
+<question> When a variable is not defined anywhere yet, where will it be created
+           by an assignment?
+<question> What will be printed in the following program? If the first line is
+           uncommented, then what?
+<demo>
+//x = 9;
+for x from 0 to 5 {
+}
+println x;
+</demo>
+<question> In the following
+<demo>
+for x in array {}
+</demo>
+           is <code>x</code> local? (Judge by common sense.)
+<question> How to defined a local variable? Why you may need to do so?
+<question> How to access a global variable and constant from a class method?
+</review>
+
+
+<section name=thrd>
+
+<p>
+A <J> thread is defined exactly the same as a function except the keyword
+is <kw>thread</kw> instead of <kw>function</kw>. It can take parameters
+optionally with default values. Threads do not, however, return any values.
+Threads are global objects; they can not be declared within a class. To
+start a thread, use the <kw>start thread</kw> or <kw>start daemon thread</kw>
+command.
+
+<demo>
+thread myFirstThread millis {
+  for i from 1 to 10 {
+    sleep(millis);
+    println "Hah!";
+  }
+}
+start thread myFirstThread(1000);
+</demo>
+
+Or you can start an anonymous thread without declaration:
+
+<demo>
+start thread millis = 1000 {
+  for i from 1 to 10 {
+    sleep(millis);
+    println "Hah!";
+  }
+}
+</demo>
+
+The parameters in this case are for code clean-ness. They should all be
+initialized.
+
+<p>
+Threads are run in their own contexts, a child to the root context. The
+parameters are evaluated in the current context and their values are
+stored in the new thread context.
+
+<p>
+Threads run with others; coordination of accesses to variables is essential
+to thread programming. There are two ways to share variables among threads:
+global variables and non-primitive parameters. If two threads happen to
+modify a same shared object at the same time, the result will be unpredicted.
+To ensure ownership of a shared object, use system functions <kw>lock()</kw>
+and <kw>unlock()</kw> to serialize accesses.
+
+<codelist name="locks" caption="locks.judo">
+ 1: const #fmt = 'mm:ss.SSS'; // minute:second.millisecond
+ 2:
+ 3: thread t name, dur = 2000 {
+ 4:   while {
+ 5:     sleep(dur);
+ 6:     lock 'house';
+ 7:     println name, ' have it!  ', date().fmtDate(#fmt);
+ 8:     sleep(dur);
+ 9:     println name, ' give up.  ', date().fmtDate(#fmt);
+10:     unlock 'house';
+11:   }
+12: }
+13:
+14:
+15: start thread t('Kitty', 1000);
+16: sleep(1300);
+17: start thread t('Doggy');
+</codelist>
+
+In this program, a lock named "house" is used to serialize execution. When
+one thread owns the lock, others trying to lock it are blocked until that
+owner thread unlocks. The result is listed below; look at the time of the
+events, Doggy holds the lock for 2 second and Kitty holds for 1 second.
+When one releases the lock, the other grabs it immediately.
+
+<demo>
+Kitty have it!  58:15.706
+Kitty give up.  58:16.707
+Kitty have it!  58:17.709
+Kitty give up.  58:18.710
+Doggy have it!  58:18.710
+Doggy give up.  58:20.713
+Kitty have it!  58:20.713
+Kitty give up.  58:21.714
+Doggy have it!  58:22.716
+Doggy give up.  58:24.719
+Kitty have it!  58:24.719
+......
+</demo>
+
+To synchronize threads, the system function <kw>waitFor()</kw>, <kw>notify()</kw>
+and <kw>notifyAll()</kw> can be used. These functions work on a signal name.
+The following program is a classic producer-consumer problem. The consumer
+thread waits for the goods produced by the producer; if no goods available,
+it go to sleep until somebody (typically the producer) wakes it up. The
+producer thread periodically produces a random number of goods.
+
+<codelist name="producer_consumer" caption="producer_consumer.judo">
+ 1: inventory = 0; // shared
+ 2:
+ 3: thread consumer
+ 4: {
+ 5:   while inventory &lt;= 0 {
+ 6:     waitFor 'has-goods';
+ 7:
+ 8:     lock 'use-goods';
+ 9:     for x from 1 to inventory { print '* '; }
+10:     println;
+11:     inventory = 0;
+12:     unlock 'use-goods';
+13:   }
+14: }
+15:
+16: thread producer
+17: {
+18:   while {
+19:     sleep 1000;
+20:     lock 'use-goods';
+21:     if inventory == 0 { inventory = random(5,10); }
+22:     unlock 'use-goods';
+23:
+24:     notifyAll 'has-goods';
+25:   }
+26: }
+27:
+28: start thread consumer;
+29: start thread producer;
+</codelist>
+
+In the consumer thread, lines 8 and 12 guarantee ownership of the global
+variable <kw>inventory</kw>, as do lines 20 and 22 in the producer thread.
+The producer wakes up all the waiting consumer threads on line 24 when
+the inventory is beyond 0.
+
+<review>
+<question> How to declare a thread? Can you declare it in a class?
+<question> How to start a thread? Can you start it from a method?
+<question> Do you have to acquire a lock to access and modify a global
+           variable in a thread?
+<question> The main program runs in the default main thread. Can you
+           share global variables with threads? If so, is serialized
+           accesses necessary?
+<question> How to synchronized threads with <kw>waitFor()</kw>, <kw>notify()</kw>
+           and <kw>notifyAll()</kw>? Can you use locks to do so?
+</review>
+
+
+
+<section name=eval>
+
+<p>
+You can dynamically create <J> code and run, either in the current runtime
+context with <kw>eval</kw> command or in a separate context with
+<kw>evalExternal</kw> and <kw>evalFile</kw>. <kw>evalFile</kw> takes a file
+name instead of code.
+
+<demo>
+eval '. "ABCDEFG"';
+</demo>
+
+When the dynamic code is evaluated with <kw>eval</kw>, the declarations
+such as functions, classes and constants are taken into the current runtime
+context. <kw>evalExternal</kw> and <kw>evalFile</kw> do not.
+
+<demo>
+eval [[*
+  const #acon = 'a';
+  function foo() { println 'From foo()'; }
+  class BarCls { constructor { println 'BarCls.ctor()'; } }
+*]];
+
+println '#acon = ', #acon;
+foo();
+new BarCls;
+</demo>
+
+<p>
+<kw>evalExternal</kw> and <kw>evalFile</kw> can take parameters using the
+<kw>with</kw> clause:
+
+<demo>
+code = [[*
+  if #args.length < 0 {
+    println <err> 'Usage: java judo ', #prog, ' x';
+    exit 0;
+  }
+
+  println 'The argument is: ', #args[0];
+*]];
+evalExternal code;
+evalExternal code with 'abcd';
+</demo>
+
+The result is:
+
+<demo>
+Usage: java judo <string> x
+The argument is: abcd
+</demo>
+
+<p>
+The following is an example. Last July, Rainbow Inc., a retail company,
+ramped up its e-commerce presence. This July, Mr. Smart is hired to head
+the marketing department. He devised a sophisticated pricing scheme to
+promote certain products. Fortunately, the consultants who designed the
+system used <J>'s dynamic evaluation feature, so Mr. Smart's unforeseeable
+request is entered into the system without any code rewrite.
+
+<codelist name="new_pricing" caption="new_princing.judo">
+ 1: // pre-Mr.Smart pricing -- flat
+ 2: pricing = lambda prod, quantity {
+ 3:              switch prod {
+ 4:              case 'candy': return 1.49 * quantity;
+ 5:              case 'chips': return 2.49 * quantity;
+ 6:              case 'beer':  return 2.99 * quantity;
+ 7:              default:      return 0.99 * quantity;
+ 8:              }
+ 9:            };
+10:
+11: println '10 candies: ', pricing('candy', 10);
+12:
+13: // post-Mr.Smart pricing -- quantity discount
+14: eval [[[*
+15:   pricing = lambda prod, quantity {
+16:                switch prod {
+17:                case 'candy': unitprice = 1.49; break;
+18:                case 'chips': unitprice = 2.49; break;
+19:                case 'beer':  unitprice = 2.99; break;
+20:                default:      unitprice = 0.99; break;
+21:                }
+22:                if quantity &lt;= 5 {
+23:                  return unitprice * quantity;
+24:                } elif quantity &lt;= 10 {
+25:                  return (unitprice * 0.95 * quantity).fractionDigits(2);
+26:                } else {
+27:                  return (unitprice * 0.90 * quantity).fractionDigits(2);
+28:                }
+29:              };
+30: *]];
+31:
+32: println ' 5 candies: ', pricing('candy', 5);
+33: println '10 candies: ', pricing('candy', 10);
+34: println '15 candies: ', pricing('candy', 15);
+</codelist>
+
+What happens is, the software has a admin-tool that allows a human operator
+to type in the new pricing scheme (lines 15 through 29) and submit to the
+system, test out and commit the changes.
+
+<review>
+<question> Think of a situation where functions are dynamically created and used.
+<question> How to run dynamically generated code without affecting the current
+           runtime context?
+</review>
+
+
+<section name=summary>
+
+<p>
+User functions and class methods are declared with a name and 0 or more
+parameters, with or without default values. A function or method can be
+invoked with differnt number of parameters than what is declared. When
+fewer parameters present, <kw>null</kw> is used for the missing parameters;
+if more parameters than declared are passed, the extra ones are in the
+array <kw>$$args</kw>. Functions can be recusrively called. Functions can
+be assigned to variables by the <kw>&amp;</kw> operator. Lambda functions
+are anonymous functions. Function variables are useful for array sorting,
+filtering, element-wise conversion and any dynamic programming. Java class
+static methods can be aliased and be used like a regular <J> function.
+
+<p>
+<J> supports a set of system functions; they are actually the methods of a
+built-in object, <kw>$$sys</kw>. These functions can be called directly
+via a mechanism called function shortcut. Most of the system functions are
+listed in categories without much explanation.
+
+<p>
+User classes are extensions to struct or ordered map. They typically have
+methods. Method <kw>toString()</kw> is special; when defined, is used by
+the <kw>print</kw> statements. Classes may have a constructor, which
+takes no parameters. It is called after the class object is initialized.
+Use <kw>new</kw> operator to create a class instance, with named
+initializers for the the class members or attributes. In the constructor,
+you can ensure certain members are initialized by calling
+<kw>assert(somefield != null);</kw>. Classes can singly extend others. Parent
+classes' constructors are called first. In the class methods, the special
+variable <kw>this</kw> to pass itself to other methods, and <kw>super</kw>
+to invoke the immediate parent's same-name methods.
+
+<p>
+Variables belong to a context, normally equivalent to a block in the code;
+the only exceptions are blocks of <kw>if-elif-else</kw> and <kw>switch</kw>
+statements. New variables are created in the current context when there
+are no variable with that name exist in the context chain. Global
+functions use the global context as its parent context; class methods have
+no parent context. The decorator <kw>::</kw> in front of a variable name
+explicit accesss a global variable. To explicitly define a variable in the
+current context, use the <kw>local</kw> decorator; same-namevariables in
+the parent contexts are shielded and not accessible except for explict
+global accesses.
+
+<p>
+Threads are defined just like a function in <J> except the keyword
+<kw>thread</kw> replaces <kw>function</kw>. They are started via the
+<kw>start thread</kw> command. Anonymous threads can be started directly.
+Threads are global objects. The ways to share information is either by
+global variables or parameters of compound data structures. To
+synchronize threads and serialize access to shared object, use the system
+functions <kw>lock()</kw>, <kw>unlock()</kw>, <kw>waitFor()</kw>,
+<kw>notify()</kw> and <kw>notifyAll()</kw>.
+
+<p>
+<J> code can be dynamically generated and evaluated by <kw>eval</kw>
+and <kw>evalExternal</kw> commands. The <kw>eval</kw> command evaluates
+the code locally; declarations in the code are taken and kept.
+<kw>evalExternal</kw> evaluates in a separate runtime context.
+
+
+
+<section name=listings>
+
+<insert name="codelistings">

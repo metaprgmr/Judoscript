@@ -1,0 +1,18 @@
+<html>
+<body>
+<p>View <%!viewsrc 'lesson11/rt_error.jusp', '../' %></p>
+
+<p>(You should see some logging messages on the server.)</p>
+<%
+{
+  println '====> A';
+  call_foo(); // fail!
+  println '====> B';
+catch:
+  println <log:error ($_)> 'Some error occurred.';
+  println <log:warn> 'This is a test warning message.';
+}
+%>
+
+<hr><font size=-1>Back to <a href="../lesson11.jusp">lesson 11</a></font>
+</body></html>

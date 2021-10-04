@@ -1,0 +1,27 @@
+
+=== java.util.Vector ===
+--- size: 4 ---
+lst[0] = 1/1/01 12:00 AM
+lst[1] = 1
+lst[2] = 10.01
+lst[3] = Hello, World!
+lst[4] = 
+lst[9] = XYZ
+
+=== java.util.ArrayList ===
+--- size: 4 ---
+lst[0] = 1/1/01 12:00 AM
+lst[1] = 1
+lst[2] = 10.01
+lst[3] = Hello, World!
+lst[4] = 
+lst[9] = XYZ
+
+=== java.util.LinkedList ===
+--- size: 4 ---
+lst[0] = 1/1/01 12:00 AM
+lst[1] = 1
+lst[2] = 10.01
+lst[3] = Hello, World!
+lst[4] = 
+lst[9] = XYZ

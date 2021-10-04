@@ -1,0 +1,11 @@
+usage {
+  minArgs = 1;
+  args    = 'dir';
+  author  = 'James Huang';
+  desc    = [[*
+    Removes the specified directory regardless it is empty or not.
+    Use with caution.
+  *]];
+}
+
+rmdir #args[0] force;

@@ -1,0 +1,11 @@
+<script name="eval.judo"
+        output="stdout"
+/>
+
+<script name="value_types.judo"
+        output="stdout"
+/>
+
+<script name="new_pricing.judo"
+        output="stdout"
+/>

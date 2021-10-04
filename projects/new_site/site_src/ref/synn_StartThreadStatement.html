@@ -1,0 +1,27 @@
+<html><head><title>JudoScript Semantics - StartThreadStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>StartThreadStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=StartThreadStatement>StartThreadStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>start</font>   (  <font class=kw>daemon</font>   )?  <font class=kw>thread</font>   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=t>FUNCTION_NAME</font>   (  <font class=nt><a href="javascript:showNT('Arguments')">Arguments</a></font>  )?  <font class=kw><nobr>;</nobr></font>   )   |  <font class=nt><a href="javascript:showNT('FormalParameters')">FormalParameters</a></font> <font class=nt><a href="javascript:showNT('Block')">Block</a></font>  )  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('StartThreadStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement starts a thread. The thread can be already defined or anonymously
+  defined on the fly. The thread can be started as a daemon thread (see Java
+  documentation on this.)</p>
+
+  <p>A thread runs in its own context. It only shares the global data with other
+  threads, including its creator. There are system functions such as <code>lock()</code>,
+  <code>unlock()</code>, <code>wait()</code>, <code>notify()</code> and <code>notifyAll()</code>
+  for thread synchronization and critical section implementation.</p>
+ </body></html>

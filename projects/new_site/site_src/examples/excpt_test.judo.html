@@ -1,0 +1,22 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_stmts/excpt_test.judo:</b></td></tr><tr><td><pre>
+{
+  xxxxx();  // method does not exist
+  println 'Not reached.';
+catch:
+  println '[Line ', $_.line, '] INSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  throw $_;
+finally:
+  println 'INSIDE FINALLY.';
+}
+
+throw;
+throw new java::Exception("This exception is pure Java.");
+throw "ABCDE";
+
+catch:
+  println '[Line ', $_.line, '] OUTSIDE CATCH: &lt;',
+          $_.name, '> ', $_.message;
+  resume;
+</pre></td></tr></table></body></html>

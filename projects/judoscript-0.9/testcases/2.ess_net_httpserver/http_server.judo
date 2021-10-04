@@ -1,0 +1,19 @@
+usage {
+  author  = 'James Huang';
+  created = '2003-01-14';
+  desc    = [[*
+    A multi-threaded HTTP server that serves files from a directory.
+  *]];
+}
+
+const #docroot = ${TMPROOT}; 
+const #port = 8088;
+println 'Server running at port ', #port;
+println 'serving files from ', ${TMPROOT};
+
+ss = startServer(#port); 
+while { 
+   start thread httpHandler(acceptHttp(ss)); 
+} 
+
+thread httpHandler(a) { a.serveFile(#docroot); } 

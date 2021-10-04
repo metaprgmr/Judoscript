@@ -1,0 +1,24 @@
+<%
+  var title = 'Tutorials and Presentations on Judo and its Related Technologies';
+  var keywords = "judo, judoscript, jusp, juspt, jamaica, java scripting, jdbc scripting, hibernate scripting, xml scripting, html scraping, os shell scripting, shell scripting, soap scripting, web app, jusp platform, juspt transform, jvm bytecode, jvm macro assembler, bytecode assembler";
+  var tabID = 'judo';
+%>
+<%!include '../site_src/include/header.jusp' %>
+
+<%!leftPane%>
+
+<h2>Tutorials and Presentations</h2>
+
+<ul>
+<li>Introduction to JudoScript:<br>
+      <a href="presentations/Introduction_to_JudoScript.ppt">Powerpoint</a>
+    | <a href="presentations/Introduction_to_JudoScript.pdf">PDF</a>
+    | <a href="presentations/Introduction_to_JudoScript_handout.pdf">PDF Handout</a> (9 slides/page)
+</li>
+</ul>
+
+<%!rightPane%>
+&nbsp;
+<%!endPanes%>
+
+<%!include '../site_src/include/footer.jusp' %>

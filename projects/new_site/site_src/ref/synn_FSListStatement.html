@@ -1,0 +1,40 @@
+<html><head><title>JudoScript Semantics - FSListStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>FSListStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=FSListStatement>FSListStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+  (  <font class=kw>listFiles</font>   (  <font class=kw><nobr>{</nobr></font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font> <font class=kw><nobr>}</nobr></font>   )?   |  <font class=kw>listPrintFiles</font>   |  <font class=kw>ls</font>   )   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw>in</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  |  <font class=kw>except</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>recursive</font>   |  <font class=kw>noHidden</font>   |  <font class=kw>fileOnly</font>   |  <font class=kw>dirOnly</font>   |  <font class=kw>perFile</font>   |  <font class=kw>perDir</font>  <br>  |  <font class=kw>count</font>   |  <font class=kw>countLines</font>   |  <font class=kw>size</font>   |  <font class=kw>compressedSize</font>   |  <font class=kw>as</font>  <font class=kw>tree</font>   |  <font class=kw>ordered</font>   (  <font class=kw>by</font>   (  <font class=kw>Date</font>   |  <font class=kw>size</font>   |  <font class=kw>extension</font>   )   )  <br>  )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('FSListStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>The <font class=kw>listFiles</font>  returns the result in <font class=kw><nobr>$$fs_result</nobr></font> ; <font class=kw>listPrintFiles</font>  and <font class=kw>ls</font>  are synonyms,
+  they print the results to the system standard output.</p>
+
+  <p>The search can happen in a directory or in a ZIP or TAR archive with the <font class=kw>in</font>  clause. Multiple
+  file patterns can be specified, separated by comma, and so does the <font class=kw>except</font>  clause.</p>
+
+  <p>These commands list and search various attributes of files and directories, such as total
+  number of files and directories with <font class=kw>count</font> , total file size with <font class=kw>size</font> , and total number
+  of lines with <font class=kw>countLines</font> . In most cases, they are used to list the files themselves, and the
+  resulted can be sorted with the <font class=kw>ordered</font>  clause.</p>
+
+  <p>For <font class=kw>list</font> , the results in <font class=kw><nobr>$$fs_result</nobr></font>  are different based on the operation. For normal
+  file listing, it is an array of strings, holding all the paths. If <font class=kw>as</font>  <font class=kw>tree</font>  is specified,
+  the result in <font class=kw><nobr>$$fs_result</nobr></font>  is a <font class=kw>treeNode</font> , where each node has a "path" data member and for
+  directories, there is a "isDir" boolean member set to <font class=kw>true</font> ; this only apploies to local file
+  systems. For <font class=kw>size</font>  and <font class=kw>compressedSize</font> , if <font class=kw>perDir</font>  is specified, <font class=kw><nobr>$$fs_result</nobr></font>  is an
+  sorted map with directory names and the results; the last entry is "TOTAL" and the total number;
+  otherwise it is simply an integer for the total size. For <font class=kw>countLines</font> , if <font class=kw>perFile</font>  is
+  specified, <font class=kw><nobr>$$fs_result</nobr></font>  is an sorted map with file names and the results; the last entry is
+  "TOTAL" and the total number; otherwise it is simply an integer for the total lines. For
+  <font class=kw>count</font> , <font class=kw><nobr>$$fs_result</nobr></font>  is an array with { file-count, directory-count, total-count }.</p>
+ </body></html>

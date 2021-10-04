@@ -1,0 +1,9 @@
+public class GotoTest
+{
+  public static void main(String[] args) {
+    goto label_1
+    return
+  label_1:
+    %println "Hello, World!"
+  }
+}

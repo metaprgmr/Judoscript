@@ -1,0 +1,915 @@
+<doc title="Files, Directories and Archives"
+ author="James Jianbo Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting langauge, JudoScript, scripting language for Java, text file, binary file, random access file, gzip, gzipped file, zip file, jar file, copy, archive, compress, store, move, rename, move, ls, list, listPrint, setReadOnly, cd, mkdir, rmdir, recursive, echo, noHidden"
+ deprecated="../books/judoscript-0.9/chapters/fs.html"
+>
+
+<sectiondefs>
+<sectiondef name="file"     caption="Search, Read and Write Files">
+<sectiondef name="file_text" sub="1" caption="Text Files">
+<sectiondef name="file_bin"  sub="1" caption="Binary Files">
+<sectiondef name="file_ra"   sub="1" caption="Random Access Files">
+<sectiondef name="file_gzip" sub="1" caption="Compressed Files">
+<sectiondef name="file_zip"  sub="1" caption="Files within Zip Archives">
+<sectiondef name="mkdir"    caption="Make and Remove Directories">
+<sectiondef name="list"     caption="List and Find Files">
+<sectiondef name="copy"     caption="Copy and Archive Files">
+<sectiondef name="more"     caption="Move, Remove and Modify Files">
+<sectiondef name="summary"  caption="Summary">
+<sectiondef name="listings" caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+This article introduces both file I/O programming and commands to search, copy
+and modify files in file systems and zip archives. To read from or write to a
+file, it must be opened as a binary stream, random access or text file. GNU
+zipped files can be read or written directly. Files in zip archives can also
+be read. <J> has a versatile <kw>list</kw> and <kw>copy</kw> commands.
+<kw>list</kw> searches files and/or directories as well as zip archives with
+inclusive and exclusive patterns. <kw>copy</kw> copies files among directories
+and zip archives. Files from multiple sources can be copied into a single
+archive. Other file system commands are <kw>rename</kw> (<kw>move</kw>),
+<kw>remove</kw>, <kw>setFileTime</kw> and <kw>setReadOnly</kw>.
+</abstract>
+</doc>
+
+
+<section name=file>
+
+<p>
+A file is represented by its path name. The path can be absolute or relative
+to the current directory in the file system. <J> uses its own current
+directory, which begins with the directory where the program is started and
+can be changed via <kw>cd</kw> command. The string value has a number of
+"file" methods that tell the status of the represented file.
+
+<codelist name="file_status" caption="file_status.judo">
+1: f = #args[0];
+2:
+3: println 'file name: ':<13,    f;
+4: println 'file exists: ':<13,  f.fileExists().fmtBool();
+5: println 'file is dir: ':<13,  f.isDir().fmtBool();
+6: println 'file is file: ':<13, f.isFile().fmtBool();
+7: println 'file time: ':<13,    f.fileTime();
+8: println 'file size: ':<13,    f.fileSize();
+</codelist>
+
+The dot command is the shortcut for <kw>println</kw>. The <kw>#args</kw> array
+holds the command-line parameters. The program prints out all the information
+that <J> knows about a file. Some formatting features are worth noting. The
+<kw>:&lt;13</kw> notion instructs <kw>println</kw> to align the result
+left-aligned with a width of 13. For methods returning boolean values, the
+<kw>fmtBool()</kw> (or <kw>formatBool()</kw>) is used to print "true" or
+"false", because boolean values are just numbers (zero for false, non-zero
+true). To call a method on a value itself, do this:
+
+<demo>
+println ('Main.class').fileSize();
+</demo>
+
+<section name=file_text>
+
+<p>
+To read from or write to a file, it must be opened first in binary stream mode,
+binary random access mode or text mode. The open file is stored as a handle, and
+closed when done. Let us start with text files. The following program adds line
+numbers and prints on the standard output:
+
+<codelist name="addlinenum" caption="addlinenum.judo">
+ 1: if #args.length() == 0 {
+ 2:   println 'Usage: java judo ', #prog, ' &lt;filename&gt;';
+ 3:   exit 0;
+ 4: }
+ 5:
+ 6: file = openTextFile(#args[0]);
+ 7: for lineNum=1; (line=file.readLine()) != eof; ++lineNum {
+ 8:   println lineNum : >3, ': ', line;
+ 9: }
+10: file.close();
+</codelist>
+
+Line 6 opens a text file with system function <kw>openTextFile()</kw>, in
+line 7 the loop condition reads a line from the file. The line read could be
+empty or <kw>eof</kw>. You can skip so many characters by the <kw>skip()</kw>
+method. To read a single character, use <kw>read()</kw> method; it returns
+an integer; you can cast a number into a character (a length-1 string in
+<J>) via the <kw>chr()</kw> method:
+
+<demo>
+file.skip(5);
+ch = file.read().chr();
+</demo>
+
+<p>
+The very <kw>println</kw> statement can also print to text files. Its syntax is:
+
+<gramma>
+(<kw>print</kw> | <kw>println</kw> | <kw>flush</kw>)
+[ <kw>&lt;</kw><nt>target</nt><kw>&gt;</kw> ] [ <nt>print_list</nt> ] <kw>;</kw>
+</gramma>
+
+<kw>flush</kw> does exactly the same as <kw>print</kw> except it flushes the
+output stream. <kw>println</kw> always flushes. The target can be <kw>out</kw>
+(the default), <kw>err</kw>, <kw>log</kw>, <kw>pipe</kw> or a variable that
+denotes an open text file. Here is an example:
+
+<demo>
+dat = openTextFile('important.dat', 'w'); // 'w': write.
+println <dat> '2001/10/1,XYZ,12.00,100000';
+dat.close();
+</demo>
+
+<section name=file_bin>
+
+<p>
+Binary files are opened with <kw>openFile()</kw> system function.
+
+<codelist name="checksum" caption="checksum.judi">
+ 1: function checksum(fname)
+ 2: {
+ 3:   f = openFile(fname);
+ 4:   buf = javanew byte[2048];
+ 5:   chksum = 0;
+ 6:   while (cnt = f.read(buf)) > 0 {
+ 7:     for i from 0 to cnt-1 {
+ 8:       chksum += buf[i];
+ 9:     }
+10:   }
+11:   return chksum;
+12: }
+</codelist>
+
+Usually, a Java byte array is used to read chunks of the file, as shown on
+lines 4 and 6.
+
+<p>
+For a complete listing of binary file methods, refer to
+<a href=../langspec/spec4.html#file>language specification</a>. There are
+methods that reads Java primitive type entities such as byte, unsigned byte,
+short, unsigned short, integer, float, double, ASCII and Unicode characters.
+These numbers may be stored in the file with different byte orders. <J>
+allows you to set the byte order of the file with <kw>setBigEndian()</kw>
+and <kw>setLittleEndian()</kw> after the file is opened.
+
+<section name=file_ra>
+
+<p>
+Random access files are opened with <kw>openRandomeAccessFile()</kw> system
+function. You can set the byte order with <kw>setBigEndian()</kw> and
+<kw>setLittleEndian()</kw> after the file is opened. All the
+<kw>java.io.RandomAccessFile</kw> methods are available. The following is a
+relatively big practical program that retrieves MP3 file information.
+
+<codelist name="mp3" caption="mp3.judi">
+  1: 
+  2: //printMP3info(#args[0]);  // test
+  3: 
+  4: ////////////////////////////////////////////////////////////
+  5: //
+  6: // The MP3 Library Functions
+  7: //
+  8: ////////////////////////////////////////////////////////////
+  9: 
+ 10: 
+ 11: function printMP3info(fname)
+ 12: {
+ 13:   if fname == null { return; }
+ 14:   mp3 = mp3info(fname);
+ 15:   if mp3 == null { return; }
+ 16:   if mp3.msg != null { println "msg:       ", mp3.msg; }
+ 17:   println "type:      ", mp3.type;
+ 18:   println "mode:      ", mp3.mode;
+ 19:   println "bitrate:   ", mp3.bitrate;
+ 20:   println "frequency: ", mp3.frequency;
+ 21:   println "title:     ", mp3.title;
+ 22:   println "artist:    ", mp3.artist;
+ 23:   println "album:     ", mp3.album;
+ 24:   println "year:      ", mp3.year;
+ 25:   println "comment:   ", mp3.comment;
+ 26:   println "track:     ", mp3.track;
+ 27:   println "genre:     ", mp3.genre;
+ 28: }
+ 29: 
+ 30: /**
+ 31:  * @param  fname the MP3 file name
+ 32:  * @return a struct with potentially these fields:
+ 33:  *         .msg       -- most likely error occured
+ 34:  *         .type
+ 35:  *         .mode
+ 36:  *         .bitrate
+ 37:  *         .frequency
+ 38:  *         .title     -- ID3v1
+ 39:  *         .artist    -- ID3v1
+ 40:  *         .album     -- ID3v1
+ 41:  *         .year      -- ID3v1
+ 42:  *         .comment   -- ID3v1
+ 43:  *         .track     -- ID3v1
+ 44:  *         .genre     -- ID3v1
+      */
+ 45: function mp3info(fname)
+ 46: {
+ 47:   a = openRandomAccessFile(fname);
+ 48:   ret = new struct;
+ 49: 
+ 50:   // look for ID3v1
+ 51:   a.seek(a.size() - 128);
+ 52:   tag = a.readBytesAsString(3);
+ 53:   if tag == 'TAG' {
+ 54:     ret.title   = a.readBytesAsString(30).trim();
+ 55:     ret.artist  = a.readBytesAsString(30).trim();
+ 56:     ret.album   = a.readBytesAsString(30).trim();
+ 57:     ret.year    = a.readBytesAsString(4).trim();
+ 58:     ret.comment = a.readBytesAsString(28).trim();
+ 59:     ret.track   = a.read();
+ 60:     ret.genre   = #genres[ a.read() ];
+ 61:   }
+ 62: 
+ 63:   // get the first chunk
+ 64:   a.seek(0);
+ 65:   buf = javanew byte[512]; // normally this is big enough for a frame
+ 66:   len = a.read(buf);
+ 67:   a.close(); // we don't need the file anymore.
+ 68: 
+ 69:   // look for the FF E0 pattern
+ 70:   local $start;
+ 71:   for $start = 0; $start &lt; len; ++$start {
+ 72:     if (buf[$start] == 0x0FF) &amp;&amp; ((buf[$start+1]&amp;0x0E0) == 0x0E0) {
+ 73:       break;
+ 74:     }
+ 75:   }
+ 76:   if ($start &gt;= len) {
+ 77:     ret.msg = 'No chunk header found.';
+ 78:     return ret;
+ 79:   }
+ 80: 
+ 81:   mpeg_layer = (0 == (buf[$start + 1] &amp; 0x08)) ? #MPEG_2_I : #MPEG_1_I;
+ 82:   switch(buf[$start+1] &amp; 0x06) {
+ 83:   case 0x02: mpeg_layer += 2; break;
+ 84:   case 0x04: ++mpeg_layer; break;
+ 85:   case 0x06: break;
+ 86:   }
+ 87:   ret.type = #type_names[ mpeg_layer ];
+ 88: 
+ 89:   switch(buf[$start + 2] &amp; 0x0C) {
+ 90:   case 0x4: ret.frequency = (0==(buf[$start+1]&amp;0x08))?24000:48000; break;
+ 91:   case 0x8: ret.frequency = (0==(buf[$start+1]&amp;0x08))?16000:32000; break;
+ 92:   case 0x0: ret.frequency = (0==(buf[$start+1]&amp;0x08))?22050:44100; break;
+ 93:   case 0xC:
+ 94:   }
+ 95: 
+ 96:   switch(buf[$start + 3] &amp; 0xC0) {
+ 97:   case 0x00: ret.mode = "Stereo"; break;
+ 98:   case 0x40: ret.mode = "Joint Stereo"; break;
+ 99:   case 0x80: ret.mode = "Dual Channel"; break;
+100:   case 0xC0: ret.mode = "Mono"; break;
+101:   }
+102: 
+103:   ret.bitrate = #bitrate_table[ (buf[$start+2]&gt;&gt;4)&amp;0x0F][$mpeg_layer];
+104: 
+105:   return ret;
+106: 
+107: } // mp3info().
+108: 
+109: const #MPEG_1_I   = 0;
+110: const #MPEG_1_II  = 1;
+111: const #MPEG_1_III = 2;
+112: const #MPEG_2_I   = 3;
+113: const #MPEG_2_II  = 4;
+114: const #MPEG_2_III = 5;
+115: 
+116: const #bitrate_table = [
+117:         /*0000*/ [     0,     0,     0,     0,     0,     0],
+118:         /*0001*/ [ 32000, 32000, 32000, 32000,  8000,  8000],
+119:         /*0010*/ [ 64000, 48000, 40000, 48000, 16000, 16000],
+120:         /*0011*/ [ 96000, 56000, 48000, 56000, 24000, 24000],
+121:         /*0100*/ [128000, 64000, 56000, 64000, 32000, 32000],
+122:         /*0101*/ [160000, 80000, 64000, 80000, 40000, 40000],
+123:         /*0110*/ [192000, 96000, 80000, 96000, 48000, 48000],
+124:         /*0111*/ [224000,112000, 96000,112000, 56000, 56000],
+125:         /*1000*/ [256000,128000,112000,128000, 64000, 64000],
+126:         /*1001*/ [288000,160000,128000,144000, 80000, 80000],
+127:         /*1010*/ [320000,192000,160000,160000, 96000, 96000],
+128:         /*1011*/ [352000,224000,192000,176000,112000,112000],
+129:         /*1100*/ [384000,256000,224000,192000,128000,128000],
+130:         /*1101*/ [416000,320000,256000,224000,144000,144000],
+131:         /*1110*/ [448000,384000,320000,256000,160000,160000],
+132:         /*1111*/ [     0,     0,     0,     0,     0,     0]
+133:       ];
+134: 
+135: const #type_names = new array(
+136:        "MPeg-1 Layer-I", "MPeg-1 Layer-II", "MPeg-1 Layer-III",
+137:        "MPeg-2 Layer-I", "MPeg-2 Layer-II", "MPeg-2 Layer-III"
+138:       );
+139: 
+140: const #genres = new array(
+141:        "Blues", "Classic Rock", "Country", "Dance", "Disco", "Funk",
+142:        "Grunge", "Hip-Hop", "Jazz", "Metal", "New Age", "Oldies", "Other",
+143:        "Pop", "R&amp;B", "Rap", "Reggae", "Rock", "Techno", "Industrial",
+144:        "Alternative", "Ska", "Death Metal", "Pranks", "Soundtrack",
+145:        "Euro-Techno", "Ambient", "Trip-Hop", "Vocal", "Jazz+Funk",
+146:        "Fusion", "Trance", "Classical", "Instrumental", "Acid", "House",
+147:        "Game", "Sound Clip", "Gospel", "Noise", "AlternRock", "Bass",
+148:        "Soul", "Punk", "Space", "Meditative", "Instrumental Pop",
+149:        "Instrumental Rock", "Ethnic", "Gothic", "Darkwave",
+150:        "Techno-Industrial", "Electronic", "Pop-Folk", "Eurodance",
+151:        "Dream", "Southern Rock", "Comedy", "Cult", "Gangsta", "Top 40",
+152:        "Christian Rap", "Pop/Funk", "Jungle", "Native American",
+153:        "Cabaret", "New Wave", "Psychadelic", "Rave", "Showtunes",
+154:        "Trailer", "Lo-Fi", "Tribal", "Acid Punk", "Acid Jazz", "Polka",
+155:        "Retro", "Musical", "Rock &amp; Roll", "Hard Rock", "Folk",
+156:        "Folk/Rock", "National folk", "Swing", "Fast-fusion", "Bebob",
+157:        "Latin", "Revival", "Celtic", "Bluegrass", "Avantgarde",
+158:        "Gothic Rock", "Progressive Rock", "Psychedelic Rock",
+159:        "Symphonic Rock", "Slow Rock", "Big Band", "Chorus",
+160:        "Easy Listening", "Acoustic", "Humour", "Speech", "Chanson",
+161:        "Opera", "Chamber Music", "Sonata", "Symphony", "Booty Bass",
+162:        "Primus", "Porn Groove", "Satire", "Slow Jam", "Club", "Tango",
+163:        "Samba", "Folklore", "Ballad", "Powder Ballad", "Rhythmic Soul",
+164:        "Freestyle", "Duet", "Punk Rock", "Drum Solo", "A Capella",
+165:        "Euro-House", "Dance Hall", "Goa", "Drum &amp; Bass", "Club House",
+166:        "Hardcore", "Terror", "Indie", "BritPop", "NegerPunk",
+167:        "Polsk Punk", "Beat", "Christian Gangsta", "Heavy Metal",
+168:        "Black Metal", "Crossover", "Contemporary C", "Christian Rock",
+169:        "Merengue", "Salsa", "Thrash Metal", "Anime", "JPop", "SynthPop"
+170:       );
+171: 
+</codelist>
+
+<section name=file_gzip>
+
+<p>
+GNU zipped files can be read from and written to directly. Open a file with one
+of the following, and read/write like a normal file:
+
+<demo>
+file = openGZippedFile(filename, 'w');
+file = openGZippedTextFile(filename, 'w');
+</demo>
+
+<section name=file_zip>
+
+<p>
+First you obtain a handle to a zip archive with the system function <kw>openZip()</kw>,
+then call its <kw>openFile()</kw> or <kw>openTextFile()</kw> methods. It also have
+<kw>isFile()</kw> and <kw>isDirectory()</kw> methods to check the status of an entry.
+
+<demo>
+zf = openZip("mysrc.jar");
+if zf.isFile(#args[0]) {
+  f = zf.openTextFile(#args[0]);
+  println f.readLine(); // print the first line
+  f.close();
+}
+zf.close();
+</demo>
+
+<review>
+<question> How to tell if a file exists or is a directory?
+<question> How to open a text file for reading? Other than <kw>readLine()</kw>,
+           what else can you do with it?
+<question> How to open a binary file for reading? How to set byte order?
+           Can you read Java bytes, integers, etc.?
+<question> How to use random access files? Can it be written? How to set its
+           byte order?
+<question> Anything special about reading or writing a GNU zipped file?
+<question> Write a program to print out a specific file in a zip archive?
+</review>
+
+
+
+<section name=mkdir>
+
+<p>
+So far, we have learnt how to programmatically handle file content. The rest
+of this article explains all the commands that search and manipulate file
+system objects and files in zip/jar archives, sometimes with the help of a
+fake software product development project called "flagship". The project
+source file tree looks like this:
+
+<demo>
+flagship/readme.txt
+flagship/doc/pub/index.html
+flagship/doc/pub/ug.html
+flagship/doc/pub/spec.html
+flagship/doc/pub/architecture.gif
+flagship/doc/pub/logo.gif
+flagship/doc/dev/design.doc
+flagship/doc/dev/tasks.xls
+flagship/doc/dev/pres.ppt
+flagship/doc/dev/architecture.vsd
+flagship/src/makefile
+flagship/src/java/CommandCenter.java
+flagship/src/java/DecisionEngine.java
+flagship/src/java/alfa
+flagship/src/cpp/flagship.h
+flagship/src/cpp/fs_jni.c
+flagship/src/cpp/util.h
+flagship/src/cpp/util.c
+flagship/src/cpp/engine.inc
+flagship/src/cpp/alfa
+flagship/src/cpp/flagship.cpp
+flagship/src/cpp/save/engine.cpp
+flagship/src/cpp/save/flagship.cpp
+flagship/src/cpp/basics/types.h
+flagship/src/cpp/basics/_win32.h
+flagship/src/cpp/basics/_unix.h
+flagship/src/cpp/basics/_mac.h
+flagship/examples/load.judo
+flagship/examples/unload.judo
+flagship/examples/common.judi
+flagship/examples/data.dtd
+flagship/examples/data.xml
+</demo>
+
+It is a Java/C++ hybrid project. Most files in this tree are either source code
+or documentation. Some files and directories like <nt>alfa</nt> and <nt>save</nt>,
+however, are created and used only temporarily. We will emulate the building and
+packaging processes to demonstrate the use of various commands.
+First, let us create it somewhere.
+
+<codelist name="flagship" caption="flagship.judi">
+ 1: // modify this for your base test directory.
+ 2: const #base = 'c:/temp/x/';
+ 3:
+ 4: // Create a phony file.
+ 5: function genFile dir, name {
+ 6:   f = openTextFile(#base @ dir @ name, 'w');
+ 7:   if name.endsWith('.html') {
+ 8:     print &lt;f&gt; "&lt;html&gt;&lt;body&gt;&lt;h1&gt;", nam, "&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;";
+ 9:   } else {
+10:     print &lt;f&gt; '======= ', name, ' =======';
+11:   }
+12:   f.close();
+13: }
+</codelist>
+
+<codelist name="create_flagship_tree" caption="create_flagship_tree.judo">
+ 1: !include 'flagship.judi' // for #base and genFile().
+ 2:
+ 3: mkdir 'flagship/doc/pub, flagship/doc/dev, ' @
+ 4:       'flagship/src/java, ' @
+ 5:       'flagship/src/cpp/save, flagship/src/cpp/basics, ' @
+ 6:       'flagship/examples'
+ 7:       in #base;
+ 8:
+ 9: genFile( 'flagship/', 'readme.txt' );
+10: genFile( 'flagship/doc/pub/', 'index.html' );
+11: genFile( 'flagship/doc/pub/', 'ug.html' );
+12: genFile( 'flagship/doc/pub/', 'spec.html' );
+13: genFile( 'flagship/doc/pub/', 'architecture.gif' );
+14: genFile( 'flagship/doc/pub/', 'logo.gif' );
+15: genFile( 'flagship/doc/dev/', 'design.doc' );
+16: genFile( 'flagship/doc/dev/', 'tasks.xls' );
+17: genFile( 'flagship/doc/dev/', 'pres.ppt' );
+18: genFile( 'flagship/doc/dev/', 'architecture.vsd' );
+19: genFile( 'flagship/src/', 'makefile' );
+20: genFile( 'flagship/src/java/', 'CommandCenter.java' );
+21: genFile( 'flagship/src/java/', 'DecisionEngine.java' );
+22: genFile( 'flagship/src/java/', 'alfa' );
+23: genFile( 'flagship/src/cpp/', 'flagship.h' );
+24: genFile( 'flagship/src/cpp/', 'fs_jni.c' );
+25: genFile( 'flagship/src/cpp/', 'util.h' );
+26: genFile( 'flagship/src/cpp/', 'util.c' );
+27: genFile( 'flagship/src/cpp/', 'engine.inc' );
+28: genFile( 'flagship/src/cpp/', 'alfa' );
+29: genFile( 'flagship/src/cpp/', 'flagship.cpp' );
+30: genFile( 'flagship/src/cpp/save/', 'engine.inc' );
+31: genFile( 'flagship/src/cpp/save/', 'flagship.cpp' );
+32: genFile( 'flagship/src/cpp/basics/', 'types.h' );
+33: genFile( 'flagship/src/cpp/basics/', '_win32.h' );
+34: genFile( 'flagship/src/cpp/basics/', '_unix.h' );
+35: genFile( 'flagship/src/cpp/basics/', '_mac.h' );
+36: genFile( 'flagship/examples/', 'load.judo' );
+37: genFile( 'flagship/examples/', 'unload.judo' );
+38: genFile( 'flagship/examples/', 'common.judi' );
+39: genFile( 'flagship/examples/', 'data.dtd' );
+40: genFile( 'flagship/examples/', 'data.xml' );
+</codelist>
+
+The file in <codelist href="flagship"> is included in all the test scripts. It
+defines a <kw>#base</kw> constant pointing to our test directory. You can modify
+it for your environment. It also defines a function, <kw>genFile()</kw>, that
+generates a phony text file with its file name as its content regardless of its
+type in the base directory. Lines 3 through 7 in <codelist href="create_flagship_tree">
+creates all the directories. Notice only the deepest directories are specify;
+the intermediate ones are created automatically.
+
+<p>
+The remove directory command syntax is as follows, 
+
+<gramma>
+( <kw>removeDir</kw> | <kw>rmdir</kw> ) <nt>dir_name</nt> [ <kw>in</kw> <nt>base</nt> ] [ <kw>force</kw> ]
+</gramma>
+
+For a directory that is not empty, specify <kw>force</kw> to recursively delete
+the whole tree.
+
+<demo>
+rmdir 'flagship' in 'c:/temp/x/' force;
+</demo>
+
+<review>
+<question> When you use <kw>mkdir</kw> command to create a diretory, how do
+           you ensure the intermediate directories are there?
+<question> Does <kw>rmdir</kw> command always remove a directory?
+           How to ensure it is removed?
+</review>
+
+
+
+<section name=list>
+
+<p>
+<J> has a versatile <kw>list</kw> command that finds files or trees in file
+systems or zip/jar archives. Its syntax is:
+
+<gramma>
+( <kw>list</kw> [ <kw>{</kw> <nt>array_var</nt> <kw>}</kw> ]
+| <kw>listPrint</kw> | <kw>ls</kw> ) <br>
+[ <nt>patterns</nt>
+  ( <kw>except</kw> <nt>patterns</nt>
+  | <kw>in</kw> <nt>base</nt>
+  | <kw>recursive</kw>
+  | <kw>noHidden</kw>
+  | <kw>fileOnly</kw>
+  | <kw>dirOnly</kw>
+  )+ <br>
+  ( <kw>count</kw>
+  | <kw>size</kw>
+  | <kw>compressedSize</kw>
+  | [ <kw>ordered</kw> [ <kw>by</kw> ( <kw>date</kw> | <kw>size</kw> | <kw>extension</kw> ) ] ]
+  ) <br>
+]
+</gramma>
+
+The familiar <kw>ls</kw> is an alias for <kw>listPrint</kw>, which prints out
+the found files instead of returning the result in an internal variable
+<kw>$$fs_result</kw> as <kw>list</kw> does. You can use <kw>list</kw> to get
+the total size or file and directory counts; the total size is returned as an
+integer, and the counts are in an array of three, the first is for files,
+second directories and last total. The <nt>patterns</nt> are comma-separated
+file name patterns, with or without wildcard characters '*' (0 or more of any
+letters) and '?' (a single letter). The command can be applied recursively,
+for files only or directories only, and/or exclude hidden files. The
+<nt>base</nt> can be a directory or a file name with extension of ".zip" or
+".jar", in which case the command will show results for files in that zip
+file. Let us see some examples.
+
+<codelist name="dirsizes" caption="dirsizes.judo">
+ 1: repos = #args[0];
+ 2:
+ 3: list dirOnly in repos;
+ 4: for x in $$fs_result {
+ 5:   list x recursive in repos compressedSize;
+ 6:   compressedSize = $$fs_result;
+ 7:   list x recursive in repos size;
+ 8:   size = $$fs_result;
+ 9:   println compressedSize:&gt;10, size:&gt;10, '  ', x;
+10: }
+</codelist>
+
+Line 3 lists all the directories in the repository specified on the command
+line, which can be a directory, a zip file or empty for the current directory. 
+For each one of them, lines 5 and 6 gets the compressed size of that tree,
+lines 7 and 8 gets the normal size, and prints on line 8. The compressed size
+makes sense only for zip archives. To run against directories, you may want
+to comment out lines 5 and 6.
+
+<p>
+I have a habit of using temporary files with the name "alfa", "beta" and
+"gamma", sometimes "a", "b" and "c". Also, I don't trust myself too much, so
+every so often I create a "save/" directory and copy the source code there,
+then go on editing files. This is what I do to see how many pieces of junk I
+have created:
+
+<demo>
+ls '*/alfa,*/beta,*/gamma,*/?,*/save/*' in 'c:/temp/x/' recursive;
+</demo>
+
+When I want to list all source files, I like to exclude them and any Java
+class files:
+
+<demo>
+cd 'c:/temp/x/flagship';
+ls '*.c,*.cpp,*.h,*.inc,*.java' except '*/save/*, *.class' recursive;
+</demo>
+
+The following code counts files and directories:
+
+<demo>
+list '*' recursive;
+println 'Files: ', $$fs_result[0];
+println 'Dirs:  ', $$fs_result[1];
+println 'Total: ', $$fs_result[2];
+</demo>
+
+Any processing can be applied to found files. The following program
+counts the total line number for the selected or all the files.
+
+<codelist name="countlines" caption="countlines.judo">
+ 1: switch #args.length() {
+ 2: case 0:  list recursive; break;
+ 3: case 1:  list #args[0] recursive; break;
+ 4: default: list #args[0] except #args[1] recursive;
+ 5: }
+ 6:
+ 7: fileCnt = 0;
+ 8: lineCnt = 0;
+ 9: for x in $$fs_result {
+10:   if !x.isFile() { continue; }
+11:   file = openTextFile(x);
+12:   ++fileCnt;
+13:   while (line = file.readLine()) != eof {
+14:     ++lineCnt;
+15:   }
+16:   file.close();
+17: }
+18:
+19: println "Total files: ", fileCnt;
+20: println "Total lines: ", lineCnt;
+</codelist>
+
+Try it in our "flagship" project:
+
+<demo>
+% java judo countlines.judo "*.java,*.c,*.cpp,*.h,*.inc" "*/save/*"
+</demo>
+
+The following is the zip-version of count lines; the focus is lines
+11, 13, 14 and 24.
+
+<codelist name="countlines_in_zip" caption="countlines_in_zip.judo">
+ 1: switch #args.length() {
+ 2: case 0:  println 'Usage: java judo ',#prog,' &lt;zipfile&gt; [&lt;good&gt; [&lt;bad&gt;]]';
+ 3:          exit(0);
+ 4: case 1:  list in #args[0] recursive; break;
+ 5: case 2:  list #args[1] in #args[0] recursive; break;
+ 6: default: list #args[1] in #args[0] except #args[2] in 'a.jar' recursive;
+ 7: }
+ 8:
+ 9: fileCnt = 0;
+10: lineCnt = 0;
+11: zf = openZip(#args[0]);
+12: for x in $$fs_result {
+13:   if zf.isFile(x) {
+14:     file = zf.openTextFile(x);
+15:     ++fileCnt;
+16:     while (line = file.readLine()) != eof {
+17:       ++lineCnt;
+18:     }
+19:     file.close();
+20:   }
+23: }
+24: zf.close();
+25:
+26: println "Total files: ", fileCnt;
+27: println "Total lines: ", lineCnt;
+</codelist>
+
+There are situations where files from totally different trees need be processed
+together. You can provide an array variable to the <kw>list</kw> command, so
+the result is added there instead of <kw>$$fs_result</kw>.
+
+<demo>
+arr = [];
+list {arr} '*.h,*.cpp,*.c' in '/export/dallas/flagship/src/';
+list {arr} '*.java' in '~/flagship/src/java/';
+for x in arr {
+  println x; // do something more useful
+}
+</demo>
+
+Last but not least, <kw>~</kw> represents the user's home directory.
+Its value is taken from the JVM's system property of "home.dir".
+
+<review>
+<question> What other results does command <kw>list</kw> return other than
+           listing file names?
+<question> How to list all Java files except for "Test.java" in a directory?
+<question> In a zip archive, how to find all the files that are bigger than
+           512 bytes?
+<question> What data does <kw>list count</kw> return in <kw>$$fs_result</kw>?
+<question> How to specify an external array to accept files found by
+           <kw>list</kw>?
+</review>
+
+
+
+<section name=copy>
+
+<p>
+<J> has a <kw>copy</kw> command that is as versatile as <kw>list</kw>.
+
+<gramma>
+<kw>copy</kw> <nt>patterns</nt> <br>
+( <kw>except</kw> <nt>patterns</nt>
+| <kw>in</kw> <nt>base</nt>
+| <kw>recursive</kw>
+| <kw>noHidden</kw>
+| <kw>echo</kw>
+| <kw>keepDirs</kw>
+| <kw>compress</kw>
+| <kw>store</kw>
+| ( <kw>to</kw> | <kw>into</kw> ) <nt>target</nt>
+| <kw>under</kw> <nt>expression</nt>
+| <kw>script</kw> <nt>expression</nt>
+| <kw>transform</kw> ( <nt>expression</nt> | <nt>variable</nt> <kw>,</kw> <nt>variable</nt> <nt>block</nt>
+)+
+</gramma>
+
+The file selection is exactly the same as <kw>list</kw>. The base can be a
+directory in the file system or a zip archive. The <nt>target</nt> can be a
+single file name in case the source is just one file, or a directory in the
+file system, or a zip archive name used in an <kw>into</kw> clause. The
+<kw>keepDirs</kw> option will keep the directory of the source files relative
+to the base; if <kw>recursive</kw> is used, directories are always kept. The
+<kw>echo</kw> option displays all the source files being copied. Options
+<kw>compress</kw> and <kw>store</kw> instruct or override the zip archive
+compression setting.  The following is a few simple examples.
+
+<demo>
+cd 'c:/temp/x/flagship';
+copy 'readme.txt' to 'README.TEXT';
+
+copy 'readme.txt' in 'c:/temp/x/flagship' to 'README.TXT'; // in here
+
+copy '*' except '*/alfa,*/save/*'
+  in 'c:/temp/x/' recursive noHidden echo
+  to 'c:/temp/y/';
+
+copy '*' except '*.class,*/alfa,*/save/*,*.zip'
+  in 'c:/temp/x/' recursive noHidden echo
+into 'a:20011001.zip';
+
+copy '*.java'
+  in 'a:20010901.zip' recursive echo
+  to 'c:/temp/y/';
+</demo>
+
+When copying files to regular files, if the target file exists, <J>
+checks its size and timestamp against those of the source file; if they
+are the same, this file is "passed". To force a overwrite, delete the
+targ files first.
+
+<p>
+There are situations where files from multiple directories be archived
+in a single zip file. You need to create a zip file using the system
+function <kw>createZip()</kw> or <kw>createJar()</kw>, use that as the
+target for <kw>copy</kw> commands, and close when done. In this case,
+either <kw>to</kw> or <kw>into</kw>. The jar file normally takes a
+manifest which is a string. And sometimes you may want to copy them
+under different folder names for better organization.
+
+<demo>
+zf = createZip('~/archives/20011101.zip');
+copy '*.h,*.cpp,*.c'
+  in '/export/dallas/' recursive noHidden echo
+  into zf under 'src/c';
+copy '*.java'
+  in '~/flagship/src/' recursive noHidden echo
+  into zf under 'src/java';
+zf.close();
+</demo>
+
+When copying from an archive, use <kw>strip</kw> to strip the extra folder name:
+
+<demo>
+copy '*.h,*.cpp,*.c' in '~/archives/20011101.zip' strip 'src/c/'
+  into 'my_c_src.tar.gz';
+</demo>
+
+<p>
+<J> has an option for the <kw>copy</kw> command to do transformation rather than
+simple copying. Its <kw>transform</kw> clause either takes a function variable
+or a lambda function itself (with or without the <kw>lambda</kw> keyword). The
+transform function takes two parameters, one for input stream one for output,
+both binary. To do text read and write, convert them to text input and output
+first.
+
+<codelist name="copy_transform" caption="copy_transform.judo">
+ 1: copy '*.java' except '*/save/*, *Test*'
+ 2:   in 'd:/src/' recursive Echo to 'c:/save/'
+ 3:   transform src, dst {
+ 4:     src.toTextInput();
+ 5:     dst.toTextOutput();
+ 6:     // prepend a copyright notice to all the files
+ 7:     println &lt;dst> [[*
+ 8:         /* JudoScript Language
+ 9:          * Copyright 2001-2002 James Huang
+10:          */
+11:       *]]; // add copyright notice
+12:     do src as lines { println &lt;dst> $_; }
+13:   };
+</codelist>
+
+
+<review>
+<question> Using <kw>copy</kw> command to copy a port of the files from
+           one zip archive to another.
+<question> How to print all the files being copied or added to a zip archive?
+<question> Is the search for source files any different than <kw>list</kw> command?           
+<question> How to use <kw>under</kw> and <kw>strip</kw> in a <kw>copy</kw> command?
+<question> How to copy all the files and turn all the end-of-line to Unix style?
+</review>
+
+
+
+<section name=more>
+
+<p>
+Move and remove are synonyms in <J>.
+
+<gramma>
+( <kw>rename</kw> | <kw>move</kw> ) <nt>patterns</nt>
+( <kw>except</kw> <nt>patterns</nt> | <kw>to</kw> <nt>target</nt> | <kw>echo</kw>)*
+</gramma>
+
+If a target is supplied and does not exist, only one file or directory is
+allowed to change name to that. If the target is a directory (default is
+current directory), all the files and directories found by the inclusive
+and exclusive patterns are moved there.
+
+<p>
+These commands share a same syntax: <kw>remove</kw>,<kw>setFileTime</kw>,
+<kw>setReadOnly</kw> and <kw>rename</kw> or <kw>move</kw>. It is somewhat odd
+that Java does not provide a way to revoke a file's read-only flag. These
+commands only apply to file system objects. The syntax of the first three are
+as follows:
+
+<gramma>
+( <kw>remove</kw> | <kw>setFileTime</kw> | <kw>setReadOnly</kw> ) <nt>patterns</nt> <br>
+( <kw>except</kw> <nt>patterns</nt>
+| <kw>in</kw> <nt>base</nt>
+| <kw>recursive</kw>
+| <kw>echo</kw>
+| <kw>noHidden</kw>
+| <kw>fileOnly</kw>
+| <kw>dirOnly</kw>
+| <kw>to</kw> <nt>timestamp</nt>
+)+
+</gramma>
+
+Always be careful with <kw>remove</kw> and <kw>rmdir</kw> commands! Sometimes
+the capability to target a number of files may be a curse rather than a bless.
+The following example clears the garbage I usually create:
+
+<demo>
+cd 'c:/temp/x/';
+remove '*/alfa,*/beta,*/gamma,*/?' recursive echo;
+</demo>
+
+The following does a simple Unix touch and a more sophisticated one:
+
+<demo>
+setFileTime '*';
+setFileTime '*' recursive echo fileOnly to date(1999,1,1,13,5);
+</demo>
+
+
+
+<review>
+<question> For a <kw>rename</kw> command, if the specified target is the name
+           of an existing file name, what happens? If the target does not
+           exist and 3 files have been found with the patterns, what happens?
+<question> Can you move files into a zip archive?
+<question> Can you recursively remove files?
+<question> How to set a file's time?
+<question> How to set the read-only flag for a file? Can you revoke the
+           read-only flag?
+</review>
+
+
+
+<section name=summary>
+
+<p>
+A file is represented by a string; a string value has a number of file methods
+to tell the existence and attributes. To read or write a file, first open it
+with one of the following statements: <kw>openFile()</kw>, <kw>openTextFile()</kw>,
+<kw>openRandomAccessFile()</kw>, <kw>openGZippedFile()</kw> and
+<kw>openGZippedTextFile()</kw>. To read files within a zip/jar archive, or get
+file status therein, first open the zip archive via <kw>openZip()</kw>, then
+call the file handle's <kw>openFile()</kw>, <kw>openTextFile()</kw> and other
+methods. Binary files have methods to read Java primitive type values; you can
+set byte order via <kw>setBigEndian()</kw> or <kw>setLitteEndian()</kw> methods.
+
+<p>
+Making and removing directories are straightforward. Other file system
+commands include <kw>list</kw>, <kw>listPrint</kw> or <kw>ls</kw>,
+<kw>copy</kw>, <kw>rename</kw> or <kw>move</kw>, <kw>setFileTime</kw> and
+<kw>setReadOnly</kw>; they all take source files and some of them target
+files or locations. <J> adopts a consistent source file format, which
+include an inclusive and an exclusive pattern lists and a base. It may be
+recursive, without hidden files, and file or directory only. The base can
+be a file system directory or a zip archive; the target can be a directory
+or a zip archive as well. The <kw>copy</kw> thus is a powerful archiving
+command, too. Archiving files from separate sources into a zip archive is
+done by first creating a new zip archive file, and using it as the target
+for multiple <kw>copy</kw> commands.
+
+
+
+<section name=listings>
+
+<insert name="codelistings">

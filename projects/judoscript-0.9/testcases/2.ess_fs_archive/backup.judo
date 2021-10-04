@@ -1,0 +1,15 @@
+zf = createZip('~/archives/work-' + Date().fmtDate('yyyyMMdd') + '.zip');
+
+copy '*' in 'c:/src/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'src/';
+
+copy '*' in 'c:/docs/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'docs/';
+
+copy '*' in 'c:/examples/' except '*/alfa*, */beta*, */save/*'
+  recursive noHidden echo
+  into zf under 'examples/';
+
+zf.close();

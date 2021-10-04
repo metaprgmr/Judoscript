@@ -1,0 +1,1100 @@
+<doc title="Values, Variables and Data Strcutures" author="James Jianbo Huang"
+ created="October 2001" last="July 2003"
+ keywords="Java scripting language, JudoScript, scripting language for Java, variable, constant, number, integer, floating-point, float, string, here-doc, date, time, math, array, linked list, stack, queue, map, ordered map, table data, sorting, filter, convert, array sorting, array filter, array convert, chr, ascii, unicode, ceil, floor, round, groupNumber, fractionDigits, toBoolean, toByte, toCharacter, toShort, toInteger, toLong, toFloat, toDouble, parseUrl, fileExists, isDir, isFile, fileTime, fileSize, sin, cos, sin_d, cos_d, log, log2, bfs, dfs"
+ wideTOC="true"
+>
+
+<sectiondefs>
+<sectiondef name="var_const"   caption="Variables and Constants">
+<sectiondef name="primitive"   caption="Primitive Data Types">
+<sectiondef name="convert"  sub=1 caption="Conversions and Formatting">
+<sectiondef name="string"   sub=1 caption="String Processing">
+<sectiondef name="heredoc"  sub=1 caption="Enhanced Here-Doc">
+<sectiondef name="datetime" sub=1 caption="Date and Time">
+<sectiondef name="secret"   sub=1 caption="Secret Value">
+<sectiondef name="string_spec" caption="Special-Purpose String Methods">
+<sectiondef name="math"        caption="Maths">
+<sectiondef name="array"       caption="Array and Linked List">
+<sectiondef name="stats"    sub=1 caption="Statistics">
+<sectiondef name="sort"     sub=1 caption="Sort, Filter and Convert">
+<sectiondef name="struct"      caption="Object and Ordered Map">
+<sectiondef name="adv"         caption="Advanced Data Structures">
+<sectiondef name="stack"    sub=1 caption="Stack and Queue">
+<sectiondef name="set"      sub=1 caption="Set">
+<sectiondef name="true"     sub=1 caption="Tree">
+<sectiondef name="table"    sub=1 caption="Tabular Data">
+<sectiondef name="summary"     caption="Summary">
+<sectiondef name="listings"    caption="Code Listings">
+</sectiondefs>
+
+<abstract>
+<J> has primitive data types and data structures including arrays, linked
+lists, structs, ordered maps, stacks and queues, and table data. Primitive
+data types include number, string and date/time and secret. String can also
+represent URL and file. Arrays can be sorted and filtered with custom
+comparator and filter functions. The Objects' keys can be obtained in
+array, either in undetermined order, or sorted and/or filtered by keys or
+by the values. Comparator and filter functions are frequently defined as
+lambda functions.
+</abstract>
+
+</doc>
+
+
+<section name=var_const>
+
+<p>
+<J> is a dynamically typed language, meaning that its variables and constants
+are not typed, but their values, however, belong to one of these supported
+types: number, string, date and time, secret, compound data types (data
+structures), Java objects and arrays, and built-in object types. Variables
+are not required to be declared first. Value types are interpreted in the
+program based on the context at runtime. For instance, a boolean expression
+will interpret the values as integers. This articles discusses the primitive
+types and data structures.
+
+<p>
+Variable names start with a letter, underscore or dollar sign (<kw>$</kw>);
+and the following can include any of these as well as digits. They are
+defined by being assigned a value:
+
+<demo>
+a = 1;
+</demo>
+
+Constant names start with a pound sign (<kw>#</kw>). They are defined like this:
+
+<demo>
+const #PI = 3.1415927;
+</demo>
+
+To check whether a constant has been defined or not, use the <kw>defined</kw>
+operator:
+
+<demo>
+if defined #PI { println #PI; }
+</demo>
+
+The <kw>println</kw> command can be abbreviated as a dot (.).
+
+
+<section name=primitive>
+
+<p>
+<J> supports these primitive data types: integer, floating-point number,
+string and date/time. Boolean values are just numbers: 0 stands for false,
+non-zero for true. They can be assigned a <kw>true</kw> or <kw>false</kw>,
+which are just 1 and 0. A character is a length-1 string. The <kw>null</kw>
+value is numerically equivalent to 0 and textually empty. Numbers and
+strings are called simple values; they have a set of common methods.
+
+<p>
+The following program demonstrates how values are used:
+
+<codelist name="simple_vars" caption="simple_vars.judo">
+ 1: println 'A) a = 1: ':&lt;18,       a = 1;
+ 2: println 'B) a = 1.00: ':&lt;18,    a = 1.00;
+ 3: println "C) a = '1.00': ":&lt;18,  a = '1.00';
+ 4: println 'D) a = 1.5e5: ':&lt;18,   a = 1.5e5;
+ 5: println 'E) a = null: ':&lt;18,    a = null;
+ 6: println '   a = 1.0:':&lt;18,      a = 1.0;
+ 7: println 'F) a += 2: ':&lt;18,      a += 2;
+ 8: println '   a = 1.1':&lt;18,       a = '1.1';
+ 9: println 'G) a *= 4: ':&lt;18,      a *= 4;
+10: println '   a = 10:':&lt;18,       a = 10;
+11: println 'H) b = a / 2.5: ':&lt;18, b = a / 2.5;
+12: println '   a = 3.5:':&lt;18,      a = 3.5;
+13: println '   b = 2.5:':&lt;18,      b = 2.5;
+14: println 'I) a % b = ':&lt;18,      a % b;
+15: println '   a = 5.0:':&lt;18,      a = 5.0;
+16: println 'J) a - c = ':&lt;18,      a - c; // c is not defined.
+17: println 'K) a + "abc" = ':&lt;18,  a + "abc";
+18: println 'L) "abc" + a = ':&lt;18,  "abc" + a;
+19: println 'M) "abc" @ a = ':&lt;18,  "abc" @ a; // concatenation
+20: println '   a @= "xyz": ':&lt;18,  a @= "xyz"; // self concatenation
+21: println 'N) a + "0x0a" = ':&lt;18, a + "0x0a";
+22: println 'O) a + "0x0m" = ':&lt;18, a + "0x0m";
+23: println 'P) a + "007" = ':&lt;18,  a + "008";
+24: println 'Q) a + "008" = ':&lt;18,  a + "008";
+25: println '   a = 5:':&lt;18,        a = 5;
+26: println 'R) a + "0x0a" = ':&lt;18, a + "0x0a";
+27: println 'S) a + "0x0m" = ':&lt;18, a + "0x0m";
+28: println 'T) a + "007" = ':&lt;18,  a + "007";
+29: println 'U) a + "008" = ':&lt;18,  a + "008";
+30:
+31: catch:
+32:   println 'EXCEPTION: ', $_.message;
+33:   resume;
+</codelist>
+
+If this is your first glance of any <J> code, it may look too much. But if
+you look closely, it is really very natural. The start of script and lines 31 and 34 form a
+try-catch block; when an exception happens, its message is printed and the
+execution is resumed (line 33). I wish Java had <kw>resume</kw> statement,
+too; you never know, someday it might. The major mechanism used in this
+program is <kw>println</kw>, or a dot. It takes any number of parameters
+and prints them one by one to the system standard output. The <kw>&lt;18</kw>
+notion is for formatting: it means "left-aligned with a width of 18". For
+right- and center-alignment, it is <kw>&gt;18</kw> and <kw>*18</kw>. An
+assignment expression returns the value itself.
+
+<p>
+Let us see the result of the run and dive into the gory details of
+numbers, strings and expressions:
+
+<demo>
+% java judo simple_vars.judo
+A) a = 1:        1
+B) a = 1.00:     1.0
+C) a = '1.00':   1.00
+D) a = 1.5e5:    150000.0
+E) a = null:
+   a = 1.0:      1.0
+F) a += 2:       3.0
+   a = 1.1       1.1
+G) a *= 4:       4.4
+   a = 10:       10
+H) b = a / 2.5:  4.0
+   a = 3.5:      3.5
+   b = 2.5:      2.5
+I) a % b =       1
+   a = 5.0:      5.0
+J) a - c =       5.0
+K) a + "abc" =   EXCEPTION: Invalid floating-point value
+L) "abc" + a =   EXCEPTION: Invalid floating-point value
+M) "abc" @ a =   abc5.0
+   a @= "xyz":   5.0xyz
+N) a + "0x0a" =  EXCEPTION: Invalid integer value
+O) a + "0x0m" =  EXCEPTION: Invalid integer value
+P) a + "007" =   EXCEPTION: Invalid integer value
+Q) a + "008" =   EXCEPTION: Invalid integer value
+   a = 5:        5
+R) a + "0x0a" =  15
+S) a + "0x0m" =  EXCEPTION: Invalid integer value
+T) a + "007" =   12
+U) a + "008" =   EXCEPTION: Invalid integer value
+</demo>
+
+First of all, strings can be quoted either by single quotes or double
+quotes (line 4). When single quotes are used, double quote characters
+can appear as normal text and vice versa. Its concatenation operator
+is <kw>@</kw> (line 20). Integers can be expressed as decimal (line 3),
+octal (starts with 0 but not "0x"; line 29) or hexadecimal (starts with
+"0x" or "0X"; line 27). Floating-point numbers can be decimal and
+fraction digits (line 7) or in scientific notion (line 5).
+
+<p>
+Lines 7 through 17 demonstrates the auto-detection of number types:
+<J> always tries to use a higher-precision type, that is, floating
+points over integers. Based on context, a string is evaluated to a
+number by its "face value" (lines 22, 27 and 29); if the string is
+not in a valid number format, an exception is thrown (lines 18, 19,
+22 through 25, 28 and 30).
+
+
+<section name="convert">
+
+<p>
+There are times where a specific data type or value range is intended.
+The simple values have methods for such controls.
+
+<codelist name="conversions" caption="conversions.judo">
+ 1: println 'i1 = 62:       ', i1 = 62;
+ 2: println 'i2 = 12345678: ', i2 = 12345678;
+ 3: println 'f1 = 54.12345: ', f1 = 54.12345;
+ 4: println 'f2 = 54.56789: ', f2 = 54.56789;
+ 5: println 'f3 = 54.56123: ', f3 = 54.56123;
+ 6: println 'c = "A":       ', c = "A";
+ 7: println 's = "abcdefg": ', s = "abcdefg";
+ 8:
+ 9: println nl, '=== integer &lt;=&gt; float ===';
+10: println 'i1.float() = ', i1.float();
+11: println 'f1.int() =   ', f1.int();
+12:
+13: println nl, '=== character &lt;=&gt; number ===';
+14: println 'i1.chr() =    ', i1.chr();
+15: println 'i2.chr() =    ', i2.chr();
+16: println 'f1.chr() =    ', f1.chr();
+17: println 'c.ascii() =   ', c.ascii();
+18: println 's.ascii() =   ', s.ascii();
+19: println 'c.unicode() = ', c.unicode();
+20: println 's.unicode() = ', s.unicode();
+21:
+22: println nl, '=== float and integer precision control and formatting ===';
+23: println 'f1.ceil(), f1.floor(), f1.round() =  ',
+24:         f1.ceil(), '  ', f1.floor(), '  ', f1.round();
+25: println 'f2.ceil(), f2.floor(), f2.round() =  ',
+26:         f2.ceil(), '  ', f2.floor(), '  ', f2.round();
+27: println 'i2.groupNumber()      = ', i2.groupNumber();
+28: println 'i2.groupNumber(4)     = ', i2.groupNumber(4);
+29: println "i2.groupNumber(4,'.') = ", i2.groupNumber(4,'.');
+30: println 'f2.fractionDigits()   = ', f2.fractionDigits();
+31: println 'f2.fractionDigits(2)  = ', f2.fractionDigits(2);
+32: println 'f3.fractionDigits(2)  = ', f3.fractionDigits(2);
+33:
+34: println nl, '=== numbers =&gt; Java objects ===';
+35: println 'i1.toBoolean() =   ', i1.toBoolean().getClass().getName();
+36: println 'i1.toByte() =      ', i1.toByte().getClass().getName();
+37: println 'i1.toCharacter() = ', i1.toCharacter().getClass().getName();
+38: println 'i1.toShort() =     ', i1.toShort().getClass().getName();
+39: println 'i1.toInteger() =   ', i1.toInteger().getClass().getName();
+40: println 'i1.toLong() =      ', i1.toLong().getClass().getName();
+41: println 'i1.toFloat() =     ', i1.toFloat().getClass().getName();
+42: println 'i1.toDouble() =    ', i1.toDouble().getClass().getName();
+</codelist>
+
+On line 9, etc., <kw>nl</kw> inside <kw>println</kw> stands for newline.
+Lines 10 and 11 converts the numbers explicitly to float or integer. In
+lines 14 through 20, method <kw>chr()</kw> (or <kw>char()</kw>) treats
+a numeric value as a character value, where <kw>ascii()</kw> and
+<kw>unicode()</kw> returns a character's numeric value. A character in
+<J> is a length-1 string, so the character value of "abcdefg" is the
+same as that of "a". Lines 23 through 26 demonstrate how to round up
+floating point values to integers, and lines 27 through 32 for
+formatting numbers. Lines 35 through 42 show the methods that convert a
+number to a Java object; this is useful when calling a Java method that
+requires precise data types among overloaded methods.
+
+<p>
+These methods are specifically for formatting numbers:
+<ul>
+<li> <kw>formatBool()</kw> or <kw>fmtBool()</kw>: returns "true" or
+     "false" if the value is interpreted as boolean true or false.
+<li> <kw>formatHex()</kw> or <kw>fmtHex()</kw>: returns the hexadecimal
+     representation of the integer number.
+<li> <kw>formatOctal()</kw> or <kw>fmtOctal()</kw>: returns the octal
+     representation of the integer number.
+<li> <kw>formatCurrency()</kw> or <kw>fmtCurrency()</kw>: returns the
+     currency representation for this value, using the JVM's default locale.
+<li> <kw>formatDuration()</kw> or <kw>fmtDuration()</kw>: returns the
+     English representation of the millisecond value in days, hours,
+     minutes and seconds.
+</ul>
+
+The follow examples show some uses:
+<demo>
+println '1 > 2 is ', (1 > 2).fmtBool();
+println (231).fmtHex();
+dur = ( (2 * 24 + 3) * 3600 + 35 * 60 + 9 ) * 1000;
+println dur.fmtDuration(); // => 2 days 3:35:09
+</demo>
+ 
+Using <J> command-line program execution feature, you have a calculator:
+
+<demo>
+%java judo -x println (231).fmtHex()
+E7
+%java judo -x println 0xE7
+231
+</demo>
+
+The last ';' can be omitted. I create an alias "jx" for "java judo -x",
+so the above lines become really compact.
+
+
+<section name="string">
+
+<p>
+A <J> string supports most Java's <kw>java.lang.String</kw> methods. In
+addition, it has a number of its own convenience and special purpose
+methods, because in <J> strings also represent many other things. We
+discuss string processing methods first.
+
+<p>
+The <kw>csv()</kw> method turns a character-separated value into an array.
+It takes a string as its parameter, all characters are separators; if
+missing, uses comma. This method returns null for two consecutive
+separators; this is different than <kw>java.util.StringTokenizer</kw>
+which discards such values.
+
+<demo>
+s = '2001/10/01||XYZ|12.00|10000';
+a = s.csv('|');
+println 'Date:   ', a[0];
+println 'Name:   ', a[1]; // => null
+println 'Symbol: ', a[2];
+println 'Quote:  ', a[3];
+println 'Volume: ', a[k];
+</demo>
+
+The <kw>isEmpty()</kw> and <kw>isNotEmpty()</kw> checks if a string is empty
+or not. A string is considered empty if it is null or only contains whitespace
+characters. Method <kw>neverEmpty()</kw> takes a default string parameter; if
+the current string value is empty, that parameter is returned. If no parameters
+specified, when empty it returns a space (which is "empty" itself but what
+else?) The <kw>replace()</kw> and <kw>replaceIgnoreCase()</kw> methods replace
+substrings with new ones, which is more powerful than Java counterpart
+(<kw>replace(char,char)</kw>) that only replaces characters. The following is
+an application dealing with HTML content:
+
+<demo>
+expr = " &lt;add_expr&gt; ::= &lt;expr&gt; '+' &lt;expr&gt; ";
+exprHtml = expr.replace('&lt;', '&amp;lt;')
+               .replace('&gt;', '&amp;gt;')
+               .replace('&amp;', '&amp;amp;')
+               .replace("'", '&amp;quot;');
+println &lt;htmlFile&gt; exprHtml;
+println &lt;htmlFile&gt; '&lt;td&gt;', x.neverEmpty('&amp;nbsp;'), '&lt;/td&gt;';
+</demo>
+
+The following example shows how to use file system commands to rename all
+files with extension of ".htm" or ".HTM" to ".html".
+
+<demo>
+list '*.htm, *.HTM'; // result is an array stored in $$fs_result
+for x in $$fs_result {
+  if x.toLower().endsWith('.htm') {
+    rename x to x.replaceIgnoreCase('.htm', '.html');
+  }
+}
+</demo>
+
+This program prints out an ASCII table for 32 to 255:
+
+<codelist name="ascii" caption="ascii.judo">
+ 1: cnt = 0;
+ 2: println '   ', ' 0' @ (cnt++).fmtHex() repeat 16;
+ 3: println '   ', ' --' {16};
+ 4: for x from 2 to 15 {
+ 5:   local base = x &lt;&lt; 4;
+ 6:   print x.fmtHex(), '0:';
+ 7:   for y from 0 to 0x0f {
+ 8:     local ch = base | y;
+ 9:     print '  ', ch.chr();
+10:   }
+11:   println;
+12: }
+</codelist>
+
+Lines 2 and 3 print out the header. On line 2, the <kw>repeat</kw> clause
+make that expression evaluated 16 times; on line 3, the shortcut form
+<kw>{16}</kw> is used. The result for values less than 127 is listed below.
+
+<demo>
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20:     !  "  #  $  %  &  '  (  )  *  +  ,  -  .  /
+30:  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?
+40:  @  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O
+50:  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _
+60:  `  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o
+70:  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~ 
+</demo>
+
+<p>
+String has other methods. <kw>count()</kw> counts the occurrances of a
+character within the string. <kw>regionMatches()</kw> and
+<kw>regionmatchesIgnoreCase()</kw> does the same as <kw>java.lang.String</kw>.
+<kw>getReader()</kw> returns a reader that uses the string as its input.
+Programs can, for instance, read lines from a string.
+
+
+
+<section name="heredoc">
+
+<p>
+In the make utility, feature here-doc is used to specify a chunk of text
+to be enclosed in two user-defined markers and used verbatim by the script.
+<J> supports the same feature with the extension that expressions can be
+embedded.
+
+<demo>
+lastname = "Robinson";
+prodname = "Dry Cleaner";
+representative = "Cleo Rubinstein";
+letter = [[*
+  Dear Mr. (* lastname *),
+
+  Thank you very much for your interest in our product, (* prodname *).
+  For more information, please visit our web site at (* url *).
+
+  Sincerely,
+
+  (* representative *)
+*]];
+flush letter;
+</demo>
+
+The markers are <kw>[[*</kw> and <kw>*]]</kw>. Embedded expressions are
+enclosed in between <kw>(*</kw> and <kw>*)</kw>. The lines' indentations
+are removed, so is the first empty new line following the <kw>[[*</kw>
+marker, so the code can appear nice and neat. Use <kw>[[[*</kw> instead
+of <kw>[[*</kw> to turn off automatic indentation stripping. 
+
+
+
+<section name="datetime">
+
+<p>
+Three system functions create dates and times: <kw>date()</kw>, <kw>time()</kw>
+and <kw>timeToday()</kw>.
+
+<demo>
+Oct1_2001 = date(2001,10,1);
+timestamp = date(2001,10,1,15,30,0);
+noon = time(12);
+tonight6_30pm = timeToday(18,30);
+</demo>
+
+<kw>date()</kw> takes parameters of year, month, day, hour, minute and second.
+<kw>time()</kw> creates a date object with year, month and day fields all
+initialized to 0. <kw>timeToday()</kw> is a convenience method that creates a
+time in today.
+
+<p>
+Date values (objects) have a list of attributes, some are settable and others
+read-only. See <a href=../langspec/spec3.html#date>language specification</a>
+for a complete listing. It also have a method, <kw>formatDate()</kw> or
+<kw>fmtDate()</kw>, which takes a <kw>java.text.SimpleDateFormat</kw> format
+string and optionally a time zone ID, one of those returned by
+<kw>java.util.TimeZone.getAvailableIDs()</kw>. If the format string is
+<kw>null</kw>, use the default date/time format. The default date/time format
+can be obtained or set by <kw>getDefaultDateFormat()</kw> and
+<kw>setDefaultDateFormat()</kw> functions.
+
+<codelist name="date_attr" caption="date_attr.judo">
+ 1: println 'd = ', d = date();
+ 2:
+ 3: // get
+ 4: println 'd.epoch            = ', d.epoch;
+ 5: println 'd.year             = ', d.year;
+ 6: println 'd.month            = ', d.month;
+ 7: println 'd.date             = ', d.date;
+ 8: println 'd.hour             = ', d.hour;
+ 9: println 'd.minute           = ', d.minute;
+10: println 'd.second           = ', d.second;
+11: println 'd.milliSecond      = ', d.milliSecond;
+12: println 'd.zoneOffset       = ', d.zoneOffset;
+13: println 'd.dstOffset        = ', d.dstOffset;
+14: println 'd.weekOfYear       = ', d.weekOfYear;
+15: println 'd.weekOfMonth      = ', d.weekOfMonth;
+16: println 'd.dayOfMonth       = ', d.dayOfMonth;
+17: println 'd.dayOfYear        = ', d.dayOfYear;
+18: println 'd.dayOfWeek        = ', d.dayOfWeek;
+19: println 'd.dayOfWeekInMonth = ', d.dayOfWeekInMonth;
+20: println 'd.isAM             = ', d.isAM.fmtBool();
+21: println 'd.isPM             = ', d.isPM.fmtBool();
+22: println 'd.monthName        = ', d.monthName;
+23: println 'd.monthShortName   = ', d.monthShortName;
+24: println 'd.weekDayName      = ', d.weekDayName;
+25: println 'd.weekDayShortName = ', d.weekDayShortName;
+26:
+27: // set
+28: println 'd.epoch       = ', d.epoch = 1000,       '  =&gt; ', d;
+29: println 'd.year        = ', d.year = 1996,        '  =&gt; ', d;
+30: println 'd.month       = ', d.month = 5,       '     =&gt; ', d;
+31: println 'd.date        = ', d.date = 25,        '    =&gt; ', d;
+32: println 'd.hour        = ', d.hour = 8,        '     =&gt; ', d;
+33: println 'd.minute      = ', d.minute = 15,      '    =&gt; ', d;
+34: println 'd.second      = ', d.second = 56,      '    =&gt; ', d;
+35: println 'd.milliSecond = ', d.milliSecond = 430, '   =&gt; ', d;
+36: println 'd.zoneOffset  = ', d.zoneOffset = 360000, ' =&gt; ', d;
+37: println 'd.dstOffset   = ', d.dstOffset = 360000,  ' =&gt; ', d;
+</codelist>
+
+
+<review>
+<question> Are variables typed? Do they have to be declared?
+<question> How to define a constant?
+<question> What are the primitive value types of <J>?
+<question> What is the result type of <kw>date(1999,12,1) + 5.35 * 4 - '0x0FE'</kw>?
+           What happens to this expression: <kw>12 + 'who'</kw>?
+<question> How to catch exceptions? What does <kw>resume</kw> do?
+<question> Given a number such as 64, how to get a character of its value?
+           How to get a charater's numeric value?
+<question> What is the difference between a string and a character?
+<question> Values have methods, too. Can their methods be invoked
+           directly like <kw>231.fmtHex()</kw>? If not, how?
+<question> How to limit the number of fraction digits to 3 for a
+           floating-point number?
+<question> Are boolean values a unique type in <J>?
+           How to assign a boolean value? How to print it?
+<question> Use <J> as a calculator, quickly convert between
+           decimal 2345678 and hex 23CACE.
+<question> The expression <kw>a = ( 'a,b,,,e' ).csv();</kw> returns an
+           array of how many elements? Their values?
+<question> Do the string methods <kw>replace()</kw> and
+           <kw>replaceIgnoreCase()</kw> only replace individual characters?
+<question> How to assign a block of text to a string variable? Can you align
+           the text with the code nice and neat?
+<question> How to create a date value for 9:12 AM today? How to create a
+           date value for 2:15 PM tomorrow?
+<question> How to change a time to the next hour?
+<question> How to print a time in the GMT time zone with default format?
+</review>
+
+
+<section name="secret">
+
+<p>
+Secret values appear to be regular values but are used only by known parties,
+such as statements that take passwords. If it is attempted to be printed, it
+will throw illegal-access exception. To obtain one, use the system function
+<kw>secret()</kw>:
+
+<gramma>
+<kw>secret(</kw> <nt>encrypted_text</nt> [ <kw>,</kw> <nt>decryptor</nt> ] <kw>)</kw>
+</gramma>
+
+The <nt>decryptor</nt> is an object that implements the method <kw>decrypt()</kw>,
+which takes a string and returns another. It does not matter whether it is
+implemented in <J> or Java, though most likely it is in Java. The encrypted
+value must be a text string. How to obtain it is up to your crypto package
+that your decryptor is part of. If no decryptor is specified, by default the
+value is returned as-is for now. However, this behavior may change, that is,
+a default decryptor may be used, which is specified in the runtime
+environment. Let us see an example. Suppose you have run some utility and
+encrypted your password to "XI,8aM4/", and the decryptor is a Java class.
+
+<demo>
+const #dbPass = secret('XI,8aM4/', javanew com.xxx.util.MyCrypto);
+</demo>
+
+
+
+
+<section name="string_spec">
+
+<p>
+Strings also represents URLs and file names. String has <kw>urlEncode()</kw>
+(<kw>encodeUrl()</kw>), <kw>urlDecode()</kw> (<kw>decodeUrl()</kw>) methods.
+It also has a <kw>parseUrl()</kw> method that parses a string into a number
+of URL parts, returned in a struct. This program also demonstrates a feature
+called <em>class transposition</em>, on line 23. Class instances can be
+transposed into objects of another class, normally with more or new methods
+than the current one.
+
+<codelist name="parse_url" caption="parse_url.judo">
+ 1: a = [ 'http://localhost:8080/articles/developer.html#top',
+ 2:       'http://localhost/cgi-bin/check.pl?id=1234&amp;sess=abc',
+ 3:       '/index.html',
+ 4:       'index.html',
+ 5:       '',
+ 6:       '/',
+ 7:       'http://www.judoscript.com',
+ 8:       'images/bg.gif'
+ 9:     ];
+10: for url in a {
+11:   b = url.parseUrl();
+12:   println '-----------------------------------------------';
+13:   println '            URL: ', url;
+14:   println '           root: ', b.root;
+15:   println '       protocol: ', b.protocol;
+16:   println '         domain: ', b.domain;
+17:   println '           host: ', b.host;
+18:   println '           port: ', b.port;
+19:   println '           path: ', b.path;
+20:   println '      file_name: ', b.file_name;
+21:   println '   query_string: ', b.query_string;
+22:   println '            ref: ', b.ref;
+23:   println 'constructed URL: ', b.transpose('UrlInfo');
+24: }
+25:
+26: class UrlInfo
+27: {
+28:   function toString() {
+29:     ret = root @ path;
+30:     if query_string != null { ret @= '?' @ query_string; }
+31:     if ref != null { ret @= '#' @ ref; }
+32:     return ret;
+33:   }
+34: }
+</codelist>
+
+You can treat a string as a file path and get various parts:
+
+<demo>
+  a = [ '/usr/bin/java', 'c:/temp/Test.java', '~/alfa', 'judo.jar' ];
+  for x in a {
+    println x.getFilePath(), ' : ', x.getFileName(), ' : ', x.getFileExt();
+  }
+</demo>
+
+The following example shows string's file methods:
+
+<codelist name="file_status" caption="file_status.judo">
+1: f = #args[0];
+2:
+3: println 'file name: ':<13,    f;
+4: println 'file exists: ':<13,  f.fileExists().fmtBool();
+5: println 'file is dir: ':<13,  f.isDir().fmtBool();
+6: println 'file is file: ':<13, f.isFile().fmtBool();
+7: println 'file time: ':<13,    f.fileTime();
+8: println 'file size: ':<13,    f.fileSize();
+</codelist>
+
+
+<review>
+<question> How to get the host and path part of a URL?
+<question> How to get file extension of a file name?
+<question> How to check if a file exists? Whether it is a file or directory?
+           Its size?
+</review>
+
+
+
+<section name="math">
+
+<p>
+Numeric values have a list of mathematic methods. See
+<a href=../langspec/spec3.html#value>language specification</a> for a complete
+listing. The following is some trigonometric examples:
+
+<demo>
+println '------ trigonometry ------';
+const #PI = 3.1415927;
+println "60' in radian: angle = ", angle = #PI / 3;
+println 'angle.degree() = ', angle.degree().fractionDigits(3);
+println 'angle.sin() = ', angle.sin().fractionDigits(3);
+println 'angle.cos() = ', angle.cos().fractionDigits(3);
+println 'angle.tan() = ', angle.tan().fractionDigits(3);
+println 'f = ', f = 1.0;
+println 'f.asin() = ', f.asin().fractionDigits(3);
+println 'f.acos() = ', f.acos().fractionDigits(3);
+println 'f.atan() = ', f.atan().fractionDigits(3);
+println "60' in degrees: angle = ", angle = 60;
+println 'angle.radian() = ', angle.radian().fractionDigits(3);
+println 'angle.sin_d() = ', angle.sin_d().fractionDigits(3);
+println 'angle.cos_d() = ', angle.cos_d().fractionDigits(3);
+println 'angle.tan_d() = ', angle.tan_d().fractionDigits(3);
+println 'f.asin_d() = ', f.asin_d().fractionDigits(3);
+println 'f.acos_d() = ', f.acos_d().fractionDigits(3);
+println 'f.atan_d() = ', f.atan_d().fractionDigits(3);
+</demo>
+
+<review>
+<question> List all the mathematical methods for numeric values.
+</review>
+
+
+<section name="array">
+
+<p>
+Array is one of the most important data structures. A <J> can contain any
+variables, including numbers, strings, Java objects and other data structures
+including arrays. To define or initialize an array:
+
+<demo>
+arr = []; // empty array
+arr = [ 1, 'abc', date(2001,10,1), javanew java.util.Hashtable() ];
+arr = [ [ 1, 2 ], [ 3, 4 ] ]; // multi-dimension
+arr = new Array; // another way to create.
+arr = new Array( 1, 'abc', date(2001,10,1) );
+</demo>
+
+<p>
+Linked lists are desirable over arrays in certain algorithms for performance
+reasons. In <em>JuduScript</em> both share a common interface; the only
+difference is its declaration:
+
+<demo>
+lst = linkedList[]; // empty list
+lst = linkedList[ 1, 'abc', date(2001,10,1), javanew java.util.Hashtable() ];
+lst = [ linkedList[ 1, 2 ], linkedList[ 3, 4 ] ];
+</demo>
+
+The <kw>length</kw> or <kw>size</kw> attribute is the number of elements.
+To add elements, call its <kw>add()</kw> or <kw>append()</kw> with one or
+more values; use <kw>prepend()</kw> to insert elements to the front; or use
+<kw>insert()</kw> to insert at a particular position. Array index is 0-based.
+You can merge all the elements from another array by <kw>appendArray()</kw>
+or <kw>prependArray()</kw>. Obtain a portion of an array via <kw>subarray()</kw>.
+Method <kw>clear()</kw> removes all the elements, where <kw>remove()</kw>
+removes an element at a specific location. To find the index of an element,
+use <kw>indexOf()</kw>. <kw>reverse()</kw> is a convenience method that
+reverses all the elements.
+
+<p>
+To enumerate all the elements in an array, do one of these:
+
+<demo>
+for idx=0; idx < arr.length; ++idx {
+  local x = arr[idx];
+  println idx, '  ', x;
+}
+for idx from 0 to arr.lastIndex() {
+  local x = arr[idx];
+  println idx, '  ', x;
+}
+for x in arr {
+  println x;
+}
+</demo>
+
+If the index is not used, the last form is the easiest. If the index is
+used, the second form is more concise.
+
+<p>
+Arrays can also be created via <kw>new</kw> operator. This may be useful
+where <code>{}</code> is syntactically not allowed.
+
+
+
+<section name="stats">
+
+<p>
+These methods collect some basic statistics about all the numeric elements
+in the array: <kw>sum()</kw>, <kw>max()</kw>, <kw>min()</kw>, <kw>average()</kw>
+or <kw>avg()</kw> and <kw>range()</kw> (the difference between the smallest
+and largest values). If elements are all integers, the result is integer,
+otherwise it is float.
+
+
+<section name="sort">
+
+<p>
+<J> has some powerful sorting capabilities for arrays and linked lists via
+the <kw>sort()</kw>. This method can take a user-defined comparator function
+to control the ordering. By default it sorts according to the string
+representation of the elements. Sorting is done locally, and the array itself
+is returned.
+
+<codelist name="custom_sort" caption="custom_sort.judo">
+ 1: a = [ '1.2', '3', '3.9', '1.10', '1.2.1', '2.3', '3' ];
+ 2: a.sort( &amp;my_comparator );
+ 3: for i from 0 to a.lastIndex() { println i, '  ', a[i]; }
+ 4:
+ 5: function my_comparator(lhs, rhs) {
+ 6:   la = lhs.csv('.');
+ 7:   ra = rhs.csv('.');
+ 8:   for i from 0 to la.size() {
+ 9:     if la[i].int() &lt; ra[i].int() { return -1; }
+10:     if la[i].int() &gt; ra[i].int() { return 1; }
+11:   }
+12:   if la.size() == ra.size() { return 0; }
+13:   return la.size() &gt; ra.size();
+14: }
+</codelist>
+
+Lines 5 through 14 defines a custom comparator. Comparator functions must
+take two parameters, and return -1, 0 or 1. On line 1, we have an array
+of things that look like book sections. Normal string comparison fails to
+yield correct order. Our comparator takes apart the section number to an
+array (lines 6 and 7), and compares each parts. Line 2 shows how to pass
+a function to a method: the ampersand notion. The result is:
+
+<demo>
+0  1.2
+1  1.2.1
+2  1.10
+3  2.3
+4  3
+5  3
+6  3.9
+</demo>
+
+As a convenience, <J> has <kw>sortAsNumber()</kw>, <kw>sortAtDate()</kw>
+and <kw>sortAsString()</kw> methods. The last one is not really necessary,
+just for the sake of naming consistency.
+
+<p>
+Sometimes you need to pick "qualified" elements in an array. <J>'s array
+filtering feature makes this easy. Array have a <kw>filter()</kw> that
+takes a user-defined filter function. It can return a new array for the
+qualified elements, or change the array locally.
+
+<codelist name="filter" caption="filter.judo">
+1: a = [ 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg' ];
+2: println a.filter(&amp;size_filter);
+3:
+4: function size_filter elem { return elem.length() &lt; 5; }
+5:
+6: a.filter( lambda elem { return elem.length() &gt;= 5; }, true );
+7: println a;
+</codelist>
+
+Lines 1 through 4 shows how a filter function, which takes a parameter
+and returns a boolean, is used by the <kw>filter()</kw> method. Line 2
+prints a string representation of the array.
+
+<p>
+On line 6, the second parameter is <kw>true</kw>, so filtering is done
+locally. The first parameter is an anonymous function mechanism, called
+"lambda" function. Functions can be assigned to a variable, for instance,
+
+<demo>
+f1 = &amp;size_filter;
+f2 = lambda elem { return elem.length() >= 5; };
+println a.filter(f1);
+println a.filter(f2);
+</demo>
+
+Our last topic of this seciton is converting elements in arrays. This
+is done by the method <kw>convert()</kw>, which, not surprisingly,
+takes a conversion function that must accept one parameter and return
+a value.
+
+<codelist name="array_convert" caption="array_convert.judo">
+1: a = [ 'abc', 'Abc', 'ABc', 'ABC' ];
+2: println a.convert( lambda elem { return elem.toUpper(); } );
+</codelist>
+
+<review>
+<question> How to create an array and linked list? How to initialize them?
+<question> How many ways to add elements to an array and linked list?
+<question> What is the easiest way to enumerate an array either forward
+           or backward?
+<question> What kinds of statistics can you get directly from arrays?
+<question> What is a comparator function? How can they be used in array sorting?
+<question> Given an array of integers, how to use filter to obtain all
+           even numbers?
+<question> What is a lambda function? Can functions be assigned to variables
+           or passed as parameters?
+<question> How to initialize a multi-dimensional array? How to access its
+           elements?
+</review>
+
+
+
+<section name="struct">
+
+<p>
+A struct and an ordered map are virtually the same compound data structures
+that holds variable number of named attributes. In <J> there is no need to
+define a struct; simply assign values to an attribute name. Therefore, "map"
+may be a more appropriate name for struct. Objects and ordered maps are
+created by the <kw>new</kw> operator, and may take 0 or more named
+initializers. Attribute names do not have to be quoted unless they have
+non-identifier characters. Ordered maps maintains the order of attributes
+added when you retrieve them; structs do not. This is the only difference
+between the two. Ordered map also has an <kw>indexOf()</kw> method that
+works the same way as for arrays. An ordered map essentially serves the use
+of an array (for the names) along with a name-value mapping, which can be
+very handy in some situations.
+
+<demo>
+a = new Object;
+a = new OrderedMap;
+a = new Object( name = 'Sanjay Deepak',
+                title = 'Software Engineer',
+                sex = 'm',
+                age = 34
+              );
+a = new Object( 'last name' = 'Deepak',
+                'first name' = 'Sanjay',
+                title = 'Software Engineer'
+              );
+</demo>
+
+To access an attribute, use the dot operator; if the attribute name has
+non-identifier characters, have it quoted. If an attribute is not defined,
+a <kw>null</kw> is returned.
+
+<demo>
+println a.'first name';      // access by name
+field = 'first name';  // access by expression
+println a.(field);
+</demo>
+
+To remove an attribute, use <kw>remove()</kw> or <kw>delete()</kw>.
+Method <kw>size()</kw> returns the number of attributes, and
+<kw>clear()</kw> removes them all.
+
+<p>
+Method <kw>keys()</kw> returns all the keys in an array. It is used to
+enumerate all attributes. Method <kw>values()</kw> returns an array of
+all values.
+
+<demo>
+a = new Object( alfa = 'A', beta = 'B', gamma = 'C', delta = 'D' );
+for x in a.keys() {
+  println x, ' => ', a.(x);
+}
+</demo>
+
+Keys (attributes) or their values can be sorted or filtered. This is
+a powerful feature that makes in-memory data processing extremely easy.
+The methods are <kw>keysSorted()</kw>, <kw>keysFiltered()</kw>,
+<kw>keysSortedByValue()</kw>, <kw>keysFilteredByValue()</kw> and
+<kw>keysSortedAndFilteredByValue()</kw>. All of them may take a
+comparator function and/or filter function. The following example shows
+how to use the latter three to achieve some kind of in-memory queries.
+
+<codelist name="in_memory_query" caption="in_memory_query.judo">
+ 1: empl = new Object;
+ 2: empl.'0001' = new Object( name = 'Tony Nugyen',  age = 33 );
+ 3: empl.'0002' = new Object( name = 'Kathy Murphy', age = 42 );
+ 4: empl.'0003' = new Object( name = 'Michael Chu',  age = 29 );
+ 5: empl.'0004' = new Object( name = 'Rick Policsi', age = 30 );
+ 6: empl.'0005' = new Object( name = 'Sanjay Buch',  age = 23 );
+ 7:
+ 8: age_comp = lambda lhs, rhs { return compare(lhs.age, rhs.age); };
+ 9: age_flt  = lambda elem { return (elem.age &gt;= 30); };
+10:
+11: println 'List employees by age in descending order:';
+12: listThem( empl.keysSortedByValue(age_comp) );
+13:
+14: println 'List employees older than 30 years old:';
+15: listThem( empl.keysFilteredByValue(age_flt) );
+16:
+17: println 'List employees older than 30 years old in descending order:';
+18: listThem( empl.keysFilteredAndSortedByValue(age_flt,age_comp) );
+19:
+20: function listThem keys {
+21:   for x in keys {
+22:     local emp = empl.(x);
+23:     println emp.age, ' ', emp.name;
+24:   }
+25: }
+</codelist>
+
+Lines 1 through 6 create an Object whose attributes are keys and values
+are a struct containing various pieces of information. Line 8 defines a
+comparator function that compares values with the system function
+<kw>compare()</kw>; line 9 defines a filter function that filters the
+values also. These two are used in lines 12, 15 and 18 for various sorting
+and filtering combinations. As you see, tabular data in memory can be
+filtered and sorted based on any "column" or "columns" -- it is all in
+the comparator and filter function you implement.
+
+<review>
+<question> What is the difference between a struct and an ordered map?
+<question> If an attribute name starts with a digit, how this attribute
+           can be initialized when creating a struct?
+<question> What is the syntax to access an attribute given a variable
+           for its name?
+<question> Are attribute names limited to strings? What about their values?
+<question> How to enumerate through all the attributes in a struct or
+           an ordered map.
+<question> For a struct, how do you get all keys in a specific order?
+<question> How to get an array of keys in the order based on its values
+           and/or qualified based on certain criterion?
+</review>
+
+
+
+<section name="stack">
+
+<p>
+Stacks ane queues are essential to deal with recursive data structures
+(such as trees and graphs) and algorithms. To create a stack or queue,
+use the <kw>new</kw> operator.
+
+<p>
+Stacks have these methods: <kw>size()</kw>, <kw>clear()</kw>, <kw>push()</kw>,
+<kw>pop()</kw>, <kw>peek()</kw>, <kw>peekAt()</kw> and <kw>isEmpty()</kw>.
+Queues have these methods: <kw>enque()</kw> or <kw>eng()</kw>, <kw>deque()</kw>
+or <kw>deq()</kw>, <kw>head()</kw>, <kw>tail()</kw> and <kw>isEmpty()</kw>.
+The next program traverses a tree in two ways.
+
+<codelist name="dfs_bfs" caption="dfs_bfs.judo">
+ 1: class Node
+ 2: {
+ 3:   constructor {
+ 4:     assert(name != null); // should be in the initializer
+ 5:     children = [];
+ 6:   }
+ 7:   function toString { return name; }
+ 8:   function addChild child { children.add(child); }
+ 9: }
+10:
+11: // constuct a tree
+12: root = new Node(name='ROOT');
+13: a = new Node( name='A' );
+14: a.addChild(new Node(name='A1'));
+15: a.addChild(new Node(name='A2'));
+16: root.addChild(a);               // left subtree
+17: a = new Node( name='B');
+18: a.addChild(new Node(name='B1'));
+19: a.addChild(new Node(name='B2'));
+20: a.addChild(new Node(name='B3'));
+21: root.addChild(a);               // right subtree
+22:
+23: dfs(root);
+24: bfs(root);
+25:
+26: function dfs root {
+27:   print 'Depth-first traverse: ';
+28:   stk = new stack;
+29:   stk.push(root);
+30:   while !stk.isEmpty() {
+31:     node = stk.pop();
+32:     print node, ' ';
+33:     for x in node.children backward { stk.push(x); }
+34:   }
+35:   println;
+36: }
+37:
+38: function bfs root {
+39:   print 'Breadth-first traverse: ';
+40:   que = new queue;
+41:   que.enq(root);
+42:   while !que.isEmpty() {
+43:     node = que.deq();
+44:     print node, ' ';
+45:     for x in node.children { que.enq(x); }
+46:   }
+47:   println;
+48: }
+</codelist>
+
+Lines 1 through 9 defines a class. In the constructor, lines 4 mandates
+that an attributed called "name" must be initialized, and line 5 creates
+an array attribute "children". A stack is used for depth-first traversal,
+and a queue for bread-first. On line 33 the for loop runs in backward
+order so the "left" child is processed first. The tree and the result of
+run is shown below:
+
+<demo>
+      ROOT
+     /    \
+    A      B
+   /|    / | \
+ A1 A2  B1 B2 B3
+
+Depth-first traverse: ROOT A A1 A2 B B1 B2 B3
+Breadth-first traverse: ROOT A B A1 A2 B1 B2 B3
+</demo>
+
+
+<review>
+<question> Use a stack to reverse an array (without resorting to array's
+           <kw>reverse()</kw> method).
+</review>
+
+
+
+<section name=summary>
+
+<p>
+<J> variables and constants are weakly typed. The primitive types include
+integer, floating point number, string and date/time and secret. Data
+structures include struct, ordered map, array, linked list, stack and
+queue. Other variables include Java objects (and arrays) and built-in
+objects. Numbers and strings can be used interchangeably in expressions.
+They can be explicitly converted to intended types. Numbers and strings
+have a set of methods that covers conversion, formatting, mathematical,
+and string processing. Strings also represent URLs and file, they have
+methods like <kw>parseUrl()</kw>, <kw>fileExists()</kw>, etc.
+
+<p>
+A chunk of text can be used via the enhanced here-doc mechanism. Text can
+be aligned and the indentation is stripped. Expressions can be embedded.
+
+<p>
+Date and time values can be created in various ways. They have a number of
+attributes, some are writable.
+
+<p>
+Arrays and linked lists share the same interface. The only difference is
+their creation. They can be initialized; elements can be added to the end
+or front. Other arrays/lists can be merged in. The best way to enumerate
+an array is the <kw>for..in</kw> statement. A number of basic statistics
+method helps the numeric processing. They can be sorted or filtered with
+user-defined comparator or filter function. Such functions are often
+declared as lambda functions.
+
+<p>
+Objects and ordered maps stores a number of name-value mapping. Ordered
+maps maintain the order of the keys that were added to it, where structs
+don't. The keys can be returned as an array, which is the way to
+enumerate sturcts; they may be returned sorted or filtered (by user-defined
+functions); they can even be sorted and/or filtered based on the values. 
+ 
+<p>
+Stacks and queues are also supported.
+
+
+<section name=listings>
+
+<insert name="codelistings">

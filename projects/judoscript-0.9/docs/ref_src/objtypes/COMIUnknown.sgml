@@ -1,0 +1,21 @@
+<function sig="queryInterface className guid">
+  Returns a COMIUnknown for the <param>guid</param>. The <param>className</param> must
+  be a Java class that extends the class <code>jp.ne.so_net.ga2.no_ji.jcom.IUnknown</code>.
+</function>
+
+<function sig="getIDispatch">
+  Returns a COMIDispatch for this COM interface.
+</function>
+
+<function sig="getIEnumVARIANT">
+  Returns an array of elements represented by the IEnumVARIANT interface for this
+  COM interface.
+</function>
+
+<function sig="addRef">
+  Increments the reference count of the COM object.
+</function>
+
+<function sig="release">
+  Decrements the reference count of the COM object.
+</function>

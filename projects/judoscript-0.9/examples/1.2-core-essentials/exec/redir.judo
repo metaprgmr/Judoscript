@@ -1,0 +1,10 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-11-12';
+  desc    = [[*
+    It runs the Java program test.Echo by taking input from
+    file "out_err.judo" and redirect output to file "alfa".
+  *]];
+}
+
+exec 'java test.Echo < out_err.judo > alfa';

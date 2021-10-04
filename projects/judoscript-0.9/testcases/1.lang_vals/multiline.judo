@@ -1,0 +1,13 @@
+a = [[*
+   aaaaaaaaaaaaaaa
+   aaaaaaaaaaaaaaa
+   aaaaaaaaaaaaaaa
+*]];
+println '----', a, '----';
+
+b = [[[*
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+   bbbbbbbbbbbbbbb
+*]];
+println '====', b, '====';

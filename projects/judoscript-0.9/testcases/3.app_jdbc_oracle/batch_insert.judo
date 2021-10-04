@@ -1,0 +1,16 @@
+!include 'setup/connect.judi'
+
+db::batch {
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 103, 'Scott', 'Williamson', to_date('5-3-1956','dd-mm-yyyy'), 92500.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)  // test comment
+  VALUES ( 104, 'Louis', 'Tan', to_date('24-10-1983','dd-mm-yyyy'), 55250.0 );
+
+  INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+  VALUES ( 105, 'Shiva', 'Patel', to_date('8-4-1979','dd-mm-yyyy'), 48000.0 ); -- test comment
+}
+
+println 'db::batch result = ', $_;
+
+db::disconnect();

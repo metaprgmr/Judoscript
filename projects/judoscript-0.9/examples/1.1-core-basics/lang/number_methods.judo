@@ -1,0 +1,45 @@
+usage {
+  author  = 'James Huang';
+  create  = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = 'Demonstrates math methods of number values.';
+}
+
+println '------ initialization ------';
+println 'i = ', i = 5;
+println 'f = ', f = 5.5;
+println 'minus_i = ', minus_i = -5;
+println 'minus_f = ', minus_f = -5.5;
+
+println '------ numeric functions ------';
+println 'i.int() = ', i.int(), ';  f.int() = ', f.int();
+println 'i.float() = ', i.float(), ';  f.float() = ', f.float();
+println 'i.abs() = ', i.abs(), '; minus_i.abs() = ', minus_i.abs();
+println 'f.abs() = ', f.abs(), '; minus_f.abs() = ', minus_f.abs();
+println 'i.sqrt() = ', i.sqrt(), ';  f.sqrt() = ', f.sqrt();
+println 'i.log() = ', i.log(), ';  f.log() = ', f.log();
+println 'i.log10() = ', i.log10(), ';  f.log10() = ', f.log10();
+println 'i.floor() = ', i.floor(), ';  f.floor() = ', f.floor();
+println 'i.ceil() = ', i.ceil(), ';  f.ceil() = ', f.ceil();
+println 'i.round() = ', i.round(), ';  f.round() = ', f.round();
+println 'i.pow(2) = ', i.pow(2), ';  f.pow(2) = ', f.pow(2);
+
+println '------ trigonometry ------';
+const #PI = 3.1415927;
+println "60' in radian: angle = ", angle = #PI / 3;
+println 'angle.degree() = ', angle.degree().fractionDigits(3);
+println 'angle.sin() = ', angle.sin().fractionDigits(3);
+println 'angle.cos() = ', angle.cos().fractionDigits(3);
+println 'angle.tan() = ', angle.tan().fractionDigits(3);
+println 'f = ', f = 1.0;
+println 'f.asin() = ', f.asin().fractionDigits(3);
+println 'f.acos() = ', f.acos().fractionDigits(3);
+println 'f.atan() = ', f.atan().fractionDigits(3);
+println "60' in degrees: angle = ", angle = 60;
+println 'angle.radian() = ', angle.radian().fractionDigits(3);
+println 'angle.sin_d() = ', angle.sin_d().fractionDigits(3);
+println 'angle.cos_d() = ', angle.cos_d().fractionDigits(3);
+println 'angle.tan_d() = ', angle.tan_d().fractionDigits(3);
+println 'f.asin_d() = ', f.asin_d().fractionDigits(3);
+println 'f.acos_d() = ', f.acos_d().fractionDigits(3);
+println 'f.atan_d() = ', f.atan_d().fractionDigits(3);

@@ -1,0 +1,8 @@
+x = 'aliens';
+eval [[*
+  println 'Hello, you ', x, '!';
+  y = 9;
+*]];
+println 'y was set within eval; now, y = ', y, nl;
+
+evalSeparate "println 'Hello, you ', x, '!'; ";

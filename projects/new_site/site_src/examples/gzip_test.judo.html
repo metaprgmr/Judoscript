@@ -1,0 +1,38 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_file_io/gzip_test.judo:</b></td></tr><tr><td><pre>
+const #read = false;
+
+if #read {
+  a = openGZippedTextFile('aa.gz');
+  while {
+    line = a.readLine();
+    if line == eof { break; }
+    println line;
+  }
+  a.close();
+} else {
+  a = openGZippedTextFile('aa.gz','w');
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  println &lt;a> 'abcdefghijklmnopqrstuvwxyz';
+  println &lt;a> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  a.close();
+}
+
+// unzip the file
+gunzip 'aa.gz';
+copy 'aa' to 'bb';
+gzip 'bb';
+</pre></td></tr></table></body></html>

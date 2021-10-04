@@ -1,0 +1,371 @@
+<synopsis>
+This chapter discusses the <J> language at a high level, including philosophy, language design and standards, and uses of <J>. The <J> language is a versatile and practical language; functionally it is partitioned into major groups like core programming, Java scripting and specific functional areas; structurally it is composed of built-in data structures and objects, system functions and syntax rules that are either general-purpose and special purpose. <J> is a language intended for any IT workers, not necessarily Java developers, and both Java software and <J> software install and usages are introduced, especially for those who do not yet have Java experience. Finally, the book organization and other house-keeping topics are covered.
+</synopsis>
+
+<p>This chapter introduces the background, high-level description of <J>, general discussions on scripting languages and Java scripting languages and comparisons between <J> and other languages. It tries to answer the questions of why, how and who to use <J>. Finally, it explains the organization of the whole book. Many discussions are general in nature, and those regarding <J> are conclusions that you may revisit after you have learned to use and program in <J>.</p>
+
+<!--===============================================================-->
+<section1 title="Background" id="backgnd" status="green" >
+
+<p><J> is a <i>functional scripting language</i>. It is a product of our time.</p>
+
+<p>Modern computers employ the same <i>von Neumann</i> architecture just like fifty years ago, but what we do with computers is drastically different. Today, we run most enterprises on computer systems, and we use computers in homes, offices, schools, libraries and virtually everywhere. In recent years, thanks to the great advances of hardware and the internet boom, the world of computing is experiencing explosive growth, so much so that it is drastically different from as late as 1987, when the Perl language was born.</p>
+
+<p>In the entire 1980's, many important computing technologies were in the development, such as database, graphical user interface, networking, etc. Running Unix and MS-DOS, computers were process-centric, and the information was mostly stored either as flat text files or in proprietary binary formats. It was in such an environment that Perl was incepted to be a language that made <i>easy things easy, and hard things possible</i>; the thing that Perl made the easiest was text processing, as Perl introduced regular expression into the core of the language. It is fair to say that, Perl is a general-purpose programming language plus the special support for one domain &mdash; single-byte text processing. As Perl grew in popularity, it has evolved into a general-purpose programming language that builds software systems, beyond its original intent of doing things easily and quickly. Inspired by Perl, many similar languages were invented; some of them support object-oriented programming (OOP); all of them embody so-called <i>syntactic sugar</i>, trying to make coding easier here and there. A new class of languages called <i>scripting languages</i> have emerged. These languages all serve the same purpose that Perl was designed for, in 1987. The result is, today we have a multitude of general-purpose programming languages to choose from, ranging from C, C++ and Java to Perl and Visual Basic, and there are few fundamental differences between them.</p>
+
+<p>But time is changing. The prolifiration of graphical user interface (GUI) and the commoditization of computer hardware have profoundly changed the way we conduct business, live and interact with each other. Software engineering has also undergone an explosion of development. The biggest changes in software engineering are object-orientation and wide-spread distributed computing, best exemplified by today's indispensable and ubiquitous internet and intranet. Many technologies considered exotic or simply did not exist in 1987 are now standard featuers that every computer user deals with, for instance, HTTP, HTML, XML, e-mail, internationalization and Unicode, and SQL and relational databases. They are all used in general software engineering, but each has its own theory and domain knowledge. When you have to do some work quickly that deals with many of these technologies, programming in languages like Perl is clearly not the most productive way. If you still must code a lot to solve a problem, using a scripting language kind of loses its purpose.</p>
+
+<p>First published in November 2001, <J> is a new kid on the block. It is not an alternative way to repeat the same problem, but rather, to provide computer professionals and power users with an easier, more intuitive and productive way to communicate with computers. <J> has defined a new class of scripting languages &mdash; <i>functional scripting languages</i>.</p>
+
+<p>In the following sections, we will explore the meaning of functional scripting languages, and also examine the advantages of scripting languages and Java scripting languages in general, because <J> is a genuine Java scripting language as well. Finally, we will take a look at programming language design, and see the pros and cons of the design of some languages.</p>
+
+<!------------------------------------->
+<section2 title="Judo, a Functional Java Scripting Language" id="judo_fsl">
+
+<p><title3>A language of a trio</title3><J> is a general-purpose programming (scripting) language with intimate support for many today's popular computing subjects. That is, it has multiple domain support built in the language, big and small. Domain support in <J> is not only built-in functions and objects, but special-purpose syntax as well. The supported domains include:</p>
+
+<ul>
+<li>Java scripting</li>
+<li>SQL scripting</li>
+<li>XML scripting</li>
+<li>SGML/HTML scrapging</li>
+<li>Send mail</li>
+<li>Unified file system and archive operations</li>
+<li>Execute native executables</li>
+<li>Internet scripting</li>
+<li>Ant task scripting</li>
+<li>Scheduling</li>
+<li>Building Java GUI</li>
+<li>Microsoft ActiveX scripting on Windows platforms</li>
+</ul>
+
+<p><J> is itself a powerful scripting language, too. It didn't re-invent the wheel, and simply uses a syntax and programming model similar to JavaScript. It has stronger data structures, better support for thread programming and object-oriented programming, and more syntactic sugar. <J> is thus far a Java-based scripting language; it is not affiliated or related in any ways to the Java-version JavaScript, <i>Rhino</i>. There is an effort underway to make <J> mostly compatible with JavaScript 2.0; JavaScript 2.0 is still a work in progress but is much more robust than JavaScript 1.x.</p>
+
+<p><J> is also a potent Java scripting language. It can script Java objects and classes to the best capability possible allowed by the Java virtual machine (JVM). To be more specific, you can instantiate and use Java objects, arrays and class objects; you can also extend Java classes and/or implement Java interfaces with the parameters allowed by the JVM. The merits of Java scripting languages are discussed in the next section, but the first and foremost one is that, any Java software and resources are readily available to Java scripting languages.</p>
+
+<p>Hence, <J> is a language of a trio:</p>
+<ol>
+<li>a powerful scripting language engine,</li>
+<li>free access to the underlying Java platform and resources, and</li>
+<li>domain support for modern computing techniques.</li>
+</ol>
+
+<p>The synergy of the trio renders great power, productivity and elegance to programmers.</p>
+
+<p><title3>A powerful programming language</title3>The ultimate power of programming langauges stems from programmability. <J> may be a more powerful programming language because it has more built-in data structures, and they are typically richer in functionality than many their counterparts in other languages. <J> data structures are not just predefined types, they can also have dedicated, intuitive facilities and syntactic support, therefore it can be very easy and expressive. For instance, the two-dimensional <code>TableData</code> data structures has an accompanying <code>printTable</code> statement; the <code>Array</code> object has a method <code>toCsv()</code> than can not only concatenate its elements but also take a <code>decorate function</code> object to do things like quoting the values.</p>
+
+<p>Another source of power is clearly from scripting Java. This is no different from any Java scripting languages and is discussed in detail later.</p>
+
+<p><title3>Greater productivity and easier on mind</title3>Every scripting language is created for productivity by using a syntax and a programming model that make coding easier and more obvious. This is discussed more in the following section. For <J>, the domain support makes it easier on your mind while coding for solutions, because domain-support allows you to <i>specify</i> what you want to do, rather than coding solutions with data structures and algorithms that takes a bigger toll on the mind. The results are <i>a)</i> the code is coherent and directly to-the-point, and <i>b)</i> the code is in context and focused. The following is a code snippet in <J> and a code snippet in Perl.</p>
+
+<codelist name="Judo code snippet for database query" id="_ex1">
+prepare qry:
+  SELECT * FROM emp
+  WHERE last_name = ? AND
+        salary &lt; ?
+;
+executeQuery qry with @1 = 'Lin', @2:number = 50000.0;
+</codelist>
+
+<codelist name="Perl code snippet for database query" id="_ex2">
+$sth = $dbh->prepare( "
+  SELECT * FROM emp
+  WHERE last_name = ? AND
+        salary &lt; ?
+" );
+$sth->bind_param( 1, "Lin", SQL_VARCHAR );
+$sth->bind_param( 2, 5000.0 );
+$sth->execute(  );
+</codelist>
+
+<p>The meaning (the thinking process) for the <J> code is: <i>prepare a query; run it with the parameters.</i> The meaing (the thinking process) for the Perl code is: <i>prepare a query; bind one parameter; bind another parameter; execute the query.</i> The <J> thinking is more collected and coherent than Perl's, which is typical for any programming langauges. Domain support also helps to group code in context so your mind is much more focused, as demonstrated by the next example, XML SAX programming.</p>
+
+<codelist name="Judo XML scripting example" id="_ex3">
+do 'data.xml' as xml {
+  &lt;order>:       println '==============';
+  TEXT&lt;number>:  println 'Order #:   ', $_;
+  TEXT&lt;invoice>: println 'Invoice #: ', $_;
+}
+</codelist>
+
+<p>If you have marginal knowledge of the domain of XML, you would be able to guess what this code snippet does. It's quite clear that, for the <code>&lt;order></code> tag, it prints out a divider; for text enclosed by <code>&lt;number></code> and <code>&lt;invoice></code>, print them out as order number and invoice number. Now, let's take a look at a Java counterpart.</p>
+
+<codelist name="Java XML SAX programming example" id="_ex4">
+public class OrderFinder extends HandlerBase {
+  public OrderFinder() { super(); }
+
+  public void characters(char[] buf, int start, int len) {
+    //... process text surrounded by certain tags.
+  }
+
+  public void startElement(String elem, AttributeList as) {
+    if (elem.equals("order")) {
+      System.out.println("==============");
+    } else if (elem.equals("number")) {
+      //... process
+    } else if (elem.equals("invoice")) {
+      //... process
+    }
+  }
+
+  public void endElement(String elem) {
+    if (elem.equals("number")) {
+      //... process
+    } else if (elem.equals("invoice")) {
+      //... process
+    }
+  }
+}
+</codelist>
+
+<p>Compared to the <J> version, what a sight this is! The program is not even complete. What we see is a class with a number of disparate methods. If you look closely at the method names and the parameter lists, you may be able to guess what they do. The thing is, this program has many assumptions (the SAX framework) and dependencies (the classes in the SAX packages). These assumptions and dependencies are implementational details that are not directly related to the problem we are trying to solve. In other words, when one is trying to print out the order and invoice numbers for an XML document, why must he know the details of a particular framework? In contrast, the declarative nature of the <J> domain support is a higher-level abstraction and is directly pertinent to the problems in the domain. Solving problems in <J> is a natural and intuitive process with much less distraction of unwanted programming details; as you have seen, it is much easier and less stressful on your mind. Before we go, let's look at yet another example of functional scripting in <J>, and try to envision the difference of coding in Perl or Java to do the same.</p>
+
+<codelist name="Send mail example" id="_ex5">
+sendMail
+    from: 'james.huang@judoscript.com'
+      to: cust_email
+  attach: '${DOCROOT}/store/judo.jar.zip'
+ subject: 'Here is a latest update.'
+htmlBody: [[*
+  &lt;p>Dear (* cust_name *):&lt;/p>
+  &lt;p>Attached is the latest software with the bug fixed.
+  Thanks for reporting this issue!&lt;/p>
+  &lt;p>Sincerely,&lt;br>- James&lt;/p>
+*]]
+;
+</codelist>
+
+<p><title3>A functional scripting language</title3>Functional languages tell computers <i>to do it</i>, where programming languages tell computers <i>how to do it</i>. Functional support, or domain support, was historically materialized in languages called fourth-generation-languages (4GLs). (3GLs are high-level programming languages, including Fortran, C, C++, Java, C#, VB, Perl, Python, ...; 2GLs are assembly languages and 1GLs are machine languages. The higher the <i>G</i>, the more abstract the <i>L</i>.) Traditionally, 4GLs are domain-specific, that is, languages have syntax and constructs to support knowledge of a specific domain. 4GLs (functional languages) are closely related to or directly in the problem space, whereas 3GLs (programming langauges) are directly for building software, and the software in turn tries to address the problem space. The difference is not just different ways of coding, it is different ways of thinking. Languages are carriers of thoughts, which profoundly affect the way of thinking; this phenomenon applies to both natural and computer languages.</p>
+
+<p><J>'s domain support even extends into the general programming areas. For instance, the <code>TableData</code> data structure and its related syntactic support are indeed the support for the domain of two-dimensional data entities. Same applies to many other data structures in explicit or subtle ways. This is why <J> enjoys great programmability.</p>
+
+<p><J> is the first general- and multi-purpose 4GL, built atop a powerful 3GL engine and the Java runtime. It is in the class of <i>functional scripting languages</i>. It allows users to interact with computers both declaratively and programmatically, so that the problem solving process becomes easy, effective and intuitive. The resultant programs and the thinking process are direct, coherent, in context and focused. <J> code is typically shorter and more obvious than in other languages, which means great maintainability and flexibility.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="The Java Platform and Scripting Languages" id="jplaf">
+
+<p>Java is a dream platform for scripting languages. On the Java platform, everything is a native object complete with RTTI (Run-Time Type Inforamtion), and are readily and naturally accessible and operational in the native language, Java. The Java Virtual Machine (JVM) is a simple CPU simulated by a software running on top of many operatin systems. Dedicated teams continually work on the JVM performance improvement. Java scripting languages can easily access most of the underlying Java platform and resources. Many Java scripting languages compile the source code directly into the JVM bytecode, resulting in great performance.</p>
+
+<p>One of the greatest merits of Java scripting languages is, there is no need to build special libraries just for that language; you can simply create Java libraries (packages) to be used by both Java and Java scripting languages. In contrast, Perl, Python and many other languages have their own ever-growing libraries, and these libraries for different languages largely overlap in functionality. This is collectively a huge waste in the programming community. Java, being a popular system language and a meta-platform running on various "real" platforms, is a good place to converge all the common computing features. Part of the reason for this is Java's superb scriptability and availability of Java scripting languages.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Vive les Scripting Languages!" id="scriptlangs">
+
+<p>Scripting languages greatly improves productivity over system languages. System languages, such as C, C++ and Java, are designed for creating large-scale software systems and computing infrastructures. Typically, they are strongly and statically typed, enforce rigid program structures, and their source programs are compiled before run. Software or libraries created by system languages are well-defined, unambigous, and performant. The downside is that, these languages are generic, verbose and detail-oriented, hence requires a lot of code and attention to achieve goals. Human mind has limited long-term and short-term capacities; when the size of software grows, the chances of mistakes grow accordingly.</p>
+
+<p>Scripting languages are usually untyped or dynamically typed; you can write simple statements directly without rigid structure; and there is syntactic sugar that can express some operation with a single instruction instead of a number of instructions otherwise. Scripting languages not only allow users to write less code to achieve goals, they also enforce a different thinking process than system languages.</p>
+
+<p><title3>Program in context</title3>Data in computer programs general have types. Scripting languages such as <J> use a dynamic type system, that is, variables are simply containers of any values; at any one moment, the value held in a variable (or a data structure) is of a particular type. With object-based systems, that means each value has a set of predefined methods and/or properties. How does the programmer know the type of a variable in a program? by context. When you call <code>x.formatDate('yyyy-MM-dd')</code>, for instance, the programmer knows that <code>x</code> must contain a <code>Date</code> value. Scripting language programmers, therefore, have a stronger sense of context. This dynamicness naturally implies uncertainty of the value types; such seemingly adversary prompts developers to do more testing. It is <i>testing</i> that guarantees software quality, not the language's type system. So, ironically, a weaker type system may actually help software quality, which defies common sense.</p>
+
+<p><title3>Signal/noise ratio</title3>Scripting languages' syntactic sugar allows programmers to concisely express sophisticated ideas. This results in less and more obvious code. For a code maintainer, this means higher "signal/noise ratio". <i>Signal/noise ratio</i> is a concept in communication theory that reflects the confidence level of receiving useful information out of contaminated signals. Think of a TV screen from an antenna receiver with poor signal versus a TV screen of cable TV connection. I once converted a utility program written in Java into <J>. The Java program had 344 lines and 12790 bytes; the corresponding <J> program had 192 lines and 6523 bytes. If we reduce the documentation, the <J> program is about half the line numbers and bytes in size than Java's. In this particular case, suppose <J> spends 5% of code for non-business logic, the signal/noise ratio is about 20; suppose Java spends 50% of code for non-business logic, the signal/noice ratio is 1. For programs of different lengths, such ratios may vary; but scripting languages are consistently more focused than system languages. It is this natural tendency of focusing on problems that helps scripting language programmers to concentrate on problems rather than get distracted by programming details. Scripting language programmers are less stressed, more focused, effective and efficient in problem solving. All these help raise the software quality.</p>
+
+<p><title3><J> is even more focused</title3><J>'s 4GL-like functional features are highly abstract for many of today's populalr computing needs. They are <i>functional sugar</i>, beyond <i>syntactic sugar</i> in normal scripting languages. Hence, <J> programs are typically more to-the-point, coherent and with less noise. Refer back to listings <ref id="_ex1"/> and <ref id="_ex2"/> for a comparison; with Java, there will certainly be a lot noisier than either <J> or Perl versions.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Programming Language Design" id="design">
+
+<p>Programming languages are invented based on specific computing models and ideas. For general algorithmic programming languages, there are many characteristics and design criteria. The most important aspects are expressiveness and simplicity, and the balance between the two.</p>
+
+<p>Simplicity of programming languages is reflected by their orthogonality. An orthogonal language would have the minumum number of constructs to cover all the programming needs. System languages like C, C++ and Java areall highly orthogonal. The benefit is, programmers need to memorize fewest possible rules to code solutions. The downside is, expressiveness is poor.</p>
+
+<p>Expressiveness is critical for code efficiency, effectiveness and aesthetics. For instance, you can practise OOP in any general-purpose programming languages, but languages with native OOP support are certainly better choices just for OOP's sake. Enhancing expressiveness by blending different languages has been experimented by, say, Pro*C and SQL/J; the result is questionable because the code looks confusing. Pursuit of language expressiveness is more art than science. It ultimately comes down to the number of use cases a language intends to cover and the conosistency (or style) of that language.</p>
+
+<p>Scripting languages simplify programming (as compared to system languages) by relaxing the type system, and improve expressiveness by introducing syntactic sugar, at the expenses of violating orthogonality. The number of new rules is limited, and they expressively cover many useful programming use cases. That's why scripting languages are enjoying great popularity. Of course, languages should still refrain themselves from adding too many rules for every trivial use case. Perl, for instance, has been criticized for having too many rules, some of which are quite accentric.</p>
+
+<p><J> is designed to cover use cases like scripting for SQL, XML, SGML, operating system and internet, as well as <i>any</i> general programming topics such as algorithms, OOP, threads, exceptions, dynamic execution, Java scripting, regular expression, etc. <J> tries to flatten the learning curve for new users by adopting the (hopefully) familiar programming model and syntax of JavaScript. Since JavaScript 1.x is a rather primitive language, <J> has quite a few enhancements to cover the programming use cases, some of which are in-line with the work-in-progress JavaScript 2 specification.</p>
+
+<p>The biggest differentiator of <J> to other languages is its collection of 4GL-like functional domain support; this is the <i>very reason</i> why <J> was incepted! Domain support violates orthogonality of a programming langauge, and requires users to remember special syntactic rules for particular domains. But the cost is really quite small, as domain-specific syntax are so pertinent and intuitive; if you look back at the examples of SQL query (listing <ref id="_ex1"/>), the XML scripting (listing <ref id="_ex3"/>) and send mail (listing <ref id="_ex5"/>), you would know how much (or little) effort is needed to remember those syntactic rules. The benefit of expressiveness far outweighs this small cost.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Judo 0.9, 1.0 and ECMAScript" id="9_10_ecma">
+
+<p><J>'s basic programming model is similar to that of JavaScript. This include data type system, flow control, function definition and such. JavaScript is best known for its role in web browsers. It is also a general-purpose languages, used in software such as Macromedia's Flash and even server side development. The JavaScript version 1.5 is standardized by ECMA (European Computer Manufacturers Association) as <ref href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">ECMA-262 Edition 3</ref>. JavaScript started as a simple scripting language, and up to version 1.5, it has added features to simulate object-oriented programming. As a part of the language, it has a number of built-in simple object types.</p>
+
+<p>The originator of JavaScript was Netscape (acquired by AOL in 1999), who had an experimental proposal of <ref href="http://www.mozilla.org/js/language/js20/">JavaScript 2.0</ref>, which was also proposed to ECMA as ECMAScript 4. This proposal is clearly a much more robust language than its predecessor. The major differences are: <i>a)</i> a stronger type system, <i>b)</i> genuine class support, and <i>c)</i> package and namespace. The current version of <J>, 0.9, has genuine class support; the core language of <J> version 1.0 will be compatible with most of the current ECMAScript 4 proposal.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+<!--===============================================================-->
+<section1 title="Components of Judo Language" id="components" status="red" >
+
+<!------------------------------------->
+<section2 title="Core Programming Language" id="core">
+
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Java Scripting" id="javascript">
+
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Built-In Data Structures" id="ds">
+
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="System Functions" id="sysfxns">
+
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Functional Support" id="fntnl">
+
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Uses of Judo" id="uses" status="green" >
+
+<p><J> is a general-purpose scripting language, it can be used anywhere that another general-purpose scripting language is appropriate. It has also features that make it particularly fit for certain types of work, big and small. It is designed for enterprise applications, which is also great for software development and daily uses.</p>
+
+<!------------------------------------->
+<section2 title="Enterprise Uses" id="entuses">
+
+<p><title3>Multi-source, multi-format data processing and reporting</title3><J> is a superb data processing and reporting tool! Today, enterprise software deal with not only relational databases but also richer data formats such as XML and SGML, abstract data types like Enterprise Java Beans (EJBs), web services, ..., as well as old friends like flat files and spreadsheets. Spreadsheets are so popular in business, they are touted as "the language of business." Traditionally, (and naturally,) people use various tools for data querying, reporting and processing. <J> can handle all these with great easy, and is a unified data processing tool. The benefits of using such a single, unitified tool are obvious: a) you can do <i>any</i> processing with <i>any</i> data sources of <i>any</i> formats <i>at the same time</i>, b) faster to reach correct and right solutions and results, c) less tools to learn, install, configure and launch, d) cheaper, and e) the problem solving process is mentally less taxing because you can focus on the problem at hand without constant worries over environmental issues, context switching from tool to tool, and integration of heteorogeneous pieces of software.</p>
+
+<p><title3>Content management</title3>Comment management is a special type of data processing which is common with publication services. It can be a book or magazine publisher, or an information providing web site. Frequently contents are encoded in SGML or XML, but they may also be stored in flat files or relational databases. There can be dynamic content as well, for instance, weather, stock, traffic or advertisement. <J> has native support for many data formats, in addition to rich data structures and OOP support. It is great for content publishing. This book, for instance, is encoded in SGML and processed by a custom content management system written entirely in <J>; content is encoded in such a way that it is completely independent from its presentation, and various scripts process the content into HTML and publishing ready format.</p>
+
+<p><title3>J2EE and network client programs and batch jobs</title3><J>, being a potent Java scripting language, can be used to create client programs to access and manipulate J2EE applications and systems through JNI, JMS, JMX and other J2EE protocols. It has great support for HTTP and other networking protocols. Combined with other features, network clients and batch jobs written in <J> can be terse and highly functional.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Software Development Uses" id="devuses">
+
+<p><J> resembles operating system shells in many ways, largely due to its robust support for executing native programs and versatile file system and archive operations. It can be used in many automation processes during software development.</p>
+
+<p><title3>Software prototype</title3><J> can be used to quickly build software prototypes and proof-of-concept experimental systems, whether it is a data-centric application, a Java GUI based system or a web application. During prototyping, you can easily simulate various data sources without the constraints of a full-blown test environment.</p>
+
+<p><title3>Automated black-box and white-box testing</title3><J> is great for distributed system testing, especially J2EE systems. For instance, you can script to use HTTP access, direct EJB invocation and/or database access to run use cases and check results. You can even instantiate a <J> engine in the Java software as a remote agent and invoke or inspect Java objects directly. <J> is also a white-box testing tool for Java.</p>
+
+<p><title3>Data investigation tool</title3><J>'s SQL scripting and rich data structures provide quick ways to investigate data problems and scenarios and find the right solutions.</p>
+
+<p><title3>Building software</title3><J> itself is built with <J>. This is quite a complicated process, because the majority of the <J> software must be compiled with JDK1.3 but a small part is in JDK1.4; and there are optional packages needed at different times. A menu-driven build script was written in <J> and handles the job clearly and effectively. The build targets also includes clobber, archive, and automated testing. <J> is a flatter solution than XML-based build tools, because you have full control over the build steps and no worries about the format and meanings of all kinds of tag attributes for various tasks.</p>
+
+<p><title3><J> as an embedded scripting solution</title3><J> language engine can be embedded in Java software and the software can in turn expose <J> to its power users as a means to customize or script actions.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Daily Uses" id="dailyuses">
+
+<p><J> has many nifty features for everyday uses. One of the most useful task is to copy selected files into a ZIP, JAR or TAR archive for back-ups. You can FTP or SCP files between remote and local machines. You can do quick numeric or date/time calculations, formating and conversions. You can process text and binary files easily, for instance, to print out SGML entity encodings. You can quickly inspect Java static fields. You can easily download a HTTP resource, and can scape it for specific pieces of information. The list goes on and on; all these will make it easier for your life as a computer professional.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Who Can Use Judo" id="who" status="green" >
+
+<p><J> is designed for everybody's use. It provides three levels of convenience for users to interact with computers: <i>a)</i> its extended shell-like commands that covers not only operating system operations but also rich data processing and file handling; <i>b)</i> its easy and powerful programming language that allows you to code any solutions, and <i>c)</i> access to any Java classes and resources. IT and software professionals can take the best advantage of <J>. Software developers, especially Java developers, use many automation tools during development; with <J>, you can probably reduce the number of tools needed.</p>
+
+<p><J> is a unified tool for using most of your computer's resources. Java objects and ActiveX components on Windows, once obtained, are no different from a <J> object or value; so even if you are not a Java programmer or ActiveX expert, you can still take advantage of them once you know the attributes of that object. This is the beauty of object-orientation; this idea is used everywhere nowadays, and in languages like <J>, objects simply appear and behave the same as well.</p>
+
+<p><title3>IT and Software Professionals</title3>There is a surprising number of computer power users who have never used Java. There are veteran system administrators dexterous with both Unix and Windows, who can pick and choose modules to custom build Linux kernel, and are capable of Unix shell scripting and Perl coding; yet they have never used any Java software. There are C++ programmers and device driver writers who never have the chance or urge to learn Java. This is a pitty, because Java is a free and tremendously useful resource; some people and companies have been spending a lot of time and money to really improve the JVMs on various platforms, and it is an umbrella for all sorts of computing resources. The Java language is easy to program in, and is much easier to deploy than C/C++-based software. <J>'s richness and usefulness exemplify Java's resourcefulness, and give everyone a good reason to start using Java software. Using Java software does not necessarily mean programming in Java, although a small cup of Java coding doesn't hurt. In the following section, we will introduce using Java software and how to run <J>. For Java gurus, you can simply skip the part that introduces Java.</p>
+
+<p><title3>Business Computer Power Users</title3>Some business professionals are also computer power users. Many can do sophisticated Microsoft Office using and even VBA programming; some are capable of querying relational databases using SQL. Although not working as computer professionals, these people have a logical mind and hands-on spirit. <J> is great for them to research and present business data.</p>
+
+<p><title3>Java Developers</title3>Needless to say, Java developers will be able to take advantage of Java scripting and do more when they need to. They can combine <J>'s functional features with Java software and/or J2EE services to achieve great results in compressed time frames for many tasks for development, deployment and production systems. <J> supports BSF (Bean Scripting Framework), so you can embed it in any BSF-capable software (such as Jakarta Ant). <J> also provides a Java API to its language engine, so that it can be embedded in Java software as a customer-facing scripting solution.</p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="How to Run Java Software and Judo" id="run" status="red" >
+
+<!------------------------------------->
+<section2 title="Install Java and Run Java Software" id="runjava">
+
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Install and Run Judo" id="runjudo">
+
+
+</section2><!--------------------------->
+
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="How This Book is Organized" id="bookorg" status="green" >
+
+<p>This book is a comprehensive documentation, tutorial and reference guide of <J>. It is organized based on usages. The whole book is planned for <J> 1.0; for now, as <J> 0.9 is the latest version, only relevant chapters are included, but unsupported chapters are reserved in the book. That's why chapter numbers are not consecutive.</p>
+
+<p>The book is grouped in several parts. Parts II and III cover what's mostly in conventional Java scripting languages. Parts III, IV and V are all functional support of <J>. The following is a complete listing of all parts and chapters. Part VI contains the complete cross-reference for the Judo language.</p>
+
+<book_org>
+
+<p><i>Again, certain chapters are not relevant to <J> version 0.9 and are therefore not present in this edition.</i></p>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Conventions and Terminologies Used in This Book" id="convention" status="red" >
+
+</section1><!--=====================================================-->
+
+<!--
+java.io.File                     : listFiles, copy, mkdir, rmdir
+
+java.io.*                        : openFile(), openTextFile(), randomAccessFile()
+                                   print/println/flush
+
+java.lang.Runtime
+java.lang.Process                : exec
+
+java.lang.Thread                 : thread, startThread
+
+java.sql.*                       : [JDBC scripting]
+
+java.util.regex                  : String::match()/split()/replace()
+
+java.util.zip.*                  : listFiels, copy, openZip(), createZip()
+java.util.jar.*                  : listFiels, copy, openJar(), createJar()
+com.ice.tar.*                    : listFiels, copy, openTar(), createTar()
+
+java.awt.*;
+java.awt.event.*
+javax.swing.event.*              : guiEvent{}
+
+com.judoscript.util.Markup
+com.judoscript.util.MarkupParser : do as sgml{}
+
+javax.xml.parsers.*
+org.xml.sax.*
+org.xml.sax.ext.*                : do as xml{}
+
+javax.mail.*                     : sendMail
+
+java.util.Timer
+java.util.TimerTask              : schedule{}
+
+java.util.Date
+java.util.Calendar               : Date-time object
+
+org.apache.tools.ant.*           : anttask::<xml>...</xml>
+
+jp.ne.so_net.ga2.no_ji.jcom.*    : [ActiveX scripting]
+
+javax.management.*               : [JMX scripting]
+
+-->

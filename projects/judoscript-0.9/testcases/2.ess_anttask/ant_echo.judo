@@ -1,0 +1,7 @@
+a = 'ants';
+
+anttask::<echo message="Hello, ${a}!"/>
+
+anttask::<echo><![CDATA[
+  Hello, more ${a}!
+]]></echo>

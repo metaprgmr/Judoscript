@@ -1,0 +1,42 @@
+
+
+
+,,,,,,,,,Maintenance Invoice #:,22498
+,,,,,,,,,Revision #:,1
+,,,,,,,,,Invoice Date:,24-Jun-2004
+,,,,,,,,,Payment Date:,NET 30
+Account Name:,"CITIGROUP"
+PS Customer Name:,"Citibank"
+PS Customer ID:,"PS1201100"
+Contact:,"Saurav Das",,,,,,,,Renewal Rep Name:," BEA Systems, Inc."
+Address:,"One Court Sqr 23rd Fl Zone 1",,,,,,,,,"7074 Collection Center Drive"
+,"Long Island City, NY 11120 USA",,,,,,,,,"Chicago, IL 60693 USA"
+Phone:,"",,,,,,,,,"Tax ID # 77-0394711"
+Fax:,""
+Email:,"saurav.das@citigroup.com"
+
+
+
+MAINTENANCE SUPPORT INVOICE
+ Item Number , Supported License Product Description , Product Unit List , ,Support Level,Support Level % List,Annual Unit Price , , Qty , Start Date , , End Date , # of Days , Extended Price , , BEA Systems Previous Inv , Customer's Previous P.O. ,Line Comments 
+ 1,"WL SVR Advan v6.1,56bit,DL","$USD","10000.00","7x24",21.0,"$USD","2100.00",2,31-Oct-2004,-,29-Oct-2005,363,"$USD","4176.99",188004,CHECK 0100181918
+ 2,"WL SVR Advan v6.1,56bit,DL","$USD","10000.00","7x24",21.0,"$USD","2100.00",2,01-Nov-2004,-,31-Oct-2005,365,"$USD","4200.00",188004,CHECK 0100181918
+ 3,"WL SVR Advan v6.1,56bit,DL","$USD","10000.00","7x24",21.0,"$USD","2100.00",2,31-Oct-2004,-,29-Oct-2005,363,"$USD","4176.99",188004,CHECK 0100181918
+ 4,"WLS6.1DevKit w/Port,SP2,56B,DL","$USD","2495.00","7x24",21.0,"$USD","523.95",5,10-Jan-2005,-,09-Jan-2006,365,"$USD","2619.75",188004,CHECK 0100181918
+
+Pre-Paid Education and Consulting bundles are available at discounted rate with Maintenance Renewal. Please contact your renewal representative for further details.,
+
+Comments:,
+,,,,,,,,,, Subtotal
+,,,,,,,,,,"$USD","15173.73",
+,,,,,,,,,, tax
+,,,,,,,,,,"$USD","0.00",
+,,,,,,,,,, Grand Total
+,,,,,,,,,,"$USD","15173.73",
+
+Notes:,A.,"For all Cancelled or Declined maintenance lines,  reinstatement fees shall apply per contract terms  in effect at the time of reinstatement."
+,B.,Wiring Instructions:
+ ,,"Bank of America, Illinois" 
+,,"231 South La Salle Street, Chicago, IL 60697 " 
+,,ABA #: 071000039 
+,,"BEA Systems, Inc., Account #: 81880-04261 "

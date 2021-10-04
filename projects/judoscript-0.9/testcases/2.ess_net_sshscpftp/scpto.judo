@@ -1,0 +1,16 @@
+usage {
+  minArgs = 1;
+  args    = 'local_file_name';
+  desc    = [[*
+    Send one local file to the remote server in the user's home dir.
+
+    Modify this to use real server name, user name and password
+    before run.
+  *]];
+}
+
+server_name = 'localhost';
+username    = 'justme';
+password    = 'itsonlyme';
+
+scp server_name, username, password from local #args[0];

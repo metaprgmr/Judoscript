@@ -1,0 +1,11 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_anttask/antburger.judo:</b></td></tr><tr><td><pre>
+anttask::&lt;taskdef name="judo" classname="com.judoscript.AntJudoScriptTask" />
+
+anttask::&lt;judo>
+  println 'This is Judo-in-Ant-in-Judo, a.k.a. AntBurger!',
+          nl, nl, 'AntBurger is delicious!';
+&lt;/judo>
+
+catch: $_.pist();
+</pre></td></tr></table></body></html>

@@ -1,0 +1,95 @@
+/////////////////////////////////////////////////////////////////////
+// Environment
+/////////////////////////////////////////////////////////////////////
+
+!include '${JUDOROOT}/projects/common.judi'
+
+myroot      = '${projects}/judoscript.com';
+
+j09docs     = '${myroot}/judoscript-0.9/docs';
+j09examples = '${myroot}/judoscript-0.9/examples';
+j09articles = '${j09docs}/art_src';
+j09ref      = '${j09docs}/ref_src';
+home        = '${myroot}/home_src';
+share       = '${myroot}/share';
+myarchives  = '${archives}/judoscript.com';
+
+mkdir myarchives;
+mkdir '${docroot}/articles';
+mkdir '${docroot}/examples';
+mkdir '${docroot}/ref';
+mkdir '${docroot}/share';
+mkdir '${docroot}/contrib';
+mkdir '${docroot}/store';
+
+/////////////////////////////////////////////////////////////////////
+// Select Targets
+/////////////////////////////////////////////////////////////////////
+
+println <err> [[*
+
+  ********************** Project judoscript.com *********************
+*]];
+
+menuItems = [
+  'Build Site',             // 1
+  '  Copy Static Content',  // 2
+  '  Build Pages',          // 3
+  'Archive',                // 4
+];
+
+option = 0;
+
+if #args.length <= 0 {
+  option = menu(menuItems, false); // no confirm
+} elif #args[0].isInt() {
+  option = #args[0];
+}
+
+switch option {
+  case 1:   copyStatic(); buildPages(); break;
+  case 2:   copyStatic();               break;
+  case 3:   buildPages();               break;
+  case 4:   archive();                  break;
+  default:  ;
+}
+
+/////////////////////////////////////////////////////////////////////
+// Copy Static Content
+/////////////////////////////////////////////////////////////////////
+
+function copyStatic {
+  println <err> nl, '*** Done building ...', nl;
+
+  copy 'readme.'+#versionID+'.html' in '${JUDOROOT}/projects/judoscript-'+#versionID+'/docs/releases'
+       to docroot+'/relnote.html' echo;
+  copy 'goodies/*' in myroot             except '*~, *DS_Store, */alfa*, */beta*' to docroot              recursive echo;
+  copy '*' in share                      except '*~, *DS_Store, */alfa*, */beta*' to '${docroot}/share/'  recursive echo;
+  copy '*' in '${myroot}/contributions/' except '*~, *DS_Store, */alfa*, */beta*' to '${docroot}/contrib' recursive echo;
+  copy 'ICE_JNIRegistry.dll' in '${JUDOROOT}/bin/' into '${docroot}/store/ICE_JNIRegistry.dll.zip' echo;
+  copy 'jcom.dll'            in '${JUDOROOT}/bin/' into '${docroot}/store/jcom.dll.zip' echo;
+}
+
+/////////////////////////////////////////////////////////////////////
+// Build Pages
+/////////////////////////////////////////////////////////////////////
+
+function buildPages {
+  runScript 'site.judo', '${myroot}/buildtools';
+}
+
+/////////////////////////////////////////////////////////////////////
+// Archive
+/////////////////////////////////////////////////////////////////////
+
+function archive {
+  println <err> nl, '*** Archiving ...', nl;
+
+  zipname = '${myarchives}/judoscript.com-' + Date().fmtDate('yyyy-MM-dd') + '.zip';
+  copy '*' in myroot except '*/archives/*, *DS_Store, */alfa*, */beta*, *.class, *~'
+       recursive into zipname echo under 'judoscript.com';
+
+  copy zipname to '${archives}/judoscript.com-latest.zip' echo;
+  archiveCommon();
+}
+

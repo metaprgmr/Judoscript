@@ -1,0 +1,21 @@
+<html><head><title></title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+</head><body><h3>Functional Area
+ : <u>Building Java GUIs</u></h3>
+  <p>Java GUI programs are essentially made of two parts: assembly of GUI components and event
+  handling. Using JudoScript's Java scripting capability, assembling AWT and Swing components is easy.
+  JudoScript uses a special <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font> to handle GUI events. This statement can
+  specify event handlers for individual components or a group of components. In the latter case,
+  a named handler is created, which is used by <font class=sfn><a href="javascript:showSF('setGuiListener')">setGuiListener()</a></font> to assign to
+  specific components. Different <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font>'s can be used for different sets
+  of components.</p>
+
+  <p>For a <code>javax.swing.Timer</code> object, the event handler is specified the same was
+  as other GUI components. The <code>Timer</code> constructor takes a
+  <code>java.awt.event.ActionListener</code> instance; in JudoScript this is obtained by
+  <font class=sfn><a href="javascript:showSF('timerHandler')">timerHandler()</a></font>. What really happens is, a JudoScript GUI program has just one 
+  <code>java.awt.event.ActionListener</code> object, and it routes all the GUI events to the
+  respective handler code written in JudoScript. <font class=sfn><a href="javascript:showSF('timerHandler')">timerHandler()</a></font> returns just that
+  <code>ActionListener</code> object.</p>
+<h4>Related Functional Areas</h4><ul><li><font class=fa><a href="javascript:showFA('java')">Using Java Classes</a></font><li><font class=fa><a href="javascript:showFA('java_obj')">Using Java Objects and Arrays</a></font></ul><h4>Related Syntax</h4><ul><li><font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font></ul><h4>Related System Functions</h4><ul><li><font class=sfn><a href="javascript:showSF('timerHandler')">timerHandler()</a></font><li><font class=sfn><a href="javascript:showSF('setGuiListener')">setGuiListener()</a></font></ul></body></html>

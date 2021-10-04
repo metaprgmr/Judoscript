@@ -1,0 +1,16 @@
+usage {
+  args = '[ inclusive_list [ exclusion_list ] ]';
+  desc = [[*
+    This program use the 'list countLines' command
+    to count the lines for intended files.
+  *]];
+}
+
+switch #args.length() {
+case 0:  list recursive countLines; break;
+case 1:  list #args[0] recursive countLines; break;
+default: list #args[0] except #args[1] recursive countLines;
+}
+
+println "Total lines: ", $$fs_result;
+

@@ -1,0 +1,3 @@
+x = new java::Foo2$Bar;
+
+println x.getClass().getName();

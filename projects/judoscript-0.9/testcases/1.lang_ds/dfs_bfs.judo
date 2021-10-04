@@ -1,0 +1,43 @@
+class MyNode extends TreeNode {
+  constructor { assert(has('name')); }
+  function toString { return name; }
+}
+
+// constuct a tree
+root = new MyNode(name='ROOT');
+a = new MyNode( name='A' );
+a.addChild(new MyNode(name='A1'));
+a.addChild(new MyNode(name='A2'));
+root.addChild(a);               // left subtree
+a = new MyNode( name='B');
+a.addChild(new MyNode(name='B1'));
+a.addChild(new MyNode(name='B2'));
+a.addChild(new MyNode(name='B3'));
+root.addChild(a);               // right subtree
+
+dfs(root); // ROOT A A1 A2 B B1 B2 B3
+bfs(root); // ROOT A B A1 A2 B1 B2 B3
+
+function dfs root {
+  print 'Depth-first traverse:   ';
+  stk = new Stack;
+  stk.push(root);
+  while !stk.isEmpty() {
+    node = stk.pop();
+    print node, ' ';
+    for x in node.getChildren() backward { stk.push(x); }
+  }
+  println;
+}
+
+function bfs root {
+  print 'Breadth-first traverse: ';
+  q = new Queue;
+  q.enq(root);
+  while !q.isEmpty() {
+    node = q.deq();
+    print node, ' ';
+    for x in node.getChildren() { q.enq(x); }
+  }
+  println;
+}

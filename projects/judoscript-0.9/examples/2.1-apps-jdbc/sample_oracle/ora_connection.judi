@@ -1,0 +1,5 @@
+const #dbUrl = 'jdbc:oracle:thin:@localhost:1521:mydb';
+const #dbUser = 'dbuser';
+const #dbPass = secret('dbpass');
+
+connect to #dbUrl, #dbUser, #dbPass;

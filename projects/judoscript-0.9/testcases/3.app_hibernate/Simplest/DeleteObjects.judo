@@ -1,0 +1,39 @@
+usage {
+  author  = 'James Huang';
+  created = '2005-1-28';
+  desc    = [[*
+    Use HQL to delete 0 or more objects for a given where clause.
+  *]];
+}
+
+hib::setup (
+    hibernate.connection.url      = 'jdbc:mysql://localhost/test',
+    hibernate.connection.username = 'james',
+    hibernate.connection.password = 'james',
+    hibernate.hbm2ddl.auto        = 'update'
+  )
+
+  TestSimpleTypes
+;
+
+//
+// Delete objects:
+//
+hib::delete:
+  from TestSimpleTypes o where o.id > :startIdx and o.id < :endIdx
+; with startIdx:Long = 11, endIdx:Long = 13;
+
+//
+// Verify:
+//
+hib::query qry:
+  select o.id, o.theFloat, o.theString from TestSimpleTypes o
+  where o.id > :startIdx and o.id < :endIdx
+; with startIdx:Long = 9, endIdx:Long = 15;
+
+// now, qry is a List of Object[] --
+for o in qry {
+  println o;
+}
+
+hib::close;

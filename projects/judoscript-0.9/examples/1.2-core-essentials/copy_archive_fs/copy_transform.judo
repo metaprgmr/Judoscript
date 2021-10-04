@@ -1,0 +1,22 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-03-16';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Copies the source files and prepends a copyright notice
+    to all of them.
+  *]];
+}
+
+copy '*.xxx' except '*/save/*, *Test*' in '.' recursive Echo to 'y/'
+  transform src, dst {
+    src.toTextInput();
+    dst.toTextOutput();
+    // prepend a copyright notice to all the files
+    println <dst> [[*
+      /* JudoScript Language
+       * Copyright 2001-2002 James Huang
+       */
+      *]]; // add copyright notice
+    do src as lines { println <dst> $_; }
+  };

@@ -1,0 +1,4 @@
+const #useHanoi = true;
+
+!include if #useHanoi 'hanoi.judo'
+!include if !#useHanoi 'loopidx.judo'

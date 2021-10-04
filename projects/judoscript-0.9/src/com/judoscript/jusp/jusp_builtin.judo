@@ -1,0 +1,681 @@
+//
+// HTML standard controls
+//
+
+/**
+ * Writes a <link rel=stylesheet> tag.
+ *
+ * @param uri - the URI for the stylesheet file.
+ */
+function jusp$stylesheet ctxt, uri {
+  print <ctxt.writer> '<link rel=stylesheet type=text/css href="${uri}"/>';
+}
+
+/**
+ * Writes a <!DOCTYPE> tag for WML, HTML3 and HTML4.
+ *
+ * @param type - 'wml', 'html3', 'html4' and 'html' (same as html4) and 'xhtml'
+ */
+function jusp$doctype ctxt, type {
+  var txt;
+  switch type {
+  case 'html3':
+    txt='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">';
+    break;
+
+  case 'html4':
+  case 'html':
+    txt='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+    break;
+
+  case 'xhtml':
+    txt='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+    break;
+
+  case 'wml':
+    txt='<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">';
+    break;
+  }
+  if (txt) print <ctxt.writer> txt;
+}
+
+/**
+ * Writes a URL as a clickable text.
+ */
+function jusp$link ctxt, url, display {
+  if (!display) display = url;
+  print <ctxt.writer> '<a href="${url}">${display}</a>';
+}
+
+
+/**
+ * Writes a <input type=button> control.
+ *
+ * @param name  - the name of the control
+ * @param value - the value of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$button ctxt, name, value, extra {
+  assert name, "HTML button control must have a 'name' attribute.";
+
+  print <ctxt.writer> '<input type=button name="${name}" value="${value}" ${extra}>';
+}
+
+
+/**
+ * Writes a <input type=submit> control.
+ *
+ * @param value - [optional] the value of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$submit ctxt, value, extra {
+  if (value.isEmpty())
+    print <ctxt.writer> '<input type=submit ${extra}>';
+  else
+    print <ctxt.writer> '<input type=submit value="${value}" ${extra}>';
+}
+
+
+/**
+ * Writes a <input type=password> control.
+ *
+ * @param name  - the name of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$password ctxt, name, extra {
+  assert name, "HTML password control must have a 'name' attribute.";
+
+  print <ctxt.writer> '<input type=password name="${name}" ${extra}>';
+}
+
+
+/**
+ * Writes a <input type=hidden> control if <i>value</i> is set or
+ * <i>form</i> contains the value for the <i>name</i>.
+ *
+ * @param name  - the name of the control
+ * @param value - [optional] the value of the control.
+ *                If not present, checks the value in <i>form</i>.
+ *                If no value found, simply ignores.
+ */
+function jusp$hidden ctxt, name, value {
+  assert name, "HTML hidden control must have a 'name' attribute.";
+
+  var val = value != null ? value : ctxt.form.(name);
+  if (val.isNotEmpty())
+    print <ctxt.writer> '<input type=hidden name="${name}" value="${val}">';
+}
+
+
+/**
+ * Writes a <input type=checkbox> control and sets <i>checked</i> flag
+ * if <i>form</i> contains the named value.
+ *
+ * @param name  - the name of the control
+ * @param value - the value of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$checkbox ctxt, name, value, extra {
+  assert name, "HTML checkbox control must have a 'name' attribute.";
+  assert value, "HTML checkbox control must have a 'value' attribute.";
+
+  var checked = ctxt.form.(name).toArray().contains(value);
+  var checkedAttr = checked ? ' checked=1' : '';
+  print <ctxt.writer> '<input type=checkbox name="${name}" value="${value}"${checkedAttr} ${extra}>';
+}
+
+
+/**
+ * Writes a <input type=radio> control and sets <i>checked</i> flag
+ * if <i>form</i> contains the named value
+ *
+ * @param name  - the name of the control
+ * @param value - the value of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$radio ctxt, name, value, extra {
+  assert name, "HTML radio control must have a 'name' attribute.";
+  assert value, "HTML radio control must have a 'value' attribute.";
+
+  var checkedAttr = (ctxt.form.(name) == value) ? 'checked=1' : '';
+  print <ctxt.writer> '<input type=radio name="${name}" value="${value}"${checkedAttr} ${extra}>';
+}
+
+
+/**
+ * Writes a <input type=text> control.
+ * The value is either set to <i>value</i> if not null,
+ * or the named value in the <i>form</i>.
+ *
+ * @param name  - the name of the control
+ * @param value - the value of the control; may be null.
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$text ctxt, name, value, extra {
+  assert name, "HTML text control must have a 'name' attribute.";
+
+  var val = value != null ? value : ctxt.form.(name);
+  print <ctxt.writer> '<input type=text name="${name}" value="${val}" ${extra}>';
+}
+
+
+/**
+ * Writes a <textarea> control.
+ * The content is either set to <i>value</i> if not null,
+ * or the named value in the <i>form</i>.
+ *
+ * @param name  - the name of the control
+ * @param value - the value of the control; may be null.
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$textarea ctxt, name, value, extra {
+  assert name, "HTML textarea control must have a 'name' attribute.";
+
+  var val = value != null ? value : ctxt.form.(name);
+  print <ctxt.writer> '<textarea name="${name}" ${extra}>${val}</textarea>';
+}
+
+
+/**
+ * Writes a <select> control.
+ * The value contained in <i>form</i> are set to "selected".
+ *
+ * If <i>values</i> is empty, displays "<i>(None)</i>".
+ * If <i>values</i> has only one value and is present in <i>form</i>,
+ * that value is directly displayed (without <select>).
+ *
+ * @param name     - the name of the control
+ * @param values   - the values of items
+ * @param displays - the display names of items; must match values.
+ * @param extra    - [optional] extra text for the control
+ */
+function jusp$select ctxt, name, values, displays, extra {
+  assert name, "HTML select control must have a 'name' attribute.";
+  assert values, "HTML select control must have a 'values' attribute.";
+  assert displays, "HTML select control must have a 'displays' attribute.";
+
+  if (values == null || values.length() == 0)
+    print <ctxt.writer> "<i>(None)</i>";
+
+  if ((values.length() == 1) && (ctxt.form.(name) == values[0])) {
+    // only one element; if selected, display it as is.
+    print <ctxt.writer> values[0];
+  }
+
+  print <ctxt.writer> '<select name="${name}" ${extra}>';
+
+  var selected = ctxt.form.(name).toArray();
+  for v in values {
+    var selectedAttr = selected.contains(v) ? ' selected' : '';
+    print <ctxt.writer> '<option value="${v}"', selectedAttr, '>', displays[loopIndex()], '</option>';
+  }
+  print <ctxt.writer> '</select>';
+}
+
+
+/**
+ * Writes a multi-select <select> control.
+ * The value contained in <i>form</i> are set to "selected".
+ *
+ * If <i>values</i> is empty, displays "<i>(None)</i>".
+ * If <i>values</i> has only one value and is present in <i>form</i>,
+ * that value is directly displayed (without <select>).
+ *
+ * @param name     - the name of the control
+ * @param values   - the values of items
+ * @param displays - the display names of items; must match values.
+ * @param extra    - [optional] extra text for the control
+ */
+function jusp$multiSelect ctxt, name, values, displays, extra {
+  if (extra == null) extra = 'multiple';
+  else extra += ' multiple';
+  jusp$select ctxt, name, values, displays, extra;
+}
+
+
+/**
+ * Writes a <input type=file> control.
+ *
+ * @param name  - the name of the control
+ * @param extra - [optional] extra text for the control
+ */
+function jusp$file ctxt, name, extra {
+  assert name, "HTML file control must have a 'name' attribute.";
+
+  print <ctxt.writer> '<input type=file name="${name}" ${extra}>';
+}
+
+
+/**
+ * Writes a <applet> control.
+ *
+ * @param params - an Object or its variants, or java.util.Map.
+ *                 Values are written as embedded <param> tags.
+ */
+function jusp$applet ctxt, tagContent, params {
+  assert tagContent, 'HTML applet control must have content';
+
+  print <ctxt.writer> '<applet ${tagContent}>';
+  for n in params { // params must be an Object/java.util.Map
+    print <ctxt.writer> '<param name="${n}" value="', params.(n), '">'; 
+  }
+  print <ctxt.writer> "Your browser doesn't support &lt;applets&gt; tag.</applet>";
+}
+
+
+/**
+ * Writes an <object> control.
+ *
+ * @param params - an Object or its variants, or java.util.Map.
+ *                 Values are written as embedded <param> tags.
+ */
+function jusp$object ctxt, tagContent, params {
+  assert tagContent, 'HTML object control must have content';
+
+  print <ctxt.writer> '<object ${tagContent}>';
+  for n in params { // params must be an Object/java.util.Map
+    print <ctxt.writer> '<param name="${n}" value="', params.(n), '">'; 
+  }
+  print <ctxt.writer> "Your browser doesn't support &lt;object&gt; tag.</object>";
+}
+
+
+//
+// HTML extended controls
+//
+
+import com.judoscript.user.JuspUtil;
+import java.util.TimeZone, java.util.Locale;
+
+/**
+ * Writes 3 <select> controls for month, day and year, respectively.
+ * The corresponding values contained in <i>form</i> for the date are set to "selected".
+ *
+ * @param name        - the name of the control
+ * @param yearsBefore - [optional] number of years before current year. Default is 5.
+ * @param yearsAfter  - [optional] number of years after current year. Default is 20.
+ * @param extra       - [optional] extra text for all the controls.
+ */
+function jusp$date ctxt, name, yearsBefore, yearsAfter, extra {
+  assert name, "HTML date control must have a 'name' attribute.";
+
+  var dat = JuspUtil::readDateControl(ctxt.form, name);
+  print <ctxt.writer> JuspUtil::dateControl(name, null, dat, yearsBefore, yearsAfter, extra);
+}
+
+function jusp$readDate for JuspUtil::readDateControl();
+
+// Country and state constants --
+
+const #countries = [
+// 1     2     3     4     5     6     7     8     9     10
+  'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AN', 'AO', 'AQ', //
+  'AR', 'AS', 'AT', 'AU', 'AW', 'AX', 'AZ', 'BA', 'BB', 'BD', //  10
+  'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BM', 'BN', 'BO', 'BR', //  20
+  'BS', 'BT', 'BV', 'BW', 'BY', 'BZ', 'CA', 'CC', 'CD', 'CF', //  30
+  'CG', 'CH', 'CI', 'CK', 'CL', 'CM', 'CN', 'CO', 'CR', 'CS', //  40
+  'CU', 'CV', 'CX', 'CY', 'CZ', 'DE', 'DJ', 'DK', 'DM', 'DO', //  50
+  'DZ', 'EC', 'EE', 'EG', 'EH', 'ER', 'ES', 'ET', 'FI', 'FJ', //  60
+  'FK', 'FM', 'FO', 'FR', 'FX', 'GA', 'GB', 'GD', 'GE', 'GF', //  70
+  'GH', 'GI', 'GL', 'GM', 'GN', 'GP', 'GQ', 'GR', 'GS', 'GT', //  80
+  'GU', 'GW', 'GY', 'HK', 'HM', 'HN', 'HR', 'HT', 'HU', 'ID', //  90
+  'IE', 'IL', 'IN', 'IO', 'IQ', 'IR', 'IS', 'IT', 'JM', 'JO', // 100
+  'JP', 'KE', 'KG', 'KH', 'KI', 'KM', 'KN', 'KP', 'KR', 'KW', // 110
+  'KY', 'KZ', 'LA', 'LB', 'LC', 'LI', 'LK', 'LR', 'LS', 'LT', // 120
+  'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'MG', 'MH', 'MK', 'ML', // 130
+  'MM', 'MN', 'MO', 'MP', 'MQ', 'MR', 'MS', 'MT', 'MU', 'MV', // 140
+  'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NF', 'NG', 'NI', // 150
+  'NL', 'NO', 'NP', 'NR', 'NU', 'NZ', 'OM', 'PA', 'PE', 'PF', // 160
+  'PG', 'PH', 'PK', 'PL', 'PM', 'PN', 'PR', 'PS', 'PT', 'PW', // 170
+  'PY', 'QA', 'RE', 'RO', 'RU', 'RW', 'SA', 'SB', 'SC', 'SD', // 180
+  'SE', 'SG', 'SH', 'SI', 'SJ', 'SK', 'SL', 'SM', 'SN', 'SO', // 190
+  'SR', 'ST', 'SU', 'SV', 'SY', 'SZ', 'TC', 'TD', 'TF', 'TG', // 200
+  'TH', 'TJ', 'TK', 'TL', 'TM', 'TN', 'TO', 'TP', 'TR', 'TT', // 210
+  'TV', 'TW', 'TZ', 'UA', 'UG', 'UK', 'UM', 'US', 'UY', 'UZ', // 220
+  'VA', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WF', 'WS', 'YE', // 230
+  'YT', 'YU', 'ZA', 'ZM', 'ZR', 'ZW'                          // 240
+];
+
+const #countries$names = [
+ /*   1 */ "Andorra",                              /*   2 */ "United Arab Emirates",
+ /*   3 */ "Afghanistan",                          /*   4 */ "Antigua and Barbuda",
+ /*   5 */ "Anguilla",                             /*   6 */ "Albania",
+ /*   7 */ "Armenia",                              /*   8 */ "Netherlands Antilles",
+ /*   9 */ "Angola",                               /*  10 */ "Antarctica",
+ /*  11 */ "Argentina",                            /*  12 */ "American Samoa",
+ /*  13 */ "Austria",                              /*  14 */ "Australia",
+ /*  15 */ "Aruba",                                /*  16 */ "Aland Islands",
+ /*  17 */ "Azerbaijan",                           /*  18 */ "Bosnia and Herzegovina",
+ /*  19 */ "Barbados",                             /*  20 */ "Bangladesh",
+ /*  21 */ "Belgium",                              /*  22 */ "Burkina Faso",
+ /*  23 */ "Bulgaria",                             /*  24 */ "Bahrain",
+ /*  25 */ "Burundi",                              /*  26 */ "Benin",
+ /*  27 */ "Bermuda",                              /*  28 */ "Brunei Darussalam",
+ /*  29 */ "Bolivia",                              /*  30 */ "Brazil",
+ /*  31 */ "Bahamas",                              /*  32 */ "Bhutan",
+ /*  33 */ "Bouvet Island",                        /*  34 */ "Botswana",
+ /*  35 */ "Belarus",                              /*  36 */ "Belize",
+ /*  37 */ "Canada",                               /*  38 */ "Cocos (Keeling) Islands",
+ /*  39 */ "Democratic Republic of the Congo",     /*  40 */ "Central African Republic",
+ /*  41 */ "Congo",                                /*  42 */ "Switzerland",
+ /*  43 */ "Cote D'Ivoire (Ivory Coast)",          /*  44 */ "Cook Islands",
+ /*  45 */ "Chile",                                /*  46 */ "Cameroon",
+ /*  47 */ "China",                                /*  48 */ "Colombia",
+ /*  49 */ "Costa Rica",                           /*  50 */ "Serbia and Montenegro",
+ /*  51 */ "Cuba",                                 /*  52 */ "Cape Verde",
+ /*  53 */ "Christmas Island",                     /*  54 */ "Cyprus",
+ /*  55 */ "Czech Republic",                       /*  56 */ "Germany",
+ /*  57 */ "Djibouti",                             /*  58 */ "Denmark",
+ /*  59 */ "Dominica",                             /*  60 */ "Dominican Republic",
+ /*  61 */ "Algeria",                              /*  62 */ "Ecuador",
+ /*  63 */ "Estonia",                              /*  64 */ "Egypt",
+ /*  65 */ "Western Sahara",                       /*  66 */ "Eritrea",
+ /*  67 */ "Spain",                                /*  68 */ "Ethiopia",
+ /*  69 */ "Finland",                              /*  70 */ "Fiji",
+ /*  71 */ "Falkland Islands (Malvinas)",          /*  72 */ "Federated States of Micronesia",
+ /*  73 */ "Faroe Islands",                        /*  74 */ "France",
+ /*  75 */ "France, Metropolitan",                 /*  76 */ "Gabon",
+ /*  77 */ "Great Britain (UK)",                   /*  78 */ "Grenada",
+ /*  79 */ "Georgia",                              /*  80 */ "French Guiana",
+ /*  81 */ "Ghana",                                /*  82 */ "Gibraltar",
+ /*  83 */ "Greenland",                            /*  84 */ "Gambia",
+ /*  85 */ "Guinea",                               /*  86 */ "Guadeloupe",
+ /*  87 */ "Equatorial Guinea",                    /*  88 */ "Greece",
+ /*  89 */ "S. Georgia and S. Sandwich Islands",   /*  90 */ "Guatemala",
+ /*  91 */ "Guam",                                 /*  92 */ "Guinea-Bissau",
+ /*  93 */ "Guyana",                               /*  94 */ "Hong Kong",
+ /*  95 */ "Heard Island and McDonald Islands",    /*  96 */ "Honduras",
+ /*  97 */ "Croatia (Hrvatska)",                   /*  98 */ "Haiti",
+ /*  99 */ "Hungary",                              /* 100 */ "Indonesia",
+ /* 101 */ "Ireland",                              /* 102 */ "Israel",
+ /* 103 */ "India",                                /* 104 */ "British Indian Ocean Territory",
+ /* 105 */ "Iraq",                                 /* 106 */ "Iran",
+ /* 107 */ "Iceland",                              /* 108 */ "Italy",
+ /* 109 */ "Jamaica",                              /* 110 */ "Jordan",
+ /* 111 */ "Japan",                                /* 112 */ "Kenya",
+ /* 113 */ "Kyrgyzstan",                           /* 114 */ "Cambodia",
+ /* 115 */ "Kiribati",                             /* 116 */ "Comoros",
+ /* 117 */ "Saint Kitts and Nevis",                /* 118 */ "Korea (North)",
+ /* 119 */ "Korea (South)",                        /* 120 */ "Kuwait",
+ /* 121 */ "Cayman Islands",                       /* 122 */ "Kazakhstan",
+ /* 123 */ "Laos",                                 /* 124 */ "Lebanon",
+ /* 125 */ "Saint Lucia",                          /* 126 */ "Liechtenstein",
+ /* 127 */ "Sri Lanka",                            /* 128 */ "Liberia",
+ /* 129 */ "Lesotho",                              /* 130 */ "Lithuania",
+ /* 131 */ "Luxembourg",                           /* 132 */ "Latvia",
+ /* 133 */ "Libya",                                /* 134 */ "Morocco",
+ /* 135 */ "Monaco",                               /* 136 */ "Moldova",
+ /* 137 */ "Madagascar",                           /* 138 */ "Marshall Islands",
+ /* 139 */ "Macedonia",                            /* 140 */ "Mali",
+ /* 141 */ "Myanmar",                              /* 142 */ "Mongolia",
+ /* 143 */ "Macao",                                /* 144 */ "Northern Mariana Islands",
+ /* 145 */ "Martinique",                           /* 146 */ "Mauritania",
+ /* 147 */ "Montserrat",                           /* 148 */ "Malta",
+ /* 149 */ "Mauritius",                            /* 150 */ "Maldives",
+ /* 151 */ "Malawi",                               /* 152 */ "Mexico",
+ /* 153 */ "Malaysia",                             /* 154 */ "Mozambique",
+ /* 155 */ "Namibia",                              /* 156 */ "New Caledonia",
+ /* 157 */ "Niger",                                /* 158 */ "Norfolk Island",
+ /* 159 */ "Nigeria",                              /* 160 */ "Nicaragua",
+ /* 161 */ "Netherlands",                          /* 162 */ "Norway",
+ /* 163 */ "Nepal",                                /* 164 */ "Nauru",
+ /* 165 */ "Niue",                                 /* 166 */ "New Zealand (Aotearoa)",
+ /* 167 */ "Oman",                                 /* 168 */ "Panama",
+ /* 169 */ "Peru",                                 /* 170 */ "French Polynesia",
+ /* 171 */ "Papua New Guinea",                     /* 172 */ "Philippines",
+ /* 173 */ "Pakistan",                             /* 174 */ "Poland",
+ /* 175 */ "Saint Pierre and Miquelon",            /* 176 */ "Pitcairn",
+ /* 177 */ "Puerto Rico",                          /* 178 */ "Palestinian Territory",
+ /* 179 */ "Portugal",                             /* 180 */ "Palau",
+ /* 181 */ "Paraguay",                             /* 182 */ "Qatar",
+ /* 183 */ "Reunion",                              /* 184 */ "Romania",
+ /* 185 */ "Russian Federation",                   /* 186 */ "Rwanda",
+ /* 187 */ "Saudi Arabia",                         /* 188 */ "Solomon Islands",
+ /* 189 */ "Seychelles",                           /* 190 */ "Sudan",
+ /* 191 */ "Sweden",                               /* 192 */ "Singapore",
+ /* 193 */ "Saint Helena",                         /* 194 */ "Slovenia",
+ /* 195 */ "Svalbard and Jan Mayen",               /* 196 */ "Slovakia",
+ /* 197 */ "Sierra Leone",                         /* 198 */ "San Marino",
+ /* 199 */ "Senegal",                              /* 200 */ "Somalia",
+ /* 201 */ "Suriname",                             /* 202 */ "Sao Tome and Principe",
+ /* 203 */ "USSR (former)",                        /* 204 */ "El Salvador",
+ /* 205 */ "Syria",                                /* 206 */ "Swaziland",
+ /* 207 */ "Turks and Caicos Islands",             /* 208 */ "Chad",
+ /* 209 */ "French Southern Territories",          /* 210 */ "Togo",
+ /* 211 */ "Thailand",                             /* 212 */ "Tajikistan",
+ /* 213 */ "Tokelau",                              /* 214 */ "Timor-Leste",
+ /* 215 */ "Turkmenistan",                         /* 216 */ "Tunisia",
+ /* 217 */ "Tonga",                                /* 218 */ "East Timor",
+ /* 219 */ "Turkey",                               /* 220 */ "Trinidad and Tobago",
+ /* 221 */ "Tuvalu",                               /* 222 */ "Taiwan",
+ /* 223 */ "Tanzania",                             /* 224 */ "Ukraine",
+ /* 225 */ "Uganda",                               /* 226 */ "United Kingdom",
+ /* 227 */ "United States Minor Outlying Islands", /* 228 */ "United States",
+ /* 229 */ "Uruguay",                              /* 230 */ "Uzbekistan",
+ /* 231 */ "Vatican City State (Holy See)",        /* 232 */ "Saint Vincent and the Grenadines",
+ /* 233 */ "Venezuela",                            /* 234 */ "Virgin Islands (British)",
+ /* 235 */ "Virgin Islands (U.S.)",                /* 236 */ "Viet Nam",
+ /* 237 */ "Vanuatu",                              /* 238 */ "Wallis and Futuna",
+ /* 239 */ "Samoa",                                /* 240 */ "Yemen",
+ /* 241 */ "Mayotte",                              /* 242 */ "Yugoslavia (former)",
+ /* 243 */ "South Africa",                         /* 244 */ "Zambia",
+ /* 245 */ "Zaire (former)",                       /* 246 */ "Zimbabwe"
+];
+
+const #us$states = [
+// 1     2     3     4     5     6     7     8     9     10
+  "AL", "AK", "AS", "AZ", "AR", "CA", "CO", "CT", "DE", "DC",  //
+  "FM", "FL", "GA", "GU", "HI", "ID", "IL", "IN", "IA", "KS",  // 10
+  "KY", "LA", "ME", "MH", "MD", "MA", "MI", "MN", "MS", "MO",  // 20
+  "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP",  // 30
+  "OH", "OK", "OR", "PW", "PA", "PR", "RI", "SC", "SD", "TN",  // 40
+  "TX", "UT", "VT", "VI", "VA", "WA", "WV", "WI", "WY"         // 50
+];
+
+const #us$states$names = [
+  /*  1 */ "ALABAMA",                        /*  2 */ "ALASKA",
+  /*  3 */ "AMERICAN SAMOA",                 /*  4 */ "ARIZONA ",
+  /*  5 */ "ARKANSAS",                       /*  6 */ "CALIFORNIA ",
+  /*  7 */ "COLORADO ",                      /*  8 */ "CONNECTICUT",
+  /*  9 */ "DELAWARE",                       /* 10 */ "DISTRICT OF COLUMBIA",
+  /* 11 */ "FEDERATED STATES OF MICRONESIA", /* 12 */ "FLORIDA",
+  /* 13 */ "GEORGIA",                        /* 14 */ "GUAM ",
+  /* 15 */ "HAWAII",                         /* 16 */ "IDAHO",
+  /* 17 */ "ILLINOIS",                       /* 18 */ "INDIANA",
+  /* 19 */ 'IOWA',                           /* 20 */ 'KANSAS',
+  /* 21 */ 'KENTUCKY',                       /* 22 */ 'LOUISIANA',
+  /* 23 */ 'MAINE',                          /* 24 */ 'MARSHALL ISLANDS',
+  /* 25 */ 'MARYLAND',                       /* 26 */ 'MASSACHUSETTS',
+  /* 27 */ 'MICHIGAN',                       /* 28 */ 'MINNESOTA',
+  /* 29 */ 'MISSISSIPPI',                    /* 30 */ 'MISSOURI',
+  /* 31 */ 'MONTANA',                        /* 32 */ 'NEBRASKA',
+  /* 33 */ 'NEVADA',                         /* 34 */ 'NEW HAMPSHIRE',
+  /* 35 */ 'NEW JERSEY',                     /* 36 */ 'NEW MEXICO',
+  /* 37 */ 'NEW YORK',                       /* 38 */ 'NORTH CAROLINA',
+  /* 39 */ 'NORTH DAKOTA',                   /* 40 */ 'NORTHERN MARIANA ISLANDS',
+  /* 41 */ 'OHIO',                           /* 42 */ 'OKLAHOMA',
+  /* 43 */ 'OREGON',                         /* 44 */ 'PALAU',
+  /* 45 */ 'PENNSYLVANIA',                   /* 46 */ 'PUERTO RICO',
+  /* 47 */ 'RHODE ISLAND',                   /* 48 */ 'SOUTH CAROLINA',
+  /* 49 */ 'SOUTH DAKOTA',                   /* 50 */ 'TENNESSEE',
+  /* 51 */ 'TEXAS',                          /* 52 */ 'UTAH',
+  /* 53 */ 'VERMONT',                        /* 54 */ 'VIRGIN ISLANDS',
+  /* 55 */ 'VIRGINIA ',                      /* 56 */ 'WASHINGTON',
+  /* 57 */ 'WEST VIRGINIA',                  /* 58 */ 'WISCONSIN',
+  /* 59 */ 'WYOMING'
+];
+
+function jusp$countryList ctxt, name, extra {
+  jusp$select ctxt, name, #countries, #countries$names, extra;
+}
+
+
+function jusp$US_StateList ctxt, name, extra {
+  jusp$select ctxt, name, #us$states, #us$states$names, extra;
+}
+
+
+function jusp$timeZoneList ctxt, name, extra {
+  var displays = [];
+  var ids = TimeZone::getAvailableIDs();
+  for id in ids {
+    var tz = TimeZone::getTimeZone(id);
+//    displays.add(tz.getDisplayName(true, TimeZone::LONG));
+    displays.add( id.startsWith('Etc/GMT') ? (tz.getDisplayName()+' ('+id+')') : id );
+  }
+
+  jusp$select ctxt, name, ids, displays, extra;
+}
+
+
+//
+// I18n support
+//
+
+
+function jusp$localeList ctxt, name, extra, dispLocale {
+  var isoLocales = [];
+  var localeNames = [];
+  for locale in Locale::getAvailableLocales() {
+    isoLocales.add( locale.getLanguage() );
+    localeNames.add( locale.toString() );
+  }
+
+  jusp$select ctxt, name, isoLocales, localeNames, extra;
+}
+
+
+//
+// Validation support
+//
+
+
+function jusp$validate ctxt, msg {
+  if (msg.isNotEmpty())
+    ctxt.error.add(msg);
+}
+
+
+//
+// Built-in validation functions
+//
+
+
+function jusp$textLength required, ctxt, name, lower, upper {
+  var val = ctxt.form.(name);
+  if val.isEmpty() {
+    if (required) return "Required parameter '${name}' is not set.";
+    return;
+  }
+
+  var len = val.length();
+  if (lower != null && len < lower) return "'${name}' is too short.";
+  if (upper != null && len > upper) return "'${name}' is too long.";
+}
+
+function jusp$numberRange required, ctxt, name, lower, upper {
+  var val = ctxt.form.(name);
+  if val.isEmpty() {
+    if (required) return "Required parameter '${name}' is not set.";
+    return;
+  }
+
+  if (lower != null && val < lower) return "'${name}' is too small.";
+  if (upper != null && val > upper) return "'${name}' is too big.";
+}
+
+function jusp$dateRange required, ctxt, name, lower, upper {
+  var val = JuspUtil::readDateControl(ctxt.form, name);
+  if val.isEmpty() {
+    if (required) return "Required parameter '${name}' is not set.";
+    return;
+  }
+
+  val = val.int();
+  if (lower != null && val-lower.int() < 0)
+    return "'${name}' is earlier than " + lower.fmtDate('dd MMM, yyyy');
+  if (upper != null && val-upper.int() > 86400000)
+    return "'${name}' is later than " + upper.fmtDate('dd MMM, yyyy');
+}
+
+function jusp$validEMailAddress required, ctxt, name {
+  var val = ctxt.form.(name);
+  if val.isEmpty() {
+    if (required) return "Required parameter '${name}' is not set.";
+    return;
+  }
+
+  var idx = val.indexOf('@');
+  if (idx < 1 || val.length()-idx < 2)
+    return "'${name}' is an invalid e-mail address.";
+}
+
+function jusp$isNumber required, ctxt, name {
+  var val = ctxt.form.(name);
+  if (val.isEmpty() && required)
+    return "Required parameter '${name}' is not set.";
+  if (!val.isNumber())
+    return "'${name}' is not a number.";
+}
+
+function jusp$isInteger required, ctxt, name {
+  var val = ctxt.form.(name);
+  if (val.isEmpty() && required)
+    return "Required parameter '${name}' is not set.";
+  if (!val.isInteger())
+    return "'${name}' is not an integer.";
+}
+
+function jusp$in required, ctxt, name, coll {
+  if (coll == null) return;
+
+  var val = ctxt.form.(name);
+  if val.isEmpty() {
+    if (required) return "Required parameter '${name}' is not set.";
+    return;
+  }
+
+  if (coll != null && !coll.contains(val))
+    return "'${name}' is invalid.";
+}
+
+//
+// Undocumented
+//
+
+function jusp$juspView ctxt, file_path, color {
+  if (!file_path.fileExists())
+    throw new java::FileNotFoundException(file_path + ' not found.');
+
+  if (color.isEmpty()) color="#FF0033";
+  var decor  = '<font color=${color}>';
+  var _decor = '</font>';
+
+  var writer = ctxt.writer;
+  print<writer> '<pre>';
+  do file_path as jsp {
+  <%>, <%=>:
+    print<writer> decor, '<b>', $_.getName().escapeHtml(), '</b>',
+                  $_.getText().escapeHtml(), '<b>%&gt;</b>', _decor;
+
+  <%-->: print<writer> decor, '<b>&lt;%--</b>', $_.getText(), '<b>--%&gt;</b>', _decor;
+
+  <%!>: 
+    var s = $_.getText().trim();
+    print<writer> decor, '<b>&lt;%!', s.leftOfFirstWhite().escapeHtml(), '</b> ',
+                  s.rightOfFirstWhite().escapeHtml(), ' <b>%&gt;</b>', _decor;
+
+  <%@>:
+    print<writer> decor, '<b>&lt;%@ ', $_.getText(), '</b>';
+    var attrs = $_.getAllAttrs();
+    for k in attrs {
+      print<writer> ' ', k, '="', attrs.(k), '"';
+    }
+    print<writer> ' <b>%&gt;</b>', _decor;
+
+  :TEXT: print<writer> $_.escapeHtml();
+  }
+  print<writer> '</pre>';
+  flush<writer>;
+}
+

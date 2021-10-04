@@ -1,0 +1,90 @@
+<function sig="addChild node, ...">
+  Adds <param>node</param>'s to the end of the child list.
+</function>
+
+<function sig="getChildren">
+  Returns an array of all the immediate children nodes.
+</function>
+
+<function sig="isLeaf">
+  Returns <!true> if this node has no children.
+</function>
+
+<function sig="sortChildren comparator">
+  Sorts the children, either with the supplied <param>comparator</param> if
+  present or with the default comparator.
+</function>
+
+<function sig="sortChildrenWholeTree comparator">
+  Sorts the children for all the nodes in the subtree rooted at this node,
+  either with the supplied <param>comparator</param> if present or with the
+  default comparator.
+</function>
+
+<function sig="getParent">
+  Returns the parant node, or <!null> if this is the root of the tree.
+</function>
+
+<function function sig="setParent node">
+  Sets <param>node</param> to be the parent.
+</function>
+
+<function sig="isTop">
+  Returns <!true> if this is the root of the tree (without a parent).
+</function>
+
+<function sig="getTop">
+  Returns the root of the tree that this node resides in. It can be self.
+</function>
+
+<function sig="getLevel">
+  Returns the depth of this node in the tree. The level of the root of a tree is 0.
+</function>
+
+<function sig="getCascade attrName">
+  Returns the value for the key named <param>attrName</param>; if such a key does
+  not exist in the current node, it traces all the way to the root until either a
+  value is found or root is reached.
+</function>
+
+<function sig="getPath">
+  Returns an array of nodes that is the path from the root of the tree up to
+  this node (self is not included).
+</function>
+
+<function sig="hasInPath node">
+  Returns <!true> if <param>node</param> is in the path from the root of the tree
+  to this node.
+</function>
+
+<function sig="find filterFunction">
+  Returns an array of nodes that are qualified by <param>filterFunction</param>.
+</function>
+
+<function sig="findByKey key">
+  The <param>key</param> is a text name. Uses the <code>getKey()</code> to find
+  a match and returns the mached node, or <!null> if no match is found.
+</function>
+
+<function sig="getKey">
+  Returns a "key" for this node, which typically should be unique among all the
+  nodes in the tree. This is used by the <code>findByKey()</code> method.
+  By default, it returns what <code>toString()</code> returns. This method is
+  likely overridden in the derived class.
+</function>
+
+<function sig="dfsAllNodes">
+  Returns an array of all the nodes in the (sub)tree starting from this node
+  in a depth-first search.
+</function>
+
+<function sig="bfsAllNodes">
+  Returns an array of all the nodes in the (sub)tree starting from this node
+  in a breadth-first search.
+</function>
+
+<function sig="transposeTree type">
+  Transposes all the nodes in the subtree rooted at this node into the new
+  <param>type</param>. The <param>type</param> must represent a user-defined
+  class that extends <!treeNode>.
+</function>

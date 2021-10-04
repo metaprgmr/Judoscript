@@ -1,0 +1,17 @@
+<%
+  var title='Listing Items for Seller';
+%>
+<%!include 'header.jusp' %>
+
+<table border=1 cellspacing=1>
+<%!itemCaption%>
+<%
+  for item in getAllItems() {
+    %><%!itemRow item, 'Update', 'sellerController.jusp?do=to_mod' %><%
+  }
+%>
+</table>
+
+<p><a href="sellerController.jusp?do=to_add">Add item</a></p>
+
+<%!include 'footer.jusp' %>

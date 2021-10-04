@@ -1,0 +1,92 @@
+<title name="The JudoScript Language 1.0 Specification" />
+
+<part title="Introduction">
+  <chapter title="Introduction to the JudoScript Technology" id="intro" />
+</part>
+
+
+<part title="Essential Language">
+  <chapter title="Lexcical Grammar" id="lex" />
+  <chapter title="Types and Values" id="type" />
+  <chapter title="Variable" id="var" />
+  <chapter title="Flow and Data/Event-Driven Control" id="flow" />
+  <chapter title="Exception Handling" id="excpt" />
+  <chapter title="Function" id="fxn" />
+  <chapter title="Thread Programming" id="thrd" />
+  <chapter title="Object-Oriented Programming" id="oop" />
+  <chapter title="Aspect-Oriented Programming" id="aop" />
+  <chapter title="Namespace" id="ns" />
+  <chapter title="Package" id="pkg" />
+</part>
+
+
+<part title="Data Structures">
+  <chapter title="Array and LinkedList" id="arr" />
+  <chapter title="Object (Map), OrderedMap and SortedMap" id="map" />
+  <chapter title="Set, OrderedSet and SortedSet" id="set" />
+  <chapter title="TableData" id="tabledata" />
+  <chapter title="TreeNode" id="treenode" />
+  <chapter title="Stack and Queue" id="stkque" />
+</part>
+
+
+<part title="Functional Support">
+
+</part>
+
+
+<part title="Built-in Packages">
+  <chapter title="The Sys Package" id="sys" />
+  <chapter title="The Math Package" id="math" />
+  <chapter title="The BSF Package" id="bsf" />
+  <chapter title="Java Packages" id="javapkgs" />
+</part>
+
+<!--
+
+The JudoScript Technology Version 1.0 Specifications
+====================================================
+
+
+The JudoScript technology contains three specs:
+  I.   The JudoScript Language
+  II.  JudoScript Java-Embedding Support
+  III. JUSP, The JudoScript Server Page Technology
+
+
+
+Spec I. The JudoScript Language
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Composition-wise, JudoScript language has three key parts:
+  a. The language syntax
+  b. Built-in data types
+  c. Built-in system functions
+
+Function-wise, JudoScript language can be partitioned into these parts:
+  a. Essential language
+  b. Data structures
+  c. Functional programming
+
+The essential programming support refers to the very basic language
+constructs. The functional programming support includes general
+data structures, regex, native XML, and other domain-specific
+functional subsystems. Many subsystems have special syntax support
+and dedicated object types and system functions. Hence, this
+language spec can be partitioned this way:
+
+Composite              Syntax                  Data Types             System Functions
+------------------------------------------------------------------------------------------------
+Essential Language     General Language Syntax
+Data Structures        Dedicated Syntax        Data Structure Types   Dedicated System Functions
+Functional Programming Special Syntax          Dedicated Object Types Dedicated System Functions
+                                               Built-in Packages
+
+This spec is organized into these parts:
+
+  a. Essential Language
+  b. Data Strcutures
+  c. Functional Support
+  d. Built-in Packages
+
+-->

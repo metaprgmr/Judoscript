@@ -1,0 +1,15 @@
+MBeanServer (Standard; loosely typed)
+MBeanHome   (BEA; strongly typed)
+
+JMX
+  -- J2EE1.4 - Deployment API
+  -- J2EE1.4 - Management API
+
+
+Design:
+^^^^^^
+jmx::connect;
+jmx::disconnect;
+jmx::use;
+jmx::list [ '...' [ except '...' ] ];
+jmx::ls   [ '...' [ except '...' ] ];

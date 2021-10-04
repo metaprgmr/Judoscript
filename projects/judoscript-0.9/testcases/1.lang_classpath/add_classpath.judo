@@ -1,0 +1,8 @@
+println '---- Just system classpath ----', nl, #classpath;
+
+#classpath.add('c:/temp');
+println '---- Added user classpaths ----', nl, #classpath;
+
+a = new java::alfa;
+println nl, a;
+

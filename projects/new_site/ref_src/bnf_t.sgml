@@ -1,0 +1,62 @@
+<t id=CONST_NAME name="Constant Name">
+  Constant names start with #, followed by one or more identifier characters. 
+</t>
+
+<t id=FLOAT_LIT name="Floating-Point Number Literal">
+  Floating-point number literals are any legitimate Java <code>float</code>
+  or <code>double</code> numbers.
+</t>
+
+<t id=FUNCTION_NAME name="Function Name">
+  <p>Function names are thread names starts with a letter or an underscore (_)
+  followed by 0 or more of the above plus digits.</p>
+</t>
+
+<t id=IDENTIFIER name="Identifier">
+  <p>Identifiers are used by variable names, function names and others.</p>
+
+  <p>An identifier can start with a dollar sign ($), an underscore (_) or
+  letter followed by 0 or more of the above plus digits.</p>
+
+  <p>In some situations (such as Java class names) it may be more restrictive,
+  such as no dollar signs.</p>
+
+  <p>Identifiers may include some of the JudoScript reserved words, as long
+  as there is no syntactical conflict.</p>
+</t>
+
+<t id=INT_LIT name="Integer Literal">
+  Floating-point number literals are any legitimate Java <code>int</code>
+  or <code>long</code> numbers.
+</t>
+
+<t id=JAVACLASS_DEFINITION name="Java Class Definition">
+  Java class definition is used for embedded Java classes. The defined
+  Java class or interface must be public and no package name is allowed.
+  Imports can be used. The class can extend other classes, including other
+  embedded ones, and/or implement interfaces. Inner classes are allowed.
+</t>
+
+<t id=LABEL_NAME name="Label Name">
+  A label name is exactly the same as a function name.
+</t>
+
+<t id=LOCALDATA name="Local Data">
+  The local data, also called in-script data, is any text starting on
+  the next line following <!EndScript> to the end of the script. It is
+  represented by the <!$$local> built-in input stream.
+</t>
+
+<t id=PLAIN_TEXT name="Plain Text">
+  The plain text is any text that does not contain <code>(*</code> and
+  <code>*]]</code>, which is used in the here-doc expression. The two
+  exceptions are the delimiters.
+</t>
+
+<t id=STRING_LIT name="String Literal">
+  The string literal can be quoted by double-quote (") or single-quote (').
+  If double-quote is used, single quotes can appear as regular characters
+  and vice versa. Java-style escape sequence is supported, including the
+  Unicode escaping.
+</t>
+

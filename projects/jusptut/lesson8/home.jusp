@@ -1,0 +1,13 @@
+<%
+  var title = 'Home'; // required by "header.jusp".
+%>
+<%!include "header.jusp" %>
+
+<p>Thank you for letting us service you!</p>
+
+<p>View <a href="accounts.jusp">account balances</a></p>
+
+<hr><p><a href="login.jusp">logout</a></p>
+
+<hr><font size=-1>Back to <a href="../lesson8.jusp">lesson 8</a></font>
+</body></html>

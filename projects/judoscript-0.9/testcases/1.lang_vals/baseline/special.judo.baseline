@@ -1,0 +1,96 @@
+-------------------------------  -------------------------------  -------------------------------
+infinity           = infinity    ~infinity          = infinity    infinity * 0       = 0           
+-infinity          = -infinity   ~(-infinity)       = -infinity   -infinity * 0      = 0           
+max_number         = max_number  ~max_number        = max_number  max_number * 0     = 0           
+min_number         = min_number  ~min_number        = min_number  min_number * 0     = 0           
+undefined          =             10 / undefined     = infinity    10 / 0             = infinity    
+null               =             10 / null          = infinity    -10 / 0            = -infinity   
+-------------------------------  -------------------------------  -------------------------------
+10 + infinity      = 10          infinity + 10      = infinity    -10 + infinity     = -10         
+10 - infinity      = 10          infinity - 10      = infinity    -10 - infinity     = -10         
+10 * infinity      = infinity    infinity * 10      = infinity    -10 * infinity     = -infinity   
+10 / infinity      = 0           infinity / 10      = infinity    -10 / infinity     = 0           
+10 & infinity      = infinity    infinity & 10      = infinity    -10 & infinity     = infinity    
+10 | infinity      = infinity    infinity | 10      = infinity    -10 | infinity     = infinity    
+10 ^ infinity      = infinity    infinity ^ 10      = infinity    -10 ^ infinity     = infinity    
+10 << infinity     = infinity    infinity << 10     = infinity    -10 << infinity    = infinity    
+10 >> infinity     = 0           infinity >> 10     = infinity    -10 >> infinity    = 0           
+10 >>> infinity    = 0           infinity >>> 10    = infinity    -10 >>> infinity   = min_number  
+-------------------------------  -------------------------------  -------------------------------
+10 + (-infinity)   = 10          (-infinity) + 10   = -infinity   -10 + (-infinity)  = -10         
+10 - (-infinity)   = 10          (-infinity) - 10   = -infinity   -10 - (-infinity)  = -10         
+10 * (-infinity)   = -infinity   (-infinity) * 10   = -infinity   -10 * (-infinity)  = infinity    
+10 / (-infinity)   = 0           (-infinity) / 10   = -infinity   -10 / (-infinity)  = 0           
+10 & (-infinity)   = -infinity   (-infinity) & 10   = -infinity   -10 & (-infinity)  = -infinity   
+10 | (-infinity)   = -infinity   (-infinity) | 10   = -infinity   -10 | (-infinity)  = -infinity   
+10 ^ (-infinity)   = -infinity   (-infinity) ^ 10   = -infinity   -10 ^ (-infinity)  = -infinity   
+10 << (-infinity)  = -infinity   (-infinity) << 10  = -infinity   -10 << (-infinity) = -infinity   
+10 >> (-infinity)  = 0           (-infinity) >> 10  = -infinity   -10 >> (-infinity) = 0           
+10 >>> (-infinity) = 0           (-infinity) >>> 10 = -infinity   -10 >>> (-infinity)= min_number  
+-------------------------------  -------------------------------  -------------------------------
+10 + max_number    = 10          max_number + 10    = max_number  -10 + max_number   = -10         
+10 - max_number    = 10          max_number - 10    = max_number  -10 - max_number   = -10         
+10 * max_number    = max_number  max_number * 10    = max_number  -10 * max_number   = min_number  
+10 / max_number    = 0           max_number / 10    = max_number  -10 / max_number   = 0           
+10 & max_number    = max_number  max_number & 10    = max_number  -10 & max_number   = max_number  
+10 | max_number    = max_number  max_number | 10    = max_number  -10 | max_number   = max_number  
+10 ^ max_number    = max_number  max_number ^ 10    = max_number  -10 ^ max_number   = max_number  
+10 << max_number   = max_number  max_number << 10   = max_number  -10 << max_number  = max_number  
+10 >> max_number   = 0           max_number >> 10   = max_number  -10 >> max_number  = 0           
+10 >>> max_number  = 0           max_number >>> 10  = max_number  -10 >>> max_number = min_number  
+-------------------------------  -------------------------------  -------------------------------
+10 + min_number    = 10          min_number + 10    = min_number  -10 + min_number   = -10         
+10 - min_number    = 10          min_number - 10    = min_number  -10 - min_number   = -10         
+10 * min_number    = min_number  min_number * 10    = min_number  -10 * min_number   = max_number  
+10 / min_number    = 0           min_number / 10    = min_number  -10 / min_number   = 0           
+10 & min_number    = min_number  min_number & 10    = min_number  -10 & min_number   = min_number  
+10 | min_number    = min_number  min_number | 10    = min_number  -10 | min_number   = min_number  
+10 ^ min_number    = min_number  min_number ^ 10    = min_number  -10 ^ min_number   = min_number  
+10 << min_number   = min_number  min_number << 10   = min_number  -10 << min_number  = min_number  
+10 >> min_number   = 0           min_number >> 10   = min_number  -10 >> min_number  = 0           
+10 >>> min_number  = 0           min_number >>> 10  = min_number  -10 >>> min_number = min_number  
+---------------------------------------  ---------------------------------------
+max_number + infinity      = infinity    max_number + (-infinity)   = -infinity   
+max_number - infinity      = -infinity   max_number - (-infinity)   = infinity    
+max_number * infinity      = infinity    max_number * (-infinity)   = -infinity   
+max_number / infinity      = 0           max_number / (-infinity)   = 0           
+max_number & infinity      = max_number  max_number & (-infinity)   = max_number  
+max_number | infinity      = max_number  max_number | (-infinity)   = max_number  
+max_number ^ infinity      = max_number  max_number ^ (-infinity)   = max_number  
+max_number << infinity     = max_number  max_number << (-infinity)  = max_number  
+max_number >> infinity     = max_number  max_number >> (-infinity)  = max_number  
+max_number >>> infinity    = max_number  max_number >>> (-infinity) = max_number  
+---------------------------------------  ---------------------------------------
+min_number + infinity      = infinity    min_number + (-infinity)   = -infinity   
+min_number - infinity      = -infinity   min_number - (-infinity)   = infinity    
+min_number * infinity      = -infinity   min_number * (-infinity)   = infinity    
+min_number / infinity      = 0           min_number / (-infinity)   = 0           
+min_number & infinity      = min_number  min_number & (-infinity)   = min_number  
+min_number | infinity      = min_number  min_number | (-infinity)   = min_number  
+min_number ^ infinity      = min_number  min_number ^ (-infinity)   = min_number  
+min_number << infinity     = min_number  min_number << (-infinity)  = min_number  
+min_number >> infinity     = min_number  min_number >> (-infinity)  = min_number  
+min_number >>> infinity    = min_number  min_number >>> (-infinity) = min_number  
+---------------------------------------  ---------------------------------------
+infinity + max_number      = infinity    (-infinity) + max_number   = -infinity   
+infinity - max_number      = infinity    (-infinity) - max_number   = -infinity   
+infinity * max_number      = infinity    (-infinity) * max_number   = -infinity   
+infinity / max_number      = infinity    (-infinity) / max_number   = -infinity   
+infinity & max_number      = infinity    (-infinity) & max_number   = -infinity   
+infinity | max_number      = infinity    (-infinity) | max_number   = -infinity   
+infinity ^ max_number      = infinity    (-infinity) ^ max_number   = -infinity   
+infinity << max_number     = infinity    (-infinity) << max_number  = -infinity   
+infinity >> max_number     = infinity    (-infinity) >> max_number  = -infinity   
+infinity >>> max_number    = infinity    (-infinity) >>> max_number = -infinity   
+---------------------------------------  ---------------------------------------
+infinity + min_number      = infinity    (-infinity) + min_number   = -infinity   
+infinity - min_number      = infinity    (-infinity) - min_number   = -infinity   
+infinity * min_number      = -infinity   (-infinity) * min_number   = infinity    
+infinity / min_number      = -infinity   (-infinity) / min_number   = infinity    
+infinity & min_number      = infinity    (-infinity) & min_number   = -infinity   
+infinity | min_number      = infinity    (-infinity) | min_number   = -infinity   
+infinity ^ min_number      = infinity    (-infinity) ^ min_number   = -infinity   
+infinity << min_number     = infinity    (-infinity) << min_number  = -infinity   
+infinity >> min_number     = infinity    (-infinity) >> min_number  = -infinity   
+infinity >>> min_number    = infinity    (-infinity) >>> min_number = -infinity   
+---------------------------------------  ---------------------------------------

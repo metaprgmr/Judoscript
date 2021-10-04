@@ -1,0 +1,35 @@
+<html><head><title>JudoScript Semantics - Statement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>Statement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=Statement>Statement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=nt><a href="javascript:showNT('Block')">Block</a></font> <br>  |  <font class=nt><a href="javascript:showNT('LocalVariableDeclaration')">LocalVariableDeclaration</a></font> <br>  |  <font class=t>FUNCTION_NAME</font>  <font class=nt><a href="javascript:showNT('ArgumentList')">ArgumentList</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |   (  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('IfStatement')">IfStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('SwitchStatement')">SwitchStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('WhileStatement')">WhileStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('DoWHileStatement')">DoWHileStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ForStatements')">ForStatements</a></font> <br>  |  <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('BreakStatement')">BreakStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('ContinueStatement')">ContinueStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('ResumeStatement')">ResumeStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('ReturnStatement')">ReturnStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('ThrowStatement')">ThrowStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('StartThreadStatement')">StartThreadStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('DynamicStatements')">DynamicStatements</a></font> <br>  |  <font class=nt><a href="javascript:showNT('PrintStatement')">PrintStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('PrintTableDataStatement')">PrintTableDataStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('EchoStatement')">EchoStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('DeleteStatement')">DeleteStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('JdbcStatements')">JdbcStatements</a></font> <br>  |  <font class=nt><a href="javascript:showNT('FileSystemStatements')">FileSystemStatements</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('XmlStatement')">XmlStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('XsltStatement')">XsltStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ScheduleStatement')">ScheduleStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('ExecStatement')">ExecStatement</a></font> <br>  |  <font class=nt><a href="javascript:showNT('SCPStatement')">SCPStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('MailStatement')">MailStatement</a></font> <font class=kw><nobr>;</nobr></font>  <br>  |  <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font> </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('Statement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>Statement is the fundamental part of a programming language. JudoScript statements
+  fall into two general categories: basic langauge statements and application statements.</p>
+
+  <p>Most of the basic language statements are similar to C, Java or other scripting
+  languages. Some of the <font class=nt><a href="javascript:showNT('ForStatements')">ForStatements</a></font> provide convenience for array iteration.
+  The <font class=nt><a href="javascript:showNT('ResumeStatement')">ResumeStatement</a></font> has not counterpart in Java programs. The
+  <font class=nt><a href="javascript:showNT('LinesStatement')">LinesStatement</a></font> is a convenience to process lines in files or input streams.</p>
+
+  <p>The application statements is a rich part of JudoScript language! They provide
+  convenience to many commonly used operations in modern computing. (Note the statements
+  do not cover all the application features in JudoScript; others are covered by the system
+  functions.) As listed here, these are the application statements: <font class=nt><a href="javascript:showNT('PrintStatement')">PrintStatement</a></font>,
+  <font class=nt><a href="javascript:showNT('PrintTableDataStatement')">PrintTableDataStatement</a></font>, <font class=nt><a href="javascript:showNT('EchoStatement')">EchoStatement</a></font>, <font class=nt><a href="javascript:showNT('JdbcStatements')">JdbcStatements</a></font>,
+  <font class=nt><a href="javascript:showNT('FileSystemStatements')">FileSystemStatements</a></font>, <font class=nt><a href="javascript:showNT('XmlStatement')">XmlStatement</a></font>, <font class=nt><a href="javascript:showNT('XsltStatement')">XsltStatement</a></font>,
+  <font class=nt><a href="javascript:showNT('SgmlStatement')">SgmlStatement</a></font>, <font class=nt><a href="javascript:showNT('ScheduleStatement')">ScheduleStatement</a></font>, <font class=nt><a href="javascript:showNT('ExecStatement')">ExecStatement</a></font>,
+  <font class=nt><a href="javascript:showNT('SCPStatement')">SCPStatement</a></font>, <font class=nt><a href="javascript:showNT('MailStatement')">MailStatement</a></font> and <font class=nt><a href="javascript:showNT('GuiEventsStatement')">GuiEventsStatement</a></font>.</p>
+ </body></html>

@@ -1,0 +1,23 @@
+<synopsis>
+<J> includes a built-in SGML parser and provides the <kw>do</kw> .. <kw>as</kw> <kw>sgml</kw> and <kw>do</kw> .. <kw>as</kw> <kw>jsp</kw> event-driven statements that are very handy for scraping HTML and JSP pages, build custom SGML sublanguages and set up template systems. Each tag is denoted as an event, and you as a programmer provides code for each tag. The tags also include <kw>TEXT</kw> and special tags such as <kw>&lt;!></kw>, etc. In the handler code, the <code>$_</code> variable will hold the tag object, which may have attributes. SGML (including XML) documents are great to separate content and their presentation, and the <J> SGML statement is a very convenient way to implement SGML document transformers.
+</synopsis>
+
+<section1 title="SGML/HTML Scraping Made Easy" id="sgml" status="red">
+</section1>
+
+<section1 title="SGML Scripting Versus XML Scripting" status="red">
+</section1>
+
+<section1 title="JSP Scraping and Build Template Systems" id="jsp" status="red">
+</section1>
+
+<section1 title="Develop Your Own Tag System for Information Organization" status="red">
+</section1>
+
+<section1 title="Case Study: An SGML-Based Documentation System" status="red">
+  <section2 title="Planning for SGML-Based Documentation">
+  </section2>
+  <section2 title="Develop An SGML-Based Documentation System">
+  </section2>
+</section1>
+

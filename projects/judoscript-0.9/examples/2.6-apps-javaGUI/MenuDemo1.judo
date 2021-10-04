@@ -1,0 +1,54 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+
+
+demoFrame = new java::JFrame('MenuDemo');
+gui::events {
+  <demoFrame:Window:windowClosing>: exit(0);
+}
+contentPane = demoFrame.getContentPane();
+output = new java::JTextArea(5, 30);
+output.setEditable(false);
+scrollPane = new java::JScrollPane(output);
+contentPane.add(scrollPane, (java::BorderLayout).CENTER);
+menuBar = new java::JMenuBar;
+demoFrame.setJMenuBar(menuBar);
+menu = new java::JMenu("A Menu");
+menu.setMnemonic((java::KeyEvent).VK_A);
+menu.getAccessibleContext()
+ .cast("javax.accessibility.AccessibleContext")
+ .setAccessibleDescription("Menu");
+menuBar.add(menu);
+menuItem = new java::JMenuItem("Item 1");
+menuItem.getAccessibleContext()
+ .cast("javax.accessibility.AccessibleContext")
+ .setAccessibleDescription("Item 1");
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+menuItem = new java::JMenuItem("Item 2");
+menuItem.getAccessibleContext()
+ .cast("javax.accessibility.AccessibleContext")
+ .setAccessibleDescription("Item 2");
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+group = new java::ButtonGroup;
+menuItem = new java::JRadioButtonMenuItem("radio 1");
+group.add(menuItem);
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+menuItem = new java::JRadioButtonMenuItem("radio 2");
+group.add(menuItem);
+setGuiListener(menuItem, 'ACTION');
+menu.add(menuItem);
+guiEvents {
+  < ?ACTION : Action : actionPerformed> :
+    var source = $_.getSource();
+    var s = [[*
+      Action event detected.
+      Event source: (* source.getText() *)
+    *]];
+    output.append(s);
+}
+demoFrame.setSize(450, 260);
+demoFrame.setVisible(true);

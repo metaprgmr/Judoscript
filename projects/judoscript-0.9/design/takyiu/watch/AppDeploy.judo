@@ -1,0 +1,46 @@
+/**** **** **** **** **** **** **** **** **** **** **** **** ****
+connect localhost:7001 system weblogic
+appfile=c:/studentWLSA11/labs/lab10/applications/timeoff.war
+appname=timeoff
+server=managed
+target=$server
+deployer=/DeployerRuntime/DeployerRuntime
+data=new weblogic.management.deploy.DeploymentData
+$data addTarget $target null
+invoke ${deployer}/activate $appfile $appname null $data null
+
+task = $LAST
+$task getState
+state = $LAST
+while $state <= 1
+  echo "deployment task running"
+  sleep 1000
+  $task getState
+  state = $LAST
+end
+$task getStatus
+status = $LAST
+echo "deployment task finished with status =" $status
+**** **** **** **** **** **** **** **** **** **** **** **** ****/
+
+jmx::connect 't3://localhost:7001', 'system', 'weblogic';
+appfile     = 'c:/student/labs/lab10/applications/timeoff.war';
+appname     = 'timeoff';
+server      = 'managed';
+target      = server;
+deployer    = '/DeployerRuntime/DeployerRuntime';
+const #data = java::weblogic.management.deploy.DeploymentData;
+#data.addTarget(target, null);
+task = jmx::call('${deployer}/activate', appfile, appname, null, #data, null);
+
+while {
+  state = task.getState();
+  if (state > 1)
+    break;
+  println "deployment task running";
+  sleep 1000;
+}
+
+println "deployment task finished with status = ${status}';
+jmx::disconnect;
+

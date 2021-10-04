@@ -1,0 +1,442 @@
+<synopsis>
+<J> provides an <kw>exec</kw> facility that executes OS native programs in ways that are similar to OS shells and beyond. For instance, you can easily write code to feed input into and read in the output of the running executable at the same time. You can specify the starting directory and environment variables for the new process, and <kw>exec</kw> supports a sophisticated command format that allows you to pipe multiple executables together and redirect input and output between files.
+</synopsis>
+
+<!--===============================================================-->
+<section1 title="Introduction to Running Native Programs" id="intro" status="green">
+
+<p>The <kw>exec</kw> command provides a flexible way of executing native operating system programs. In a nutshell, you can specify shell-like command lines including pipes and redirections, and set environment variables and start directory; you can pump input to that executable and receive output out of that executable as well. You can receive the return value. By default the executable is run synchronously, but it can be run asynchronously. The complete syntax is:</p>
+
+<grammar id="Exec">
+<rule name="exec"><kw>exec</kw> [ <kw>&&</kw> | <kw>&lt;</kw> <nt>returnVar</nt> <kw>&gt;</kw> ] <nt>Expr</nt> <nt>StartOptions</nt> <nt>InputOutput</nt></rule>
+<rule name="StartOptions">[ <kw>from</kw> <nt>workdir</nt> ] [ <kw>with</kw> [ <kw>&lt;</kw> <kw>new</kw> <kw>&gt;</kw> ] [ <nt>Expr</nt> | ( <nt>IDENTIFIER</nt> <kw>=</kw> <nt>Expr</nt> ) ( <kw>,</kw> <nt>IDENTIFIER</nt> <kw>=</kw> <nt>Expr</nt> )* ] </rule>
+<rule name="InputOutput">[ <kw>needSystemInput</kw> ] ( <nt>OutputBlock</nt> | <kw>;</kw> ) | <nt>InputBlock</nt> [ <nt>OutputBlock</nt> ]</rule>
+<rule name="InputBlock"><kw>input</kw> <nt>Block</nt></rule>
+<rule name="OutputBlock"><kw>output</kw> <nt>Block</nt></rule>
+</grammar>
+
+<p>This looks like a lot of knobs that you can turn. The core elements of running any executables are:</p>
+
+<ol>
+<li>the command line</li>
+<li>the start-up directory, and</li>
+<li>environment variables for the launched process.</li>
+</ol>
+
+<p>In most cases, these are all you need. The following are some examples that do not need a lot of explanations.</p>
+
+<asis>
+exec 'ls > files.txt';
+
+exec 'ls > ~/tempfiles.txt' from '/temp';
+
+exec && 'java foo.bar.FooBarClass' with CLASSPATH=${mycp};
+</asis>
+
+<p>The <code>&&</code> option is to run asynchronously. We will cover all the options and uses of this versatile command later. Before getting into details, beware that <J> ultimately uses Java to run native executables, which has limitations. The JDK documentation for class <code>java.lang.Runtime</code> states:</p>
+
+<blockquote>"The Runtime.exec methods may not work well for special processes on certain native platforms, such as native windowing processes, daemon processes, Win16/DOS processes on Win32, or shell scripts."</blockquote>
+
+<p>Thus far, I have successfully run Unix and Win32 commands, shell scripts and batch files. Nevertheless, always test out the scripts on the intended platforms with the native executables. In this chapter, we will mostly use Unix and Windows commands and the following three Java programs to demonstrate various uses.</p>
+
+<codelist name="Hello.java" id="Hello.java">
+package test;
+
+public class Hello
+{
+  public static void main(String[] args) {
+    System.out.println("Hello, World!");
+    if (args.length > 0)
+      System.err.println("Hello, Error!");
+    System.exit(123);
+  }
+}
+</codelist>
+
+<codelist name="Echo.java" id="Echo.java">
+package test;
+
+public class Echo
+{
+  public static void main(String[] args) {
+    try {
+      int len;
+      byte[] buf = new byte[256];
+      while ((len = System.in.read(buf)) > 0) {
+        System.out.write(buf,0,len);
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+</codelist>
+
+<codelist id="ToLower.java" name="ToLower.java">
+package test;
+import java.io.*;
+
+public class ToLower
+{
+  public static void main(String[] args) {
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      while (true) {
+        String line = br.readLine();
+        if (line == null) break;
+        System.out.println(line.toLowerCase());
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+</codelist>
+
+<p>Let us run <code>test.Hello</code> first.</p>
+
+<asis>
+exec &lt;a> 'java test.Hello';
+println a; // prints 123
+</asis>
+
+<p>Here, variable <code>a</code> receives the return code from the program. Since class <code>test.Hello</code> can print to standard output or standard error, let us see how to receive them.</p>
+
+<asis>
+setOut "stdout.txt";      // set standard output to this file
+setErr "stderr.txt";      // set standard error to this file
+exec 'java test.Hello';   // to stdout
+exec 'java test.Hello a'; // to stderr
+</asis>
+
+<p>After running, file <code>stdout.txt</code> contains:</p>
+
+<asis>
+Hello, World!
+Hello, World!
+</asis>
+
+<p>and file <code>stderr.txt</code> contains:</p>
+
+<asis>
+Hello, Error!
+</asis>
+
+<p>In the rest of this chapter, we are going to detail on the command-line format, start-up options, return value, execution synchronization, and input/output.</p>
+
+
+<!--===============================================================-->
+<section1 title="The Command-Line Format" id="cmdline" status="green">
+
+<p>The <nt>Expr</nt> in the syntax rules above is evaluated to a string value representing a command line, and is parsed by <J> to launch executables. The command line is usually a string literal, and it can be multi-line to achieve better readability. For instance,</p>
+
+<asis>
+exec [[* ${j13home}/bin/javac -d ${tmp}/classes
+                  ${generated}/*.java
+                  ${src}/*judo*.java
+                  ${src}/com/judoscript/*.java
+                  ${src}/com/judoscript/parser/helper/*.java
+                  ${src}/com/judoscript/bio/*.java
+                  ${src}/com/judoscript/db/*.java
+                  ${src}/com/judoscript/xml/*.java
+                  ${src}/com/judoscript/gui/*.java
+                  ${src}/com/judoscript/studio/*.java
+                  ${src}/com/judoscript/jusp/*.java
+                  ${src}/com/judoscript/ext/FactoryUtil.java
+     *]]
+     with PATH      = j13path,
+          JAVA_HOME = j13home,
+          CLASSPATH = '${cp}${:}${lib}/j2ee1.3.jar${:}${lib}/bsf-2.3.jar'
+;
+</asis>
+
+<p><J> supports a shell-like, sophisticated command line format, defined in BNF as:</p>
+
+<grammar>
+<rule name="command_line"><nt>executable1</nt> ( | <nt>executable</nt> )*</rule>
+<rule name="executable1"><nt>program</nt> ( <nt>input_redirect</nt> | <nt>output_redirect</nt> )*</rule>
+<rule name="executable"><nt>program</nt> ( <nt>output_redirect</nt> )*</rule>
+<rule name="input_redirect"><kw>&lt;</kw> <nt>file</nt></rule>
+<rule name="output_redirect"><nt>write_to</nt> | <nt>append_to</nt></rule>
+<rule name="write_to">( <kw>&gt;</kw> | <kw>1&gt;</kw> | <kw>2&gt;</kw> | <kw>2&gt;&1</kw> | <kw>1&gt;&2</kw> ) <nt>file</nt> | <kw>2&gt;&1</kw> | <kw>1&gt;&2</kw></rule>
+<rule name="append_to">( <kw>&gt;&gt;</kw> | <kw>1&gt;&gt;</kw> | <kw>2&gt;&gt;</kw> | <kw>2&gt;&gt;&1</kw> | <kw>1&gt;&gt;&2</kw> ) <nt>file</nt> | <kw>2&gt;&gt;&1</kw> | <kw>1&gt;&gt;&2</kw></rule>
+</grammar>
+
+<p>Redirecting and piping are familiar to most computer users. On most operating systems, a program can take input from the system input stream and write to system output and error streams; they are commonly referred to as <code>stdin</code>, <code>stdout</code> and <code>stderr</code>, following the tradition of Unix and the C programming language. In many OS shells, you can <i>redirect</i> <code>stdin</code>, <code>stdout</code> and/or <code>stderr</code> to files; you can also <i>pipe</i> the output of a program into the input of another program. In many Unix shells, you can optionally combine <code>stdout</code> and <code>stderr</code> and send the content into a single file.</p>
+
+<p>The <J>'s command-line format is even more flexible: you can pipe up programs, and each program can optionally write output to files at the same time. Only the first program's input can be redirected to a file, as subsequent programs are taking the previous program's output as input. In most Unix shells, only the last program in a pipe can write to a file. In <J>, the last program can redirect output and error into separate files.</p>
+
+<table id="output_option" name="Output Redirect Options">
+<tr><th>Writ-To</th><th>Append-To</th><th>Output Redirection</th></tr>
+<tr><td><kw>&gt;</kw> <nt>file</nt></td><td><kw>&gt;&gt;</kw> <nt>file</nt></td><td><code>stdout</code> to a file</td></tr>
+<tr><td><kw>1></kw> <nt>file</nt></td><td><kw>1>></kw> <nt>file</nt></td><td><code>stdout</code> to a file</td></tr>
+<tr><td><kw>2></kw> <nt>file</nt></td><td><kw>2>></kw> <nt>file</nt></td><td><code>stderr</code> to a file</td></tr>
+<tr><td><kw>2>&1</kw></td><td><kw>2>>&1</kw></td><td><code>stderr</code> to <code>stdout</code></td></tr>
+<tr><td><kw>1>&2</kw></td><td><kw>1>>&2</kw></td><td><code>stdout</code> to <code>stderr</code></td></tr>
+<tr><td><kw>2>&1</kw> <nt>file</nt></td><td><kw>2>>&1</kw> <nt>file</nt></td><td><code>stderr</code> and <code>stdout</code> to file</td></tr>
+<tr><td><kw>1>&2</kw> <nt>file</nt></td><td><kw>1>>&2</kw> <nt>file</nt></td><td><code>stdout</code> and <code>stderr</code> to file</td></tr>
+</table>
+
+<p>When <kw>1>&2</kw>, <kw>2>&1</kw>, <kw>1>>&2</kw> or <kw>2>>&1</kw> occurs, that should be the only output redirection.</p>
+
+<p>You can redirect the input from a file, and sent the output to a file:</p>
+
+<asis>
+exec 'java test.Echo < lines.txt > alfa';
+</asis>
+
+<p>You can append to a file, redirect output or error to one file or merge them. The following session is recorded on a Windows machine, and we run the <J> software with the <code>-x</code> option which runs the <J> program from the command-line:</p>
+
+<asis>
+c:\>java judo -x "exec 'java test.Hello a 2>&1'"
+Hello, World!
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 1> alfa 2> beta'"
+
+c:\>type alfa
+Hello, World!
+
+c:\>type beta
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 2>&1 alfa'"
+
+c:\>type alfa
+Hello, World!
+Hello, Error!
+
+c:\>java judo -x "exec 'java test.Hello a 2>>&1 alfa'"
+
+c:\>type alfa
+Hello, World!
+Hello, Error!
+Hello, World!
+Hello, Error!
+
+c:\>
+</asis>
+
+<p>The following session tries out piping:</p>
+
+<asis>
+c:\>java judo -x "exec 'java test.Hello a 2>&1 | java test.ToLower | java test.Echo > alfa'"
+
+c:\>type alfa
+hello, world!
+hello, error!
+
+c:\>
+</asis>
+
+<p>You can send the output to a file and at the same time pipe into another program. With the help of the <code>test.Echo</code>, we can create a <i>tee</i> utility:</p>
+
+<codelist name="tee" caption="tee.judo">
+outfile = #args[0].neverEmpty('output.dump');
+exec 'java test.Echo > ${outfile} | java test.Echo' needSystemIn;
+</codelist>
+
+<p>The <kw>needSystemIn</kw> indicates this program needs user input. Here is the result:</p>
+
+<asis>
+c:\>echo ABCDEFG | java judo tee.judo alfa
+ABCDEFG
+
+c:\>type alfa
+ABCDEFG
+</asis>
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Return Value, Running Modes and Options" id="options" status="green">
+
+<!------------------------------------->
+<section2 title="Return Value" id="retval">
+
+<p>Native executables may return a value, which is typically a string representing an integer. You can specify a variable name in <kw>&lt; &gt;</kw> following <kw>exec</kw> to receive this return value. To get the return value, <J> runs the executable synchronously and waits for it to finish.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Synchronous and Asynchronous Runs" id="sync">
+
+<p>Programs can be run either synchronously, by default, or asynchronously. To run asynchronously, specify <kw>&&</kw> following the <kw>exec</kw> keyword. The following program shows the difference.</p>
+
+<codelist name="sync_async.judo" id="sync_async.judo">
+exec 'dir';
+println "--- I am done with: exec command.";
+
+exec && 'dir';
+println "--- I am done with: exec && command.";
+</codelist>
+
+<p>Its output is:</p>
+
+<asis>
+exit_code.judo  out_err.judo     sync_async.judo
+in2script.judo  redir.judo       tee.judo
+in_out.judo     script_out.judo  workdir_envvar.judo
+--- I am done with: exec command.
+--- I am done with: exec && command.
+exit_code.judo  out_err.judo     sync_async.judo
+in2script.judo  redir.judo       tee.judo
+in_out.judo     script_out.judo  workdir_envvar.judo
+</asis>
+
+<p>The second <kw>exec</kw> is run asynchronously, therefore the following <kw>println</kw> is run immediately after <kw>exec</kw>, and the Windows <code>dir</code> command finishes afterwards. In contrast, the first <kw>exec</kw> waits till the <code>dir</code> commands completes and moves on to the next <kw>println</kw> statement.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Environment Variables" id="envvars">
+
+<p>By default, <kw>exec</kw> command launches the child process with all the environment variables of the current JVM process. You can set new environment variables or change values of existing ones using the <kw>with</kw> clause. Optionally, you can choose <i>not</i> to inherit any parent environment variables with the <kw>&lt;new&gt;</kw> option.</p>
+
+<p>The <kw>with</kw> clause usually takes name-value pairs for environment variable values. It can also take an expression that evaluates either to an <code>Object</code> or a Java instance of <code>java.util.Map</code>, whose elements are used. The following example demonstrates these choices.</p>
+
+<codelist name="envvars.judo" id="envvars.judo">
+cmdline = 'java judo -x "for x in getEnvVars() { println x; }"';
+
+println nl, '--- Run with inherited env variables from parent JVM process:';
+exec cmdline;
+
+println nl, '--- Run with no env variables except for PATH and CLASSPATH:';
+exec cmdline
+     with &lt;new>
+     PATH = ${PATH},
+     CLASSPATH = ${CLASSPATH}
+;
+
+println nl, '--- Run with a new env variable:';
+exec cmdline with CLASSPATH = 'c:/temp';
+
+println nl, '--- Run with a set of new env variables:';
+newEVs = { // an Object
+  FOO = 'foo',
+  BAR = 'bar'
+};
+exec cmdline with newEVs;
+</codelist>
+
+<p>This script runs an external program specified in the variable <code>cmdline</code>, which happens to be an in-line execution of a short <J> program. The third <kw>exec</kw> in this program fails, because the <code>CLASSPATH</code> is not valid, so <J> software is not found anywhere.</p>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Start-Up Directory" id="startup">
+
+<p>Sometimes, it matters where to start the program. For instance, some shell scripts may have used relative directories to access other resources and hence must start from a particular directory structure. The <kw>exec</kw> command uses the <kw>from</kw> clause to specify this.</p>
+
+<asis>
+exec 'build.sh' from ${BUILD_HOME};
+</asis>
+
+<p>The following example creates a batch file on a Windows machine and runs it from where it resides.</p>
+
+<codelist name="run_batch.judo" id="run_batch.judo">
+testDir = 'c:/temp';
+bat_file = '${testDir}${/}alfa.bat';
+
+f = openTextFile(bat_file, 'w');
+flush &lt;f> [[*
+  @echo 'This is some garbage.' > alfa.alfa
+  @echo ABCDEFG=%ABCDEFG%
+  @echo PATH=%PATH%
+*]];
+f.close();
+
+exec bat_file
+     from testDir
+     with ABCDEFG = 1234567,
+          PATH    = testDir;
+</codelist>
+
+<p>So far, we have covered all the basic topics regarding running executables in <J>. Next is a more exciting topic of manipulating the input to and the output from a running executable.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Process Executable Input And/Or Output" id="execio" status="green">
+
+<p>Executables may take user input and/or write out results. The <kw>exec</kw>'s <kw>needSystemIn</kw>, <kw>input</kw> and <kw>output</kw> clauses provide ways to manipulate these aspects.</p>
+
+<!------------------------------------->
+<section2 title="User Input for the Executable" id="userinput">
+
+<p>If a native program taks user input, things may get interesting when it is launched from within another agent, such as a shell script or <J>. It is not uncommon to see a background job hanging, only waiting to read some input that will never come. In <kw>exec</kw>, by default <J> sends an EOF (End-Of-File) to the input stream if no input redirection is present. This is to avoid the hang as mentioned above. To allow user input, you need to explicitly so specify via the <kw>needSystemIn</kw>:</p>
+
+<asis>
+C:\>java judo -x "exec 'java test.ToLower' needSystemIn"
+abc
+abc
+ABC
+abc
+^Z
+
+C:\>
+</asis>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Provide User Input from the Script" id="input">
+
+<p><J> allows you to provide the user input from within the script. This is achieved by the <kw>input</kw> block, where you can print to a predefined output destiny, <code>&lt;pipe&gt;</code>. Here is an example:</p>
+
+<codelist name="in2script.judo" id="in2script.judo">
+exec 'java test.ToLower | java test.Echo'
+input {
+  println &lt;pipe&gt; 'You should see this message in lower case, not UPPER CASE!';
+  println &lt;pipe&gt; 'Cheers!';
+}
+</codelist>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Read Executable Output into the Script" id="output">
+
+<p><J> also allows you to read in the output from the program:</p>
+
+<codelist name="script_out.judo" id="script_out.judo">
+exec 'java test.ToLower' needSystemIn
+output {
+  while (line=readPipe()) != eof {
+    println '  #', loopIndex()+1, ': ', line;
+  }
+}
+</codelist>
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Write to and Read from the Executable" id="inout">
+
+<p>You can write into <i>and</i> read from a command line at the same time.</p>
+
+<codelist name="in_out.judo" id="in_out.judo">
+exec 'java test.ToLower | java test.Echo'
+input {
+  println &lt;pipe&gt; 'Hello,';
+  println &lt;pipe&gt; 'World!';
+}
+output {
+  while (line=readPipe()) != eof {
+    println '  #', loopIndex()+1, ': ', line;
+  }
+}
+</codelist>
+
+<p>The <kw>output</kw> block is actually run in a separate thread, so your code need to follow thread programming guideline. For details of thread programming, see <ref id="thread:"/>.</p>
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Case Study: Build and Test the Judo Software" id="buidjudo" status="red">
+
+</section1><!--=====================================================-->

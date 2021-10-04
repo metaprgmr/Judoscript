@@ -1,0 +1,24 @@
+<function sig="size" alias="length">
+  Returns the dimension of this one-dimensional array.
+</function>
+
+<function sig="lastIndex">
+  Returns the index of the last element in this one-dimensional array, which
+  is size - 1.
+</function>
+
+<function sig="reverse">
+  Reverses all the elements in this one-dimensional array and returns self.
+</function>
+
+<function sig="subarray startIndex, endIndex">
+  Returns a sub-array of this, starting at <param>startindex</param> inclusive to
+  <param>endIndex</param> exclusive. If <param>endIndex</param> is not specified or
+  beyond range, the end of array is used.                                                                 
+</function>
+
+<function sig="sort comparatorFunction">
+  Sorts this array locally and returns self. If <param>comparatorFunction</param> is
+  not specified, use the "natural" order of the elements.
+</function>
+

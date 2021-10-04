@@ -1,0 +1,156 @@
+usage {
+  minArgs = 1;
+  args    = 'filename.xml';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Reads an XML file, turns it into a DOM document and displays it
+    in a Swing JTree.
+  *]];
+}
+
+!JavaGuiClass #JTree, #JFrame, #DefaultMutableTreeNode, #DefaultTreeModel,
+              #JScrollPane, #Dimension, #JPanel, #TreeSelectionModel,
+              #BorderLayout, #Toolkit, #Color, #JOptionPane
+!JavaBaseClass #Node, #Document, #DocumentBuilderFactory
+
+const #FRAME_WIDTH  = 440;
+const #FRAME_HEIGHT = 280;
+
+showDetails = true;
+filename = #args[0];
+
+frame = javanew #JFrame("XML to JTree");
+frame.setBackground(#Color.lightGray);
+frame.getContentPane().setLayout(javanew #BorderLayout);
+{
+  local toolkit = #Toolkit.getDefaultToolkit();
+  local dim = toolkit.getScreenSize();
+  local screenHeight = dim.height;
+  local screenWidth  = dim.width;
+
+  // Display in the middle of the screen
+  frame.setBounds( (screenWidth-#FRAME_WIDTH)/2,
+                    (screenHeight-#FRAME_HEIGHT)/2,
+                    #FRAME_WIDTH, #FRAME_HEIGHT );
+}
+guiEvents {
+  <frame : Window : windowClosing> :  exit(0);
+}
+
+doc = null; // global scope
+{
+  doc = do filename as dom;
+catch:
+  #JOptionPane.showMessageDialog(frame, _.message, "Exception",
+                                 #JOptionPane.WARNING_MESSAGE);
+  exit 0;
+}
+
+top     = createTreeNode(doc.getDocumentElement(), showDetails );
+dtModel = javanew #DefaultTreeModel(top);
+jTree   = javanew #JTree(dtModel);
+
+jTree.getSelectionModel().setSelectionMode(
+                           #TreeSelectionModel.SINGLE_TREE_SELECTION);
+jTree.setShowsRootHandles(true);
+jTree.setEditable(false);
+
+// Create a new JScrollPane to override one of the methods.
+
+class XmlTreePane extendsjava javax.swing.JScrollPane
+{
+  int width;
+  int height;
+
+  constructor tree, width, height {
+    super(tree);
+    this.width = width;
+    this.height = height;
+  }
+  #Dimension getPreferredSize() {
+    return javanew #Dimension(width-20, height-40);
+  }
+}
+
+main = javanew #JPanel;
+jScroll = new XmlTreePane(jTree,#FRAME_WIDTH,#FRAME_HEIGHT);
+
+panel = javanew #JPanel;
+panel.setLayout(javanew #BorderLayout);   
+panel.add("Center", jScroll);
+main.add("Center", panel);
+frame.getContentPane().add(main, #BorderLayout.CENTER);
+frame.validate();
+frame.setVisible(true);
+
+function createTreeNode root, showDetails
+{
+  type = getNodeType(root);
+  name = root.getNodeName();
+  value = root.getNodeValue();
+
+  if showDetails {
+    dmtNode = javanew #DefaultMutableTreeNode(
+                       "[" @ type @ "] --> " @ name@" = " @ value);
+  } else { // Special case for TEXT_NODE
+    dmtNode = javanew #DefaultMutableTreeNode(
+                 root.getNodeType()==#Node.TEXT_NODE ? value : name );
+  }
+
+  // Display the attributes if there are any
+  attribs = root.getAttributes();
+  if attribs != null && showDetails {
+    for i from 0 to attribs.getLength()-1 {
+      local attNode = attribs.item(i);
+      local attName = attNode.getNodeName().trim();
+      local attValue = attNode.getNodeValue().trim();
+
+      if attValue.isNotEmpty() && attValue.isNotEmpty() {
+        dmtNode.add(javanew #DefaultMutableTreeNode(
+          "[Attribute] --> " @ attName @ "=\"" @ attValue @ "\"") );
+      }
+    }
+  }
+
+  // If there are any children and they are non-null then recurse...
+  if root.hasChildNodes() {
+    childNodes = root.getChildNodes();
+    if childNodes != null {
+      for k from 0 to childNodes.getLength()-1 {
+        local nd = childNodes.item(k);
+        if nd != null {
+          // A special case could be made for each Node type.
+          if nd.getNodeType() == #Node.ELEMENT_NODE {
+            dmtNode.add(createTreeNode(nd, showDetails));
+          }
+          elif nd.getNodeValue().isNotEmpty() { // the default
+            dmtNode.add(createTreeNode(nd, showDetails));
+          }
+        }
+      }
+    }
+  }
+
+  return dmtNode;
+}
+
+function getNodeType node
+{
+  switch node.getNodeType() {
+  case #Node.ELEMENT_NODE:               return "Element";
+  case #Node.ATTRIBUTE_NODE:             return "Attribute";
+  case #Node.TEXT_NODE:                  return "Text";
+  case #Node.CDATA_SECTION_NODE:         return "CData section";
+  case #Node.ENTITY_REFERENCE_NODE:      return "Entity reference";
+  case #Node.ENTITY_NODE:                return "Entity";
+  case #Node.PROCESSING_INSTRUCTION_NODE:return "Processing instruction";
+  case #Node.COMMENT_NODE:               return "Comment";
+  case #Node.DOCUMENT_NODE:              return "Document";
+  case #Node.DOCUMENT_TYPE_NODE:         return "Document type";
+  case #Node.DOCUMENT_FRAGMENT_NODE:     return "Document fragment";
+  case #Node.NOTATION_NODE:              return "Notation";
+  default:                               return "Unknown";
+  }
+}

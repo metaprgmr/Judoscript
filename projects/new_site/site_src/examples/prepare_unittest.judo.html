@@ -1,0 +1,17 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_fs_archive/prepare_unittest.judo:</b></td></tr><tr><td><pre>
+// Assumed the junit.jar is somewhere in the installation directory tree
+// where this script is also located.
+
+cd #script.getFilePath(), '..'; // move up one directory
+listFiles '*/junit.jar' recursive limit 1;
+if $_.length &lt;= 0 {
+  println &lt;err> "junit.jar is not found. Can't proceed with testing.";
+  return;
+}
+
+#classpath.add( $_[0] );
+
+// now, do some unit testing
+// ....
+</pre></td></tr></table></body></html>

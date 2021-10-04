@@ -1,0 +1,56 @@
+<function sig="getSQL">
+  Returns the SQL statement for this query.
+</function>
+
+<function sig="getPreparedStatement">
+  Returns the prepared statement (an instance of <code>java.sql.PreparedStatement</code>)
+  for this query.
+</function>
+
+<function sig="close">
+  Closes this prepared statement.
+</function>
+
+<function sig="hasResult">
+  Returns <!true> if the last run has results.
+</function>
+
+<function sig="next">
+  Returns <!true> if the result still has rows, and moves the result set pointer
+  to the next row. Valied only after a run.
+</function>
+
+<function sig="getResult limit">
+  This is a convenience method that returns the whole result or up to <param>limit</param>,
+  if specified; the result is either an array if the result has only one column, or a
+  <obj id=TableData> if multiple columns are selected.
+</function>
+
+<function sig="dumpResult fileName, limit, promptSegment">
+  Dumps the whole result or up to <param>limit</param> rows into a <obj id=tableDump> file.
+  If <param>fileName</param> is not specified, use the table name (of the first column)
+  suffixed with ".tdmp". The optional <param>promptSegment</param> is an integer such as
+  100; if specified, whenever every so many rows are saved to the file, a dot indicator is
+  printed to system out. This is a helpful hint for large table dumping which can take a
+  long while.
+</function>
+
+<function sig="getResultSetType">
+  Returns the result set type, which is one of these: "forward_only",
+  "scroll_insensitive" or "scroll_sensitive".
+</function>
+
+<function sig="getResultSet">
+  Returns the result set (an instance of <code>java.sql.ResultSet</code>)
+  of the last query run.
+</function>
+
+<function sig="getResultSetMetaData">
+  Returns the meta data for the result set (an instance of <code>java.sql.ResultSet</code>)
+  of the last query run.
+</function>
+
+<function sig="getColumnAttributes" alias="getColumnAttrs">
+  Returns the column attributes for this query as an instance of <obj id=TableData>.
+</function>
+

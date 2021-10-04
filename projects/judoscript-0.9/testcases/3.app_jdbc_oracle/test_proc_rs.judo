@@ -1,0 +1,37 @@
+!include 'setup/connect.judi'
+
+//
+// create the stored procedure
+//
+db::any [[*
+  create or replace package types
+  as
+    type cursorType is ref cursor;
+  end;
+*]];
+
+db::any [[*
+  create or replace function ListPeople return types.cursortype
+  as
+    l_cursor types.cursorType;
+  begin
+    open l_cursor for
+      select emp_no, first_name, last_name, birth_date, salary
+      from emp;
+    return l_cursor;
+  end;
+*]];
+
+//
+// test it
+//
+db::prepareCall: { :ret = call ListPeople };
+
+db::sql with @ret:oracle_cursor => res;
+
+while res.next() {
+  println res[3] :<12, res[4].fmtDate('yyyy-MM-dd');
+}
+
+db::disconnect();
+

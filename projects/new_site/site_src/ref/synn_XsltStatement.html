@@ -1,0 +1,29 @@
+<html><head><title>JudoScript Semantics - XsltStatement</title>
+<link href="../share/bnf.css" rel="stylesheet" type="text/css">
+<script language=JavaScript src=../share/judolib.js></script>
+<script language=JavaScript src=ntUsedBy.js></script>
+</head><body>
+<h3>Semantics : <u>XsltStatement</u></h3>
+<table border=0 width=98% bgcolor=#EEEEEE><tr><td nowrap width=10 valign=top>
+  <b><font class=nt><a name=XsltStatement>XsltStatement</a></font>&nbsp;&nbsp;::=&nbsp;</b>
+</td><td>
+
+ <font class=kw>xslt</font>  <br>  (  <font class=kw>copy</font>  <br>  |   (  <font class=kw>xpath</font>  <font class=kw><nobr>(</nobr></font>   )?  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?   (  <font class=kw><nobr>)</nobr></font>   )?  <font class=kw>on</font>  <br>  )  <br> <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  (  <font class=kw>as</font>  <font class=kw>dom</font>  <br>  |   (  <font class=kw>into</font>   |  <font class=kw>to</font>   )  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  (  <font class=kw>systemID</font>  <font class=nt><a href="javascript:showNT('Expr')">Expr</a></font>  )?  <br>  )  <br>  (  <font class=kw>outputProperties</font>  <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font>  |  <font class=kw>parameters</font>  <font class=nt><a href="javascript:showNT('MemberInitList')">MemberInitList</a></font>  )*  </td></tr></table><br>
+<table border=0><tr><td valign=top nowrap><b>Used&nbsp;by:&nbsp;&nbsp;</td><td>
+<script language=JavaScript><!--
+document.write(getUsedBy('XsltStatement'));
+//--></script>
+</td></tr></table><br>
+
+
+  <p>This statement applies an XSL transformation upon a source document and generates
+  a result document. The statement can be divided into 4 parts: the transformation, the
+  source, the destination, and output properties and parameters.</p>
+  <p>The transformation can be as simple as a <font class=kw>copy</font> , or an XSL script which can be in
+  a file, a URL, a input stream or a reader; it can also be a xpath expression signified
+  by <font class=kw>xpath</font>  that performs a query.</p>
+  <p>The source and/or result can be a file, a URL, a input/output stream,
+  reader/writer, or a <code>org.w3c.dom.Document</code> object. Optionally the output
+  properties and/or parameters can be specified for the transformer. For all parts,
+  system IDs can be specified.</p>
+ </body></html>

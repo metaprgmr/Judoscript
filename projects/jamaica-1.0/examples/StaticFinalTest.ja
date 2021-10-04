@@ -1,0 +1,17 @@
+
+public class StaticFinalTest
+{
+  static final int CONST_ONE = 1;
+  static final String NAME = "James Huang";
+  static final ArrayList LIST;
+
+  {
+    %set LIST = %object ArrayList
+  }
+
+  public static void main(String[] args) {
+    %println "CONST_ONE = ", CONST_ONE
+    %println "NAME = ", NAME
+    %println "LIST = ", LIST
+  }
+}

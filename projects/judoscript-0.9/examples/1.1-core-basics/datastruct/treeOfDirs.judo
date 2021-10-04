@@ -1,0 +1,18 @@
+usage {
+  author  = 'James Huang';
+  created = '2002-12-22';
+  desc    = 'Lists a directory as a tree, and prints out the tree BFS.';
+}
+
+dir = (#args.length <= 0) ? '.' : #args[0];
+
+list '*' in dir
+     //dirOnly
+     recursive
+     as tree;
+
+println '$$fs_result is a treeNode; BFS traverse:';
+for f in $$fs_result.bfsAllNodes() {
+  println f.path;
+}
+

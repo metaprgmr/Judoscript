@@ -1,0 +1,8 @@
+Copied srcObj into Object:    obj = {a=1,B=xyz}
+Copied srcMap into Object:    obj = {A=1,a=1,B=XYZ}
+Copied srcObj into Map:       map = {a=1, B=xyz}
+Copied srcMap into Map:       map = {A=1, a=1, B=XYZ}
+Copied srcArr into Array:     arr = [1,2,3]
+Copied srcJavaArr into Array: arr = [1,2,3,10,20,30]
+Copied srcArr into List:     list = [1, 2, 3]
+Copied srcJavaArr into List: list = [1, 2, 3, 10, 20, 30]

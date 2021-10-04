@@ -1,0 +1,35 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/5.util_useful/html_tblchk.judo:</b></td></tr><tr><td><pre>
+usage {
+  minArgs = 1;
+  args    = 'file_or_url';
+  author  = 'James Huang';
+  created = '2001-11-12';
+  lastMod = '2002-08-10';
+  desc    = [[*
+    Prints out all the HTML table tags, including &lt;table>,
+    &lt;tbody>, &lt;tr>, &lt;td> and &lt;th>, with indentation.
+  *]];
+}
+
+$spaces = '  ';
+
+do #args[0] as html
+{
+BEFORE:   $indent = 0;
+AFTER:    flush;
+&lt;table>:  println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+&lt;/table>: --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+&lt;tbody>:  println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+&lt;tr>:     println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+&lt;/tr>:    --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+&lt;td>:     println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+          ++$indent;
+&lt;/td>:    --$indent;
+          println $spaces {$indent}, $_, ' ', $_.getRow(), ' ', $_.getColumn();
+}
+</pre></td></tr></table></body></html>

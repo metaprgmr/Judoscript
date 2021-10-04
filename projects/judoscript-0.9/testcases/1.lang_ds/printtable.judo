@@ -1,0 +1,9 @@
+a = new TableData('Name', 'Language Type', 'Birthday');
+a.add('Java',       'System',    Date(1996,5,23))
+ .add('JudoScript', 'Scripting', Date(2001,11,16));
+
+println 'Language  | Type      | Birthday';
+println '----------+-----------+---------';
+printTable a for column(0) :<10!, '| ',
+                 column('Language Type') :<10!, '| ',
+                 column('Birthday').fmtDate('yyyy-MM');

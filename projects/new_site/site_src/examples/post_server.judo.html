@@ -1,0 +1,42 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/2.ess_net_httpserver/post_server.judo:</b></td></tr><tr><td><pre>
+usage {
+  author  = 'James Huang';
+  created = '2003-03-01';
+  desc    = [[*
+    This program is a HTTP server that displays a HTML form
+    with POST. It prints out all the form variables. Change
+    method to GET for a test as well.
+
+    Note that when one box is checked, a string is returned;
+    if multiple ones are checked, an array is returned.
+  *]];
+}
+
+println &lt;err> 'Port: 8088';
+ss = startServer(8088);
+while { start thread testPost(acceptHttp(ss)); }
+
+thread testPost a {
+  params = a.parseFormVars();
+  for x in params.keys() {
+    println x :>10, ' = ', params.(x);
+  }
+
+  a.'Content-Type' = 'text/html';
+  os = a.getTextOutput();
+  flush &lt;os> [[*
+    &lt;html>&lt;body>
+    &lt;form action="myform" method="POST">
+    &lt;input name="Name" value="J. S. Bach"> &lt;br>
+    &lt;input type=checkbox name=List value="item 1"> Item 1&lt;br>
+    &lt;input type=checkbox name=List value="item 2"> Item 2&lt;br>
+    &lt;input type=checkbox name=List value="item 3"> Item 3&lt;br>
+    &lt;input type=checkbox name=List value="item 4"> Item 4&lt;br>
+    &lt;input type=submit>
+    &lt;/form>
+    &lt;/body>&lt;/html>
+  *]];
+  os.close();
+}
+</pre></td></tr></table></body></html>

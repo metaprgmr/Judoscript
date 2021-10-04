@@ -1,0 +1,17 @@
+<function sig="getName">
+  Returns the name of this tag. For end tag, it starts with "/".
+</function>
+
+<function sig="getRow">
+  Returns the line number of this tag in the source.
+</function>
+
+<function sig="getColumn">
+  Returns the column number of this tag in the source.
+</function>
+
+<function sig="isClosed">
+  Returns <!true> if this tag is closed. This can either be an end tag
+  or a self-closed tag.
+</function>
+

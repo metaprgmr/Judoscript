@@ -1,0 +1,12 @@
+call j LabelDemo.judo
+call j TopLevelDemo.judo
+call j ButtonDemo.judo
+call j SliderDemo.judo
+call j MenuDemo.judo
+call j ToolBarDemo.judo
+call j SimplestGUI.judo
+call j TreeDemo.judo
+call j CheckBoxDemo.judo
+call j TabbedPaneDemo.judo
+call j SimpleTableDemo.judo
+call j ScrollDemo.judo

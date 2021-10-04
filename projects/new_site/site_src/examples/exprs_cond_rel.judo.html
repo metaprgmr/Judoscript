@@ -1,0 +1,30 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/1.lang_vals/exprs_cond_rel.judo:</b></td></tr><tr><td><pre>
+println '   a = ', a = 1;
+println '   b = ', b = 'XYZ';
+println '   c = ', c = 'text';
+println "A) c != 'text' ? a : b = ", c!='text' ? a : b;
+println "   c == 'text' ? a : b = ", c=='text' ? a : b;
+println 'B) a1 = ', a1 = 4;
+println '   0 &lt; a1 &lt; 5: ',  (0 &lt; a1 &lt; 5).fmtBool();
+println '   0 &lt; a1 &lt; 3: ',  (0 &lt; a1 &lt; 3).fmtBool();
+println 'C) a2 = ', a2 = 3;
+println '   a &lt; a1 > a2: ', (a &lt; a1 > a2).fmtBool();
+println '   a > a1 &lt; a2: ', (a > a1 &lt; a2).fmtBool();
+println '   a2 = ', a = 2;
+println '   b = ', b = 2.5;
+println 'D) ', a > b ? '2 > 2.5' : 'NOT 2 > 2.5';
+println '   b = ', b = '10';
+println 'E) ', a &lt; b ? "2 &lt; '10'" : "NOT 2 &lt; '10'";
+println 'F) ', b &lt;= a ? "'10' &lt;= 2" : "NOT '10' &lt;= 2";
+println 'G) ', b > '11' ? "'10' > '11'" : "NOT '10' > '11'";
+println 'H) ', b >= '11' ? "'10' >= '11'" : "NOT '10' >= '11'";
+println 'I) ', b >= '10' ? "'10' >= '10'" : "NOT '10' >= '10'";
+println 'J) ', b != '10' ? "'10' != '10'" : "NOT '10' != '10'";
+println 'K) ', b == '10' ? "'10' == '10'" : "NOT '10' == '10'";
+println '   a1 = ', a1;
+println '   a2 = ', a2;
+println 'L) a1 | 0x02 = ', a1 | 0x02 ;
+println 'M) a2 &amp; 0x02 = ', a2 &amp; 0x02 ;
+println 'N) a2 ^ 0x02 = ', a2 ^ 0x02 ;
+</pre></td></tr></table></body></html>

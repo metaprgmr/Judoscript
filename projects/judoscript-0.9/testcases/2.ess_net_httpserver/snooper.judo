@@ -1,0 +1,51 @@
+println <err> [[*
+  Connect with a browser at
+
+    http://localhost:8088/snoop/abc?a=1&b=2
+
+  It returns a HTML page that echoes all the request information.
+
+*]];
+
+ss = startServer(8088);
+while {
+  start thread snooper(acceptHttp(ss));
+}
+
+thread snooper a {
+  path = a.getPath();
+  if path.indexOf('snoop') < 0 {
+    a.serveFile();
+    return;
+  }
+  a.'Content-Type' = 'text/html';
+  os = a.getTextOutput();
+  flush <os> [[*
+    <html><body>
+    <h1>Snooper Server</h1>
+    <table>
+    <tr><td>&nbsp;</td><td>&nbsp;&nbsp;</td><td><em>Request URI Parts</em></td></tr>
+    <tr><td><b>Server Name</b></td><td></td><td>(* a.getServerName() *)</td></tr>
+    <tr><td><b>Server Port</b></td><td></td><td>(* a.getServerPort() *)</td></tr>
+    <tr><td><b>URI</b></td><td></td><td>(* a.getUrl() *)</td></tr>
+    <tr><td><b>Host</b></td><td></td><td>(* a.getHost() *)</td></tr>
+    <tr><td><b>Port</b></td><td></td><td>(* a.getPort() *)</td></tr>
+    <tr><td><b>Domain</b></td><td></td><td>(* a.getDomain() *)</td></tr>
+    <tr><td><b>Path</b></td><td></td><td>(* a.getPath() *)</td></tr>
+    <tr><td><b>File</b></td><td></td><td>(* a.getFile() *)</td></tr>
+    <tr><td><b>Query String</b></td><td></td><td>(* a.getQuery() *)</td></tr>
+    <tr><td><b>Ref</b></td><td></td><td>(* a.getRef() *)</td></tr>
+    <tr><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td><em>Request Headers</em></td></tr>
+  *]];
+  for x in a.getAllHeaders() {
+    flush <os> [[* <tr><td nowrap><b>(* x *)</b></td><td></td><td>(* a.(x) *)</td></tr> *]];
+  }
+  flush <os> '<tr><td></td><td></td><td><em>Cookies</em></td></tr>';
+  for x in a.getCookies() {
+    flush <os> [[* <tr><td><b>(* x.getName() *)</b></td><td></td><td>(* x.getValue() *)</td></tr> *]];
+  }
+
+  flush <os> '</table></body></html>';
+  os.close();
+}

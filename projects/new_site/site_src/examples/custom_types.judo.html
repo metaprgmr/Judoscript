@@ -1,0 +1,69 @@
+<html><body style="margin-left:0px;margin-top:0px;margin-right:0px"><table width=100% border=0 cellpadding=10 cellspacing=0><tr><td bgcolor=#CCCCCC><b>
+testcases/3.app_wsdl/custom_types.judo:</b></td></tr><tr><td><pre>
+usage {
+  desc = [[*
+    This test program runs against the Apache Axis sample web service,
+    "echo", which has the following operations:
+
+      * echoString
+      * echoNormalizedString
+      * echoToken
+      * echoInteger
+      * echoFloat
+      * echoUnsignedLong
+      * echoUnsignedInt
+      * echoUnsignedShort
+      * echoUnsignedByte
+      * echoNonNegativeInteger
+      * echoPositiveInteger
+      * echoNonPositiveInteger
+      * echoNegativeInteger
+      * echoBase64
+      * echoHexBinary
+      * echoDecimal
+      * echoBoolean
+      * echoDate
+      * echoMap
+      * echoVoid
+
+      * echoStringArray          -- here
+      * echoIntegerArray         -- here
+      * echoFloatArray           -- here
+      * echo2DStringArray        -- here
+      * echoMapArray             -- here
+      * echoStruct               -- here
+      * echoStructArray          -- here
+      * echoStructAsSimpleTypes  -- here
+      * echoSimpleTypesAsStruct  -- here
+      * echoNestedStruct         -- here
+      * echoNestedArray          -- here
+  *]];
+  author = 'James Huang';
+  created = '2004-11-20';
+}
+
+//
+// The WSDL:
+//
+wsdl = wsdl::'http://localhost:8080/axis/services/echo?wsdl';
+
+string2d    = [ [ 'a', 'b' ], [ 'A', 'B' ] ];
+mapArray    = [ new Object( alfa=1 ), new Object( beta='xyz' ) ];
+soapStruct  = { varString='xyz', varInt=1, varFloat=1.01 };
+structArray = [ soapStruct, soapStruct ];
+soapStruct1 = { varString='xyz', varInt=1, varFloat=1.01, varStruct=soapStruct };
+soapStruct2 = { varString='xyz', varInt=1, varFloat=1.01, varArray=[ 'x', 'y' ]};
+
+println 'echoStringArray:         ', wsdl.echoStringArray( [ 'o', 'p', 'q' ] );
+println 'echoIntegerArray:        ', wsdl.echoIntegerArray( [ 10, 20, 30 ] );
+println 'echoFloatArray:          ', wsdl.echoFloatArray( [ 1.01, 2.02, 3.03 ] );
+println 'echo2DStringArray:       ', wsdl.echo2DStringArray( string2d );
+println 'echoMapArray:            ', wsdl.echoMapArray( mapArray );
+println 'echoStruct:              ', wsdl.echoStruct( soapStruct );
+println 'echoStructArray:         ', wsdl.echoStructArray( structArray );
+println 'echoNestedStruct:        ', wsdl.echoNestedStruct( soapStruct1 );
+println 'echoNestedArray:         ', wsdl.echoNestedArray( soapStruct2 );
+println 'echoSimpleTypesAsStruct: ', wsdl.echoSimpleTypesAsStruct( 'xyz', 1, 1.01 );
+println 'echoStructAsSimpleTypes: ', wsdl.echoStructAsSimpleTypes( soapStruct );
+
+</pre></td></tr></table></body></html>

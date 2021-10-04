@@ -1,0 +1,189 @@
+/*
+    In each of the directories, there is a 'qa.list' SGML file.
+    Each is like:
+
+    <script name="Xyz.judo"                              -- required.
+            type="auto|manin|man"                        -- default "auto".
+            input="..."                                  -- command-line; default none.
+            output="stdout:var;stderr:var;file[foo]:var" -- if var, is constant.
+    >
+*/
+
+listTestables();
+
+function listTestables {
+  len = ('${.}').length() + 1;
+
+  list '1*.judo,1*.htmx,2*.judo,2*.htmx'
+       except '*jdbc*'
+       recursive fileOnly;
+
+  for x in $$fs_result.sort() {
+    . '  ', x.substring(len);
+  }
+}
+
+
+EndScript -------------------------------------------------
+
+# Instructions:
+#
+# +  -- run with consistent result
+# ?  -- run with volatile result
+# !  -- run with interaction and no result
+# *  -- custom run.
+
++ 1.1-core-basics/datastruct/array_convert.judo
++ 1.1-core-basics/datastruct/array_init.judo
++ 1.1-core-basics/datastruct/arrays.judo
++ 1.1-core-basics/datastruct/custom_sort.judo
++ 1.1-core-basics/datastruct/dfs_bfs.judo
++ 1.1-core-basics/datastruct/filter.judo
++ 1.1-core-basics/datastruct/in_memory_query.judo
++ 1.1-core-basics/datastruct/john_son.judo
++ 1.1-core-basics/datastruct/linkedlist.judo
++ 1.1-core-basics/datastruct/obj_basics.judo
++ 1.1-core-basics/datastruct/orderedmap.judo
++ 1.1-core-basics/datastruct/printtable.judo
++ 1.1-core-basics/datastruct/queue.judo
++ 1.1-core-basics/datastruct/set.judo
++ 1.1-core-basics/datastruct/stack.judo
++ 1.1-core-basics/datastruct/struct.judo
++ 1.1-core-basics/datastruct/tabledata.judo
++ 1.1-core-basics/datastruct/treeNode.judo
++ 1.1-core-basics/datastruct/treeOfDirs.judo
++ 1.1-core-basics/datastruct/value_sort.judo
++ 1.1-core-basics/eval/eval.judo
+  1.1-core-basics/eval/new_pricing.judo
+  1.1-core-basics/eval/value_types.judo
+  1.1-core-basics/lang/assert_test.judo
++ 1.1-core-basics/lang/base64.judo
++ 1.1-core-basics/lang/cond_inc.judo
++ 1.1-core-basics/lang/const.judo
++ 1.1-core-basics/lang/conversions.judo
+? 1.1-core-basics/lang/date_attr.judo
++ 1.1-core-basics/lang/dyn_vars.judo
++ 1.1-core-basics/lang/excpt_test.judo
++ 1.1-core-basics/lang/exprs_arith.judo
++ 1.1-core-basics/lang/exprs_cond_rel.judo
++ 1.1-core-basics/lang/exprs_inc_dec.judo
++ 1.1-core-basics/lang/exprs_unary.judo
++ 1.1-core-basics/lang/fxn_basics.judo
++ 1.1-core-basics/lang/fxn_default_params.judo
++ 1.1-core-basics/lang/fxn_var.judo
++ 1.1-core-basics/lang/fxn_var_param_list.judo
++ 1.1-core-basics/lang/hanoi.judo
++ 1.1-core-basics/lang/heredoc.judo
++ 1.1-core-basics/lang/lambda.judo
++ 1.1-core-basics/lang/number_methods.judo
++ 1.1-core-basics/lang/parse_url.judo
++ 1.1-core-basics/lang/simple_vars.judo
++ 1.1-core-basics/lang/stmt_for.judo
++ 1.1-core-basics/lang/stmt_if.judo
++ 1.1-core-basics/lang/stmt_switch.judo
++ 1.1-core-basics/lang/stmt_while.judo
++ 1.1-core-basics/lang/string_methods.judo
++ 1.1-core-basics/lang/string_replace.judo
+  1.1-core-basics/lang/unix_run.judo
++ 1.1-core-basics/lang/var_scope.judo
+  1.1-core-basics/thread/locks.judo
+  1.1-core-basics/thread/producer_consumer.judo
+  1.2-core-essentials/copy_archive_fs/copy_tests.judo
+  1.2-core-essentials/copy_archive_fs/copy_transform.judo
+  1.2-core-essentials/copy_archive_fs/create_flagship_tree.judo
+  1.2-core-essentials/copy_archive_fs/dirsizes.judo
+  1.2-core-essentials/copy_archive_fs/emu_build.judo
+  1.2-core-essentials/copy_archive_fs/list.judo
+  1.2-core-essentials/copy_archive_fs/remove_flagship_tree.judo
+  1.2-core-essentials/copy_archive_fs/rename.judo
+  1.2-core-essentials/env_sys/cmdline.judo
+? 1.2-core-essentials/env_sys/sysprops.judo
++ 1.2-core-essentials/exec/exit_code.judo
++ 1.2-core-essentials/exec/in_out.judo
+! 1.2-core-essentials/exec/out2script.judo
+  1.2-core-essentials/exec/out_err.judo
++ 1.2-core-essentials/exec/pipe_script2in.judo
+  1.2-core-essentials/exec/redir.judo
+  1.2-core-essentials/exec/tee.judo
++ 1.2-core-essentials/exec/workdir_envvar.judo
+  1.2-core-essentials/file_and_io/countlines.judo
+  1.2-core-essentials/file_and_io/countlines1.judo
+  1.2-core-essentials/file_and_io/countlines_in_zip.judo
+  1.2-core-essentials/file_and_io/countlines_in_zip1.judo
+  1.2-core-essentials/file_and_io/encrypt.judo
+  1.2-core-essentials/file_and_io/encrypt_file.judo
+  1.2-core-essentials/file_and_io/file_status.judo
+  1.2-core-essentials/file_and_io/gzip_test.judo
+  1.2-core-essentials/file_and_io/input.judo
+! 1.2-core-essentials/file_and_io/readlines.judo
++ 1.2-core-essentials/file_and_io/sgml_entities.judo
++ 1.2-core-essentials/print_fmt/align.judo
++ 1.2-core-essentials/print_fmt/charvalue.judo
+? 1.2-core-essentials/print_fmt/date_formats.judo
+! 1.2-core-essentials/schedule/changing_time.judo
+  1.2-core-essentials/schedule/coocoo_clock.judo
+? 1.2-core-essentials/schedule/countdown.judo
+! 1.2-core-essentials/schedule/heart_beat.judo
++ 1.3-core-java/access.judo
+? 1.3-core-java/alias_javastatic.judo
++ 1.3-core-java/extend_absclass.judo
++ 1.3-core-java/extend_class.judo
++ 1.3-core-java/extend_class_itf.judo
++ 1.3-core-java/extend_itf.judo
++ 1.3-core-java/hashtable.judo
++ 1.3-core-java/java_array.judo
++ 1.3-core-java/javastatic.judo
+  1.4-core-embed_in_java/randgen.judo
+  2.2-apps-xml/dom/XML2JTree.judo
+  2.2-apps-xml/dom/create_president.judo
+  2.2-apps-xml/dom/dom_namespace.judo
+  2.2-apps-xml/dom/dom_traverse.judo
++ 2.2-apps-xml/dom/read_xml.judo
++ 2.2-apps-xml/sax/books.judo
+  2.2-apps-xml/sax/namespaces.judo
+  2.2-apps-xml/sax/sax2_events.judo
++ 2.2-apps-xml/sax/sax_events.judo
++ 2.2-apps-xml/sax/text_tags.judo
+  2.2-apps-xml/xslt/xslt.judo
+  2.2-apps-xml/xslt/xslt_copy.judo
+  2.2-apps-xml/xslt/xslt_from_dom.judo
+  2.2-apps-xml/xslt/xslt_local_src.judo
+  2.2-apps-xml/xslt/xslt_local_xsl.judo
+  2.2-apps-xml/xslt/xslt_query.judo
+  2.2-apps-xml/xslt/xslt_text_src.judo
+  2.2-apps-xml/xslt/xslt_to_out.judo
+  2.3-apps-sgml/body.htmx
+  2.3-apps-sgml/get_quotes.judo
+  2.3-apps-sgml/print_url.judo
+  2.3-apps-sgml/reproduce_html.judo
+  2.4-apps-internet/http_client/http_headers.judo
+  2.4-apps-internet/http_client/show_cookies.judo
+  2.4-apps-internet/http_server/http_proxy.judo
+  2.4-apps-internet/http_server/http_server.judo
+  2.4-apps-internet/http_server/mini_server.judo
+  2.4-apps-internet/http_server/snooper.judo
+  2.4-apps-internet/http_server/test_post.judo
+  2.4-apps-internet/mail/attach.judo
+  2.4-apps-internet/mail/sendmsg.judo
+  2.4-apps-internet/ssh_scp_ftp/ftp.judo
++ 2.5-apps-COM/ExcelTest.judo
++ 2.5-apps-COM/IETest.judo
++ 2.5-apps-COM/Outlook.judo
++ 2.5-apps-COM/VBScript.judo
++ 2.5-apps-COM/testEnum.judo
++ 2.5-apps-COM/testExcel.judo
++ 2.5-apps-COM/testJCom.judo
+  2.5-apps-COM/testWord.judo
+! 2.6-apps-javaGUI/ButtonDemo.judo
+! 2.6-apps-javaGUI/CheckBoxDemo.judo
+! 2.6-apps-javaGUI/LabelDemo.judo
+! 2.6-apps-javaGUI/MenuDemo.judo
+! 2.6-apps-javaGUI/MenuDemo1.judo
+! 2.6-apps-javaGUI/ScrollDemo.judo
+! 2.6-apps-javaGUI/SimpleTableDemo.judo
+! 2.6-apps-javaGUI/SimplestGUI.judo
+! 2.6-apps-javaGUI/SliderDemo.judo
+! 2.6-apps-javaGUI/TabbedPaneDemo.judo
+! 2.6-apps-javaGUI/ToolBarDemo.judo
+! 2.6-apps-javaGUI/TopLevelDemo.judo
+! 2.6-apps-javaGUI/TreeDemo.judo

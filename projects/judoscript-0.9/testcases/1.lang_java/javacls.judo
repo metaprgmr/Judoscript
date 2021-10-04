@@ -1,0 +1,6 @@
+CDim = java::java.awt.Dimension;
+println new :CDim(100,200);
+
+import java.awt.Dimension;
+const #Dimension = java::Dimension;
+println new #Dimension(100,200);

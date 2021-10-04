@@ -1,0 +1,9 @@
+a = LinkedList [ 'a', 'b', 'c' ];
+println a;
+
+b = new LinkedList( 1, 2, 3 );
+b.add(4);
+b.add(5);
+b.add(6);
+b.add(7);
+println b;

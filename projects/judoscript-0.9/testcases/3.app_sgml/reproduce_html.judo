@@ -1,0 +1,5 @@
+do 'http://www.google.com' as html // or 'as sgml'. To do case sensitive, add "case"
+{
+<!>, <>, :TEXT: print $_;
+:AFTER:         flush;
+}

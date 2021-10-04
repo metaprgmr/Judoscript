@@ -1,0 +1,34 @@
+<%
+  var title = 'Wikis and Weblogs';
+  var keywords = "judo, judoscript, jusp, juspt, jamaica, java scripting, jdbc scripting, hibernate scripting, xml scripting, html scraping, os shell scripting, shell scripting, soap scripting, web app, jusp platform, juspt transform, jvm bytecode, jvm macro assembler, bytecode assembler";
+  var tabID = 'judo';
+%>
+<%!include '../site_src/include/header.jusp' %>
+
+<%!leftPane%>
+
+<h2>Wiki, Weblog and Forum</h2>
+
+<p>Currently the major discussion forum is the <em>JudoScript</em> Yahoo!Group:</p>
+<br>
+<form method=GET action="http://groups.yahoo.com/subscribe/judoscript">
+<table cellspacing=0 cellpadding=0 border=0 bgcolor=#FFFFFF>
+<tr>
+  <td colspan=2 align=left class=secondary3>
+    <b>Subscribe to <a href="http://groups.yahoo.com/group/judoscript"><em>JUDOSCRIPT</em> Yahoo!Group</a></b>
+  </td>
+</tr>
+<tr>
+  <td class=secondary3>E-mail address:<br> <input type=text name="user" size=20></td>
+  <td height=10px>
+    <input type=image border=0 alt="Click here to join judoscript"
+     name="Click here to join judoscript" src="http://groups.yahoo.com/img/ui/join.gif">
+  </td>
+</tr>
+</table></form>
+
+<%!rightPane%>
+&nbsp;
+<%!endPanes%>
+
+<%!include '../site_src/include/footer.jusp' %>

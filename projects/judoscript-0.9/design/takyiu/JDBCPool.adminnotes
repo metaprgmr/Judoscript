@@ -1,0 +1,3 @@
+REM presumably creating on managed server but wound up in admin server!
+java weblogic.Admin -url t3://localhost:8001 -username system -password weblogic CREATE_POOL myPool props=user=PBPUBLIC;password=PBPUBLIC,maxCapacity=5,driver=com.pointbase.jdbc.jdbcUniversalDriver,url=jdbc:pointbase:server://loalhost/demo
+

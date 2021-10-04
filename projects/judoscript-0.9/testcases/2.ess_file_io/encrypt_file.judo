@@ -1,0 +1,12 @@
+infile   = getScriptPath();
+tempfile = infile.getFilePath() + '/baseline/alfa.enc';
+outfile  = infile.getFilePath() + '/baseline/alfa.dec';
+
+encryptFile 'password', infile, tempfile;
+decryptFile 'password', tempfile, outfile;
+
+if infile.fileSize() == outfile.fileSize() {
+  println 'Encryptiong/decryption succeeded!';
+} else {
+  println 'Encryptiong/decryption failed!';
+}

@@ -1,0 +1,26 @@
+<NOTE title="Weblogic JMX" url="http://e-docs.bea.com/wls/docs70/jmx/overview.html">
+
+Weblogic server = managed resources + managed beans
+
+Weblogic server beans = configuration MBeans + runtime MBeans
+
+
+<SECTION title="Configuration MBeans">
+
+The admin server hosts all the configuration MBeans for all managed
+resources on all server instances.
+
+The admin server also saves changes to these beans.
+
+Configuration MBeans in the admin server are copied to each managed
+server. The replicas are called local configuration MBeans.
+
+The Life Cycle of Configuration MBeans
+1. Admin server starts by reading 'config.xml', and all config mbeans
+   are initialized.
+2. When a managed server starts, it
+
+
+</SECTION title="Configuration MBeans">
+
+</NOTE>

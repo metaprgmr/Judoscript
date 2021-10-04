@@ -1,0 +1,6 @@
+exec 'java test.ToLower' needSystemIn
+output {
+  while (line = readPipe()) != eof {
+    println '  #', loopIndex()+1, ': ', line;
+  }
+}

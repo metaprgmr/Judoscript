@@ -1,0 +1,13 @@
+a = new java::Papa, Mama, Foo {
+  void playBall() {
+    println 'Make a few dents!';
+  }
+  void singSong() {
+    println 'Utter some sound.';
+  }
+};
+
+a.playBall();
+a.singSong();
+
+println "Height: " + a.height();

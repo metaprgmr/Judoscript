@@ -1,0 +1,13 @@
+usage {
+  author  = 'James Huang';
+  created = '2001-08-11';
+  desc    = 'Creates and uses a few function aliases for static Java methods.';
+}
+
+function prop for java.lang.System::getProperty();
+function now  for java.lang.System::currentTimeMillis();
+function rt   for java.lang.Runtime::getRuntime();
+
+println now(), nl;
+println prop('java.class.path'), nl;
+rt().gc();

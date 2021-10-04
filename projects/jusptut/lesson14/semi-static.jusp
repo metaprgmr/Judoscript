@@ -1,0 +1,14 @@
+<%@page isStatic="true" refresh="10" %>
+<html>
+<head><title>A Semi-Static Page</title>
+<body>
+<h1>A Semi-Static Page</h1>
+
+<p>View <%!viewsrc 'lesson14/semi-static.jusp', '../' %></p>
+
+<p><em>This is a semi-static page, cache refreshed every 10 seconds.</em></p>
+
+<p>Generated at <%= Date().fmtDate('yyyy-MM-dd hh:mm:ss') %></p>
+
+<hr><font size=-1>Back to <a href="../lesson14.jusp">lesson 14</a></font>
+</body></html>

@@ -1,0 +1,44 @@
+<doc title="Value Objects" author="James Jianbo Huang"
+ created="February 2003"
+ keywords="JudoScript, Java Scripting language, scripting language for Java, object"
+>
+
+<sectiondefs>
+<sectiondef name="intro" caption="Introduction">
+<sectiondef name="list"  caption="List Of Object Types">
+</sectiondefs>
+
+<abstract>
+<J> is a object-based language. Every value in <J> is an object. This article lists
+all possible categories of value objects in tabular format for quick reference.
+</abstract>
+</doc>
+
+
+<section name=intro>
+
+<p>
+
+</p>
+
+
+<section name=list>
+
+<displayTable captions='Object Type,Category,Meaning,Creation'>
+
+<displayRow>
+primitive
+<displayNext>
+built-in
+<displayNext>
+
+<displayNext>
+<pre>
+x = 100;
+x = 2.5;
+x = 'abcd';
+x = date(2003,3,15);
+</pre>
+</displayRow>
+
+</displayTable>

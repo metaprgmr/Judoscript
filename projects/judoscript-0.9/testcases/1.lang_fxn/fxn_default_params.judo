@@ -1,0 +1,14 @@
+// Default values in a function
+function foo a, b=1 { return a + b; }
+println foo(3);
+
+// Default values in a method
+class MyCls {
+  function foo a, b=alfa { // alfa should be a data member.
+    return a + b;
+  }
+}
+
+a = new MyCls( alfa = 9 );
+a.alfa = 100;
+println a.foo(3);

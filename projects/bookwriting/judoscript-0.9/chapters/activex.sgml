@@ -1,0 +1,95 @@
+<notyet href="../../../articles/activex.html">
+
+
+<!--===============================================================-->
+<section1 title="Microsoft ActiveX/COM Background" id="activex" status="red">
+
+<!------------------------------------->
+<section2 title="Introduction to COM and ActiveX" id="activex_1">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="IDispatch" id="activex_2">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="IEnumVARIANT" id="activex_3">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Type Library" id="activex_4">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Introduction to ActiveX Control" id="activex_5">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="ActiveX Control Data Types" id="activex_6">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="ActiveX Control Methods and Properites" id="activex_7">
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="ActiveX Control Events" id="activex_8">
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+
+<!--===============================================================-->
+<section1 title="ActiveX and Java" id="jactivex" status="red">
+
+<!------------------------------------->
+<section2 title="Scripting ActiveX Controls with Java" id="jactivex_1">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Thoughts about COM/ActiveX, Java and Platforms" id="jactivex_2">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+
+
+<!--===============================================================-->
+<section1 title="Scripting ActiveX Controls with Judo" id="judoax" status="red">
+
+<!------------------------------------->
+<section2 title="Obtain ActiveX Controls" id="judoax_1">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Access ActiveX Control Properties" id="judoax_2">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Invoke ActiveX Control Methods" id="judoax_3">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Control the Reference Counts" id="judoax_4">
+
+</section2><!--------------------------->
+
+<!------------------------------------->
+<section2 title="Use the IEnumVARIANT Interface" id="judoax_5">
+
+</section2><!--------------------------->
+
+</section1><!--=====================================================-->
+
+<!--===============================================================-->
+<section1 title="Use ADO to Access Databases" id="ado" status="red">
+
+
+</section1><!--=====================================================-->
+

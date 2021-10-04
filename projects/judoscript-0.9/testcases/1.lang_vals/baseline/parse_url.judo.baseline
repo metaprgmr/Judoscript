@@ -1,0 +1,96 @@
+-----------------------------------------------
+            URL: http://localhost:8080/articles/developer.html#top
+           root: http://localhost:8080
+       protocol: http
+         domain: localhost:8080
+           host: localhost
+           port: 8080
+           path: /articles/developer.html
+      file_name: developer.html
+   query_string: 
+            ref: top
+constructed URL: http://localhost:8080/articles/developer.html#top
+-----------------------------------------------
+            URL: http://localhost/cgi-bin/check.pl?id=1234&sess=abc
+           root: http://localhost
+       protocol: http
+         domain: localhost
+           host: localhost
+           port: 
+           path: /cgi-bin/check.pl
+      file_name: check.pl
+   query_string: id=1234&sess=abc
+            ref: 
+constructed URL: http://localhost/cgi-bin/check.pl?id=1234&sess=abc
+-----------------------------------------------
+            URL: /index.html
+           root: 
+       protocol: 
+         domain: 
+           host: 
+           port: 
+           path: /index.html
+      file_name: index.html
+   query_string: 
+            ref: 
+constructed URL: /index.html
+-----------------------------------------------
+            URL: index.html
+           root: 
+       protocol: 
+         domain: 
+           host: 
+           port: 
+           path: index.html
+      file_name: index.html
+   query_string: 
+            ref: 
+constructed URL: index.html
+-----------------------------------------------
+            URL: 
+           root: 
+       protocol: 
+         domain: 
+           host: 
+           port: 
+           path: 
+      file_name: 
+   query_string: 
+            ref: 
+constructed URL: 
+-----------------------------------------------
+            URL: /
+           root: 
+       protocol: 
+         domain: 
+           host: 
+           port: 
+           path: /
+      file_name: 
+   query_string: 
+            ref: 
+constructed URL: /
+-----------------------------------------------
+            URL: http://www.judoscript.com
+           root: http://www.judoscript.com
+       protocol: http
+         domain: www.judoscript.com
+           host: www.judoscript.com
+           port: 
+           path: /
+      file_name: 
+   query_string: 
+            ref: 
+constructed URL: http://www.judoscript.com/
+-----------------------------------------------
+            URL: images/bg.gif
+           root: 
+       protocol: 
+         domain: 
+           host: 
+           port: 
+           path: images/bg.gif
+      file_name: bg.gif
+   query_string: 
+            ref: 
+constructed URL: images/bg.gif

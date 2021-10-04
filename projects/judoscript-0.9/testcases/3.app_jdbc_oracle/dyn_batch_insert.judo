@@ -1,0 +1,24 @@
+!include 'setup/connect.judi'
+
+db::sql: DELETE FROM emp WHERE emp_no IN (106, 107);
+
+rows = [
+  [ 'Chrinstine', 'Lin',     '24-5-1985', 50250.0 ],
+  [ 'John',       'Johnson', '13-7-1978', 45200.0 ],
+];
+id = 106; // start value.
+
+batch = createBatch(); // use $$con
+for row in rows {
+  db::addBatch to batch:
+    INSERT INTO emp(emp_no,first_name,last_name,birth_date,salary)
+    VALUES ( (* id++ *), '(* row[0] *)', '(* row[1] *)',
+           to_date('(* row[2] *)','dd-mm-yyyy'), (* row[3] *) )
+  ;
+}
+println 'batch size before run: ', batch.size;
+res = batch.execute();
+println 'batch size after run:  ', batch.size, nl,
+        'executeBatch results = ', res;
+
+db::disconnect();
