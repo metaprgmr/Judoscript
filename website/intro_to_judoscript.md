@@ -12,7 +12,7 @@ Expressions can be embedded in the domain-specific statements wherever appropria
 ## Language features I: a potent scripting language
 
 ### The Base language
-The Judoscript base language is almost identical to JavaScript for variable and constant declarations, flow control statements, and dot notation for accessing object members. In addition to the two C++-style comments, it has a third form, <code>/? ?/</code>, useful to disable a chunk of code. Function parameters can have default values, and invocation can take named parameter values. Like in JavaScript, functions are also objects and can be passed as values. Dynamic programming is available via the <code>eval</code> and <code>evalExternal</code> commands.[\[1\]](./judoscript.com-v2/books/judoscript-0.9/chapters/basic.html) [\[2\]](./judoscript.com-v2/books/judoscript-0.9/chapters/datatypes.html) [\[3\]](./judoscript.com-v2/books/judoscript-0.9/chapters/flow.html)
+The Judoscript base language is almost identical to JavaScript for variable and constant declarations, flow control statements, and dot notation for accessing object members. In addition to the two C++-style comments, it has a third form, <code>/? ?/</code>, useful to disable a chunk of code. Function parameters can have default values, and invocation can take named parameter values. Like in JavaScript, functions are also objects and can be passed as values. Dynamic programming is available via the <code>eval</code> and <code>evalExternal</code> commands. [\[1\]](./judoscript.com-v2/books/judoscript-0.9/chapters/basic.html) [\[2\]](./judoscript.com-v2/books/judoscript-0.9/chapters/datatypes.html) [\[3\]](./judoscript.com-v2/books/judoscript-0.9/chapters/flow.html)
 
 ### Object oriented programming
 Unlike JavaScript, user-defined classes are declared statically, but the data members are dynamic. Multiple inheritance is supported, and programmers should handle potential diamond inheritance issues. Class instances can be transposed to another type. [\[4\]](./judoscript.com-v2/articles/fxn_cls_etc.html)
@@ -131,7 +131,7 @@ f.setVisible(true);
 This part of the language is what makes Judoscript unique. Each major domain support will be touched on briefly, usually with examples.
 
 ### JDBC scripting
-JDBC scripting is a central feature of Judoscript, as well as a key motivation for the language itself. It makes database operations intuitive and conveient.[\[6\]](./judoscript.com-v2/books/judoscript-0.9/chapters/jdbc.html)
+JDBC scripting is a central feature of Judoscript, as well as a key motivation for the language itself. It makes database operations intuitive and conveient. [\[6\]](./judoscript.com-v2/books/judoscript-0.9/chapters/jdbc.html)
 
 Below is an example that connects to database and runs some SQL statements.
 
@@ -212,7 +212,7 @@ while qry.next() {
 </pre>
 
 ### SGML and XML document processing
-SGML is the generic hypertext format that includes HTML and XML. There are two APIs for processing XML documents: [[Simple API for XML]] (or SAX), and [[Document Object Model]] (or DOM). SAX processing scans the whole text as a stream, and fires events for each encountered tag or text segment. Judoscript has a cute little statement that makes use of this feature effectively for XML and SGML data.[\[7\]](./judoscript.com-v2/articles/xml.html) [\[8\]](./judoscript.com-v2/articles/http_html.html)
+SGML is the generic hypertext format that includes HTML and XML. There are two APIs for processing XML documents: [[Simple API for XML]] (or SAX), and [[Document Object Model]] (or DOM). SAX processing scans the whole text as a stream, and fires events for each encountered tag or text segment. Judoscript has a cute little statement that makes use of this feature effectively for XML and SGML data. [\[7\]](./judoscript.com-v2/articles/xml.html) [\[8\]](./judoscript.com-v2/articles/http_html.html)
 
 The next example shows the essence of HTML scraping. With this, writing a web site crawler is not far from reality!
 
@@ -380,3 +380,13 @@ There are many supporting libraries included in the language runtime; some are f
 11. [Judoscript SOAP Web Service Scripting](./judoscript.com-v2/books/judoscript-0.9/chapters/wsdl.html)
 12. [Judoscript Schedule, Execute, E-Mail, SSH, SCP](./judoscript.com-v2/articles/sched_exec_mail.html)
 13. [Judoscript COM Scripting](./judoscript.com-v2/articles/activex.html)
+
+
+## Quick Links
+
+* [The Story and Philosophy of Judoscript](./story_philosophy.md)
+* [Reflections on _the Judoscript Idea_](./judoscript_idea_reflections.md)
+* Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
+* Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
+* [Building the language software and website](./build_judoscript_website.md)
+* The [Home page](./)

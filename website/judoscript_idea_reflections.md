@@ -15,3 +15,12 @@ Another concern is usability and learning curve. For an API-based language, at l
 Declarative programming within an algorithmic base language certainly has its power. The question is how far a language should go. A common approach in practical language designs is to adopt a small number of very carefully chosen domains with declarative programming, and leave others to APIs. Database is always a prominent candidate, such as in SQR, Oracle's Pro*C, Salesforce's Apex, etc.; this becomes especially powerful if the language owner also controls the embedded query languages. That is why it is common for software vendors to include their own proprietary languages.
 
 As for a general purpose language with many domain-specific support, Judoscript remains the only one to date. Groovy and its maker, JavaSoft, have undergone drastic changes just a few years later; if the author of Judoscript could foresee such changes, perhaps he would have continued Judoscript's growth path, and we would have data to convince ourselves, either way, whether _the Judoscript idea_ is a good one or not.
+
+## Quick Links
+
+* [The Story and Philosophy of Judoscript](./story_philosophy.md)
+* [Introduction to the Judoscript Language](./intro_to_judoscript.md)
+* Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
+* Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
+* [Building the language software and website](./build_judoscript_website.md)
+* The [Home page](./)

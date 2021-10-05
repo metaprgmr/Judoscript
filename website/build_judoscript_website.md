@@ -66,8 +66,7 @@ This is the earlier one. The key to remember is that _articles_ and _references_
 5. <code>cd projects/judoscript-0.9/buildtools/</code>, run <code>judo all</code>, "Ship It!".
 6. <code>cd projects/judoscript.com/buildtools/</code>, run <code>judo build</code>, "Build Pages", again.
 
-## The live sites in this Museum
-
+## Quick Links
 * Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
 * Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
 * The [Home page](./)

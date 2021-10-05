@@ -30,3 +30,13 @@ The design of Judoscript demonstrates Huang's ideal of this _using_ aspect of sc
 To further his belief in the _using_ nature of Judoscript, Huang even discourages people from creating libraries written in Judoscript. "Reusable libraries should be written in Java, for Judoscript (or any Java scripting languages) to use," he advocated.
 
 For the sake of nomenclature, the term _domain_ used here is limited to common programming techniques in Information Technology, not application domains such as simulation of real world or virtual worlds, specific scientific areas, or huge computing service engines, etc. There is a loosely defined term, fourth-generation programming language or 4GL. SQR claims to be a 4GL; Judoscript would fit even better.
+
+
+## Quick Links
+
+* [Introduction to the Judoscript Language](./intro_to_judoscript.md)
+* [Reflections on _the Judoscript Idea_](./judoscript_idea_reflections.md)
+* Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
+* Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
+* [Building the language software and website](./build_judoscript_website.md)
+* The [Home page](./)
