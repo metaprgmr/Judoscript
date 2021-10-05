@@ -216,44 +216,44 @@ SGML is the generic hypertext format that includes HTML and XML. There are two A
 
 The next example shows the essence of HTML scraping. With this, writing a web site crawler is not far from reality!
 
-<syntaxhighlight lang="html4strict">
+<pre>
 do 'http://www.judoscript.org' as sgml {
-    <a>:  if $_.href != null { println 'Found a hyperlink:', $_.href; }
-    <p>:  println 'Found a paragraph tag.';
+    &lt;a>:  if $_.href != null { println 'Found a hyperlink:', $_.href; }
+    &lt;p>:  println 'Found a paragraph tag.';
     TEXT: println 'Found some text:', $_.length();
 }
-</syntaxhighlight>
+</pre>
 
 The following example processes the XML data that is appended at the end of the script.
-<syntaxhighlight lang="html4strict">
+<pre>
 do $$local as xml
 {
-<book>:       println ($_.hardcover=='true')?"Hard":"Soft", '-cover Book ------------';
-<date>TEXT:   println '  Date: ', $_, ' (', $_.type, ')';
-<title>TEXT:  println ' Title: ', $_;
-<author>TEXT: println 'Author: ', $_;
-<isbn>TEXT:   println '  ISBN: ', $_;
+&lt;book>:       println ($_.hardcover=='true')?"Hard":"Soft", '-cover Book ------------';
+&lt;date>TEXT:   println '  Date: ', $_, ' (', $_.type, ')';
+&lt;title>TEXT:  println ' Title: ', $_;
+&lt;author>TEXT: println 'Author: ', $_;
+&lt;isbn>TEXT:   println '  ISBN: ', $_;
 }
 EndScript -------------------------------------------------------
-<booklist>
- <book>
-  <title> UNIX in a Nutshell </title>
-  <author> Daniel Gilly </author>
-  <publisher> O&apos;Reilly &amp; Associates, Inc. </publisher>
-  <isbn> 1-56592-001-5 </isbn>
-  <date type="first edition"> 1986-12 </date>
-  <date type="second edition"> 1992-06 </date>
- </book>
- <book hardcover="true">
-  <title> Advanced Programming in the UNIX Environment </title>
-  <author> Richard Stevens </author>
-  <publisher> Addison-Wesley </publisher>
-  <isbn> 0-201-56317-7 </isbn>
-  <date type="copyright"> 1993 </date>
-  <date type="twelfth printing"> 1996-12 </date>
- </book>
-</booklist>
-</syntaxhighlight>
+&lt;booklist>
+ &lt;book>
+  &lt;title> UNIX in a Nutshell &lt;/title>
+  &lt;author> Daniel Gilly &lt;/author>
+  &lt;publisher> O&apos;Reilly &amp; Associates, Inc. &lt;/publisher>
+  &lt;isbn> 1-56592-001-5 &lt;/isbn>
+  &lt;date type="first edition"> 1986-12 &lt;/date>
+  &lt;date type="second edition"> 1992-06 &lt;/date>
+ &lt;/book>
+ &lt;book hardcover="true">
+  &lt;title> Advanced Programming in the UNIX Environment &lt;/title>
+  &lt;author> Richard Stevens &lt;/author>
+  &lt;publisher> Addison-Wesley &lt;/publisher>
+  &lt;isbn> 0-201-56317-7 &lt;/isbn>
+  &lt;date type="copyright"> 1993 &lt;/date>
+  &lt;date type="twelfth printing"> 1996-12 &lt;/date>
+ &lt;/book>
+&lt;/booklist>
+</pre>
 
 Judoscript also supports DOM and XSLT processing of XML documents.
 
@@ -262,18 +262,18 @@ Apache Ant has been _the_ build system for Java for a long time; companies and d
 
 <pre>
 a = 'ants';
-anttask::<echo message="Hello, ${a}!"/>
-anttask::<echo>Hello, more ${a}!</echo>
+anttask::&lt;echo message="Hello, ${a}!"/>
+anttask::&lt;echo>Hello, more ${a}!&lt;/echo>
 </pre>
 
 There are ways to run native executables in Judoscript, but you can also resort to Ant scripting, as shown below.
 
-<syntaxhighlight lang="html4strict">
+<pre>
 src = '.';
-anttask::<exec dir="${src}" executable="cmd.exe" os="Windows 2000" output="dir.txt">
-  <arg line="/c dir"/>
-</exec>
-</syntaxhighlight>
+anttask::&lt;exec dir="${src}" executable="cmd.exe" os="Windows 2000" output="dir.txt">
+  &lt;arg line="/c dir"/>
+&lt;/exec>
+</pre>
 
 ### Unified file system and archive scripting
 
