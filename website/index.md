@@ -3,7 +3,7 @@ This is the Museum for the **Judoscript** language.
 
 Judoscript is a quite unique scripting language. It is the first (and possibly the only) multi-domain, general-purpose programming language; it was also one of the handful earliest Java scripting languages.
 
-For its characteristics, the story, and reflections on the <i>Judoscript Idea</i>, please see [this Wikipedia article](https://en.wikipedia.org/wiki/Judoscript).
+For a better understanding of Judoscript, please read this trio of [The Story and Philosophy of Judoscript](./story_philosophy.md), [Introduction to the Judoscript Language](./intro_to_judoscript.md) and [Reflections on _the Judoscript Idea_](./judoscript_idea_reflections.md).
 
 <img src="JianboHuang-small.png" align="right" border="0">Judoscript's journey started in late 2001, but sadly stopped short by the end of 2005. It was a work-in-progress without final fruition; yet, the language software was completed according to the desired plan. Even now, with Java versions having greatly advanced, it runs as smoothly as in 2005; what an unexpected delight! As life goes on, it is worth keeping its vestige in the digital ether. Hence, this museum is set up, not for the sake of immortality but, rather, in a sense of social responsibility.
 
@@ -18,7 +18,6 @@ Judoscript language was quite complete in terms of its implementation of funcion
 
 -----------
 ## Quick Links
-* Live [Judoscript.com Website Version 1](./judoscript.com-v1/)
-* Live [Judoscript.com Website Version 2](./judoscript.com-v2/)
+* Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
+* Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
 * [Building the language software and website](./build_judoscript_website.md)
-

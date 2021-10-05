@@ -68,6 +68,6 @@ This is the earlier one. The key to remember is that _articles_ and _references_
 
 ## The live sites in this Museum
 
-* The live [version 1 site](judoscript.com-v1)
-* The live [version 2 site](judoscript.com-v2)
-* The [Home page](..)
+* Live [reconstructed version 2 judoscript.com site](judoscript.com-v2)
+* Live [reconstructed version 1 judoscript.com site](judoscript.com-v1)
+* The [Home page](./)
