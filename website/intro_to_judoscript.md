@@ -180,8 +180,8 @@ The more interesting usage is the parameterized queries and updates. Queries and
 
 <pre>
 db::prepare ins:
-  INSERT INTO emp( emp_no, first_name, last_name, birth_date, salary  )
-           VALUES( :empNo, :firstName, :lastName, :birthDate, :salary )
+  INSERT INTO emp(emp_no, first_name, last_name, birth_date, salary )
+           VALUES(:empNo, :firstName, :lastName, :birthDate, :salary)
 ;
 
 for row in rows {
