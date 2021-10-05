@@ -374,7 +374,7 @@ There are many supporting libraries included in the language runtime; some are f
 5. [Judoscript Java Scripting](./judoscript.com-v2/books/judoscript-0.9/chapters/java.html)
 6. [Judoscript Introduction to JDBC Scripting](./judoscript.com-v2/books/judoscript-0.9/chapters/jdbc.html)
 7. [Judoscript XML Scripting](./judoscript.com-v2/articles/xml.html)
-8. [Judoscript XML Scripting](./judoscript.com-v2/articles/http_html.html)
+8. [Judoscript HTML and SGML Scripting](./judoscript.com-v2/articles/http_html.html)
 9. [Judoscript Ant Scripting and Scripting Ant](./judoscript.com-v2/books/judoscript-0.9/chapters/ant.html)
 10. [Judoscript File System and Archives](./judoscript.com-v2/books/judoscript-0.9/chapters/fs.html)
 11. [Judoscript SOAP Web Service Scripting](./judoscript.com-v2/books/judoscript-0.9/chapters/wsdl.html)
