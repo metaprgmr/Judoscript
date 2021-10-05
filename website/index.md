@@ -12,7 +12,7 @@ For a better understanding of Judoscript, please read this trio:
 
 This museum exhibits a rather complete setting for the Judoscript language development, its documentation building and website building. In other words, previously, the development bits and pieces were just sitting on my development machine, where only the source code and certain artifacts of the language were checked into _sourceforge_; but here, it contains both the source code and the build environment for the whole operation, so that, if someone is willing, he or she can [rebuild the language, as well as the website](./build_judoscript_website.md).
 
-One of the reasons for doing this, as well as an interesting fact, is that all the build tools are _written in Judoscript_! This is the best way to show case its capability and characteristics.
+One of the reasons for doing this, as well as an interesting fact, is that all the build tools are _written in Judoscript_! This is the best way to showcase its capability and characteristics.
 
 The website, whose content is built along with each release of the software for the shared documentation, has undergone one major change; hence there is a [version 1 site](./judoscript.com-v1/) and a [version 2 site](./judoscript.com-v2/); both are re-created and live, thanks to <u>github.io</u>.
 
